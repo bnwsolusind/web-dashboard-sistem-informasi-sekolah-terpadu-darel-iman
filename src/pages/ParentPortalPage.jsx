@@ -375,15 +375,15 @@ export default function ParentPortalPage() {
       .children()
       .then((r) => {
         const apiChildren = r.data || []
-        const apiIds = new Set(apiChildren.map((c) => String(c.id)))
-        const mockExtra = MOCK_FALLBACK_CHILDREN.filter((m) => !apiIds.has(String(m.id)))
-        const combined = [...apiChildren, ...mockExtra]
-        setChildren(combined)
-
-        if (combined.length > 0) {
-          const persisted = combined.find((c) => String(c.id) === String(requestedChild))
-          setChildId(persisted?.id || combined[0]?.id || '')
+        if (apiChildren.length > 0) {
+          setChildren(apiChildren)
+          const persisted = apiChildren.find((c) => String(c.id) === String(requestedChild))
+          setChildId(persisted?.id || apiChildren[0]?.id || '')
         } else {
+          // Fallback ke mock data hanya jika akun belum memiliki data siswa terdaftar di database
+          setChildren(MOCK_FALLBACK_CHILDREN)
+          const persisted = MOCK_FALLBACK_CHILDREN.find((c) => String(c.id) === String(requestedChild))
+          setChildId(persisted?.id || MOCK_FALLBACK_CHILDREN[0]?.id || '')
           setLoading(false)
         }
       })
