@@ -988,6 +988,7 @@ const getSidebarIconBadgeClass = (key, idx) => {
           { to: '/dashboard/master-quran-surah', label: 'Al-Qur’an' },
           { to: '/dashboard/master-jadwal-sholat', label: 'Sholat' },
           { to: '/dashboard/master-doa', label: 'Do’a & Dzikir' },
+          { to: '/dashboard/poin-penilaian-doa', label: 'Poin Penilaian Doa' },
         ],
       },
     ] : []),

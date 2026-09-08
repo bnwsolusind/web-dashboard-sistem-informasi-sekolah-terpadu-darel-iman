@@ -301,6 +301,9 @@ export default function TahfizhPage() {
   const [modalAyahStart, setModalAyahStart] = useState(1)
   const [modalAyahEnd, setModalAyahEnd] = useState(10)
   const [modalBarisCount, setModalBarisCount] = useState(5)
+  const [isAyahStartLocked, setIsAyahStartLocked] = useState(false)
+  const [modalMurajaahRequired, setModalMurajaahRequired] = useState(false)
+  const [studentPendingMurajaah, setStudentPendingMurajaah] = useState(null)
   const [modalAyatsList, setModalAyatsList] = useState([])
   const [loadingModalAyats, setLoadingModalAyats] = useState(false)
 
@@ -574,6 +577,8 @@ export default function TahfizhPage() {
       setModalAyahEnd(7)
       setModalBarisCount(5)
     }
+    setIsAyahStartLocked(false)
+    setModalMurajaahRequired(false)
     setShowQuranModal(true)
   }
 
@@ -611,6 +616,15 @@ export default function TahfizhPage() {
 
       updated[selectedRowIndex].hafalan_predikat = computedPredikat
       updated[selectedRowIndex].hafalan_notes = notesList.join('; ')
+    }
+
+    updated[selectedRowIndex].murajaah_required = modalMurajaahRequired
+    if (modalMurajaahRequired) {
+      updated[selectedRowIndex].murajaah_required_surah_number = modalSurah.nomor
+      updated[selectedRowIndex].murajaah_required_surah_name = modalSurah.nama_latin || modalSurah.nama
+      updated[selectedRowIndex].murajaah_required_ayah_start = Number(modalAyahStart)
+      updated[selectedRowIndex].murajaah_required_ayah_end = Number(modalAyahEnd)
+      updated[selectedRowIndex].hafalan_predikat = 'Perlu Murajaah'
     }
 
     updated[selectedRowIndex].isModified = true
@@ -680,80 +694,55 @@ export default function TahfizhPage() {
     })
   }
 
-  // Handle Lanjutkan Hafalan Automatically (Detect last hafalan and advance to next ayat/surah)
-  const handleContinueHafalan = () => {
+  // Handle Lanjutkan Hafalan Automatically (Authoritative from API & Auto-Lock Ayat Awal)
+  const handleContinueHafalan = async () => {
     if (!selectedStudentId) {
       setNotification({ type: 'warning', message: 'Silakan pilih siswa terlebih dahulu.' })
       return
     }
 
-    let lastFilledRow = null
-    let targetRowIndex = -1
-
-    for (let i = weeklySheet.length - 1; i >= 0; i--) {
-      if (weeklySheet[i].hafalan_surah_number) {
-        lastFilledRow = weeklySheet[i]
-        break
+    try {
+      const data = await tahfizhService.getLastHafalan(selectedStudentId)
+      if (!data) {
+        setNotification({ type: 'error', message: 'Data kelanjutan hafalan tidak ditemukan.' })
+        return
       }
-    }
 
-    for (let i = 0; i < weeklySheet.length; i++) {
-      if (!weeklySheet[i].hafalan_surah_number) {
-        targetRowIndex = i
-        break
-      }
-    }
-    if (targetRowIndex === -1) targetRowIndex = 0
-
-    if (!lastFilledRow) {
-      const defaultSurah = quranSurahs.find((s) => Number(s.nomor) === 78) || quranSurahs[0]
-      if (defaultSurah) {
-        handleCellChange(targetRowIndex, 'hafalan_surah_number', defaultSurah.nomor)
-        handleCellChange(targetRowIndex, 'hafalan_surah_name', defaultSurah.nama_latin || defaultSurah.nama)
-        handleCellChange(targetRowIndex, 'hafalan_ayah_start', 1)
-        handleCellChange(targetRowIndex, 'hafalan_ayah_end', Math.min(10, defaultSurah.jumlah_ayat))
-        handleCellChange(targetRowIndex, 'hafalan_baris', 5)
-
-        handleOpenQuranModal(targetRowIndex)
+      // Cek apakah ada tugas wajib Murajaah di Rumah yang belum selesai diverifikasi
+      if (data.has_pending_murajaah && data.pending_murajaah_info) {
+        const info = data.pending_murajaah_info
+        setStudentPendingMurajaah(info)
         setNotification({
-          type: 'success',
-          message: `Lanjutkan Hafalan: Memulai Surah ${defaultSurah.nama_latin} (Ayat 1 - ${Math.min(10, defaultSurah.jumlah_ayat)})!`,
+          type: 'warning',
+          message: `Perhatian: Santri memiliki tugas Murajaah di Rumah yang belum diverifikasi: Surah ${info.surah_name} (Ayat ${info.ayah_start} - ${info.ayah_end}). Harap verifikasi setoran terlebih dahulu sebelum melanjutkan hafalan baru!`,
         })
+        return
       }
-      return
-    }
 
-    const lastSurahNum = Number(lastFilledRow.hafalan_surah_number)
-    const lastAyahEnd = Number(lastFilledRow.hafalan_ayah_end || 1)
-    const lastSurahObj = quranSurahs.find((s) => Number(s.nomor) === lastSurahNum)
+      let targetRowIndex = weeklySheet.findIndex((r) => !r.hafalan_surah_number)
+      if (targetRowIndex === -1) targetRowIndex = 0
 
-    let nextSurahNum = lastSurahNum
-    let nextAyahStart = lastAyahEnd + 1
-    let nextAyahEnd = lastAyahEnd + 10
+      const targetSurah = quranSurahs.find((s) => Number(s.nomor) === Number(data.next_surah_number)) || quranSurahs[0]
+      const nextAyahStart = Number(data.next_ayah_start || 1)
+      const nextAyahEnd = Math.min(nextAyahStart + 9, targetSurah ? targetSurah.jumlah_ayat : 7)
 
-    if (lastSurahObj && nextAyahStart > lastSurahObj.jumlah_ayat) {
-      const nextSurahObj = quranSurahs.find((s) => Number(s.nomor) === lastSurahNum + 1) || lastSurahObj
-      nextSurahNum = Number(nextSurahObj.nomor)
-      nextAyahStart = 1
-      nextAyahEnd = Math.min(10, nextSurahObj.jumlah_ayat)
-    } else if (lastSurahObj) {
-      nextAyahEnd = Math.min(nextAyahEnd, lastSurahObj.jumlah_ayat)
-    }
+      setModalSurah(targetSurah)
+      setModalAyahStart(nextAyahStart)
+      setModalAyahEnd(nextAyahEnd)
+      setModalBarisCount(Math.max(1, Math.ceil((nextAyahEnd - nextAyahStart + 1) * 0.75)))
+      setIsAyahStartLocked(true)
+      setModalMurajaahRequired(false)
 
-    const targetSurah = quranSurahs.find((s) => Number(s.nomor) === nextSurahNum) || lastSurahObj
+      setSelectedRowIndex(targetRowIndex)
+      setShowQuranModal(true)
 
-    if (targetSurah) {
-      handleCellChange(targetRowIndex, 'hafalan_surah_number', targetSurah.nomor)
-      handleCellChange(targetRowIndex, 'hafalan_surah_name', targetSurah.nama_latin || targetSurah.nama)
-      handleCellChange(targetRowIndex, 'hafalan_ayah_start', nextAyahStart)
-      handleCellChange(targetRowIndex, 'hafalan_ayah_end', nextAyahEnd)
-      handleCellChange(targetRowIndex, 'hafalan_baris', 5)
-
-      handleOpenQuranModal(targetRowIndex)
       setNotification({
         type: 'success',
-        message: `Lanjutkan Hafalan: Memuat Surah ${targetSurah.nama_latin} (Ayat ${nextAyahStart} s/d ${nextAyahEnd})!`,
+        message: `Lanjutkan Hafalan: Surah ${targetSurah?.nama_latin || targetSurah?.nama} (Mulai Ayat ${nextAyahStart} s/d ${nextAyahEnd}) [Ayat Awal Terkunci Otomatis]`,
       })
+    } catch (err) {
+      console.error('Error fetching last hafalan:', err)
+      setNotification({ type: 'error', message: 'Gagal memuat kelanjutan hafalan santri.' })
     }
   }
 
@@ -903,6 +892,16 @@ export default function TahfizhPage() {
           hafalan_ayah_start: row.hafalan_ayah_start ? Number(row.hafalan_ayah_start) : null,
           hafalan_ayah_end: row.hafalan_ayah_end ? Number(row.hafalan_ayah_end) : null,
           hafalan_baris: Number(row.hafalan_baris) || 0,
+          murajaah_required: !!row.murajaah_required,
+          murajaah_required_surah_number: row.murajaah_required_surah_number ? Number(row.murajaah_required_surah_number) : null,
+          murajaah_required_surah_name: row.murajaah_required_surah_name || null,
+          murajaah_required_ayah_start: row.murajaah_required_ayah_start ? Number(row.murajaah_required_ayah_start) : null,
+          murajaah_required_ayah_end: row.murajaah_required_ayah_end ? Number(row.murajaah_required_ayah_end) : null,
+          murajaah_required: !!row.murajaah_required,
+          murajaah_required_surah_number: row.murajaah_required_surah_number ? Number(row.murajaah_required_surah_number) : null,
+          murajaah_required_surah_name: row.murajaah_required_surah_name || null,
+          murajaah_required_ayah_start: row.murajaah_required_ayah_start ? Number(row.murajaah_required_ayah_start) : null,
+          murajaah_required_ayah_end: row.murajaah_required_ayah_end ? Number(row.murajaah_required_ayah_end) : null,
           murajaah_text: row.murajaah_text,
           murajaah_lembar: Number(row.murajaah_lembar) || 0,
           audio_url: row.audio_url,
@@ -927,7 +926,7 @@ export default function TahfizhPage() {
         })
       } catch (e) {
         console.error(e)
-        setNotification({ type: 'error', message: 'Gagal menyimpan data log harian.' })
+        setNotification({ type: 'error', message: e.response?.data?.message || 'Gagal menyimpan data log harian.' })
       }
     } else {
       setSavingAll(true)
@@ -2627,6 +2626,7 @@ export default function TahfizhPage() {
                           <div className="relative">
                             <select
                               value={modalAyahStart}
+                              disabled={isAyahStartLocked}
                               onChange={(e) => {
                                 const start = Number(e.target.value)
                                 setModalAyahStart(start)
@@ -2638,7 +2638,11 @@ export default function TahfizhPage() {
                                   setModalBarisCount(Math.max(1, Math.ceil((Number(modalAyahEnd) - start + 1) * 0.75)))
                                 }
                               }}
-                              className="w-full h-10 px-3 pr-8 bg-white border border-emerald-300 rounded-xl text-xs font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500 cursor-pointer dark:bg-slate-900 dark:border-slate-700 dark:text-slate-200"
+                              className={`w-full h-10 px-3 pr-8 rounded-xl text-xs font-bold ${
+                                isAyahStartLocked
+                                  ? 'bg-slate-100 border border-slate-300 text-slate-500 cursor-not-allowed dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400'
+                                  : 'bg-white border border-emerald-300 text-slate-800 focus:ring-2 focus:ring-emerald-500 cursor-pointer dark:bg-slate-900 dark:border-slate-700 dark:text-slate-200'
+                              }`}
                             >
                               {Array.from({ length: modalSurah.jumlah_ayat }, (_, i) => i + 1).map((a) => (
                                 <option key={a} value={a}>

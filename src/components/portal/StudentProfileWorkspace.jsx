@@ -50,39 +50,82 @@ function Timeline({ items, emptyTitle }) {
   return <div className="relative ml-2 space-y-5 border-l border-emerald-200 pl-6 dark:border-emerald-900">{items.map((item, index) => <div key={item.id || index} className="relative"><span className="absolute -left-[31px] top-1 h-2.5 w-2.5 rounded-full bg-emerald-500 ring-4 ring-emerald-50 dark:ring-emerald-950" /><div className="flex flex-wrap items-start justify-between gap-2"><div><p className="text-sm font-bold text-slate-800 dark:text-slate-100">{item.school || item.sekolah || item.title || item.judul || item.activity || 'Aktivitas siswa'}</p><p className="mt-1 text-xs text-slate-500">{item.level || item.jenjang || item.description || item.keterangan || item.subject || ''}</p></div><span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300">{item.year || item.tahun || item.date || item.waktu || item.status || '-'}</span></div></div>)}</div>
 }
 
-export default function StudentProfileWorkspace({ student = {}, dashboard = {}, readOnly = true }) {
+export default function StudentProfileWorkspace({ student = {}, dashboard = {}, readOnly = true, onPhotoUpdated }) {
   const fileInputRef = useRef(null)
   const meta = student.metadata || {}
   const initialPhoto = student.photo || student.photo_url || student.avatar_url || student.photo_thumb || meta.photo || meta.foto_url || meta.foto || ''
   const [customPhoto, setCustomPhoto] = useState(initialPhoto)
+  const [uploadingPhoto, setUploadingPhoto] = useState(false)
   const [showCardModal, setShowCardModal] = useState(false)
+
+  useEffect(() => {
+    setCustomPhoto(initialPhoto)
+  }, [initialPhoto])
   const [qrOpen, setQrOpen] = useState(false)
   const [qrToken, setQrToken] = useState('')
   const [qrError, setQrError] = useState('')
   const [detail, setDetail] = useState(null)
 
-  const handlePhotoUpload = (e) => {
+  const handlePhotoUpload = async (e) => {
     const file = e.target.files?.[0]
     if (!file) return
     if (!file.type.startsWith('image/')) {
-      alert('Format file tidak didukung. Silakan pilih gambar (JPG/PNG).')
+      alert('Format berkas tidak didukung. Silakan pilih gambar (JPG, PNG, WEBP).')
       return
     }
+    if (file.size > 3 * 1024 * 1024) {
+      alert('Ukuran berkas terlalu besar. Maksimal 3MB.')
+      return
+    }
+
+    const childId = student.id || student.uuid
+    if (!childId) {
+      alert('ID Siswa tidak ditemukan.')
+      return
+    }
+
+    // Instant local preview
     const reader = new FileReader()
     reader.onload = (event) => {
       const dataUrl = event.target?.result
-      if (dataUrl) {
-        setCustomPhoto(dataUrl)
-        student.photo_url = dataUrl
-        student.photo = dataUrl
-        student.foto = dataUrl
-        if (student.metadata) {
-          student.metadata.foto = dataUrl
-          student.metadata.photo_url = dataUrl
-        }
-      }
+      if (dataUrl) setCustomPhoto(dataUrl)
     }
     reader.readAsDataURL(file)
+
+    const formData = new FormData()
+    formData.append('photo', file)
+
+    setUploadingPhoto(true)
+    try {
+      const res = await familyPortalService.updateChildPhoto(childId, formData)
+      if (res?.success) {
+        const savedUrl = res.data?.photo_url || res.data?.photo
+        if (savedUrl) {
+          setCustomPhoto(savedUrl)
+          student.photo_url = savedUrl
+          student.photo = res.data?.photo || savedUrl
+          if (student.metadata) {
+            student.metadata.photo = res.data?.photo || savedUrl
+            student.metadata.photo_url = savedUrl
+          }
+        }
+        if (typeof onPhotoUpdated === 'function') {
+          onPhotoUpdated(savedUrl, childId)
+        }
+      } else {
+        alert(res?.message || 'Gagal menyimpan foto siswa ke server.')
+        setCustomPhoto(initialPhoto)
+      }
+    } catch (err) {
+      const errMsg = err.response?.data?.message || err.message || 'Terjadi kesalahan saat mengunggah foto siswa.'
+      alert(errMsg)
+      setCustomPhoto(initialPhoto)
+    } finally {
+      setUploadingPhoto(false)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+    }
   }
   const parents = asList(student.parents)
   const father = parents.find((item) => /ayah|father/i.test(item.pivot?.relationship_type || item.relationship_type || '')) || meta.ayah || {}
@@ -173,24 +216,41 @@ export default function StudentProfileWorkspace({ student = {}, dashboard = {}, 
                 size="detail"
                 className="h-28 w-28 rounded-[24px] border-4 border-white shadow-xl dark:border-slate-800 transition duration-200 group-hover:scale-[1.02] group-hover:brightness-90"
               />
-              <span className="absolute bottom-1 right-1 flex h-8 w-8 items-center justify-center rounded-full bg-[#0E5C44] text-white shadow-lg ring-2 ring-white dark:ring-slate-900 transition hover:scale-110">
-                <Camera className="h-4 w-4" />
-              </span>
+              <button
+                type="button"
+                onClick={() => !uploadingPhoto && fileInputRef.current?.click()}
+                disabled={uploadingPhoto}
+                className="absolute bottom-1 right-1 flex h-8 w-8 items-center justify-center rounded-full bg-[#0E5C44] text-white shadow-lg ring-2 ring-white dark:ring-slate-900 transition hover:scale-110 cursor-pointer disabled:opacity-75"
+                title="Ubah Foto Siswa"
+              >
+                {uploadingPhoto ? <Loader2 className="h-4 w-4 animate-spin" /> : <Camera className="h-4 w-4" />}
+              </button>
             </div>
             <button
               type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="flex items-center gap-1.5 rounded-full border border-emerald-300 bg-white/90 px-3 py-1 text-[11px] font-bold text-emerald-800 shadow-xs hover:bg-emerald-50 transition cursor-pointer dark:border-emerald-800 dark:bg-slate-800 dark:text-emerald-300"
+              onClick={() => !uploadingPhoto && fileInputRef.current?.click()}
+              disabled={uploadingPhoto}
+              className="flex items-center gap-1.5 rounded-full border border-emerald-300 bg-white/90 px-3 py-1 text-[11px] font-bold text-emerald-800 shadow-xs hover:bg-emerald-50 transition cursor-pointer dark:border-emerald-800 dark:bg-slate-800 dark:text-emerald-300 disabled:opacity-75"
             >
-              <Camera className="h-3.5 w-3.5 text-emerald-700 dark:text-emerald-400" />
-              <span>Ubah Foto</span>
+              {uploadingPhoto ? (
+                <>
+                  <Loader2 className="h-3.5 w-3.5 animate-spin text-emerald-700 dark:text-emerald-400" />
+                  <span>Menyimpan...</span>
+                </>
+              ) : (
+                <>
+                  <Camera className="h-3.5 w-3.5 text-emerald-700 dark:text-emerald-400" />
+                  <span>Ubah Foto</span>
+                </>
+              )}
             </button>
             <input
               ref={fileInputRef}
               type="file"
-              accept="image/*"
+              accept="image/jpeg,image/png,image/webp,image/jpg"
               className="hidden"
               onChange={handlePhotoUpload}
+              disabled={uploadingPhoto}
             />
           </div>
           <div className="text-center sm:text-left"><div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start"><h1 className="text-2xl font-black text-slate-950 dark:text-white">{name}</h1><span className="rounded-full bg-emerald-100 px-3 py-1 text-[10px] font-black uppercase text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">{status}</span></div><p className="mt-2 text-sm font-semibold text-slate-600 dark:text-slate-300">NIS {student.nis || '-'} · NISN {student.nisn || '-'}</p><div className="mt-3 flex flex-wrap justify-center gap-2 text-[11px] font-semibold text-slate-600 sm:justify-start dark:text-slate-300"><span className="rounded-full bg-white/80 px-3 py-1.5 shadow-sm dark:bg-slate-800">{unitName}</span><span className="rounded-full bg-white/80 px-3 py-1.5 shadow-sm dark:bg-slate-800">{className}</span><span className="rounded-full bg-white/80 px-3 py-1.5 shadow-sm dark:bg-slate-800">{dashboard.academic_context?.academic_year || '-'}</span><span className="rounded-full bg-white/80 px-3 py-1.5 shadow-sm dark:bg-slate-800">{dashboard.academic_context?.semester || '-'}</span></div></div>

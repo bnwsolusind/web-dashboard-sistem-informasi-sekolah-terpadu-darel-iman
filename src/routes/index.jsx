@@ -91,6 +91,7 @@ const TahfizhReportSummaryPage = lazy(() => import('../pages/tahfizh/TahfizhRepo
 const MasterQuranSurahPage = lazy(() => import('../pages/MasterQuranSurahPage'))
 const MasterJadwalSholatPage = lazy(() => import('../pages/MasterJadwalSholatPage'))
 const MasterDoaPage = lazy(() => import('../pages/MasterDoaPage'))
+const PoinPenilaianDoaPage = lazy(() => import('../pages/PoinPenilaianDoaPage'))
 const DeleteApprovalPage = lazy(() => import('../pages/DeleteApprovalPage'))
 const GateAttendancePage = lazy(() => import('../pages/GateAttendancePage'))
 const WorshipAttendancePage = lazy(() => import('../pages/WorshipAttendancePage'))

@@ -15,6 +15,12 @@ export const tahfizhService = {
     return res.data
   },
 
+  // Ambil hafalan terakhir dan data kelanjutan otomatis
+  getLastHafalan: async (studentId) => {
+    const res = await api.get(`/tahfizh/last-hafalan/${studentId}`)
+    return res.data?.data
+  },
+
   // Upload rekaman suara murajaah
   uploadAudio: async (audioFile) => {
     const formData = new FormData()

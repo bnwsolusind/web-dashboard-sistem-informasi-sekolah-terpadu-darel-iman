@@ -22,6 +22,9 @@ import {
   Award,
   BarChart2,
   GraduationCap,
+  Calculator,
+  ShieldCheck,
+  NotebookText,
 } from 'lucide-react'
 import AcademicModuleContainer from '../components/akademik/AcademicModuleContainer'
 import MasterTahunAjaranPage from './MasterTahunAjaranPage'
@@ -45,6 +48,9 @@ import LmsBankSoalPage from './LmsBankSoalPage'
 import LmsUjianPage from './LmsUjianPage'
 import LmsPenilaianPage from './LmsPenilaianPage'
 import LmsRaporPage from './LmsRaporPage'
+import AssessmentFormulaPage from './AssessmentFormulaPage'
+import WorshipAssessmentSettingPage from './WorshipAssessmentSettingPage'
+import AssessmentImplementationNotesPage from './AssessmentImplementationNotesPage'
 import { useAuthStore } from '../stores/authStore'
 
 const CONTAINERS = {
@@ -100,6 +106,33 @@ const CONTAINERS = {
         icon: Clock,
         description: 'Waktu & Ruang',
         squircleStyle: 'bg-rose-100 text-rose-600 dark:bg-rose-950/80 dark:text-rose-400 border border-rose-200/80 dark:border-rose-800/60',
+      },
+      {
+        key: 'rumus-penilaian',
+        label: 'Rumus Penilaian',
+        component: AssessmentFormulaPage,
+        icon: Calculator,
+        description: 'Akademik, Tahfizh & Mutabaah',
+        requiredPermission: 'assessment_formula.view',
+        squircleStyle: 'bg-teal-100 text-teal-700 dark:bg-teal-950/80 dark:text-teal-300 border border-teal-200/80 dark:border-teal-800/60',
+      },
+      {
+        key: 'program-ibadah',
+        label: 'Program & Ibadah',
+        component: WorshipAssessmentSettingPage,
+        icon: ShieldCheck,
+        description: 'Full Day & Ramadan',
+        requiredPermission: 'worship_assessment.setting.view',
+        squircleStyle: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60',
+      },
+      {
+        key: 'catatan-penilaian',
+        label: 'Catatan Implementasi',
+        component: AssessmentImplementationNotesPage,
+        icon: NotebookText,
+        description: 'Audit & Aturan Bisnis',
+        requiredPermission: 'worship_assessment.setting.view',
+        squircleStyle: 'bg-sky-100 text-sky-700 dark:bg-sky-950/80 dark:text-sky-300 border border-sky-200/80 dark:border-sky-800/60',
       },
     ],
   },
@@ -294,6 +327,8 @@ export default function AcademicLmsContainerPage({ section }) {
   }, [section, userRoles])
 
   const config = CONTAINERS[section]
+  const userPermissions = useMemo(() => new Set((user?.permissions || []).map((p) => typeof p === 'string' ? p : p.name)), [user])
+  const availableTabs = useMemo(() => config.tabs.filter((tab) => !tab.requiredPermission || userPermissions.has(tab.requiredPermission) || userPermissions.has('*')), [config.tabs, userPermissions])
   const location = useLocation()
   const [searchParams] = useSearchParams()
 
@@ -301,16 +336,16 @@ export default function AcademicLmsContainerPage({ section }) {
     return <Navigate to="/dashboard" replace />
   }
   const activeTab = searchParams.get('tab')
-  const defaultTab = config.tabs[0].key
+  const defaultTab = availableTabs[0].key
   const selected = useMemo(() => {
-    return config.tabs.find((t) =>
+    return availableTabs.find((t) =>
       t.key === activeTab ||
       (activeTab === 'modul-semester' && t.key === 'semester') ||
       (activeTab === 'semester' && t.key === 'modul-semester') ||
       (activeTab === 'ujian-cbt' && t.key === 'cbt') ||
       (activeTab === 'cbt' && t.key === 'ujian-cbt')
     )
-  }, [activeTab, config.tabs])
+  }, [activeTab, availableTabs])
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -323,7 +358,7 @@ export default function AcademicLmsContainerPage({ section }) {
   }
 
   const ActivePage = selected.component
-  const tabs = config.tabs.map((t) => ({
+  const tabs = availableTabs.map((t) => ({
     key: t.key,
     label: t.label,
     icon: t.icon,

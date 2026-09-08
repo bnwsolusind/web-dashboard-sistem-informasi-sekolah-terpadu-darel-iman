@@ -52,15 +52,7 @@ const UNIT_BADGE_STYLES = {
   MAHAD: 'bg-amber-100/90 text-amber-800 border border-amber-200/80 dark:bg-amber-950/80 dark:text-amber-300 dark:border-amber-800/80',
 }
 
-const DEFAULT_TEACHERS = [
-  { id: 1, name: 'Ust. Abdullah, S.Pd.I', niy: 'NIY. 198801201', subject: 'Pendidikan Agama Islam & Tahfidz', status: 'Aktif' },
-  { id: 2, name: 'Ustdh. Fatimah, S.S.', niy: 'NIY. 199004112', subject: 'Bahasa Arab', status: 'Aktif' },
-  { id: 3, name: 'Ust. Ridwan, M.Pd.', niy: 'NIY. 198507153', subject: 'Matematika', status: 'Aktif' },
-  { id: 4, name: 'Ust. Hamzah, S.T.', niy: 'NIY. 199203084', subject: 'IPA (Sains)', status: 'Aktif' },
-  { id: 5, name: 'Ust. Muhammad, M.A.', niy: 'NIY. 198711225', subject: 'Hadits & Aqidah', status: 'Aktif' },
-  { id: 6, name: 'Ustdh. Siti Rahmah, S.Pd.', niy: 'NIY. 199308196', subject: 'Bahasa Indonesia', status: 'Aktif' },
-  { id: 7, name: 'Ust. Zulkifli, S.Pd.', niy: 'NIY. 199105307', subject: 'Bahasa Inggris', status: 'Aktif' },
-]
+const DEFAULT_TEACHERS = []
 
 function getUnitBadgeStyle(unitName = '') {
   const str = String(unitName).toUpperCase()
@@ -210,11 +202,11 @@ export default function HomeroomAttendanceDashboardPage() {
           }))
           setTeachersList(mapped)
         } else {
-          setTeachersList(DEFAULT_TEACHERS)
+          setTeachersList([])
         }
       } catch (err) {
         console.error('Failed to fetch teachers:', err)
-        setTeachersList(DEFAULT_TEACHERS)
+        setTeachersList([])
       } finally {
         setLoadingTeachers(false)
       }
@@ -2112,7 +2104,7 @@ export default function HomeroomAttendanceDashboardPage() {
                       {selectedClass.wali_kelas} (Wali Kelas)
                     </option>
                   )}
-                  {DEFAULT_TEACHERS.map((t) => (
+                  {teachersList.map((t) => (
                     <option key={t.id} value={t.name}>
                       {t.name} ({t.subject})
                     </option>

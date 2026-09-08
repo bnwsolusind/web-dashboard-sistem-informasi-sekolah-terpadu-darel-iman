@@ -6,7 +6,7 @@ const cardStyle = 'rounded-[18px] border border-slate-200/80 bg-white p-5 shadow
 
 const formatDate = (val) => val ? new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(val)) : '-'
 
-export default function AssignmentsWorkspace({ assignments = [], onSubmitAssignment, isParent = false, loading = false }) {
+export default function AssignmentsWorkspace({ assignments = [], onSubmitAssignment, isParent = false, canSubmit = true, loading = false }) {
   const [activeTab, setActiveTab] = useState('all')
   const [activeModal, setActiveModal] = useState(null)
   const [textAnswer, setTextAnswer] = useState('')
@@ -154,7 +154,7 @@ export default function AssignmentsWorkspace({ assignments = [], onSubmitAssignm
 
           {isParent && (
             <span className="rounded-full bg-amber-100 px-3 py-1 text-[10px] font-bold text-amber-800 dark:bg-amber-950 dark:text-amber-300">
-              Mode Monitoring Orang Tua
+              {canSubmit ? "Mode Orang Tua (Unit SD — Kumpul Tugas Aktif)" : "Mode Monitoring Orang Tua (SMP/SMA)"}
             </span>
           )}
         </div>
@@ -207,14 +207,19 @@ export default function AssignmentsWorkspace({ assignments = [], onSubmitAssignm
                   )}
                 </div>
 
-                {!isParent && !submission && (
+                {(!isParent || canSubmit) && !submission && (
                   <button
                     onClick={() => setActiveModal(item)}
                     className="mt-4 flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-[#0E5C44] text-xs font-bold text-white transition hover:bg-[#157255]"
                   >
                     <Send className="h-3.5 w-3.5" />
-                    Kumpulkan Tugas
+                    {isParent ? "Kumpulkan Tugas (Ananda)" : "Kumpulkan Tugas"}
                   </button>
+                )}
+                {isParent && !canSubmit && !submission && (
+                  <div className="mt-4 rounded-xl bg-amber-50 p-2.5 text-center text-[11px] font-semibold text-amber-800 dark:bg-amber-950/50 dark:text-amber-300">
+                    Tugas jenjang SMP/SMA dikerjakan langsung oleh ananda di portal siswa.
+                  </div>
                 )}
               </div>
             )

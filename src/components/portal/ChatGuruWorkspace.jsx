@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react'
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import {
   MessageSquare,
   Search,
   Send,
+  Download,
+  Eye,
   UserCheck,
   BookOpen,
   Filter,
@@ -56,16 +58,311 @@ const CATEGORIES = [
 
 const EMOJI_OPTIONS = ['👍', '🙏', '❤️', '👏', '😊', '💡']
 
+const timeCache = new Map()
 const formatMessageTime = (timestamp) => {
   if (!timestamp) return ''
+  if (timeCache.has(timestamp)) return timeCache.get(timestamp)
   const date = new Date(timestamp)
   if (isNaN(date.getTime())) return String(timestamp)
   const now = new Date()
   const isToday = date.toDateString() === now.toDateString()
-  return isToday
+  const result = isToday
     ? date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
     : date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })
+  if (timeCache.size > 500) timeCache.clear()
+  timeCache.set(timestamp, result)
+  return result
 }
+
+// Memoized Chat Message Bubble to avoid re-rendering entire conversation stream on typing
+const ChatMessageBubble = React.memo(function ChatMessageBubble({
+  msg,
+  isOwn,
+  senderName,
+  isFirstUnread,
+  timeFormatted,
+  onImageClick,
+}) {
+  return (
+    <React.Fragment>
+      {isFirstUnread && (
+        <div className="flex items-center justify-center my-4 select-none">
+          <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400">
+            — Belum Dibaca —
+          </span>
+        </div>
+      )}
+
+      <div className={`flex items-start gap-2.5 ${isOwn ? 'justify-end' : 'justify-start'} mb-2`}>
+        {!isOwn && (
+          msg.sender_avatar || msg.sender_foto ? (
+            <img
+              src={msg.sender_avatar || msg.sender_foto}
+              alt={senderName}
+              className="h-8 w-8 rounded-full object-cover shrink-0 ring-1 ring-slate-200/80 mt-0.5"
+            />
+          ) : (
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-700 text-xs font-black text-white shrink-0 shadow-2xs mt-0.5">
+              {(senderName || 'P')[0]}
+            </div>
+          )
+        )}
+
+        <div className={`flex flex-col ${isOwn ? 'items-end' : 'items-start'} max-w-[85%] sm:max-w-[78%]`}>
+          {!isOwn && (
+            <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-400 mb-1">
+              {senderName}
+            </span>
+          )}
+
+          <div className="flex items-end gap-2">
+            <div
+              className={`group relative rounded-2xl p-3 text-xs shadow-2xs ${
+                isOwn
+                  ? 'bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200/80 dark:border-emerald-800/80 text-slate-900 dark:text-emerald-100 rounded-tr-xs'
+                  : 'bg-slate-100/90 dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-tl-xs'
+              }`}
+            >
+              {/* Message Attachments */}
+              {Array.isArray(msg.attachments) && msg.attachments.length > 0 && (
+                <div className="mb-2 space-y-1.5">
+                  {msg.attachments.map((att, attIdx) => {
+                    const isImg = att.file_type === 'image' || (att.mime_type && att.mime_type.startsWith('image/'))
+                    const fileUrl = att.url || (att.path ? (att.path.startsWith('http') ? att.path : `/storage/${att.path}`) : '')
+                    if (isImg) {
+                      return (
+                        <div key={att.id || attIdx} className="relative group/att overflow-hidden rounded-xl border border-black/10 dark:border-white/10 max-w-[280px]">
+                          <img
+                            src={fileUrl}
+                            alt={att.original_name || 'Lampiran'}
+                            className="max-h-56 w-full object-cover cursor-pointer hover:scale-102 transition-transform duration-200"
+                            onClick={() => onImageClick && onImageClick(fileUrl, att.original_name)}
+                          />
+                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/att:opacity-100 transition-opacity flex items-center justify-center gap-2 pointer-events-none">
+                            <span className="text-white text-xs font-bold flex items-center gap-1 bg-black/60 px-2.5 py-1 rounded-full pointer-events-auto cursor-pointer" onClick={() => onImageClick && onImageClick(fileUrl, att.original_name)}>
+                              <Eye className="h-3.5 w-3.5" /> Lihat
+                            </span>
+                          </div>
+                        </div>
+                      )
+                    }
+                    return (
+                      <a
+                        key={att.id || attIdx}
+                        href={fileUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        download={att.original_name}
+                        className="flex items-center gap-2.5 p-2 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 transition shadow-xs max-w-[280px]"
+                      >
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300">
+                          <FileText className="h-5 w-5" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-xs font-bold text-slate-800 dark:text-slate-100">{att.original_name || 'Dokumen'}</p>
+                          <p className="text-[10px] text-slate-400 font-medium">{att.formatted_size || (att.file_size ? `${(att.file_size / 1024).toFixed(0)} KB` : 'File')}</p>
+                        </div>
+                        <Download className="h-4 w-4 text-slate-400 hover:text-emerald-600 shrink-0" />
+                      </a>
+                    )
+                  })}
+                </div>
+              )}
+
+              {Boolean(msg.message && msg.message.trim()) && (
+                <p className="whitespace-pre-wrap leading-relaxed">{msg.message}</p>
+              )}
+
+              <div className="mt-1 flex items-center justify-end gap-1 text-[10px] text-slate-400 font-semibold">
+                <span>{timeFormatted}</span>
+                {isOwn && (
+                  <CheckCheck className="h-3.5 w-3.5 text-emerald-600" />
+                )}
+              </div>
+
+              {Array.isArray(msg.reactions) && msg.reactions.length > 0 && (
+                <div className="mt-1.5 flex flex-wrap gap-1">
+                  {msg.reactions.map((r, rIdx) => (
+                    <span
+                      key={rIdx}
+                      className="inline-flex items-center gap-1 rounded-full bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 px-2 py-0.5 text-[10px] font-bold text-slate-700 dark:text-slate-200 shadow-2xs"
+                    >
+                      <span>{r.reaction}</span>
+                      <span>{r.count}</span>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {msg.is_unread && (
+              <span className="h-2.5 w-2.5 rounded-full bg-blue-600 shrink-0 shadow-2xs mb-2" />
+            )}
+          </div>
+        </div>
+      </div>
+    </React.Fragment>
+  )
+})
+
+// Isolated Message Composer component: keeps typed text state isolated so typing never re-renders messages
+const ChatMessageComposer = React.memo(function ChatMessageComposer({ onSend, sending, totalUnreadCount }) {
+  const [text, setText] = useState('')
+  const [category, setCategory] = useState('')
+  const [stagedAttachment, setStagedAttachment] = useState(null)
+  const fileInputRef = useRef(null)
+
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const isImage = file.type.startsWith('image/')
+    const previewUrl = isImage ? URL.createObjectURL(file) : null
+    setStagedAttachment({
+      file,
+      name: file.name,
+      size: (file.size / 1024 > 1024 ? (file.size / 1048576).toFixed(1) + ' MB' : (file.size / 1024).toFixed(0) + ' KB'),
+      isImage,
+      previewUrl,
+    })
+    e.target.value = ''
+  }
+
+  const removeAttachment = () => {
+    if (stagedAttachment?.previewUrl) {
+      URL.revokeObjectURL(stagedAttachment.previewUrl)
+    }
+    setStagedAttachment(null)
+  }
+
+  const onSubmit = (e) => {
+    e.preventDefault()
+    if ((!text.trim() && !stagedAttachment) || sending) return
+    onSend(text, category, stagedAttachment?.file)
+    setText('')
+    setCategory('')
+    if (stagedAttachment?.previewUrl) {
+      URL.revokeObjectURL(stagedAttachment.previewUrl)
+    }
+    setStagedAttachment(null)
+  }
+
+  return (
+    <div className="border-t border-slate-200/80 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 space-y-2 shrink-0">
+      {/* Staged Attachment Preview Bar */}
+      {stagedAttachment && (
+        <div className="flex items-center gap-3 p-2 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800/80">
+          {stagedAttachment.isImage ? (
+            <img
+              src={stagedAttachment.previewUrl}
+              alt="Pratinjau"
+              className="h-12 w-12 rounded-xl object-cover border border-emerald-300 dark:border-emerald-700 shadow-2xs"
+            />
+          ) : (
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-200/80 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200">
+              <FileText className="h-6 w-6" />
+            </div>
+          )}
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-xs font-bold text-slate-800 dark:text-slate-100">{stagedAttachment.name}</p>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400">{stagedAttachment.size} • Siap dikirim</p>
+          </div>
+          <button
+            type="button"
+            onClick={removeAttachment}
+            className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-rose-100 hover:text-rose-600 transition cursor-pointer"
+            title="Hapus Lampiran"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      )}
+
+      <form onSubmit={onSubmit} className="space-y-2">
+        {/* Hidden file input */}
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt"
+          className="hidden"
+        />
+
+        {/* Curved Rounded Input Bar */}
+        <div className="flex items-center gap-2 rounded-3xl border border-slate-200/90 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-1 shadow-inner">
+          <input
+            type="text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder={stagedAttachment ? "Tambah keterangan (opsional)..." : "Ketik pesan..."}
+            className="h-9 flex-1 bg-transparent text-xs text-slate-900 dark:text-white outline-none placeholder:text-slate-400"
+          />
+
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="p-1 text-slate-400 hover:text-emerald-600 transition cursor-pointer"
+            title="Lampirkan Gambar atau Berkas"
+          >
+            <Paperclip className="h-4.5 w-4.5" />
+          </button>
+
+          <button
+            type="submit"
+            disabled={(!text.trim() && !stagedAttachment) || sending}
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-600 text-white shadow-md shadow-emerald-600/30 transition hover:bg-emerald-700 disabled:opacity-40 cursor-pointer shrink-0"
+          >
+            <Send className="h-4 w-4" />
+          </button>
+        </div>
+
+        {/* Bottom Attachment Toolbar */}
+        <div className="flex items-center justify-between text-slate-400 px-2 pt-0.5">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="flex items-center gap-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-400 hover:underline transition cursor-pointer"
+            >
+              <Paperclip className="h-3.5 w-3.5" /> Lampirkan Berkas
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (fileInputRef.current) {
+                  fileInputRef.current.accept = "image/*";
+                  fileInputRef.current.click();
+                }
+              }}
+              className="flex items-center gap-1 text-[11px] font-bold text-slate-500 hover:text-emerald-600 transition cursor-pointer"
+            >
+              <ImageIcon className="h-3.5 w-3.5" /> Foto
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (fileInputRef.current) {
+                  fileInputRef.current.accept = ".pdf,.doc,.docx,.xls,.xlsx,.txt";
+                  fileInputRef.current.click();
+                }
+              }}
+              className="flex items-center gap-1 text-[11px] font-bold text-slate-500 hover:text-emerald-600 transition cursor-pointer"
+            >
+              <FileText className="h-3.5 w-3.5" /> Dokumen
+            </button>
+          </div>
+
+          {/* Unread Indicator Badge */}
+          <div className="flex items-center gap-1.5 text-[11px] font-bold text-blue-600">
+            <span>{totalUnreadCount} belum dibaca</span>
+            {totalUnreadCount > 0 && (
+              <span className="h-2.5 w-2.5 rounded-full bg-blue-600" />
+            )}
+          </div>
+        </div>
+      </form>
+    </div>
+  )
+})
 
 export default function ChatGuruWorkspace({
   mode = 'parent', // 'parent' | 'teacher' | 'employee'
@@ -92,8 +389,6 @@ export default function ChatGuruWorkspace({
   const [dbUnits, setDbUnits] = useState([])
 
   const [messages, setMessages] = useState([])
-  const [messageText, setMessageText] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('')
   const [search, setSearch] = useState('')
   const [selectedUnit, setSelectedUnit] = useState('all')
   const [selectedStatus, setSelectedStatus] = useState('all')
@@ -102,6 +397,7 @@ export default function ChatGuruWorkspace({
   const [messagesLoading, setMessagesLoading] = useState(false)
   const [error, setError] = useState('')
   const [sending, setSending] = useState(false)
+  const [lightboxMedia, setLightboxMedia] = useState(null)
   const [mobileDetailOpen, setMobileDetailOpen] = useState(false)
   const [showNewChatModal, setShowNewChatModal] = useState(false)
   const [groupName, setGroupName] = useState('')
@@ -281,37 +577,98 @@ export default function ChatGuruWorkspace({
     return () => clearTimeout(timer)
   }, [search, selectedUnit, selectedStatus])
 
-  // Load Messages for selected contact
-  const fetchMessages = async () => {
+  // Heartbeat Presence when workspace is active
+  useEffect(() => {
+    let isMounted = true
+    const sendPresence = (status = 'online') => {
+      familyPortalService.updatePresence(status).catch(() => {})
+    }
+
+    sendPresence('online')
+    const presenceTimer = setInterval(() => {
+      if (isMounted) sendPresence('online')
+    }, 45000)
+
+    const handleBeforeUnload = () => sendPresence('offline')
+    window.addEventListener('beforeunload', handleBeforeUnload)
+
+    return () => {
+      isMounted = false
+      clearInterval(presenceTimer)
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  }, [])
+
+  // Load Messages for selected contact (supports silent background polling)
+  const fetchMessages = async (silent = false) => {
     if (!selectedContact) return
-    setMessagesLoading(true)
+    if (!silent) setMessagesLoading(true)
     try {
       const targetUserId = selectedContact.user_id || selectedContact.id
+      let incoming = []
       if (mode === 'parent') {
         const res = await familyPortalService.chatMessages(targetUserId, childId).catch(() => ({ data: [] }))
-        setMessages(Array.isArray(res?.data) ? res.data : (Array.isArray(res) ? res : []))
+        incoming = Array.isArray(res?.data) ? res.data : (Array.isArray(res) ? res : [])
       } else if (mode === 'employee') {
         const res = await familyPortalService.employeeMessages(targetUserId).catch(() => ({ data: [] }))
-        const apiMsgs = Array.isArray(res?.data) ? res.data : (Array.isArray(res) ? res : [])
-        setMessages(apiMsgs)
+        incoming = Array.isArray(res?.data) ? res.data : (Array.isArray(res) ? res : [])
       } else {
         const parentUserId = selectedContact.parent_user_id || targetUserId
         const studentId = selectedContact.student_id || childId
         const res = await familyPortalService.teacherMessages(parentUserId, studentId).catch(() => ({ data: [] }))
-        setMessages(Array.isArray(res?.data) ? res.data : (Array.isArray(res) ? res : []))
+        incoming = Array.isArray(res?.data) ? res.data : (Array.isArray(res) ? res : [])
       }
+
+      setMessages((prev) => {
+        if (silent && prev.length === incoming.length) {
+          const lastPrev = prev[prev.length - 1]
+          const lastInc = incoming[incoming.length - 1]
+          if (
+            lastPrev?.id === lastInc?.id &&
+            lastPrev?.read_at === lastInc?.read_at &&
+            lastPrev?.message === lastInc?.message &&
+            (lastPrev?.reactions?.length || 0) === (lastInc?.reactions?.length || 0)
+          ) {
+            return prev // Zero re-render when identical
+          }
+        }
+        return incoming
+      })
     } catch (err) {
-      console.warn('Gagal memuat pesan percakapan:', err)
-      setMessages([])
+      if (!silent) {
+        console.warn('Gagal memuat pesan percakapan:', err)
+        setMessages([])
+      }
     } finally {
-      setMessagesLoading(false)
-      setTimeout(scrollToBottom, 100)
+      if (!silent) {
+        setMessagesLoading(false)
+        setTimeout(scrollToBottom, 100)
+      }
     }
   }
 
   useEffect(() => {
-    fetchMessages()
+    fetchMessages(false)
   }, [selectedContact, childId])
+
+  // 1. Fast active message polling (1.5s) when conversation is open and tab is active
+  useEffect(() => {
+    if (!selectedContact) return
+    const msgTimer = setInterval(() => {
+      if (typeof document !== 'undefined' && document.hidden) return
+      fetchMessages(true)
+    }, 2000)
+    return () => clearInterval(msgTimer)
+  }, [selectedContact, mode, childId])
+
+  // 2. Slower contact list polling (15s) to avoid choking HTTP connections
+  useEffect(() => {
+    const contactTimer = setInterval(() => {
+      if (typeof document !== 'undefined' && document.hidden) return
+      fetchContacts(search, selectedUnit, selectedStatus)
+    }, 30000)
+    return () => clearInterval(contactTimer)
+  }, [mode, childId, search, selectedUnit, selectedStatus])
 
   // Combined contacts for Employee mode
   const combinedEmployeeContacts = useMemo(() => {
@@ -431,6 +788,10 @@ export default function ChatGuruWorkspace({
       }
 
       // 4. Tab Scoping Filter
+      if (mode === 'teacher') {
+        if (tab === 'unread') return (item.unread_count || 0) > 0
+        return true
+      }
       if (tab === 'percakapan' || tab === 'all' || tab === 'directory') {
         return true
       }
@@ -469,50 +830,60 @@ export default function ChatGuruWorkspace({
     })
   }, [messages, selectedContact])
 
-  // Handle Send Message
-  const handleSend = async (e) => {
-    e.preventDefault()
-    if (!messageText.trim() || !selectedContact || sending) return
+  // Handle Send Message (Optimistic UI with 0ms Perceived Latency)
+  const handleSend = useCallback(async (text, category = '', file = null) => {
+    if ((!text || !text.trim()) && !file) return
+    if (!selectedContact || sending) return
 
-    setSending(true)
-    let fullText = messageText.trim()
-    if (selectedCategory) {
-      fullText = `[Kategori: ${selectedCategory}]\n${fullText}`
+    let fullText = (text || '').trim()
+    if (category) {
+      fullText = `[Kategori: ${category}]\n${fullText}`
     }
 
+    const targetUserId = selectedContact.user_id || selectedContact.id
+    const tempId = 'msg_temp_' + Date.now()
+
+    const tempAttachments = file ? [{
+      id: 'temp_att_' + Date.now(),
+      url: URL.createObjectURL(file),
+      original_name: file.name,
+      file_type: file.type.startsWith('image/') ? 'image' : 'file',
+      formatted_size: (file.size / 1024 > 1024 ? (file.size / 1048576).toFixed(1) + ' MB' : (file.size / 1024).toFixed(0) + ' KB')
+    }] : []
+
+    const optimisticMsg = {
+      id: tempId,
+      sender_user_id: currentUserId || 'own_user',
+      recipient_user_id: targetUserId,
+      message: fullText,
+      attachments: tempAttachments,
+      created_at: new Date().toISOString(),
+      is_own: true,
+      read_at: null
+    }
+
+    setMessages((prev) => [...prev, optimisticMsg])
+    setTimeout(scrollToBottom, 30)
+
+    setSending(true)
     try {
-      const targetUserId = selectedContact.user_id || selectedContact.id
       if (mode === 'parent') {
-        await familyPortalService.sendMessage(targetUserId, childId, fullText)
+        await familyPortalService.sendMessage(targetUserId, childId, fullText, file)
       } else if (mode === 'employee') {
-        await familyPortalService.sendEmployeeMessage(targetUserId, fullText)
+        await familyPortalService.sendEmployeeMessage(targetUserId, fullText, file)
       } else {
         const parentUserId = selectedContact.parent_user_id || targetUserId
         const studentId = selectedContact.student_id || childId
-        await familyPortalService.sendTeacherMessage(parentUserId, studentId, fullText)
+        await familyPortalService.sendTeacherMessage(parentUserId, studentId, fullText, file)
       }
-
-      const newMsg = {
-        id: 'msg_temp_' + Date.now(),
-        sender_user_id: currentUserId || 'own_user',
-        recipient_user_id: targetUserId,
-        message: fullText,
-        created_at: new Date().toISOString(),
-        is_own: true,
-        read_at: null
-      }
-      setMessages((prev) => [...prev, newMsg])
-      setMessageText('')
-      setSelectedCategory('')
-      setTimeout(scrollToBottom, 50)
-      fetchMessages()
-      fetchContacts()
+      fetchMessages(true)
     } catch (err) {
       setError('Gagal mengirim pesan.')
+      fetchMessages(true)
     } finally {
       setSending(false)
     }
-  }
+  }, [selectedContact, sending, currentUserId, mode, childId, scrollToBottom, fetchMessages])
 
   // Handle Reaction Toggle
   const handleToggleReaction = async (messageId, reactionEmoji) => {
@@ -680,70 +1051,105 @@ export default function ChatGuruWorkspace({
 
             {/* ROW 3: CATEGORY TABS PILLS */}
             <div className="flex items-center gap-1 overflow-x-auto no-scrollbar pt-0.5 select-none">
-              <button
-                type="button"
-                onClick={() => setTab('percakapan')}
-                className={`rounded-lg px-2.5 py-1 text-[11px] font-extrabold transition cursor-pointer whitespace-nowrap ${
-                  tab === 'percakapan'
-                    ? 'bg-emerald-600 text-white shadow-2xs'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'
-                }`}
-              >
-                Percakapan
-              </button>
+              {mode === 'teacher' ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setTab('all')}
+                    className={`rounded-lg px-3 py-1 text-[11px] font-extrabold transition cursor-pointer whitespace-nowrap ${
+                      tab === 'all'
+                        ? 'bg-emerald-600 text-white shadow-2xs'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'
+                    }`}
+                  >
+                    Semua Orang Tua
+                  </button>
 
-              <button
-                type="button"
-                onClick={() => setTab('directory')}
-                className={`rounded-lg px-2.5 py-1 text-[11px] font-extrabold transition cursor-pointer whitespace-nowrap ${
-                  tab === 'directory'
-                    ? 'bg-emerald-600 text-white shadow-2xs'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'
-                }`}
-              >
-                Pegawai
-              </button>
+                  <button
+                    type="button"
+                    onClick={() => setTab('unread')}
+                    className={`rounded-lg px-3 py-1 text-[11px] font-extrabold transition cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
+                      tab === 'unread'
+                        ? 'bg-emerald-600 text-white shadow-2xs'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'
+                    }`}
+                  >
+                    <span>Belum Dibaca</span>
+                    {totalUnreadCount > 0 && (
+                      <span className="rounded-full bg-rose-500 px-1.5 py-0.2 text-[9px] font-black text-white">
+                        {totalUnreadCount}
+                      </span>
+                    )}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setTab('percakapan')}
+                    className={`rounded-lg px-2.5 py-1 text-[11px] font-extrabold transition cursor-pointer whitespace-nowrap ${
+                      tab === 'percakapan'
+                        ? 'bg-emerald-600 text-white shadow-2xs'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'
+                    }`}
+                  >
+                    Percakapan
+                  </button>
 
-              <button
-                type="button"
-                onClick={() => setTab('kepsek')}
-                className={`rounded-lg px-2.5 py-1 text-[11px] font-extrabold transition cursor-pointer whitespace-nowrap ${
-                  tab === 'kepsek'
-                    ? 'bg-emerald-600 text-white shadow-2xs'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'
-                }`}
-              >
-                Kepsek
-              </button>
+                  <button
+                    type="button"
+                    onClick={() => setTab('directory')}
+                    className={`rounded-lg px-2.5 py-1 text-[11px] font-extrabold transition cursor-pointer whitespace-nowrap ${
+                      tab === 'directory'
+                        ? 'bg-emerald-600 text-white shadow-2xs'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'
+                    }`}
+                  >
+                    Pegawai
+                  </button>
 
-              <button
-                type="button"
-                onClick={() => setTab('divisi_pendidikan')}
-                className={`rounded-lg px-2.5 py-1 text-[11px] font-extrabold transition cursor-pointer whitespace-nowrap ${
-                  tab === 'divisi_pendidikan'
-                    ? 'bg-emerald-600 text-white shadow-2xs'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'
-                }`}
-              >
-                Divisi
-              </button>
+                  <button
+                    type="button"
+                    onClick={() => setTab('kepsek')}
+                    className={`rounded-lg px-2.5 py-1 text-[11px] font-extrabold transition cursor-pointer whitespace-nowrap ${
+                      tab === 'kepsek'
+                        ? 'bg-emerald-600 text-white shadow-2xs'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'
+                    }`}
+                  >
+                    Kepsek
+                  </button>
 
-              <button
-                type="button"
-                onClick={() => setTab('unread')}
-                className={`rounded-lg px-2.5 py-1 text-[11px] font-extrabold transition cursor-pointer whitespace-nowrap flex items-center gap-1 ${
-                  tab === 'unread'
-                    ? 'bg-emerald-600 text-white shadow-2xs'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'
-                }`}
-              >
-                <span>Belum Dibaca</span>
-                {totalUnreadCount > 0 && (
-                  <span className="rounded-full bg-blue-500 px-1 py-0.2 text-[9px] font-black text-white">
-                    {totalUnreadCount}
-                  </span>
-                )}
-              </button>
+                  <button
+                    type="button"
+                    onClick={() => setTab('divisi_pendidikan')}
+                    className={`rounded-lg px-2.5 py-1 text-[11px] font-extrabold transition cursor-pointer whitespace-nowrap ${
+                      tab === 'divisi_pendidikan'
+                        ? 'bg-emerald-600 text-white shadow-2xs'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'
+                    }`}
+                  >
+                    Divisi
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setTab('unread')}
+                    className={`rounded-lg px-2.5 py-1 text-[11px] font-extrabold transition cursor-pointer whitespace-nowrap flex items-center gap-1 ${
+                      tab === 'unread'
+                        ? 'bg-emerald-600 text-white shadow-2xs'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'
+                    }`}
+                  >
+                    <span>Belum Dibaca</span>
+                    {totalUnreadCount > 0 && (
+                      <span className="rounded-full bg-blue-500 px-1 py-0.2 text-[9px] font-black text-white">
+                        {totalUnreadCount}
+                      </span>
+                    )}
+                  </button>
+                </>
+              )}
             </div>
 
             {/* ROW 4: TOTAL COUNTER SUMMARY */}
@@ -908,8 +1314,12 @@ export default function ChatGuruWorkspace({
                     const isSelected = selectedContact && (selectedContact.user_id === contactId || selectedContact.id === contactId)
                     const isOnline = contact.is_online || contact.status === 'online'
 
-                    const displayName = contact.name || contact.nama_lengkap || contact.nama_panggilan || contact.nama || 'Pegawai'
-                    const displaySub = contact.last_message || contact.subtitle || contact.position_name || contact.position?.name || contact.jabatan || 'Staf Pegawai'
+                    const displayName = mode === 'teacher'
+                      ? (contact.parent_name || contact.name || 'Orang Tua Murid')
+                      : (contact.name || contact.nama_lengkap || contact.nama_panggilan || contact.nama || 'Pegawai')
+                    const displaySub = mode === 'teacher'
+                      ? (contact.last_message || (contact.student_name ? `Wali dari ${contact.student_name} (${contact.class_name || '-'})` : 'Pesan Orang Tua'))
+                      : (contact.last_message || contact.subtitle || contact.position_name || contact.position?.name || contact.jabatan || 'Staf Pegawai')
 
                     return (
                       <div
@@ -1039,12 +1449,14 @@ export default function ChatGuruWorkspace({
 
                   <div>
                     <h3 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white flex items-center gap-2">
-                      <span>{selectedContact.name || selectedContact.nama_lengkap || 'Pegawai'}</span>
+                      <span>{mode === 'teacher' ? (selectedContact.parent_name || selectedContact.name || 'Orang Tua Murid') : (selectedContact.name || selectedContact.nama_lengkap || 'Pegawai')}</span>
                     </h3>
                     <p className="text-[10px] sm:text-[11px] font-medium text-slate-500 dark:text-slate-400">
                       {selectedContact.type === 'group'
                         ? `${selectedContact.members_count || selectedContact.participants?.length || 1} anggota`
-                        : `${selectedContact.position_name || selectedContact.role || 'Staf Pegawai'} ${selectedContact.unit_name ? '• ' + selectedContact.unit_name : ''}`}
+                        : mode === 'teacher'
+                          ? (selectedContact.student_name ? `Wali dari ${selectedContact.student_name} • ${selectedContact.class_name || '-'}` : (selectedContact.role_label || 'Pesan Orang Tua'))
+                          : `${selectedContact.position_name || selectedContact.role || 'Staf Pegawai'} ${selectedContact.unit_name ? '• ' + selectedContact.unit_name : ''}`}
                     </p>
                   </div>
                 </div>
@@ -1120,143 +1532,30 @@ export default function ChatGuruWorkspace({
                     )
                     const senderName = isOwn ? 'Anda' : (msg.sender_name || selectedContact?.name || 'Pengirim')
                     const isFirstUnread = Boolean(msg.is_unread || index === firstUnreadMessageIndex)
+                    const timeFormatted = formatMessageTime(msg.created_at || msg.created_at_time)
 
                     return (
-                      <React.Fragment key={msg.id || index}>
-                        {/* UNREAD DIVIDER (Matching Reference UI) */}
-                        {isFirstUnread && (
-                          <div className="flex items-center justify-center my-4 select-none">
-                            <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400">
-                              — Belum Dibaca —
-                            </span>
-                          </div>
-                        )}
-
-                        <div className={`flex items-start gap-2.5 ${isOwn ? 'justify-end' : 'justify-start'} mb-2`}>
-                          {!isOwn && (
-                            msg.sender_avatar || msg.sender_foto || selectedContact?.foto || selectedContact?.photo ? (
-                              <img
-                                src={msg.sender_avatar || msg.sender_foto || selectedContact?.foto || selectedContact?.photo}
-                                alt={senderName}
-                                className="h-8 w-8 rounded-full object-cover shrink-0 ring-1 ring-slate-200/80 mt-0.5"
-                              />
-                            ) : (
-                              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-700 text-xs font-black text-white shrink-0 shadow-2xs mt-0.5">
-                                {(senderName || 'P')[0]}
-                              </div>
-                            )
-                          )}
-
-                          <div className={`flex flex-col ${isOwn ? 'items-end' : 'items-start'} max-w-[85%] sm:max-w-[78%]`}>
-                            {!isOwn && (
-                              <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-400 mb-1">
-                                {senderName}
-                              </span>
-                            )}
-
-                            <div className="flex items-end gap-2">
-                              <div
-                                className={`group relative rounded-2xl p-3 text-xs shadow-2xs ${
-                                  isOwn
-                                    ? 'bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200/80 dark:border-emerald-800/80 text-slate-900 dark:text-emerald-100 rounded-tr-xs'
-                                    : 'bg-slate-100/90 dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-tl-xs'
-                                }`}
-                              >
-                                <p className="whitespace-pre-wrap leading-relaxed">{msg.message}</p>
-
-                                {/* Timestamp inside bubble right aligned */}
-                                <div className="mt-1 flex items-center justify-end gap-1 text-[10px] text-slate-400 font-semibold">
-                                  <span>{formatMessageTime(msg.created_at || msg.created_at_time)}</span>
-                                  {isOwn && (
-                                    <CheckCheck className="h-3.5 w-3.5 text-emerald-600" />
-                                  )}
-                                </div>
-
-                                {/* Emoji Reactions Bar */}
-                                {Array.isArray(msg.reactions) && msg.reactions.length > 0 && (
-                                  <div className="mt-1.5 flex flex-wrap gap-1">
-                                    {msg.reactions.map((r, rIdx) => (
-                                      <span
-                                        key={rIdx}
-                                        className="inline-flex items-center gap-1 rounded-full bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 px-2 py-0.5 text-[10px] font-bold text-slate-700 dark:text-slate-200 shadow-2xs"
-                                      >
-                                        <span>{r.reaction}</span>
-                                        <span>{r.count}</span>
-                                      </span>
-                                    ))}
-                                  </div>
-                                )}
-                              </div>
-
-                              {msg.is_unread && (
-                                <span className="h-2.5 w-2.5 rounded-full bg-blue-600 shrink-0 shadow-2xs mb-2" />
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </React.Fragment>
+                      <ChatMessageBubble
+                        key={msg.id || index}
+                        msg={msg}
+                        isOwn={isOwn}
+                        senderName={senderName}
+                        isFirstUnread={isFirstUnread}
+                        timeFormatted={timeFormatted}
+                        onImageClick={(url, name) => setLightboxMedia({ url, name })}
+                      />
                     )
                   })
                 )}
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* 4. BOTTOM MESSAGE COMPOSER (Matching Reference UI) */}
-              <div className="border-t border-slate-200/80 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 space-y-2 shrink-0">
-                <form onSubmit={handleSend} className="space-y-2">
-                  {/* Curved Rounded Input Bar */}
-                  <div className="flex items-center gap-2 rounded-3xl border border-slate-200/90 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-1 shadow-inner">
-                    <input
-                      type="text"
-                      value={messageText}
-                      onChange={(e) => setMessageText(e.target.value)}
-                      placeholder="Ketik pesan..."
-                      className="h-9 flex-1 bg-transparent text-xs text-slate-900 dark:text-white outline-none placeholder:text-slate-400"
-                    />
-
-                    <button type="button" className="p-1 text-slate-400 hover:text-slate-600 transition" title="Rekam Suara">
-                      <Mic className="h-4.5 w-4.5" />
-                    </button>
-
-                    <button
-                      type="submit"
-                      disabled={!messageText.trim() || sending}
-                      className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-600 text-white shadow-md shadow-emerald-600/30 transition hover:bg-emerald-700 disabled:opacity-40 cursor-pointer shrink-0"
-                    >
-                      <Send className="h-4 w-4" />
-                    </button>
-                  </div>
-
-                  {/* Bottom Attachment Toolbar */}
-                  <div className="flex items-center justify-between text-slate-400 px-2 pt-0.5">
-                    <div className="flex items-center gap-3">
-                      <button type="button" className="hover:text-emerald-600 transition cursor-pointer" title="Lampirkan File">
-                        <Paperclip className="h-4 w-4" />
-                      </button>
-                      <button type="button" className="hover:text-emerald-600 transition cursor-pointer" title="Emoji">
-                        <Smile className="h-4 w-4" />
-                      </button>
-                      <button type="button" className="hover:text-emerald-600 transition cursor-pointer" title="Mention User">
-                        <AtSign className="h-4 w-4" />
-                      </button>
-                      <button type="button" className="hover:text-emerald-600 transition cursor-pointer" title="Kirim Gambar">
-                        <ImageIcon className="h-4 w-4" />
-                      </button>
-                      <button type="button" className="hover:text-emerald-600 transition cursor-pointer" title="Kirim Dokumen">
-                        <FileText className="h-4 w-4" />
-                      </button>
-                    </div>
-
-                    {/* Unread Indicator Badge (Matching Reference UI) */}
-                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-blue-600">
-                      <span>{totalUnreadCount} belum dibaca</span>
-                      {totalUnreadCount > 0 && (
-                        <span className="h-2.5 w-2.5 rounded-full bg-blue-600" />
-                      )}
-                    </div>
-                  </div>
-                </form>
-              </div>
+              {/* 4. BOTTOM MESSAGE COMPOSER (Isolated State: Zero Re-render Lag while Typing) */}
+              <ChatMessageComposer
+                onSend={handleSend}
+                sending={sending}
+                totalUnreadCount={totalUnreadCount}
+              />
             </>
           ) : (
             <div className="flex flex-1 flex-col items-center justify-center p-8 text-center text-slate-400">
@@ -1360,6 +1659,46 @@ export default function ChatGuruWorkspace({
                 )}
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {/* Image Lightbox Modal */}
+      {lightboxMedia && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-xs animate-in fade-in duration-200"
+          onClick={() => setLightboxMedia(null)}
+        >
+          <div className="relative max-w-4xl max-h-[90vh] overflow-hidden rounded-2xl bg-slate-950 p-2 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between p-2 text-white border-b border-white/10">
+              <span className="text-xs font-bold truncate max-w-xs">{lightboxMedia.name || 'Pratinjau Foto'}</span>
+              <div className="flex items-center gap-2">
+                <a
+                  href={lightboxMedia.url}
+                  download={lightboxMedia.name}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="p-1 rounded-lg hover:bg-white/10 text-white transition"
+                  title="Unduh"
+                >
+                  <Download className="h-4 w-4" />
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setLightboxMedia(null)}
+                  className="p-1 rounded-lg hover:bg-white/10 text-white transition cursor-pointer"
+                  title="Tutup"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+            <div className="flex items-center justify-center p-2">
+              <img
+                src={lightboxMedia.url}
+                alt={lightboxMedia.name}
+                className="max-h-[75vh] max-w-full rounded-xl object-contain"
+              />
+            </div>
           </div>
         </div>
       )}

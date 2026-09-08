@@ -650,6 +650,73 @@ export default function MobileApiConfigPage() {
                       </div>
                     )}
                   </div>
+
+                  {/* Gradasi Kontainer Berita & Informasi (Warta) */}
+                  <div className="mt-5 rounded-2xl border border-teal-200 bg-teal-50/60 p-4 dark:border-teal-900 dark:bg-teal-950/20">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div>
+                        <span className="block text-sm font-black text-slate-900 dark:text-white">
+                          Warna Gradasi Kontainer Berita & Informasi (Warta)
+                        </span>
+                        <span className="mt-0.5 block text-xs font-normal text-slate-500 dark:text-slate-400">
+                          Atur gradasi warna latar belakang untuk kartu warta di beranda mobile (standar: Putih ke Hijau Muda).
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                      <label className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                        Warna Awal (Start - Contoh: #FFFFFF)
+                        <span className="mt-1.5 flex h-11 items-center gap-2 rounded-xl border border-slate-200 bg-white px-2 dark:border-slate-700 dark:bg-slate-900">
+                          <input
+                            type="color"
+                            value={config.theme?.news_gradient_start || '#FFFFFF'}
+                            onChange={(e) => updateTheme('news_gradient_start', e.target.value.toUpperCase())}
+                            className="h-8 w-10 cursor-pointer rounded-lg border-0 bg-transparent"
+                          />
+                          <input
+                            value={config.theme?.news_gradient_start || '#FFFFFF'}
+                            onChange={(e) => updateTheme('news_gradient_start', e.target.value)}
+                            className="min-w-0 flex-1 bg-transparent font-mono text-xs outline-none uppercase"
+                          />
+                        </span>
+                      </label>
+                      <label className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                        Warna Akhir (End - Contoh: #E8F5E9)
+                        <span className="mt-1.5 flex h-11 items-center gap-2 rounded-xl border border-slate-200 bg-white px-2 dark:border-slate-700 dark:bg-slate-900">
+                          <input
+                            type="color"
+                            value={config.theme?.news_gradient_end || '#E8F5E9'}
+                            onChange={(e) => updateTheme('news_gradient_end', e.target.value.toUpperCase())}
+                            className="h-8 w-10 cursor-pointer rounded-lg border-0 bg-transparent"
+                          />
+                          <input
+                            value={config.theme?.news_gradient_end || '#E8F5E9'}
+                            onChange={(e) => updateTheme('news_gradient_end', e.target.value)}
+                            className="min-w-0 flex-1 bg-transparent font-mono text-xs outline-none uppercase"
+                          />
+                        </span>
+                      </label>
+                    </div>
+
+                    {/* Live Preview Bar */}
+                    <div
+                      className="mt-4 rounded-xl border border-teal-300/70 p-3 shadow-xs"
+                      style={{
+                        background: `linear-gradient(to right, ${config.theme?.news_gradient_start || '#FFFFFF'}, ${config.theme?.news_gradient_end || '#E8F5E9'})`,
+                      }}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-slate-800">Pratinjau Kontainer Berita & Informasi</span>
+                        <span className="text-[10px] font-extrabold text-teal-800 bg-white/80 px-2 py-0.5 rounded-md border border-teal-200">
+                          Gradasi Aktif
+                        </span>
+                      </div>
+                      <p className="mt-1 text-[11px] text-slate-600">
+                        Kartu warta di halaman beranda aplikasi mobile akan berlatar gradasi ini.
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="rounded-[18px] border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-700 dark:bg-slate-800/60">
@@ -1128,21 +1195,34 @@ export default function MobileApiConfigPage() {
             <div className="mt-3 space-y-2">
               {sortedSections
                 .filter((item) => item.enabled)
-                .map((item) => (
-                  <div
-                    key={item.type}
-                    className="p-2.5 shadow-xs"
-                    style={{
-                      backgroundColor: config.theme?.surface_color || '#FFFFFF',
-                      color: config.theme?.text_color || '#0F172A',
-                      borderRadius: config.theme?.card_radius ?? 18,
-                    }}
-                  >
-                    <span className="text-[11px] font-bold">
-                      {sectionLabels[item.type] || item.type}
-                    </span>
-                  </div>
-                ))}
+                .map((item) => {
+                  const isAnnounce = item.type === 'announcements';
+                  return (
+                    <div
+                      key={item.type}
+                      className="p-2.5 shadow-xs"
+                      style={{
+                        background: isAnnounce
+                          ? `linear-gradient(to right, ${config.theme?.news_gradient_start || '#FFFFFF'}, ${config.theme?.news_gradient_end || '#E8F5E9'})`
+                          : (config.theme?.surface_color || '#FFFFFF'),
+                        color: config.theme?.text_color || '#0F172A',
+                        borderRadius: config.theme?.card_radius ?? 18,
+                        border: isAnnounce ? '1px solid rgba(16, 185, 129, 0.3)' : undefined,
+                      }}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-bold">
+                          {sectionLabels[item.type] || item.type}
+                        </span>
+                        {isAnnounce && (
+                          <span className="text-[8px] font-extrabold text-teal-800 bg-white/80 px-1.5 py-0.5 rounded">
+                            Gradasi
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
             </div>
 
             {/* Simulated Active Features Pill */}

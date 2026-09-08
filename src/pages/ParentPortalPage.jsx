@@ -49,11 +49,13 @@ import TahfizhWorkspace from '../components/portal/TahfizhWorkspace'
 import GradesWorkspace from '../components/portal/GradesWorkspace'
 import TeacherCommentsWorkspace from '../components/portal/TeacherCommentsWorkspace'
 import MutabaahWorkspace from '../components/portal/MutabaahWorkspace'
+import ParentWorshipInputWorkspace from '../components/portal/ParentWorshipInputWorkspace'
 import AttendanceWorkspace from '../components/portal/AttendanceWorkspace'
 import ExamGridsWorkspace from '../components/portal/ExamGridsWorkspace'
 import CbtExamsWorkspace from '../components/portal/CbtExamsWorkspace'
 import ExamResultsWorkspace from '../components/portal/ExamResultsWorkspace'
 import ChatGuruWorkspace from '../components/portal/ChatGuruWorkspace'
+import AcademicCalendarModal from '../components/calendar/AcademicCalendarModal'
 import { useAuthStore } from '../stores/authStore'
 
 // TailGrids Core Components
@@ -62,235 +64,13 @@ import { Badge } from '@/components/tailgrids/core/badge'
 import { Button } from '@/components/tailgrids/core/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/tailgrids/core/card'
 
-// Multi-Child Fallback Dataset for Parents with children in Same / Cross Units (SD IT, SMP IT, SMA IT, Pesantren)
-const MOCK_FALLBACK_CHILDREN = [
-  {
-    id: 'child-sd-101',
-    full_name: 'Muhammad Fathan Al-Fatih',
-    nama_lengkap: 'Muhammad Fathan Al-Fatih',
-    nis: 'SD-2022-0145',
-    nisn: '0123456789',
-    nik: '1371011504140001',
-    gender: 'male',
-    jenis_kelamin: 'Laki-laki',
-    birth_place: 'Padang',
-    birth_date: '2014-04-15',
-    religion: 'Islam',
-    address: 'Jl. Melati No. 12, Kuranji, Kota Padang',
-    unit_name: 'SD IT Darel Iman',
-    unit_code: 'SDIT',
-    kelas: { nama_kelas: 'Kelas 5 Al-Bukhari', rombel: '5A', wali_kelas: { nama_lengkap: 'Ustadz Hamzah, S.Pd.I' } },
-    is_pesantren: false,
-    wali_kelas: 'Ustadz Hamzah, S.Pd.I',
-    foto_url: null,
-    gpa: 92,
-    tahfizh_summary: '3 Juz (Juz 30, 29, 28)',
-    tahfizh_target_pct: 88,
-    mutabaah_score: 95,
-    attendance_status: 'Hadir',
-    metadata: {
-      nama_panggilan: 'Fathan',
-      kewarganegaraan: 'WNI',
-      golongan_darah: 'O',
-      bahasa: 'Indonesia',
-      anak_ke: '1',
-      status_anak: 'Kandung',
-      rt: '02',
-      rw: '05',
-      kelurahan: 'Kuranji',
-      kecamatan: 'Kuranji',
-      kota: 'Padang',
-      provinsi: 'Sumatera Barat',
-      kode_pos: '25157',
-      email: 'fathan.sdit@dareliman.or.id',
-      nomor_hp: '081267890011',
-      jenjang: 'SD',
-      rombel: '5A',
-      wali_kelas: 'Ustadz Hamzah, S.Pd.I',
-      guru_bk: 'Ustadz Hendra, S.Psi',
-      status_akademik: 'Aktif',
-      tanggal_masuk: '2022-07-11',
-      alergi: 'Tidak Ada',
-      riwayat_penyakit: 'Tidak Ada',
-      vaksin: 'Lengkap (DPT, Polio, MR)',
-      tinggi_badan: '138 cm',
-      berat_badan: '34 kg',
-      ayah: {
-        nama_lengkap: 'Rahmat Hidayat, S.E.',
-        nik: '1371011005820002',
-        pekerjaan: 'Wiraswasta',
-        pendidikan: 'S1 Ekonomi',
-        nomor_hp: '081267890001',
-        email: 'rahmat.hidayat@gmail.com',
-        alamat: 'Jl. Melati No. 12, Kuranji, Kota Padang',
-      },
-      ibu: {
-        nama_lengkap: 'Siti Aminah, S.Pd.',
-        nik: '1371015208850003',
-        pekerjaan: 'Guru',
-        pendidikan: 'S1 Pendidikan',
-        nomor_hp: '081267890002',
-        email: 'siti.aminah@gmail.com',
-        alamat: 'Jl. Melati No. 12, Kuranji, Kota Padang',
-      },
-    },
-  },
-  {
-    id: 'child-smp-102',
-    full_name: 'Aisyah Humaira',
-    nama_lengkap: 'Aisyah Humaira',
-    nis: 'SMP-2023-0089',
-    nisn: '0123456790',
-    nik: '1371015206110004',
-    gender: 'female',
-    jenis_kelamin: 'Perempuan',
-    birth_place: 'Padang',
-    birth_date: '2011-06-12',
-    religion: 'Islam',
-    address: 'Jl. Melati No. 12, Kuranji, Kota Padang',
-    unit_name: 'SMP IT Darel Iman',
-    unit_code: 'SMPIT',
-    kelas: { nama_kelas: 'Kelas 8 Khadijah', rombel: '8B', wali_kelas: { nama_lengkap: 'Ustadzah Fatimah, M.Pd' } },
-    is_pesantren: false,
-    wali_kelas: 'Ustadzah Fatimah, M.Pd',
-    foto_url: null,
-    gpa: 94,
-    tahfizh_summary: '6 Juz (Juz 30, 29, 28, 27, 1, 2)',
-    tahfizh_target_pct: 95,
-    mutabaah_score: 98,
-    attendance_status: 'Hadir',
-    metadata: {
-      nama_panggilan: 'Aisyah',
-      kewarganegaraan: 'WNI',
-      golongan_darah: 'A',
-      bahasa: 'Indonesia',
-      anak_ke: '2',
-      status_anak: 'Kandung',
-      rt: '02',
-      rw: '05',
-      kelurahan: 'Kuranji',
-      kecamatan: 'Kuranji',
-      kota: 'Padang',
-      provinsi: 'Sumatera Barat',
-      kode_pos: '25157',
-      email: 'aisyah.smpit@dareliman.or.id',
-      nomor_hp: '081267890022',
-      jenjang: 'SMP',
-      rombel: '8B',
-      wali_kelas: 'Ustadzah Fatimah, M.Pd',
-      guru_bk: 'Ustadzah Nurul, S.Psi',
-      status_akademik: 'Aktif',
-      tanggal_masuk: '2023-07-10',
-      alergi: 'Debu',
-      riwayat_penyakit: 'Tidak Ada',
-      vaksin: 'Lengkap (DPT, Polio, MR, COVID-19)',
-      tinggi_badan: '152 cm',
-      berat_badan: '42 kg',
-      ayah: {
-        nama_lengkap: 'Rahmat Hidayat, S.E.',
-        nik: '1371011005820002',
-        pekerjaan: 'Wiraswasta',
-        pendidikan: 'S1 Ekonomi',
-        nomor_hp: '081267890001',
-        email: 'rahmat.hidayat@gmail.com',
-        alamat: 'Jl. Melati No. 12, Kuranji, Kota Padang',
-      },
-      ibu: {
-        nama_lengkap: 'Siti Aminah, S.Pd.',
-        nik: '1371015208850003',
-        pekerjaan: 'Guru',
-        pendidikan: 'S1 Pendidikan',
-        nomor_hp: '081267890002',
-        email: 'siti.aminah@gmail.com',
-        alamat: 'Jl. Melati No. 12, Kuranji, Kota Padang',
-      },
-    },
-  },
-  {
-    id: 'child-pesantren-103',
-    full_name: 'Abdullah Royyan',
-    nama_lengkap: 'Abdullah Royyan',
-    nis: 'SMA-2024-0012',
-    nisn: '0123456791',
-    nik: '1371011809080005',
-    gender: 'male',
-    jenis_kelamin: 'Laki-laki',
-    birth_place: 'Padang',
-    birth_date: '2008-09-18',
-    religion: 'Islam',
-    address: 'Jl. Melati No. 12, Kuranji, Kota Padang (Asrama Uhud - Kamar 204)',
-    unit_name: 'SMA IT / Pondok Pesantren Darel Iman',
-    unit_code: 'PONPES',
-    kelas: { nama_kelas: 'Kelas 11 IPA 1 (Santri Asrama)', rombel: '11-IPA-1', wali_kelas: { nama_lengkap: 'Ustadz Ahmad Farhan, S.S' } },
-    is_pesantren: true,
-    asrama: 'Gedung Asrama Uhud - Kamar 204',
-    musyrif: 'Ustadz Zulkifli, Lc',
-    wali_kelas: 'Ustadz Ahmad Farhan, S.S',
-    foto_url: null,
-    gpa: 90,
-    tahfizh_summary: '12 Juz (Juz 1-10, 29, 30)',
-    tahfizh_target_pct: 90,
-    mutabaah_score: 92,
-    attendance_status: 'Hadir (Presensi Asrama)',
-    pesantren_details: {
-      presensi_malam: 'Hadir Qiyamul Lail (03.30 WIB)',
-      shalat_subuh: 'Jamaah Masjid Utama (Tepat Waktu)',
-      kebersihan_kamar: 'A (Sangat Baik)',
-      kesehatan: 'Sehat (Pemeriksaan Klinik Poskestren 15 Aug)',
-      catatan_musyrif: 'Santri rajin murajaah malam dan aktif bimbingan adab.',
-    },
-    metadata: {
-      nama_panggilan: 'Royyan',
-      kewarganegaraan: 'WNI',
-      golongan_darah: 'B',
-      bahasa: 'Indonesia & Arab',
-      anak_ke: '3',
-      status_anak: 'Kandung',
-      rt: '02',
-      rw: '05',
-      kelurahan: 'Kuranji',
-      kecamatan: 'Kuranji',
-      kota: 'Padang',
-      provinsi: 'Sumatera Barat',
-      kode_pos: '25157',
-      email: 'royyan.ponpes@dareliman.or.id',
-      nomor_hp: '081267890033',
-      jenjang: 'SMA IT / Pesantren',
-      rombel: '11-IPA-1',
-      wali_kelas: 'Ustadz Ahmad Farhan, S.S',
-      guru_bk: 'Ustadz Zulkifli, Lc (Musyrif Asrama)',
-      status_akademik: 'Aktif',
-      tanggal_masuk: '2024-07-08',
-      alergi: 'Tidak Ada',
-      riwayat_penyakit: 'Tidak Ada',
-      vaksin: 'Lengkap (DPT, Polio, MR, COVID-19 Booster)',
-      tinggi_badan: '168 cm',
-      berat_badan: '58 kg',
-      ayah: {
-        nama_lengkap: 'Rahmat Hidayat, S.E.',
-        nik: '1371011005820002',
-        pekerjaan: 'Wiraswasta',
-        pendidikan: 'S1 Ekonomi',
-        nomor_hp: '081267890001',
-        email: 'rahmat.hidayat@gmail.com',
-        alamat: 'Jl. Melati No. 12, Kuranji, Kota Padang',
-      },
-      ibu: {
-        nama_lengkap: 'Siti Aminah, S.Pd.',
-        nik: '1371015208850003',
-        pekerjaan: 'Guru',
-        pendidikan: 'S1 Pendidikan',
-        nomor_hp: '081267890002',
-        email: 'siti.aminah@gmail.com',
-        alamat: 'Jl. Melati No. 12, Kuranji, Kota Padang',
-      },
-    },
-  },
-]
+// Fallback dataset removed: children loaded dynamically from API
+const MOCK_FALLBACK_CHILDREN = []
 
 const menu = [
   ['ringkasan', 'Dashboard', Sparkles, 'bg-sky-100/90 text-sky-600 border-sky-200/90 hover:bg-sky-200'],
   ['profile', 'Profil & Biodata', UserRound, 'bg-blue-100/90 text-blue-600 border-blue-200/90 hover:bg-blue-200'],
+  ['calendar', 'Kalender Akademik', CalendarDays, 'bg-cyan-100/90 text-cyan-600 border-cyan-200/90 hover:bg-cyan-200'],
   ['announcements', 'Informasi Sekolah', Megaphone, 'bg-indigo-100/90 text-indigo-600 border-indigo-200/90 hover:bg-indigo-200'],
   ['schedules', 'Jadwal', CalendarDays, 'bg-violet-100/90 text-violet-600 border-violet-200/90 hover:bg-violet-200'],
   ['materials', 'Materi', BookOpen, 'bg-purple-100/90 text-purple-600 border-purple-200/90 hover:bg-purple-200'],
@@ -359,6 +139,7 @@ export default function ParentPortalPage() {
   const [active, setActive] = useState(() => (menu.some(([id]) => id === requestedTab) ? requestedTab : 'ringkasan'))
 
   const [records, setRecords] = useState([])
+  const [tahfizhAchievement, setTahfizhAchievement] = useState(null)
   const [permissionsRecords, setPermissionsRecords] = useState([])
   const [examGridsRecords, setExamGridsRecords] = useState([])
   const [resultsData, setResultsData] = useState(null)
@@ -368,6 +149,7 @@ export default function ParentPortalPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [ringkasanSubTab, setRingkasanSubTab] = useState('mutabaah')
+  const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false)
 
   // Multi-Child List Fetching & Merging
   useEffect(() => {
@@ -380,17 +162,14 @@ export default function ParentPortalPage() {
           const persisted = apiChildren.find((c) => String(c.id) === String(requestedChild))
           setChildId(persisted?.id || apiChildren[0]?.id || '')
         } else {
-          // Fallback ke mock data hanya jika akun belum memiliki data siswa terdaftar di database
-          setChildren(MOCK_FALLBACK_CHILDREN)
-          const persisted = MOCK_FALLBACK_CHILDREN.find((c) => String(c.id) === String(requestedChild))
-          setChildId(persisted?.id || MOCK_FALLBACK_CHILDREN[0]?.id || '')
+          setChildren([])
+          setChildId('')
           setLoading(false)
         }
       })
       .catch(() => {
-        setChildren(MOCK_FALLBACK_CHILDREN)
-        const persisted = MOCK_FALLBACK_CHILDREN.find((c) => String(c.id) === String(requestedChild))
-        setChildId(persisted?.id || MOCK_FALLBACK_CHILDREN[0].id)
+        setChildren([])
+        setChildId('')
         setLoading(false)
       })
   }, [])
@@ -405,6 +184,7 @@ export default function ParentPortalPage() {
     setExamGridsRecords([])
     setReportsRecords([])
     setPermissionsRecords([])
+    setTahfizhAchievement(null)
     setSearchParams(
       (params) => {
         const next = new URLSearchParams(params)
@@ -460,10 +240,28 @@ export default function ParentPortalPage() {
         ])
         setResultsData(resRes.data?.data ?? null)
         setReportsRecords(repRes.data?.data ?? [])
+      } else if (active === 'grades') {
+        setRecords([])
+        const res = await familyPortalService.list('grades', childId).catch(() => ({ data: null }))
+        setRecords(res?.data || null)
+      } else if (active === 'tahfizh') {
+        const [logsResponse, achievementResponse] = await Promise.all([
+          familyPortalService.list('tahfizh', childId).catch(() => ({ data: [] })),
+          api.get(`/portal/children/${childId}/tahfizh-achievement`).catch(() => ({ data: { data: null } })),
+        ])
+        setRecords(unwrap(logsResponse))
+        setTahfizhAchievement(achievementResponse.data?.data || null)
+        if (logsResponse?.tahfizh_target) setDashboard((prev) => ({ ...(prev || {}), tahfizh_target: logsResponse.tahfizh_target }))
+      } else if (active === 'mutabaah') {
+        const res = await api.get(`/parent/mutabaah/${childId}`)
+        setRecords(res.data?.data || null)
       } else {
         setRecords([])
         const res = await familyPortalService.list(active, childId).catch(() => ({ data: [] }))
         setRecords(unwrap(res))
+        if (res?.tahfizh_target) {
+          setDashboard((prev) => ({ ...(prev || {}), tahfizh_target: res.tahfizh_target }))
+        }
       }
     } catch (e) {
       setError(e.response?.data?.message || 'Data portal belum berhasil dimuat dari server.')
@@ -493,9 +291,43 @@ export default function ParentPortalPage() {
     )
   }
 
+  const handlePhotoUpdated = (newPhotoUrl, updatedChildId) => {
+    setChildren((prev) =>
+      prev.map((c) =>
+        String(c.id) === String(updatedChildId)
+          ? { ...c, photo: newPhotoUrl, photo_url: newPhotoUrl, avatar_url: newPhotoUrl }
+          : c
+      )
+    )
+    setRecords((prev) =>
+      typeof prev === 'object' && prev
+        ? { ...prev, photo: newPhotoUrl, photo_url: newPhotoUrl, avatar_url: newPhotoUrl }
+        : prev
+    )
+  }
+
   const activeChild = useMemo(() => {
-    return children.find((c) => String(c.id) === String(childId)) || children[0] || MOCK_FALLBACK_CHILDREN[0]
+    return children.find((c) => String(c.id) === String(childId)) || children[0] || null
   }, [children, childId])
+
+  const isChildSD = useMemo(() => {
+    if (!activeChild) return false
+    const unitName = (activeChild.unit_name || activeChild.education_unit?.name || "").toLowerCase()
+    const jenjang = (activeChild.jenjang || activeChild.kelas?.jenjang || activeChild.education_unit?.level || "").toLowerCase()
+    return jenjang.includes("sd") || jenjang.includes("mi") || unitName.includes("sd") || unitName.includes("mi") || unitName.includes("sekolah dasar") || unitName.includes("ibtidaiyah")
+  }, [activeChild])
+
+  const handleAssignmentSubmit = async (assignmentId, payload) => {
+    const formData = new FormData()
+    if (payload.jawaban_teks) formData.append("jawaban_teks", payload.jawaban_teks)
+    if (payload.file_lampiran) formData.append("file_lampiran", payload.file_lampiran)
+    if (childId) formData.append("child_id", childId)
+
+    await api.post("/portal/assignments/" + assignmentId + "/submit", formData, {
+      headers: { "X-Child-Id": childId },
+    })
+    await load()
+  }
 
   const activeChildAnnouncements = useMemo(() => {
     const raw = dashboard?.announcements || [
@@ -563,6 +395,20 @@ export default function ParentPortalPage() {
                   Pantau perkembangan nilai akademik, progres tahfizh Al-Qur'an, mutabaah harian, presensi, jadwal, serta pengumuman sekolah terpadu.
                 </p>
               </div>
+            </div>
+
+            <div className="flex shrink-0 items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setIsCalendarModalOpen(true)}
+                className="flex items-center gap-2 rounded-xl border border-cyan-300/80 bg-white/95 px-3.5 py-2.5 text-xs font-black text-cyan-900 shadow-sm transition hover:bg-cyan-50 dark:border-cyan-800 dark:bg-slate-800 dark:text-cyan-200 cursor-pointer"
+              >
+                <CalendarDays className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
+                <span>Kalender Akademik</span>
+                <span className="rounded-md bg-cyan-100 px-1.5 py-0.5 text-[10px] text-cyan-800 dark:bg-cyan-950 dark:text-cyan-300 font-extrabold">
+                  {activeChild?.unit_name || 'Unit Siswa'}
+                </span>
+              </button>
             </div>
           </div>
         </div>
@@ -1097,6 +943,35 @@ export default function ParentPortalPage() {
                   </CardContent>
                 </Card>
 
+                {/* KARTU KALENDER AKADEMIK UNIT SISWA */}
+                <Card className="border-cyan-200/80 bg-gradient-to-br from-cyan-50/40 via-white to-teal-50/30 shadow-xs dark:border-cyan-900/50 dark:from-slate-900 dark:to-slate-900">
+                  <CardHeader className="border-b border-cyan-100/70 bg-cyan-50/60 p-5 dark:border-slate-800 dark:bg-slate-900">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <CalendarDays className="h-4 w-4 text-cyan-600" />
+                        <CardTitle className="text-sm font-bold text-slate-900 dark:text-white">
+                          Kalender Akademik ({activeChild?.unit_name})
+                        </CardTitle>
+                      </div>
+                      <Button size="sm" variant="ghost" onClick={() => setIsCalendarModalOpen(true)} className="text-xs text-cyan-700 font-black dark:text-cyan-400">
+                        Lihat Kalender →
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-5 space-y-2.5 text-xs">
+                    <div className="rounded-xl bg-cyan-50/80 p-3 text-[11px] text-cyan-900 dark:bg-cyan-950/40 dark:text-cyan-200 border border-cyan-200/60">
+                      ℹ️ Menampilkan agenda resmi tahun ajaran dan kalender akademik khusus unit <b>{activeChild?.unit_name}</b>.
+                    </div>
+                    <Button
+                      onClick={() => setIsCalendarModalOpen(true)}
+                      className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600 to-teal-600 text-white font-bold text-xs py-2.5 rounded-xl shadow-xs hover:opacity-95"
+                    >
+                      <CalendarDays className="h-4 w-4" />
+                      Buka Kalender Akademik {activeChild?.unit_name}
+                    </Button>
+                  </CardContent>
+                </Card>
+
                 <Card className="border-slate-200/80 shadow-xs">
                   <CardHeader className="border-b border-slate-100 bg-slate-50/50 p-5 dark:border-slate-800 dark:bg-slate-900">
                     <div className="flex items-center justify-between">
@@ -1134,7 +1009,56 @@ export default function ParentPortalPage() {
               dashboard={dashboard || {}}
               onNavigate={selectTab}
               readOnly={false}
+              onPhotoUpdated={handlePhotoUpdated}
             />
+          )}
+
+          {active === 'calendar' && (
+            <div className="space-y-4">
+              <div className="rounded-2xl border border-cyan-200 bg-gradient-to-r from-cyan-50 via-teal-50/60 to-white p-5 shadow-xs dark:border-cyan-900 dark:bg-slate-900">
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div>
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-cyan-100 px-3 py-1 text-xs font-black text-cyan-800 dark:bg-cyan-950 dark:text-cyan-300">
+                      <CalendarDays className="h-3.5 w-3.5" />
+                      Kalender Akademik Terpadu
+                    </span>
+                    <h2 className="mt-2 text-lg font-black text-slate-900 dark:text-white">
+                      Kalender Akademik Unit: {activeChild?.unit_name}
+                    </h2>
+                    <p className="mt-1 text-xs text-slate-600 dark:text-slate-300">
+                      Jadwal resmi kegiatan belajar mengajar, penilaian, libur semester, dan agenda penting khusus ananda {activeChild?.full_name}.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsCalendarModalOpen(true)}
+                    className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-600 to-teal-600 px-4 py-2.5 text-xs font-black text-white shadow-md transition hover:scale-[1.02] cursor-pointer"
+                  >
+                    <CalendarDays className="h-4 w-4" />
+                    <span>Buka Kalender Interaktif</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Kalender Embed Preview */}
+              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs dark:border-slate-800 dark:bg-slate-900 text-center py-10">
+                <CalendarDays className="mx-auto h-12 w-12 text-cyan-600 dark:text-cyan-400" />
+                <h3 className="mt-3 text-base font-black text-slate-900 dark:text-white">
+                  Kalender Akademik & Agenda Kegiatan {activeChild?.unit_name}
+                </h3>
+                <p className="mx-auto mt-1 max-w-md text-xs text-slate-500">
+                  Data kalender telah difilter khusus untuk unit {activeChild?.unit_name}. Anda dapat melihat tampilan bulanan, mingguan, serta daftar agenda lengkap dengan membuka kalender interaktif.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setIsCalendarModalOpen(true)}
+                  className="mt-5 inline-flex items-center gap-2 rounded-xl bg-cyan-600 px-5 py-2.5 text-xs font-black text-white shadow-md transition hover:bg-cyan-700 cursor-pointer"
+                >
+                  <CalendarDays className="h-4 w-4" />
+                  Buka Kalender Akademik {activeChild?.unit_name}
+                </button>
+              </div>
+            </div>
           )}
 
           {active === 'announcements' && (
@@ -1150,11 +1074,11 @@ export default function ParentPortalPage() {
           )}
 
           {active === 'assignments' && (
-            <AssignmentsWorkspace assignments={records} isParent={true} loading={loading} />
+            <AssignmentsWorkspace assignments={records} isParent={true} canSubmit={isChildSD} onSubmitAssignment={handleAssignmentSubmit} loading={loading} />
           )}
 
           {active === 'tahfizh' && (
-            <TahfizhWorkspace logs={records} target={dashboard?.tahfizh_target} loading={loading} />
+            <TahfizhWorkspace logs={records} target={dashboard?.tahfizh_target} achievement={tahfizhAchievement} loading={loading} />
           )}
 
           {active === 'grades' && (
@@ -1162,11 +1086,14 @@ export default function ParentPortalPage() {
           )}
 
           {active === 'student-notes' && (
-            <TeacherCommentsWorkspace comments={records} loading={loading} />
+            <TeacherCommentsWorkspace comments={records} loading={loading} childId={childId} isParent onSigned={load} />
           )}
 
           {active === 'mutabaah' && (
-            <MutabaahWorkspace mutabaah={records} isParent={true} loading={loading} />
+            <div className="space-y-5">
+              <ParentWorshipInputWorkspace studentId={childId} />
+              <MutabaahWorkspace mutabaah={records?.today || null} isParent={true} loading={loading} />
+            </div>
           )}
 
           {active === 'attendance' && (
@@ -1221,7 +1148,13 @@ export default function ParentPortalPage() {
           )}
         </section>
       )}
+
+      {/* MODAL KALENDER AKADEMIK (TERKUNCI KE UNIT SISWA ORANG TUA) */}
+      <AcademicCalendarModal
+        isOpen={isCalendarModalOpen}
+        onClose={() => setIsCalendarModalOpen(false)}
+        lockedUnit={activeChild?.unit_name || ''}
+      />
     </div>
   )
 }
-

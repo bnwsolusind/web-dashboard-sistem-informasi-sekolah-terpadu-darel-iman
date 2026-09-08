@@ -21,6 +21,8 @@ export const DEFAULT_MOBILE_API_CONFIG = {
     card_radius: 18,
     welcome_text: 'Selamat datang di SIMSIT Dar el-Iman',
     login_banner_url: '',
+    news_gradient_start: '#FFFFFF',
+    news_gradient_end: '#E8F5E9',
   },
   branding: {
     app_name: 'Sistem Manajemen Sekolah Terpadu',

@@ -94,7 +94,7 @@ export default function FloatingChatWidget() {
 
   // Periodically check total unread messages across parent, teacher, and employee chats
   const checkUnread = useCallback(async () => {
-    if (!shouldRender) return
+    if (!shouldRender || isOpen || (typeof document !== 'undefined' && document.hidden)) return
     let total = 0
     try {
       if (isParent && childId) {
@@ -102,7 +102,7 @@ export default function FloatingChatWidget() {
         const contacts = res.data || []
         total += contacts.reduce((sum, c) => sum + (c.unread_count || 0), 0)
       }
-      if (isTeacher) {
+      if (isTeacher && !isEmployee) {
         const res = await familyPortalService.teacherConversations().catch(() => ({ data: [] }))
         const conversations = res.data || []
         total += conversations.reduce((sum, c) => sum + (c.unread_count || 0), 0)
@@ -126,7 +126,7 @@ export default function FloatingChatWidget() {
 
   useEffect(() => {
     checkUnread()
-    const timer = setInterval(checkUnread, 15000)
+    const timer = setInterval(checkUnread, 30000)
     return () => clearInterval(timer)
   }, [checkUnread])
 

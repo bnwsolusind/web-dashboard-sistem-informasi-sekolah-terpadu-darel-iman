@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { HeartHandshake, CheckCircle2, Circle, Clock, Save, Loader2, Calendar, Award } from 'lucide-react'
 
@@ -13,14 +13,20 @@ export default function MutabaahWorkspace({ mutabaah = null, onSaveMutabaah, isP
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
 
+  useEffect(() => {
+    const existing = mutabaah?.details || []
+    setCheckedIds(new Set(existing.filter((item) => item.status_value === 'good').map((d) => d.activity_id || d.id || d.activity_name)))
+  }, [mutabaah])
+
   const detailsList = useMemo(() => mutabaah?.details || [], [mutabaah])
 
   const stats = useMemo(() => {
-    const total = detailsList.length
-    const achieved = checkedIds.size
-    const percentage = total ? Math.round((achieved / total) * 100) : 0
-    return { total, achieved, pending: total - achieved, percentage }
-  }, [detailsList, checkedIds])
+    const total = Number(mutabaah?.total_items ?? detailsList.length)
+    const achieved = Number(mutabaah?.good_count ?? detailsList.filter((item) => item.status_value === 'good').length)
+    const pending = Number(mutabaah?.not_done_count ?? detailsList.filter((item) => item.status_value === 'not_done').length)
+    const percentage = mutabaah?.score == null ? null : Math.round(Number(mutabaah.score))
+    return { total, achieved, pending, percentage }
+  }, [detailsList, mutabaah])
 
   const toggleCheck = (id) => {
     if (isReadOnly) return
@@ -89,11 +95,11 @@ export default function MutabaahWorkspace({ mutabaah = null, onSaveMutabaah, isP
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-50 text-violet-700 dark:bg-violet-950 dark:text-violet-300">
               <Award className="h-5 w-5" />
             </span>
-            <span className="text-xl font-black text-slate-900 dark:text-white">{stats.percentage}%</span>
+            <span className="text-xl font-black text-slate-900 dark:text-white">{stats.percentage == null ? '-' : `${stats.percentage}%`}</span>
           </div>
           <p className="mt-3 text-xs font-bold text-slate-500">Persentase Capaian</p>
           <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
-            <div className="h-full rounded-full bg-violet-500" style={{ width: `${stats.percentage}%` }} />
+            <div className="h-full rounded-full bg-violet-500" style={{ width: `${stats.percentage || 0}%` }} />
           </div>
         </motion.div>
       </div>
@@ -136,7 +142,7 @@ export default function MutabaahWorkspace({ mutabaah = null, onSaveMutabaah, isP
         <div className="mt-5 grid gap-3 md:grid-cols-2">
           {detailsList.map((item, idx) => {
             const id = item.activity_id || item.id || item.activity_name || `act-${idx}`
-            const isChecked = checkedIds.has(id) || item.is_completed || item.completed
+            const isChecked = item.status_value === 'good' || checkedIds.has(id) || item.is_completed || item.completed
 
             return (
               <div

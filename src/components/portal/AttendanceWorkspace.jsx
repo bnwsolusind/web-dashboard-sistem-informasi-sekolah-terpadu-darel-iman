@@ -33,7 +33,7 @@ export default function AttendanceWorkspace({ attendanceLogs = [], permissionsHi
     let hadir = 0, terlambat = 0, izin = 0, sakit = 0, alpha = 0
 
     safeAttendanceLogs.forEach((item) => {
-      const st = (item.status || '').toLowerCase()
+      const st = (item.status_hadir || item.status_label || item.status || '').toLowerCase()
       if (st.includes('hadir')) hadir++
       else if (st.includes('terlambat')) terlambat++
       else if (st.includes('izin')) izin++
@@ -130,11 +130,11 @@ export default function AttendanceWorkspace({ attendanceLogs = [], permissionsHi
             {safeAttendanceLogs.map((item, idx) => (
               <div key={item.id || idx} className="flex flex-wrap items-center justify-between gap-4 py-4 text-xs">
                 <div>
-                  <b className="text-sm font-bold text-slate-900 dark:text-white">{item.session?.subject?.name || item.subject_name || 'Presensi Pembelajaran'}</b>
-                  <p className="mt-1 text-slate-500">{formatDate(item.created_at || item.date)} · Waktu: {item.waktu_presensi || 'Tepat Waktu'}</p>
+                  <b className="text-sm font-bold text-slate-900 dark:text-white">{item.jadwal_pelajaran?.subject?.name || item.jadwalPelajaran?.subject?.name || item.session?.subject?.name || item.session?.schedule?.subject?.name || item.subject_name || 'Presensi Pembelajaran'}</b>
+                  <p className="mt-1 text-slate-500">{formatDate(item.tanggal || item.created_at || item.date)} · Waktu: {item.arrival_time || item.waktu_presensi || 'Tepat Waktu'}</p>
                 </div>
-                <span className={`rounded-full px-3 py-1 text-[10px] font-bold ${/hadir/i.test(item.status || '') ? 'bg-emerald-100 text-emerald-700' : /sakit|izin/i.test(item.status || '') ? 'bg-amber-100 text-amber-700' : 'bg-rose-100 text-rose-700'}`}>
-                  {item.status || 'Hadir'}
+                <span className={`rounded-full px-3 py-1 text-[10px] font-bold ${/hadir/i.test(item.status_hadir || item.status_label || item.status || '') ? 'bg-emerald-100 text-emerald-700' : /sakit|izin/i.test(item.status_hadir || item.status_label || item.status || '') ? 'bg-amber-100 text-amber-700' : 'bg-rose-100 text-rose-700'}`}>
+                  {item.status_label || (item.status_hadir ? item.status_hadir.charAt(0).toUpperCase() + item.status_hadir.slice(1) : (item.status || 'Hadir'))}
                 </span>
               </div>
             ))}

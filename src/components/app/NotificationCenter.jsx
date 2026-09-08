@@ -60,6 +60,16 @@ export default function NotificationCenter({
 
   const controlled = Boolean(controlledItems)
 
+  const muatUnreadCount = useCallback(async () => {
+    if (controlled || disabled || (typeof document !== 'undefined' && document.hidden)) return
+    try {
+      const count = await reportService.notificationUnreadCount()
+      setUnreadCount(Number(count.unread_count) || 0)
+    } catch {
+      // ignore
+    }
+  }, [controlled, disabled])
+
   const muatNotifikasi = useCallback(async () => {
     if (controlled || disabled) return
     setLoading(true)
@@ -74,19 +84,29 @@ export default function NotificationCenter({
     } finally {
       setLoading(false)
     }
-    try {
-      const count = await reportService.notificationUnreadCount()
-      setUnreadCount(Number(count.unread_count) || 0)
-    } catch {
-      setUnreadCount(0)
-    }
-  }, [controlled, disabled])
+    muatUnreadCount()
+  }, [controlled, disabled, muatUnreadCount])
 
+  // Periodic polling only polls unread count (very lightweight payload)
   useEffect(() => {
-    muatNotifikasi()
-    const interval = setInterval(muatNotifikasi, 15000) // Poll every 15s for real-time notification updates
-    return () => clearInterval(interval)
-  }, [muatNotifikasi])
+    muatUnreadCount()
+    const interval = setInterval(muatUnreadCount, 30000)
+    const onVisibilityChange = () => {
+      if (!document.hidden) muatUnreadCount()
+    }
+    document.addEventListener('visibilitychange', onVisibilityChange)
+    return () => {
+      clearInterval(interval)
+      document.removeEventListener('visibilitychange', onVisibilityChange)
+    }
+  }, [muatUnreadCount])
+
+  // When popover or modal opens, fetch the full notifications list
+  useEffect(() => {
+    if (popoverOpen || isOpen) {
+      muatNotifikasi()
+    }
+  }, [popoverOpen, isOpen, muatNotifikasi])
 
   useEffect(() => {
     const handler = (e) => {

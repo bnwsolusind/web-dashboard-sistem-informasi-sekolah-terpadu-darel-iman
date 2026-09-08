@@ -213,12 +213,13 @@ export const AUDIENCE_OPTIONS = [
   { value: 'Staf & Operasional', label: 'Khusus Staf & Operasional' }
 ]
 
-export default function AcademicCalendarModal({ isOpen, onClose }) {
+export default function AcademicCalendarModal({ isOpen, onClose, lockedUnit = null }) {
   const navigate = useNavigate()
   const user = useAuthStore((state) => state.user)
 
   // Role permissions
   const canManage = useMemo(() => {
+    if (lockedUnit) return false;
     if (!user) return true
     const roleStr = [
       user?.role,
@@ -262,6 +263,7 @@ export default function AcademicCalendarModal({ isOpen, onClose }) {
   }, [user])
 
   const isFullAccessUser = useMemo(() => {
+    if (lockedUnit) return false;
     if (!user) return true
     const roleStr = [
       user?.role,
@@ -542,9 +544,37 @@ export default function AcademicCalendarModal({ isOpen, onClose }) {
   }, [rangeStart, rangeEnd, clickStep, hoverDate])
 
   const activeTargetUnit = useMemo(() => {
-    if (isFullAccessUser) return selectedUnitFilter
-    return userUnit || selectedUnitFilter
-  }, [isFullAccessUser, selectedUnitFilter, userUnit])
+    if (lockedUnit) return lockedUnit;
+    if (isFullAccessUser) return selectedUnitFilter;
+    return userUnit || selectedUnitFilter;
+  }, [lockedUnit, isFullAccessUser, selectedUnitFilter, userUnit])
+
+  const isUnitMatch = useCallback(
+    (evtUnit, targetUnit) => {
+      if (lockedUnit) {
+        if (!evtUnit) return false;
+        const eu = String(evtUnit).toLowerCase().trim();
+        const lu = String(lockedUnit).toLowerCase().trim();
+        if (eu === lu || eu.includes(lu) || lu.includes(eu)) return true;
+        if (lu.includes('sd') && eu.includes('sd')) return true;
+        if (lu.includes('smp') && eu.includes('smp')) return true;
+        if ((lu.includes('sma') || lu.includes('pesantren')) && (eu.includes('sma') || eu.includes('pesantren'))) return true;
+        if ((lu.includes('tk') || lu.includes('paud')) && (eu.includes('tk') || eu.includes('paud'))) return true;
+        return false;
+      }
+      if (!targetUnit || targetUnit === 'Semua Unit') return true;
+      if (!evtUnit || evtUnit === 'Semua Unit') return true;
+      const eu = String(evtUnit).toLowerCase().trim();
+      const tu = String(targetUnit).toLowerCase().trim();
+      if (eu === tu || eu.includes(tu) || tu.includes(eu)) return true;
+      if (tu.includes('sd') && eu.includes('sd')) return true;
+      if (tu.includes('smp') && eu.includes('smp')) return true;
+      if ((tu.includes('sma') || tu.includes('pesantren')) && (eu.includes('sma') || eu.includes('pesantren'))) return true;
+      if ((tu.includes('tk') || tu.includes('paud')) && (eu.includes('tk') || eu.includes('paud'))) return true;
+      return false;
+    },
+    [lockedUnit]
+  )
 
   const resetForm = (overrideStart = null, overrideEnd = null, overrideUnit = null) => {
     setEditingId(null)
@@ -777,10 +807,7 @@ export default function AcademicCalendarModal({ isOpen, onClose }) {
       const start = evt.startDate
       const end = evt.endDate || evt.startDate
       const matchesDate = todayDateStr >= start && todayDateStr <= end
-      const matchesUnit =
-        activeTargetUnit === 'Semua Unit' ||
-        evt.unit === 'Semua Unit' ||
-        evt.unit === activeTargetUnit
+      const matchesUnit = isUnitMatch(evt.unit, activeTargetUnit)
       return matchesDate && matchesUnit
     })
   }, [events, todayDateStr, activeTargetUnit])
@@ -866,10 +893,7 @@ export default function AcademicCalendarModal({ isOpen, onClose }) {
     return events
       .filter((evt) => {
         const matchesCat = categoryFilter === 'all' ? true : evt.category === categoryFilter
-        const matchesUnit =
-          activeTargetUnit === 'Semua Unit' ||
-          evt.unit === 'Semua Unit' ||
-          evt.unit === activeTargetUnit
+        const matchesUnit = isUnitMatch(evt.unit, activeTargetUnit)
         const matchesCategoryEnabled = enabledCategories[evt.category] !== false
         const matchesSearch = searchQuery
           ? evt.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -1094,15 +1118,19 @@ export default function AcademicCalendarModal({ isOpen, onClose }) {
           {/* RIGHT SECTION: ACTIONS (CETAK, KELOLA, REFRESH, CLOSE) */}
           <div className="flex items-center gap-2">
             {/* UNIT FILTER SELECTOR */}
-            <div className="w-36 sm:w-44">
+            <div className="w-40 sm:w-48">
               <select
                 value={activeTargetUnit}
-                onChange={(e) => isFullAccessUser && setSelectedUnitFilter(e.target.value)}
-                disabled={!isFullAccessUser}
-                title={!isFullAccessUser ? `Terkunci unit ${activeTargetUnit}` : 'Pilih Unit Pendidikan'}
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-black text-slate-800 focus:border-blue-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white cursor-pointer"
+                onChange={(e) => isFullAccessUser && !lockedUnit && setSelectedUnitFilter(e.target.value)}
+                disabled={!isFullAccessUser || Boolean(lockedUnit)}
+                title={lockedUnit ? `Terkunci unit anak: ${lockedUnit}` : (!isFullAccessUser ? `Terkunci unit ${activeTargetUnit}` : 'Pilih Unit Pendidikan')}
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-black text-slate-800 focus:border-blue-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white cursor-pointer disabled:opacity-90"
               >
-                {isFullAccessUser ? (
+                {lockedUnit ? (
+                  <option value={lockedUnit}>
+                    {`${lockedUnit} (Unit Siswa)`}
+                  </option>
+                ) : isFullAccessUser ? (
                   unitOptions.map((u) => (
                     <option key={u.value} value={u.value}>
                       {u.label || u.value}
@@ -1110,7 +1138,7 @@ export default function AcademicCalendarModal({ isOpen, onClose }) {
                   ))
                 ) : (
                   <option value={activeTargetUnit}>
-                    {activeTargetUnit} (Terkunci)
+                    {`${activeTargetUnit} (Terkunci)`}
                   </option>
                 )}
               </select>
@@ -1541,35 +1569,49 @@ export default function AcademicCalendarModal({ isOpen, onClose }) {
                 </div>
 
                 {/* SECTION 2: KALENDER LAIN (UNIT CHECKBOXES) */}
-                <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-                  <div className="flex items-center justify-between">
-                    <h4 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">
-                      Kalender Lain
-                    </h4>
-                    <Plus className="h-3.5 w-3.5 text-slate-400 cursor-pointer" />
+                {lockedUnit ? (
+                  <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-xs font-black text-emerald-800 dark:text-emerald-300 uppercase tracking-wider">
+                        Unit Siswa
+                      </h4>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs font-bold text-slate-700 dark:text-slate-300">
+                      <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+                      <span>{lockedUnit} (Khusus)</span>
+                    </div>
                   </div>
-                  <div className="space-y-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300">
-                    {[
-                      { label: 'Wali Kelas 7A', color: 'bg-teal-500' },
-                      { label: 'Laboratorium IPA', color: 'bg-pink-500' },
-                      { label: 'Perpustakaan', color: 'bg-amber-600' },
-                      { label: 'Ruang BK', color: 'bg-rose-800' }
-                    ].map((u) => (
-                      <label key={u.label} className="flex items-center gap-2.5 cursor-pointer hover:opacity-80">
-                        <input
-                          type="checkbox"
-                          checked={enabledUnits[u.label] !== false}
-                          onChange={(e) =>
-                            setEnabledUnits((prev) => ({ ...prev, [u.label]: e.target.checked }))
-                          }
-                          className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-                        />
-                        <span className={`h-2.5 w-2.5 rounded-full ${u.color}`} />
-                        <span>{u.label}</span>
-                      </label>
-                    ))}
+                ) : (
+                  <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">
+                        Kalender Lain
+                      </h4>
+                      <Plus className="h-3.5 w-3.5 text-slate-400 cursor-pointer" />
+                    </div>
+                    <div className="space-y-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300">
+                      {[
+                        { label: 'Wali Kelas 7A', color: 'bg-teal-500' },
+                        { label: 'Laboratorium IPA', color: 'bg-pink-500' },
+                        { label: 'Perpustakaan', color: 'bg-amber-600' },
+                        { label: 'Ruang BK', color: 'bg-rose-800' }
+                      ].map((u) => (
+                        <label key={u.label} className="flex items-center gap-2.5 cursor-pointer hover:opacity-80">
+                          <input
+                            type="checkbox"
+                            checked={enabledUnits[u.label] !== false}
+                            onChange={(e) =>
+                              setEnabledUnits((prev) => ({ ...prev, [u.label]: e.target.checked }))
+                            }
+                            className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                          />
+                          <span className={`h-2.5 w-2.5 rounded-full ${u.color}`} />
+                          <span>{u.label}</span>
+                        </label>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
 
               {/* CENTER MAIN WORKSPACE (TIMETABLE GRID & MONTH VIEW) */}

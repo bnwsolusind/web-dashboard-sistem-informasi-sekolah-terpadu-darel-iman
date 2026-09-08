@@ -9,28 +9,24 @@ export default function GradesWorkspace({ grades = [], loading = false }) {
 
   const safeGrades = useMemo(() => {
     if (Array.isArray(grades)) return grades
+    if (grades && Array.isArray(grades.items)) return grades.items
     if (grades && Array.isArray(grades.data)) return grades.data
     return []
   }, [grades])
 
-  const numericScores = useMemo(() => {
-    return safeGrades.map((g) => Number(g.final_score || g.nilai_akhir || g.nilai_tugas)).filter(Number.isFinite)
-  }, [safeGrades])
-
-  const stats = useMemo(() => {
-    if (!numericScores.length) return { avg: '-', max: '-', tuntas: 0, belumTuntas: 0 }
-    const avg = Math.round(numericScores.reduce((a, b) => a + b, 0) / numericScores.length)
-    const max = Math.max(...numericScores)
-    const tuntas = numericScores.filter((s) => s >= 75).length
-    const belumTuntas = numericScores.filter((s) => s < 75).length
-
-    return { avg, max, tuntas, belumTuntas }
-  }, [numericScores])
+  const summary = grades?.summary || {}
+  const stats = {
+    avg: summary.average_score ?? '-',
+    max: summary.highest_score ?? '-',
+    tuntas: summary.passed_subjects ?? 0,
+    belumTuntas: summary.remedial_subjects ?? 0,
+  }
 
   const filteredGrades = useMemo(() => {
     return safeGrades.filter((g) => {
-      const subjectName = g.subject?.name || g.mata_pelajaran || ''
-      return !search || subjectName.toLowerCase().includes(search.toLowerCase())
+      const subjectName = g.subject?.name || ''
+      const subjectCode = g.subject?.code || ''
+      return !search || `${subjectCode} ${subjectName}`.toLowerCase().includes(search.toLowerCase())
     })
   }, [safeGrades, search])
 
@@ -68,7 +64,7 @@ export default function GradesWorkspace({ grades = [], loading = false }) {
             <span className="text-xl font-black text-slate-900 dark:text-white">{stats.tuntas}</span>
           </div>
           <p className="mt-3 text-xs font-bold text-slate-500">Mapel Tuntas</p>
-          <p className="mt-0.5 text-[11px] text-slate-400">Nilai &ge; KKM (75)</p>
+          <p className="mt-0.5 text-[11px] text-slate-400">Sesuai KKM tiap mata pelajaran</p>
         </motion.div>
 
         <motion.div whileHover={{ y: -2 }} className={cardStyle}>
@@ -79,7 +75,7 @@ export default function GradesWorkspace({ grades = [], loading = false }) {
             <span className="text-xl font-black text-slate-900 dark:text-white">{stats.belumTuntas}</span>
           </div>
           <p className="mt-3 text-xs font-bold text-slate-500">Perlu Perbaikan</p>
-          <p className="mt-0.5 text-[11px] text-slate-400">Nilai &lt; KKM (75)</p>
+          <p className="mt-0.5 text-[11px] text-slate-400">Di bawah KKM mata pelajaran</p>
         </motion.div>
       </div>
 
@@ -88,7 +84,9 @@ export default function GradesWorkspace({ grades = [], loading = false }) {
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4 dark:border-slate-800">
           <div>
             <h3 className="text-base font-bold text-slate-900 dark:text-white">Daftar Nilai Hasil Belajar</h3>
-            <p className="mt-0.5 text-xs text-slate-500">Nilai resmi berstatus published dari modul utama.</p>
+            <p className="mt-0.5 text-xs text-slate-500">
+              {grades?.publication ? 'Nilai dari rapor yang telah diterbitkan.' : 'Belum ada rapor yang diterbitkan.'}
+            </p>
           </div>
 
           <div className="relative">
@@ -106,9 +104,9 @@ export default function GradesWorkspace({ grades = [], loading = false }) {
         {/* Grid Nilai */}
         <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filteredGrades.map((item, idx) => {
-            const finalScore = Number(item.final_score || item.nilai_akhir || item.nilai_tugas || 0)
-            const isTuntas = finalScore >= 75
-            const predikat = finalScore >= 90 ? 'A' : finalScore >= 80 ? 'B' : finalScore >= 75 ? 'C' : 'D'
+            const finalScore = item.final_score
+            const isTuntas = item.is_passed === true
+            const predikat = item.grade_letter
 
             return (
               <div
@@ -117,22 +115,26 @@ export default function GradesWorkspace({ grades = [], loading = false }) {
               >
                 <div>
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-slate-500">{item.subject?.code || 'MAPEL'}</span>
+                    <span className="font-bold text-slate-500">{item.subject?.code || '-'}</span>
                     <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${isTuntas ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300'}`}>
-                      {isTuntas ? 'Tuntas' : 'Perlu Remedial'}
+                      {item.is_passed === true ? 'Tuntas' : item.is_passed === false ? 'Perlu Perbaikan' : '-'}
                     </span>
                   </div>
 
-                  <h4 className="mt-2 text-base font-bold text-slate-900 dark:text-white">{item.subject?.name || item.mata_pelajaran || 'Mata Pelajaran'}</h4>
+                  <h4 className="mt-2 text-base font-bold text-slate-900 dark:text-white">{item.subject?.name || 'Mata pelajaran'}</h4>
 
                   <div className="mt-4 flex items-baseline justify-between">
                     <div>
                       <p className="text-[10px] font-bold uppercase text-slate-400">Nilai Akhir</p>
-                      <p className="text-3xl font-black text-emerald-600 dark:text-emerald-400">{finalScore}</p>
+                      <p className="text-3xl font-black text-emerald-600 dark:text-emerald-400">{finalScore ?? '-'}</p>
                     </div>
                     <div className="text-right">
                       <p className="text-[10px] font-bold uppercase text-slate-400">Predikat</p>
-                      <p className="text-xl font-black text-slate-800 dark:text-slate-200">{predikat}</p>
+                      <p className="text-xl font-black text-slate-800 dark:text-slate-200">{predikat || '-'}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-[10px] font-bold uppercase text-slate-400">KKM</p>
+                      <p className="text-xl font-black text-slate-800 dark:text-slate-200">{item.kkm ?? '-'}</p>
                     </div>
                   </div>
 

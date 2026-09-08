@@ -12,6 +12,9 @@ export const familyPortalService = {
     }
   },
   updateChildPassword: async (childId, payload) => (await api.put(`/portal/children/${childId}/password`, payload)).data,
+  updateChildPhoto: async (childId, formData) => (await api.post(`/portal/children/${childId}/photo`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })).data,
   dashboard: async (childId) => (await api.get('/portal/dashboard', childParams(childId))).data,
   list: async (resource, childId) => (await api.get(`/portal/${resource}`, childParams(childId))).data,
   submitPermission: async (payload) => (await api.post('/portal/permissions', payload)).data,
@@ -19,12 +22,33 @@ export const familyPortalService = {
   // Parent Chat
   chatContacts: async (childId) => (await api.get('/portal/chat/contacts', childParams(childId))).data,
   chatMessages: async (teacherId, childId) => (await api.get(`/portal/chat/${teacherId}`, childParams(childId))).data,
-  sendMessage: async (teacherId, childId, message) => (await api.post(`/portal/chat/${teacherId}`, { child_id: childId, message })).data,
+  sendMessage: async (teacherId, childId, message, attachment = null) => {
+    if (attachment) {
+      const formData = new FormData()
+      formData.append('child_id', childId)
+      if (message) formData.append('message', message)
+      formData.append('attachment', attachment)
+      return (await api.post(`/portal/chat/${teacherId}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })).data
+    }
+    return (await api.post(`/portal/chat/${teacherId}`, { child_id: childId, message })).data
+  },
 
   // Teacher Chat
   teacherConversations: async () => (await api.get('/teacher/chat/conversations')).data,
   teacherMessages: async (parentUserId, studentId) => (await api.get(`/teacher/chat/parent/${parentUserId}/student/${studentId}`)).data,
-  sendTeacherMessage: async (parentUserId, studentId, message) => (await api.post(`/teacher/chat/parent/${parentUserId}/student/${studentId}`, { message })).data,
+  sendTeacherMessage: async (parentUserId, studentId, message, attachment = null) => {
+    if (attachment) {
+      const formData = new FormData()
+      if (message) formData.append('message', message)
+      formData.append('attachment', attachment)
+      return (await api.post(`/teacher/chat/parent/${parentUserId}/student/${studentId}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })).data
+    }
+    return (await api.post(`/teacher/chat/parent/${parentUserId}/student/${studentId}`, { message })).data
+  },
 
   // Employee-to-Employee Chat
   employeeContacts: async (search = '', unitId = '', status = '', category = '') => {
@@ -98,14 +122,22 @@ export const familyPortalService = {
       }
     }
   },
-  sendEmployeeMessage: async (recipientUserId, message) => {
+  sendEmployeeMessage: async (recipientUserId, message, attachment = null) => {
+    const payload = attachment ? (() => {
+      const fd = new FormData()
+      if (message) fd.append('message', message)
+      fd.append('attachment', attachment)
+      return fd
+    })() : { message }
+    const config = attachment ? { headers: { 'Content-Type': 'multipart/form-data' } } : {}
+
     try {
-      return (await api.post(`/employee/chat/messages/${recipientUserId}`, { message })).data
+      return (await api.post(`/employee/chat/messages/${recipientUserId}`, payload, config)).data
     } catch {
       try {
-        return (await api.post(`/employee/messages/${recipientUserId}`, { message })).data
+        return (await api.post(`/employee/messages/${recipientUserId}`, payload, config)).data
       } catch {
-        return (await api.post(`/chat/employee/messages/${recipientUserId}`, { message })).data
+        return (await api.post(`/chat/employee/messages/${recipientUserId}`, payload, config)).data
       }
     }
   },

@@ -10,8 +10,44 @@ export default function EmployeeChatPage() {
   const user = useAuthStore((state) => state.user)
   const roles = user?.roles || []
 
-  const isTeacher = roles.some((r) => ['Guru', 'Wali Kelas', 'Guru Pengajar'].includes(r))
+  const isTeacher = roles.some((r) => {
+    const name = typeof r === 'string' ? r : r?.name || ''
+    return /guru|wali|teacher|pengajar|bk|tahfizh|pai/i.test(name)
+  }) || roles.some((r) => {
+    const name = typeof r === 'string' ? r : r?.name || ''
+    return /super.*admin|admin|kepala|kepsek|divisi/i.test(name)
+  })
+
   const [activeTabMode, setActiveTabMode] = useState('employee') // 'employee' | 'teacher'
+  const [parentUnreadCount, setParentUnreadCount] = useState(0)
+
+  // Check unread messages from parents periodically for teachers
+  React.useEffect(() => {
+    if (!isTeacher) return
+    let isMounted = true
+
+    const checkParentUnread = async () => {
+      try {
+        const { familyPortalService } = await import('../services/familyPortalService')
+        const res = await familyPortalService.teacherConversations().catch(() => ({ data: [] }))
+        const list = Array.isArray(res?.data) ? res.data : []
+        const totalUnread = list.reduce((acc, conv) => acc + (conv.unread_count || 0), 0)
+        if (isMounted) setParentUnreadCount(totalUnread)
+      } catch {
+        // silent fallback
+      }
+    }
+
+    checkParentUnread()
+    const interval = setInterval(() => {
+      if (typeof document !== 'undefined' && document.hidden) return
+      checkParentUnread()
+    }, 20000)
+    return () => {
+      isMounted = false
+      clearInterval(interval)
+    }
+  }, [isTeacher])
 
   return (
     <PageContainer className="space-y-6 pb-12">
@@ -65,19 +101,54 @@ export default function EmployeeChatPage() {
 
                 <button
                   onClick={() => setActiveTabMode('teacher')}
-                  className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all ${
+                  className={`relative flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all ${
                     activeTabMode === 'teacher'
                       ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md'
                       : 'text-slate-600 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-slate-700'
                   }`}
                 >
                   <HeartHandshake className="h-4 w-4" /> Pesan Orang Tua
+                  {parentUnreadCount > 0 && (
+                    <span className="ml-1 inline-flex items-center justify-center rounded-full bg-rose-500 px-1.5 py-0.5 text-[10px] font-black text-white shadow-xs animate-pulse">
+                      {parentUnreadCount}
+                    </span>
+                  )}
                 </button>
               </div>
             )}
           </div>
         </div>
       </motion.div>
+
+      {/* Alert Banner for New Incoming Parent Messages */}
+      {parentUnreadCount > 0 && activeTabMode === 'employee' && (
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-2xl bg-gradient-to-r from-amber-500/20 via-rose-500/15 to-amber-500/20 p-4 border-2 border-amber-500/40 shadow-sm"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-rose-500 to-amber-600 text-white font-black text-xs shadow-xs animate-bounce">
+              {parentUnreadCount}
+            </div>
+            <div>
+              <p className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">
+                Ada {parentUnreadCount} pesan baru dari Orang Tua Murid!
+              </p>
+              <p className="text-[11px] font-medium text-slate-600 dark:text-slate-300">
+                Wali santri telah mengirimkan pesan konsultasi. Klik tombol di kanan untuk membuka.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setActiveTabMode('teacher')}
+            className="shrink-0 rounded-xl bg-gradient-to-r from-rose-600 via-amber-600 to-emerald-600 px-4 py-2 text-xs font-black text-white shadow-md hover:brightness-110 transition cursor-pointer"
+          >
+            Buka Pesan Orang Tua &rarr;
+          </button>
+        </motion.div>
+      )}
 
       {/* Main Chat Workspace */}
       <ChatGuruWorkspace mode={activeTabMode} hideHeader={false} />

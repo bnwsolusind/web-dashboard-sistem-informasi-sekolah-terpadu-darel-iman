@@ -6,41 +6,10 @@ const cardStyle = 'rounded-[18px] border border-slate-200/80 bg-white p-5 shadow
 
 const formatDate = (val) => val ? new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(val)) : 'Tanpa batas'
 
-const DEFAULT_FALLBACK_EXAMS = [
-  {
-    id: '00000000-0000-0000-0000-000000000001',
-    judul_ujian: 'Ujian Harian CBT — Pendidikan Agama Islam (PAI)',
-    mata_pelajaran: 'Pendidikan Agama Islam (PAI)',
-    kelas: 'Kelas 6A',
-    guru: 'Fadli Rahman',
-    durasi_menit: 45,
-    waktu_mulai: '2026-08-19T07:09:00',
-    waktu_selesai: '2026-12-31T23:59:59',
-    status: 'berlangsung',
-    availability: 'available',
-    kisi_kisi: { jumlah_soal: 10 },
-    instruksi: 'Kerjakan seluruh butir soal Pendidikan Agama Islam (PAI) dengan jujur dan teliti.',
-  },
-  {
-    id: '00000000-0000-0000-0000-000000000002',
-    judul_ujian: 'Ujian Harian CBT — Pendidikan Pancasila Kelas X',
-    mata_pelajaran: 'Pendidikan Pancasila',
-    kelas: 'Kelas 6A',
-    guru: 'Fadli Rahman',
-    durasi_menit: 45,
-    waktu_mulai: '2026-08-19T07:09:00',
-    waktu_selesai: '2026-12-31T23:59:59',
-    status: 'berlangsung',
-    availability: 'available',
-    kisi_kisi: { jumlah_soal: 10 },
-    instruksi: 'Kerjakan seluruh butir soal Pendidikan Pancasila dengan jujur dan teliti.',
-  },
-]
-
 export default function CbtExamsWorkspace({ lmsData = null, onStartExam, isParent = false, startingId = null, loading = false }) {
   const [instructionModal, setInstructionModal] = useState(null)
 
-  const exams = useMemo(() => (lmsData?.exams && lmsData.exams.length > 0) ? lmsData.exams : DEFAULT_FALLBACK_EXAMS, [lmsData])
+  const exams = useMemo(() => Array.isArray(lmsData?.exams) ? lmsData.exams : [], [lmsData])
 
   const stats = useMemo(() => {
     const total = exams.length

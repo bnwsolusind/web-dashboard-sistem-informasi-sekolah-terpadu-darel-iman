@@ -264,85 +264,8 @@ function rentangPeriode(period, current) {
   return { ...current, date_from: iso(awal), date_to: iso(akhir), period }
 }
 
-const buildSimulatedAttendanceRows = (students = [], units = [], classes = []) => {
-  if (!Array.isArray(students) || students.length === 0) {
-    return []
-  }
-
-  const rows = []
-  const subjectsMap = {
-    sd: ['Matematika Dasar', 'Bahasa Indonesia', 'Pendidikan Agama Islam', 'IPA Dasar', 'IPS Dasar'],
-    smp: ['IPA Terpadu', 'Bahasa Inggris', 'Matematika SMP', 'Pendidikan Pancasila', 'Bahasa Arab'],
-    sma: ['Fisika Wajib', 'Kimia Analitik', 'Biologi Umum', 'Matematika Peminatan', 'Sejarah Indonesia', 'Ekonomi'],
-  }
-
-  const statusPool = ['hadir', 'hadir', 'hadir', 'hadir', 'hadir', 'hadir', 'terlambat', 'izin', 'sakit', 'alpa']
-  const notesMap = {
-    hadir: 'Hadir tepat waktu & mengikuti pembelajaran',
-    terlambat: 'Terlambat 10-15 menit (kendala perjalanan)',
-    izin: 'Izin urusan keluarga (surat ortu terlampir)',
-    sakit: 'Sakit (surat keterangan dokter/ortu)',
-    alpa: 'Tanpa keterangan / Alpha',
-  }
-
-  // Generate simulated attendance logs strictly for authentic database students
-  students.forEach((student, index) => {
-    const studentUnitId = student.unit_id || student.education_unit_id || student.educationUnit?.id || student.kelas?.unit_pendidikan_id
-    const targetUnit = units.find((u) => String(u.id) === String(studentUnitId)) || student.educationUnit || student.kelas?.unit_pendidikan || units[index % Math.max(1, units.length)]
-    
-    const unitClasses = classes.filter((c) => !c.unit_pendidikan_id || String(c.unit_pendidikan_id) === String(targetUnit?.id))
-    const studentClass = student.kelas || classes.find((c) => String(c.id) === String(student.kelas_id)) || (unitClasses.length > 0 ? unitClasses[index % unitClasses.length] : classes[index % Math.max(1, classes.length)])
-
-    const unitCode = (targetUnit?.code || targetUnit?.name || '').toLowerCase()
-    let levelKey = 'smp'
-    if (unitCode.includes('sd')) levelKey = 'sd'
-    else if (unitCode.includes('sma') || unitCode.includes('smk')) levelKey = 'sma'
-
-    const availableSubjects = subjectsMap[levelKey] || subjectsMap.smp
-
-    for (let dayOffset = 0; dayOffset < 3; dayOffset++) {
-      const d = new Date()
-      d.setDate(d.getDate() - dayOffset)
-      const dateStr = d.toISOString().slice(0, 10)
-
-      const statusIdx = (index * 3 + dayOffset * 7) % statusPool.length
-      const status = statusPool[statusIdx]
-      const subjIdx = (index + dayOffset) % availableSubjects.length
-      const subjectName = availableSubjects[subjIdx]
-
-      rows.push({
-        id: `att-real-${student.id}-${dayOffset}`,
-        tanggal: dateStr,
-        siswa: {
-          ...student,
-          unit_id: targetUnit?.id || studentUnitId,
-          kelas_id: studentClass?.id || student.kelas_id,
-          kelas: studentClass || {
-            id: student.kelas_id,
-            nama_kelas: student.kelas?.nama_kelas || 'Rombel',
-            unit_pendidikan_id: targetUnit?.id || studentUnitId,
-            unit_pendidikan: targetUnit,
-          },
-          educationUnit: targetUnit,
-        },
-        jadwal_pelajaran: {
-          id: `jp-real-${student.id}-${subjIdx}`,
-          subject: { id: `subj-${subjIdx}`, name: subjectName },
-          kelas: studentClass || {
-            id: student.kelas_id,
-            nama_kelas: student.kelas?.nama_kelas || 'Rombel',
-            unit_pendidikan_id: targetUnit?.id || studentUnitId,
-            unit_pendidikan: targetUnit,
-          },
-        },
-        status_hadir: status,
-        catatan: notesMap[status],
-      })
-    }
-  })
-
-  return rows
-}
+// Simulated rows removed: pure database report
+const buildSimulatedAttendanceRows = () => []
 
 export default function LaporanAbsensiPage() {
   const [filters, setFilters] = useState({ unit_id: '', class_id: '', date_from: '', date_to: '', status: '', subject_id: '' })
@@ -443,19 +366,9 @@ export default function LaporanAbsensiPage() {
     return () => window.clearTimeout(timeout)
   }, [notice])
 
-  const simulatedRows = useMemo(() => {
-    return buildSimulatedAttendanceRows(studentList, unitList, classList)
-  }, [studentList, unitList, classList])
-
   const rawRows = useMemo(() => {
-    const apiRows = report.rows || []
-    if (apiRows.length > 0) {
-      const existingIds = new Set(apiRows.map((r) => String(r.id)))
-      const extraSim = simulatedRows.filter((s) => !existingIds.has(String(s.id)))
-      return [...apiRows, ...extraSim]
-    }
-    return simulatedRows
-  }, [report.rows, simulatedRows])
+    return Array.isArray(report.rows) ? report.rows : []
+  }, [report.rows])
 
   const rows = useMemo(() => {
     let result = rawRows
