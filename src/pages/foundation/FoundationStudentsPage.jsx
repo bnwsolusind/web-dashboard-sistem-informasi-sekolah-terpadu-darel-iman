@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import ActionDropdown from '../../components/app/ActionDropdown'
-import { Award, FileSpreadsheet, GraduationCap, RefreshCcw, ShieldAlert, ShieldCheck, Sparkles, UserCheck, UserMinus, UserRound, UsersRound } from 'lucide-react'
+import { Award, FileSpreadsheet, FileText, GraduationCap, Printer, RefreshCcw, ShieldAlert, ShieldCheck, Sparkles, UserCheck, UserMinus, UserRound, UsersRound } from 'lucide-react'
 import { ArrowBothDirectionHorizontal2 } from '@tailgrids/icons'
 import AppBreadcrumb from '../../components/app/AppBreadcrumb'
 import api from '../../services/api'
 import useDebounce from '../../hooks/useDebounce'
+import { printWeeklyStudentEvaluation } from '../../utils/printHelper'
 import {
   MasterDataPage,
   MasterDataTable,
@@ -174,6 +175,31 @@ export function FoundationStudentsPage() {
   const handleRefresh = () => {
     setPage(1)
     fetchStudents(Boolean(students.length))
+  }
+
+  const handlePrintWeekly = (st) => {
+    const eduUnit = st.education_unit || st.unit
+    printWeeklyStudentEvaluation({
+      student: {
+        ...st,
+        name: st.full_name || st.nama || st.name,
+        nis: st.nis || st.nisn || '-',
+        className: st.kelas?.nama_kelas || st.school_class?.name || '10 Madinah 1',
+        unitName: eduUnit?.name || 'Sekolah Menengah Atas Islam Terpadu',
+        education_unit: eduUnit,
+      },
+      period: {
+        title: 'Senin, 10 Agustus 2026 s.d. Jumat, 14 Agustus 2026',
+        academicYear: '2026/2027',
+      },
+      homeroomTeacher: {
+        name: st.kelas?.wali_kelas_nama || 'Ustadzah Elsa Putri Utami',
+      },
+      guruWali: {
+        name: 'Ilma Emilia Widyastuti',
+      },
+      schoolCity: eduUnit?.metadata?.city || 'Padang',
+    })
   }
 
   const exportRows = paginatedStudents.map((st, idx) => ({
@@ -485,7 +511,17 @@ export function FoundationStudentsPage() {
                           <MasterStatusBadge active={st.is_active || st.status === 'aktif'} activeLabel="Aktif" inactiveLabel="Nonaktif" />
                         </td>
                         <td className="px-2 py-3 text-center">
-                          <ActionDropdown onView={() => setSelectedStudentId(st.id)} />
+                          <div className="flex items-center justify-center gap-1.5">
+                            <button
+                              type="button"
+                              title="Cetak Laporan Perkembangan Pekanan"
+                              onClick={() => handlePrintWeekly(st)}
+                              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:scale-105 active:scale-95 transition-all dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 shadow-2xs"
+                            >
+                              <Printer className="h-4 w-4" />
+                            </button>
+                            <ActionDropdown onView={() => setSelectedStudentId(st.id)} />
+                          </div>
                         </td>
                       </tr>
                     )

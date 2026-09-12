@@ -187,7 +187,7 @@ const ROLE_ROUTES = [
   { roles: ['Guru BK', 'guru_bk'], route: '/dashboard/guru-bk' },
   { roles: ['Wali Kelas', 'walas', 'wali_kelas'], route: '/dashboard/wali-kelas' },
   // Tingkat 7b — Guru umum
-  { roles: ['Guru', 'guru', 'Guru Mata Pelajaran', 'guru_mata_pelajaran', 'Guru PAI', 'Pembimbing'], route: '/portal-guru/workspace' },
+  { roles: ['Guru', 'guru', 'Guru Mata Pelajaran', 'guru_mata_pelajaran', 'Guru PAI', 'Pembimbing'], route: '/dashboard' },
   // Tingkat 8 — Pengguna Eksternal
   { roles: ROLES.ORANG_TUA, route: '/portal-orangtua' },
   { roles: ROLES.SISWA, route: '/portal-siswa' },

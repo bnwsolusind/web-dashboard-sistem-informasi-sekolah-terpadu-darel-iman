@@ -25,6 +25,7 @@ import {
   MessageCircle,
   Moon,
   Plus,
+  Receipt,
   RefreshCw,
   Send,
   ShieldCheck,
@@ -54,6 +55,7 @@ import AttendanceWorkspace from '../components/portal/AttendanceWorkspace'
 import ExamGridsWorkspace from '../components/portal/ExamGridsWorkspace'
 import CbtExamsWorkspace from '../components/portal/CbtExamsWorkspace'
 import ExamResultsWorkspace from '../components/portal/ExamResultsWorkspace'
+import ParentBillsWorkspace from '../components/portal/ParentBillsWorkspace'
 import ChatGuruWorkspace from '../components/portal/ChatGuruWorkspace'
 import AcademicCalendarModal from '../components/calendar/AcademicCalendarModal'
 import { useAuthStore } from '../stores/authStore'
@@ -77,7 +79,8 @@ const menu = [
   ['assignments', 'Tugas', ClipboardList, 'bg-fuchsia-100/90 text-fuchsia-600 border-fuchsia-200/90 hover:bg-fuchsia-200'],
   ['tahfizh', 'Tahfizh', BookOpenCheck, 'bg-emerald-100/90 text-emerald-600 border-emerald-200/90 hover:bg-emerald-200'],
   ['grades', 'Nilai', Award, 'bg-teal-100/90 text-teal-600 border-teal-200/90 hover:bg-teal-200'],
-  ['student-notes', 'Komentar Guru', MessageCircle, 'bg-cyan-100/90 text-cyan-600 border-cyan-200/90 hover:bg-cyan-200'],
+  ['student-notes', 'Buku Penghubung', BookOpenCheck, 'bg-cyan-100/90 text-cyan-600 border-cyan-200/90 hover:bg-cyan-200'],
+  ['bills', 'Tagihan & SPP', Receipt, 'bg-emerald-100/90 text-emerald-600 border-emerald-200/90 hover:bg-emerald-200'],
   ['mutabaah', 'Mutabaah', HeartHandshake, 'bg-amber-100/90 text-amber-600 border-amber-200/90 hover:bg-amber-200'],
   ['attendance', 'Absensi', CalendarCheck, 'bg-orange-100/90 text-orange-600 border-orange-200/90 hover:bg-orange-200'],
   ['kisi', 'Kisi-kisi', FileText, 'bg-yellow-100/90 text-yellow-700 border-yellow-200/90 hover:bg-yellow-200'],
@@ -255,6 +258,11 @@ export default function ParentPortalPage() {
       } else if (active === 'mutabaah') {
         const res = await api.get(`/parent/mutabaah/${childId}`)
         setRecords(res.data?.data || null)
+      } else if (active === 'bills') {
+        setRecords([])
+        const res = await api.get('/portal/bills', { headers: { 'X-Child-Id': childId } }).catch(() => ({ data: { data: [] } }))
+        const list = res.data?.data?.data ?? res.data?.data ?? []
+        setRecords(Array.isArray(list) ? list : [])
       } else {
         setRecords([])
         const res = await familyPortalService.list(active, childId).catch(() => ({ data: [] }))
@@ -1116,25 +1124,11 @@ export default function ParentPortalPage() {
           )}
 
           {active === 'hasil' && (
-            <ExamResultsWorkspace resultsData={resultsData} reports={reportsRecords} loading={loading} />
+            <ExamResultsWorkspace resultsData={resultsData} reports={reportsRecords} loading={loading} student={activeChild} />
           )}
 
           {active === 'bills' && (
-            <div className="rounded-[18px] border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800">
-              {records.map((r) => (
-                <div key={r.id} className="flex flex-wrap items-center justify-between gap-3 p-5">
-                  <div>
-                    <b className="text-sm font-bold">{r.title}</b>
-                    <p className="mt-1 text-xs text-slate-500">Jatuh tempo {date(r.due_date)}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-black text-slate-900 dark:text-white">{rupiah(r.amount)}</p>
-                    <Status value={r.status} />
-                  </div>
-                </div>
-              ))}
-              {!records.length && <Empty text="Belum ada data tagihan." />}
-            </div>
+            <ParentBillsWorkspace bills={records} loading={loading} student={activeChild} />
           )}
 
           {/* CHAT GURU & MUSYRIF WORKSPACE (INTEGRATED FOR ACTIVE CHILD'UNIT) */}

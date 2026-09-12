@@ -53,7 +53,7 @@ export default function TeacherMutabaahWeekly({ selectedClassId = '' }) {
     try {
       const result = await mutabaahService.dailyContext({ date: days[0].date })
       setContext(result)
-      const matchesClass = result.assignments?.filter((item) => !selectedClassId || item.kelas_id === selectedClassId || item.rombel_id === selectedClassId) || []
+      const matchesClass = result.assignments?.filter((item) => !selectedClassId || selectedClassId === 'all' || item.kelas_id === selectedClassId || item.rombel_id === selectedClassId) || []
       const available = matchesClass.length ? matchesClass : (result.assignments || [])
       setAssignmentId((current) => available.some((item) => item.id === current) ? current : (available[0]?.id || ''))
     } catch (requestError) {
@@ -127,7 +127,7 @@ export default function TeacherMutabaahWeekly({ selectedClassId = '' }) {
   }
 
   const allAssignments = context?.assignments || []
-  const classAssignments = allAssignments.filter((item) => !selectedClassId || item.kelas_id === selectedClassId || item.rombel_id === selectedClassId)
+  const classAssignments = allAssignments.filter((item) => !selectedClassId || selectedClassId === 'all' || item.kelas_id === selectedClassId || item.rombel_id === selectedClassId)
   const assignments = classAssignments.length ? classAssignments : allAssignments
   const selectedStudent = students.find((item) => item.id === studentId)
   const filled = Object.values(values).filter(Boolean).length

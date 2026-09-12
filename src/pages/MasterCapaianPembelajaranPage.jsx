@@ -61,6 +61,56 @@ const itemVariants = {
   },
 }
 
+export const getUnitJenjang = (unit) => {
+  if (!unit) return ''
+  const level = String(unit.level || '').toUpperCase()
+  const name = String(unit.name || '').toUpperCase()
+  const code = String(unit.code || '').toUpperCase()
+  const combined = `${level} ${name} ${code}`
+
+  if (/TK|PAUD|TAUD|PLAYHOUSE|KB/i.test(combined)) return 'TK'
+  if (/SD|MIT|MI |IBTIDAIYAH/i.test(combined)) return 'SD'
+  if (/SMP|PONPES|PESANTREN|MTS|TSANAWIYAH/i.test(combined)) return 'SMP'
+  if (/SMA|MAHAD|MA |ALIYAH|SMK/i.test(combined)) return 'SMA'
+  return ''
+}
+
+export const FASE_OPTIONS_BY_JENJANG = {
+  TK: [
+    { value: 'Fase Fondasi', label: 'Fase Fondasi (PAUD / TK)' },
+  ],
+  SD: [
+    { value: 'Fase A', label: 'Fase A (Kelas 1 - 2)' },
+    { value: 'Fase B', label: 'Fase B (Kelas 3 - 4)' },
+    { value: 'Fase C', label: 'Fase C (Kelas 5 - 6)' },
+  ],
+  SMP: [
+    { value: 'Fase D', label: 'Fase D (Kelas 7 - 9)' },
+  ],
+  SMA: [
+    { value: 'Fase E', label: 'Fase E (Kelas 10)' },
+    { value: 'Fase F', label: 'Fase F (Kelas 11 - 12)' },
+  ],
+}
+
+export const ALL_FASE_OPTIONS = [
+  { value: 'Fase Fondasi', label: 'Fase Fondasi (PAUD / TK)' },
+  { value: 'Fase A', label: 'Fase A (Kelas 1 - 2)' },
+  { value: 'Fase B', label: 'Fase B (Kelas 3 - 4)' },
+  { value: 'Fase C', label: 'Fase C (Kelas 5 - 6)' },
+  { value: 'Fase D', label: 'Fase D (Kelas 7 - 9)' },
+  { value: 'Fase E', label: 'Fase E (Kelas 10)' },
+  { value: 'Fase F', label: 'Fase F (Kelas 11 - 12)' },
+]
+
+export const getDefaultFaseForJenjang = (jenjang) => {
+  if (jenjang === 'TK') return { fase: 'Fase Fondasi', kelas_target: 'TK A' }
+  if (jenjang === 'SD') return { fase: 'Fase A', kelas_target: 'Kelas 1' }
+  if (jenjang === 'SMP') return { fase: 'Fase D', kelas_target: 'Kelas 7' }
+  if (jenjang === 'SMA') return { fase: 'Fase E', kelas_target: 'Kelas 10' }
+  return { fase: 'Fase A', kelas_target: 'Kelas 1' }
+}
+
 function KpiTintedCard({ icon: Icon, label, subtext, value, tone = 'emerald' }) {
   const tones = {
     emerald: {
@@ -256,35 +306,86 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
     return units
   }, [isGuru, teacherUnitIds, units])
 
-  const availableKurikulumsForModal = useMemo(() => {
-    let list = kurikulums
-    const targetUnit = formData.unit_pendidikan_id || (isGuru && teacherUnitIds.length > 0 ? teacherUnitIds[0] : '')
-    if (targetUnit) {
-      list = list.filter(
-        (k) =>
-          !k.unit_pendidikan_id ||
-          String(k.unit_pendidikan_id) === String(targetUnit) ||
-          String(k.unit_id) === String(targetUnit)
-      )
+  const resolveKurikulumForUnit = (unitId) => {
+    if (!unitId) return kurikulums
+    const currentUnit = units.find((u) => String(u.id) === String(unitId))
+    const jenjang = getUnitJenjang(currentUnit)
+
+    const direct = kurikulums.filter(
+      (k) => String(k.unit_pendidikan_id) === String(unitId) || String(k.unit_id) === String(unitId)
+    )
+    const byJenjang = kurikulums.filter((k) => {
+      if (!jenjang) return false
+      const kJ = String(k.jenjang || '').toUpperCase()
+      if (kJ === jenjang) return true
+      if (jenjang === 'SMP' && (kJ.includes('SMP') || kJ.includes('PESANTREN'))) return true
+      if (jenjang === 'SMA' && (kJ.includes('SMA') || kJ.includes('PESANTREN'))) return true
+      const kText = `${k.nama_kurikulum || ''} ${k.kode_kurikulum || ''}`.toUpperCase()
+      return kText.includes(jenjang)
+    })
+    const seen = new Set()
+    const result = []
+    ;[...direct, ...byJenjang].forEach((item) => {
+      if (!seen.has(String(item.id))) {
+        seen.add(String(item.id))
+        result.push(item)
+      }
+    })
+    return result.length > 0 ? result : kurikulums
+  }
+
+  const resolveSubjectsForUnit = (unitId, kurId) => {
+    let list = subjects
+    const currentUnit = units.find((u) => String(u.id) === String(unitId))
+    const jenjang = getUnitJenjang(currentUnit)
+
+    if (unitId) {
+      const unitSubs = list.filter((s) => String(s.unit_pendidikan_id) === String(unitId))
+      if (unitSubs.length > 0) {
+        list = unitSubs
+      } else if (jenjang) {
+        const jSubs = list.filter((s) => {
+          const str = `${s.kode_mapel || ''} ${s.nama_mapel || ''} ${s.code || ''} ${s.name || ''}`.toUpperCase()
+          return str.includes(jenjang)
+        })
+        if (jSubs.length > 0) list = jSubs
+      }
     }
-    return list
-  }, [kurikulums, formData.unit_pendidikan_id, isGuru, teacherUnitIds])
+
+    if (kurId) {
+      const kurSubs = list.filter((s) => !s.kurikulum_id || String(s.kurikulum_id) === String(kurId))
+      if (kurSubs.length > 0) {
+        list = kurSubs
+      }
+    }
+
+    if (isGuru && teacherSubjectIds.length > 0) {
+      const guruSubs = list.filter((s) => teacherSubjectIds.includes(String(s.id)))
+      if (guruSubs.length > 0) list = guruSubs
+    }
+
+    return list.length > 0 ? list : subjects
+  }
+
+  const availableKurikulumsForModal = useMemo(() => {
+    const targetUnit = formData.unit_pendidikan_id || (isGuru && teacherUnitIds.length > 0 ? teacherUnitIds[0] : '')
+    return resolveKurikulumForUnit(targetUnit)
+  }, [kurikulums, formData.unit_pendidikan_id, isGuru, teacherUnitIds, units])
 
   const availableSubjectsForModal = useMemo(() => {
-    let list = subjects
     const targetUnit = formData.unit_pendidikan_id || (isGuru && teacherUnitIds.length > 0 ? teacherUnitIds[0] : '')
-    if (targetUnit) {
-      list = list.filter((s) => !s.unit_pendidikan_id || String(s.unit_pendidikan_id) === String(targetUnit))
+    return resolveSubjectsForUnit(targetUnit, formData.kurikulum_id)
+  }, [subjects, formData.unit_pendidikan_id, formData.kurikulum_id, isGuru, teacherUnitIds, teacherSubjectIds, units])
+
+  const availableFasesForModal = useMemo(() => {
+    const targetUnit = formData.unit_pendidikan_id || (isGuru && teacherUnitIds.length > 0 ? teacherUnitIds[0] : '')
+    const currentUnit = units.find((u) => String(u.id) === String(targetUnit))
+    const targetJenjang = getUnitJenjang(currentUnit)
+    if (targetJenjang && FASE_OPTIONS_BY_JENJANG[targetJenjang]) {
+      return FASE_OPTIONS_BY_JENJANG[targetJenjang]
     }
-    if (formData.kurikulum_id) {
-      list = list.filter((s) => !s.kurikulum_id || String(s.kurikulum_id) === String(formData.kurikulum_id))
-    }
-    if (isGuru && teacherSubjectIds.length > 0) {
-      const guruSubjects = list.filter((s) => teacherSubjectIds.includes(String(s.id)))
-      if (guruSubjects.length > 0) list = guruSubjects
-    }
-    return list
-  }, [subjects, formData.unit_pendidikan_id, formData.kurikulum_id, isGuru, teacherUnitIds, teacherSubjectIds])
+    return ALL_FASE_OPTIONS
+  }, [units, formData.unit_pendidikan_id, isGuru, teacherUnitIds])
 
   const loadDropdownMasterData = async () => {
     try {
@@ -369,38 +470,35 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
       setEditingItem(null)
       const defaultUnit = isGuru && teacherUnitIds.length > 0
         ? teacherUnitIds[0]
-        : (units.length > 0 ? units[0].id : '')
+        : (selectedUnit || (units.length > 0 ? units[0].id : ''))
 
-      let matchingKur = kurikulums
-      if (defaultUnit) {
-        matchingKur = kurikulums.filter((k) => !k.unit_pendidikan_id || String(k.unit_pendidikan_id) === String(defaultUnit))
-      }
-      const defaultKur = matchingKur.length > 0 ? matchingKur[0].id : (kurikulums.length > 0 ? kurikulums[0].id : '')
+      const currentUnit = units.find((u) => String(u.id) === String(defaultUnit))
+      const jenjang = getUnitJenjang(currentUnit)
+      const defaultFaseData = getDefaultFaseForJenjang(jenjang)
 
-      let matchingSub = subjects
-      if (defaultUnit) {
-        matchingSub = matchingSub.filter((s) => !s.unit_pendidikan_id || String(s.unit_pendidikan_id) === String(defaultUnit))
-      }
-      if (defaultKur) {
-        matchingSub = matchingSub.filter((s) => !s.kurikulum_id || String(s.kurikulum_id) === String(defaultKur))
-      }
-      if (isGuru && teacherSubjectIds.length > 0) {
-        const guruSubs = matchingSub.filter((s) => teacherSubjectIds.includes(String(s.id)))
-        if (guruSubs.length > 0) matchingSub = guruSubs
-      }
-      const defaultSub = matchingSub.length > 0 ? matchingSub[0].id : (subjects.length > 0 ? subjects[0].id : '')
+      const matchingKur = resolveKurikulumForUnit(defaultUnit)
+      const defaultKur = selectedKurikulum && matchingKur.some((k) => String(k.id) === String(selectedKurikulum))
+        ? selectedKurikulum
+        : (matchingKur.length > 0 ? matchingKur[0].id : '')
+
+      const matchingSub = resolveSubjectsForUnit(defaultUnit, defaultKur)
+      const defaultSub = selectedSubject && matchingSub.some((s) => String(s.id) === String(selectedSubject))
+        ? selectedSubject
+        : (matchingSub.length > 0 ? matchingSub[0].id : (subjects.length > 0 ? subjects[0].id : ''))
+
+      const defaultTahun = selectedTahun || (tahunAjarans.length > 0 ? tahunAjarans[0].id : '')
 
       setFormData({
         unit_pendidikan_id: defaultUnit,
-        tahun_ajaran_id: tahunAjarans.length > 0 ? tahunAjarans[0].id : '',
+        tahun_ajaran_id: defaultTahun,
         kurikulum_id: defaultKur,
         mata_pelajaran_id: defaultSub,
-        kode_cp: `CP-MAPEL-${dataCp.length + 1}`,
+        kode_cp: `CP-MAPEL-${(pagination.total || dataCp.length) + 1}`,
         nama_cp: '',
         deskripsi: '',
-        fase: 'Fase A',
-        kelas_target: 'Kelas 1',
-        urutan: dataCp.length + 1,
+        fase: defaultFaseData.fase,
+        kelas_target: defaultFaseData.kelas_target,
+        urutan: (pagination.total || dataCp.length) + 1,
         status: true,
       })
     }
@@ -408,52 +506,36 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
   }
 
   const handleUnitChangeInForm = (newUnitId) => {
-    let matchingKur = kurikulums
-    if (newUnitId) {
-      matchingKur = kurikulums.filter((k) => !k.unit_pendidikan_id || String(k.unit_pendidikan_id) === String(newUnitId))
-    }
+    const currentUnit = units.find((u) => String(u.id) === String(newUnitId))
+    const jenjang = getUnitJenjang(currentUnit)
+    const defaultFaseData = getDefaultFaseForJenjang(jenjang)
+
+    const matchingKur = resolveKurikulumForUnit(newUnitId)
     const newKurId = matchingKur.length > 0 ? matchingKur[0].id : ''
 
-    let matchingSub = subjects
-    if (newUnitId) {
-      matchingSub = matchingSub.filter((s) => !s.unit_pendidikan_id || String(s.unit_pendidikan_id) === String(newUnitId))
-    }
-    if (newKurId) {
-      matchingSub = matchingSub.filter((s) => !s.kurikulum_id || String(s.kurikulum_id) === String(newKurId))
-    }
-    if (isGuru && teacherSubjectIds.length > 0) {
-      const guruSubs = matchingSub.filter((s) => teacherSubjectIds.includes(String(s.id)))
-      if (guruSubs.length > 0) matchingSub = guruSubs
-    }
+    const matchingSub = resolveSubjectsForUnit(newUnitId, newKurId)
     const newSubId = matchingSub.length > 0 ? matchingSub[0].id : ''
 
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       unit_pendidikan_id: newUnitId,
       kurikulum_id: newKurId,
       mata_pelajaran_id: newSubId,
-    })
+      fase: defaultFaseData.fase,
+      kelas_target: defaultFaseData.kelas_target,
+    }))
   }
 
   const handleKurikulumChangeInForm = (newKurId) => {
-    let matchingSub = subjects
-    if (formData.unit_pendidikan_id) {
-      matchingSub = matchingSub.filter((s) => !s.unit_pendidikan_id || String(s.unit_pendidikan_id) === String(formData.unit_pendidikan_id))
-    }
-    if (newKurId) {
-      matchingSub = matchingSub.filter((s) => !s.kurikulum_id || String(s.kurikulum_id) === String(newKurId))
-    }
-    if (isGuru && teacherSubjectIds.length > 0) {
-      const guruSubs = matchingSub.filter((s) => teacherSubjectIds.includes(String(s.id)))
-      if (guruSubs.length > 0) matchingSub = guruSubs
-    }
-    const newSubId = matchingSub.length > 0 ? matchingSub[0].id : ''
+    const matchingSub = resolveSubjectsForUnit(formData.unit_pendidikan_id, newKurId)
+    const currentSubValid = matchingSub.some((s) => String(s.id) === String(formData.mata_pelajaran_id))
+    const newSubId = currentSubValid ? formData.mata_pelajaran_id : (matchingSub.length > 0 ? matchingSub[0].id : '')
 
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       kurikulum_id: newKurId,
       mata_pelajaran_id: newSubId,
-    })
+    }))
   }
 
   const handleCloseModal = () => {
@@ -752,7 +834,15 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
           >
             <option value="">-- Semua Mapel --</option>
             {subjects
-              .filter((item) => !selectedKurikulum || item.kurikulum_id === selectedKurikulum)
+              .filter((item) => {
+                if (selectedUnit && item.unit_pendidikan_id && String(item.unit_pendidikan_id) !== String(selectedUnit)) {
+                  return false
+                }
+                if (selectedKurikulum && item.kurikulum_id && String(item.kurikulum_id) !== String(selectedKurikulum)) {
+                  return false
+                }
+                return true
+              })
               .map((item) => (
                 <option key={item.id} value={item.id}>
                   {item.nama_mapel || item.name}
@@ -981,7 +1071,7 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
                     <option value="">-- Pilih Kurikulum --</option>
                     {availableKurikulumsForModal.map((k) => (
                       <option key={k.id} value={k.id}>
-                        {k.nama_kurikulum || k.kode_kurikulum}
+                        {k.nama_kurikulum || k.kode_kurikulum} {k.jenjang ? `(${k.jenjang})` : ''}
                       </option>
                     ))}
                   </select>
@@ -1000,14 +1090,14 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
                     <option value="">-- Pilih Mata Pelajaran --</option>
                     {availableSubjectsForModal.map((s) => (
                       <option key={s.id} value={s.id}>
-                        {s.nama_mapel || s.name}
+                        {s.nama_mapel || s.name} {s.kode_mapel || s.code ? `[${s.kode_mapel || s.code}]` : ''}
                       </option>
                     ))}
                   </select>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                     Kode CP <span className="text-rose-500">*</span>
@@ -1024,20 +1114,43 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-                    Fase <span className="text-slate-400 font-normal">(Kurikulum Merdeka)</span>
+                    Fase <span className="text-slate-400 font-normal">(Kurikulum)</span>
                   </label>
                   <select
                     value={formData.fase}
-                    onChange={(e) => setFormData({ ...formData, fase: e.target.value })}
+                    onChange={(e) => {
+                      const newFase = e.target.value
+                      let newKelas = formData.kelas_target
+                      if (newFase === 'Fase Fondasi') newKelas = 'TK A'
+                      else if (newFase === 'Fase A') newKelas = 'Kelas 1'
+                      else if (newFase === 'Fase B') newKelas = 'Kelas 3'
+                      else if (newFase === 'Fase C') newKelas = 'Kelas 5'
+                      else if (newFase === 'Fase D') newKelas = 'Kelas 7'
+                      else if (newFase === 'Fase E') newKelas = 'Kelas 10'
+                      else if (newFase === 'Fase F') newKelas = 'Kelas 11'
+                      setFormData({ ...formData, fase: newFase, kelas_target: newKelas })
+                    }}
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#0E5C44] dark:text-slate-100"
                   >
-                    <option value="Fase A">Fase A (Kelas 1-2)</option>
-                    <option value="Fase B">Fase B (Kelas 3-4)</option>
-                    <option value="Fase C">Fase C (Kelas 5-6)</option>
-                    <option value="Fase D">Fase D (Kelas 7-9)</option>
-                    <option value="Fase E">Fase E (Kelas 10)</option>
-                    <option value="Fase F">Fase F (Kelas 11-12)</option>
+                    {availableFasesForModal.map((f) => (
+                      <option key={f.value} value={f.value}>
+                        {f.label}
+                      </option>
+                    ))}
                   </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+                    Kelas Target
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Contoh: Kelas 1, TK A"
+                    value={formData.kelas_target}
+                    onChange={(e) => setFormData({ ...formData, kelas_target: e.target.value })}
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#0E5C44] dark:text-slate-100"
+                  />
                 </div>
               </div>
 

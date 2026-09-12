@@ -57,7 +57,7 @@ import {
   MasterFilterSelect,
   SquircleActionButton,
 } from '../components/master-data'
-import { printCleanTable, downloadPdfTable } from '../utils/printHelper'
+import { printCleanTable, downloadPdfTable, printWeeklyStudentEvaluation } from '../utils/printHelper'
 
 import {
   Card,
@@ -369,6 +369,31 @@ export default function LaporanSiswaPage() {
           itemStatus,
         ]
       }),
+    })
+  }
+
+  const handlePrintWeekly = (st) => {
+    const eduUnit = st?.raw?.education_unit || st?.education_unit || (typeof st?.unit === 'object' ? st?.unit : null)
+    printWeeklyStudentEvaluation({
+      student: {
+        ...st,
+        name: st?.nama || st?.full_name || st?.name || 'Shezakia Mufidah Alfirdausi',
+        nis: st?.nis || st?.nisn || '-',
+        className: st?.kelas || '10 Madinah 1',
+        unitName: eduUnit?.name || st?.unit || 'Sekolah Menengah Atas Islam Terpadu',
+        education_unit: eduUnit,
+      },
+      period: {
+        title: 'Senin, 10 Agustus 2026 s.d. Jumat, 14 Agustus 2026',
+        academicYear: '2026/2027',
+      },
+      homeroomTeacher: {
+        name: 'Ustadzah Elsa Putri Utami',
+      },
+      guruWali: {
+        name: 'Ilma Emilia Widyastuti',
+      },
+      schoolCity: eduUnit?.metadata?.city || 'Padang',
     })
   }
 
@@ -1021,7 +1046,8 @@ export default function LaporanSiswaPage() {
                   </TableHead>
 
                   <TableHead className="text-center">Gender</TableHead>
-                  <TableHead className="text-right">Status</TableHead>
+                  <TableHead className="text-center">Status</TableHead>
+                  <TableHead className="text-right">Aksi</TableHead>
                 </TableRow>
               </TableHeader>
 
@@ -1093,6 +1119,14 @@ export default function LaporanSiswaPage() {
                               >
                                 Lihat Detail Profil Siswa
                               </button>
+                              <button
+                                type="button"
+                                onClick={() => handlePrintWeekly(item)}
+                                className="w-full mt-1.5 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-[10px] font-bold uppercase tracking-wider rounded-xl transition-all hover:from-emerald-700 hover:to-teal-700 active:scale-98 shadow-xs cursor-pointer flex items-center justify-center gap-1.5"
+                              >
+                                <Printer className="size-3.5" />
+                                Cetak Evaluasi Pekanan
+                              </button>
                             </div>
                           </HoverCardContent>
                         </HoverCard>
@@ -1114,12 +1148,23 @@ export default function LaporanSiswaPage() {
                         {item.jenis_kelamin || item.jk || '-'}
                       </TableCell>
 
-                      <TableCell className="text-right">
+                      <TableCell className="text-center">
                         <MasterStatusBadge
                           status={itemStatus}
                           className="hover:scale-105 transition-transform cursor-pointer"
                           onClick={() => setSelectedStudentModal(item)}
                         />
+                      </TableCell>
+
+                      <TableCell className="text-right">
+                        <button
+                          type="button"
+                          title="Cetak Laporan Perkembangan Pekanan"
+                          onClick={() => handlePrintWeekly(item)}
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:scale-105 active:scale-95 transition-all dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 shadow-2xs"
+                        >
+                          <Printer className="h-4 w-4" />
+                        </button>
                       </TableCell>
                     </TableRow>
                   )

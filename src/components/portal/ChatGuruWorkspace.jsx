@@ -39,6 +39,7 @@ import {
   Minus
 } from 'lucide-react'
 import api from '../../services/api'
+import { webRealtimeWs } from '../../services/websocketService'
 import { familyPortalService } from '../../services/familyPortalService'
 import { educationUnitService } from '../../services/educationUnitService'
 
@@ -657,9 +658,50 @@ export default function ChatGuruWorkspace({
     const msgTimer = setInterval(() => {
       if (typeof document !== 'undefined' && document.hidden) return
       fetchMessages(true)
-    }, 2000)
+    }, 6000)
     return () => clearInterval(msgTimer)
   }, [selectedContact, mode, childId])
+
+  // Realtime WebSocket Subscription untuk Chat Zero-Delay
+  useEffect(() => {
+    if (!currentUserId) return
+
+    const channel = `user.${currentUserId}`
+    const unsubscribe = webRealtimeWs.subscribe(channel, (eventData) => {
+      if (eventData.event === 'chat.message.sent') {
+        const msg = eventData.payload
+        if (!msg) return
+
+        const activeTargetId = selectedContact?.user_id || selectedContact?.id
+        if (activeTargetId && String(activeTargetId) === String(msg.sender_user_id)) {
+          setMessages((prev) => {
+            if (prev.some((m) => m.id === msg.id)) return prev
+            return [
+              ...prev,
+              {
+                id: msg.id,
+                sender_user_id: msg.sender_user_id,
+                recipient_user_id: msg.recipient_user_id,
+                message: msg.message,
+                created_at: msg.created_at,
+                sender_name: msg.sender_name || selectedContact?.name,
+                attachments: msg.attachments || [],
+              },
+            ]
+          })
+          setTimeout(() => {
+            scrollToBottom()
+          }, 50)
+        } else {
+          fetchContacts(search, selectedUnit, selectedStatus)
+        }
+      }
+    })
+
+    return () => {
+      unsubscribe()
+    }
+  }, [currentUserId, selectedContact, scrollToBottom, fetchContacts, search, selectedUnit, selectedStatus])
 
   // 2. Slower contact list polling (15s) to avoid choking HTTP connections
   useEffect(() => {

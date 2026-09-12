@@ -72,8 +72,8 @@ export default function TeacherCommentsWorkspace({ comments = [], loading = fals
       <Card className="p-5 border border-slate-200/80 bg-white shadow-xs dark:border-slate-800 dark:bg-slate-900 rounded-[20px]">
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4 dark:border-slate-800">
           <div>
-            <h2 className="text-base font-bold text-slate-900 dark:text-white">Komentar & Catatan Guru</h2>
-            <p className="mt-0.5 text-xs text-slate-500">Catatan perkembangan siswa yang dibagikan oleh guru dan wali kelas.</p>
+            <h2 className="text-base font-bold text-slate-900 dark:text-white">Buku Penghubung & Catatan Guru</h2>
+            <p className="mt-0.5 text-xs text-slate-500">Catatan resmi komunikasi dan pemantauan perkembangan siswa antara guru, wali kelas, dan orang tua.</p>
           </div>
 
           <div className="relative">
@@ -169,7 +169,7 @@ export default function TeacherCommentsWorkspace({ comments = [], loading = fals
         {!filteredComments.length && (
           <Card className="p-16 text-center text-xs text-slate-400 border border-dashed border-slate-300 dark:border-slate-700 rounded-[20px]">
             <MessageCircle className="mx-auto mb-3 h-10 w-10 text-slate-300" />
-            Belum ada komentar guru untuk kategori ini.
+            Belum ada catatan buku penghubung untuk kategori ini.
           </Card>
         )}
       </div>

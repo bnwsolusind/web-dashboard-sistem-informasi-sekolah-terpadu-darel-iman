@@ -41,14 +41,16 @@ export function TahfizhSubNav() {
       activeColor: 'bg-sky-600 text-white shadow-md shadow-sky-600/30',
       inactiveColor: 'bg-sky-100/90 text-sky-700 hover:bg-sky-600 hover:text-white dark:bg-sky-950/60 dark:text-sky-300 dark:hover:bg-sky-600 dark:hover:text-white hover:shadow-md hover:shadow-sky-600/30',
     },
-    {
-      id: '/dashboard/laporan-tahfizh',
-      path: '/dashboard/laporan-tahfizh',
-      label: 'Laporan Tahfizh',
-      icon: BarChart2,
-      activeColor: 'bg-violet-600 text-white shadow-md shadow-violet-600/30',
-      inactiveColor: 'bg-violet-100/90 text-violet-700 hover:bg-violet-600 hover:text-white dark:bg-violet-950/60 dark:text-violet-300 dark:hover:bg-violet-600 dark:hover:text-white hover:shadow-md hover:shadow-violet-600/30',
-    },
+    ...(!isTeacher ? [
+      {
+        id: '/dashboard/laporan-tahfizh',
+        path: '/dashboard/laporan-tahfizh',
+        label: 'Laporan Tahfizh',
+        icon: BarChart2,
+        activeColor: 'bg-violet-600 text-white shadow-md shadow-violet-600/30',
+        inactiveColor: 'bg-violet-100/90 text-violet-700 hover:bg-violet-600 hover:text-white dark:bg-violet-950/60 dark:text-violet-300 dark:hover:bg-violet-600 dark:hover:text-white hover:shadow-md hover:shadow-violet-600/30',
+      },
+    ] : []),
     {
       id: '/dashboard/guru-tahfizh',
       path: '/dashboard/guru-tahfizh',

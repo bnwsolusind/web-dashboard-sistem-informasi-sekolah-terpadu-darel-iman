@@ -25,6 +25,7 @@ import { educationUnitService } from '../services/educationUnitService'
 import { tahunAjaranService } from '../services/tahunAjaranService'
 import { masterKurikulumService } from '../services/masterKurikulumService'
 import { subjectService } from '../services/subjectService'
+import { getUnitJenjang } from './MasterCapaianPembelajaranPage'
 import PageContainer from '../components/app/PageContainer'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
 import { useAuthStore } from '../stores/authStore'
@@ -267,35 +268,76 @@ export default function MasterTujuanPembelajaranPage({ embedded = false, hideBre
     return units
   }, [isGuru, teacherUnitIds, units])
 
-  const availableKurikulumsForModal = useMemo(() => {
-    let list = kurikulums
-    const targetUnit = formData.unit_pendidikan_id || (isGuru && teacherUnitIds.length > 0 ? teacherUnitIds[0] : '')
-    if (targetUnit) {
-      list = list.filter(
-        (k) =>
-          !k.unit_pendidikan_id ||
-          String(k.unit_pendidikan_id) === String(targetUnit) ||
-          String(k.unit_id) === String(targetUnit)
-      )
+  const resolveKurikulumForUnit = (unitId) => {
+    if (!unitId) return kurikulums
+    const currentUnit = units.find((u) => String(u.id) === String(unitId))
+    const jenjang = getUnitJenjang(currentUnit)
+
+    const direct = kurikulums.filter(
+      (k) => String(k.unit_pendidikan_id) === String(unitId) || String(k.unit_id) === String(unitId)
+    )
+    const byJenjang = kurikulums.filter((k) => {
+      if (!jenjang) return false
+      const kJ = String(k.jenjang || '').toUpperCase()
+      if (kJ === jenjang) return true
+      if (jenjang === 'SMP' && (kJ.includes('SMP') || kJ.includes('PESANTREN'))) return true
+      if (jenjang === 'SMA' && (kJ.includes('SMA') || kJ.includes('PESANTREN'))) return true
+      const kText = `${k.nama_kurikulum || ''} ${k.kode_kurikulum || ''}`.toUpperCase()
+      return kText.includes(jenjang)
+    })
+    const seen = new Set()
+    const result = []
+    ;[...direct, ...byJenjang].forEach((item) => {
+      if (!seen.has(String(item.id))) {
+        seen.add(String(item.id))
+        result.push(item)
+      }
+    })
+    return result.length > 0 ? result : kurikulums
+  }
+
+  const resolveSubjectsForUnit = (unitId, kurId) => {
+    let list = subjects
+    const currentUnit = units.find((u) => String(u.id) === String(unitId))
+    const jenjang = getUnitJenjang(currentUnit)
+
+    if (unitId) {
+      const unitSubs = list.filter((s) => String(s.unit_pendidikan_id) === String(unitId))
+      if (unitSubs.length > 0) {
+        list = unitSubs
+      } else if (jenjang) {
+        const jSubs = list.filter((s) => {
+          const str = `${s.kode_mapel || ''} ${s.nama_mapel || ''} ${s.code || ''} ${s.name || ''}`.toUpperCase()
+          return str.includes(jenjang)
+        })
+        if (jSubs.length > 0) list = jSubs
+      }
     }
-    return list
-  }, [kurikulums, formData.unit_pendidikan_id, isGuru, teacherUnitIds])
+
+    if (kurId) {
+      const kurSubs = list.filter((s) => !s.kurikulum_id || String(s.kurikulum_id) === String(kurId))
+      if (kurSubs.length > 0) {
+        list = kurSubs
+      }
+    }
+
+    if (isGuru && teacherSubjectIds.length > 0) {
+      const guruSubs = list.filter((s) => teacherSubjectIds.includes(String(s.id)))
+      if (guruSubs.length > 0) list = guruSubs
+    }
+
+    return list.length > 0 ? list : subjects
+  }
+
+  const availableKurikulumsForModal = useMemo(() => {
+    const targetUnit = formData.unit_pendidikan_id || (isGuru && teacherUnitIds.length > 0 ? teacherUnitIds[0] : '')
+    return resolveKurikulumForUnit(targetUnit)
+  }, [kurikulums, formData.unit_pendidikan_id, isGuru, teacherUnitIds, units])
 
   const availableSubjectsForModal = useMemo(() => {
-    let list = subjects
     const targetUnit = formData.unit_pendidikan_id || (isGuru && teacherUnitIds.length > 0 ? teacherUnitIds[0] : '')
-    if (targetUnit) {
-      list = list.filter((s) => !s.unit_pendidikan_id || String(s.unit_pendidikan_id) === String(targetUnit))
-    }
-    if (formData.kurikulum_id) {
-      list = list.filter((s) => !s.kurikulum_id || String(s.kurikulum_id) === String(formData.kurikulum_id))
-    }
-    if (isGuru && teacherSubjectIds.length > 0) {
-      const guruSubjects = list.filter((s) => teacherSubjectIds.includes(String(s.id)))
-      if (guruSubjects.length > 0) list = guruSubjects
-    }
-    return list
-  }, [subjects, formData.unit_pendidikan_id, formData.kurikulum_id, isGuru, teacherUnitIds, teacherSubjectIds])
+    return resolveSubjectsForUnit(targetUnit, formData.kurikulum_id)
+  }, [subjects, formData.unit_pendidikan_id, formData.kurikulum_id, isGuru, teacherUnitIds, teacherSubjectIds, units])
 
   const loadInitialMasters = async () => {
     try {
@@ -431,10 +473,12 @@ export default function MasterTujuanPembelajaranPage({ embedded = false, hideBre
       })
     } else {
       setEditingItem(null)
-      const defaultUnit = units[0]?.id ?? ''
+      const defaultUnit = isGuru && teacherUnitIds.length > 0 ? teacherUnitIds[0] : (units[0]?.id ?? '')
       const defaultTahun = tahunAjarans[0]?.id ?? ''
-      const defaultKur = kurikulums[0]?.id ?? ''
-      const defaultMapel = subjects[0]?.id ?? ''
+      const matchingKur = resolveKurikulumForUnit(defaultUnit)
+      const defaultKur = matchingKur.length > 0 ? matchingKur[0].id : (kurikulums[0]?.id ?? '')
+      const matchingSub = resolveSubjectsForUnit(defaultUnit, defaultKur)
+      const defaultMapel = matchingSub.length > 0 ? matchingSub[0].id : (subjects[0]?.id ?? '')
 
       setFormData({
         unit_pendidikan_id: defaultUnit,
@@ -880,7 +924,7 @@ export default function MasterTujuanPembelajaranPage({ embedded = false, hideBre
                     <option value="">-- Pilih Kurikulum --</option>
                     {availableKurikulumsForModal.map((k) => (
                       <option key={k.id} value={k.id}>
-                        {k.nama_kurikulum || k.kode_kurikulum}
+                        {k.nama_kurikulum || k.kode_kurikulum} {k.jenjang ? `(${k.jenjang})` : ''}
                       </option>
                     ))}
                   </select>
@@ -900,7 +944,7 @@ export default function MasterTujuanPembelajaranPage({ embedded = false, hideBre
                   <option value="">-- Pilih Mata Pelajaran --</option>
                   {availableSubjectsForModal.map((s) => (
                     <option key={s.id} value={s.id}>
-                      {s.nama_mapel || s.name}
+                      {s.nama_mapel || s.name} {s.kode_mapel || s.code ? `[${s.kode_mapel || s.code}]` : ''}
                     </option>
                   ))}
                 </select>

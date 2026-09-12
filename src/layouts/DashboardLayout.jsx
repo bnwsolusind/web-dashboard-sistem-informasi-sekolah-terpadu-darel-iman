@@ -30,6 +30,7 @@ import {
   Building2,
   CalendarDays,
   ShieldCheck,
+  CreditCard,
   RefreshCw,
 } from 'lucide-react'
 import Swal from 'sweetalert2'
@@ -87,6 +88,24 @@ export default function DashboardLayout() {
   const isPureMusyrif = isMusyrifRole(roles) && !hasRole('Guru', 'guru', 'Guru Mata Pelajaran', 'guru_mata_pelajaran', 'Guru PAI', 'Guru Tahfizh', 'Wali Kelas', 'walas', 'wali_kelas', 'Super Admin', 'Admin')
   const isMusyrifUser = isMusyrifRole(roles) || isPureMusyrif || hasRole('Musyrif', 'Musyrifah', 'musyrif', 'musyrifah', 'Pengasuh', 'Wali Asrama', 'Pembimbing')
   const isStaffOrTeacherUser = hasFullMenuAccess || isTeacherRole(roles) || isTuOrKepsek(roles) || isDivisiPendidikan || isMusyrifUser || hasRole('Operator', 'Wali Kelas', 'Guru', 'Kepala Sekolah', 'TU', 'Tata Usaha')
+  const isTeacherOnly =
+    isTeacherRole(roles) &&
+    !hasFullMenuAccess &&
+    !hasRole(
+      'Yayasan', 'Ketua Yayasan', 'ketua_yayasan', 'pengurus_yayasan',
+      'Kepala Sekolah', 'kepala_sekolah', 'KepalaSekolah', 'kepsek',
+      'Divisi Pendidikan', 'divisi_pendidikan', 'DivisiPendidikan',
+      'Tata Usaha', 'TU', 'tu', 'tata_usaha', 'Operator', 'operator'
+    )
+  const isGuruUser =
+    !hasFullMenuAccess &&
+    (isTeacherOnly || isTeacherRole(roles) || hasRole('Guru', 'guru', 'Guru Mata Pelajaran', 'Guru Tahfizh', 'Guru BK', 'Wali Kelas')) &&
+    !hasRole(
+      'Yayasan', 'Ketua Yayasan', 'ketua_yayasan', 'pengurus_yayasan',
+      'Kepala Sekolah', 'kepala_sekolah', 'KepalaSekolah', 'kepsek',
+      'Divisi Pendidikan', 'divisi_pendidikan', 'DivisiPendidikan',
+      'Tata Usaha', 'TU', 'tu', 'tata_usaha', 'Operator', 'operator'
+    )
   const isPureStudent = isStudentRole(roles) && !isStaffOrTeacherUser
   const isPureParent = isParentRole(roles) && !isStaffOrTeacherUser
   const canViewEducationUnits = can('unit.view', 'unit.view_all', 'foundation.unit.view', 'sistem.master_data')
@@ -477,16 +496,14 @@ export default function DashboardLayout() {
     ...(hasFullMenuAccess || can('teacher_monitoring.view') ? [
       { to: '/dashboard/pemantauan', label: 'Monitoring Guru Mengajar' },
     ] : []),
-    ...(!hasRole('Guru') && !hasRole('Guru Tahfizh') && !hasRole('Wali Kelas') && !hasRole('Siswa') ? [
+    ...(!isTeacherOnly && !isGuruUser && !hasRole('Guru', 'Guru Mapel') ? [
       { to: '/dashboard/absensi-gerbang', label: 'Absensi Gerbang' },
       { to: '/dashboard/absensi-pembelajaran', label: 'Absensi Kelas & MaPel' },
       ...(isPesantrenUnit ? [{ to: '/dashboard/absensi-ibadah', label: 'Absensi Ibadah Santri' }] : []),
       { to: '/dashboard/absensi-ibadah-siswa', label: 'Absensi Ibadah Siswa' },
       { to: '/dashboard/laporan-absensi', label: 'Rekap Presensi & Laporan' },
     ] : [
-      { to: '/dashboard/absensi-pembelajaran', label: 'Absensi Kelas & Mata Pelajaran' },
       ...(isPesantrenUnit ? [{ to: '/dashboard/absensi-ibadah', label: 'Absensi Ibadah Santri' }] : []),
-      { to: '/dashboard/absensi-ibadah-siswa', label: 'Absensi Ibadah Siswa' },
     ]),
   ].filter((item, index, list) => list.findIndex((entry) => entry.to === item.to) === index)
 
@@ -610,8 +627,32 @@ export default function DashboardLayout() {
     if (to.includes('/lms/kisi-kisi')) return can('pembelajaran.kisi_kisi_ujian')
     if (to.includes('/lms/bank-soal')) return can('pembelajaran.bank_soal')
     if (to.includes('/jadwal-pelajaran')) return can('pembelajaran.jadwal_pelajaran')
-    if (to.includes('/master-kurikulum')) return can('pembelajaran.kurikulum.view')
-    if (to === '/dashboard/mutabaah/rekap') return !isTataUsaha && can('mutabaah.recap.view', 'mutabaah.report.view', 'mutabaah.report.export')
+    if (to.includes('/laporan-tahfizh')) {
+      if ((isTeacherOnly || isGuruUser) && !hasFullMenuAccess) return false
+      return (
+        hasRole(
+          'Super Admin', 'Admin', 'Yayasan', 'Ketua Yayasan', 'Pengurus Yayasan',
+          'Sekretaris Yayasan', 'Bendahara Yayasan', 'Divisi Pendidikan', 'Kepala Bidang Pendidikan',
+          'Divisi Kurikulum', 'Divisi Kesiswaan', 'Divisi Bahasa', 'Divisi Program Khusus',
+          'Kepala Sekolah', 'Wakil Kepala Sekolah', 'Waka Kurikulum', 'Wakil Kurikulum',
+          'Waka Kesiswaan', 'Wakil Kesiswaan', 'Tata Usaha', 'TU', 'Operator'
+        ) ||
+        can('report.tahfizh.view', 'report.view')
+      )
+    }
+    if (to.includes('/tahfizh/rekapan') || to.includes('/laporan-rekapan-tahfizh')) {
+      return (
+        hasRole(
+          'Super Admin', 'Admin', 'Yayasan', 'Ketua Yayasan', 'Pengurus Yayasan',
+          'Sekretaris Yayasan', 'Bendahara Yayasan', 'Divisi Pendidikan', 'Kepala Bidang Pendidikan',
+          'Divisi Kurikulum', 'Divisi Kesiswaan', 'Divisi Bahasa', 'Divisi Program Khusus',
+          'Kepala Sekolah', 'Wakil Kepala Sekolah', 'Waka Kurikulum', 'Wakil Kurikulum',
+          'Waka Kesiswaan', 'Wakil Kesiswaan', 'Tata Usaha', 'TU', 'Operator',
+          'Guru', 'guru', 'Guru Mapel', 'Guru Tahfizh', 'Guru BK', 'Wali Kelas', 'wali_kelas', 'Musyrif', 'musyrif', 'Musyrifah'
+        ) ||
+        can('report.tahfizh.view', 'tahfizh.view', 'report.view', 'dashboard.guru-tahfizh.view', 'dashboard.guru.view')
+      )
+    }
     if (to === '/dashboard/tahfizh' || to.startsWith('/dashboard/tahfizh')) {
       if (isParentRole(roles) && !hasRole('Super Admin', 'SuperAdmin', 'super_admin')) {
         return false
@@ -634,9 +675,10 @@ export default function DashboardLayout() {
       )
     }
     if (to === '/dashboard/absensi-pembelajaran' || to.startsWith('/dashboard/absensi-pembelajaran') || to.includes('/absensi-pembelajaran')) {
+      if ((isTeacherOnly || isGuruUser) && !hasFullMenuAccess) return false
       if (isPureMusyrif && !hasFullMenuAccess) return false
       return (
-        hasRole('Super Admin', 'Admin', 'Tata Usaha', 'TU', 'tata_usaha', 'Operator', 'operator', 'Kepala Sekolah', 'kepala_sekolah', 'KepalaSekolah', 'kepsek', 'Divisi Pendidikan', 'divisi_pendidikan', 'DivisiPendidikan', 'Kepala Bidang Pendidikan', 'Waka Kurikulum', 'Waka Kesiswaan', 'Guru', 'Wali Kelas') ||
+        hasRole('Super Admin', 'Admin', 'Tata Usaha', 'TU', 'tata_usaha', 'Operator', 'operator', 'Kepala Sekolah', 'kepala_sekolah', 'KepalaSekolah', 'kepsek', 'Divisi Pendidikan', 'divisi_pendidikan', 'DivisiPendidikan', 'Kepala Bidang Pendidikan', 'Waka Kurikulum', 'Waka Kesiswaan') ||
         can('lesson_attendance.view', 'attendance.view', 'kehadiran.siswa.monitoring')
       )
     }
@@ -648,11 +690,11 @@ export default function DashboardLayout() {
       )
     }
     if (to === '/dashboard/absensi-ibadah-siswa' || to.startsWith('/dashboard/absensi-ibadah-siswa')) {
+      if ((isTeacherOnly || isGuruUser) && !hasFullMenuAccess) return false
       return (
         hasRole(
           'Kepala Sekolah', 'kepala_sekolah', 'KepalaSekolah', 'kepsek',
           'Divisi Pendidikan', 'divisi_pendidikan', 'DivisiPendidikan', 'Kepala Bidang Pendidikan',
-          'Guru', 'guru', 'Wali Kelas', 'wali_kelas',
           'Super Admin', 'Admin', 'Tata Usaha', 'TU', 'Operator',
           'Yayasan'
         ) ||
@@ -708,9 +750,10 @@ export default function DashboardLayout() {
       )
     }
     if (to.includes('/laporan-alumni')) {
+      if ((isTeacherOnly || isGuruUser) && !hasFullMenuAccess) return false
       return (
         hasFullMenuAccess ||
-        hasRole('Super Admin', 'SuperAdmin', 'super_admin', 'Admin', 'admin', 'Yayasan', 'Ketua Yayasan', 'Pengurus Yayasan', 'Kepala Sekolah', 'kepala_sekolah', 'KepalaSekolah', 'kepsek', 'Divisi Pendidikan', 'divisi_pendidikan', 'DivisiPendidikan', 'Tata Usaha', 'TU', 'tata_usaha', 'Operator', 'operator', 'Waka Kesiswaan', 'Guru', 'Wali Kelas') ||
+        hasRole('Super Admin', 'SuperAdmin', 'super_admin', 'Admin', 'admin', 'Yayasan', 'Ketua Yayasan', 'Pengurus Yayasan', 'Kepala Sekolah', 'kepala_sekolah', 'KepalaSekolah', 'kepsek', 'Divisi Pendidikan', 'divisi_pendidikan', 'DivisiPendidikan', 'Tata Usaha', 'TU', 'tata_usaha', 'Operator', 'operator', 'Waka Kesiswaan') ||
         can('kesiswaan.alumni_tujuan_lanjut', 'alumni.view', 'foundation.alumni.view', 'report.view', 'kesiswaan.kelulusan_per_tahun', 'sistem.master_data')
       )
     }
@@ -787,16 +830,6 @@ export default function DashboardLayout() {
     hasRole('Divisi Pendidikan', 'divisi_pendidikan', 'DivisiPendidikan', 'Pengawasan Akademik') &&
     !hasRole('Super Admin', 'SuperAdmin', 'super_admin', 'Admin', 'admin', 'Yayasan', 'Ketua Yayasan', 'Pengurus Yayasan')
 
-  const isTeacherOnly =
-    isTeacherRole(roles) &&
-    !hasFullMenuAccess &&
-    !hasRole(
-      'Yayasan', 'Ketua Yayasan', 'ketua_yayasan', 'pengurus_yayasan',
-      'Kepala Sekolah', 'kepala_sekolah', 'KepalaSekolah', 'kepsek',
-      'Divisi Pendidikan', 'divisi_pendidikan', 'DivisiPendidikan',
-      'Tata Usaha', 'TU', 'tu', 'tata_usaha', 'Operator', 'operator'
-    )
-
   const isFoundationUser =
     !hasFullMenuAccess &&
     (hasRole('Yayasan', 'Ketua Yayasan', 'ketua_yayasan', 'sekretaris_yayasan', 'bendahara_yayasan', 'pengurus_yayasan') ||
@@ -806,12 +839,27 @@ export default function DashboardLayout() {
     const to = submenu?.to || item?.to || ''
     if (hasFullMenuAccess) return false
     if (
-      isTeacherOnly &&
+      (isTeacherOnly || isGuruUser) &&
       (
+        item?.key === 'mutabaah' ||
+        to === '/dashboard/mutabaah' ||
+        to.startsWith('/dashboard/mutabaah') ||
+        to === '/dashboard/tahfizh' ||
+        to.startsWith('/dashboard/tahfizh') ||
+        to === '/dashboard/laporan-tahfizh' ||
+        to.includes('/laporan-tahfizh') ||
+        to === '/dashboard/monitoring-tahfizh-ibadah-non-pesantren' ||
+        to.includes('/monitoring-tahfizh-ibadah') ||
+        item?.key === 'dashboard-yayasan-menu' ||
+        to === '/dashboard/yayasan' ||
+        to.startsWith('/dashboard/yayasan') ||
+        to.startsWith('/dashboard/monitoring-divisi') ||
         item?.key === 'akademik' ||
         to.includes('/akademik') ||
         to === '/dashboard/kelola-alumni' ||
         to.includes('/kelola-alumni') ||
+        to === '/dashboard/laporan-alumni' ||
+        to.includes('/laporan-alumni') ||
         to === '/dashboard/berita-informasi' ||
         to.includes('/berita-informasi') ||
         to === '/dashboard/absensi-gerbang' ||
@@ -949,8 +997,9 @@ const getSidebarIconBadgeClass = (key, idx) => {
       icon: LayoutDashboard,
       to: '/dashboard',
     },
-    {
-      key: 'dashboard-yayasan-menu',
+    ...(!isTeacherOnly && !isGuruUser ? [
+      {
+        key: 'dashboard-yayasan-menu',
       label: isKepalaSekolah ? 'DASHBOARD KEPALA SEKOLAH' : isDivisiPendidikan ? 'DASHBOARD DIVISI PENDIDIKAN' : 'DASHBOARD YAYASAN',
       icon: Building2,
       submenus: (isKepalaSekolah || isDivisiPendidikan) ? [
@@ -971,6 +1020,7 @@ const getSidebarIconBadgeClass = (key, idx) => {
         { to: '/dashboard/chat-pegawai', label: 'Chat Pengurus & Pegawai' },
       ],
     },
+    ] : []),
     ...(!((isParentRole(roles) || isStudentRole(roles)) && !hasFullMenuAccess) ? [
       {
         key: 'master-data',
@@ -989,6 +1039,16 @@ const getSidebarIconBadgeClass = (key, idx) => {
           { to: '/dashboard/master-jadwal-sholat', label: 'Sholat' },
           { to: '/dashboard/master-doa', label: 'Do’a & Dzikir' },
           { to: '/dashboard/poin-penilaian-doa', label: 'Poin Penilaian Doa' },
+        ],
+      },
+    ] : []),
+    ...((hasFullMenuAccess || isKepalaSekolah || isDivisiPendidikan || hasRole('Super Admin', 'super_admin', 'Admin', 'admin', 'Operator', 'operator', 'Tata Usaha', 'tu', 'tata_usaha')) ? [
+      {
+        key: 'keuangan-sekolah',
+        label: 'KEUANGAN SISWA',
+        icon: CreditCard,
+        submenus: [
+          { to: '/dashboard/keuangan/tagihan-siswa', label: 'Tagihan & Pembayaran SPP' },
         ],
       },
     ] : []),
@@ -1051,7 +1111,7 @@ const getSidebarIconBadgeClass = (key, idx) => {
         ],
       },
     ] : []),
-    ...(!isPureMusyrif ? [
+    ...(!isPureMusyrif && !isTeacherOnly && !isGuruUser ? [
       {
         key: 'mutabaah',
         label: 'MUTABA’AH',
@@ -1068,7 +1128,10 @@ const getSidebarIconBadgeClass = (key, idx) => {
       label: 'TAHFIZH AL-QUR’AN',
       icon: BookMarked,
       submenus: [
-        { to: '/dashboard/laporan-tahfizh', label: 'Laporan Tahfizh' },
+        { to: '/dashboard/tahfizh/rekapan', label: 'Laporan Rekapan Tahfizh' },
+        ...(!isTeacherOnly && !isGuruUser && !hasRole('Guru', 'guru', 'Guru Mapel') ? [
+          { to: '/dashboard/laporan-tahfizh', label: 'Laporan Tahfizh' },
+        ] : []),
         ...(hasRole('Super Admin', 'Admin', 'Guru Tahfizh', 'Kepala Sekolah', 'Divisi Pendidikan') || can('dashboard.guru-tahfizh.view')
           ? [{ to: '/dashboard/guru-tahfizh', label: 'Dashboard Guru Tahfizh' }]
           : []),
@@ -1084,15 +1147,17 @@ const getSidebarIconBadgeClass = (key, idx) => {
         { to: '/dashboard/rekap-absensi-gerbang', label: 'Laporan Absensi Gerbang' },
         { to: '/dashboard/rekap-absensi-ibadah', label: 'Laporan Absensi Ibadah' },
         { to: '/dashboard/mutabaah/rekap', label: 'Laporan Mutaba’ah' },
-        { to: '/dashboard/laporan-tahfizh', label: 'Laporan Tahfizh' },
-        ...(hasRole('Super Admin', 'super_admin', 'Admin', 'admin', 'Pengurus Yayasan', 'Yayasan', 'Kepala Sekolah', 'Divisi Pendidikan', 'Guru', 'guru', 'Guru Mapel', 'Guru Tahfizh', 'Wali Kelas') || can('report.tahfizh.view') || can('tahfizh.view')
-          ? [{ to: '/dashboard/tahfizh/rekapan', label: 'Laporan Rekapan Tahfizh' }]
-          : []),
+        { to: '/dashboard/tahfizh/rekapan', label: 'Laporan Rekapan Tahfizh' },
+        ...(!isTeacherOnly && !isGuruUser && !hasRole('Guru', 'guru', 'Guru Mapel') ? [
+          { to: '/dashboard/laporan-tahfizh', label: 'Laporan Tahfizh' },
+        ] : []),
         { to: '/dashboard/laporan-akademik', label: 'Laporan Akademik & Nilai' },
         { to: '/dashboard/laporan-pegawai', label: 'Laporan Pegawai & Guru' },
         { to: '/dashboard/laporan-lms', label: 'Laporan LMS' },
-        { to: '/dashboard/laporan-alumni', label: 'Laporan Alumni & Prestasi' },
-        { to: '/dashboard/kelola-alumni', label: 'Pengolahan Data Alumni' },
+        ...(!isTeacherOnly && !isGuruUser && !hasRole('Guru', 'guru', 'Guru Mapel') ? [
+          { to: '/dashboard/laporan-alumni', label: 'Laporan Alumni & Prestasi' },
+          { to: '/dashboard/kelola-alumni', label: 'Pengolahan Data Alumni' },
+        ] : []),
       ],
     },
     {
@@ -1833,7 +1898,7 @@ const getSidebarIconBadgeClass = (key, idx) => {
                 </button>
               </div>
             )}
-            <ActiveScheduleNotice />
+            {!location.pathname.includes('/portal-guru') && <ActiveScheduleNotice />}
             <Outlet />
           </main>
         </div>

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Camera, Clock3, Play, QrCode, Radio, RefreshCw, Square, XCircle, ChevronRight } from 'lucide-react'
 import { AppBadge, AppButton, AppCard, AppModal } from '../app'
 import { teacherTeachingService } from '../../services/teacherTeachingService'
+import { requestCameraStream, parseCameraError, isBarcodeDetectorSupported } from '../../utils/cameraHelper'
 
 const statusVariant = {
   hadir: 'success',
@@ -42,6 +43,7 @@ export default function TeacherTeachingSessionPanel({ onNotify, isModal = false 
   const [showScanner, setShowScanner] = useState(false)
   const [showCompleteModal, setShowCompleteModal] = useState(false)
   const [cameraError, setCameraError] = useState('')
+  const [cameraErrorInfo, setCameraErrorInfo] = useState(null)
   const [cameraActive, setCameraActive] = useState(false)
   const [elapsedSeconds, setElapsedSeconds] = useState(0)
 
@@ -128,6 +130,8 @@ export default function TeacherTeachingSessionPanel({ onNotify, isModal = false 
 
   const closeScanner = () => {
     stopCamera()
+    setCameraErrorInfo(null)
+    setCameraError('')
     setShowScanner(false)
   }
 
@@ -142,11 +146,10 @@ export default function TeacherTeachingSessionPanel({ onNotify, isModal = false 
       setAttendance(result?.attendance || null)
       setSession(result?.session || null)
       setQrToken('')
+      notify('success', 'Presensi Berhasil', `Guru berhasil diabsen (${result?.attendance?.status || 'hadir'}).`)
       closeScanner()
-      notify('success', result?.scan_status === 'duplicate' ? 'Presensi Sudah Tercatat' : 'Presensi Berhasil', result?.message || 'Presensi guru tersimpan.')
-      await loadSchedules()
-    } catch (requestError) {
-      const message = requestError.response?.data?.message || 'QR kartu guru ditolak oleh server.'
+    } catch (scanError) {
+      const message = scanError?.response?.data?.message || scanError?.message || 'Gagal mengenali kartu pengajar.'
       setError(message)
       notify('error', 'Scan Ditolak', message)
     } finally {
@@ -157,17 +160,25 @@ export default function TeacherTeachingSessionPanel({ onNotify, isModal = false 
 
   const startCamera = async () => {
     setCameraError('')
+    setCameraErrorInfo(null)
     try {
-      if (!navigator.mediaDevices?.getUserMedia) throw new Error('Browser tidak mendukung akses kamera.')
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false })
+      const stream = await requestCameraStream({ preferredFacingMode: 'environment' })
       streamRef.current = stream
       if (videoRef.current) {
         videoRef.current.srcObject = stream
         await videoRef.current.play()
       }
       setCameraActive(true)
-      if (!('BarcodeDetector' in window)) {
-        setCameraError('Pemindaian otomatis belum tersedia di browser ini. Gunakan input scanner USB/manual.')
+      if (!isBarcodeDetectorSupported()) {
+        setCameraErrorInfo({
+          title: 'Pemindaian Otomatis QR Belum Aktif',
+          message: 'Browser ini belum mendukung BarcodeDetector API. Stream kamera tetap aktif.',
+          actionType: 'notice',
+          instructions: [
+            'Gunakan peramban Google Chrome atau Microsoft Edge terbaru untuk pemindaian QR otomatis.',
+            'Atau masukkan token kartu secara manual pada formulir.',
+          ],
+        })
         return
       }
       detectorRef.current = new window.BarcodeDetector({ formats: ['qr_code'] })
@@ -182,7 +193,10 @@ export default function TeacherTeachingSessionPanel({ onNotify, isModal = false 
         }
       }, 500)
     } catch (cameraRequestError) {
-      setCameraError(cameraRequestError.message || 'Kamera tidak dapat diakses. Periksa izin browser.')
+      stopCamera()
+      const parsed = parseCameraError(cameraRequestError)
+      setCameraErrorInfo(parsed)
+      setCameraError(parsed.message)
     }
   }
 
@@ -357,11 +371,52 @@ export default function TeacherTeachingSessionPanel({ onNotify, isModal = false 
             )}
           </div>
 
-          {cameraError && (
+          {cameraErrorInfo ? (
+            <div className={`rounded-2xl border p-4 text-xs ${
+              cameraErrorInfo.actionType === 'notice'
+                ? 'border-amber-200 bg-amber-50/80 text-amber-900 dark:border-amber-900/40 dark:bg-amber-950/30 dark:text-amber-200'
+                : 'border-rose-200 bg-rose-50/80 text-rose-900 dark:border-rose-900/50 dark:bg-rose-950/30 dark:text-rose-200'
+            }`}>
+              <div className="flex items-start gap-3">
+                <div className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg font-bold text-xs ${
+                  cameraErrorInfo.actionType === 'notice'
+                    ? 'bg-amber-200/80 text-amber-800 dark:bg-amber-900/60 dark:text-amber-300'
+                    : 'bg-rose-200/80 text-rose-800 dark:bg-rose-900/60 dark:text-rose-300'
+                }`}>
+                  !
+                </div>
+                <div className="min-w-0 flex-1 space-y-1">
+                  <p className="font-extrabold text-xs">{cameraErrorInfo.title}</p>
+                  <p className="text-[11px] leading-relaxed opacity-90">{cameraErrorInfo.message}</p>
+                  {cameraErrorInfo.instructions?.length > 0 && (
+                    <div className="mt-2 space-y-1 rounded-xl bg-white/70 p-2 text-[10px] font-medium dark:bg-black/20">
+                      <p className="font-bold uppercase tracking-wider text-[9px] opacity-75">Panduan Penyelesaian:</p>
+                      <ol className="list-decimal pl-3 space-y-0.5">
+                        {cameraErrorInfo.instructions.map((step, idx) => (
+                          <li key={idx} className="leading-normal">{step}</li>
+                        ))}
+                      </ol>
+                    </div>
+                  )}
+                  {cameraErrorInfo.actionType !== 'notice' && (
+                    <div className="pt-1.5">
+                      <button
+                        type="button"
+                        onClick={startCamera}
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-2.5 py-1 text-[11px] font-bold text-white shadow hover:bg-emerald-700 transition"
+                      >
+                        <RefreshCw className="h-3 w-3" /> Coba Nyalakan Ulang
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ) : cameraError ? (
             <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs font-semibold text-amber-700 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-300">
               {cameraError}
             </div>
-          )}
+          ) : null}
         </div>
       </AppModal>
 

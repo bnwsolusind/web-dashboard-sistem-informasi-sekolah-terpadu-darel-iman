@@ -33,7 +33,9 @@ import {
   MessageSquare,
   MessageCircle,
   Send,
+  Printer,
 } from 'lucide-react'
+import { printWeeklyStudentEvaluation } from '../utils/printHelper'
 import { useAuthStore } from '../stores/authStore'
 import { familyPortalService } from '../services/familyPortalService'
 import {
@@ -314,6 +316,47 @@ export default function KepalaSekolahDashboardPage() {
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null)
   const [attendanceStatusFilter, setAttendanceStatusFilter] = useState('all')
   const [selectedAttendanceDate, setSelectedAttendanceDate] = useState('')
+
+  const handlePrintWeekly = (st) => {
+    const sName = st?.nama || st?.name || st?.full_name || 'Shezakia Mufidah Alfirdausi'
+    const sNisn = st?.nisn || st?.nis || '-'
+    const sKelas = st?.kelas || st?.rombel || st?.school_class?.name || '10 Madinah 1'
+    const sUnit = st?.unit_name || st?.unit || schoolInfo?.nama || 'Sekolah Menengah Atas Islam Terpadu'
+    const sWali = st?.nama_ortu || st?.wali || 'Ilma Emilia Widyastuti'
+    const eduUnit = st?.education_unit || (typeof st?.unit === 'object' ? st?.unit : null) || {
+      name: schoolInfo?.nama || sUnit,
+      code: schoolInfo?.kode,
+      metadata: {
+        npsn: schoolInfo?.npsn,
+        address: schoolInfo?.alamat,
+        phone: schoolInfo?.kontak,
+        accreditation: schoolInfo?.akreditasi,
+        principal_name: schoolInfo?.kepala_sekolah,
+      },
+    }
+
+    printWeeklyStudentEvaluation({
+      student: {
+        ...st,
+        name: sName,
+        nis: sNisn,
+        className: sKelas,
+        unitName: sUnit,
+        education_unit: eduUnit,
+      },
+      period: {
+        title: 'Senin, 10 Agustus 2026 s.d. Jumat, 14 Agustus 2026',
+        academicYear: schoolInfo?.tahun_ajaran || '2026/2027',
+      },
+      homeroomTeacher: {
+        name: 'Ustadzah Elsa Putri Utami',
+      },
+      guruWali: {
+        name: sWali,
+      },
+      schoolCity: eduUnit?.metadata?.city || 'Padang',
+    })
+  }
 
   // State Modal Chat Direct Real-Time
   const currentAuthUser = useAuthStore((state) => state.user)
@@ -1543,6 +1586,19 @@ export default function KepalaSekolahDashboardPage() {
                         </a>
                       </div>
                     )}
+
+                    {/* Cetak Evaluasi Pekanan */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handlePrintWeekly(student)
+                      }}
+                      className="w-full inline-flex items-center justify-center gap-1.5 rounded-xl border border-emerald-500/50 bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-700 hover:to-teal-700 py-2 px-3 text-xs font-bold transition-all cursor-pointer shadow-xs mt-1.5"
+                    >
+                      <Printer className="h-3.5 w-3.5" />
+                      <span>Cetak Perkembangan Pekanan</span>
+                    </button>
                   </HoverCardContent>
                 </HoverCard>
               )
@@ -1944,6 +2000,7 @@ export default function KepalaSekolahDashboardPage() {
                       <th className="px-4 py-3.5 text-white font-extrabold">Waktu Presensi</th>
                       <th className="px-4 py-3.5 text-white font-extrabold">Status</th>
                       <th className="px-4 py-3.5 text-white font-extrabold">Keterangan</th>
+                      <th className="px-4 py-3.5 text-center text-white font-extrabold">Aksi</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -1983,12 +2040,22 @@ export default function KepalaSekolahDashboardPage() {
                               </AppBadge>
                             </td>
                             <td className="px-4 py-3 text-slate-500 dark:text-slate-400">{sKet}</td>
+                            <td className="px-4 py-3 text-center">
+                              <button
+                                type="button"
+                                title="Cetak Laporan Perkembangan Pekanan"
+                                onClick={() => handlePrintWeekly(st)}
+                                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:scale-105 active:scale-95 transition-all dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 shadow-2xs"
+                              >
+                                <Printer className="h-4 w-4" />
+                              </button>
+                            </td>
                           </tr>
                         )
                       })
                     ) : (
                       <tr>
-                        <td colSpan={7} className="px-4 py-8 text-center text-slate-400 italic">
+                        <td colSpan={8} className="px-4 py-8 text-center text-slate-400 italic">
                           Tidak ada data presensi yang cocok dengan filter atau pencarian.
                         </td>
                       </tr>

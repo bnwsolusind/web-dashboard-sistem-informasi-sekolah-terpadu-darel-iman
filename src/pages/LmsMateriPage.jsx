@@ -44,6 +44,7 @@ import {
 } from '../components/master-data'
 import CsvImportModal from '../components/master-data/CsvImportModal'
 import ActionDropdown from '../components/app/ActionDropdown'
+import MateriMediaEmbed, { VideoEmbedPlayer, PdfDocumentViewer, parseVideoEmbed } from '../components/common/MateriMediaEmbed'
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -533,6 +534,8 @@ export default function LmsMateriPage({ embedded = false, hideBreadcrumb = false
 
       if (selectedFile) {
         payload.append('file', selectedFile)
+      } else if (formData.file_url) {
+        payload.append('file_url', formData.file_url)
       }
 
       if (editingItem) {
@@ -1106,11 +1109,35 @@ export default function LmsMateriPage({ embedded = false, hideBreadcrumb = false
                         </div>
                       </td>
                       <td className="py-3.5 px-3 text-center" onClick={(e) => e.stopPropagation()}>
-                        <ActionDropdown
-                          onView={() => handleOpenPreviewModal(item)}
-                          onEdit={() => handleOpenEditModal(item)}
-                          onDelete={() => handleOpenDeleteConfirm(item)}
-                        />
+                        <div className="flex items-center justify-center gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => handleOpenPreviewModal(item)}
+                            title="Lihat Detail Materi"
+                            className="inline-flex items-center gap-1 rounded-xl bg-emerald-50 px-2.5 py-1.5 text-xs font-bold text-emerald-700 transition hover:bg-emerald-100 dark:bg-emerald-950/40 dark:text-emerald-300 dark:hover:bg-emerald-900/50"
+                          >
+                            <Eye className="h-3.5 w-3.5" />
+                            <span className="hidden xl:inline">Lihat</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleOpenEditModal(item)}
+                            title="Edit Data Materi"
+                            className="inline-flex items-center gap-1 rounded-xl bg-amber-50 px-2.5 py-1.5 text-xs font-bold text-amber-700 transition hover:bg-amber-100 dark:bg-amber-950/40 dark:text-amber-300 dark:hover:bg-amber-900/50"
+                          >
+                            <Edit3 className="h-3.5 w-3.5" />
+                            <span className="hidden xl:inline">Edit</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleOpenDeleteConfirm(item)}
+                            title="Hapus Data Materi"
+                            aria-label="Hapus Data Materi"
+                            className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-rose-50 text-rose-600 transition hover:bg-rose-100 dark:bg-rose-950/40 dark:text-rose-400 dark:hover:bg-rose-900/50"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -1405,48 +1432,106 @@ export default function LmsMateriPage({ embedded = false, hideBreadcrumb = false
                   />
                 </div>
 
-                {/* File Attachment Upload */}
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Upload File Dokumen / PDF (Opsional)</label>
-                  <input
-                    id="file"
-                    type="file"
-                    accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip,image/*"
-                    onChange={(e) => setSelectedFile(e.target.files[0] || null)}
-                    className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#0E5C44]/10 file:text-[#0E5C44] hover:file:bg-[#0E5C44]/20 cursor-pointer"
-                  />
-                  {editingItem?.file && !selectedFile && (
-                    <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-1 font-medium">
-                      File saat ini: <a href={editingItem.file} target="_blank" rel="noreferrer" className="underline font-medium">Buka File Dokumen</a>
-                    </p>
+                {/* File Attachment (Upload & Online URL) */}
+                <div className="rounded-2xl border border-sky-100 bg-sky-50/40 p-4 dark:border-sky-950 dark:bg-sky-950/20 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-sky-900 dark:text-sky-300 uppercase tracking-wider flex items-center gap-1.5">
+                      <FileText className="w-4 h-4 text-sky-600 dark:text-sky-400" />
+                      Lampiran Dokumen / Modul PDF (Embed View)
+                    </label>
+                    <span className="text-[10px] font-semibold text-slate-400">PDF, DOCX, PPTX (Maks 20MB)</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
+                        Pilihan 1: Unggah Berkas PDF / Dokumen
+                      </label>
+                      <input
+                        id="file"
+                        type="file"
+                        accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip,image/*"
+                        onChange={(e) => setSelectedFile(e.target.files[0] || null)}
+                        className="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3.5 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-sky-600 file:text-white hover:file:bg-sky-700 cursor-pointer"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
+                        Pilihan 2: Atau Tautan Dokumen PDF Online
+                      </label>
+                      <input
+                        id="file_url"
+                        type="url"
+                        placeholder="https://.../dokumen-materi.pdf"
+                        value={formData.file_url}
+                        onChange={(e) => setFormData({ ...formData, file_url: e.target.value })}
+                        className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-sky-600 dark:text-slate-100 transition-colors"
+                      />
+                    </div>
+                  </div>
+
+                  {(editingItem?.file || formData.file_url || selectedFile) && (
+                    <div className="flex items-center gap-2 text-xs text-sky-700 dark:text-sky-300 font-medium pt-1">
+                      <CheckCircle className="w-3.5 h-3.5 shrink-0" />
+                      <span className="truncate">
+                        {selectedFile
+                          ? `Berkas lokal: ${selectedFile.name} (${(selectedFile.size / 1024).toFixed(0)} KB)`
+                          : formData.file_url
+                          ? `Tautan PDF: ${formData.file_url}`
+                          : `Tersimpan: ${editingItem?.file}`}
+                      </span>
+                    </div>
                   )}
                 </div>
 
-                {/* Link Video & External Link */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">URL Video Pembelajaran (YouTube / MP4)</label>
-                    <input
-                      id="video"
-                      type="url"
-                      placeholder="https://youtube.com/watch?v=..."
-                      value={formData.video}
-                      onChange={(e) => setFormData({ ...formData, video: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#0E5C44] dark:text-slate-100 transition-colors"
-                    />
+                {/* Video Pembelajaran & External Link */}
+                <div className="rounded-2xl border border-rose-100 bg-rose-50/40 p-4 dark:border-rose-950 dark:bg-rose-950/20 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-rose-900 dark:text-rose-300 uppercase tracking-wider flex items-center gap-1.5">
+                      <Video className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+                      Video Pembelajaran (Embed Otomatis)
+                    </label>
+                    <span className="text-[10px] font-semibold text-slate-400">YouTube, Vimeo, atau MP4</span>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Link Referensi Eksternal</label>
                     <input
-                      id="link"
+                      id="video"
                       type="url"
-                      placeholder="https://pustaka.kemdikbud.go.id/..."
-                      value={formData.link}
-                      onChange={(e) => setFormData({ ...formData, link: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#0E5C44] dark:text-slate-100 transition-colors"
+                      placeholder="Contoh: https://www.youtube.com/watch?v=... atau https://youtu.be/..."
+                      value={formData.video}
+                      onChange={(e) => setFormData({ ...formData, video: e.target.value })}
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-rose-600 dark:text-slate-100 transition-colors"
                     />
+                    {formData.video && (
+                      <div className="mt-2 flex items-center gap-2 text-xs font-semibold text-rose-700 dark:text-rose-300">
+                        <Sparkles className="w-3.5 h-3.5 shrink-0" />
+                        <span>
+                          {parseVideoEmbed(formData.video)?.type === 'youtube'
+                            ? 'YouTube Video terdeteksi — otomatis di-embed pada pemutar materi siswa & guru.'
+                            : parseVideoEmbed(formData.video)?.type === 'vimeo'
+                            ? 'Vimeo Video terdeteksi — otomatis di-embed.'
+                            : 'Tautan video valid — akan disematkan di frame player interaktif.'}
+                        </span>
+                      </div>
+                    )}
                   </div>
+                </div>
+
+                {/* Link Referensi Eksternal */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+                    Link Referensi Tambahan (Opsional)
+                  </label>
+                  <input
+                    id="link"
+                    type="url"
+                    placeholder="https://pustaka.kemdikbud.go.id/..."
+                    value={formData.link}
+                    onChange={(e) => setFormData({ ...formData, link: e.target.value })}
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#0E5C44] dark:text-slate-100 transition-colors"
+                  />
                 </div>
               </form>
             </DialogBody>
@@ -1483,7 +1568,7 @@ export default function LmsMateriPage({ embedded = false, hideBreadcrumb = false
 
         {/* PREVIEW DETAIL MODAL - TailGrids Dialog */}
         {previewModalOpen && previewItem && (
-          <Dialog isOpen={previewModalOpen} onOpenChange={setPreviewModalOpen} showCloseButton={false} className="max-w-2xl">
+          <Dialog isOpen={previewModalOpen} onOpenChange={setPreviewModalOpen} showCloseButton={false} className="max-w-4xl">
             <DialogHeader className="bg-gradient-to-r from-[#0E5C44] to-[#1E8E5A] -mx-6 -mt-6 p-5 text-white rounded-t-2xl">
               <div className="flex items-center justify-between w-full">
                 <div className="flex items-center gap-3">
@@ -1510,7 +1595,7 @@ export default function LmsMateriPage({ embedded = false, hideBreadcrumb = false
               </div>
             </DialogHeader>
 
-            <DialogBody className="py-3 space-y-4 text-sm text-slate-700 dark:text-slate-300 max-h-[70vh] overflow-y-auto">
+            <DialogBody className="py-4 space-y-4 text-sm text-slate-700 dark:text-slate-300 max-h-[78vh] overflow-y-auto">
               <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-xs">
                 <span>Tipe Materi: <strong>{previewItem.tipe}</strong></span>
                 <span>Urutan ke-<strong>{previewItem.urutan}</strong></span>
@@ -1531,6 +1616,33 @@ export default function LmsMateriPage({ embedded = false, hideBreadcrumb = false
                 </div>
               )}
 
+              {/* Video Pembelajaran Tersemat (Video Embed Player) */}
+              {previewItem.video && (
+                <div className="space-y-2">
+                  <h4 className="font-bold text-xs uppercase tracking-wider text-rose-700 dark:text-rose-400 flex items-center gap-1.5">
+                    <Video className="w-3.5 h-3.5" /> Pemutar Video Pembelajaran (Embed)
+                  </h4>
+                  <VideoEmbedPlayer
+                    url={previewItem.video}
+                    title={`Video: ${previewItem.judul}`}
+                  />
+                </div>
+              )}
+
+              {/* Dokumen PDF Tersemat (Interactive PDF Viewer) */}
+              {previewItem.file && (
+                <div className="space-y-2">
+                  <h4 className="font-bold text-xs uppercase tracking-wider text-sky-700 dark:text-sky-400 flex items-center gap-1.5">
+                    <FileText className="w-3.5 h-3.5" /> Pratinjau Dokumen PDF / Modul Digital
+                  </h4>
+                  <PdfDocumentViewer
+                    url={previewItem.file}
+                    title={`Dokumen: ${previewItem.judul}`}
+                    height="500px"
+                  />
+                </div>
+              )}
+
               {previewItem.isi && (
                 <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40">
                   <h4 className="font-bold text-xs uppercase tracking-wider text-slate-400 mb-2">Uraian Materi Lengkap</h4>
@@ -1544,46 +1656,6 @@ export default function LmsMateriPage({ embedded = false, hideBreadcrumb = false
                     <FileCode className="w-3.5 h-3.5" /> Catatan &amp; Instruksi Guru
                   </h4>
                   <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">{previewItem.catatan}</p>
-                </div>
-              )}
-
-              {previewItem.file && (
-                <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <FileText className="w-5 h-5 text-blue-600" />
-                    <div>
-                      <p className="font-semibold text-blue-900 dark:text-blue-200 text-xs">File Lampiran Dokumen</p>
-                      <p className="text-xs text-blue-700 dark:text-blue-300">Siap diunduh / dipelajari</p>
-                    </div>
-                  </div>
-                  <a
-                    href={previewItem.file}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold text-xs hover:bg-blue-700 transition-colors"
-                  >
-                    Buka Dokumen
-                  </a>
-                </div>
-              )}
-
-              {previewItem.video && (
-                <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Video className="w-5 h-5 text-rose-600" />
-                    <div>
-                      <p className="font-semibold text-rose-900 dark:text-rose-200 text-xs">Video Pembelajaran</p>
-                      <p className="text-xs text-rose-700 dark:text-rose-300 truncate max-w-xs">{previewItem.video}</p>
-                    </div>
-                  </div>
-                  <a
-                    href={previewItem.video}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="px-4 py-2 rounded-lg bg-rose-600 text-white font-semibold text-xs hover:bg-rose-700 transition-colors"
-                  >
-                    Tonton Video
-                  </a>
                 </div>
               )}
 

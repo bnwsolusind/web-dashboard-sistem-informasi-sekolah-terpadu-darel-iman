@@ -51,6 +51,7 @@ import { kelasService } from '../services/kelasService'
 import { useUnitStore } from '../stores/unitStore'
 import { useAuthStore } from '../stores/authStore'
 import PageContainer from '../components/app/PageContainer'
+import TahfizhSubNav from '../components/tahfizh/TahfizhSubNav'
 
 // TailGrids Core Components
 import { Breadcrumbs } from '@/components/tailgrids/core/breadcrumbs'
@@ -119,10 +120,6 @@ export default function TahfizhPage() {
   const isParent = useMemo(() => {
     return userRoles.some((r) => ['Orang Tua', 'orang_tua', 'ortu', 'parent', 'Parent'].includes(r))
   }, [userRoles])
-
-  if (isParent && !isSuperAdminOrAdmin) {
-    return <Navigate to="/portal-orangtua" replace />
-  }
 
   const isMusyrif = useMemo(() => {
     return userRoles.some((r) => ['Musyrif', 'Musyrifah', 'musyrif', 'musyrifah'].includes(r))
@@ -846,7 +843,8 @@ export default function TahfizhPage() {
     if (playingAudioUrl === url && audioRef.current) {
       audioRef.current.pause()
       setPlayingAudioUrl(null)
-    if (!url) return
+      return
+    }
 
     if (audioRef.current) {
       audioRef.current.pause()
@@ -1227,6 +1225,10 @@ export default function TahfizhPage() {
     setShowPrintModal(false)
   }
 
+  if (isParent && !isSuperAdminOrAdmin) {
+    return <Navigate to="/portal-orangtua" replace />
+  }
+
   return (
     <PageContainer maxW="7xl" className="space-y-6 pb-12">
       <motion.div initial="hidden" animate="visible" variants={containerVariants} className="space-y-6">
@@ -1280,6 +1282,11 @@ export default function TahfizhPage() {
               </div>
             </div>
           </div>
+        </motion.div>
+
+        {/* 🧭 SUB NAVIGATION TABS */}
+        <motion.div variants={itemVariants} className="print:hidden">
+          <TahfizhSubNav />
         </motion.div>
 
         {/* Progress KPI Cards Siswa / Rombel (Di bawah Breadcrumbs) */}
@@ -3453,5 +3460,4 @@ export default function TahfizhPage() {
       />
     </PageContainer>
   )
-}
 }

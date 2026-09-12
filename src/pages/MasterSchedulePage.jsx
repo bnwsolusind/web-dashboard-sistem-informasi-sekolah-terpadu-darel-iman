@@ -165,6 +165,9 @@ export default function MasterSchedulePage({ embedded = false, hideBreadcrumb = 
     return Array.from(map.values())
   }, [unitsList, options.kelas])
 
+  // Effective Day filter: in weekly view mode, use selectedWeeklyDay; in table view mode, use dayFilter
+  const effectiveDayFilter = viewMode === 'weekly' ? selectedWeeklyDay : dayFilter
+
   // Query Schedule List
   const { data: response = {}, isLoading, isError, refetch } = useQuery({
     queryKey: [
@@ -176,21 +179,22 @@ export default function MasterSchedulePage({ embedded = false, hideBreadcrumb = 
       semesterFilter,
       subjectFilter,
       classFilter,
-      dayFilter,
+      effectiveDayFilter,
       teacherFilter,
       statusFilter,
+      viewMode,
     ],
     queryFn: () =>
       scheduleService.getDaftar({
         page,
-        per_page: 15,
+        per_page: viewMode === 'weekly' ? 24 : 15,
         search,
         unit_pendidikan_id: unitFilter || undefined,
         academic_year_id: yearFilter || undefined,
         semester_id: semesterFilter || undefined,
         subject_id: subjectFilter || undefined,
         kelas_id: classFilter || undefined,
-        day_of_week: dayFilter || undefined,
+        day_of_week: effectiveDayFilter || undefined,
         employee_id: teacherFilter || undefined,
         is_active: statusFilter || undefined,
       }),
@@ -859,24 +863,35 @@ export default function MasterSchedulePage({ embedded = false, hideBreadcrumb = 
           <div className="p-5 space-y-5">
             {/* Days Tab Strip */}
             <div className="flex gap-2 overflow-x-auto pb-2 border-b border-slate-100 dark:border-slate-800">
-              {DAYS_MAP.map((day) => (
-                <button
-                  key={day.id}
-                  type="button"
-                  onClick={() => setSelectedWeeklyDay(day.id)}
-                  className={`flex h-10 shrink-0 items-center gap-2 rounded-xl px-4 text-xs font-bold transition ${
-                    selectedWeeklyDay === day.id
-                      ? 'bg-[#0E5C44] text-white shadow-md shadow-emerald-900/20'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'
-                  }`}
-                >
-                  <Calendar className="h-3.5 w-3.5" />
-                  <span>{day.name}</span>
-                  <span className="ml-1 rounded-full bg-black/10 px-2 py-0.5 text-[10px]">
-                    {items.filter((i) => (i.day_of_week ?? 1) === day.id).length}
-                  </span>
-                </button>
-              ))}
+              {DAYS_MAP.map((day) => {
+                const dayCount =
+                  stats?.per_hari?.[day.id] ??
+                  stats?.per_hari?.[String(day.id)] ??
+                  (selectedWeeklyDay === day.id ? items.length : 0)
+
+                return (
+                  <button
+                    key={day.id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedWeeklyDay(day.id)
+                      setDayFilter(String(day.id))
+                      setPage(1)
+                    }}
+                    className={`flex h-10 shrink-0 items-center gap-2 rounded-xl px-4 text-xs font-bold transition ${
+                      selectedWeeklyDay === day.id
+                        ? 'bg-[#0E5C44] text-white shadow-md shadow-emerald-900/20'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'
+                    }`}
+                  >
+                    <Calendar className="h-3.5 w-3.5" />
+                    <span>{day.name}</span>
+                    <span className="ml-1 rounded-full bg-black/10 px-2 py-0.5 text-[10px]">
+                      {dayCount}
+                    </span>
+                  </button>
+                )
+              })}
             </div>
 
             {/* Grid of Schedules for Selected Day */}

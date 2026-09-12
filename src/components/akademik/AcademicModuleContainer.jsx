@@ -16,25 +16,16 @@ export default function AcademicModuleContainer({ title, description, tabs, hide
     return { ...tab, to: `${location.pathname}?${params.toString()}` }
   }), [location.pathname, searchParams, tabs])
 
-  useEffect(() => {
-    if (activeTabRef.current) {
-      activeTabRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'center',
-      })
-    }
-  }, [activeTab])
-
+  // Tab menu dibuat stabil (wrap) tanpa pergeseran horizontal kiri-kanan
   const renderNav = (extraActions = null) => (
     <nav
       aria-label={`Tab ${title}`}
-      className="rounded-[20px] border border-emerald-500/20 bg-emerald-50/50 p-2 shadow-xs dark:border-emerald-900/40 dark:bg-[#13221f] flex flex-col sm:flex-row sm:items-center justify-between gap-2 overflow-hidden w-full max-w-full min-w-0"
+      className="rounded-[20px] border border-emerald-500/20 bg-emerald-50/50 p-3 shadow-xs dark:border-emerald-900/40 dark:bg-[#13221f] flex flex-col gap-3 w-full"
     >
-      <div className="relative flex items-center w-full min-w-0 overflow-hidden">
+      <div className="w-full">
         <div
           role="tablist"
-          className="flex gap-2 overflow-x-auto pb-1 pt-0.5 scrollbar-none flex-1 touch-pan-x overscroll-x-contain w-full min-w-0 scroll-smooth"
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5 w-full"
         >
           {tabLinks.map((tab) => {
             const Icon = tab.icon
@@ -46,7 +37,7 @@ export default function AcademicModuleContainer({ title, description, tabs, hide
                 ref={isSelected ? activeTabRef : null}
                 role="tab"
                 aria-selected={isSelected}
-                className={`group relative flex shrink-0 items-center gap-2.5 rounded-xl border px-3.5 py-2.5 min-h-[44px] transition-all duration-200 ${
+                className={`group relative flex items-center gap-2.5 rounded-xl border px-3.5 py-2.5 min-h-[48px] w-full transition-all duration-200 ${
                   isSelected
                     ? 'border-emerald-400/40 bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-600/25'
                     : 'border-slate-200/80 bg-white hover:border-emerald-300 hover:bg-emerald-50/60 dark:border-slate-800 dark:bg-[#111827] dark:hover:bg-slate-800/80'
@@ -59,14 +50,14 @@ export default function AcademicModuleContainer({ title, description, tabs, hide
                     <Icon className="h-4 w-4" />
                   </div>
                 )}
-                <div className="flex flex-col pr-0.5 whitespace-nowrap">
-                  <span className={`text-xs font-extrabold tracking-tight transition-colors ${
+                <div className="flex flex-col pr-0.5 min-w-0 flex-1 overflow-hidden">
+                  <span className={`text-xs font-extrabold tracking-tight truncate transition-colors ${
                     isSelected ? 'text-white' : 'text-slate-700 dark:text-slate-200 group-hover:text-emerald-700 dark:group-hover:text-emerald-300'
                   }`}>
                     {tab.label}
                   </span>
                   {tab.description && (
-                    <span className={`text-[10px] font-medium leading-none mt-0.5 ${
+                    <span className={`text-[10px] font-medium leading-none mt-0.5 truncate ${
                       isSelected ? 'text-emerald-100' : 'text-slate-500 dark:text-slate-400'
                     }`}>
                       {tab.description}
@@ -79,7 +70,7 @@ export default function AcademicModuleContainer({ title, description, tabs, hide
         </div>
       </div>
       {extraActions && (
-        <div className="flex flex-wrap items-center gap-2 shrink-0 pt-1 sm:pt-0 border-t sm:border-t-0 border-slate-100 dark:border-slate-800">
+        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-200/60 dark:border-slate-800">
           {extraActions}
         </div>
       )}

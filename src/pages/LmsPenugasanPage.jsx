@@ -685,7 +685,7 @@ export default function LmsPenugasanPage({ embedded, hidePageHeader, tabNav }) {
       </motion.div>
 
       {/* Tab Navigation (Pindahkan di atas card datatable) */}
-      {tabNav && <div className="my-2">{tabNav}</div>}
+      {tabNav && <div className="my-2">{typeof tabNav === 'function' ? tabNav() : tabNav}</div>}
 
       {/* SEARCH & FILTER BAR (2-ROW LAYOUT) */}
       <motion.div variants={itemVariants} className="rounded-[18px] border border-slate-200/80 bg-white p-4.5 shadow-sm dark:border-slate-700/80 dark:bg-[#1B2433] space-y-3.5">

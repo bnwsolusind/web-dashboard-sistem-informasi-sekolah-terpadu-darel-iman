@@ -181,6 +181,120 @@ export default function MusyrifDashboardPage() {
   const [klinikForm, setKlinikForm] = useState({ symptoms: '', medicine: '', status: 'rawat_jalan' })
   const [titipanForm, setTitipanForm] = useState({ item_type: 'smartphone', item_name: '', serial_number: '' })
 
+  // State Perizinan Santri & Absensi Kembali (Boarding Pass)
+  const [dormitoryPermits, setDormitoryPermits] = useState([])
+  const [dormitoryPermitsStatistik, setDormitoryPermitsStatistik] = useState(null)
+  const [loadingPermits, setLoadingPermits] = useState(false)
+  const [permitFilterStatus, setPermitFilterStatus] = useState('all')
+  const [permitSearch, setPermitSearch] = useState('')
+  const [selectedPermitForReturn, setSelectedPermitForReturn] = useState(null)
+  const [submittingReturn, setSubmittingReturn] = useState(false)
+  const [returnForm, setReturnForm] = useState({
+    actual_return_time: '',
+    return_condition: 'Sehat & Rapih',
+    notes: '',
+  })
+  const [newPermitForm, setNewPermitForm] = useState({
+    student_id: '',
+    permit_type: 'pesiar_mingguan',
+    destination: '',
+    scheduled_departure_at: '',
+    scheduled_return_at: '',
+    pickup_person_name: '',
+    pickup_person_phone: '',
+    pickup_person_relation: 'Orang Tua Kandung',
+    purpose_notes: '',
+  })
+
+  const fetchDormitoryPermits = async () => {
+    setLoadingPermits(true)
+    try {
+      const res = await api.get('/musyrif/permits', {
+        params: {
+          status: permitFilterStatus === 'all' ? undefined : permitFilterStatus,
+          search: permitSearch || undefined,
+        },
+      })
+      if (res?.data) {
+        setDormitoryPermits(res.data.data || [])
+        setDormitoryPermitsStatistik(res.data.statistik || null)
+      }
+    } catch (err) {
+      console.error('Failed to fetch dormitory permits:', err)
+    } finally {
+      setLoadingPermits(false)
+    }
+  }
+
+  const handleReturnCheckin = async (e) => {
+    e.preventDefault()
+    if (!selectedPermitForReturn) return
+    setSubmittingReturn(true)
+    try {
+      const returnTime = returnForm.actual_return_time
+        ? new Date(returnForm.actual_return_time).toISOString()
+        : new Date().toISOString()
+      const res = await api.post(`/musyrif/permits/${selectedPermitForReturn.id}/return-checkin`, {
+        actual_return_time: returnTime,
+        return_condition: returnForm.return_condition,
+        notes: returnForm.notes,
+      })
+      Swal.fire({
+        icon: 'success',
+        title: 'Absensi Kembali Berhasil!',
+        text: res.data?.message || 'Santri telah dicatat kembali ke asrama tepat waktu/terverifikasi.',
+        timer: 2200,
+        showConfirmButton: false,
+      })
+      setSelectedPermitForReturn(null)
+      fetchDormitoryPermits()
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal Memproses Absensi',
+        text: err.response?.data?.message || 'Terjadi kesalahan sistem.',
+      })
+    } finally {
+      setSubmittingReturn(false)
+    }
+  }
+
+  const handleCreatePermit = async (e) => {
+    e.preventDefault()
+    if (!newPermitForm.student_id) {
+      Swal.fire({ icon: 'warning', title: 'Pilih Santri', text: 'Silakan tentukan santri binaan yang mengajukan izin.' })
+      return
+    }
+    try {
+      const res = await api.post('/musyrif/permits', {
+        student_id: newPermitForm.student_id,
+        permit_type: newPermitForm.permit_type,
+        destination: newPermitForm.destination,
+        scheduled_departure_at: newPermitForm.scheduled_departure_at ? new Date(newPermitForm.scheduled_departure_at).toISOString() : new Date().toISOString(),
+        scheduled_return_at: newPermitForm.scheduled_return_at ? new Date(newPermitForm.scheduled_return_at).toISOString() : null,
+        pickup_person_name: newPermitForm.pickup_person_name,
+        pickup_person_phone: newPermitForm.pickup_person_phone,
+        pickup_person_relation: newPermitForm.pickup_person_relation,
+        purpose_notes: newPermitForm.purpose_notes,
+      })
+      Swal.fire({
+        icon: 'success',
+        title: 'Surat Izin Santri Berhasil Diterbitkan!',
+        text: `Nomor Boarding Pass: ${res.data?.data?.permit_number || '-'}`,
+        timer: 2200,
+        showConfirmButton: false,
+      })
+      setQuickActionModal(null)
+      fetchDormitoryPermits()
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal Menerbitkan Izin',
+        text: err.response?.data?.message || 'Pastikan kolom tanggal dan data terisi lengkap.',
+      })
+    }
+  }
+
   useEffect(() => {
     if (!setoranForm?.surah_number) {
       setModalAyatsList([])
@@ -362,7 +476,8 @@ export default function MusyrifDashboardPage() {
   useEffect(() => {
     fetchDashboard()
     fetchStudentsFromDb()
-  }, [])
+    fetchDormitoryPermits()
+  }, [permitFilterStatus])
 
   if (loading && !data) return <SkeletonDashboard />
   if (error && !data) return <ErrorState message={error} onRetry={fetchDashboard} />
@@ -434,6 +549,33 @@ export default function MusyrifDashboardPage() {
             { santri: 'Muhammad Al-Fatih', item: 'Smartphone Android', serial: 'SN-901823', status: 'Tersimpan di Brankas' },
             { santri: 'Abdullah Azzam', item: 'Laptop ASUS', serial: 'SN-441209', status: 'Diambil untuk Tugas' },
           ],
+        }
+      case 'perizinan':
+        return {
+          title: 'Buku Perizinan & Absensi Kepulangan Santri Asrama (Boarding Pass)',
+          subtitle: `Pencatatan Pesiar, Libur & Absensi Kembali ke Asrama | Musyrif: ${context?.musyrif_name || 'Musyrif Asrama'}`,
+          filename: `Log_Perizinan_Santri_${new Date().toISOString().slice(0, 10)}`,
+          tabKey: 'perizinan',
+          columns: [
+            { key: 'permit_number', label: 'No. Izin' },
+            { key: 'santri', label: 'Nama Santri' },
+            { key: 'kategori', label: 'Kategori' },
+            { key: 'tujuan', label: 'Tujuan' },
+            { key: 'jadwal_kembali', label: 'Jadwal Kembali' },
+            { key: 'kembali_riil', label: 'Kembali Riil' },
+            { key: 'terlambat', label: 'Keterlambatan' },
+            { key: 'status', label: 'Status' },
+          ],
+          data: (customTables.perizinan || dormitoryPermits || []).map((p) => ({
+            permit_number: p.permit_number || '-',
+            santri: p.student?.full_name || p.student?.name || '-',
+            kategori: p.permit_type ? p.permit_type.replace('_', ' ').toUpperCase() : '-',
+            tujuan: p.destination || '-',
+            jadwal_kembali: p.scheduled_return_at ? new Date(p.scheduled_return_at).toLocaleString('id-ID') : '-',
+            kembali_riil: p.actual_return_at ? new Date(p.actual_return_at).toLocaleString('id-ID') : '-',
+            terlambat: p.late_minutes > 0 ? `${p.late_minutes} Menit` : 'Tepat Waktu',
+            status: p.status ? p.status.toUpperCase() : '-',
+          })),
         }
       default: // 'aktivitas'
         return {
@@ -697,6 +839,14 @@ export default function MusyrifDashboardPage() {
       badgeColor: 'bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300',
       tone: 'bg-sky-50 text-sky-700 dark:bg-sky-950/40 dark:text-sky-300 border-sky-200/60',
     },
+    {
+      id: 'perizinan',
+      title: 'Perizinan & Absen Kembali',
+      icon: CalendarCheck,
+      badge: 'Boarding',
+      badgeColor: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300',
+      tone: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-300 border-indigo-200/60',
+    },
   ]
 
   const santriColumns = [
@@ -929,7 +1079,7 @@ export default function MusyrifDashboardPage() {
             </span>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3" role="tablist">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3" role="tablist">
             {cardModulesList.map((mod) => {
               const Icon = mod.icon
               const isActive = activeTab === mod.id
@@ -1216,9 +1366,536 @@ export default function MusyrifDashboardPage() {
                   </div>
                 </section>
               )}
+              {/* TAB 6: PERIZINAN & ABSENSI KEMBALI (BOARDING PASS) */}
+              {activeTab === 'perizinan' && (
+                <section className="space-y-5">
+                  {/* Master Stats Grid */}
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
+                    <div className="rounded-2xl border border-indigo-100/80 bg-gradient-to-br from-indigo-50/50 to-white p-4 shadow-sm dark:border-indigo-900/40 dark:bg-slate-900">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-bold text-indigo-700 dark:text-indigo-400 uppercase tracking-wider">Total Izin Boarding</span>
+                        <div className="p-2 rounded-xl bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">
+                          <CalendarCheck className="w-4 h-4" />
+                        </div>
+                      </div>
+                      <div className="mt-2 text-2xl font-black text-slate-800 dark:text-white">
+                        {dormitoryPermitsStatistik?.total_permits ?? dormitoryPermits.length}
+                      </div>
+                      <p className="text-[10px] text-slate-500 mt-1">Surat izin kepulangan/pesiar santri</p>
+                    </div>
+
+                    <div className="rounded-2xl border border-amber-100/80 bg-gradient-to-br from-amber-50/50 to-white p-4 shadow-sm dark:border-amber-900/40 dark:bg-slate-900">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">Sedang di Luar</span>
+                        <div className="p-2 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400">
+                          <Clock className="w-4 h-4" />
+                        </div>
+                      </div>
+                      <div className="mt-2 text-2xl font-black text-amber-600 dark:text-amber-400">
+                        {dormitoryPermitsStatistik?.currently_out ?? 0}
+                      </div>
+                      <p className="text-[10px] text-slate-500 mt-1">Belum melakukan absensi kembali</p>
+                    </div>
+
+                    <div className="rounded-2xl border border-emerald-100/80 bg-gradient-to-br from-emerald-50/50 to-white p-4 shadow-sm dark:border-emerald-900/40 dark:bg-slate-900">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">Tepat Waktu</span>
+                        <div className="p-2 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400">
+                          <CheckCircle2 className="w-4 h-4" />
+                        </div>
+                      </div>
+                      <div className="mt-2 text-2xl font-black text-emerald-600 dark:text-emerald-400">
+                        {dormitoryPermitsStatistik?.returned_ontime ?? 0}
+                      </div>
+                      <p className="text-[10px] text-slate-500 mt-1">Kembali sesuai batas jam pesantren</p>
+                    </div>
+
+                    <div className="rounded-2xl border border-rose-100/80 bg-gradient-to-br from-rose-50/50 to-white p-4 shadow-sm dark:border-rose-900/40 dark:bg-slate-900">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-bold text-rose-700 dark:text-rose-400 uppercase tracking-wider">Terlambat Masuk</span>
+                        <div className="p-2 rounded-xl bg-rose-100 dark:bg-rose-950 text-rose-600 dark:text-rose-400">
+                          <ShieldAlert className="w-4 h-4" />
+                        </div>
+                      </div>
+                      <div className="mt-2 text-2xl font-black text-rose-600 dark:text-rose-400">
+                        {dormitoryPermitsStatistik?.returned_late ?? 0}
+                      </div>
+                      <p className="text-[10px] text-slate-500 mt-1">Perlu pembinaan/konsekuensi musyrif</p>
+                    </div>
+                  </div>
+
+                  {/* Main Table Card */}
+                  <div className="rounded-2xl border border-slate-200/80 bg-white p-5 sm:p-6 shadow-sm dark:border-slate-800 dark:bg-[#1B2433] space-y-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4 dark:border-slate-800">
+                      <div>
+                        <h3 className="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                          <CalendarCheck className="w-5 h-5 text-indigo-600" /> Buku Izin Pesiar & Absensi Kembali Santri
+                        </h3>
+                        <p className="text-xs text-slate-500">
+                          Pondok Pesantren Beroperasi Senin-Sabtu. Ahad adalah jadwal kunjungan/pesiar & wajib melakukan absensi saat kembali ke pondok.
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <button
+                          type="button"
+                          onClick={() => fetchDormitoryPermits()}
+                          disabled={loadingPermits}
+                          className="p-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800 transition text-xs font-semibold flex items-center gap-1.5"
+                        >
+                          <RefreshCw className={`w-3.5 h-3.5 ${loadingPermits ? 'animate-spin' : ''}`} /> Refresh
+                        </button>
+                        <MasterActionButton variant="emerald" icon={Plus} onClick={() => setQuickActionModal('perizinan_baru')}>
+                          Terbitkan Surat Izin Santri
+                        </MasterActionButton>
+                      </div>
+                    </div>
+
+                    {/* Filter & Search Bar */}
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+                      <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
+                        {[
+                          { id: 'all', label: 'Semua Status' },
+                          { id: 'active', label: 'Sedang di Luar' },
+                          { id: 'returned', label: 'Kembali Tepat Waktu' },
+                          { id: 'late', label: 'Terlambat' },
+                        ].map((btn) => (
+                          <button
+                            key={btn.id}
+                            type="button"
+                            onClick={() => setPermitFilterStatus(btn.id)}
+                            className={`px-3 py-1.5 rounded-lg font-bold transition whitespace-nowrap ${
+                              permitFilterStatus === btn.id
+                                ? 'bg-indigo-600 text-white shadow-sm'
+                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'
+                            }`}
+                          >
+                            {btn.label}
+                          </button>
+                        ))}
+                      </div>
+
+                      <div className="relative w-full sm:w-64">
+                        <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                        <input
+                          type="text"
+                          value={permitSearch}
+                          onChange={(e) => setPermitSearch(e.target.value)}
+                          onKeyDown={(e) => { if (e.key === 'Enter') fetchDormitoryPermits() }}
+                          placeholder="Cari santri, no izin, tujuan..."
+                          className="w-full pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 text-xs font-medium focus:border-indigo-600 outline-none"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Table Container */}
+                    <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+                      <table className="w-full text-left text-xs border-collapse">
+                        <thead>
+                          <tr className="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 font-bold border-b border-slate-200 dark:border-slate-700">
+                            <th className="p-3">No. Boarding Pass & Kategori</th>
+                            <th className="p-3">Santri & Asrama</th>
+                            <th className="p-3">Jadwal Keberangkatan & Rencana Kembali</th>
+                            <th className="p-3">Realisasi Kembali & Keterlambatan</th>
+                            <th className="p-3">Penjemput / Wali</th>
+                            <th className="p-3 text-center">Status & Absensi Kembali</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
+                          {loadingPermits ? (
+                            <tr>
+                              <td colSpan={6} className="p-8 text-center text-slate-500">
+                                <RefreshCw className="w-5 h-5 animate-spin mx-auto mb-2 text-indigo-600" />
+                                Memuat data perizinan santri dari PostgreSQL...
+                              </td>
+                            </tr>
+                          ) : dormitoryPermits.length === 0 ? (
+                            <tr>
+                              <td colSpan={6} className="p-8 text-center text-slate-500">
+                                Belum ada data perizinan santri yang sesuai kriteria.
+                              </td>
+                            </tr>
+                          ) : (
+                            dormitoryPermits.map((p) => {
+                              const isCurrentlyOut = p.status === 'active' || p.status === 'approved'
+                              const isLate = p.status === 'late' || p.late_minutes > 0
+                              const isReturned = p.status === 'returned'
+
+                              return (
+                                <tr key={p.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/50 transition">
+                                  <td className="p-3">
+                                    <div className="font-extrabold text-slate-900 dark:text-white font-mono text-[11px]">
+                                      {p.permit_number}
+                                    </div>
+                                    <div className="text-[10px] text-slate-500 capitalize mt-0.5">
+                                      {p.permit_type?.replace('_', ' ')}
+                                    </div>
+                                  </td>
+
+                                  <td className="p-3">
+                                    <div className="font-bold text-slate-900 dark:text-white">
+                                      {p.student?.full_name || p.student?.name || 'Santri Asrama'}
+                                    </div>
+                                    <div className="text-[10px] text-slate-500">
+                                      NISN: {p.student?.nisn || '-'} | Kamar: {p.student?.kamar || p.dormitory_room || 'Asrama Pondok'}
+                                    </div>
+                                  </td>
+
+                                  <td className="p-3">
+                                    <div className="text-slate-800 dark:text-slate-200">
+                                      Berangkat: {p.scheduled_departure_at ? new Date(p.scheduled_departure_at).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' }) : '-'}
+                                    </div>
+                                    <div className="text-indigo-600 dark:text-indigo-400 font-bold mt-0.5">
+                                      Batas Kembali: {p.scheduled_return_at ? new Date(p.scheduled_return_at).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' }) : '-'}
+                                    </div>
+                                    <div className="text-[10px] text-slate-500 truncate max-w-xs mt-0.5">
+                                      Tujuan: {p.destination || '-'}
+                                    </div>
+                                  </td>
+
+                                  <td className="p-3">
+                                    {p.actual_return_at ? (
+                                      <div>
+                                        <div className="font-bold text-slate-800 dark:text-slate-200">
+                                          {new Date(p.actual_return_at).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' })}
+                                        </div>
+                                        {isLate ? (
+                                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40 px-2 py-0.5 rounded-full border border-rose-200 dark:border-rose-900 mt-0.5">
+                                            <ShieldAlert className="w-3 h-3" /> Terlambat +{p.late_minutes} Menit
+                                          </span>
+                                        ) : (
+                                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-900 mt-0.5">
+                                            <CheckCircle2 className="w-3 h-3" /> Tepat Waktu
+                                          </span>
+                                        )}
+                                        {p.return_condition && (
+                                          <div className="text-[10px] text-slate-500 mt-0.5">
+                                            Kondisi: {p.return_condition}
+                                          </div>
+                                        )}
+                                      </div>
+                                    ) : (
+                                      <span className="text-amber-600 dark:text-amber-400 font-bold flex items-center gap-1">
+                                        <Clock className="w-3.5 h-3.5" /> Sedang Berada di Luar
+                                      </span>
+                                    )}
+                                  </td>
+
+                                  <td className="p-3">
+                                    <div className="font-semibold text-slate-800 dark:text-slate-200">
+                                      {p.pickup_person_name || 'Mandiri / Wali'}
+                                    </div>
+                                    <div className="text-[10px] text-slate-500">
+                                      {p.pickup_person_relation || 'Orang Tua'} {p.pickup_person_phone ? `(${p.pickup_person_phone})` : ''}
+                                    </div>
+                                  </td>
+
+                                  <td className="p-3 text-center">
+                                    {isCurrentlyOut ? (
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          setSelectedPermitForReturn(p)
+                                          const now = new Date()
+                                          const localIso = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
+                                          setReturnForm({
+                                            actual_return_time: localIso,
+                                            return_condition: 'Sehat & Rapih',
+                                            notes: '',
+                                          })
+                                        }}
+                                        className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-sm inline-flex items-center gap-1.5 transition active:scale-95 cursor-pointer"
+                                      >
+                                        <CheckCircle2 className="w-3.5 h-3.5" /> Absensi Kembali
+                                      </button>
+                                    ) : (
+                                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${
+                                        isReturned
+                                          ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+                                          : 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'
+                                      }`}>
+                                        {p.status}
+                                      </span>
+                                    )}
+                                  </td>
+                                </tr>
+                              )
+                            })
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </section>
+              )}
             </motion.main>
           </AnimatePresence>
         </div>
+
+      {/* 🔵 MODAL ABSENSI KEMBALI SANTRI (RETURN CHECK-IN) */}
+      <AnimatePresence>
+        {selectedPermitForReturn && (
+          <Backdrop isOpen={Boolean(selectedPermitForReturn)} onOpenChange={() => setSelectedPermitForReturn(null)} className="z-50 flex items-center justify-center p-3 sm:p-5">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              className="w-full max-w-lg"
+            >
+              <div className="rounded-3xl border border-slate-200 bg-white shadow-2xl overflow-hidden dark:border-slate-800 dark:bg-[#1B2433]">
+                <div className="bg-gradient-to-r from-indigo-900 via-indigo-800 to-teal-900 text-white px-6 py-4 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-indigo-700/80 flex items-center justify-center border border-indigo-500/50 shadow-inner">
+                      <CheckCircle2 className="w-5 h-5 text-indigo-200" />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-extrabold text-white">Absensi Kembali ke Pondok</h3>
+                      <p className="text-xs text-indigo-200 font-medium">Verifikasi kedatangan santri & pengecekan batas waktu</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedPermitForReturn(null)}
+                    className="p-1.5 rounded-xl hover:bg-white/10 text-white/80 transition"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <form onSubmit={handleReturnCheckin} className="p-5 sm:p-6 space-y-4 text-xs">
+                  {/* Info Box Santri */}
+                  <div className="p-3.5 rounded-2xl bg-indigo-50/80 border border-indigo-100 dark:bg-indigo-950/30 dark:border-indigo-900/50 space-y-1">
+                    <div className="flex justify-between items-center font-bold">
+                      <span className="text-slate-600 dark:text-slate-400">Santri:</span>
+                      <span className="text-slate-900 dark:text-white font-extrabold text-sm">{selectedPermitForReturn.student?.full_name || selectedPermitForReturn.student?.name}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-600 dark:text-slate-400">Nomor Boarding Pass:</span>
+                      <span className="font-mono font-bold text-indigo-700 dark:text-indigo-400">{selectedPermitForReturn.permit_number}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-600 dark:text-slate-400">Batas Waktu Jadwal:</span>
+                      <span className="font-bold text-rose-600 dark:text-rose-400">
+                        {selectedPermitForReturn.scheduled_return_at ? new Date(selectedPermitForReturn.scheduled_return_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) : '-'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="font-bold block mb-1 text-slate-700 dark:text-slate-300">Waktu Kedatangan Riil (Absensi Kembali)</label>
+                    <input
+                      type="datetime-local"
+                      required
+                      value={returnForm.actual_return_time}
+                      onChange={(e) => setReturnForm({ ...returnForm, actual_return_time: e.target.value })}
+                      className="w-full rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 dark:bg-slate-800 text-xs font-semibold focus:border-indigo-600 outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="font-bold block mb-1 text-slate-700 dark:text-slate-300">Kondisi Fisik / Ketertiban Santri</label>
+                    <select
+                      value={returnForm.return_condition}
+                      onChange={(e) => setReturnForm({ ...returnForm, return_condition: e.target.value })}
+                      className="w-full rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 dark:bg-slate-800 text-xs font-semibold focus:border-indigo-600 outline-none"
+                    >
+                      <option value="Sehat & Rapih">Sehat & Rapih (Standar)</option>
+                      <option value="Kurang Sehat / Sakit">Kurang Sehat / Sakit (Perlu Masuk UKS)</option>
+                      <option value="Terlambat Izin Resmi">Terlambat dengan Izin Resmi Orang Tua</option>
+                      <option value="Terlambat Tanpa Keterangan">Terlambat Tanpa Keterangan</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="font-bold block mb-1 text-slate-700 dark:text-slate-300">Catatan Musyrif Penerima (Opsional)</label>
+                    <textarea
+                      rows={2}
+                      value={returnForm.notes}
+                      onChange={(e) => setReturnForm({ ...returnForm, notes: e.target.value })}
+                      placeholder="Catatan barang bawaan, alasan keterlambatan, dsb..."
+                      className="w-full rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 dark:bg-slate-800 text-xs focus:border-indigo-600 outline-none"
+                    />
+                  </div>
+
+                  <div className="pt-2 flex items-center justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedPermitForReturn(null)}
+                      className="px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 dark:text-slate-300 font-bold transition"
+                    >
+                      Batal
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={submittingReturn}
+                      className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold shadow-md transition flex items-center gap-1.5"
+                    >
+                      <CheckCircle2 className="w-4 h-4" />
+                      {submittingReturn ? 'Menyimpan...' : 'Simpan Absensi Kembali'}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </motion.div>
+          </Backdrop>
+        )}
+      </AnimatePresence>
+
+      {/* 🟢 MODAL BUAT SURAT IZIN SANTRI BARU */}
+      <AnimatePresence>
+        {quickActionModal === 'perizinan_baru' && (
+          <Backdrop isOpen={Boolean(quickActionModal)} onOpenChange={() => setQuickActionModal(null)} className="z-50 flex items-center justify-center p-3 sm:p-5">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              className="w-full max-w-lg"
+            >
+              <div className="rounded-3xl border border-slate-200 bg-white shadow-2xl overflow-hidden dark:border-slate-800 dark:bg-[#1B2433]">
+                <div className="bg-gradient-to-r from-emerald-900 via-teal-800 to-indigo-900 text-white px-6 py-4 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-700/80 flex items-center justify-center border border-emerald-500/50 shadow-inner">
+                      <CalendarCheck className="w-5 h-5 text-emerald-200" />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-extrabold text-white">Terbitkan Surat Izin Santri</h3>
+                      <p className="text-xs text-emerald-200 font-medium">Pondok Pesantren Boarding Pass</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setQuickActionModal(null)}
+                    className="p-1.5 rounded-xl hover:bg-white/10 text-white/80 transition"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <form onSubmit={handleCreatePermit} className="p-5 sm:p-6 space-y-3.5 text-xs">
+                  <div>
+                    <label className="font-bold block mb-1 text-slate-700 dark:text-slate-300">Pilih Santri Binaan *</label>
+                    <select
+                      required
+                      value={newPermitForm.student_id}
+                      onChange={(e) => setNewPermitForm({ ...newPermitForm, student_id: e.target.value })}
+                      className="w-full rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 dark:bg-slate-800 text-xs font-semibold focus:border-emerald-600 outline-none"
+                    >
+                      <option value="">-- Pilih Santri --</option>
+                      {dbStudents.map((s) => (
+                        <option key={s.id} value={s.id}>
+                          {s.full_name || s.name} ({s.nisn || s.nis || 'Santri'})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="font-bold block mb-1 text-slate-700 dark:text-slate-300">Jenis Perizinan</label>
+                      <select
+                        value={newPermitForm.permit_type}
+                        onChange={(e) => setNewPermitForm({ ...newPermitForm, permit_type: e.target.value })}
+                        className="w-full rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 dark:bg-slate-800 text-xs font-semibold focus:border-emerald-600 outline-none"
+                      >
+                        <option value="pesiar_mingguan">Pesiar Mingguan (Ahad)</option>
+                        <option value="libur_semester">Libur Semester</option>
+                        <option value="izin_khusus">Izin Khusus / Keluarga</option>
+                        <option value="sakit">Izin Sakit / Rujukan Luar</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="font-bold block mb-1 text-slate-700 dark:text-slate-300">Alamat Tujuan *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="Contoh: Rumah Orang Tua di Padang"
+                        value={newPermitForm.destination}
+                        onChange={(e) => setNewPermitForm({ ...newPermitForm, destination: e.target.value })}
+                        className="w-full rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 dark:bg-slate-800 text-xs font-semibold focus:border-emerald-600 outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="font-bold block mb-1 text-slate-700 dark:text-slate-300">Jadwal Keluar *</label>
+                      <input
+                        type="datetime-local"
+                        required
+                        value={newPermitForm.scheduled_departure_at}
+                        onChange={(e) => setNewPermitForm({ ...newPermitForm, scheduled_departure_at: e.target.value })}
+                        className="w-full rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 dark:bg-slate-800 text-xs font-semibold focus:border-emerald-600 outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="font-bold block mb-1 text-slate-700 dark:text-slate-300">Batas Wajib Kembali *</label>
+                      <input
+                        type="datetime-local"
+                        required
+                        value={newPermitForm.scheduled_return_at}
+                        onChange={(e) => setNewPermitForm({ ...newPermitForm, scheduled_return_at: e.target.value })}
+                        className="w-full rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 dark:bg-slate-800 text-xs font-semibold focus:border-emerald-600 outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="font-bold block mb-1 text-slate-700 dark:text-slate-300">Nama Penjemput</label>
+                      <input
+                        type="text"
+                        placeholder="Nama Ayah/Ibu/Wali"
+                        value={newPermitForm.pickup_person_name}
+                        onChange={(e) => setNewPermitForm({ ...newPermitForm, pickup_person_name: e.target.value })}
+                        className="w-full rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 dark:bg-slate-800 text-xs font-semibold focus:border-emerald-600 outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="font-bold block mb-1 text-slate-700 dark:text-slate-300">No. HP Penjemput</label>
+                      <input
+                        type="tel"
+                        placeholder="08xxxxxxxxxx"
+                        value={newPermitForm.pickup_person_phone}
+                        onChange={(e) => setNewPermitForm({ ...newPermitForm, pickup_person_phone: e.target.value })}
+                        className="w-full rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 dark:bg-slate-800 text-xs font-semibold focus:border-emerald-600 outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="font-bold block mb-1 text-slate-700 dark:text-slate-300">Alasan / Keterangan Tambahan</label>
+                    <textarea
+                      rows={2}
+                      placeholder="Alasan izin kepulangan..."
+                      value={newPermitForm.purpose_notes}
+                      onChange={(e) => setNewPermitForm({ ...newPermitForm, purpose_notes: e.target.value })}
+                      className="w-full rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 dark:bg-slate-800 text-xs focus:border-emerald-600 outline-none"
+                    />
+                  </div>
+
+                  <div className="pt-2 flex items-center justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
+                    <button
+                      type="button"
+                      onClick={() => setQuickActionModal(null)}
+                      className="px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 dark:text-slate-300 font-bold transition"
+                    >
+                      Batal
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold shadow-md transition flex items-center gap-1.5"
+                    >
+                      <CalendarCheck className="w-4 h-4" /> Terbitkan Boarding Pass
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </motion.div>
+          </Backdrop>
+        )}
+      </AnimatePresence>
 
       {/* 🟢 MODAL POP-UP DIALOG (TAHFIZH PAGE STYLE BENCHMARK) */}
       <AnimatePresence>

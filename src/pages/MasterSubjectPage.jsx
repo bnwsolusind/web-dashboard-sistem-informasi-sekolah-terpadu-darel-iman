@@ -25,6 +25,7 @@ import { printCleanTable } from '../utils/printHelper'
 import { subjectService } from '../services/subjectService'
 import { masterKurikulumService } from '../services/masterKurikulumService'
 import { educationUnitService } from '../services/educationUnitService'
+import { getUnitJenjang } from './MasterCapaianPembelajaranPage'
 import { ActionDropdown, AppBadge, AppButton, AppModal } from '../components/app'
 import PageContainer from '../components/app/PageContainer'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
@@ -305,13 +306,41 @@ export default function MasterSubjectPage({ embedded = false, hideBreadcrumb = f
     ? Math.round((Number(stats.aktif || 0) / Number(stats.total)) * 100)
     : 0
 
-  const availableKurikulumForFilter = selectedUnitFilter
-    ? kurikulumDropdown.filter((k) => !k.unit_pendidikan_id || k.unit_pendidikan_id === selectedUnitFilter)
-    : kurikulumDropdown
+  const resolveKurikulumForUnit = (unitId) => {
+    if (!unitId) return kurikulumDropdown
+    const currentUnit = (unitDropdown || []).find((u) => String(u.id) === String(unitId))
+    const jenjang = getUnitJenjang(currentUnit)
 
-  const availableKurikulumForForm = formData.unit_pendidikan_id
-    ? kurikulumDropdown.filter((k) => !k.unit_pendidikan_id || k.unit_pendidikan_id === formData.unit_pendidikan_id)
-    : kurikulumDropdown
+    const direct = kurikulumDropdown.filter(
+      (k) => String(k.unit_pendidikan_id) === String(unitId) || String(k.unit_id) === String(unitId)
+    )
+    const byJenjang = kurikulumDropdown.filter((k) => {
+      if (!jenjang) return false
+      const kJ = String(k.jenjang || '').toUpperCase()
+      if (kJ === jenjang) return true
+      if (jenjang === 'SMP' && (kJ.includes('SMP') || kJ.includes('PESANTREN'))) return true
+      if (jenjang === 'SMA' && (kJ.includes('SMA') || kJ.includes('PESANTREN'))) return true
+      const kText = `${k.nama_kurikulum || ''} ${k.kode_kurikulum || ''}`.toUpperCase()
+      return kText.includes(jenjang)
+    })
+    const seen = new Set()
+    const result = []
+    ;[...direct, ...byJenjang].forEach((item) => {
+      if (!seen.has(String(item.id))) {
+        seen.add(String(item.id))
+        result.push(item)
+      }
+    })
+    return result.length > 0 ? result : kurikulumDropdown
+  }
+
+  const availableKurikulumForFilter = useMemo(() => {
+    return resolveKurikulumForUnit(selectedUnitFilter)
+  }, [selectedUnitFilter, kurikulumDropdown, unitDropdown])
+
+  const availableKurikulumForForm = useMemo(() => {
+    return resolveKurikulumForUnit(formData.unit_pendidikan_id)
+  }, [formData.unit_pendidikan_id, kurikulumDropdown, unitDropdown])
 
   const resetFilters = () => {
     setSearch('')
@@ -343,15 +372,24 @@ export default function MasterSubjectPage({ embedded = false, hideBreadcrumb = f
 
   const handleOpenFormTambah = () => {
     setSelectedForEdit(null)
+    const defaultUnit = selectedUnitFilter || (availableUnitOptions[0]?.id || unitDropdown[0]?.id || '')
+    const matchingKur = resolveKurikulumForUnit(defaultUnit)
+    const defaultKur = selectedKurikulumFilter && matchingKur.some((k) => String(k.id) === String(selectedKurikulumFilter))
+      ? selectedKurikulumFilter
+      : (matchingKur[0]?.id || '')
+
+    const currentUnit = (unitDropdown || []).find((u) => String(u.id) === String(defaultUnit))
+    const defaultJenjang = getUnitJenjang(currentUnit) || 'SD'
+
     setFormData({
-      unit_pendidikan_id: unitDropdown[0]?.id || '',
-      kurikulum_id: kurikulumDropdown[0]?.id || '',
+      unit_pendidikan_id: defaultUnit,
+      kurikulum_id: defaultKur,
       kode_mapel: '',
       nama_mapel: '',
       nama_singkat: '',
       kelompok_mapel: 'Kelompok A',
       kategori: 'Wajib',
-      jenjang: 'SD',
+      jenjang: defaultJenjang,
       tingkat_kelas: 'All',
       jam_pelajaran: 2,
       kkm: 75,
@@ -360,7 +398,7 @@ export default function MasterSubjectPage({ embedded = false, hideBreadcrumb = f
       bobot_sikap: 20,
       warna: '#0E5C44',
       ikon: 'BookOpen',
-      urutan_tampil: 1,
+      urutan_tampil: (meta.total || items.length) + 1,
       status: true,
       deskripsi: '',
     })
@@ -578,9 +616,9 @@ export default function MasterSubjectPage({ embedded = false, hideBreadcrumb = f
               value={selectedUnitFilter}
               onChange={(event) => {
                 const unitId = event.target.value
-                const matchingKurikulum = kurikulumDropdown.filter((item) => !item.unit_pendidikan_id || item.unit_pendidikan_id === unitId)
+                const matchingKurikulum = resolveKurikulumForUnit(unitId)
                 setSelectedUnitFilter(unitId)
-                if (!matchingKurikulum.some((item) => item.id === selectedKurikulumFilter)) setSelectedKurikulumFilter('')
+                if (!matchingKurikulum.some((item) => String(item.id) === String(selectedKurikulumFilter))) setSelectedKurikulumFilter('')
                 setPage(1)
               }}
               disabled={!canViewAllUnits && availableUnitOptions.length <= 1}
@@ -778,6 +816,33 @@ export default function MasterSubjectPage({ embedded = false, hideBreadcrumb = f
             <form onSubmit={handleSubmit} className="space-y-4 text-xs font-medium">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
+                  <label className="mb-1.5 block text-xs font-semibold text-slate-700">Unit Pendidikan <span className="text-rose-500">*</span></label>
+                  <select
+                    value={formData.unit_pendidikan_id}
+                    onChange={(e) => {
+                      const newUnitId = e.target.value
+                      const matchingKur = resolveKurikulumForUnit(newUnitId)
+                      const currentUnit = (unitDropdown || []).find((u) => String(u.id) === String(newUnitId))
+                      const jenjang = getUnitJenjang(currentUnit)
+                      const isStillValid = matchingKur.some((k) => String(k.id) === String(formData.kurikulum_id))
+                      setFormData({
+                        ...formData,
+                        unit_pendidikan_id: newUnitId,
+                        kurikulum_id: isStillValid ? formData.kurikulum_id : (matchingKur[0]?.id || ''),
+                        jenjang: jenjang || formData.jenjang,
+                      })
+                    }}
+                    required
+                    className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 shadow-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                  >
+                    <option value="">Pilih Unit Pendidikan</option>
+                    {unitDropdown.map((u) => (
+                      <option key={u.id} value={u.id}>{u.name}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
                   <label className="mb-1.5 block text-xs font-semibold text-slate-700">Kurikulum <span className="text-rose-500">*</span></label>
                   <select
                     value={formData.kurikulum_id}
@@ -788,32 +853,8 @@ export default function MasterSubjectPage({ embedded = false, hideBreadcrumb = f
                     <option value="">Pilih Kurikulum</option>
                     {availableKurikulumForForm.map((k) => (
                       <option key={k.id} value={k.id}>
-                        {k.nama_kurikulum} {k.kode_kurikulum ? `(${k.kode_kurikulum})` : ''}
+                        {k.nama_kurikulum} {k.jenjang ? `(${k.jenjang})` : (k.kode_kurikulum ? `(${k.kode_kurikulum})` : '')}
                       </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="mb-1.5 block text-xs font-semibold text-slate-700">Unit Pendidikan <span className="text-rose-500">*</span></label>
-                  <select
-                    value={formData.unit_pendidikan_id}
-                    onChange={(e) => {
-                      const newUnitId = e.target.value
-                      const matchingKur = kurikulumDropdown.filter((k) => !k.unit_pendidikan_id || k.unit_pendidikan_id === newUnitId)
-                      const isStillValid = matchingKur.some((k) => k.id === formData.kurikulum_id)
-                      setFormData({
-                        ...formData,
-                        unit_pendidikan_id: newUnitId,
-                        kurikulum_id: isStillValid ? formData.kurikulum_id : (matchingKur[0]?.id || ''),
-                      })
-                    }}
-                    required
-                    className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 shadow-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-emerald-600"
-                  >
-                    <option value="">Pilih Unit Pendidikan</option>
-                    {unitDropdown.map((u) => (
-                      <option key={u.id} value={u.id}>{u.name}</option>
                     ))}
                   </select>
                 </div>

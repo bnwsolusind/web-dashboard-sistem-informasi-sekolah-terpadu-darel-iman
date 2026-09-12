@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { BookOpen, Download, ExternalLink, FileText, Search, Video, Music, CheckCircle2, User } from 'lucide-react'
+import { VideoEmbedPlayer, PdfDocumentViewer } from '../common/MateriMediaEmbed'
 
 const cardStyle = 'rounded-[18px] border border-slate-200/80 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900'
 
@@ -154,7 +155,7 @@ export default function MaterialsWorkspace({ materials = [], loading = false }) 
       {/* Modal Detail Materi */}
       {activeDetail && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4">
-          <div className="w-full max-w-2xl rounded-[18px] bg-white p-6 shadow-2xl dark:bg-slate-900">
+          <div className="w-full max-w-3xl rounded-[18px] bg-white p-6 shadow-2xl dark:bg-slate-900 max-h-[85vh] overflow-y-auto">
             <div className="flex items-start justify-between border-b border-slate-100 pb-4 dark:border-slate-800">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600">
@@ -170,8 +171,29 @@ export default function MaterialsWorkspace({ materials = [], loading = false }) 
               </button>
             </div>
 
-            <div className="my-4 max-h-[60vh] overflow-y-auto space-y-4 text-xs leading-6 text-slate-700 dark:text-slate-300 whitespace-pre-wrap">
-              {activeDetail.konten || activeDetail.catatan || 'Konten materi komplit.'}
+            {/* Video Embed if available */}
+            {activeDetail.video && (
+              <div className="my-4">
+                <VideoEmbedPlayer
+                  url={activeDetail.video}
+                  title={`Video: ${activeDetail.judul || activeDetail.title}`}
+                />
+              </div>
+            )}
+
+            {/* PDF Embed if available */}
+            {(activeDetail.file || (activeDetail.tipe_materi === 'dokumen' && activeDetail.path_file)) && (
+              <div className="my-4">
+                <PdfDocumentViewer
+                  url={activeDetail.file || activeDetail.path_file}
+                  title={`Dokumen: ${activeDetail.judul || activeDetail.title}`}
+                  height="450px"
+                />
+              </div>
+            )}
+
+            <div className="my-4 space-y-4 text-xs leading-6 text-slate-700 dark:text-slate-300 whitespace-pre-wrap">
+              {activeDetail.konten || activeDetail.catatan || activeDetail.isi || 'Konten materi komplit.'}
             </div>
 
             {(activeDetail.media || []).length > 0 && (

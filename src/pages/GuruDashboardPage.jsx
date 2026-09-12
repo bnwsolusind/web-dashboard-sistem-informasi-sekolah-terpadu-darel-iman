@@ -93,6 +93,7 @@ export default function GuruDashboardPage() {
   const [materiKelasMapel, setMateriKelasMapel] = useState('Matematika - X IPA 1')
   const [materiDeskripsi, setMateriDeskripsi] = useState('')
   const [materiAttachmentUrl, setMateriAttachmentUrl] = useState('')
+  const [materiVideoUrl, setMateriVideoUrl] = useState('')
   const [materiPublishDirectly, setMateriPublishDirectly] = useState(true)
 
   // Form States for Penugasan Modal
@@ -185,6 +186,7 @@ export default function GuruDashboardPage() {
     setMateriJudul('')
     setMateriDeskripsi('')
     setMateriAttachmentUrl('')
+    setMateriVideoUrl('')
     setQuickModal(null)
   }
 
@@ -792,13 +794,26 @@ export default function GuruDashboardPage() {
 
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="materi-link" className="text-xs font-extrabold text-slate-700 dark:text-slate-300">
-                  Tautan Dokumen / File Lampiran
+                  Tautan Dokumen / Modul PDF Lampiran
                 </label>
                 <input
                   id="materi-link"
-                  placeholder="https://drive.google.com/file/... atau link modul PDF"
+                  placeholder="https://.../modul-pembelajaran.pdf atau link dokumen drive"
                   value={materiAttachmentUrl}
                   onChange={(e) => setMateriAttachmentUrl(e.target.value)}
+                  className="w-full rounded-xl border border-slate-300/80 bg-white dark:bg-slate-800/80 dark:border-slate-700 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-medium transition-all duration-300 ease-in-out focus:border-[#0E5C44] focus:ring-4 focus:ring-[#0E5C44]/20 dark:focus:border-[#3FBF75] dark:focus:ring-[#3FBF75]/30 focus:outline-none"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="materi-video" className="text-xs font-extrabold text-slate-700 dark:text-slate-300">
+                  URL Video Pembelajaran (YouTube / Embed)
+                </label>
+                <input
+                  id="materi-video"
+                  placeholder="https://www.youtube.com/watch?v=... (otomatis di-embed)"
+                  value={materiVideoUrl}
+                  onChange={(e) => setMateriVideoUrl(e.target.value)}
                   className="w-full rounded-xl border border-slate-300/80 bg-white dark:bg-slate-800/80 dark:border-slate-700 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-medium transition-all duration-300 ease-in-out focus:border-[#0E5C44] focus:ring-4 focus:ring-[#0E5C44]/20 dark:focus:border-[#3FBF75] dark:focus:ring-[#3FBF75]/30 focus:outline-none"
                 />
               </div>

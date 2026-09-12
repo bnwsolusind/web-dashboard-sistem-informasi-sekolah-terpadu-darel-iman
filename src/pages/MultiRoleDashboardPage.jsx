@@ -3,7 +3,9 @@ import { Navigate } from 'react-router-dom'
 import { ShieldAlert } from 'lucide-react'
 import { useAuthStore } from '../stores/authStore'
 import SuperAdminDashboardPage from './SuperAdminDashboardPage'
-import { ROLES, hasAnyRole, resolveDefaultPortal } from '../auth/portalResolver'
+import TeacherMonitoringDashboardPage from './TeacherMonitoringDashboardPage'
+import ParentDashboardPage from './ParentDashboardPage'
+import { ROLES, hasAnyRole, resolveDefaultPortal, isTeacherRole } from '../auth/portalResolver'
 
 export default function MultiRoleDashboardPage() {
   const user = useAuthStore((state) => state.user)
@@ -29,7 +31,11 @@ export default function MultiRoleDashboardPage() {
   }
 
   if (hasAnyRole(roles, ['Orang Tua', 'Orangtua', 'Wali Murid', 'orang_tua', 'parent'])) {
-    return <Navigate to="/portal-orangtua" replace />
+    return <ParentDashboardPage />
+  }
+
+  if (isTeacherRole(roles)) {
+    return <TeacherMonitoringDashboardPage />
   }
 
   const resolvedRoute = resolveDefaultPortal(user)

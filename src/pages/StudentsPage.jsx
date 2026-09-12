@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, useNavigate } from 'react-router-dom'
 import {
   FaArrowLeft,
   FaArrowRight,
@@ -43,7 +43,7 @@ import PersonIdentityCell from '../components/ui/PersonIdentityCell'
 import { hasAnyRole } from '../auth/portalResolver'
 import { useAuthStore } from '../stores/authStore'
 import PageContainer from '../components/app/PageContainer'
-import { Printer, ShieldCheck, Sparkles } from 'lucide-react'
+import { Printer, ShieldCheck, Sparkles, MessageSquare, Phone, Send, MessageCircle } from 'lucide-react'
 import { OverlayWrapper, Backdrop } from '../components/tailgrids/core/overlay'
 import { Dialog, DialogClose, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../components/tailgrids/core/dialog'
 import { Download1, Upload1, Plus as PlusIcon } from '@tailgrids/icons'
@@ -869,6 +869,40 @@ export default function StudentsPage() {
     setShowDetailModal(true)
   }
 
+  const navigate = useNavigate()
+  const [chatTargetModal, setChatTargetModal] = useState(null)
+
+  const handleOpenChatModal = (student) => {
+    setChatTargetModal(student)
+  }
+
+  const handleDirectChatPortal = (student) => {
+    if (!student) return
+    const sId = student.id || ''
+    const pId = student.parentId || student.parent_id || ''
+    const pName = encodeURIComponent(student.orangTua || student.metadata?.nama_ayah || student.metadata?.nama_ibu || 'Orang Tua')
+    const sName = encodeURIComponent(student.nama || student.full_name || '')
+    navigate(`/dashboard/chat-pegawai?mode=teacher&student_id=${sId}&parent_id=${pId}&parent_name=${pName}&student_name=${sName}`)
+    setChatTargetModal(null)
+    setShowDetailModal(false)
+  }
+
+  const handleDirectWhatsApp = (phone, student) => {
+    if (!phone) {
+      Swal.fire('Nomor Tidak Tersedia', 'Nomor telepon/WA orang tua belum terdaftar.', 'info')
+      return
+    }
+    let cleanPhone = String(phone).replace(/[^0-9]/g, '')
+    if (cleanPhone.startsWith('0')) cleanPhone = '62' + cleanPhone.slice(1)
+    if (!cleanPhone.startsWith('62')) cleanPhone = '62' + cleanPhone
+    const text = encodeURIComponent(
+      `Assalamu'alaikum Warahmatullahi Wabarakatuh Bapak/Ibu Wali dari Ananda ${student.nama || student.full_name || ''} (${student.unit || ''} - Kelas ${student.kelas || ''}).\n\nSaya ingin berkonsultasi mengenai perkembangan ananda di sekolah.`
+    )
+    window.open(`https://wa.me/${cleanPhone}?text=${text}`, '_blank')
+    setChatTargetModal(null)
+    setShowDetailModal(false)
+  }
+
   const handleDelete = async (student) => {
     if (!canDeleteStudent) return
     const res = await Swal.fire({
@@ -1405,11 +1439,18 @@ export default function StudentsPage() {
                           onView={() => handleOpenDetail(item)}
                           onEdit={canUpdateStudent ? () => handleOpenEdit(item) : undefined}
                           onDelete={canDeleteStudent ? () => handleDelete(item) : undefined}
-                          extraItems={[{
-                            label: 'Cetak Kartu',
-                            icon: <FaPrint className="h-4 w-4 text-emerald-600" />,
-                            onClick: () => { setStudentToPrint(item); setShowCetakModal(true) },
-                          }]}
+                          extraItems={[
+                            {
+                              label: 'Chat Orang Tua',
+                              icon: <MessageSquare className="h-4 w-4 text-emerald-600" />,
+                              onClick: () => handleOpenChatModal(item),
+                            },
+                            {
+                              label: 'Cetak Kartu',
+                              icon: <FaPrint className="h-4 w-4 text-emerald-600" />,
+                              onClick: () => { setStudentToPrint(item); setShowCetakModal(true) },
+                            },
+                          ]}
                         />
                       </div>
                     </td>
@@ -1556,6 +1597,34 @@ export default function StudentsPage() {
                           )
                           if (activeDetailTab === 'orangTua') return (
                             <div className="space-y-2">
+                              {/* Quick Contact Banner */}
+                              <div className="flex flex-wrap items-center justify-between gap-2 p-3 mb-3 rounded-xl bg-emerald-50/90 border border-emerald-200/80 dark:bg-emerald-950/40 dark:border-emerald-800/60">
+                                <div className="flex items-center gap-2">
+                                  <MessageSquare className="h-4 w-4 text-emerald-700 dark:text-emerald-400" />
+                                  <span className="text-xs font-bold text-emerald-900 dark:text-emerald-200">
+                                    Hubungi Langsung Orang Tua / Wali
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDirectChatPortal(selectedStudent)}
+                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-emerald-800 text-white hover:bg-emerald-900 transition cursor-pointer shadow-xs"
+                                  >
+                                    <MessageSquare className="h-3.5 w-3.5" /> Chat SIMS Portal
+                                  </button>
+                                  {(meta.nomor_wa_ayah || meta.hp_ayah || meta.telfon_ayah || meta.nomor_wa_ibu || meta.hp_ibu || selectedStudent.noHp) && (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleDirectWhatsApp(meta.nomor_wa_ayah || meta.hp_ayah || meta.nomor_wa_ibu || selectedStudent.noHp, selectedStudent)}
+                                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition cursor-pointer shadow-xs"
+                                    >
+                                      <Phone className="h-3.5 w-3.5" /> WhatsApp
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+
                               <p className="font-bold text-emerald-800 border-b border-emerald-100 pb-1.5 mb-2">Data Ayah Kandung</p>
                               <DRow label="NIK Ayah" val={meta.nik_ayah} />
                               <DRow label="Nama Ayah" val={meta.nama_ayah} />
@@ -1930,6 +1999,95 @@ export default function StudentsPage() {
               </DialogFooter>
             </Dialog>
           </OverlayWrapper>
+        )}
+
+        {/* MODAL PILIH OPSI CHAT KE ORANG TUA */}
+        {chatTargetModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm animate-fade-in">
+            <div className="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl border border-slate-200 dark:bg-slate-900 dark:border-slate-800">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+                    <MessageCircle className="size-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-black text-slate-900 dark:text-white">Hubungi Orang Tua / Wali</h3>
+                    <p className="text-[11px] font-medium text-slate-500">
+                      Ananda: <strong className="text-emerald-700 dark:text-emerald-400">{chatTargetModal.nama}</strong>
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setChatTargetModal(null)}
+                  className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800"
+                >
+                  <FaTimes className="size-4" />
+                </button>
+              </div>
+
+              <div className="my-4 space-y-3">
+                <div className="rounded-xl bg-slate-50 p-3 text-xs border border-slate-100 dark:bg-slate-800/50 dark:border-slate-800">
+                  <div className="flex justify-between py-1">
+                    <span className="text-slate-500">Nama Wali:</span>
+                    <strong className="text-slate-800 dark:text-slate-200">{chatTargetModal.orangTua || '-'}</strong>
+                  </div>
+                  <div className="flex justify-between py-1">
+                    <span className="text-slate-500">Unit / Kelas:</span>
+                    <strong className="text-slate-800 dark:text-slate-200">{chatTargetModal.unit} • Kelas {chatTargetModal.kelas}</strong>
+                  </div>
+                  <div className="flex justify-between py-1">
+                    <span className="text-slate-500">Nomor HP / WA:</span>
+                    <strong className="text-emerald-700 dark:text-emerald-400">{chatTargetModal.noHp || '-'}</strong>
+                  </div>
+                </div>
+
+                <p className="text-[11px] font-bold text-slate-600 dark:text-slate-300">Pilih Jalur Komunikasi:</p>
+
+                <div className="grid grid-cols-1 gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => handleDirectChatPortal(chatTargetModal)}
+                    className="flex items-center gap-3 w-full p-3 rounded-xl border border-emerald-300 bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 hover:border-emerald-500 text-emerald-950 dark:bg-emerald-950/30 dark:border-emerald-800 dark:text-emerald-200 transition cursor-pointer text-left"
+                  >
+                    <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-emerald-700 text-white font-black">
+                      <MessageSquare className="size-4.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-black">Chat Internal SIMS Terpadu</p>
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400">Pesan resmi tersimpan dalam riwayat komunikasi sekolah</p>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleDirectWhatsApp(chatTargetModal.noHp, chatTargetModal)}
+                    className="flex items-center gap-3 w-full p-3 rounded-xl border border-emerald-200 bg-white hover:border-emerald-400 text-slate-800 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200 transition cursor-pointer text-left"
+                  >
+                    <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-white font-black">
+                      <Phone className="size-4.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-black">Hubungi via WhatsApp</p>
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400">Kirim pesan langsung ke nomor WhatsApp orang tua</p>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex justify-end pt-2">
+                <Button
+                  variant="ghost"
+                  appearance="outline"
+                  size="sm"
+                  onClick={() => setChatTargetModal(null)}
+                  className="font-semibold text-xs"
+                >
+                  Batal
+                </Button>
+              </div>
+            </div>
+          </div>
         )}
         </MasterDataPage>
       </motion.div>

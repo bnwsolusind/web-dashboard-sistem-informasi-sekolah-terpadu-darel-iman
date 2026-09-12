@@ -232,7 +232,7 @@ export function CalendarYearPicker({ className }: YearPickerProps) {
               return;
             }
 
-            const selectedYear = Number([...keys][0]);
+            const selectedYear = Number(Array.from(keys)[0]);
             if (Number.isNaN(selectedYear)) {
               return;
             }

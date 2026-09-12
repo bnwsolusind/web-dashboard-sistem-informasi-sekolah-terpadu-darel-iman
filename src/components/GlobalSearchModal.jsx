@@ -135,7 +135,7 @@ export default function GlobalSearchModal({ isOpen, onClose }) {
       const isSuperAdmin = roles.some((r) => String(r).toLowerCase().replace(/[\s_-]+/g, '').includes('superadmin'))
       if (isDenied && !isSuperAdmin) return false
     }
-    if (item.link?.includes('/absensi-gerbang')) {
+    if (item.link?.includes('/absensi-gerbang') || item.link?.includes('/laporan-alumni') || item.link?.includes('/kelola-alumni') || item.link?.includes('/laporan-tahfizh')) {
       const isTeacherOnly = roles.some((r) => [
         'guru', 'gurumatapelajaran', 'gurutahfizh', 'gurubk', 'walikelas', 'musyrif', 'musyrifah'
       ].includes(String(r).toLowerCase().replace(/[\s_-]+/g, ''))) &&
