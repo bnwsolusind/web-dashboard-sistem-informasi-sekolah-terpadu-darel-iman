@@ -198,7 +198,7 @@ export default function HeroUiFilterSelect({
                 minWidth: `${Math.min(Math.max(coords.width, 200), typeof window !== 'undefined' ? window.innerWidth - 16 : 200)}px`,
                 maxWidth: 'calc(100vw - 16px)',
               }}
-              className={`z-[9999] ${popoverWidth !== 'w-full' ? popoverWidth : ''} overflow-hidden rounded-2xl border-2 border-emerald-500/30 bg-white/95 dark:bg-[#182232]/95 backdrop-blur-md p-1.5 shadow-2xl shadow-emerald-950/20 dark:border-emerald-700/50 dark:shadow-black/60`}
+              className={`z-[9999] ${popoverWidth !== 'w-full' ? popoverWidth : ''} overflow-hidden rounded-xl border border-slate-200 bg-white dark:bg-slate-900 p-1.5 shadow-lg dark:border-slate-800`}
             >
               {searchable && normalizedOptions.length > 5 && (
                 <div className="p-1.5 border-b border-slate-100 dark:border-slate-800 mb-1">
@@ -209,7 +209,7 @@ export default function HeroUiFilterSelect({
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       placeholder="Ketik untuk mencari..."
-                      className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-900/80 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600 shadow-2xs"
+                      className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600 shadow-2xs"
                       autoFocus
                     />
                   </div>
@@ -233,10 +233,10 @@ export default function HeroUiFilterSelect({
                           setIsOpen(false)
                           setSearch('')
                         }}
-                        className={`w-full flex items-center justify-between rounded-xl px-2.5 py-2 text-xs font-bold transition-all text-left cursor-pointer ${
+                        className={`w-full flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-all text-left cursor-pointer ${
                           isSelected
-                            ? 'bg-gradient-to-r from-emerald-50 to-teal-50/70 text-emerald-950 dark:from-emerald-950/80 dark:to-teal-950/50 dark:text-emerald-200 font-black'
-                            : 'text-slate-700 hover:bg-emerald-50/60 hover:text-emerald-900 dark:text-slate-200 dark:hover:bg-slate-800/80 dark:hover:text-emerald-300'
+                            ? 'bg-slate-100 text-slate-900 font-semibold dark:bg-slate-800 dark:text-white'
+                            : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white'
                         }`}
                       >
                         <div className="truncate pr-2 flex-1">

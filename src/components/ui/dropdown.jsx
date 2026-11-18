@@ -16,13 +16,16 @@ export function DropdownMenuTrigger({ className, ...props }) {
   return <HeroDropdown.Trigger className={cn('outline-none cursor-pointer', className)} {...props} />
 }
 
-export function DropdownMenuContent({ children, className, placement, ...props }) {
+export function DropdownMenuContent({ children, className, placement = 'bottom-end', ...props }) {
   return (
-    <HeroDropdown.Popover placement={placement}>
+    <HeroDropdown.Popover
+      placement={placement}
+      className="rounded-xl border border-slate-200 bg-white p-1.5 shadow-lg dark:border-slate-800 dark:bg-slate-900 overflow-hidden"
+    >
       <HeroDropdown.Menu
         {...props}
         className={cn(
-          'outline-none shadow-xl rounded-2xl overflow-hidden min-w-44 bg-white dark:bg-[#1B2433] border border-slate-200 dark:border-slate-800 p-1 text-slate-800 dark:text-slate-100',
+          'outline-none min-w-44 bg-white dark:bg-slate-900 p-0 text-slate-800 dark:text-slate-100',
           className
         )}
       >
@@ -39,7 +42,7 @@ export function DropdownMenuItem({ className, onAction, onClick, onPress, ...pro
       {...props}
       onAction={handleSelect}
       className={cn(
-        'group text-slate-700 dark:text-slate-200 text-xs font-semibold focus:text-emerald-950 focus:bg-emerald-50 dark:focus:bg-emerald-950/50 dark:focus:text-emerald-200 flex w-full cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2 outline-none transition-colors data-[disabled]:opacity-50 data-[disabled]:pointer-events-none',
+        'group flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-slate-900 focus:bg-slate-50 focus:text-slate-900 outline-none transition-colors data-[disabled]:opacity-50 data-[disabled]:pointer-events-none dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white dark:focus:bg-slate-800 dark:focus:text-white [&_*]:text-inherit',
         className
       )}
     />
@@ -161,13 +164,13 @@ export function Dropdown({ trigger, items, align = 'right', className }) {
       onClick={(e) => e.stopPropagation()}
       style={getPanelStyle()}
       className={cn(
-        'app-dropdown-portal min-w-[180px] rounded-2xl bg-white dark:bg-[#1B2433] p-1.5 shadow-2xl border border-slate-200/90 dark:border-slate-700/80 text-slate-800 dark:text-slate-100 opacity-100 pointer-events-auto isolation-auto animate-in fade-in zoom-in-95 duration-150',
+        'app-dropdown-portal min-w-[180px] rounded-xl bg-white dark:bg-slate-900 p-1.5 shadow-lg border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 opacity-100 pointer-events-auto isolation-auto animate-in fade-in zoom-in-95 duration-150',
         className
       )}
     >
       {items.map((item, idx) => {
         if (item.divider) {
-          return <div key={idx} className="my-1 border-t border-slate-100 dark:border-slate-700/60" />
+          return <div key={idx} className="my-1 border-t border-slate-100 dark:border-slate-800" />
         }
         return (
           <button
@@ -181,10 +184,10 @@ export function Dropdown({ trigger, items, align = 'right', className }) {
             }}
             disabled={item.disabled}
             className={cn(
-              'group flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-xs font-semibold transition-colors text-left cursor-pointer focus:outline-none focus-visible:ring-2',
+              'group flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors text-left cursor-pointer focus:outline-none focus-visible:ring-2 [&_*]:text-inherit',
               item.danger
-                ? 'text-rose-600 hover:bg-rose-50/90 hover:text-rose-700 focus-visible:ring-rose-600/30 focus-visible:bg-rose-50 focus-visible:text-rose-700 dark:text-rose-400 dark:hover:bg-rose-950/60 dark:hover:text-rose-300 dark:focus-visible:bg-rose-950/60 dark:focus-visible:text-rose-300'
-                : 'text-slate-700 hover:bg-emerald-50/90 hover:text-emerald-900 focus-visible:ring-emerald-600/30 focus-visible:bg-emerald-50 focus-visible:text-emerald-900 dark:text-slate-200 dark:hover:bg-emerald-950/50 dark:hover:text-emerald-200 dark:focus-visible:bg-emerald-950/50 dark:focus-visible:text-emerald-200',
+                ? 'text-rose-600 hover:bg-rose-50 hover:text-rose-700 focus-visible:ring-rose-600/30 focus-visible:bg-rose-50 focus-visible:text-rose-700 dark:text-rose-400 dark:hover:bg-rose-950/60 dark:hover:text-rose-300 dark:focus-visible:bg-rose-950/60 dark:focus-visible:text-rose-300'
+                : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900 focus-visible:ring-slate-400/30 focus-visible:bg-slate-50 focus-visible:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white dark:focus-visible:bg-slate-800 dark:focus-visible:text-white',
               item.disabled && 'opacity-50 pointer-events-none'
             )}
           >
@@ -194,7 +197,7 @@ export function Dropdown({ trigger, items, align = 'right', className }) {
                   'flex h-4 w-4 shrink-0 items-center justify-center text-sm transition-colors',
                   item.danger
                     ? 'text-rose-500 group-hover:text-rose-700 dark:text-rose-400 dark:group-hover:text-rose-300 [&>svg]:transition-colors [&>svg]:group-hover:text-rose-700 dark:[&>svg]:group-hover:text-rose-300'
-                    : 'text-slate-500 group-hover:text-emerald-700 dark:text-slate-400 dark:group-hover:text-emerald-300 [&>svg]:transition-colors [&>svg]:group-hover:text-emerald-700 dark:[&>svg]:group-hover:text-emerald-300'
+                    : 'text-slate-500 group-hover:text-slate-900 dark:text-slate-400 dark:group-hover:text-white [&>svg]:transition-colors [&>svg]:group-hover:text-slate-900 dark:[&>svg]:group-hover:text-white'
                 )}
               >
                 {item.icon}

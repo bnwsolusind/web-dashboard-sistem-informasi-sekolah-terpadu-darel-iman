@@ -170,7 +170,7 @@ export function HoverCardContent({
               exit={{ opacity: 0, scale: 0.96, y: 4 }}
               transition={{ duration: 0.15, ease: 'easeOut' }}
               className={cn(
-                'overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl dark:border-slate-800 dark:bg-[#1B2433] pointer-events-auto',
+                'overflow-hidden rounded-xl border border-slate-200 bg-white p-3 shadow-lg dark:border-slate-800 dark:bg-slate-900 pointer-events-auto',
                 className
               )}
               {...props}

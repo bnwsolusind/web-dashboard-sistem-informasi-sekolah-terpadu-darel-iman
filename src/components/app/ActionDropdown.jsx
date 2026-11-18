@@ -75,37 +75,37 @@ export default function ActionDropdown({
           </span>
         </Tooltip>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="p-1.5 border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900 min-w-36 shadow-lg rounded-xl">
+      <DropdownMenuContent className="p-1.5 border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 min-w-44 shadow-lg rounded-xl">
         {canView && (
           <DropdownMenuItem
             onAction={() => exec(onView)}
-            className="cursor-pointer font-medium text-xs text-slate-700 hover:text-emerald-700 dark:text-slate-200"
+            className="cursor-pointer font-medium text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white px-3 py-2 rounded-lg flex items-center gap-2.5"
           >
-            <Eye className="size-4 text-sky-500" />
+            <Eye className="size-4 text-sky-500 shrink-0" />
             <span>Lihat Data</span>
           </DropdownMenuItem>
         )}
         {canEdit && (
           <DropdownMenuItem
             onAction={() => exec(onEdit)}
-            className="cursor-pointer font-medium text-xs text-slate-700 hover:text-emerald-700 dark:text-slate-200"
+            className="cursor-pointer font-medium text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white px-3 py-2 rounded-lg flex items-center gap-2.5"
           >
-            <Pencil1 className="size-4 text-amber-500" />
+            <Pencil1 className="size-4 text-amber-500 shrink-0" />
             <span>Edit Data</span>
           </DropdownMenuItem>
         )}
         {canHistory && (
           <DropdownMenuItem
             onAction={() => exec(onHistory)}
-            className="cursor-pointer font-medium text-xs text-slate-700 hover:text-emerald-700 dark:text-slate-200"
+            className="cursor-pointer font-medium text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white px-3 py-2 rounded-lg flex items-center gap-2.5"
           >
-            <ClockThree className="size-4 text-slate-400" />
+            <ClockThree className="size-4 text-slate-400 shrink-0" />
             <span>Riwayat</span>
           </DropdownMenuItem>
         )}
         {filteredExtraItems.map((item, idx) => {
           const isDanger = item.isDanger || item.danger
-          const iconClassName = `size-4 ${isDanger ? 'text-rose-500' : 'text-slate-500'}`
+          const iconClassName = `size-4 shrink-0 ${isDanger ? 'text-rose-500' : 'text-slate-500'}`
           const renderedIcon = React.isValidElement(item.icon)
             ? item.icon
             : item.icon
@@ -115,8 +115,10 @@ export default function ActionDropdown({
             <DropdownMenuItem
               key={idx}
               onAction={() => exec(item.onClick)}
-              className={`cursor-pointer font-medium text-xs text-slate-700 hover:text-emerald-700 dark:text-slate-200 ${
-                isDanger ? 'text-rose-600 dark:text-rose-400 hover:text-rose-700' : ''
+              className={`cursor-pointer font-medium text-sm px-3 py-2 rounded-lg flex items-center gap-2.5 ${
+                isDanger
+                  ? 'text-rose-600 hover:bg-rose-50 hover:text-rose-700 dark:text-rose-400 dark:hover:bg-rose-950/40 dark:hover:text-rose-300'
+                  : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white'
               }`}
             >
               {renderedIcon}
@@ -131,9 +133,9 @@ export default function ActionDropdown({
             )}
             <DropdownMenuItem
               onAction={() => exec(onDelete)}
-              className="cursor-pointer font-medium text-xs text-rose-600 hover:text-rose-700 dark:text-rose-400"
+              className="cursor-pointer font-medium text-sm text-rose-600 hover:bg-rose-50 hover:text-rose-700 dark:text-rose-400 dark:hover:bg-rose-950/40 dark:hover:text-rose-300 px-3 py-2 rounded-lg flex items-center gap-2.5"
             >
-              <Trash1 className="size-4 text-rose-500" />
+              <Trash1 className="size-4 text-rose-500 shrink-0" />
               <span>Hapus</span>
             </DropdownMenuItem>
           </>
