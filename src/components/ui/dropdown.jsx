@@ -16,16 +16,21 @@ export function DropdownMenuTrigger({ className, ...props }) {
   return <HeroDropdown.Trigger className={cn('outline-none cursor-pointer', className)} {...props} />
 }
 
-export function DropdownMenuContent({ children, className, placement = 'bottom-end', ...props }) {
+export function DropdownMenuContent({ children, className, placement = 'bottom end', ...props }) {
+  // Normalize React Aria placement: convert hyphens to spaces (e.g. 'bottom-end' -> 'bottom end')
+  const normalizedPlacement = typeof placement === 'string'
+    ? placement.replace('-', ' ')
+    : 'bottom end'
+
   return (
     <HeroDropdown.Popover
-      placement={placement}
-      className="rounded-xl border border-slate-200 bg-white p-1.5 shadow-lg dark:border-slate-800 dark:bg-slate-900 overflow-hidden"
+      placement={normalizedPlacement}
+      className="rounded-xl border border-slate-200 bg-white p-1.5 shadow-lg dark:border-slate-800 dark:bg-slate-900"
     >
       <HeroDropdown.Menu
         {...props}
         className={cn(
-          'outline-none min-w-44 bg-white dark:bg-slate-900 p-0 text-slate-800 dark:text-slate-100',
+          'outline-none min-w-44 p-0 text-slate-800 dark:text-slate-100',
           className
         )}
       >

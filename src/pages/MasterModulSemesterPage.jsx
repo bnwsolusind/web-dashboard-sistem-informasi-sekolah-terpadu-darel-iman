@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
@@ -1316,7 +1317,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                       <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">
                         Tahun Ajaran <span className="text-rose-500">*</span>
                       </label>
-                      <select
+                      <CustomSelect
                         value={formData.tahun_ajaran_id}
                         onChange={(e) => setFormData({ ...formData, tahun_ajaran_id: e.target.value })}
                         className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium"
@@ -1327,7 +1328,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                             {t.name}
                           </option>
                         ))}
-                      </select>
+                      </CustomSelect>
                       {formErrors.tahun_ajaran_id && (
                         <p className="text-[11px] text-rose-500 mt-1">{formErrors.tahun_ajaran_id[0]}</p>
                       )}
@@ -1337,7 +1338,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                       <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">
                         Unit Pendidikan <span className="text-rose-500">*</span>
                       </label>
-                      <select
+                      <CustomSelect
                         value={formData.unit_pendidikan_id}
                         onChange={(e) => setFormData({ ...formData, unit_pendidikan_id: e.target.value })}
                         className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium"
@@ -1348,7 +1349,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                             {u.name} ({u.code})
                           </option>
                         ))}
-                      </select>
+                      </CustomSelect>
                     </div>
                   </div>
 
@@ -1357,7 +1358,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                       <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">
                         Semester <span className="text-rose-500">*</span>
                       </label>
-                      <select
+                      <CustomSelect
                         value={formData.semester_id}
                         onChange={(e) => setFormData({ ...formData, semester_id: e.target.value })}
                         className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium"
@@ -1368,7 +1369,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                             {s.name}
                           </option>
                         ))}
-                      </select>
+                      </CustomSelect>
                       {formErrors.semester_id && (
                         <p className="text-[11px] text-rose-500 mt-1">{formErrors.semester_id[0]}</p>
                       )}
@@ -1386,7 +1387,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                         )}
                       </div>
                       <div className="flex items-center gap-2">
-                        <select
+                        <CustomSelect
                           value={formData.kelas_id}
                           onChange={(e) => setFormData({ ...formData, kelas_id: e.target.value })}
                           className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium text-xs sm:text-sm"
@@ -1397,7 +1398,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                               {k.nama_kelas} ({k.kode_kelas})
                             </option>
                           ))}
-                        </select>
+                        </CustomSelect>
 
                         <div className="group relative inline-flex shrink-0">
                           <button
@@ -1435,7 +1436,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                         )}
                       </div>
                       <div className="flex items-center gap-2">
-                        <select
+                        <CustomSelect
                           value={formData.mata_pelajaran_id}
                           onChange={(e) => setFormData({ ...formData, mata_pelajaran_id: e.target.value })}
                           className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium text-xs sm:text-sm"
@@ -1446,7 +1447,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                               {m.name} ({m.code || m.kode_mapel || '-'})
                             </option>
                           ))}
-                        </select>
+                        </CustomSelect>
 
                         <div className="group relative inline-flex shrink-0">
                           <button
@@ -1524,7 +1525,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                         </div>
                       ) : (
                         <div className="flex items-center gap-2">
-                          <select
+                          <CustomSelect
                             value={formData.guru_id}
                             onChange={(e) => setFormData({ ...formData, guru_id: e.target.value })}
                             className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium text-xs sm:text-sm"
@@ -1535,7 +1536,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                                 {g.nama_lengkap} (NIY: {g.niy || '-'}) {g.position?.name ? `• ${g.position.name}` : ''}
                               </option>
                             ))}
-                          </select>
+                          </CustomSelect>
                           <div className="group relative inline-flex shrink-0">
                             <button
                               type="button"
@@ -1565,7 +1566,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                       <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">
                         Kurikulum
                       </label>
-                      <select
+                      <CustomSelect
                         value={formData.kurikulum}
                         onChange={(e) => setFormData({ ...formData, kurikulum: e.target.value })}
                         className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium"
@@ -1575,7 +1576,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                             {k}
                           </option>
                         ))}
-                      </select>
+                      </CustomSelect>
                     </div>
                   </div>
 
@@ -1606,7 +1607,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                       <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">
                         Status Modul
                       </label>
-                      <select
+                      <CustomSelect
                         value={formData.status}
                         onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                         className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium"
@@ -1614,7 +1615,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                         <option value="Aktif">Aktif</option>
                         <option value="Nonaktif">Nonaktif</option>
                         <option value="Arsip">Arsip</option>
-                      </select>
+                      </CustomSelect>
                     </div>
                   </div>
 
@@ -1726,7 +1727,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                       <label className="block text-slate-700 dark:text-slate-300 font-bold mb-1">
                         Model Pembelajaran
                       </label>
-                      <select
+                      <CustomSelect
                         value={formData.model_pembelajaran}
                         onChange={(e) => setFormData({ ...formData, model_pembelajaran: e.target.value })}
                         className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
@@ -1736,7 +1737,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                             {m}
                           </option>
                         ))}
-                      </select>
+                      </CustomSelect>
                     </div>
                   </div>
                 </div>
@@ -2395,7 +2396,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
               />
             </div>
             <div>
-              <select
+              <CustomSelect
                 value={guruStatusModalFilter}
                 onChange={(e) => setGuruStatusModalFilter(e.target.value)}
                 className="w-full py-2.5 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-medium"
@@ -2405,7 +2406,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                 <option value="Tetap">Tetap</option>
                 <option value="Kontrak">Kontrak</option>
                 <option value="Honorer">Honorer</option>
-              </select>
+              </CustomSelect>
             </div>
           </div>
 

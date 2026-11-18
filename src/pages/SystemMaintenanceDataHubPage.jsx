@@ -310,7 +310,7 @@ export default function SystemMaintenanceDataHubPage() {
               initial={{ opacity: 0, y: -20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.95 }}
-              className={`fixed top-5 right-5 z-[100] flex items-center gap-2.5 rounded-2xl px-4 py-3 shadow-2xl text-xs font-bold ${
+              className={`fixed top-5 right-5 z-[100] flex items-center gap-2.5 rounded-xl px-4 py-3 shadow-2xl text-xs font-bold ${
                 toast.type === 'error'
                   ? 'bg-rose-600 text-white shadow-rose-900/30'
                   : toast.type === 'info'

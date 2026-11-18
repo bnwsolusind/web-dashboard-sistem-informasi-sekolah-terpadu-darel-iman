@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { DatePicker } from '@/components/ui/date-picker'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -932,7 +933,7 @@ export default function LaporanTahfizhPage() {
         <div className="border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/40 via-white to-emerald-50/40 p-3.5 sm:px-6 md:px-8 py-3 sm:py-3.5 dark:border-emerald-800/60 dark:from-emerald-950/20 dark:via-transparent dark:to-emerald-950/20 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 text-xs text-slate-500 font-semibold">
             <span>Tampilkan</span>
-            <select
+            <CustomSelect
               value={perPage}
               onChange={(e) => setPerPage(Number(e.target.value))}
               aria-label="Baris per halaman"
@@ -942,7 +943,7 @@ export default function LaporanTahfizhPage() {
               <option value={25}>25</option>
               <option value={50}>50</option>
               <option value={100}>100</option>
-            </select>
+            </CustomSelect>
             <span>baris per halaman (Total {filteredRows.length} data)</span>
           </div>
 

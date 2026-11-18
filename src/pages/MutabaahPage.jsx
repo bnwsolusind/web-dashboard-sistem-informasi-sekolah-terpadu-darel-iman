@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import {
   BookHeart, CalendarDays, Check, ChevronDown, ChevronUp, Circle, CircleMinus,
   Clock3, Copy, FileDown, FileSpreadsheet, History, ListChecks, Loader2,
@@ -345,7 +346,7 @@ function LegacyMutabaahPage() {
         </>
       ) : (
         <section className="agenda-management">
-          <div className="management-head"><div><h2>Pengaturan Rincian Agenda</h2><p>Agenda umum berlaku per jenis unit. Pilih unit tertentu bila rincian hanya berlaku pada cabang tersebut.</p></div><div className="management-actions"><select value={filterJenis} onChange={(e) => setFilterJenis(e.target.value)}><option value="">Semua jenis unit</option>{options.jenis_units.map((j) => <option key={j.uuid} value={j.uuid}>{j.singkatan} — {j.nama_jenis}</option>)}</select><button className="primary-action" onClick={() => openAgenda()}><Plus size={18} /> Tambah Rincian</button></div></div>
+          <div className="management-head"><div><h2>Pengaturan Rincian Agenda</h2><p>Agenda umum berlaku per jenis unit. Pilih unit tertentu bila rincian hanya berlaku pada cabang tersebut.</p></div><div className="management-actions"><CustomSelect value={filterJenis} onChange={(e) => setFilterJenis(e.target.value)}><option value="">Semua jenis unit</option>{options.jenis_units.map((j) => <option key={j.uuid} value={j.uuid}>{j.singkatan} — {j.nama_jenis}</option>)}</CustomSelect><button className="primary-action" onClick={() => openAgenda()}><Plus size={18} /> Tambah Rincian</button></div></div>
           <div className="management-table-wrap"><table className="management-table"><thead><tr><th>Urut</th><th>Jenis / Unit</th><th>Kelompok</th><th>Rincian Agenda</th><th>Status</th><th>Aksi</th></tr></thead><tbody>
             {agendas.map((agenda) => <tr key={agenda.id}><td>{agenda.sort_order}</td><td><b>{agenda.jenis_unit?.singkatan}</b><small>{agenda.unit?.name || 'Semua unit sejenis'}</small></td><td>{agenda.category}</td><td><b>{agenda.name}</b><small>{agenda.description}</small></td><td><span className={`state ${agenda.is_active ? 'active' : ''}`}>{agenda.is_active ? 'Aktif' : 'Nonaktif'}</span></td><td><div className="row-actions"><button onClick={() => openAgenda(agenda)}><Pencil size={16} /></button><button className="danger" onClick={() => removeAgenda(agenda)}><Trash2 size={16} /></button></div></td></tr>)}
             {!agendas.length && <tr><td colSpan="6"><div className="empty-box">Belum ada rincian agenda.</div></td></tr>}
@@ -354,8 +355,8 @@ function LegacyMutabaahPage() {
       )}
 
       {agendaModal && <div className="modal-layer" onMouseDown={(e) => e.target === e.currentTarget && setAgendaModal(false)}><form className="agenda-modal" onSubmit={saveAgenda}><div className="modal-head"><div><h2>{agendaForm.id ? 'Ubah' : 'Tambah'} Rincian Agenda</h2><p>Rincian ditampilkan otomatis sesuai jenis unit siswa.</p></div><button type="button" onClick={() => setAgendaModal(false)}><X /></button></div><div className="form-grid">
-        <label><span>Jenis Unit *</span><select required value={agendaForm.jenis_unit_id} onChange={(e) => setAgendaForm({ ...agendaForm, jenis_unit_id: e.target.value, unit_id: '' })}>{options.jenis_units.map((j) => <option value={j.uuid} key={j.uuid}>{j.singkatan} — {j.nama_jenis}</option>)}</select></label>
-        <label><span>Unit Khusus (opsional)</span><select value={agendaForm.unit_id} onChange={(e) => setAgendaForm({ ...agendaForm, unit_id: e.target.value })}><option value="">Semua unit dalam jenis ini</option>{options.units.filter((u) => !agendaForm.jenis_unit_id || u.jenis_unit_id === agendaForm.jenis_unit_id).map((u) => <option value={u.id} key={u.id}>{u.name}</option>)}</select></label>
+        <label><span>Jenis Unit *</span><CustomSelect required value={agendaForm.jenis_unit_id} onChange={(e) => setAgendaForm({ ...agendaForm, jenis_unit_id: e.target.value, unit_id: '' })}>{options.jenis_units.map((j) => <option value={j.uuid} key={j.uuid}>{j.singkatan} — {j.nama_jenis}</option>)}</CustomSelect></label>
+        <label><span>Unit Khusus (opsional)</span><CustomSelect value={agendaForm.unit_id} onChange={(e) => setAgendaForm({ ...agendaForm, unit_id: e.target.value })}><option value="">Semua unit dalam jenis ini</option>{options.units.filter((u) => !agendaForm.jenis_unit_id || u.jenis_unit_id === agendaForm.jenis_unit_id).map((u) => <option value={u.id} key={u.id}>{u.name}</option>)}</CustomSelect></label>
         <label><span>Kelompok Agenda *</span><input required value={agendaForm.category} onChange={(e) => setAgendaForm({ ...agendaForm, category: e.target.value })} placeholder="Contoh: Sholat, Adab, Tahfizh" /></label>
         <label><span>Nomor Urut</span><input type="number" min="0" value={agendaForm.sort_order} onChange={(e) => setAgendaForm({ ...agendaForm, sort_order: Number(e.target.value) })} /></label>
         <label className="full"><span>Rincian Agenda *</span><input required value={agendaForm.name} onChange={(e) => setAgendaForm({ ...agendaForm, name: e.target.value })} placeholder="Contoh: Sholat Subuh berjamaah" /></label>
@@ -369,7 +370,7 @@ function LegacyMutabaahPage() {
 }
 
 function LabeledSelect({ label, icon, value, onChange, options }) {
-  return <label className="field"><span>{label}</span><div className="field-control">{icon}<select value={value} onChange={(e) => onChange(e.target.value)}>{options.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select><ChevronDown size={15} /></div></label>
+  return <label className="field"><span>{label}</span><div className="field-control">{icon}<CustomSelect value={value} onChange={(e) => onChange(e.target.value)}>{options.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</CustomSelect><ChevronDown size={15} /></div></label>
 }
 function formatDay(date) { return new Intl.DateTimeFormat('id-ID', { weekday: 'short' }).format(new Date(`${date}T12:00:00`)) }
 function formatShortDate(date) { return new Intl.DateTimeFormat('id-ID', { day: '2-digit', month: '2-digit' }).format(new Date(`${date}T12:00:00`)) }
@@ -651,14 +652,14 @@ function MutabaahOverviewPage({ view }) {
                     <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                       Unit Pendidikan
                     </label>
-                    <select
+                    <CustomSelect
                       value={targetForm.unit_id}
                       onChange={(e) => setTargetForm({ ...targetForm, unit_id: e.target.value })}
                       className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 font-semibold text-slate-800 focus:border-[#0E5C44] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                     >
                       <option value="">Pilih Unit Pendidikan</option>
                       {options.units?.map((u) => <option key={u.id} value={u.id}>{u.name}</option>)}
-                    </select>
+                    </CustomSelect>
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
@@ -693,14 +694,14 @@ function MutabaahOverviewPage({ view }) {
                     <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                       Status Target
                     </label>
-                    <select
+                    <CustomSelect
                       value={targetForm.status}
                       onChange={(e) => setTargetForm({ ...targetForm, status: e.target.value })}
                       className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 font-semibold text-slate-800 focus:border-[#0E5C44] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                     >
                       <option value="active">Aktif</option>
                       <option value="inactive">Nonaktif</option>
-                    </select>
+                    </CustomSelect>
                   </div>
 
                   <div>
@@ -809,7 +810,7 @@ function MutabaahOverviewPage({ view }) {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '1rem' }}>
               <h2>Status Paraf Digital & Catatan Orang Tua</h2>
               <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                <select
+                <CustomSelect
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
                   style={{ padding: '0.5rem 1rem', borderRadius: '10px', border: '1px solid #E2E8F0', fontSize: '0.875rem' }}
@@ -817,7 +818,7 @@ function MutabaahOverviewPage({ view }) {
                   <option value="all">Semua Status Paraf</option>
                   <option value="signed">Sudah Di-Paraf</option>
                   <option value="unsigned">Belum Di-Paraf</option>
-                </select>
+                </CustomSelect>
                 <input
                   type="text"
                   placeholder="Cari siswa atau kelas..."

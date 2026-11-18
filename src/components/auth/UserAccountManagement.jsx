@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import ActionDropdown from '../app/ActionDropdown'
 import { useToast } from '../app'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -375,7 +376,7 @@ function PrintCredentialsModal({ open, onClose, users = [] }) {
                 <Building2 className="size-3.5 text-emerald-600" />
                 <span>Kriteria 1: Unit Pendidikan</span>
               </label>
-              <select
+              <CustomSelect
                 value={filterUnit}
                 onChange={(e) => setFilterUnit(e.target.value)}
                 className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 outline-none focus:ring-2 focus:ring-emerald-600 cursor-pointer"
@@ -387,7 +388,7 @@ function PrintCredentialsModal({ open, onClose, users = [] }) {
                   </option>
                 ))}
                 <option value="yayasan">Yayasan / General</option>
-              </select>
+              </CustomSelect>
             </div>
 
             {/* Kriteria 2: Kategori Pengguna */}
@@ -396,7 +397,7 @@ function PrintCredentialsModal({ open, onClose, users = [] }) {
                 <Filter className="size-3.5 text-emerald-600" />
                 <span>Kriteria 2: Kategori Pengguna</span>
               </label>
-              <select
+              <CustomSelect
                 value={filterCategory}
                 onChange={(e) => setFilterCategory(e.target.value)}
                 className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 outline-none focus:ring-2 focus:ring-emerald-600 cursor-pointer"
@@ -407,7 +408,7 @@ function PrintCredentialsModal({ open, onClose, users = [] }) {
                 <option value="siswa">Siswa / Santri</option>
                 <option value="orangtua">Orang Tua / Wali Murid</option>
                 <option value="standalone">Administrator Standalone</option>
-              </select>
+              </CustomSelect>
             </div>
           </div>
 
@@ -1013,7 +1014,7 @@ function AccountModal({ open, user, roles = [], saving, onClose, onSave, roleOnl
 
             <label className="text-xs font-extrabold text-slate-700 dark:text-slate-300">
               Role Penugasan
-              <select
+              <CustomSelect
                 required
                 value={form.role}
                 onChange={(e) => {
@@ -1034,7 +1035,7 @@ function AccountModal({ open, user, roles = [], saving, onClose, onSave, roleOnl
                     {roleName}
                   </option>
                 ))}
-              </select>
+              </CustomSelect>
             </label>
 
             {/* Opsi Peran Tambahan untuk Pegawai/Guru */}

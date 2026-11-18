@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import {
   CalendarDays,
   ChevronLeft,
@@ -732,7 +733,7 @@ export default function TeacherMutabaahWeekly({
               {assignments.length > 1 && (
                 <div className="flex items-center gap-1.5 rounded-xl bg-white dark:bg-slate-900 border border-emerald-200/90 dark:border-emerald-800 px-2.5 py-1.5 shadow-xs">
                   <Users className="size-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                  <select
+                  <CustomSelect
                     value={assignmentId}
                     onChange={(e) => setAssignmentId(e.target.value)}
                     className="bg-transparent text-xs font-bold text-slate-800 dark:text-white outline-none cursor-pointer pr-1"
@@ -742,7 +743,7 @@ export default function TeacherMutabaahWeekly({
                         {item.unit_name} · {item.kelas_name || item.rombel_name || item.mentoring_group || item.type}
                       </option>
                     ))}
-                  </select>
+                  </CustomSelect>
                 </div>
               )}
 

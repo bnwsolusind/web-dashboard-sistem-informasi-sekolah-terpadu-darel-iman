@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { useNavigate } from 'react-router-dom'
 import {
   BookOpenCheck,
@@ -159,7 +160,7 @@ export default function TeacherAttendanceHistoryPage() {
 
         <div className="flex items-center gap-2">
           <label className="text-xs font-semibold text-slate-500">Status:</label>
-          <select
+          <CustomSelect
             value={statusFilter}
             onChange={(e) => {
               setStatusFilter(e.target.value)
@@ -170,7 +171,7 @@ export default function TeacherAttendanceHistoryPage() {
             <option value="all">Semua Status</option>
             <option value="finalized">Finalized</option>
             <option value="draft">Draft</option>
-          </select>
+          </CustomSelect>
         </div>
       </div>
 

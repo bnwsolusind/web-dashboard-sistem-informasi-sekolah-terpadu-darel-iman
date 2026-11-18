@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import Swal from '@/components/ui/compat/swal-heroui'
 import AppTabs from '../components/app/AppTabs'
 import { DatePicker } from '@/components/ui/date-picker'
@@ -501,7 +502,7 @@ export default function WorshipAssessmentSettingPage() {
                 />
               </div>
 
-              <select
+              <CustomSelect
                 value={filterProgramType}
                 onChange={(e) => setFilterProgramType(e.target.value)}
                 className="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-700 focus:border-emerald-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
@@ -511,9 +512,9 @@ export default function WorshipAssessmentSettingPage() {
                 <option value="boarding">Pesantren / Boarding</option>
                 <option value="regular">Reguler</option>
                 <option value="tahfizh">Tahfizh</option>
-              </select>
+              </CustomSelect>
 
-              <select
+              <CustomSelect
                 value={filterSource}
                 onChange={(e) => setFilterSource(e.target.value)}
                 className="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-700 focus:border-emerald-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
@@ -523,9 +524,9 @@ export default function WorshipAssessmentSettingPage() {
                 <option value="parent">Orang Tua / Wali</option>
                 <option value="supervisor">Musyrif Asrama</option>
                 <option value="either">Orang Tua / Siswa</option>
-              </select>
+              </CustomSelect>
 
-              <select
+              <CustomSelect
                 value={filterLocation}
                 onChange={(e) => setFilterLocation(e.target.value)}
                 className="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-700 focus:border-emerald-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
@@ -534,7 +535,7 @@ export default function WorshipAssessmentSettingPage() {
                 <option value="school">Di Sekolah / Asrama</option>
                 <option value="home">Di Rumah Bersama Ortu</option>
                 <option value="any">Bebas / Di Mana Saja</option>
-              </select>
+              </CustomSelect>
             </div>
 
             {/* Emerald Datatable */}
@@ -908,7 +909,7 @@ export default function WorshipAssessmentSettingPage() {
             <form onSubmit={handleSaveRule} className="space-y-4 text-xs">
               <div>
                 <label className="font-bold text-slate-700 dark:text-slate-300">Aktivitas / Amalan Ibadah *</label>
-                <select
+                <CustomSelect
                   required
                   value={ruleForm.agenda_item_id}
                   onChange={(e) => setRuleForm({ ...ruleForm, agenda_item_id: e.target.value })}
@@ -920,13 +921,13 @@ export default function WorshipAssessmentSettingPage() {
                       {x.name} ({x.code})
                     </option>
                   ))}
-                </select>
+                </CustomSelect>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="font-bold text-slate-700 dark:text-slate-300">Program Sekolah *</label>
-                  <select
+                  <CustomSelect
                     value={ruleForm.program_type}
                     onChange={(e) => setRuleForm({ ...ruleForm, program_type: e.target.value })}
                     className="mt-1 w-full rounded-xl border border-slate-300 bg-white p-2.5 dark:border-slate-700 dark:bg-slate-800"
@@ -935,12 +936,12 @@ export default function WorshipAssessmentSettingPage() {
                     <option value="boarding">Pesantren / Boarding</option>
                     <option value="regular">Reguler</option>
                     <option value="tahfizh">Tahfizh</option>
-                  </select>
+                  </CustomSelect>
                 </div>
 
                 <div>
                   <label className="font-bold text-slate-700 dark:text-slate-300">Periode Khusus (Opsional)</label>
-                  <select
+                  <CustomSelect
                     value={ruleForm.assessment_period_id}
                     onChange={(e) => setRuleForm({ ...ruleForm, assessment_period_id: e.target.value })}
                     className="mt-1 w-full rounded-xl border border-slate-300 bg-white p-2.5 dark:border-slate-700 dark:bg-slate-800"
@@ -951,14 +952,14 @@ export default function WorshipAssessmentSettingPage() {
                         {p.name}
                       </option>
                     ))}
-                  </select>
+                  </CustomSelect>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="font-bold text-slate-700 dark:text-slate-300">Pencatat (Tanggung Jawab) *</label>
-                  <select
+                  <CustomSelect
                     value={ruleForm.input_source}
                     onChange={(e) => setRuleForm({ ...ruleForm, input_source: e.target.value })}
                     className="mt-1 w-full rounded-xl border border-slate-300 bg-white p-2.5 dark:border-slate-700 dark:bg-slate-800"
@@ -968,12 +969,12 @@ export default function WorshipAssessmentSettingPage() {
                     <option value="supervisor">Musyrif / Asrama (Pondok)</option>
                     <option value="either">Orang Tua / Siswa</option>
                     <option value="student">Siswa Mandiri</option>
-                  </select>
+                  </CustomSelect>
                 </div>
 
                 <div>
                   <label className="font-bold text-slate-700 dark:text-slate-300">Lokasi Pelaksanaan *</label>
-                  <select
+                  <CustomSelect
                     value={ruleForm.location}
                     onChange={(e) => setRuleForm({ ...ruleForm, location: e.target.value })}
                     className="mt-1 w-full rounded-xl border border-slate-300 bg-white p-2.5 dark:border-slate-700 dark:bg-slate-800"
@@ -981,7 +982,7 @@ export default function WorshipAssessmentSettingPage() {
                     <option value="school">Di Sekolah / Pondok</option>
                     <option value="home">Di Rumah Bersama Keluarga</option>
                     <option value="any">Di Mana Saja (Bebas)</option>
-                  </select>
+                  </CustomSelect>
                 </div>
               </div>
 
@@ -1054,7 +1055,7 @@ export default function WorshipAssessmentSettingPage() {
             <form onSubmit={handleSaveProgram} className="space-y-4 text-xs">
               <div>
                 <label className="font-bold text-slate-700 dark:text-slate-300">Unit Pendidikan *</label>
-                <select
+                <CustomSelect
                   required
                   value={programForm.education_unit_id}
                   onChange={(e) => setProgramForm({ ...programForm, education_unit_id: e.target.value, class_id: '' })}
@@ -1065,13 +1066,13 @@ export default function WorshipAssessmentSettingPage() {
                       {x.name}
                     </option>
                   ))}
-                </select>
+                </CustomSelect>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="font-bold text-slate-700 dark:text-slate-300">Kelas / Rombel (Opsional)</label>
-                  <select
+                  <CustomSelect
                     value={programForm.class_id}
                     onChange={(e) => setProgramForm({ ...programForm, class_id: e.target.value })}
                     className="mt-1 w-full rounded-xl border border-slate-300 bg-white p-2.5 dark:border-slate-700 dark:bg-slate-800"
@@ -1084,12 +1085,12 @@ export default function WorshipAssessmentSettingPage() {
                           {c.nama_kelas}
                         </option>
                       ))}
-                  </select>
+                  </CustomSelect>
                 </div>
 
                 <div>
                   <label className="font-bold text-slate-700 dark:text-slate-300">Jenis Program *</label>
-                  <select
+                  <CustomSelect
                     value={programForm.program_type}
                     onChange={(e) => setProgramForm({ ...programForm, program_type: e.target.value })}
                     className="mt-1 w-full rounded-xl border border-slate-300 bg-white p-2.5 dark:border-slate-700 dark:bg-slate-800"
@@ -1098,7 +1099,7 @@ export default function WorshipAssessmentSettingPage() {
                     <option value="boarding">Pesantren / Boarding</option>
                     <option value="regular">Reguler</option>
                     <option value="tahfizh">Program Khusus Tahfizh</option>
-                  </select>
+                  </CustomSelect>
                 </div>
               </div>
 
@@ -1189,26 +1190,26 @@ export default function WorshipAssessmentSettingPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="font-bold text-slate-700 dark:text-slate-300">Jenis Periode *</label>
-                  <select
+                  <CustomSelect
                     value={periodForm.period_type}
                     onChange={(e) => setPeriodForm({ ...periodForm, period_type: e.target.value })}
                     className="mt-1 w-full rounded-xl border border-slate-300 bg-white p-2.5 dark:border-slate-700 dark:bg-slate-800"
                   >
                     <option value="ramadan">Bulan Suci Ramadan</option>
                     <option value="regular">Semester Reguler</option>
-                  </select>
+                  </CustomSelect>
                 </div>
 
                 <div>
                   <label className="font-bold text-slate-700 dark:text-slate-300">Cakupan Unit *</label>
-                  <select
+                  <CustomSelect
                     value={periodForm.scope}
                     onChange={(e) => setPeriodForm({ ...periodForm, scope: e.target.value })}
                     className="mt-1 w-full rounded-xl border border-slate-300 bg-white p-2.5 dark:border-slate-700 dark:bg-slate-800"
                   >
                     <option value="global">Global (Semua Unit)</option>
                     <option value="unit">Per Unit Tertentu</option>
-                  </select>
+                  </CustomSelect>
                 </div>
               </div>
 
@@ -1236,7 +1237,7 @@ export default function WorshipAssessmentSettingPage() {
 
               <div>
                 <label className="font-bold text-slate-700 dark:text-slate-300">Template Mutaba'ah (Opsional)</label>
-                <select
+                <CustomSelect
                   value={periodForm.template_id}
                   onChange={(e) => setPeriodForm({ ...periodForm, template_id: e.target.value })}
                   className="mt-1 w-full rounded-xl border border-slate-300 bg-white p-2.5 dark:border-slate-700 dark:bg-slate-800"
@@ -1247,7 +1248,7 @@ export default function WorshipAssessmentSettingPage() {
                       {t.name}
                     </option>
                   ))}
-                </select>
+                </CustomSelect>
               </div>
 
               <div className="flex justify-end gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">

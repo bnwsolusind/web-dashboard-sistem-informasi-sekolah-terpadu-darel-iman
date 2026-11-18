@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import {
   BookOpenCheck, CalendarDays, Check, CheckCircle2, ChevronRight, ClipboardCopy,
   Download, Loader2, Printer, RotateCcw, Save, Search, Send, Users, X, XCircle,
@@ -207,7 +208,7 @@ export default function MutabaahDailySpreadsheet() {
         <span className="block text-xs font-semibold text-slate-500 mb-1">Tanggal</span>
         <DatePicker value={date} onChange={(e) => { setAssignmentId(''); setDate(e.target.value) }} />
       </div>
-      <label className="assignment-select"><span>Scope Pembimbing</span><select value={assignmentId} onChange={(e) => setAssignmentId(e.target.value)}><option value="">Pilih assignment</option>{context?.assignments?.map((a) => <option key={a.id} value={a.id}>{a.unit_name} · {a.kelas_name || a.rombel_name || a.mentoring_group || a.type}</option>)}</select></label>
+      <label className="assignment-select"><span>Scope Pembimbing</span><CustomSelect value={assignmentId} onChange={(e) => setAssignmentId(e.target.value)}><option value="">Pilih assignment</option>{context?.assignments?.map((a) => <option key={a.id} value={a.id}>{a.unit_name} · {a.kelas_name || a.rombel_name || a.mentoring_group || a.type}</option>)}</CustomSelect></label>
       <label className="search-student"><span>Cari siswa</span><div><Search size={17} /><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Nama atau NIS..." /></div></label>
       <button className="outline" onClick={copyPrevious} disabled={!students.length}><ClipboardCopy size={17} /> Salin Kemarin</button>
       <button className="outline" onClick={() => Swal.fire({ icon: 'success', title: 'Draft tersimpan', text: 'Seluruh perubahan sel telah disimpan otomatis.', timer: 1200, showConfirmButton: false })} disabled={!students.length}><Save size={17} /> Simpan</button>

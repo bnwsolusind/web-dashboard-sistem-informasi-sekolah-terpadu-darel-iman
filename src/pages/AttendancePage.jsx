@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import Swal from '@/components/ui/compat/swal-heroui'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { attendanceService } from '../services/attendanceService'
@@ -283,7 +284,7 @@ export default function AttendancePage() {
 
           <div className="flex items-center space-x-2">
             <label className="text-xs font-medium text-slate-300">Tipe:</label>
-            <select
+            <CustomSelect
               value={tipeFilter}
               onChange={(e) => setTipeFilter(e.target.value)}
               className="h-9 rounded-lg border border-slate-700 bg-slate-950 px-3 text-xs text-slate-200"
@@ -291,12 +292,12 @@ export default function AttendancePage() {
               <option value="">Semua Tipe</option>
               <option value="Siswa">Siswa</option>
               <option value="Pegawai">Pegawai / Guru</option>
-            </select>
+            </CustomSelect>
           </div>
 
           <div className="flex items-center space-x-2">
             <label className="text-xs font-medium text-slate-300">Status:</label>
-            <select
+            <CustomSelect
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               className="h-9 rounded-lg border border-slate-700 bg-slate-950 px-3 text-xs text-slate-200"
@@ -307,7 +308,7 @@ export default function AttendancePage() {
               <option value="SAKIT">Sakit</option>
               <option value="IZIN">Izin</option>
               <option value="ALPHA">Alpha</option>
-            </select>
+            </CustomSelect>
           </div>
         </CardContent>
       </Card>
@@ -398,14 +399,14 @@ export default function AttendancePage() {
         <form onSubmit={handleCreateCheckin} className="space-y-4 my-2">
           <div>
             <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">Tipe Presensi</label>
-            <select
+            <CustomSelect
               value={modalForm.tipe_presensi}
               onChange={(e) => setModalForm((p) => ({ ...p, tipe_presensi: e.target.value }))}
               className="w-full h-10 rounded-xl border border-slate-200/90 bg-slate-50/50 px-3 text-xs font-semibold text-slate-800 transition-all duration-200 hover:border-slate-300 focus:bg-white focus:outline-none focus:ring-4 focus:border-emerald-600 focus:ring-emerald-500/15 dark:border-slate-700/80 dark:bg-slate-900/50 dark:text-slate-100 dark:focus:border-emerald-400 dark:focus:bg-slate-900"
             >
               <option value="Siswa">Siswa</option>
               <option value="Pegawai">Pegawai / Guru</option>
-            </select>
+            </CustomSelect>
           </div>
 
           <div>
@@ -421,7 +422,7 @@ export default function AttendancePage() {
 
           <div>
             <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">Status Kehadiran</label>
-            <select
+            <CustomSelect
               value={modalForm.status}
               onChange={(e) => setModalForm((p) => ({ ...p, status: e.target.value }))}
               className="w-full h-10 rounded-xl border border-slate-200/90 bg-slate-50/50 px-3 text-xs font-semibold text-slate-800 transition-all duration-200 hover:border-slate-300 focus:bg-white focus:outline-none focus:ring-4 focus:border-emerald-600 focus:ring-emerald-500/15 dark:border-slate-700/80 dark:bg-slate-900/50 dark:text-slate-100 dark:focus:border-emerald-400 dark:focus:bg-slate-900"
@@ -431,12 +432,12 @@ export default function AttendancePage() {
               <option value="SAKIT">Sakit</option>
               <option value="IZIN">Izin</option>
               <option value="ALPHA">Alpha</option>
-            </select>
+            </CustomSelect>
           </div>
 
           <div>
             <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1">Metode Presensi</label>
-            <select
+            <CustomSelect
               value={modalForm.attendance_method}
               onChange={(e) => setModalForm((p) => ({ ...p, attendance_method: e.target.value }))}
               className="w-full h-10 rounded-xl border border-slate-200/90 bg-slate-50/50 px-3 text-xs font-semibold text-slate-800 transition-all duration-200 hover:border-slate-300 focus:bg-white focus:outline-none focus:ring-4 focus:border-emerald-600 focus:ring-emerald-500/15 dark:border-slate-700/80 dark:bg-slate-900/50 dark:text-slate-100 dark:focus:border-emerald-400 dark:focus:bg-slate-900"
@@ -444,7 +445,7 @@ export default function AttendancePage() {
               <option value="MANUAL">Manual Input Operator</option>
               <option value="QRCODE">QR Code Gate</option>
               <option value="GEOLOCATION">GPS Geolocation</option>
-            </select>
+            </CustomSelect>
           </div>
 
           <div>

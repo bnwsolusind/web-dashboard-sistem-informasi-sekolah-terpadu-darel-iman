@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
@@ -2154,7 +2155,7 @@ export default function HomeroomAttendanceDashboardPage() {
                 <label className="text-xs font-bold text-slate-800 dark:text-slate-200 block">
                   Mata Pelajaran <span className="text-rose-500">*</span>
                 </label>
-                <select
+                <CustomSelect
                   value={scheduleForm.subjectId}
                   onChange={(e) => setScheduleForm({ ...scheduleForm, subjectId: e.target.value })}
                   required
@@ -2165,7 +2166,7 @@ export default function HomeroomAttendanceDashboardPage() {
                   {(scheduleOptions.mata_pelajaran || []).map((subject) => (
                     <option key={subject.id} value={subject.id}>{subject.nama_mapel || subject.name}</option>
                   ))}
-                </select>
+                </CustomSelect>
               </div>
 
               {/* Row 2: Guru Pengampu (Full Width for clean spacing) */}
@@ -2184,7 +2185,7 @@ export default function HomeroomAttendanceDashboardPage() {
                     <span>Daftar Guru Pengampu</span>
                   </button>
                 </div>
-                <select
+                <CustomSelect
                   value={scheduleForm.employeeId}
                   onChange={(e) => setScheduleForm({ ...scheduleForm, employeeId: e.target.value })}
                   required
@@ -2197,23 +2198,23 @@ export default function HomeroomAttendanceDashboardPage() {
                       {t.name} ({t.subject})
                     </option>
                   ))}
-                </select>
+                </CustomSelect>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-800 dark:text-slate-200 block">Tahun Ajaran <span className="text-rose-500">*</span></label>
-                  <select value={scheduleForm.academicYearId} onChange={(e) => setScheduleForm({ ...scheduleForm, academicYearId: e.target.value, semesterId: '' })} required disabled={loadingScheduleOptions} className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-900 focus:border-amber-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white">
+                  <CustomSelect value={scheduleForm.academicYearId} onChange={(e) => setScheduleForm({ ...scheduleForm, academicYearId: e.target.value, semesterId: '' })} required disabled={loadingScheduleOptions} className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-900 focus:border-amber-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white">
                     <option value="">-- Pilih Tahun Ajaran --</option>
                     {(scheduleOptions.tahun_ajaran || scheduleOptions.academic_years || []).map((year) => <option key={year.id} value={year.id}>{year.name}</option>)}
-                  </select>
+                  </CustomSelect>
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-800 dark:text-slate-200 block">Semester <span className="text-rose-500">*</span></label>
-                  <select value={scheduleForm.semesterId} onChange={(e) => setScheduleForm({ ...scheduleForm, semesterId: e.target.value })} required disabled={loadingScheduleOptions} className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-900 focus:border-amber-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white">
+                  <CustomSelect value={scheduleForm.semesterId} onChange={(e) => setScheduleForm({ ...scheduleForm, semesterId: e.target.value })} required disabled={loadingScheduleOptions} className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-900 focus:border-amber-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-white">
                     <option value="">-- Pilih Semester --</option>
                     {(scheduleOptions.semester || []).filter((semester) => !scheduleForm.academicYearId || semester.academic_year_id === scheduleForm.academicYearId).map((semester) => <option key={semester.id} value={semester.id}>{semester.name}</option>)}
-                  </select>
+                  </CustomSelect>
                 </div>
               </div>
 
@@ -2221,7 +2222,7 @@ export default function HomeroomAttendanceDashboardPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-800 dark:text-slate-200 block">Hari Pelaksanaan</label>
-                  <select
+                  <CustomSelect
                     value={scheduleForm.dayOfWeek}
                     onChange={(e) => setScheduleForm({ ...scheduleForm, dayOfWeek: e.target.value })}
                     required
@@ -2230,7 +2231,7 @@ export default function HomeroomAttendanceDashboardPage() {
                   >
                     <option value="">-- Pilih Hari --</option>
                     {(scheduleOptions.hari || []).map((day) => <option key={day.id} value={day.id}>{day.name}</option>)}
-                  </select>
+                  </CustomSelect>
                 </div>
 
                 <div className="space-y-1.5">

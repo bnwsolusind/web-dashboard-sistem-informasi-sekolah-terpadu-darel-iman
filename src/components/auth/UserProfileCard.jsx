@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { FiCamera, FiCheck, FiAlertTriangle, FiXCircle } from 'react-icons/fi'
 import PersonAvatar from '../ui/PersonAvatar'
 import { useAuthStore } from '../../stores/authStore'
@@ -377,7 +378,7 @@ export default function UserProfileCard() {
                       </Badge>
                     )}
                   </label>
-                  <select
+                  <CustomSelect
                     value={profile.role}
                     onChange={(e) => setProfile({ ...profile, role: e.target.value })}
                     disabled={!canEditUnitAndRole}
@@ -397,7 +398,7 @@ export default function UserProfileCard() {
                     <option value="Musyrif">Musyrif</option>
                     <option value="Siswa">Siswa</option>
                     <option value="Orang Tua">Orang Tua</option>
-                  </select>
+                  </CustomSelect>
                   {!canEditUnitAndRole && (
                     <p className="text-[11px] text-slate-400 mt-1 font-medium flex items-center gap-1">
                       <span>🔒</span>
@@ -417,7 +418,7 @@ export default function UserProfileCard() {
                     </Badge>
                   )}
                 </label>
-                <select
+                <CustomSelect
                   value={profile.unit}
                   onChange={(e) => setProfile({ ...profile, unit: e.target.value })}
                   disabled={!canEditUnitAndRole}
@@ -431,7 +432,7 @@ export default function UserProfileCard() {
                       {u.nama_unit || u.name}
                     </option>
                   ))}
-                </select>
+                </CustomSelect>
                 {!canEditUnitAndRole && (
                   <p className="text-[11px] text-slate-400 mt-1 font-medium flex items-center gap-1">
                     <span>🔒</span>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { useNavigate } from 'react-router-dom'
 import {
   Users,
@@ -348,7 +349,7 @@ export default function WaliKelasDashboardPage() {
             <AppBadge variant="info" className="font-extrabold">TA {context.tahun_ajaran?.nama || '2026/2027'}</AppBadge>
             <AppBadge variant="purple" className="font-extrabold">Semester {context.semester?.nama || 'Ganjil'}</AppBadge>
             {rombelOptions.length > 1 && (
-              <select
+              <CustomSelect
                 value={selectedClassId || context.rombel?.id || ''}
                 onChange={(e) => handleClassChange(e.target.value)}
                 className="rounded-xl border border-emerald-500/30 bg-white/90 px-3.5 py-2 text-xs font-extrabold text-slate-800 shadow-sm focus:border-emerald-600 focus:outline-none dark:border-emerald-800 dark:bg-slate-900 dark:text-slate-100 cursor-pointer"
@@ -358,7 +359,7 @@ export default function WaliKelasDashboardPage() {
                     {r.nama_kelas}
                   </option>
                 ))}
-              </select>
+              </CustomSelect>
             )}
             <AppButton variant="outline" size="sm" icon={RefreshCw} onClick={() => fetchDashboard(selectedClassId)} className="border-emerald-500/30 text-emerald-800 hover:bg-emerald-500/10 dark:text-emerald-200">
               Segarkan Data

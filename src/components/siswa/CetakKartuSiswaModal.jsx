@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { downloadStudentIdCard, printStudentIdCard } from '../../services/idCardPrintService.jsx'
 import StudentIdCard from '../card-print/StudentIdCard'
 import {
@@ -449,14 +450,14 @@ export default function CetakKartuSiswaModal({ student, onClose, showSettings = 
                     <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                     <input value={studentSearch} onChange={(event) => setStudentSearch(event.target.value)} placeholder="Cari nama siswa, NIS, atau NISN..." className="h-10 w-full rounded-xl border border-slate-200 bg-white pl-9 pr-3 text-[11px] outline-none focus:border-emerald-600 focus:ring-3 focus:ring-emerald-100" />
                   </label>
-                  <select
+                  <CustomSelect
                     value={selectedStudent?.id || ''}
                     onChange={(event) => setSelectedStudent(studentOptions.find((item) => String(item.id) === event.target.value) || null)}
                     className="mt-2 h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-[11px] font-semibold text-slate-700 outline-none focus:border-emerald-600"
                   >
                     <option value="">Pilih siswa...</option>
                     {studentOptions.map((item) => <option key={item.id} value={item.id}>{item.nama} · {item.nis} · {item.nisn}</option>)}
-                  </select>
+                  </CustomSelect>
                   {selectedStudent && (
                     <div className="mt-2 flex items-center gap-3 rounded-xl border border-emerald-100 bg-emerald-50/70 p-3">
                       <PersonAvatar src={data.foto} name={data.nama} size="table" className="border-emerald-200 shrink-0" />
@@ -910,7 +911,7 @@ export default function CetakKartuSiswaModal({ student, onClose, showSettings = 
         </section>
       </div>
       {toast && (
-        <div className={`fixed right-4 top-4 z-[70] w-[min(360px,calc(100vw-2rem))] rounded-2xl border bg-white dark:bg-[#1B2433] p-4 shadow-2xl ${
+        <div className={`fixed right-4 top-4 z-[70] w-[min(360px,calc(100vw-2rem))] rounded-xl border bg-white dark:bg-[#1B2433] p-4 shadow-2xl ${
           toast.tone === 'danger' ? 'border-rose-200 dark:border-rose-800' : toast.tone === 'warning' ? 'border-amber-200 dark:border-amber-800' : 'border-emerald-200 dark:border-emerald-800'
         }`}>
           <div className="flex items-start gap-3">

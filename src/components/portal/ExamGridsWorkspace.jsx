@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   BookOpenCheck,
@@ -470,7 +471,7 @@ export default function ExamGridsWorkspace({
             </div>
 
             {/* Mata Pelajaran Dropdown Filter */}
-            <select
+            <CustomSelect
               aria-label="Filter Mata Pelajaran"
               value={selectedSubject}
               onChange={(e) => setSelectedSubject(e.target.value)}
@@ -482,7 +483,7 @@ export default function ExamGridsWorkspace({
                   {sub}
                 </option>
               ))}
-            </select>
+            </CustomSelect>
 
             {/* Reset Filter Button using HeroButton */}
             <HeroButton

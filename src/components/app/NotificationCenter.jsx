@@ -220,7 +220,7 @@ export default function NotificationCenter({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 8 }}
             transition={{ type: 'spring', stiffness: 420, damping: 28 }}
-            className="fixed inset-x-3 top-16 sm:absolute sm:inset-x-auto sm:right-0 sm:top-full mt-2 sm:mt-3 w-auto sm:w-96 rounded-3xl bg-white dark:bg-[#1B2433] p-5 shadow-2xl border border-emerald-500/20 dark:border-emerald-800/60 z-[70] max-w-[calc(100vw-1.5rem)]"
+            className="fixed inset-x-3 top-16 sm:absolute sm:inset-x-auto sm:right-0 sm:top-full mt-2 sm:mt-3 w-auto sm:w-96 rounded-xl bg-white dark:bg-[#1B2433] p-5 shadow-2xl border border-slate-200 dark:border-slate-800 z-[70] max-w-[calc(100vw-1.5rem)]"
           >
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
               <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight">Notifikasi</h3>

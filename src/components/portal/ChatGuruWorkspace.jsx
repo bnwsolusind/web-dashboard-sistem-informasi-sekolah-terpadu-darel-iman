@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import {
   MessageSquare,
   Search,
@@ -1176,7 +1177,7 @@ export default function ChatGuruWorkspace({
 
             {/* ROW 2: UNIT & STATUS FILTER DROPDOWNS (2 Equal Columns - ZERO SHIFTING) */}
             <div className="grid grid-cols-2 gap-2">
-              <select
+              <CustomSelect
                 value={selectedUnit}
                 onChange={(e) => {
                   const val = e.target.value
@@ -1189,9 +1190,9 @@ export default function ChatGuruWorkspace({
                 {availableUnits.map((u) => (
                   <option key={u.id} value={u.id}>{u.name}</option>
                 ))}
-              </select>
+              </CustomSelect>
 
-              <select
+              <CustomSelect
                 value={selectedStatus}
                 onChange={(e) => {
                   const val = e.target.value
@@ -1204,7 +1205,7 @@ export default function ChatGuruWorkspace({
                 <option value="online">Status: Online</option>
                 <option value="busy">Status: Sibuk</option>
                 <option value="offline">Status: Offline</option>
-              </select>
+              </CustomSelect>
             </div>
 
             {/* ROW 3: CATEGORY TABS PILLS */}

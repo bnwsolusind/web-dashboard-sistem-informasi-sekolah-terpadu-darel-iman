@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   AlertCircle,
@@ -589,7 +590,7 @@ export default function SchoolInformationWorkspace({ studentId, student, embedde
         </div>
         {filtersOpen && (
           <div className="mt-3.5 grid gap-3 border-t border-emerald-100/80 pt-3.5 sm:grid-cols-2 lg:grid-cols-4 dark:border-slate-800">
-            <select
+            <CustomSelect
               aria-label="Kategori"
               value={filters.category}
               onChange={(e) => setFilters({ ...filters, category: e.target.value })}
@@ -599,8 +600,8 @@ export default function SchoolInformationWorkspace({ studentId, student, embedde
               {['Umum', 'Akademik', 'Keuangan', 'Kegiatan', 'Keamanan', 'PPDB'].map((x) => (
                 <option key={x}>{x}</option>
               ))}
-            </select>
-            <select
+            </CustomSelect>
+            <CustomSelect
               aria-label="Prioritas"
               value={filters.priority}
               onChange={(e) => setFilters({ ...filters, priority: e.target.value.toLowerCase() })}
@@ -610,8 +611,8 @@ export default function SchoolInformationWorkspace({ studentId, student, embedde
               {['Mendesak', 'Penting', 'Akademik', 'Umum'].map((x) => (
                 <option key={x}>{x}</option>
               ))}
-            </select>
-            <select
+            </CustomSelect>
+            <CustomSelect
               aria-label="Status baca"
               value={filters.read_status}
               onChange={(e) => setFilters({ ...filters, read_status: e.target.value })}
@@ -620,7 +621,7 @@ export default function SchoolInformationWorkspace({ studentId, student, embedde
               <option value="">Semua status baca</option>
               <option value="unread">Belum dibaca</option>
               <option value="read">Sudah dibaca</option>
-            </select>
+            </CustomSelect>
             <label className="flex h-11 items-center gap-2 rounded-xl border border-slate-200 px-3 text-xs font-medium dark:border-slate-700">
               <input
                 type="checkbox"

@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { useQuery } from '@tanstack/react-query'
 import Swal from '@/components/ui/compat/swal-heroui'
 import { educationUnitService } from '../services/educationUnitService'
@@ -382,7 +383,7 @@ export default function StudentCrudPage() {
             onSearchChange={setSearch}
             filterComponent={
               <>
-                <select
+                <CustomSelect
                   value={unitFilter}
                   onChange={(e) => setUnitFilter(e.target.value)}
                   className="h-10 rounded-lg border border-slate-800 bg-slate-950/60 px-3 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500"
@@ -393,9 +394,9 @@ export default function StudentCrudPage() {
                       {u.name}
                     </option>
                   ))}
-                </select>
+                </CustomSelect>
 
-                <select
+                <CustomSelect
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
                   className="h-10 rounded-lg border border-slate-800 bg-slate-950/60 px-3 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500"
@@ -405,7 +406,7 @@ export default function StudentCrudPage() {
                   <option value="Nonaktif">Nonaktif</option>
                   <option value="Lulus">Lulus</option>
                   <option value="Pindah">Pindah</option>
-                </select>
+                </CustomSelect>
               </>
             }
           />

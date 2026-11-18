@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import PropTypes from 'prop-types'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -139,13 +140,13 @@ export function StudentFormModal({
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
               Jenis Kelamin <span className="text-red-400">*</span>
             </label>
-            <select
+            <CustomSelect
               {...register('jenis_kelamin')}
               className="flex h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
               <option value="L">Laki-laki (Ikhwan)</option>
               <option value="P">Perempuan (Akhwat)</option>
-            </select>
+            </CustomSelect>
           </div>
 
           {/* Unit Pendidikan */}
@@ -153,7 +154,7 @@ export function StudentFormModal({
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
               Unit Pendidikan <span className="text-red-400">*</span>
             </label>
-            <select
+            <CustomSelect
               {...register('unit_pendidikan')}
               className="flex h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
@@ -167,7 +168,7 @@ export function StudentFormModal({
                   </option>
                 )
               })}
-            </select>
+            </CustomSelect>
           </div>
 
           {/* Tingkat */}
@@ -175,7 +176,7 @@ export function StudentFormModal({
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
               Tingkat <span className="text-red-400">*</span>
             </label>
-            <select
+            <CustomSelect
               {...register('tingkat')}
               className="flex h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
@@ -184,7 +185,7 @@ export function StudentFormModal({
                   Kelas {t}
                 </option>
               ))}
-            </select>
+            </CustomSelect>
           </div>
 
           {/* Status */}
@@ -192,7 +193,7 @@ export function StudentFormModal({
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
               Status Siswa <span className="text-red-400">*</span>
             </label>
-            <select
+            <CustomSelect
               {...register('status')}
               className="flex h-10 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             >
@@ -200,7 +201,7 @@ export function StudentFormModal({
               <option value="Nonaktif">Nonaktif</option>
               <option value="Lulus">Lulus</option>
               <option value="Pindah">Pindah</option>
-            </select>
+            </CustomSelect>
           </div>
         </div>
 

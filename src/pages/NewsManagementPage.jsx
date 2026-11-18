@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Megaphone,
@@ -707,7 +708,7 @@ export default function NewsManagementPage() {
           {/* Filters & perPage Selector */}
           <div className="flex flex-wrap items-center gap-2 lg:ml-auto">
             {roleAnalysis.isGlobalAdmin && (
-              <select
+              <CustomSelect
                 value={filters.unit_id}
                 onChange={(e) => setFilters({ ...filters, unit_id: e.target.value, page: 1 })}
                 className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
@@ -718,10 +719,10 @@ export default function NewsManagementPage() {
                     {u.name}
                   </option>
                 ))}
-              </select>
+              </CustomSelect>
             )}
 
-            <select
+            <CustomSelect
               value={filters.kategori}
               onChange={(e) => setFilters({ ...filters, kategori: e.target.value, page: 1 })}
               className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
@@ -732,9 +733,9 @@ export default function NewsManagementPage() {
                   {c.label}
                 </option>
               ))}
-            </select>
+            </CustomSelect>
 
-            <select
+            <CustomSelect
               value={filters.status}
               onChange={(e) => setFilters({ ...filters, status: e.target.value, page: 1 })}
               className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
@@ -742,10 +743,10 @@ export default function NewsManagementPage() {
               <option value="all">Semua Status</option>
               <option value="Dipublikasikan">Dipublikasikan</option>
               <option value="Draf">Draf</option>
-            </select>
+            </CustomSelect>
 
             {/* perPage Selector */}
-            <select
+            <CustomSelect
               value={filters.per_page}
               onChange={(e) => setFilters({ ...filters, per_page: Number(e.target.value), page: 1 })}
               className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
@@ -756,7 +757,7 @@ export default function NewsManagementPage() {
               <option value={25}>25 / hal</option>
               <option value={50}>50 / hal</option>
               <option value={100}>100 / hal</option>
-            </select>
+            </CustomSelect>
 
             {/* Tombol Muat Ulang (Sky Pastel) */}
             <HoverCard>
@@ -963,7 +964,7 @@ export default function NewsManagementPage() {
                 <label className="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">
                   Kategori Berita *
                 </label>
-                <select
+                <CustomSelect
                   value={form.kategori}
                   onChange={(e) => setForm({ ...form, kategori: e.target.value })}
                   className="w-full rounded-xl border border-slate-200 px-3.5 py-2 text-xs font-semibold focus:border-emerald-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
@@ -973,7 +974,7 @@ export default function NewsManagementPage() {
                       {c.label}
                     </option>
                   ))}
-                </select>
+                </CustomSelect>
               </div>
 
               <div>
@@ -981,7 +982,7 @@ export default function NewsManagementPage() {
                   Target Unit Sekolah *
                 </label>
                 {roleAnalysis.isGlobalAdmin ? (
-                  <select
+                  <CustomSelect
                     value={form.target_unit}
                     onChange={(e) => {
                       const u = unitOptions.find((opt) => opt.id === e.target.value)
@@ -998,7 +999,7 @@ export default function NewsManagementPage() {
                         {u.name}
                       </option>
                     ))}
-                  </select>
+                  </CustomSelect>
                 ) : (
                   <input
                     type="text"
@@ -1027,14 +1028,14 @@ export default function NewsManagementPage() {
                 <label className="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1">
                   Status Publikasi *
                 </label>
-                <select
+                <CustomSelect
                   value={form.status}
                   onChange={(e) => setForm({ ...form, status: e.target.value })}
                   className="w-full rounded-xl border border-slate-200 px-3.5 py-2 text-xs font-semibold focus:border-emerald-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 >
                   <option value="Dipublikasikan">Dipublikasikan (Tampil di Portal)</option>
                   <option value="Draf">Draf (Disimpan Internal)</option>
-                </select>
+                </CustomSelect>
               </div>
             </div>
 

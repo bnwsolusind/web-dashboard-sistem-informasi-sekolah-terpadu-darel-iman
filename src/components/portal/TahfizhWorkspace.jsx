@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect, useCallback } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   BookOpenCheck,
@@ -1470,7 +1471,7 @@ export default function TahfizhWorkspace({
                           <span>Pilih Muroja'ah Lain yang Diulang:</span>
                           <span className="text-[10px] text-emerald-600 font-semibold">{murajaahRecords.length} Riwayat</span>
                         </label>
-                        <select
+                        <CustomSelect
                           value={activeSourceRecord?.id || ''}
                           onChange={(e) => handleSwitchTargetHafalan(e.target.value)}
                           disabled={submittingMurajaah}
@@ -1481,7 +1482,7 @@ export default function TahfizhWorkspace({
                               Surah {rec.surahName} (Ayat {rec.aStart}-{rec.aEnd}) · {formatDate(rec.date)}
                             </option>
                           ))}
-                        </select>
+                        </CustomSelect>
                       </div>
                     )}
                   </div>

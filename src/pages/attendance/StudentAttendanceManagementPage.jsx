@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -1046,7 +1047,7 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
               {activeTab === 'sesi-pelajaran' && (
                 <>
                   {/* Dropdown Mata Pelajaran dari Database */}
-                  <select
+                  <CustomSelect
                     value={selectedSubjectId}
                     onChange={(e) => setSelectedSubjectId(e.target.value)}
                     className="w-full sm:w-auto min-w-[140px] rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-800 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 truncate"
@@ -1057,10 +1058,10 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
                         {subj.name || subj.nama_matpel || subj.code}
                       </option>
                     ))}
-                  </select>
+                  </CustomSelect>
 
                   {/* Dropdown Guru Pengajar dari Database */}
-                  <select
+                  <CustomSelect
                     value={selectedTeacherId}
                     onChange={(e) => setSelectedTeacherId(e.target.value)}
                     className="w-full sm:w-auto min-w-[140px] rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-800 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 truncate"
@@ -1071,10 +1072,10 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
                         {t.nama_lengkap || t.full_name || t.name} ({t.nip || 'NIP'})
                       </option>
                     ))}
-                  </select>
+                  </CustomSelect>
 
                   {/* Dropdown Rombel / Kelas */}
-                  <select
+                  <CustomSelect
                     value={selectedClassId}
                     onChange={(e) => setSelectedClassId(e.target.value)}
                     className="w-full sm:w-auto min-w-[140px] rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-800 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
@@ -1085,7 +1086,7 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
                         {c.nama_kelas || c.name}
                       </option>
                     ))}
-                  </select>
+                  </CustomSelect>
 
                   {/* Date Filter */}
                   <DatePicker
@@ -1099,7 +1100,7 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
 
               {/* Filter Tab 3: Status Izin */}
               {activeTab === 'verifikasi' && (
-                <select
+                <CustomSelect
                   value={permStatusFilter}
                   onChange={(e) => setPermStatusFilter(e.target.value)}
                   className="w-full sm:w-auto min-w-[140px] rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-800 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
@@ -1109,12 +1110,12 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
                   <option value="approved">Disetujui (Approved)</option>
                   <option value="rejected">Ditolak (Rejected)</option>
                   <option value="all">Semua Status</option>
-                </select>
+                </CustomSelect>
               )}
 
               {/* Filter Tab 4: Status Koreksi */}
               {activeTab === 'koreksi' && (
-                <select
+                <CustomSelect
                   value={corrStatusFilter}
                   onChange={(e) => setCorrStatusFilter(e.target.value)}
                   className="w-full sm:w-auto min-w-[140px] rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-800 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
@@ -1123,12 +1124,12 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
                   <option value="approved">Disetujui (Approved)</option>
                   <option value="rejected">Ditolak (Rejected)</option>
                   <option value="all">Semua Status</option>
-                </select>
+                </CustomSelect>
               )}
 
               {/* Filter Tab 5: Status Tindak Lanjut */}
               {activeTab === 'tindak-lanjut' && (
-                <select
+                <CustomSelect
                   value={followUpStatusFilter}
                   onChange={(e) => setFollowUpStatusFilter(e.target.value)}
                   className="w-full sm:w-auto min-w-[140px] rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-800 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
@@ -1138,11 +1139,11 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
                   <option value="in_progress">Dalam Proses</option>
                   <option value="resolved">Selesai (Resolved)</option>
                   <option value="closed">Closed (Ditutup)</option>
-                </select>
+                </CustomSelect>
               )}
 
                 <span className="text-xs font-medium text-slate-500">Tampilkan:</span>
-                <select
+                <CustomSelect
                   value={perPage}
                   onChange={(e) => {
                     setPerPage(Number(e.target.value))
@@ -1156,7 +1157,7 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
                   <option value={25}>25</option>
                   <option value={50}>50</option>
                   <option value={100}>100</option>
-                </select>
+                </CustomSelect>
               </div>
             </div>
           </div>
@@ -1790,7 +1791,7 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Pilih Siswa <span className="text-rose-500">*</span>
                 </label>
-                <select
+                <CustomSelect
                   required
                   value={followUpForm.student_id}
                   onChange={(e) => setFollowUpForm({ ...followUpForm, student_id: e.target.value })}
@@ -1802,14 +1803,14 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
                       {s.nama_lengkap || s.full_name} ({s.nisn || s.nis || 'NISN'}) - {s.kelas?.nama_kelas || 'Rombel'}
                     </option>
                   ))}
-                </select>
+                </CustomSelect>
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Bentuk Tindakan / Penanganan <span className="text-rose-500">*</span>
                 </label>
-                <select
+                <CustomSelect
                   value={followUpForm.action_type}
                   onChange={(e) => setFollowUpForm({ ...followUpForm, action_type: e.target.value })}
                   className="w-full rounded-xl border border-slate-300 bg-white p-2.5 text-xs text-slate-900 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-900 dark:text-white"
@@ -1819,7 +1820,7 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
                   <option value="surat_peringatan">Surat Peringatan (SP)</option>
                   <option value="home_visit">Kunjungan Rumah (Home Visit)</option>
                   <option value="pembinaan_khusus">Pembinaan Khusus Rombel</option>
-                </select>
+                </CustomSelect>
               </div>
 
               <div>

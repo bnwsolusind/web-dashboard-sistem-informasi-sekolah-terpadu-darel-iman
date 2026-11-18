@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   BookOpen,
@@ -854,7 +855,7 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
             Filter:
           </span>
 
-          <select
+          <CustomSelect
             value={selectedUnit}
             onChange={(e) => {
               setSelectedUnit(e.target.value)
@@ -868,9 +869,9 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
                 {item.name || item.code}
               </option>
             ))}
-          </select>
+          </CustomSelect>
 
-          <select
+          <CustomSelect
             value={selectedTahun}
             onChange={(e) => {
               setSelectedTahun(e.target.value)
@@ -884,9 +885,9 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
                 {item.tahun || item.name}
               </option>
             ))}
-          </select>
+          </CustomSelect>
 
-          <select
+          <CustomSelect
             value={selectedKurikulum}
             onChange={(e) => {
               setSelectedKurikulum(e.target.value)
@@ -901,9 +902,9 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
                 {item.nama_kurikulum || item.kode_kurikulum}
               </option>
             ))}
-          </select>
+          </CustomSelect>
 
-          <select
+          <CustomSelect
             value={selectedSubject}
             onChange={(e) => {
               setSelectedSubject(e.target.value)
@@ -927,9 +928,9 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
                   {item.nama_mapel || item.name}
                 </option>
               ))}
-          </select>
+          </CustomSelect>
 
-          <select
+          <CustomSelect
             value={selectedStatus}
             onChange={(e) => {
               setSelectedStatus(e.target.value)
@@ -940,7 +941,7 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
             <option value="">-- Semua Status --</option>
             <option value="aktif">Aktif</option>
             <option value="tidak_aktif">Nonaktif</option>
-          </select>
+          </CustomSelect>
 
           <button
             type="button"
@@ -1122,7 +1123,7 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                     Unit Pendidikan
                   </label>
-                  <select
+                  <CustomSelect
                     value={formData.unit_pendidikan_id}
                     onChange={(e) => handleUnitChangeInForm(e.target.value)}
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#0E5C44] dark:text-slate-100"
@@ -1133,14 +1134,14 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
                         {u.name || u.code}
                       </option>
                     ))}
-                  </select>
+                  </CustomSelect>
                 </div>
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                     Tahun Ajaran
                   </label>
-                  <select
+                  <CustomSelect
                     value={formData.tahun_ajaran_id}
                     onChange={(e) => setFormData({ ...formData, tahun_ajaran_id: e.target.value })}
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#0E5C44] dark:text-slate-100"
@@ -1151,7 +1152,7 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
                         {t.tahun || t.name}
                       </option>
                     ))}
-                  </select>
+                  </CustomSelect>
                 </div>
               </div>
 
@@ -1160,7 +1161,7 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                     Kurikulum <span className="text-rose-500">*</span>
                   </label>
-                  <select
+                  <CustomSelect
                     value={formData.kurikulum_id}
                     onChange={(e) => handleKurikulumChangeInForm(e.target.value)}
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#0E5C44] dark:text-slate-100"
@@ -1172,14 +1173,14 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
                         {k.nama_kurikulum || k.kode_kurikulum} {k.jenjang ? `(${k.jenjang})` : ''}
                       </option>
                     ))}
-                  </select>
+                  </CustomSelect>
                 </div>
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                     Mata Pelajaran <span className="text-rose-500">*</span>
                   </label>
-                  <select
+                  <CustomSelect
                     value={formData.mata_pelajaran_id}
                     onChange={(e) => setFormData({ ...formData, mata_pelajaran_id: e.target.value })}
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#0E5C44] dark:text-slate-100"
@@ -1191,7 +1192,7 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
                         {s.nama_mapel || s.name} {s.kode_mapel || s.code ? `[${s.kode_mapel || s.code}]` : ''}
                       </option>
                     ))}
-                  </select>
+                  </CustomSelect>
                 </div>
               </div>
 
@@ -1214,7 +1215,7 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                     Fase <span className="text-slate-400 font-normal">(Kurikulum)</span>
                   </label>
-                  <select
+                  <CustomSelect
                     value={formData.fase}
                     onChange={(e) => {
                       const newFase = e.target.value
@@ -1235,7 +1236,7 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
                         {f.label}
                       </option>
                     ))}
-                  </select>
+                  </CustomSelect>
                 </div>
 
                 <div>
@@ -1297,14 +1298,14 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                     Status Aktivasi
                   </label>
-                  <select
+                  <CustomSelect
                     value={formData.status ? 'true' : 'false'}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value === 'true' })}
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#0E5C44] dark:text-slate-100"
                   >
                     <option value="true">Aktif</option>
                     <option value="false">Nonaktif</option>
-                  </select>
+                  </CustomSelect>
                 </div>
               </div>
 

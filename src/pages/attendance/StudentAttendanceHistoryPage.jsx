@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { motion } from 'framer-motion'
 import {
   BookOpen,
@@ -288,7 +289,7 @@ export default function StudentAttendanceHistoryPage() {
               />
             </div>
 
-            <select
+            <CustomSelect
               aria-label="Filter status kehadiran"
               value={filters.status}
               onChange={(e) => setFilters({ ...filters, status: e.target.value })}
@@ -300,7 +301,7 @@ export default function StudentAttendanceHistoryPage() {
                   {s[0].toUpperCase() + s.slice(1)}
                 </option>
               ))}
-            </select>
+            </CustomSelect>
 
             <Button
               variant="ghost"

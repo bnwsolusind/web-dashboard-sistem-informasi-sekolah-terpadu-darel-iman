@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Moon,
@@ -1064,7 +1065,7 @@ export default function WorshipAttendancePage() {
                       />
                     </div>
 
-                    <select
+                    <CustomSelect
                       value={filterStatus}
                       onChange={(e) => setFilterStatus(e.target.value)}
                       className="h-9 w-full sm:w-auto min-w-[130px] rounded-xl border border-slate-200 bg-white px-2.5 text-xs font-medium text-slate-700 focus:border-emerald-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
@@ -1075,9 +1076,9 @@ export default function WorshipAttendancePage() {
                       <option value="terlambat">Terlambat</option>
                       <option value="tidak_hadir">Tidak Hadir</option>
                       <option value="haid">Haid / Uzur</option>
-                    </select>
+                    </CustomSelect>
 
-                    <select
+                    <CustomSelect
                       value={filterKamar}
                       onChange={(e) => setFilterKamar(e.target.value)}
                       className="h-9 w-full sm:w-auto min-w-[130px] rounded-xl border border-slate-200 bg-white px-2.5 text-xs font-medium text-slate-700 focus:border-emerald-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
@@ -1086,9 +1087,9 @@ export default function WorshipAttendancePage() {
                       <option value="Kamar 01">Kamar 01</option>
                       <option value="Kamar 02">Kamar 02</option>
                       <option value="Kamar 03">Kamar 03</option>
-                    </select>
+                    </CustomSelect>
 
-                    <select
+                    <CustomSelect
                       value={filterKelompok}
                       onChange={(e) => setFilterKelompok(e.target.value)}
                       className="h-9 w-full sm:w-auto min-w-[130px] rounded-xl border border-slate-200 bg-white px-2.5 text-xs font-medium text-slate-700 focus:border-emerald-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
@@ -1097,7 +1098,7 @@ export default function WorshipAttendancePage() {
                       <option value="Kelompok A">Kelompok A</option>
                       <option value="Kelompok B">Kelompok B</option>
                       <option value="Kelompok C">Kelompok C</option>
-                    </select>
+                    </CustomSelect>
 
                     {(filterStatus || filterKamar || filterKelompok || searchSantri) && (
                       <button
@@ -1246,7 +1247,7 @@ export default function WorshipAttendancePage() {
                         <ChevronRight className="h-4 w-4" />
                       </button>
                     </div>
-                    <select
+                    <CustomSelect
                       value={perPage}
                       onChange={(e) => {
                         const val = parseInt(e.target.value) || 10
@@ -1259,7 +1260,7 @@ export default function WorshipAttendancePage() {
                       <option value={10}>10 / halaman</option>
                       <option value={25}>25 / halaman</option>
                       <option value={50}>50 / halaman</option>
-                    </select>
+                    </CustomSelect>
                   </div>
 
                 </div>
@@ -1438,7 +1439,7 @@ export default function WorshipAttendancePage() {
             <form onSubmit={handleVerifySubmit} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold uppercase text-slate-500 mb-1">Status Kehadiran</label>
-                <select
+                <CustomSelect
                   value={verifyStatus}
                   onChange={(e) => setVerifyStatus(e.target.value)}
                   className="w-full rounded-xl border border-slate-200 bg-white p-2.5 text-xs font-semibold text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
@@ -1448,7 +1449,7 @@ export default function WorshipAttendancePage() {
                   <option value="terlambat">Terlambat</option>
                   <option value="tidak_hadir">Tidak Hadir</option>
                   <option value="haid">Haid / Uzur Syar'i</option>
-                </select>
+                </CustomSelect>
               </div>
               <div>
                 <label className="block text-xs font-bold uppercase text-slate-500 mb-1">Catatan Musyrif</label>
@@ -1633,7 +1634,7 @@ export default function WorshipAttendancePage() {
 
               <div>
                 <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Status Sesi</label>
-                <select
+                <CustomSelect
                   value={editSessionForm.status}
                   onChange={(e) => setEditSessionForm({ ...editSessionForm, status: e.target.value })}
                   className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 font-semibold focus:border-emerald-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800"
@@ -1641,7 +1642,7 @@ export default function WorshipAttendancePage() {
                   <option value="opened">Dibuka (Opened)</option>
                   <option value="upcoming">Akan Datang (Upcoming)</option>
                   <option value="closed">Ditutup (Closed)</option>
-                </select>
+                </CustomSelect>
               </div>
             </div>
 

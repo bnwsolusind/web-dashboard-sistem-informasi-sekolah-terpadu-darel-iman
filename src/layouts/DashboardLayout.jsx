@@ -1668,7 +1668,7 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                       animate={{ opacity: 1, scale: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95, y: 8 }}
                       transition={{ type: 'spring', stiffness: 420, damping: 28 }}
-                      className="absolute right-0 top-full mt-3 w-72 sm:w-80 rounded-3xl bg-white dark:bg-[#1B2433] p-5 shadow-2xl border border-slate-100 dark:border-slate-800 z-50"
+                      className="absolute right-0 top-full mt-3 w-72 sm:w-80 rounded-xl bg-white dark:bg-[#1B2433] p-5 shadow-2xl border border-slate-200 dark:border-slate-800 z-50"
                     >
                       {/* Profile Header (Matching Image 3) */}
                       <div className="flex items-center gap-3.5">

@@ -1,4 +1,5 @@
 import { useForm } from 'react-hook-form'
+import CustomSelect from '@/components/ui/CustomSelect'
 import {
   BookOpen,
   Calendar,
@@ -233,7 +234,7 @@ export default function AcademicPage() {
                 <label className="mb-1.5 block text-xs font-bold text-slate-700 dark:text-slate-200">
                   Status Validasi <span className="text-rose-500">*</span>
                 </label>
-                <select
+                <CustomSelect
                   {...formLaporan.register('status_validasi', { required: true })}
                   className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-800 transition focus:border-[#0E5C44] focus:outline-none focus:ring-2 focus:ring-[#0E5C44]/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
                 >
@@ -241,7 +242,7 @@ export default function AcademicPage() {
                   <option value="diajukan">Diajukan</option>
                   <option value="tervalidasi">Tervalidasi</option>
                   <option value="revisi">Revisi</option>
-                </select>
+                </CustomSelect>
               </div>
 
               {/* Submit Button */}

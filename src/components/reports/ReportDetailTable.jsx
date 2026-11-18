@@ -1,4 +1,5 @@
 import React from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { Eye, Search, Building2, Briefcase, Calendar, UserCheck, ArrowRightLeft as ArrowBothDirectionHorizontal2 } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { TableRoot, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
@@ -96,7 +97,7 @@ export function ReportDetailTable({
         <div className="flex flex-wrap items-center gap-2.5">
           {/* Jenis Filter */}
           {onFilterChange && filters?.jenis_sdm !== undefined && (
-            <select
+            <CustomSelect
               value={filters?.jenis_sdm || 'all'}
               onChange={(e) => onFilterChange({ jenis_sdm: e.target.value })}
               className="rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-1.5 text-xs font-medium text-slate-700 outline-none transition hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200 cursor-pointer"
@@ -104,12 +105,12 @@ export function ReportDetailTable({
               <option value="all">Semua Jenis SDM</option>
               <option value="guru">Guru / Pendidik</option>
               <option value="non-guru">Pegawai Non-Guru</option>
-            </select>
+            </CustomSelect>
           )}
 
           {/* Status Kepegawaian Filter */}
           {onFilterChange && filters?.status_pegawai !== undefined && (
-            <select
+            <CustomSelect
               value={filters?.status_pegawai || 'all'}
               onChange={(e) => onFilterChange({ status_pegawai: e.target.value })}
               className="rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-1.5 text-xs font-medium text-slate-700 outline-none transition hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200 cursor-pointer"
@@ -118,13 +119,13 @@ export function ReportDetailTable({
               <option value="Tetap">Tetap</option>
               <option value="Kontrak">Kontrak</option>
               <option value="Honorer">Honorer</option>
-            </select>
+            </CustomSelect>
           )}
 
           {/* PerPage Select Options (5, 10, 15, 25, 50, 100) */}
           <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
             <span className="hidden sm:inline font-medium">Tampilkan:</span>
-            <select
+            <CustomSelect
               value={perPage || 15}
               onChange={(e) => onPerPageChange && onPerPageChange(Number(e.target.value))}
               className="rounded-xl border border-slate-200 bg-slate-50/60 px-2.5 py-1.5 text-xs font-semibold text-slate-700 outline-none transition hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200 cursor-pointer"
@@ -135,7 +136,7 @@ export function ReportDetailTable({
               <option value={25}>25 baris</option>
               <option value={50}>50 baris</option>
               <option value={100}>100 baris</option>
-            </select>
+            </CustomSelect>
           </div>
         </div>
       </div>

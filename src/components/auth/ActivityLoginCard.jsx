@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { FiDownload, FiCheckCircle, FiXCircle, FiCalendar, FiRefreshCw } from 'react-icons/fi'
 import { userSecurityService } from '../../services/userSecurityService'
 import { useToast } from '../app/ToastProvider'
@@ -97,7 +98,7 @@ export default function ActivityLoginCard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50/80 dark:bg-slate-800/40 p-3.5 rounded-xl border border-slate-200/80 dark:border-slate-800">
         {/* Status Filter */}
         <div className="relative">
-          <select
+          <CustomSelect
             value={statusFilter}
             onChange={(e) => {
               setStatusFilter(e.target.value)
@@ -108,12 +109,12 @@ export default function ActivityLoginCard() {
             <option value="semua">Semua Status (Berhasil & Gagal)</option>
             <option value="berhasil">Status: Berhasil Login</option>
             <option value="gagal">Status: Gagal Login</option>
-          </select>
+          </CustomSelect>
         </div>
 
         {/* Device Filter */}
         <div className="relative">
-          <select
+          <CustomSelect
             value={deviceFilter}
             onChange={(e) => {
               setDeviceFilter(e.target.value)
@@ -125,7 +126,7 @@ export default function ActivityLoginCard() {
             <option value="windows">Komputer Windows</option>
             <option value="mac">Apple / Mac</option>
             <option value="mobile">Smartphone / Mobile</option>
-          </select>
+          </CustomSelect>
         </div>
       </div>
 

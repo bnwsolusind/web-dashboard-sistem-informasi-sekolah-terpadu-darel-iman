@@ -40,7 +40,7 @@ export function ReportExportModal({ isOpen, onClose, onConfirmExport, defaultFor
   return (
     <OverlayWrapper isOpen={isOpen} onOpenChange={(open) => !open && onClose()} className="z-[70]">
       <Backdrop className="z-[70] bg-slate-950/70 backdrop-blur-md" isOpen={isOpen} onOpenChange={(open) => !open && onClose()} />
-      <Dialog className="z-[70] max-w-md w-full p-0 rounded-3xl overflow-hidden bg-white dark:bg-[#1B2433] border border-slate-200 dark:border-slate-800 shadow-2xl">
+      <Dialog className="z-[70] max-w-md w-full p-0 rounded-xl overflow-hidden bg-white dark:bg-[#1B2433] border border-slate-200 dark:border-slate-800 shadow-2xl">
         <div className="h-1.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
         <div className="p-6">
           <DialogHeader className="pb-4 border-b border-slate-100 dark:border-slate-800">

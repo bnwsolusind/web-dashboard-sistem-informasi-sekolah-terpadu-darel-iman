@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Award,
@@ -471,7 +472,7 @@ export default function GradesWorkspace({
           </label>
 
           {/* Mata Pelajaran Dropdown */}
-          <select
+          <CustomSelect
             aria-label="Pilih Mata Pelajaran"
             value={selectedSubject}
             onChange={(e) => setSelectedSubject(e.target.value)}
@@ -483,7 +484,7 @@ export default function GradesWorkspace({
                 {sub}
               </option>
             ))}
-          </select>
+          </CustomSelect>
 
           {/* Reset Button */}
           <Button

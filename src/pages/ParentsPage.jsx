@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   Users,
@@ -601,7 +602,7 @@ export default function ParentsPage() {
 
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-slate-700">Hubungan Keluarga *</label>
-                <select
+                <CustomSelect
                   value={formData.hubungan}
                   onChange={(e) => setFormData({ ...formData, hubungan: e.target.value })}
                   className="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-emerald-500 focus:outline-none"
@@ -609,7 +610,7 @@ export default function ParentsPage() {
                   <option value="Ayah">Ayah</option>
                   <option value="Ibu">Ibu</option>
                   <option value="Wali">Wali</option>
-                </select>
+                </CustomSelect>
               </div>
 
               <div className="space-y-1.5">

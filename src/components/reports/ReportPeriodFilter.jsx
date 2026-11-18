@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { Calendar, RotateCcw, Check, RefreshCw, Eye, Printer, FileText, FileSpreadsheet } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { Alert, AlertIndicator, AlertContent, AlertDescription } from '@/components/ui/alert'
@@ -151,7 +152,7 @@ export function ReportPeriodFilter({
             <label className="mb-1 block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
               Pilihan Periode
             </label>
-            <select
+            <CustomSelect
               value={selectedPeriod}
               onChange={(e) => setSelectedPeriod(e.target.value)}
               className="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2 text-xs font-semibold text-slate-700 outline-none transition focus:border-emerald-600 focus:bg-white dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 cursor-pointer"
@@ -164,7 +165,7 @@ export function ReportPeriodFilter({
               <option value="academic_year">Tahun Ajaran Aktif</option>
               <option value="year">Tahun Ini (2026)</option>
               <option value="custom">Periode Kustom...</option>
-            </select>
+            </CustomSelect>
           </div>
 
           {selectedPeriod === 'custom' && (

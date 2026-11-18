@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { DatePicker } from '@/components/ui/date-picker'
 import { motion } from 'framer-motion'
 import {
@@ -1048,7 +1049,7 @@ export default function LaporanAlumniPage() {
                     <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
                       Unit Pendidikan
                     </label>
-                    <select
+                    <CustomSelect
                       value={unit}
                       onChange={(e) => {
                         setUnit(e.target.value)
@@ -1062,7 +1063,7 @@ export default function LaporanAlumniPage() {
                           {item}
                         </option>
                       ))}
-                    </select>
+                    </CustomSelect>
                   </div>
 
                   {/* Tahun Lulus / Mutasi */}
@@ -1070,7 +1071,7 @@ export default function LaporanAlumniPage() {
                     <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
                       Tahun Lulus / Mutasi
                     </label>
-                    <select
+                    <CustomSelect
                       value={tahunLulus}
                       onChange={(e) => {
                         setTahunLulus(e.target.value)
@@ -1084,7 +1085,7 @@ export default function LaporanAlumniPage() {
                           Tahun {y}
                         </option>
                       ))}
-                    </select>
+                    </CustomSelect>
                   </div>
 
                   {/* Jenis Status / Mutasi */}
@@ -1092,7 +1093,7 @@ export default function LaporanAlumniPage() {
                     <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
                       Jenis Status / Mutasi
                     </label>
-                    <select
+                    <CustomSelect
                       value={mutasiType}
                       onChange={(e) => {
                         setMutasiType(e.target.value)
@@ -1104,7 +1105,7 @@ export default function LaporanAlumniPage() {
                       <option value="alumni">Lulusan / Alumni</option>
                       <option value="masuk">Pemindahan Masuk (Mutasi Masuk)</option>
                       <option value="keluar">Pemindahan Keluar (Mutasi Keluar)</option>
-                    </select>
+                    </CustomSelect>
                   </div>
 
                   {/* Tujuan Kelulusan */}
@@ -1112,7 +1113,7 @@ export default function LaporanAlumniPage() {
                     <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
                       Tujuan Kelulusan
                     </label>
-                    <select
+                    <CustomSelect
                       value={tujuanKelulusan}
                       onChange={(e) => {
                         setTujuanKelulusan(e.target.value)
@@ -1126,7 +1127,7 @@ export default function LaporanAlumniPage() {
                       <option value="kerja">Bekerja / Karir / Wirausaha</option>
                       <option value="pesantren">Pondok Pesantren</option>
                       <option value="lainnya">Belum Diisi / Lainnya</option>
-                    </select>
+                    </CustomSelect>
                   </div>
 
                   {/* Periode Waktu */}
@@ -1134,7 +1135,7 @@ export default function LaporanAlumniPage() {
                     <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
                       Periode Waktu
                     </label>
-                    <select
+                    <CustomSelect
                       value={period}
                       onChange={(e) => {
                         const nextPeriod = e.target.value
@@ -1158,7 +1159,7 @@ export default function LaporanAlumniPage() {
                       <option value="semester">6 Bulan Terakhir (Per Semester)</option>
                       <option value="tahun">Tahun Ini (Per Tahun)</option>
                       <option value="custom">Rentang Tanggal Kustom</option>
-                    </select>
+                    </CustomSelect>
                   </div>
 
                   {/* Date From & Date To */}
@@ -1599,7 +1600,7 @@ export default function LaporanAlumniPage() {
                 <div className="relative flex items-center gap-1.5">
                   <span className="text-xs font-medium text-slate-500">Per Halaman:</span>
                   <div className="relative">
-                    <select
+                    <CustomSelect
                       value={perHalaman}
                       onChange={(e) => {
                         setPerHalaman(Number(e.target.value))
@@ -1613,7 +1614,7 @@ export default function LaporanAlumniPage() {
                       <option value={25}>25</option>
                       <option value={50}>50</option>
                       <option value={100}>100</option>
-                    </select>
+                    </CustomSelect>
                     <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
                   </div>
                 </div>

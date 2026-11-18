@@ -16,6 +16,7 @@ import { mutabaahService } from '../services/mutabaahService'
 import MutabaahSubNav from '../components/mutabaah/MutabaahSubNav'
 import PageContainer from '../components/app/PageContainer'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
+import ActionDropdown from '../components/app/ActionDropdown'
 import {
   SquircleActionButton,
   PrintOptionModal,
@@ -178,7 +179,7 @@ function HeroUiModalSelect({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: -4 }}
             transition={{ duration: 0.15, ease: 'easeOut' }}
-            className="absolute left-0 right-0 top-full mt-1.5 z-[95] overflow-hidden rounded-2xl border border-slate-200/90 bg-white/95 backdrop-blur-md shadow-2xl dark:border-slate-700/80 dark:bg-[#182232]/95"
+            className="absolute left-0 right-0 top-full mt-1.5 z-[95] overflow-hidden rounded-xl border border-slate-200/90 bg-white/95 backdrop-blur-md shadow-2xl dark:border-slate-700/80 dark:bg-[#182232]/95"
           >
             {/* Search Input jika searchable */}
             {searchable && options.length > 5 && (
@@ -931,28 +932,30 @@ function RowActions({ row, resource, onDrawer, onRefresh }) {
   const restore = async () => { try { await mutabaahService.enterpriseRestore(resource, row.id); onRefresh(); toast('success', 'Data berhasil dipulihkan.') } catch (error) { showError(error) } }
   return (
     <div className="flex items-center justify-center gap-1.5">
-      <button title="Detail" onClick={() => onDrawer({ mode: 'detail', row })} className="h-8 w-8 rounded-lg inline-flex items-center justify-center border border-slate-200 bg-white text-xs font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 cursor-pointer">
-        <Eye className="size-4" />
-      </button>
-      {resource === 'templates' && !row.trashed && (
-        <button title="Susun Agenda" onClick={() => onDrawer({ mode: 'items', row })} className="h-8 w-8 rounded-lg inline-flex items-center justify-center border border-indigo-200 bg-indigo-50 text-xs font-medium text-indigo-700 hover:bg-indigo-100 dark:border-indigo-900/50 dark:bg-indigo-950/40 dark:text-indigo-300 cursor-pointer">
-          <GripVertical className="size-4" />
-        </button>
-      )}
-      {row.trashed ? (
-        <button title="Pulihkan" onClick={restore} className="h-8 w-8 rounded-lg inline-flex items-center justify-center border border-emerald-200 bg-emerald-50 text-xs font-medium text-emerald-700 hover:bg-emerald-100 dark:border-emerald-900/50 dark:bg-emerald-950/40 dark:text-emerald-300 cursor-pointer">
-          <ArchiveRestore className="size-4" />
-        </button>
-      ) : (
-        <>
-          <button title="Edit" onClick={() => onDrawer({ mode: 'edit', row })} className="h-8 w-8 rounded-lg inline-flex items-center justify-center border border-amber-200 bg-amber-50 text-xs font-medium text-amber-700 hover:bg-amber-100 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-300 cursor-pointer">
-            <Pencil className="size-4" />
-          </button>
-          <button title="Hapus" onClick={remove} className="h-8 w-8 rounded-lg inline-flex items-center justify-center border border-rose-200 bg-rose-50 text-xs font-medium text-rose-700 hover:bg-rose-100 dark:border-rose-900/50 dark:bg-rose-950/40 dark:text-rose-300 cursor-pointer">
-            <Trash2 className="size-4" />
-          </button>
-        </>
-      )}
+      <ActionDropdown
+        onView={() => onDrawer({ mode: 'detail', row })}
+        onEdit={!row.trashed ? () => onDrawer({ mode: 'edit', row }) : undefined}
+        onDelete={!row.trashed ? remove : undefined}
+        extraItems={
+          resource === 'templates' && !row.trashed
+            ? [
+                {
+                  label: 'Susun Agenda',
+                  icon: <GripVertical className="size-4 text-indigo-500" />,
+                  onClick: () => onDrawer({ mode: 'items', row }),
+                },
+              ]
+            : row.trashed
+            ? [
+                {
+                  label: 'Pulihkan Data',
+                  icon: <ArchiveRestore className="size-4 text-emerald-500" />,
+                  onClick: restore,
+                },
+              ]
+            : []
+        }
+      />
     </div>
   )
 }

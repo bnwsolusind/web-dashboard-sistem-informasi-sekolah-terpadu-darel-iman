@@ -86,4 +86,7 @@ SelectTrigger.propTypes = { className: PropTypes.string, children: PropTypes.nod
 SelectContent.propTypes = { className: PropTypes.string, children: PropTypes.node }
 SelectItem.propTypes = { className: PropTypes.string, children: PropTypes.node }
 
+export { default as CustomSelect } from './CustomSelect'
+export { default as AppSelect } from './CustomSelect'
+
 export default Select

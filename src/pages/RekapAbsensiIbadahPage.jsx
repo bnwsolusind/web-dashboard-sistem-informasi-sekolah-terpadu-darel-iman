@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { DatePicker } from '@/components/ui/date-picker'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -663,7 +664,7 @@ export default function RekapAbsensiIbadahPage() {
                   <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
                     Nama Ibadah / Sesi
                   </label>
-                  <select
+                  <CustomSelect
                     value={selectedIbadah}
                     onChange={(e) => {
                       setSelectedIbadah(e.target.value)
@@ -677,14 +678,14 @@ export default function RekapAbsensiIbadahPage() {
                         {i}
                       </option>
                     ))}
-                  </select>
+                  </CustomSelect>
                 </div>
 
                 <div>
                   <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
                     Status Kehadiran
                   </label>
-                  <select
+                  <CustomSelect
                     value={status}
                     onChange={(e) => {
                       setStatus(e.target.value)
@@ -697,14 +698,14 @@ export default function RekapAbsensiIbadahPage() {
                     <option value="hadir_sendiri">Hadir Sendiri</option>
                     <option value="izin">Izin / Sakit</option>
                     <option value="tidak_hadir">Tidak Hadir</option>
-                  </select>
+                  </CustomSelect>
                 </div>
 
                 <div>
                   <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
                     Periode Waktu
                   </label>
-                  <select
+                  <CustomSelect
                     value={period}
                     onChange={(e) => {
                       const nextP = e.target.value
@@ -728,7 +729,7 @@ export default function RekapAbsensiIbadahPage() {
                     <option value="semester">6 Bulan Terakhir (Per Semester)</option>
                     <option value="tahun">Tahun Ini (Per Tahun)</option>
                     <option value="custom">Rentang Tanggal Kustom</option>
-                  </select>
+                  </CustomSelect>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 pt-1">
@@ -895,7 +896,7 @@ export default function RekapAbsensiIbadahPage() {
             <div className="flex items-center gap-1.5 self-end sm:self-auto">
               <span className="text-xs font-medium text-slate-500">Per Halaman:</span>
               <div className="relative">
-                <select
+                <CustomSelect
                   value={perHalaman}
                   onChange={(e) => {
                     setPerHalaman(Number(e.target.value))
@@ -909,7 +910,7 @@ export default function RekapAbsensiIbadahPage() {
                   <option value={25}>25</option>
                   <option value={50}>50</option>
                   <option value={100}>100</option>
-                </select>
+                </CustomSelect>
                 <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 size-3.5 -translate-y-1/2 text-slate-400" />
               </div>
             </div>

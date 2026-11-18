@@ -263,7 +263,7 @@ function HeroUiFilterSelect({
             transition={{ duration: 0.15, ease: 'easeOut' }}
             className={`absolute left-0 ${
               openUpwards ? 'bottom-full mb-1.5' : 'top-full mt-1.5'
-            } z-[100] ${popoverWidth} min-w-[200px] overflow-hidden rounded-2xl border-2 border-emerald-500/30 bg-white/95 dark:bg-[#182232]/95 backdrop-blur-md p-1.5 shadow-2xl shadow-emerald-950/20 dark:border-emerald-700/60 dark:shadow-black/60`}
+            } z-[100] ${popoverWidth} min-w-[200px] overflow-hidden rounded-xl border-2 border-emerald-500/30 bg-white/95 dark:bg-[#182232]/95 backdrop-blur-md p-1.5 shadow-2xl shadow-emerald-950/20 dark:border-emerald-700/60 dark:shadow-black/60`}
           >
             {(searchable || options.length > 5) && (
               <div className="p-1.5 border-b border-slate-100 dark:border-slate-700/60 mb-1">

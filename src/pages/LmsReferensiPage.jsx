@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   BookOpen,
@@ -698,7 +699,7 @@ export default function LmsReferensiPage({ embedded = false, hideBreadcrumb = fa
             Filter:
           </span>
 
-          <select
+          <CustomSelect
             value={selectedModulAjar}
             onChange={(e) => {
               setSelectedModulAjar(e.target.value)
@@ -714,9 +715,9 @@ export default function LmsReferensiPage({ embedded = false, hideBreadcrumb = fa
                 {modul.judul_modul}
               </option>
             ))}
-          </select>
+          </CustomSelect>
 
-          <select
+          <CustomSelect
             value={selectedStatus}
             onChange={(e) => {
               setSelectedStatus(e.target.value)
@@ -727,7 +728,7 @@ export default function LmsReferensiPage({ embedded = false, hideBreadcrumb = fa
             <option value="">-- Semua Status --</option>
             <option value="aktif">Aktif</option>
             <option value="non-aktif">Non-Aktif</option>
-          </select>
+          </CustomSelect>
 
           <button
             type="button"
@@ -1011,7 +1012,7 @@ export default function LmsReferensiPage({ embedded = false, hideBreadcrumb = fa
                   <label className="block text-xs font-semibold uppercase tracking-wider text-[#0E5C44] dark:text-emerald-400">
                     Salin dari Data Referensi Umum (Opsional)
                   </label>
-                  <select
+                  <CustomSelect
                     value={selectedReferensiUmumId}
                     onChange={(e) => handleSelectReferensiUmum(e.target.value)}
                     className="w-full px-3.5 py-2 text-xs rounded-lg bg-white dark:bg-slate-900 border border-emerald-300 dark:border-emerald-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-[#0E5C44] focus:outline-none transition-all"
@@ -1022,7 +1023,7 @@ export default function LmsReferensiPage({ embedded = false, hideBreadcrumb = fa
                         {ref.judul} {ref.penulis ? `(${ref.penulis})` : ''}
                       </option>
                     ))}
-                  </select>
+                  </CustomSelect>
                   <p className="text-[11px] text-emerald-700 dark:text-emerald-300">
                     Pilih referensi umum terdaftar untuk mengisi otomatis Judul, Penulis, Penerbit, Tahun, dan URL.
                   </p>
@@ -1034,7 +1035,7 @@ export default function LmsReferensiPage({ embedded = false, hideBreadcrumb = fa
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5">
                   Tautkan Modul Ajar (Opsional)
                 </label>
-                <select
+                <CustomSelect
                   name="modul_ajar_id"
                   value={formData.modul_ajar_id}
                   onChange={handleFormChange}
@@ -1047,7 +1048,7 @@ export default function LmsReferensiPage({ embedded = false, hideBreadcrumb = fa
                       {modul.judul_modul}
                     </option>
                   ))}
-                </select>
+                </CustomSelect>
               </div>
 
               {/* Judul Referensi */}
@@ -1119,7 +1120,7 @@ export default function LmsReferensiPage({ embedded = false, hideBreadcrumb = fa
                   <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5">
                     Status Referensi
                   </label>
-                  <select
+                  <CustomSelect
                     name="status"
                     value={formData.status}
                     onChange={handleFormChange}
@@ -1127,7 +1128,7 @@ export default function LmsReferensiPage({ embedded = false, hideBreadcrumb = fa
                   >
                     <option value="aktif">Aktif</option>
                     <option value="non-aktif">Non-Aktif</option>
-                  </select>
+                  </CustomSelect>
                 </div>
               </div>
 

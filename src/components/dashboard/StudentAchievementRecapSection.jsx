@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import {
   Award,
   BookOpen,
@@ -555,7 +556,7 @@ export default function StudentAchievementRecapSection({
             </div>
 
             {/* Filter Kategori */}
-            <select
+            <CustomSelect
               value={categoryFilter}
               onChange={(e) => {
                 setCategoryFilter(e.target.value)
@@ -569,11 +570,11 @@ export default function StudentAchievementRecapSection({
               <option value="olahraga">Sepakbola / Ekstrakurikuler</option>
               <option value="lomba">Lomba Pembelajaran</option>
               <option value="akademik">Akademik Umum</option>
-            </select>
+            </CustomSelect>
 
             {/* Filter Unit Pendidikan */}
             {availableUnits.length > 1 && (
-              <select
+              <CustomSelect
                 value={unitFilter}
                 onChange={(e) => {
                   setUnitFilter(e.target.value)
@@ -587,14 +588,14 @@ export default function StudentAchievementRecapSection({
                     {u}
                   </option>
                 ))}
-              </select>
+              </CustomSelect>
             )}
           </div>
 
           {/* perPage Select */}
           <div className="flex items-center gap-2">
             <span className="text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">Tampilkan:</span>
-            <select
+            <CustomSelect
               value={perPage}
               onChange={(e) => {
                 setPerPage(Number(e.target.value))
@@ -607,7 +608,7 @@ export default function StudentAchievementRecapSection({
               <option value={15}>15</option>
               <option value={25}>25</option>
               <option value={50}>50</option>
-            </select>
+            </CustomSelect>
           </div>
         </div>
 

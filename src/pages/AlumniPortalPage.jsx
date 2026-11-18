@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import {
   GraduationCap,
   UserCheck,
@@ -340,7 +341,7 @@ export default function AlumniPortalPage() {
                 <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1.5">
                   <Briefcase className="w-3.5 h-3.5 text-slate-400" /> Aktivitas Lanjutan
                 </label>
-                <select
+                <CustomSelect
                   value={formData.status_lanjutan}
                   onChange={(e) => setFormData({ ...formData, status_lanjutan: e.target.value })}
                   className="w-full h-10.5 rounded-xl border border-slate-200/80 px-3.5 bg-white text-slate-900 outline-none focus:border-[#0E5C44] focus:ring-2 focus:ring-[#0E5C44]/20 dark:border-slate-800 dark:bg-[#111827] dark:text-white dark:focus:border-[#3FBF75]"
@@ -351,7 +352,7 @@ export default function AlumniPortalPage() {
                   <option value="Sekolah Lanjutan">Sekolah Lanjutan (SMA/SMK/MA)</option>
                   <option value="Wirausaha">Wirausaha / Bisnis</option>
                   <option value="Lainnya">Lainnya</option>
-                </select>
+                </CustomSelect>
               </div>
 
               <div>

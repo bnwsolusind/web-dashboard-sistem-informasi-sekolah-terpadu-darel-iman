@@ -1,4 +1,5 @@
 import { useToast } from '../components/app/ToastProvider'
+import CustomSelect from '@/components/ui/CustomSelect'
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
@@ -269,42 +270,42 @@ export default function DashboardPage() {
           <span className="text-[11px] text-slate-400 font-medium">Monitoring Real-Time</span>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5 text-xs">
-          <select className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-[#1b302c] border border-slate-200 dark:border-slate-700 font-medium text-slate-800 dark:text-slate-200 outline-none focus:border-emerald-500">
+          <CustomSelect className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-[#1b302c] border border-slate-200 dark:border-slate-700 font-medium text-slate-800 dark:text-slate-200 outline-none focus:border-emerald-500">
             <option value="all">Tahun Ajaran: Semua</option>
             {(apiData?.academic_years || []).map((ay) => (
               <option key={ay.id || ay.name} value={ay.name || ay.id}>{ay.name}</option>
             ))}
-          </select>
-          <select className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-[#1b302c] border border-slate-200 dark:border-slate-700 font-medium text-slate-800 dark:text-slate-200 outline-none focus:border-emerald-500">
+          </CustomSelect>
+          <CustomSelect className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-[#1b302c] border border-slate-200 dark:border-slate-700 font-medium text-slate-800 dark:text-slate-200 outline-none focus:border-emerald-500">
             <option value="all">Semester: Semua</option>
             <option value="ganjil">Ganjil</option>
             <option value="genap">Genap</option>
-          </select>
-          <select className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-[#1b302c] border border-slate-200 dark:border-slate-700 font-medium text-slate-800 dark:text-slate-200 outline-none focus:border-emerald-500">
+          </CustomSelect>
+          <CustomSelect className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-[#1b302c] border border-slate-200 dark:border-slate-700 font-medium text-slate-800 dark:text-slate-200 outline-none focus:border-emerald-500">
             <option value="all">Unit: Semua Unit</option>
             {(apiData?.unit_summaries || []).map((u) => (
               <option key={u.id} value={u.id}>{u.name}</option>
             ))}
-          </select>
-          <select className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-[#1b302c] border border-slate-200 dark:border-slate-700 font-medium text-slate-800 dark:text-slate-200 outline-none focus:border-emerald-500">
+          </CustomSelect>
+          <CustomSelect className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-[#1b302c] border border-slate-200 dark:border-slate-700 font-medium text-slate-800 dark:text-slate-200 outline-none focus:border-emerald-500">
             <option value="all">Jenis Unit: Semua</option>
             {(apiData?.jenis_units || []).map((ju) => (
               <option key={ju.id || ju.name} value={ju.id || ju.name}>{ju.name}</option>
             ))}
-          </select>
-          <select className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-[#1b302c] border border-slate-200 dark:border-slate-700 font-medium text-slate-800 dark:text-slate-200 outline-none focus:border-emerald-500">
+          </CustomSelect>
+          <CustomSelect className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-[#1b302c] border border-slate-200 dark:border-slate-700 font-medium text-slate-800 dark:text-slate-200 outline-none focus:border-emerald-500">
             <option value="all">Kota/Kab: Semua</option>
-          </select>
-          <select className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-[#1b302c] border border-slate-200 dark:border-slate-700 font-medium text-slate-800 dark:text-slate-200 outline-none focus:border-emerald-500">
+          </CustomSelect>
+          <CustomSelect className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-[#1b302c] border border-slate-200 dark:border-slate-700 font-medium text-slate-800 dark:text-slate-200 outline-none focus:border-emerald-500">
             <option value="all">Status: Semua</option>
             <option value="aktif">Aktif</option>
             <option value="nonaktif">Nonaktif</option>
-          </select>
-          <select className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-[#1b302c] border border-slate-200 dark:border-slate-700 font-medium text-slate-800 dark:text-slate-200 outline-none focus:border-emerald-500">
+          </CustomSelect>
+          <CustomSelect className="px-3 py-2 rounded-xl bg-slate-50 dark:bg-[#1b302c] border border-slate-200 dark:border-slate-700 font-medium text-slate-800 dark:text-slate-200 outline-none focus:border-emerald-500">
             <option value="year">Periode: Tahunan</option>
             <option value="month">Bulanan</option>
             <option value="semester">Semesteran</option>
-          </select>
+          </CustomSelect>
         </div>
       </div>
 
@@ -482,7 +483,7 @@ export default function DashboardPage() {
                 Target vs Realisasi Tahfiz <span className="text-[10px] text-slate-400 font-normal">(Semua Unit)</span>
               </CardTitle>
               <div className="relative">
-                <select
+                <CustomSelect
                   value={selectedTahfizUnitFilter}
                   onChange={(e) => setSelectedTahfizUnitFilter(e.target.value)}
                   className="appearance-none text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-lg px-2 py-1 pr-5 outline-none border border-slate-200 dark:border-slate-700 cursor-pointer"
@@ -491,7 +492,7 @@ export default function DashboardPage() {
                   {(apiData?.unit_summaries || []).map((u) => (
                     <option key={u.id} value={u.name}>{u.name}</option>
                   ))}
-                </select>
+                </CustomSelect>
                 <ChevronDown className="h-3 w-3 text-slate-400 absolute right-1.5 top-1.5 pointer-events-none" />
               </div>
             </div>

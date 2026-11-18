@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { useQuery } from '@tanstack/react-query'
 import {
   MessageCircle,
@@ -224,7 +225,7 @@ export default function FloatingChatWidget() {
               <div className="flex items-center gap-1 shrink-0" onClick={(e) => e.stopPropagation()}>
                 {!isMinimized && isParent && children.length > 1 && widgetMode === 'parent' && (
                   <div className="relative">
-                    <select
+                    <CustomSelect
                       value={childId}
                       onChange={(e) => setChildId(e.target.value)}
                       className="h-7 appearance-none rounded-lg border border-white/20 bg-white/10 pl-2 pr-6 text-[10px] font-bold text-white outline-none backdrop-blur hover:bg-white/20 [&>option]:text-slate-900"
@@ -234,7 +235,7 @@ export default function FloatingChatWidget() {
                           {c.full_name.split(' ')[0]}
                         </option>
                       ))}
-                    </select>
+                    </CustomSelect>
                     <ChevronDown className="pointer-events-none absolute right-1.5 top-2 h-3 w-3 text-white/80" />
                   </div>
                 )}

@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
@@ -2214,7 +2215,7 @@ function RoleFormModal({
                       <label className="mb-1.5 block text-xs font-bold text-slate-700 dark:text-slate-300">
                         Tingkat Tata Kelola (Level 1–9) <span className="text-rose-500">*</span>
                       </label>
-                      <select
+                      <CustomSelect
                         value={level}
                         onChange={(e) => setLevel(Number(e.target.value))}
                         disabled={initialData?.name === 'Super Admin'}
@@ -2229,7 +2230,7 @@ function RoleFormModal({
                         <option value={7}>Tingkat 7 — Orang Tua / Wali Murid</option>
                         <option value={8}>Tingkat 8 — Siswa / Peserta Didik</option>
                         <option value={9}>Tingkat 9 — Alumni Lembaga</option>
-                      </select>
+                      </CustomSelect>
                     </div>
                   </div>
 
@@ -2251,7 +2252,7 @@ function RoleFormModal({
                       <label className="mb-1.5 block text-xs font-bold text-slate-700 dark:text-slate-300">
                         Cakupan Data (Scope)
                       </label>
-                      <select
+                      <CustomSelect
                         value={scopeType}
                         onChange={(e) => setScopeType(e.target.value)}
                         disabled={!canAssignGlobalRole && scopeType === 'global'}
@@ -2262,14 +2263,14 @@ function RoleFormModal({
                             {opt.label}
                           </option>
                         ))}
-                      </select>
+                      </CustomSelect>
                     </div>
 
                     <div>
                       <label className="mb-1.5 block text-xs font-bold text-slate-700 dark:text-slate-300">
                         Grup Portal
                       </label>
-                      <select
+                      <CustomSelect
                         value={portalGroup}
                         onChange={(e) => setPortalGroup(e.target.value)}
                         className="w-full rounded-xl border border-slate-200/90 bg-slate-50/50 px-3 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#0E5C44] focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
@@ -2279,14 +2280,14 @@ function RoleFormModal({
                             {opt.label}
                           </option>
                         ))}
-                      </select>
+                      </CustomSelect>
                     </div>
 
                     <div>
                       <label className="mb-1.5 block text-xs font-bold text-slate-700 dark:text-slate-300">
                         Halaman Awal (Default Route)
                       </label>
-                      <select
+                      <CustomSelect
                         value={defaultRoute}
                         onChange={(e) => setDefaultRoute(e.target.value)}
                         className="w-full rounded-xl border border-slate-200/90 bg-slate-50/50 px-3 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#0E5C44] focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
@@ -2296,7 +2297,7 @@ function RoleFormModal({
                             {opt.label}
                           </option>
                         ))}
-                      </select>
+                      </CustomSelect>
                     </div>
                   </div>
 
@@ -3064,7 +3065,7 @@ function PegawaiRoleModal({
                     </span>
                   )}
                 </label>
-                <select
+                <CustomSelect
                   disabled={isProtectedEmployee}
                   value={roleName}
                   onChange={(e) => handleRoleChange(e.target.value)}
@@ -3094,7 +3095,7 @@ function PegawaiRoleModal({
                         ))}
                     </optgroup>
                   )}
-                </select>
+                </CustomSelect>
 
                 {/* Status Role Information Pill */}
                 <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-200/80 bg-slate-50/80 px-3 py-2 text-xs dark:border-slate-800 dark:bg-slate-900/50">

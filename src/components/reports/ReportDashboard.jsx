@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import {
   BarChart3, CalendarDays, ChevronLeft, ChevronRight, Download,
   Eye, FileDown, FileSpreadsheet, MoreVertical, Printer, RotateCcw,
@@ -145,7 +146,7 @@ export default function ReportDashboard({
               </div>
               <footer className="report-pagination">
                 <div>Menampilkan {rows.length ? (safePage - 1) * perPage + 1 : 0}–{Math.min(safePage * perPage, rows.length)} dari {rows.length} data</div>
-                <select value={perPage} onChange={(event) => { setPerPage(Number(event.target.value)); setPage(1) }}><option>5</option><option>10</option><option>25</option></select>
+                <CustomSelect value={perPage} onChange={(event) => { setPerPage(Number(event.target.value)); setPage(1) }}><option>5</option><option>10</option><option>25</option></CustomSelect>
                 <div className="report-pagination__buttons">
                   <button type="button" disabled={safePage === 1} onClick={() => setPage((value) => Math.max(1, value - 1))}><ChevronLeft size={16} /></button>
                   <span>{safePage}</span>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import PageContainer from '../components/app/PageContainer'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
@@ -253,7 +254,7 @@ function HeroUiWorkspaceSelect({
             exit={{ opacity: 0, scale: 0.96, y: effectivePlacement.startsWith('top') ? 4 : -4 }}
             transition={{ duration: 0.15, ease: 'easeOut' }}
             className={`absolute ${effectiveAlign === 'right' ? 'right-0' : 'left-0'} ${effectivePlacement.startsWith('top') ? 'bottom-full mb-1.5' : 'top-full mt-1.5'
-              } z-[100] ${popoverWidth} min-w-[200px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border-2 border-emerald-500/30 bg-white/95 dark:bg-[#182232]/95 backdrop-blur-md p-1.5 shadow-2xl shadow-emerald-950/20 dark:border-emerald-700/50 dark:shadow-black/60`}
+              } z-[100] ${popoverWidth} min-w-[200px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl border-2 border-emerald-500/30 bg-white/95 dark:bg-[#182232]/95 backdrop-blur-md p-1.5 shadow-2xl shadow-emerald-950/20 dark:border-emerald-700/50 dark:shadow-black/60`}
           >
             {shouldSearch && (
               <div className="p-1.5 border-b border-slate-100 dark:border-slate-800 mb-1">
@@ -6824,7 +6825,7 @@ export default function TeacherTeachingWorkspacePage() {
                   <div className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-300/80 bg-white px-3 py-1.5 text-xs font-bold text-emerald-800 shadow-xs dark:border-emerald-700 dark:bg-slate-800 dark:text-emerald-200">
                     <Filter className="h-3.5 w-3.5 text-emerald-600" />
                     <span className="text-[11px] text-slate-400 font-medium">Rombel:</span>
-                    <select
+                    <CustomSelect
                       value={selectedClass}
                       onChange={(e) => handleModalClassChange(e.target.value)}
                       className="bg-transparent text-xs font-extrabold text-emerald-900 dark:text-emerald-100 outline-none cursor-pointer"
@@ -6837,7 +6838,7 @@ export default function TeacherTeachingWorkspacePage() {
                           {c.nama_kelas || c.name}
                         </option>
                       ))}
-                    </select>
+                    </CustomSelect>
                   </div>
                   <span className="rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
                     {students.filter((student) => (attendanceData[student.id]?.status || 'Belum Dicatat') === 'Hadir').length} / {students.length} hadir
@@ -7157,7 +7158,7 @@ export default function TeacherTeachingWorkspacePage() {
                       </div>
 
                       {/* Status Filter */}
-                      <select
+                      <CustomSelect
                         value={attendanceStatusFilter}
                         onChange={(e) => setAttendanceStatusFilter(e.target.value)}
                         className="h-9 rounded-xl border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 outline-none transition focus:border-emerald-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
@@ -7166,7 +7167,7 @@ export default function TeacherTeachingWorkspacePage() {
                         {['Belum Dicatat', 'Hadir', 'Terlambat', 'Izin', 'Sakit', 'Alpha'].map((status) => (
                           <option key={status} value={status}>{status}</option>
                         ))}
-                      </select>
+                      </CustomSelect>
 
                       {(attendanceSearch || attendanceStatusFilter) && (
                         <button
@@ -7424,7 +7425,7 @@ export default function TeacherTeachingWorkspacePage() {
                                 </div>
                               </td>
                               <td className="px-4 py-3">
-                                <select
+                                <CustomSelect
                                   value={status}
                                   onChange={(e) => markStudentAttendance(student, 'Roll Call Guru', e.target.value)}
                                   className={`h-8 rounded-lg border px-2 text-[11px] font-bold outline-none transition focus:ring-1 focus:ring-emerald-500 ${statusColorMap[status] || statusColorMap['Belum Dicatat']
@@ -7433,7 +7434,7 @@ export default function TeacherTeachingWorkspacePage() {
                                   {['Belum Dicatat', 'Hadir', 'Terlambat', 'Izin', 'Sakit', 'Alpha'].map((st) => (
                                     <option key={st} value={st}>{st}</option>
                                   ))}
-                                </select>
+                                </CustomSelect>
                               </td>
                               <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
                                 <div className="inline-flex items-center gap-1.5">
@@ -8199,7 +8200,7 @@ export default function TeacherTeachingWorkspacePage() {
                   </label>
 
                   {/* Filter Rombel Kelas */}
-                  <select
+                  <CustomSelect
                     value={selectedClass}
                     onChange={(e) => {
                       const val = e.target.value
@@ -8214,10 +8215,10 @@ export default function TeacherTeachingWorkspacePage() {
                       </option>
                     ))}
                     <option value="all">Semua Rombel</option>
-                  </select>
+                  </CustomSelect>
 
                   {/* Filter Format & Tipe Soal */}
-                  <select
+                  <CustomSelect
                     value={assignmentJenisFilter}
                     onChange={(e) => setAssignmentJenisFilter(e.target.value)}
                     className="h-9 rounded-xl border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 outline-none transition focus:border-emerald-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
@@ -8228,10 +8229,10 @@ export default function TeacherTeachingWorkspacePage() {
                     <option value="objektif">🔘 Pilihan Ganda (PG)</option>
                     <option value="essay">📝 Essay</option>
                     <option value="campuran">🔀 Campuran</option>
-                  </select>
+                  </CustomSelect>
 
                   {/* Filter Status Deadline */}
-                  <select
+                  <CustomSelect
                     value={assignmentStatusFilter}
                     onChange={(e) => setAssignmentStatusFilter(e.target.value)}
                     className="h-9 rounded-xl border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 outline-none transition focus:border-emerald-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
@@ -8239,7 +8240,7 @@ export default function TeacherTeachingWorkspacePage() {
                     <option value="all">Semua Deadline</option>
                     <option value="active">🟢 Deadline Aktif</option>
                     <option value="past">🔴 Terlewat Deadline</option>
-                  </select>
+                  </CustomSelect>
 
                   {/* Refresh */}
                   <button
@@ -10148,7 +10149,7 @@ export default function TeacherTeachingWorkspacePage() {
                   {/* Filter Bar */}
                   <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-500/15 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-4 py-3 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-emerald-950/40 sm:px-5">
                     <div className="flex flex-wrap items-center gap-2">
-                      <select
+                      <CustomSelect
                         value={teacherLogMonth}
                         onChange={(e) => setTeacherLogMonth(e.target.value)}
                         className="h-9.5 rounded-xl border border-emerald-200/90 bg-white px-3 text-xs font-bold text-slate-700 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800 dark:bg-slate-800 dark:text-slate-200"
@@ -10161,7 +10162,7 @@ export default function TeacherTeachingWorkspacePage() {
                           const label = d.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })
                           return <option key={val} value={val}>{label}</option>
                         })}
-                      </select>
+                      </CustomSelect>
 
                       <div className="flex items-center rounded-xl bg-white dark:bg-slate-900 p-1 border border-emerald-200/80 dark:border-emerald-800/80 shadow-xs">
                         {['semua', 'Hadir', 'Terlambat', 'Izin', 'Sakit'].map((st) => (
@@ -10919,7 +10920,7 @@ export default function TeacherTeachingWorkspacePage() {
                       <div className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-300/80 bg-white px-3 py-2 text-xs font-bold text-emerald-800 shadow-xs dark:border-emerald-700 dark:bg-slate-800 dark:text-emerald-200">
                         <Filter className="h-3.5 w-3.5 text-emerald-600" />
                         <span className="text-[11px] text-slate-400 font-medium">Rombel:</span>
-                        <select
+                        <CustomSelect
                           value={selectedClass}
                           onChange={(e) => handleModalClassChange(e.target.value)}
                           className="bg-transparent text-xs font-extrabold text-emerald-900 dark:text-emerald-100 outline-none cursor-pointer"
@@ -10932,7 +10933,7 @@ export default function TeacherTeachingWorkspacePage() {
                               {c.nama_kelas || c.name}
                             </option>
                           ))}
-                        </select>
+                        </CustomSelect>
                       </div>
                       <button type="button" onClick={markAllStudentsPresent} className="h-11 rounded-xl border border-emerald-200 bg-white px-4 text-xs font-bold text-emerald-700 transition hover:bg-emerald-100 focus-visible:ring-3 focus-visible:ring-emerald-700/20 dark:border-emerald-800 dark:bg-slate-800 dark:text-emerald-300">Centang Semua Hadir</button>
                     </div>
@@ -11612,7 +11613,7 @@ export default function TeacherTeachingWorkspacePage() {
                               <td className="py-2.5 px-3 font-mono text-[11px] text-slate-500">{nisn}</td>
                               <td className="py-2.5 px-3 text-center">
                                 {isEditingHistorySession ? (
-                                  <select
+                                  <CustomSelect
                                     value={activeStatus}
                                     onChange={(e) => {
                                       const newStatus = e.target.value
@@ -11631,7 +11632,7 @@ export default function TeacherTeachingWorkspacePage() {
                                     <option value="Izin">Izin</option>
                                     <option value="Sakit">Sakit</option>
                                     <option value="Alpha">Alpha</option>
-                                  </select>
+                                  </CustomSelect>
                                 ) : (
                                   <span className={`inline-block rounded-full border px-2.5 py-0.5 text-[10px] font-bold capitalize ${statusClass}`}>
                                     {item.status_hadir || item.status || 'Belum Dicatat'}
@@ -12017,7 +12018,7 @@ export default function TeacherTeachingWorkspacePage() {
                 {presensiModalClasses.length > 1 ? (
                   <div className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-slate-800 px-3 py-1.5 text-xs font-bold border border-emerald-300/80 dark:border-emerald-700 shadow-xs">
                     <Users className="h-3.5 w-3.5 text-emerald-600" />
-                    <select
+                    <CustomSelect
                       id="presensi-modal-rombel-select"
                       value={selectedClass}
                       onChange={(e) => handleModalClassChange(e.target.value)}
@@ -12028,7 +12029,7 @@ export default function TeacherTeachingWorkspacePage() {
                           {c.nama_kelas || c.name} {c.kode_kelas ? `· ${c.kode_kelas}` : ''}
                         </option>
                       ))}
-                    </select>
+                    </CustomSelect>
                   </div>
                 ) : (
                   <div className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-slate-800 px-3 py-1.5 text-xs font-black border border-emerald-400/90 dark:border-emerald-600 shadow-xs text-emerald-950 dark:text-emerald-100">
@@ -12234,7 +12235,7 @@ export default function TeacherTeachingWorkspacePage() {
                     <div className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-bold text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
                       <Filter className="h-3 w-3 text-emerald-600" />
                       <span className="text-[11px] text-slate-400 font-medium">Rombel:</span>
-                      <select
+                      <CustomSelect
                         value={selectedClass}
                         onChange={(e) => handleModalClassChange(e.target.value)}
                         className="bg-transparent text-xs font-extrabold text-emerald-900 dark:text-emerald-300 outline-none cursor-pointer"
@@ -12244,7 +12245,7 @@ export default function TeacherTeachingWorkspacePage() {
                             {c.nama_kelas || c.name}
                           </option>
                         ))}
-                      </select>
+                      </CustomSelect>
                     </div>
                   ) : (
                     <div className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-300/80 bg-emerald-50/70 px-2.5 py-1.5 text-xs font-black text-emerald-900 dark:border-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-200">
@@ -12599,7 +12600,7 @@ export default function TeacherTeachingWorkspacePage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
                         <label className="font-semibold block mb-1 text-slate-700 dark:text-slate-200">Rombel / Kelas <span className="text-rose-500">*</span></label>
-                        <select
+                        <CustomSelect
                           value={tugasForm.class_id || getCurrentClassId()}
                           onChange={(e) => {
                             const newClassId = e.target.value
@@ -12618,11 +12619,11 @@ export default function TeacherTeachingWorkspacePage() {
                               {c.nama_kelas || c.name}
                             </option>
                           ))}
-                        </select>
+                        </CustomSelect>
                       </div>
                       <div>
                         <label className="font-semibold block mb-1 text-slate-700 dark:text-slate-200">Mata Pelajaran <span className="text-rose-500">*</span></label>
-                        <select
+                        <CustomSelect
                           value={tugasForm.subject_id || getCurrentSubjectId()}
                           onChange={(e) => setTugasForm({ ...tugasForm, subject_id: e.target.value })}
                           className="h-11 w-full border rounded-xl bg-white px-3 dark:bg-slate-800 border-slate-200 dark:border-slate-700 font-semibold"
@@ -12644,7 +12645,7 @@ export default function TeacherTeachingWorkspacePage() {
                             const fallbackLabel = getScheduleSubject(getCurrentSchedule() || {})
                             return <option value={fallbackId}>{fallbackLabel || 'Mata Pelajaran'}</option>
                           })()}
-                        </select>
+                        </CustomSelect>
                       </div>
                     </div>
 
@@ -12686,7 +12687,7 @@ export default function TeacherTeachingWorkspacePage() {
                         })
 
                         return (
-                          <select
+                          <CustomSelect
                             value=""
                             onChange={(e) => {
                               const newId = e.target.value
@@ -12724,7 +12725,7 @@ export default function TeacherTeachingWorkspacePage() {
                                 📖 {m.urutan ? `[Pekan ${String(m.urutan).padStart(2, '0')}] ` : ''}{m.judul} ({m.status === 'published' ? 'Published' : 'Draft'})
                               </option>
                             ))}
-                          </select>
+                          </CustomSelect>
                         )
                       })()}
 
@@ -13017,13 +13018,13 @@ export default function TeacherTeachingWorkspacePage() {
                           </div>
                           <div>
                             <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Tingkat Kesulitan</label>
-                            <select value={soalForm.tingkat_kesulitan}
+                            <CustomSelect value={soalForm.tingkat_kesulitan}
                               onChange={(e) => setSoalForm((p) => ({ ...p, tingkat_kesulitan: e.target.value }))}
                               className="w-full px-2.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
                               <option value="mudah">😊 Mudah</option>
                               <option value="sedang">🤔 Sedang</option>
                               <option value="sulit">🔥 Sulit</option>
-                            </select>
+                            </CustomSelect>
                           </div>
                         </div>
                         <div>
@@ -13192,7 +13193,7 @@ export default function TeacherTeachingWorkspacePage() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                       <div>
                         <label className="font-semibold block mb-1 text-slate-700 dark:text-slate-200">Format Jawaban Siswa</label>
-                        <select
+                        <CustomSelect
                           value={tugasForm.tipe_tugas || 'both'}
                           onChange={(e) => setTugasForm({ ...tugasForm, tipe_tugas: e.target.value })}
                           className="h-11 w-full border rounded-xl bg-white px-3 dark:bg-slate-800 border-slate-200 dark:border-slate-700 font-semibold"
@@ -13200,7 +13201,7 @@ export default function TeacherTeachingWorkspacePage() {
                           <option value="both">Teks & Upload File/Foto</option>
                           <option value="online_text">Hanya Teks Online</option>
                           <option value="file_upload">Hanya Upload File/Foto</option>
-                        </select>
+                        </CustomSelect>
                       </div>
                       <div>
                         <label className="font-semibold block mb-1 text-slate-700 dark:text-slate-200">Deadline <span className="text-rose-500">*</span></label>
@@ -13657,7 +13658,7 @@ export default function TeacherTeachingWorkspacePage() {
                       </div>
 
                       {classes.length > 1 && (
-                        <select
+                        <CustomSelect
                           value={tahfizhModalClass}
                           onChange={(e) => {
                             const newClass = e.target.value
@@ -13674,7 +13675,7 @@ export default function TeacherTeachingWorkspacePage() {
                               {cls.nama_kelas || cls.name}
                             </option>
                           ))}
-                        </select>
+                        </CustomSelect>
                       )}
                     </div>
 
@@ -13986,7 +13987,7 @@ export default function TeacherTeachingWorkspacePage() {
                         Target Siswa / Santri
                       </label>
                       <div className="relative">
-                        <select
+                        <CustomSelect
                           value={pelanggaranForm.student_id}
                           onChange={(e) => setPelanggaranForm({ ...pelanggaranForm, student_id: e.target.value })}
                           className="h-10 w-full appearance-none rounded-xl border border-slate-200 bg-white pl-3 pr-9 text-xs font-bold text-slate-800 transition hover:border-slate-300 focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
@@ -13997,7 +13998,7 @@ export default function TeacherTeachingWorkspacePage() {
                               {st.nama_lengkap || st.full_name || st.name} ({st.nis || 'Tanpa NIS'})
                             </option>
                           ))}
-                        </select>
+                        </CustomSelect>
                         <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
                           <ChevronDown className="h-4 w-4" />
                         </div>
@@ -14051,7 +14052,7 @@ export default function TeacherTeachingWorkspacePage() {
                       </div>
 
                       <div className="relative">
-                        <select
+                        <CustomSelect
                           value={pelanggaranForm.category_id}
                           onChange={(e) => handlePelanggaranCategoryChange(e.target.value)}
                           className="h-11 w-full appearance-none rounded-xl border border-slate-200 bg-white pl-3 pr-9 text-xs font-bold text-slate-800 transition hover:border-slate-300 focus:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
@@ -14073,7 +14074,7 @@ export default function TeacherTeachingWorkspacePage() {
                                 {cat.code ? `[${cat.code}] ` : ''}{cat.name} ({cat.point_weight ? `-${Math.abs(cat.point_weight)} Poin` : '0 Poin'}) {cat.cluster ? `• ${cat.cluster}` : ''}
                               </option>
                             ))}
-                        </select>
+                        </CustomSelect>
                         <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
                           <ChevronDown className="h-4 w-4" />
                         </div>
@@ -14244,7 +14245,7 @@ export default function TeacherTeachingWorkspacePage() {
                   className="h-9 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 pl-8 pr-3 text-xs outline-none focus:border-emerald-600"
                 />
               </div>
-              <select
+              <CustomSelect
                 value={submissionStatusFilter}
                 onChange={(e) => setSubmissionStatusFilter(e.target.value)}
                 className="h-9 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 text-xs font-semibold outline-none focus:border-emerald-600"
@@ -14253,7 +14254,7 @@ export default function TeacherTeachingWorkspacePage() {
                 <option value="dinilai">Sudah Dinilai</option>
                 <option value="belum_dinilai">Belum Dinilai</option>
                 <option value="terlambat">Terlambat</option>
-              </select>
+              </CustomSelect>
             </div>
 
             {/* List / Table Content */}
@@ -15109,7 +15110,7 @@ export default function TeacherTeachingWorkspacePage() {
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   Pilih Siswa / Santri
                 </label>
-                <select
+                <CustomSelect
                   value={faceStudentId}
                   onChange={(e) => setFaceStudentId(e.target.value)}
                   className="w-full h-11 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3.5 text-xs font-semibold text-slate-800 dark:text-slate-100"
@@ -15120,7 +15121,7 @@ export default function TeacherTeachingWorkspacePage() {
                       {st.nama_lengkap} ({st.nis || st.nisn || 'No NIS'})
                     </option>
                   ))}
-                </select>
+                </CustomSelect>
               </div>
 
               <div className="flex justify-end gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">

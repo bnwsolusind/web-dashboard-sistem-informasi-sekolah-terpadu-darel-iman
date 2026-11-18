@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Laptop,
@@ -546,7 +547,7 @@ export default function CbtExamsWorkspace({
               {/* Filter Mata Pelajaran Dinamis */}
               <div className="relative lg:col-span-4">
                 <BookOpen className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
-                <select
+                <CustomSelect
                   value={selectedSubject}
                   onChange={(e) => setSelectedSubject(e.target.value)}
                   className="w-full appearance-none rounded-xl border border-slate-200/90 bg-white py-2 pl-9 pr-8 text-xs font-semibold text-slate-700 focus:border-emerald-500 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 cursor-pointer"
@@ -557,7 +558,7 @@ export default function CbtExamsWorkspace({
                       {subject}
                     </option>
                   ))}
-                </select>
+                </CustomSelect>
               </div>
 
               {/* Reset Filter Button */}

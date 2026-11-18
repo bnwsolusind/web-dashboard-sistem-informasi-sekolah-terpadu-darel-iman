@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import Swal from '@/components/ui/compat/swal-heroui'
 import {
   Calculator,
@@ -911,7 +912,7 @@ export default function AssessmentFormulaPage({
                   <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
                     Jenis Penilaian <span className="text-rose-500">*</span>
                   </label>
-                  <select
+                  <CustomSelect
                     value={form.type}
                     onChange={(e) => selectType(e.target.value)}
                     className="mt-1 w-full rounded-xl border border-slate-300 bg-white p-2.5 text-xs font-bold text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
@@ -919,7 +920,7 @@ export default function AssessmentFormulaPage({
                     <option value="academic">Akademik (Mata Pelajaran)</option>
                     <option value="tahfizh">Tahfizh (Al-Qur'an)</option>
                     <option value="mutabaah">Mutaba'ah (Ibadah Harian)</option>
-                  </select>
+                  </CustomSelect>
                 </div>
               </div>
 
@@ -929,7 +930,7 @@ export default function AssessmentFormulaPage({
                   <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
                     Tingkat Cakupan <span className="text-rose-500">*</span>
                   </label>
-                  <select
+                  <CustomSelect
                     value={form.scope}
                     onChange={(e) => setForm({ ...form, scope: e.target.value })}
                     className="mt-1 w-full rounded-xl border border-slate-300 bg-white p-2.5 text-xs font-bold text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
@@ -939,7 +940,7 @@ export default function AssessmentFormulaPage({
                     {can('assessment_formula.activate') && (
                       <option value="global">Global (Seluruh Yayasan)</option>
                     )}
-                  </select>
+                  </CustomSelect>
                 </div>
 
                 {form.scope !== 'global' && (
@@ -947,7 +948,7 @@ export default function AssessmentFormulaPage({
                     <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
                       Pilih Unit Pendidikan <span className="text-rose-500">*</span>
                     </label>
-                    <select
+                    <CustomSelect
                       required
                       value={form.education_unit_id}
                       onChange={(e) =>
@@ -960,7 +961,7 @@ export default function AssessmentFormulaPage({
                           {u.name}
                         </option>
                       ))}
-                    </select>
+                    </CustomSelect>
                   </div>
                 )}
               </div>
@@ -972,7 +973,7 @@ export default function AssessmentFormulaPage({
                     <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
                       Pilih Kelas
                     </label>
-                    <select
+                    <CustomSelect
                       required
                       value={form.class_id}
                       onChange={(e) => setForm({ ...form, class_id: e.target.value })}
@@ -984,7 +985,7 @@ export default function AssessmentFormulaPage({
                           {k.nama_kelas}
                         </option>
                       ))}
-                    </select>
+                    </CustomSelect>
                   </div>
                 )}
 
@@ -992,7 +993,7 @@ export default function AssessmentFormulaPage({
                   <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
                     Tahun Ajaran <span className="text-rose-500">*</span>
                   </label>
-                  <select
+                  <CustomSelect
                     required
                     value={form.academic_year_id}
                     onChange={(e) => setForm({ ...form, academic_year_id: e.target.value })}
@@ -1003,14 +1004,14 @@ export default function AssessmentFormulaPage({
                         {y.name}
                       </option>
                     ))}
-                  </select>
+                  </CustomSelect>
                 </div>
 
                 <div>
                   <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
                     Semester
                   </label>
-                  <select
+                  <CustomSelect
                     value={form.semester_id}
                     onChange={(e) => setForm({ ...form, semester_id: e.target.value })}
                     className="mt-1 w-full rounded-xl border border-slate-300 bg-white p-2.5 text-xs font-bold text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
@@ -1026,7 +1027,7 @@ export default function AssessmentFormulaPage({
                           {s.name}
                         </option>
                       ))}
-                  </select>
+                  </CustomSelect>
                 </div>
 
                 <div>

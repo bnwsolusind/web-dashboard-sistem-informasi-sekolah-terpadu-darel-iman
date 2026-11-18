@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   CreditCard,
@@ -24,6 +25,7 @@ import {
   ArrowUpDown,
 } from 'lucide-react'
 import AppBreadcrumb from '../../components/app/AppBreadcrumb'
+import ActionDropdown from '../../components/app/ActionDropdown'
 import api from '../../services/api'
 import { Card } from '../../components/ui/card'
 import { Badge } from '../../components/ui/badge'
@@ -589,7 +591,7 @@ export default function StudentBillsManagementPage() {
             {/* Filter Group */}
             <div className="flex flex-wrap items-center gap-2.5">
               {/* Unit Filter */}
-              <select
+              <CustomSelect
                 value={selectedUnit}
                 disabled={!isGlobalUser && Boolean(userUnitId)}
                 onChange={(e) => {
@@ -607,10 +609,10 @@ export default function StudentBillsManagementPage() {
                       {u.name}
                     </option>
                   ))}
-              </select>
+              </CustomSelect>
 
               {/* Class Filter */}
-              <select
+              <CustomSelect
                 value={selectedClass}
                 onChange={(e) => {
                   setSelectedClass(e.target.value)
@@ -624,10 +626,10 @@ export default function StudentBillsManagementPage() {
                     {c.nama_kelas || c.name}
                   </option>
                 ))}
-              </select>
+              </CustomSelect>
 
               {/* Status Filter */}
-              <select
+              <CustomSelect
                 value={selectedStatus}
                 onChange={(e) => {
                   setSelectedStatus(e.target.value)
@@ -639,7 +641,7 @@ export default function StudentBillsManagementPage() {
                 <option value="unpaid">Belum Lunas</option>
                 <option value="paid">Lunas</option>
                 <option value="overdue">Jatuh Tempo</option>
-              </select>
+              </CustomSelect>
 
               {/* Search Box */}
               <div className="relative min-w-[200px]">
@@ -764,28 +766,28 @@ export default function StudentBillsManagementPage() {
 
                     {/* Kolom Aksi */}
                     <td className="px-4 py-3 text-center">
-                      <div className="flex items-center justify-center gap-1.5">
-                        {!isPaid && (
-                          <Button
-                            type="button"
-                            size="xs"
-                            variant="primary"
-                            onClick={() => handleOpenPayModal(b)}
-                            className="cursor-pointer gap-1 !bg-emerald-700 !text-white text-[11px]"
-                          >
-                            <Wallet className="h-3 w-3" />
-                            Bayar Kasir
-                          </Button>
-                        )}
-                        <Button
-                          type="button"
-                          size="xs"
-                          variant="ghost"
-                          onClick={() => handleDeleteBill(b)}
-                          className="cursor-pointer text-slate-400 hover:text-rose-600"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </Button>
+                      <div className="flex items-center justify-center">
+                        <ActionDropdown
+                          onView={() => (latestPayment ? handlePrintReceipt(b, latestPayment) : handleOpenPayModal(b))}
+                          extraItems={
+                            !isPaid
+                              ? [
+                                  {
+                                    label: 'Bayar Kasir',
+                                    icon: <Wallet className="size-4 text-emerald-600" />,
+                                    onClick: () => handleOpenPayModal(b),
+                                  },
+                                ]
+                              : [
+                                  {
+                                    label: 'Cetak Kuitansi',
+                                    icon: <Printer className="size-4 text-sky-600" />,
+                                    onClick: () => handlePrintReceipt(b, latestPayment),
+                                  },
+                                ]
+                          }
+                          onDelete={() => handleDeleteBill(b)}
+                        />
                       </div>
                     </td>
                   </tr>
@@ -868,7 +870,7 @@ export default function StudentBillsManagementPage() {
                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
                     Kelas / Rombel <span className="text-rose-500">*</span>
                   </label>
-                  <select
+                  <CustomSelect
                     value={createForm.class_id}
                     onChange={(e) => setCreateForm((prev) => ({ ...prev, class_id: e.target.value, student_id: '' }))}
                     required
@@ -880,7 +882,7 @@ export default function StudentBillsManagementPage() {
                         {c.nama_kelas || c.name}
                       </option>
                     ))}
-                  </select>
+                  </CustomSelect>
                 </div>
 
                 {/* Jika mode single, pilih siswa */}
@@ -889,7 +891,7 @@ export default function StudentBillsManagementPage() {
                     <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
                       Nama Siswa <span className="text-rose-500">*</span>
                     </label>
-                    <select
+                    <CustomSelect
                       value={createForm.student_id}
                       onChange={(e) => setCreateForm((prev) => ({ ...prev, student_id: e.target.value }))}
                       required={createForm.mode === 'single'}
@@ -901,7 +903,7 @@ export default function StudentBillsManagementPage() {
                           {s.nama_lengkap} (NIS: {s.nis || '-'})
                         </option>
                       ))}
-                    </select>
+                    </CustomSelect>
                   </div>
                 )}
 
@@ -910,7 +912,7 @@ export default function StudentBillsManagementPage() {
                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
                     Kategori Biaya <span className="text-rose-500">*</span>
                   </label>
-                  <select
+                  <CustomSelect
                     value={createForm.fee_category_id}
                     onChange={(e) => {
                       const cat = feeCategories.find((c) => c.id === e.target.value)
@@ -929,7 +931,7 @@ export default function StudentBillsManagementPage() {
                         {fc.name} ({fc.code})
                       </option>
                     ))}
-                  </select>
+                  </CustomSelect>
                 </div>
 
                 {/* Judul Tagihan */}
@@ -1054,7 +1056,7 @@ export default function StudentBillsManagementPage() {
                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
                     Metode Pembayaran <span className="text-rose-500">*</span>
                   </label>
-                  <select
+                  <CustomSelect
                     value={payForm.payment_method}
                     onChange={(e) => setPayForm((prev) => ({ ...prev, payment_method: e.target.value }))}
                     required
@@ -1064,7 +1066,7 @@ export default function StudentBillsManagementPage() {
                     <option value="TRANSFER_BSI">Transfer BSI Syariah</option>
                     <option value="QRIS">QRIS Yayasan</option>
                     <option value="TRANSFER_BANK">Transfer Bank Lainnya</option>
-                  </select>
+                  </CustomSelect>
                 </div>
 
                 <div>

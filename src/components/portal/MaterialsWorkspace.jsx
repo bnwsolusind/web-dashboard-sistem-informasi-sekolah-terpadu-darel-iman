@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Award,
@@ -281,7 +282,7 @@ export default function MaterialsWorkspace({ materials = [], loading = false, st
             />
           </label>
 
-          <select
+          <CustomSelect
             aria-label="Pilih Mata Pelajaran"
             value={selectedSubject}
             onChange={(e) => setSelectedSubject(e.target.value)}
@@ -293,7 +294,7 @@ export default function MaterialsWorkspace({ materials = [], loading = false, st
                 {sub}
               </option>
             ))}
-          </select>
+          </CustomSelect>
 
           <Button
             variant="ghost"

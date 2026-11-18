@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { DatePicker } from '@/components/ui/date-picker'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '../components/app/ToastProvider'
@@ -706,7 +707,7 @@ export default function GuruDashboardPage() {
                   <label htmlFor="presensi-jadwal" className="text-xs font-extrabold text-slate-700 dark:text-slate-300">
                     Pilih Kelas / Jadwal Pertemuan <span className="text-rose-500">*</span>
                   </label>
-                  <select
+                  <CustomSelect
                     id="presensi-jadwal"
                     value={presensiJadwalId}
                     onChange={(e) => setPresensiJadwalId(e.target.value)}
@@ -722,7 +723,7 @@ export default function GuruDashboardPage() {
                     ) : (
                       <option value="" disabled>(Belum ada jadwal mengajar aktif hari ini)</option>
                     )}
-                  </select>
+                  </CustomSelect>
                 </div>
 
                 <div className="flex flex-col gap-1.5">
@@ -892,7 +893,7 @@ export default function GuruDashboardPage() {
                 <label htmlFor="materi-kelas" className="text-xs font-extrabold text-slate-700 dark:text-slate-300">
                   Target Kelas & Mata Pelajaran <span className="text-rose-500">*</span>
                 </label>
-                <select
+                <CustomSelect
                   id="materi-kelas"
                   value={materiKelasMapel}
                   onChange={(e) => setMateriKelasMapel(e.target.value)}
@@ -906,7 +907,7 @@ export default function GuruDashboardPage() {
                       <option key={tc} value={tc}>{tc}</option>
                     ))
                   )}
-                </select>
+                </CustomSelect>
               </div>
 
               <div className="flex flex-col gap-1.5">
@@ -1034,7 +1035,7 @@ export default function GuruDashboardPage() {
                 <label htmlFor="tugas-kelas" className="text-xs font-extrabold text-slate-700 dark:text-slate-300">
                   Target Kelas & Mata Pelajaran <span className="text-rose-500">*</span>
                 </label>
-                <select
+                <CustomSelect
                   id="tugas-kelas"
                   value={tugasKelasMapel}
                   onChange={(e) => setTugasKelasMapel(e.target.value)}
@@ -1048,7 +1049,7 @@ export default function GuruDashboardPage() {
                       <option key={tc} value={tc}>{tc}</option>
                     ))
                   )}
-                </select>
+                </CustomSelect>
               </div>
 
               <div className="flex flex-col gap-1.5">
@@ -1180,7 +1181,7 @@ export default function GuruDashboardPage() {
                 <label htmlFor="pilih-tugas" className="text-xs font-extrabold text-slate-700 dark:text-slate-300">
                   Pilih Tugas yang Dinilai <span className="text-rose-500">*</span>
                 </label>
-                <select
+                <CustomSelect
                   id="pilih-tugas"
                   value={selectedTugasId}
                   onChange={(e) => setSelectedTugasId(e.target.value)}
@@ -1188,7 +1189,7 @@ export default function GuruDashboardPage() {
                 >
                   <option value="">-- Pilih Tugas yang Dinilai --</option>
                   <option value="" disabled>(Belum ada penugasan yang aktif)</option>
-                </select>
+                </CustomSelect>
               </div>
 
               {/* Student Submissions List Table */}
@@ -1431,7 +1432,7 @@ export default function GuruDashboardPage() {
                   <label htmlFor="pelanggaran-jadwal" className="text-xs font-extrabold text-slate-700 dark:text-slate-300">
                     Pilih Kelas / Jadwal Pertemuan <span className="text-rose-500">*</span>
                   </label>
-                  <select
+                  <CustomSelect
                     id="pelanggaran-jadwal"
                     disabled={pelanggaranSaving}
                     value={pelanggaranJadwalId}
@@ -1447,14 +1448,14 @@ export default function GuruDashboardPage() {
                         {sch.subject?.nama_mapel || sch.subject?.name} - {sch.kelas?.nama_kelas || 'Kelas'}
                       </option>
                     ))}
-                  </select>
+                  </CustomSelect>
                 </div>
 
                 <div className="flex flex-col gap-1.5">
                   <label htmlFor="pelanggaran-student" className="text-xs font-extrabold text-slate-700 dark:text-slate-300">
                     Pilih Santri <span className="text-rose-500">*</span>
                   </label>
-                  <select
+                  <CustomSelect
                     id="pelanggaran-student"
                     disabled={pelanggaranSaving || pelanggaranSiswaList.length === 0}
                     value={pelanggaranStudentId}
@@ -1471,7 +1472,7 @@ export default function GuruDashboardPage() {
                     ) : (
                       <option value="" disabled>(Pilih jadwal kelas terlebih dahulu)</option>
                     )}
-                  </select>
+                  </CustomSelect>
                 </div>
               </div>
 
@@ -1479,7 +1480,7 @@ export default function GuruDashboardPage() {
                 <label htmlFor="pelanggaran-kategori" className="text-xs font-extrabold text-slate-700 dark:text-slate-300">
                   Kategori Pelanggaran <span className="text-rose-500">*</span>
                 </label>
-                <select
+                <CustomSelect
                   id="pelanggaran-kategori"
                   disabled={pelanggaranSaving}
                   value={pelanggaranKategoriId}
@@ -1491,7 +1492,7 @@ export default function GuruDashboardPage() {
                       [{cat.code || 'VIO'}] {cat.name} ({cat.point_weight || -5} poin) - Level {cat.level || 'ringan'}
                     </option>
                   ))}
-                </select>
+                </CustomSelect>
               </div>
 
               <div className="flex flex-col gap-1.5">

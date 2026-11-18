@@ -245,7 +245,7 @@ export const DatePicker = React.forwardRef(function DatePicker(
             exit={{ opacity: 0, y: 4, scale: 0.98 }}
             transition={{ duration: 0.15, ease: 'easeOut' }}
             className={cn(
-              'absolute left-0 z-[100] mt-1.5 w-72 rounded-2xl border border-emerald-500/30 bg-white p-3.5 shadow-2xl shadow-emerald-950/15 backdrop-blur-md',
+              'absolute left-0 z-[100] mt-1.5 w-72 rounded-xl border border-emerald-500/30 bg-white p-3.5 shadow-2xl shadow-emerald-950/15 backdrop-blur-md',
               'dark:border-emerald-800/60 dark:bg-[#131D2E] dark:shadow-black/40',
               popoverClassName
             )}

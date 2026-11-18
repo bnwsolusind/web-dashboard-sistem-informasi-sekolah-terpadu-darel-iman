@@ -1,4 +1,5 @@
 import React from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { createRoot } from 'react-dom/client'
 import { Modal as HeroModal } from '@heroui/react'
 import { globalToast as toast } from '../../app/ToastProvider'
@@ -272,7 +273,7 @@ export const Swal = {
 
                   {input === 'select' && (
                     <div className="space-y-2">
-                      <select
+                      <CustomSelect
                         autoFocus
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
@@ -283,7 +284,7 @@ export const Swal = {
                             {label}
                           </option>
                         ))}
-                      </select>
+                      </CustomSelect>
                     </div>
                   )}
 

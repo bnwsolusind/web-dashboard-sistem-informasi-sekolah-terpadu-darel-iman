@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState, useMemo } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { useForm } from 'react-hook-form'
 import {
   CheckCheck,
@@ -313,7 +314,7 @@ export default function NotificationsPage() {
 
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Target Peran Pengguna</label>
-                  <select
+                  <CustomSelect
                     {...formPengumuman.register('target_peran')}
                     className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   >
@@ -322,7 +323,7 @@ export default function NotificationsPage() {
                     <option value="Orang Tua">Orang Tua / Wali Murid</option>
                     <option value="Siswa">Siswa / Santri</option>
                     <option value="Staf">Staf & Karyawan</option>
-                  </select>
+                  </CustomSelect>
                 </div>
               </div>
 
@@ -369,13 +370,13 @@ export default function NotificationsPage() {
 
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Status</label>
-                  <select
+                  <CustomSelect
                     {...formPengumuman.register('status_aktif')}
                     className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   >
                     <option value={true}>Aktif</option>
                     <option value={false}>Nonaktif</option>
-                  </select>
+                  </CustomSelect>
                 </div>
               </div>
 

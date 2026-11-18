@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { kepalaSekolahDashboardService } from '../services/kepalaSekolahDashboardService'
@@ -2585,7 +2586,7 @@ export default function KepalaSekolahDashboardPage() {
 
                 <div className="flex items-center gap-2 w-full sm:w-auto">
                   <span className="text-xs font-bold text-slate-400 shrink-0">Unit:</span>
-                  <select
+                  <CustomSelect
                     value={attendanceFilterUnit}
                     onChange={(e) => setAttendanceFilterUnit(e.target.value)}
                     className="h-9.5 rounded-xl border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 outline-none focus:border-emerald-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200"
@@ -2596,7 +2597,7 @@ export default function KepalaSekolahDashboardPage() {
                         {u.name || u.nama}
                       </option>
                     ))}
-                  </select>
+                  </CustomSelect>
                 </div>
               </div>
 

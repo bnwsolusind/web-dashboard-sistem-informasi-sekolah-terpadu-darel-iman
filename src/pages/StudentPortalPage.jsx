@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
@@ -101,9 +102,9 @@ function MatchingAnswer({ items, value, onChange }) {
     const usedByOthers = selected.filter((pair) => pair.kiri !== left).map((pair) => pair.kanan)
     return <div key={left} className="grid items-center gap-3 rounded-2xl border border-slate-200 p-4 dark:border-slate-700 sm:grid-cols-[1fr_auto_1fr]">
       <span className="text-sm font-semibold">{itemIndex + 1}. {left}</span><ChevronRight className="hidden h-4 w-4 text-slate-400 sm:block" />
-      <select value={current} onChange={(event) => update(left, event.target.value)} className="h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm outline-none focus:border-emerald-500 dark:border-slate-700 dark:bg-slate-800">
+      <CustomSelect value={current} onChange={(event) => update(left, event.target.value)} className="h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm outline-none focus:border-emerald-500 dark:border-slate-700 dark:bg-slate-800">
         <option value="">-- Pilih pasangan --</option>{rightItems.map((right) => <option key={right} value={right} disabled={usedByOthers.includes(right)}>{right}</option>)}
-      </select>
+      </CustomSelect>
     </div>
   })}</div>
 }

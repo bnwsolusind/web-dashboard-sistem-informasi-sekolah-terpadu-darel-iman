@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { DatePicker } from '@/components/ui/date-picker'
 import { motion } from 'framer-motion'
 import {
@@ -591,31 +592,31 @@ export default function LaporanPegawaiPage() {
             <div className="space-y-3">
               <div>
                 <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Unit Kerja</label>
-                <select
+                <CustomSelect
                   value={unit}
                   onChange={(e) => { setUnit(e.target.value); setHalaman(1); }}
                   className="w-full h-9 px-3 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 outline-none focus:ring-2 focus:ring-emerald-500"
                 >
                   <option value="semua">Semua Unit Kerja</option>
                   {daftarUnit.map((u) => <option key={u} value={u}>{u}</option>)}
-                </select>
+                </CustomSelect>
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Jabatan</label>
-                <select
+                <CustomSelect
                   value={jabatan}
                   onChange={(e) => { setJabatan(e.target.value); setHalaman(1); }}
                   className="w-full h-9 px-3 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 outline-none focus:ring-2 focus:ring-emerald-500"
                 >
                   <option value="semua">Semua Jabatan</option>
                   {daftarJabatan.map((j) => <option key={j} value={j}>{j}</option>)}
-                </select>
+                </CustomSelect>
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Jenis Kelamin</label>
-                <select
+                <CustomSelect
                   value={jenisKelamin}
                   onChange={(e) => { setJenisKelamin(e.target.value); setHalaman(1); }}
                   className="w-full h-9 px-3 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 outline-none focus:ring-2 focus:ring-emerald-500"
@@ -623,12 +624,12 @@ export default function LaporanPegawaiPage() {
                   <option value="semua">Semua Gender</option>
                   <option value="L">Laki-laki (L)</option>
                   <option value="P">Perempuan (P)</option>
-                </select>
+                </CustomSelect>
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Status Keaktifan</label>
-                <select
+                <CustomSelect
                   value={status}
                   onChange={(e) => { setStatus(e.target.value); setHalaman(1); }}
                   className="w-full h-9 px-3 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 outline-none focus:ring-2 focus:ring-emerald-500"
@@ -636,12 +637,12 @@ export default function LaporanPegawaiPage() {
                   <option value="semua">Semua Status</option>
                   <option value="aktif">Aktif</option>
                   <option value="nonaktif">Non-aktif / Cuti</option>
-                </select>
+                </CustomSelect>
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Periode Tanggal</label>
-                <select
+                <CustomSelect
                   value={period}
                   onChange={(e) => {
                     const nextP = e.target.value
@@ -665,7 +666,7 @@ export default function LaporanPegawaiPage() {
                   <option value="semester">6 Bulan Terakhir</option>
                   <option value="tahun">Tahun Ini</option>
                   <option value="custom">Rentang Kustom</option>
-                </select>
+                </CustomSelect>
               </div>
 
               <div className="grid grid-cols-2 gap-2 pt-1">
@@ -787,7 +788,7 @@ export default function LaporanPegawaiPage() {
             <div className="relative flex items-center gap-1.5">
               <span className="text-xs font-medium text-slate-500">Per Halaman:</span>
               <div className="relative">
-                <select
+                <CustomSelect
                   value={perHalaman}
                   onChange={(e) => { setPerHalaman(Number(e.target.value)); setHalaman(1); }}
                   className="h-9 cursor-pointer appearance-none rounded-xl border border-slate-200 bg-white pl-3 pr-8 text-xs font-semibold text-slate-700 shadow-2xs dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
@@ -798,7 +799,7 @@ export default function LaporanPegawaiPage() {
                   <option value={25}>25</option>
                   <option value={50}>50</option>
                   <option value={100}>100</option>
-                </select>
+                </CustomSelect>
                 <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
               </div>
             </div>

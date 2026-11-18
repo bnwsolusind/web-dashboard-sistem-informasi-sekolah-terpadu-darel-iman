@@ -1,4 +1,5 @@
 import React from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { RefreshCw } from 'lucide-react'
 import { AppButton, AppFilterBar } from '../app'
 
@@ -24,7 +25,7 @@ export default function DashboardFilter({
       <div className="flex flex-wrap items-center gap-3">
 
         {units.length > 0 && (
-          <select
+          <CustomSelect
             value={selectedUnit}
             onChange={(e) => onUnitChange?.(e.target.value)}
             className="h-9 rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-xs font-medium text-slate-700 outline-hidden focus:border-[#0E5C44] focus:ring-1 focus:ring-[#0E5C44] dark:border-slate-800 dark:bg-slate-800 dark:text-slate-200"
@@ -35,11 +36,11 @@ export default function DashboardFilter({
                 {u.name || u.nama}
               </option>
             ))}
-          </select>
+          </CustomSelect>
         )}
 
         {academicYears.length > 0 && (
-          <select
+          <CustomSelect
             value={selectedAcademicYear}
             onChange={(e) => onAcademicYearChange?.(e.target.value)}
             className="h-9 rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-xs font-medium text-slate-700 outline-hidden focus:border-[#0E5C44] focus:ring-1 focus:ring-[#0E5C44] dark:border-slate-800 dark:bg-slate-800 dark:text-slate-200"
@@ -50,11 +51,11 @@ export default function DashboardFilter({
                 {ay.year_name || ay.nama || ay.tahun}
               </option>
             ))}
-          </select>
+          </CustomSelect>
         )}
 
         {semesters.length > 0 && (
-          <select
+          <CustomSelect
             value={selectedSemester}
             onChange={(e) => onSemesterChange?.(e.target.value)}
             className="h-9 rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-xs font-medium text-slate-700 outline-hidden focus:border-[#0E5C44] focus:ring-1 focus:ring-[#0E5C44] dark:border-slate-800 dark:bg-slate-800 dark:text-slate-200"
@@ -65,7 +66,7 @@ export default function DashboardFilter({
                 {s.name || s.nama}
               </option>
             ))}
-          </select>
+          </CustomSelect>
         )}
 
         {extraFilters}

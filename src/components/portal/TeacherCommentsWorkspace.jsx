@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   MessageSquare,
@@ -496,7 +497,7 @@ export default function TeacherCommentsWorkspace({
             </div>
 
             {/* Kategori Dropdown */}
-            <select
+            <CustomSelect
               aria-label="Pilih Kategori"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
@@ -508,7 +509,7 @@ export default function TeacherCommentsWorkspace({
                   {cat}
                 </option>
               ))}
-            </select>
+            </CustomSelect>
 
             {/* Reset Button using HeroButton */}
             <HeroButton

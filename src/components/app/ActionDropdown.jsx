@@ -75,7 +75,7 @@ export default function ActionDropdown({
           </span>
         </Tooltip>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="p-1.5 border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 min-w-44 shadow-lg rounded-xl">
+      <DropdownMenuContent className="min-w-44">
         {canView && (
           <DropdownMenuItem
             onAction={() => exec(onView)}

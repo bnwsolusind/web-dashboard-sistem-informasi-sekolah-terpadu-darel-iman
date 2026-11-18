@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   HelpCircle,
@@ -734,7 +735,7 @@ export default function BantuanPage() {
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   Peran / Role Pengguna
                 </label>
-                <select
+                <CustomSelect
                   value={ticketForm.role}
                   onChange={(e) => setTicketForm({ ...ticketForm, role: e.target.value })}
                   className="w-full rounded-xl border border-slate-200/90 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
@@ -744,14 +745,14 @@ export default function BantuanPage() {
                   <option value="TU / Admin">Staf TU / Operator IT</option>
                   <option value="Kepala Sekolah">Kepala Sekolah / Pengurus</option>
                   <option value="Orang Tua / Siswa">Orang Tua / Santri</option>
-                </select>
+                </CustomSelect>
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                   Kategori Kendala
                 </label>
-                <select
+                <CustomSelect
                   value={ticketForm.category}
                   onChange={(e) => setTicketForm({ ...ticketForm, category: e.target.value })}
                   className="w-full rounded-xl border border-slate-200/90 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
@@ -762,7 +763,7 @@ export default function BantuanPage() {
                   <option value="Keuangan & SPP">Keuangan & Administrasi</option>
                   <option value="Akun & Password">Akun & Password Sesi</option>
                   <option value="Lainnya">Lainnya</option>
-                </select>
+                </CustomSelect>
               </div>
             </div>
 

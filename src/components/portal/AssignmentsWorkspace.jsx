@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ClipboardList,
@@ -589,7 +590,7 @@ export default function AssignmentsWorkspace({
           </label>
 
           {/* Mata Pelajaran Dropdown */}
-          <select
+          <CustomSelect
             aria-label="Pilih Mata Pelajaran"
             value={selectedSubject}
             onChange={(e) => setSelectedSubject(e.target.value)}
@@ -601,10 +602,10 @@ export default function AssignmentsWorkspace({
                 {sub}
               </option>
             ))}
-          </select>
+          </CustomSelect>
 
           {/* Jenis Tugas Dropdown */}
-          <select
+          <CustomSelect
             aria-label="Pilih Jenis Tugas"
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
@@ -619,7 +620,7 @@ export default function AssignmentsWorkspace({
                 </option>
               )
             })}
-          </select>
+          </CustomSelect>
 
           {/* Reset Button */}
           <Button

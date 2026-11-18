@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react'
+import CustomSelect from '@/components/ui/CustomSelect'
 import { Navigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
@@ -763,7 +764,7 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
                   <Building2 className="w-4 h-4 text-amber-600" /> Unit Sekolah:
                 </label>
                 <div className="relative">
-                <select
+                <CustomSelect
                   id="top10-unit-filter"
                   value={isScopedToLedUnit ? principalUnitCode : top10UnitFilter}
                   disabled={isScopedToLedUnit}
@@ -782,7 +783,7 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
                       ))}
                     </>
                   )}
-                </select>
+                </CustomSelect>
                 <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
                 </div>
               </div>
@@ -796,7 +797,7 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
                   <Filter className="w-4 h-4 text-emerald-600" /> Filter Kelas:
                 </label>
                 <div className="relative">
-                <select
+                <CustomSelect
                   id="top10-class-filter"
                   value={top10ClassFilter}
                   onChange={(e) => setTop10ClassFilter(e.target.value)}
@@ -808,7 +809,7 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
                       {item.className} ({item.unitCode})
                     </option>
                   ))}
-                </select>
+                </CustomSelect>
                 <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
                 </div>
               </div>
@@ -1075,7 +1076,7 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
                   <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
                     <Building2 className="size-4" />
                   </div>
-                  <select
+                  <CustomSelect
                     id="mon-unit"
                     value={isScopedToLedUnit ? principalUnitCode : filterUnit}
                     disabled={isScopedToLedUnit}
@@ -1094,7 +1095,7 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
                         ))}
                       </>
                     )}
-                  </select>
+                  </CustomSelect>
                   <ChevronDown className="pointer-events-none absolute right-2.5 h-3.5 w-3.5 text-slate-400" />
                 </div>
               </div>
@@ -1106,7 +1107,7 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
                   <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
                     <BookOpen className="size-4" />
                   </div>
-                  <select
+                  <CustomSelect
                     id="mon-kelas"
                     value={filterKelas}
                     onChange={(e) => setFilterKelas(e.target.value)}
@@ -1118,7 +1119,7 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
                         {item.className} ({item.unitCode})
                       </option>
                     ))}
-                  </select>
+                  </CustomSelect>
                   <ChevronDown className="pointer-events-none absolute right-2.5 h-3.5 w-3.5 text-slate-400" />
                 </div>
               </div>
@@ -1130,7 +1131,7 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
                   <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
                     <ShieldCheck className="size-4" />
                   </div>
-                  <select
+                  <CustomSelect
                     id="mon-status"
                     value={filterStatus}
                     onChange={(e) => setFilterStatus(e.target.value)}
@@ -1140,7 +1141,7 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
                     <option value="verified_teacher">Terverifikasi Guru/Wali Kelas</option>
                     <option value="verified_parent">Terverifikasi Orang Tua</option>
                     <option value="pending">Menunggu Verifikasi</option>
-                  </select>
+                  </CustomSelect>
                   <ChevronDown className="pointer-events-none absolute right-2.5 h-3.5 w-3.5 text-slate-400" />
                 </div>
               </div>
@@ -1152,7 +1153,7 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
                   <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
                     <ListChecks className="size-4" />
                   </div>
-                  <select
+                  <CustomSelect
                     id="mon-perpage"
                     value={perPage}
                     onChange={(e) => {
@@ -1166,7 +1167,7 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
                     <option value={15}>15 per halaman</option>
                     <option value={25}>25 per halaman</option>
                     <option value={50}>50 per halaman</option>
-                  </select>
+                  </CustomSelect>
                   <ChevronDown className="pointer-events-none absolute right-2.5 h-3.5 w-3.5 text-slate-400" />
                 </div>
               </div>
@@ -1804,10 +1805,10 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
             <DialogBody className="space-y-3">
               <div>
                 <label className="block text-xs font-medium text-slate-700 mb-1">Status Verifikasi Guru</label>
-                <select className="w-full rounded-xl border border-slate-200 bg-white py-2 px-3 text-xs sm:text-sm text-slate-800 focus:border-emerald-500 focus:outline-none">
+                <CustomSelect className="w-full rounded-xl border border-slate-200 bg-white py-2 px-3 text-xs sm:text-sm text-slate-800 focus:border-emerald-500 focus:outline-none">
                   <option value="verified_teacher">Disetujui & Diverifikasi (Lancar/Sesuai)</option>
                   <option value="pending">Perlu Pengulangan / Evaluasi</option>
-                </select>
+                </CustomSelect>
               </div>
 
               <div>
