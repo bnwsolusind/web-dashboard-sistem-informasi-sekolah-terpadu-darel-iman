@@ -34,8 +34,8 @@ export default function AppCard({
               </div>
             )}
             <div className="min-w-0">
-              {title && <CardTitle className={cn(variant === 'section' ? 'text-sm' : 'text-base')}>{title}</CardTitle>}
-              {description && <CardDescription className="mt-0.5">{description}</CardDescription>}
+              {title && <CardTitle className={cn(variant === 'section' ? 'text-base font-semibold' : 'text-lg font-semibold')}>{title}</CardTitle>}
+              {description && <CardDescription className="mt-1 text-sm text-slate-500 dark:text-slate-400">{description}</CardDescription>}
             </div>
           </div>
           {actions && <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div>}

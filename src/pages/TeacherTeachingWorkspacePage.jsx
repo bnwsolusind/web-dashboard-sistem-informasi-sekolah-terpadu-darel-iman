@@ -11745,7 +11745,7 @@ export default function TeacherTeachingWorkspacePage() {
         title="Sesi KBM Aktif — Mulai Mengajar"
         description={`Pusat kendali sesi belajar-mengajar hari ini • ${formattedLiveDate} • Jam: ${formattedLiveTime}`}
         icon={Play}
-        maxWidth="max-w-2xl"
+        maxWidth="max-w-xl"
         footer={
           <div className="flex justify-between items-center w-full">
             <button
@@ -13797,7 +13797,7 @@ export default function TeacherTeachingWorkspacePage() {
                   title="Master Surah Al-Qur'an"
                   description="Cari dan pilih dari 114 Surah Master Al-Qur'an"
                   icon={BookMarked}
-                  maxWidth="max-w-2xl"
+                  maxWidth="max-w-xl"
                 >
                   <div className="space-y-3">
                     <div className="relative">

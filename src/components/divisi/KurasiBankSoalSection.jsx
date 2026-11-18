@@ -626,7 +626,7 @@ export default function KurasiBankSoalSection({ onDataMutate }) {
         onClose={() => setIsModalOpen(false)}
         title={formData.id ? 'Kurasi & Validasi Paket Soal' : 'Tambah Paket Soal Baru'}
         description="Kelola standarisasi butir soal ujian bersama se-Yayasan dengan relasi database riil."
-        maxWidth="max-w-2xl"
+        maxWidth="max-w-xl"
         footer={
           <div className="flex justify-end gap-2">
             <Button variant="ghost" size="sm" onClick={() => setIsModalOpen(false)} disabled={saving}>

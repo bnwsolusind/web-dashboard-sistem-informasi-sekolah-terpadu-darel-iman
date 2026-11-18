@@ -77,7 +77,7 @@ export default function ConfirmDialog({
     >
       <HeroModal.Backdrop className="bg-slate-950/70 backdrop-blur-md fixed inset-0 z-[80] flex items-start sm:items-center justify-center p-3 sm:p-5 overflow-y-auto">
         <HeroModal.Container className="w-full flex items-center justify-center min-h-full my-auto">
-          <HeroModal.Dialog className="relative w-full max-w-md my-auto max-h-[calc(100dvh-1.5rem)] flex flex-col overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-[#1B2433] border border-slate-200/80 dark:border-slate-800">
+          <HeroModal.Dialog className="relative w-full max-w-md my-auto max-h-[calc(100dvh-1.5rem)] flex flex-col overflow-hidden rounded-xl bg-white shadow-xl dark:bg-[#1B2433] border border-slate-200 dark:border-slate-800">
             {/* Top Accent Gradient Line */}
             <div
               className={cn(
@@ -90,22 +90,22 @@ export default function ConfirmDialog({
               )}
             />
 
-            <HeroModal.Header className="flex items-center justify-between border-b border-slate-100 bg-white p-5 sm:p-6 dark:border-slate-800/80 dark:bg-[#1B2433]">
+            <HeroModal.Header className="flex items-center justify-between border-b border-slate-100 bg-white px-6 py-4 dark:border-slate-800 dark:bg-[#1B2433]">
               <div className="flex items-center gap-3">
                 <div
                   className={cn(
-                    'flex size-11 items-center justify-center rounded-2xl text-white shadow-md',
+                    'flex size-9 items-center justify-center rounded-lg text-white shadow-sm',
                     accentColor === 'rose'
-                      ? 'bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 shadow-rose-900/20'
+                      ? 'bg-rose-600'
                       : accentColor === 'amber'
-                      ? 'bg-gradient-to-br from-amber-400 via-amber-500 to-orange-600 shadow-amber-900/20'
-                      : 'bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 shadow-emerald-950/20'
+                      ? 'bg-amber-600'
+                      : 'bg-emerald-600'
                   )}
                 >
-                  <IconComponent className="size-5 text-white" strokeWidth={2.2} />
+                  <IconComponent className="size-4.5 text-white" strokeWidth={2.2} />
                 </div>
                 <div>
-                  <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
+                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white leading-tight">
                     {finalTitle}
                   </h3>
                   <span
@@ -129,16 +129,16 @@ export default function ConfirmDialog({
                 isDisabled={isLoading}
                 onPress={onClose}
                 aria-label="Tutup dialog"
-                className="size-8 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-400 cursor-pointer transition-all active:scale-95 disabled:opacity-50"
+                className="size-8 flex items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-400 cursor-pointer transition-all active:scale-95 disabled:opacity-50"
               >
                 <X className="size-4" strokeWidth={2.2} />
               </HeroButton>
             </HeroModal.Header>
 
-            <HeroModal.Body className="p-5 sm:p-6 text-sm text-slate-700 dark:text-slate-300">
+            <HeroModal.Body className="p-6 space-y-4">
               <div
                 className={cn(
-                  'rounded-2xl p-4 text-xs font-medium leading-relaxed border',
+                  'rounded-lg p-3.5 text-sm font-medium leading-relaxed border',
                   accentColor === 'rose'
                     ? 'border-rose-200/80 bg-rose-50/70 text-rose-900 dark:border-rose-900/50 dark:bg-rose-950/30 dark:text-rose-300'
                     : accentColor === 'amber'
@@ -150,13 +150,13 @@ export default function ConfirmDialog({
               </div>
             </HeroModal.Body>
 
-            <HeroModal.Footer className="flex items-center justify-end gap-2.5 border-t border-slate-100 bg-slate-50/50 px-5 py-4 dark:border-slate-800/80 dark:bg-slate-900/50">
+            <HeroModal.Footer className="flex items-center justify-end gap-2 border-t border-slate-100 bg-slate-50/50 px-6 py-4 dark:border-slate-800 dark:bg-slate-900/50">
               <HeroButton
                 variant="outline"
                 size="sm"
                 isDisabled={isLoading}
                 onPress={onClose}
-                className="rounded-2xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 px-4 py-2.5 text-xs font-extrabold cursor-pointer transition-all active:scale-95 disabled:opacity-50"
+                className="h-9 px-4 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 text-sm font-medium cursor-pointer transition-all active:scale-95 disabled:opacity-50"
               >
                 {cancelLabel}
               </HeroButton>
@@ -165,12 +165,12 @@ export default function ConfirmDialog({
                 isDisabled={isLoading}
                 onPress={handleConfirmAction}
                 className={cn(
-                  'inline-flex items-center gap-2 rounded-2xl text-white px-5 py-2.5 text-xs font-extrabold transition-all duration-200 active:scale-95 cursor-pointer disabled:opacity-50 shadow-md',
+                  'h-9 px-4 inline-flex items-center gap-2 rounded-lg text-white text-sm font-medium transition-all duration-200 active:scale-95 cursor-pointer disabled:opacity-50 shadow-xs',
                   accentColor === 'rose'
-                    ? 'bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 hover:brightness-110 shadow-rose-900/20'
+                    ? 'bg-rose-600 hover:bg-rose-700'
                     : accentColor === 'amber'
-                    ? 'bg-gradient-to-br from-amber-400 via-amber-500 to-orange-600 hover:brightness-110 shadow-amber-900/20'
-                    : 'bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 hover:brightness-110 shadow-emerald-950/20'
+                    ? 'bg-amber-600 hover:bg-amber-700'
+                    : 'bg-emerald-600 hover:bg-emerald-700'
                 )}
               >
                 {isLoading ? (

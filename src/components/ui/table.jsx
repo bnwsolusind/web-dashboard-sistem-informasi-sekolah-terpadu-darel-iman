@@ -77,7 +77,7 @@ export const TableHead = React.forwardRef(({ className, ...props }, ref) => (
     ref={ref}
     data-slot="table-head"
     className={cn(
-      'px-4 sm:px-5 py-3.5 font-extrabold uppercase tracking-wider text-[11px] text-emerald-950 dark:text-emerald-200 border-b border-emerald-200/80 dark:border-emerald-800/80',
+      'px-4 sm:px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-200 border-b border-emerald-200/80 dark:border-emerald-800/80',
       className
     )}
     {...props}
@@ -89,7 +89,7 @@ export const TableCell = React.forwardRef(({ className, ...props }, ref) => (
   <td
     ref={ref}
     data-slot="table-cell"
-    className={cn('px-4 sm:px-5 py-3.5 font-medium border-b border-emerald-100/70 dark:border-emerald-900/30', className)}
+    className={cn('px-4 sm:px-5 py-3.5 text-sm font-medium text-slate-700 dark:text-slate-200 border-b border-emerald-100/70 dark:border-emerald-900/30', className)}
     {...props}
   />
 ))

@@ -124,22 +124,22 @@ export function PrintOptionModal({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 12 }}
           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-          className={`font-sans w-full ${showPreview ? 'max-w-2xl' : 'max-w-lg'} my-auto`}
+          className={`font-sans w-full ${showPreview ? 'max-w-4xl' : 'max-w-xl'} my-auto`}
         >
-          <div className="relative flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-2xl shadow-emerald-950/20 dark:border-slate-800 dark:bg-[#182232] dark:shadow-black/60">
+          <div className="relative flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl dark:border-slate-800 dark:bg-[#182232]">
             {/* Top Accent Gradient Bar */}
             <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
 
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-slate-100 bg-white px-6 py-4.5 dark:border-slate-800 dark:bg-slate-950 shrink-0">
+            <div className="flex items-center justify-between border-b border-slate-100 bg-white px-6 py-4 dark:border-slate-800 dark:bg-slate-950 shrink-0">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-md shadow-emerald-500/20 border border-emerald-300/30 shrink-0">
-                  <Printer className="h-5 w-5 text-white" strokeWidth={2.25} />
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-600 text-white shadow-sm shrink-0">
+                  <Printer className="h-4.5 w-4.5 text-white" strokeWidth={2.25} />
                 </div>
                 <div>
                   <h3
                     id="print-option-modal-title"
-                    className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2"
+                    className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2"
                   >
                     <span>Opsi &amp; Scope Cetak {title}</span>
                     <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
@@ -147,7 +147,7 @@ export function PrintOptionModal({
                       Cetak &amp; PDF
                     </span>
                   </h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                     Pilih orientasi kertas, cakupan data, dan tindakan ekspor dokumen resmi.
                   </p>
                 </div>
@@ -156,14 +156,14 @@ export function PrintOptionModal({
                 type="button"
                 onClick={onClose}
                 aria-label="Tutup modal"
-                className="size-9 flex items-center justify-center rounded-2xl bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white hover:scale-105 active:scale-95 transition-all duration-200 shadow-md shadow-rose-500/20 cursor-pointer shrink-0"
+                className="size-8 flex items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-400 transition-all cursor-pointer shrink-0 active:scale-95"
               >
-                <X className="size-4 text-white" strokeWidth={2.25} />
+                <X className="size-4" strokeWidth={2.2} />
               </button>
             </div>
 
             {/* Body */}
-            <div className="min-h-0 flex-1 overflow-y-auto p-5 sm:p-6 space-y-4">
+            <div className="min-h-0 flex-1 overflow-y-auto p-6 space-y-4">
               {/* 1. Active Unit / Scope Badge */}
               <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
                 <div className="flex items-center gap-3 min-w-0">
@@ -421,16 +421,14 @@ export function PrintOptionModal({
               </div>
             </div>
 
-            {/* Footer dengan Tombol Squircle Emas */}
-            <div className="flex flex-wrap items-center justify-between gap-2.5 border-t border-slate-100 bg-slate-50/80 px-6 py-4 dark:border-slate-800 dark:bg-[#131B27] shrink-0 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
+            {/* Footer dengan Tombol Standar */}
+            <div className="flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 bg-slate-50/50 px-6 py-4 dark:border-slate-800 dark:bg-slate-900/50 shrink-0 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
               <button
                 type="button"
                 onClick={onClose}
-                className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white px-4 py-2.5 text-xs font-extrabold border border-rose-300/40 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer shadow-sm shadow-rose-500/20"
+                className="h-9 px-4 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-sm font-medium inline-flex items-center gap-1.5 transition-all duration-200 active:scale-95 cursor-pointer shadow-xs"
               >
-                <div className="flex size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                  <X className="size-3.5 text-white" strokeWidth={2.2} />
-                </div>
+                <X className="size-4" strokeWidth={2} />
                 <span>Batal</span>
               </button>
 
@@ -443,11 +441,9 @@ export function PrintOptionModal({
                       onClose()
                       onExportExcel(orientation)
                     }}
-                    className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-amber-400 via-amber-500 to-orange-600 text-white px-4 py-2.5 text-xs font-extrabold border border-amber-300/40 hover:scale-[1.03] transition-all duration-200 active:scale-95 cursor-pointer shadow-sm shadow-amber-500/20"
+                    className="h-9 px-4 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-sm font-medium inline-flex items-center gap-2 transition-all duration-200 active:scale-95 cursor-pointer shadow-xs"
                   >
-                    <div className="flex size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                      <FileSpreadsheet className="size-3.5 text-white" strokeWidth={2.2} />
-                    </div>
+                    <FileSpreadsheet className="size-4 text-emerald-600" strokeWidth={2} />
                     <span>Ekspor Excel</span>
                   </button>
                 )}
@@ -461,11 +457,9 @@ export function PrintOptionModal({
                       const downloadAction = onDownload || onDownloadPdf
                       downloadAction && downloadAction(orientation)
                     }}
-                    className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white px-4 py-2.5 text-xs font-extrabold border border-emerald-300/40 hover:scale-[1.03] transition-all duration-200 active:scale-95 cursor-pointer shadow-sm shadow-emerald-500/20"
+                    className="h-9 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium inline-flex items-center gap-2 transition-all duration-200 active:scale-95 cursor-pointer shadow-xs"
                   >
-                    <div className="flex size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                      <Download className="size-3.5 text-white" strokeWidth={2.2} />
-                    </div>
+                    <Download className="size-4" strokeWidth={2} />
                     <span>Unduh PDF</span>
                   </button>
                 )}
@@ -478,11 +472,9 @@ export function PrintOptionModal({
                       onClose()
                       onPrint(orientation)
                     }}
-                    className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-indigo-500 via-indigo-600 to-violet-700 text-white px-5 py-2.5 text-xs font-extrabold border border-indigo-300/40 hover:scale-[1.03] transition-all duration-200 active:scale-95 cursor-pointer shadow-md shadow-indigo-600/20"
+                    className="h-9 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium inline-flex items-center gap-2 transition-all duration-200 active:scale-95 cursor-pointer shadow-xs"
                   >
-                    <div className="flex size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                      <Printer className="size-3.5 text-white" strokeWidth={2.2} />
-                    </div>
+                    <Printer className="size-4" strokeWidth={2} />
                     <span>Cetak Dokumen</span>
                   </button>
                 )}

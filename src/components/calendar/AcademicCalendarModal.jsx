@@ -846,7 +846,7 @@ export default function AcademicCalendarModal({ isOpen, onClose, lockedUnit = nu
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto bg-slate-950/65 backdrop-blur-md animate-[fadeIn_0.2s_ease-out] print:static print:inset-auto print:z-auto print:bg-white print:p-0 print:m-0 print:block print:w-full print:overflow-visible">
       <div
-        className="relative w-full max-w-[1520px] h-[92vh] max-h-[92vh] flex flex-col rounded-[32px] sm:rounded-[36px] overflow-hidden border-2 border-slate-200/90 bg-white shadow-2xl transition-all dark:border-slate-800 dark:bg-[#0F172A] print:w-full print:max-w-none print:h-auto print:max-h-none print:shadow-none print:border-none print:rounded-none print:bg-white print:p-0 print:m-0 print:overflow-visible"
+        className="relative w-full max-w-4xl h-[92vh] max-h-[92vh] flex flex-col rounded-xl overflow-hidden border border-slate-200 bg-white shadow-xl transition-all dark:border-slate-800 dark:bg-[#0F172A] print:w-full print:max-w-none print:h-auto print:max-h-none print:shadow-none print:border-none print:rounded-none print:bg-white print:p-0 print:m-0 print:overflow-visible"
         onClick={(e) => e.stopPropagation()}
       >
         {/* TOP NAVIGATION HEADER BAR (GOOGLE CALENDAR / OUTLOOK STYLE) */}

@@ -2033,7 +2033,7 @@ export default function StudentsPage() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 10 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-                className="modal-dialog font-sans my-auto w-full max-w-3xl"
+                className="modal-dialog font-sans my-auto w-full max-w-4xl"
               >
                 <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-2xl shadow-emerald-950/20 dark:border-slate-800 dark:bg-[#182232] dark:shadow-black/60">
                   {/* Top Accent Gradient Bar */}
@@ -2505,7 +2505,7 @@ export default function StudentsPage() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 10 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-                className="modal-dialog font-sans my-auto w-full max-w-3xl"
+                className="modal-dialog font-sans my-auto w-full max-w-4xl"
               >
                 <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-2xl shadow-emerald-950/20 dark:border-slate-800 dark:bg-[#182232] dark:shadow-black/60">
                   {/* Top Accent Gradient Bar */}
@@ -2759,7 +2759,7 @@ export default function StudentsPage() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 10 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-                className="modal-dialog font-sans my-auto w-full max-w-2xl"
+                className="modal-dialog font-sans my-auto w-full max-w-xl"
               >
                 <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-2xl shadow-emerald-950/20 dark:border-slate-800 dark:bg-[#182232] dark:shadow-black/60">
                   {/* Top Accent Gradient Bar */}

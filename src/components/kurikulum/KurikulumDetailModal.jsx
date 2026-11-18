@@ -27,7 +27,7 @@ export default function KurikulumDetailModal({ isOpen, onClose, data }) {
       title={data.nama_kurikulum}
       subtitle={`Kode: ${data.kode_kurikulum}`}
       icon={<BookOpen className="h-5 w-5" />}
-      maxWidth="max-w-2xl"
+      maxWidth="max-w-xl"
       footer={
         <div className="flex w-full justify-end">
           <Button

@@ -4658,7 +4658,7 @@ export default function EmployeesPage() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
               transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-              className="modal-dialog font-sans my-auto w-full max-w-2xl"
+              className="modal-dialog font-sans my-auto w-full max-w-xl"
             >
               <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-2xl shadow-emerald-950/20 dark:border-slate-800 dark:bg-[#182232] dark:shadow-black/60">
                 {/* Top Accent Gradient Bar */}
@@ -4817,7 +4817,7 @@ export default function EmployeesPage() {
       {/* 6. STAT CARD SUMMARY DETAIL MODAL */}
       {statCardModal.isOpen && (
         <div className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs print:static print:bg-white print:p-0 print:block" role="dialog" aria-modal="true">
-          <div className="modal-dialog w-full max-w-3xl bg-white dark:bg-[#1B2433] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-2xl space-y-4 max-h-[85vh] flex flex-col print:max-h-none print:shadow-none print:border-none print:p-0 print:w-full">
+          <div className="modal-dialog w-full max-w-4xl bg-white dark:bg-[#1B2433] rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-xl space-y-4 max-h-[85vh] flex flex-col print:max-h-none print:shadow-none print:border-none print:p-0 print:w-full">
             {/* Printable Header Kop for Popup Datatable */}
             <div className="hidden print:block border-b border-slate-400 pb-2 mb-3 text-slate-900 text-left">
               <h1 className="text-base font-extrabold uppercase tracking-tight leading-tight">

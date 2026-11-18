@@ -3034,7 +3034,7 @@ export default function MasterSchedulePage({ embedded = false, hideBreadcrumb = 
         icon={CalendarDays}
         title={editing ? 'Edit Jadwal Pelajaran' : 'Tambah Jadwal Pelajaran'}
         description="Lengkapi informasi akademik, rincian hari kosong, dan alokasi jam bebas bentrok."
-        maxWidth="max-w-5xl"
+        maxWidth="max-w-4xl"
         footer={
           <div className="flex items-center justify-between w-full">
             <div className="text-left">

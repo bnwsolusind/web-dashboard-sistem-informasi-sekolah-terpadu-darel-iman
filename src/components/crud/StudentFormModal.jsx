@@ -105,7 +105,7 @@ export function StudentFormModal({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* NISN */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
               NISN <span className="text-red-400">*</span>
             </label>
             <Input
@@ -121,7 +121,7 @@ export function StudentFormModal({
 
           {/* Nama Lengkap */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
               Nama Lengkap <span className="text-red-400">*</span>
             </label>
             <Input
@@ -136,7 +136,7 @@ export function StudentFormModal({
 
           {/* Jenis Kelamin */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
               Jenis Kelamin <span className="text-red-400">*</span>
             </label>
             <select
@@ -150,7 +150,7 @@ export function StudentFormModal({
 
           {/* Unit Pendidikan */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
               Unit Pendidikan <span className="text-red-400">*</span>
             </label>
             <select
@@ -172,7 +172,7 @@ export function StudentFormModal({
 
           {/* Tingkat */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
               Tingkat <span className="text-red-400">*</span>
             </label>
             <select
@@ -189,7 +189,7 @@ export function StudentFormModal({
 
           {/* Status */}
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
               Status Siswa <span className="text-red-400">*</span>
             </label>
             <select

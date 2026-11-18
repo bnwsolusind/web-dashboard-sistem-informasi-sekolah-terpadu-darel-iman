@@ -450,7 +450,7 @@ export default function SupervisiKbmSection({ onDataMutate }) {
         onClose={() => setIsModalOpen(false)}
         title={formData.id ? 'Edit Lembar Observasi KBM' : 'Instrumen Observasi KBM Guru'}
         description="Evaluasi proses belajar mengajar, penerapan nilai Islam, dan penguasaan kurikulum."
-        maxWidth="max-w-2xl"
+        maxWidth="max-w-xl"
         footer={
           <div className="flex justify-end gap-2">
             <Button variant="ghost" size="sm" onClick={() => setIsModalOpen(false)}>Batal</Button>

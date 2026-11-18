@@ -67,7 +67,7 @@ function HarmonizedDeleteBillModal({ isOpen, onClose, onConfirm, bill, isSubmitt
         initial={{ opacity: 0, scale: 0.94 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.94 }}
-        className="relative w-full max-w-md overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl shadow-rose-950/20 dark:border-slate-800 dark:bg-[#1B2433]"
+        className="relative w-full max-w-md overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl dark:border-slate-800 dark:bg-[#1B2433]"
       >
         <div className="h-1.5 w-full bg-gradient-to-r from-rose-500 via-rose-600 to-red-700" />
         <div className="p-6">
@@ -823,10 +823,10 @@ export default function StudentBillsManagementPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl dark:bg-slate-900"
+              className="w-full max-w-lg rounded-xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-800 dark:bg-slate-900"
             >
               <div className="flex items-center justify-between border-b border-slate-100 pb-3 dark:border-slate-800">
-                <h3 className="text-base font-black text-slate-900 dark:text-white">Terbitkan Tagihan Siswa</h3>
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Terbitkan Tagihan Siswa</h3>
                 <button
                   type="button"
                   onClick={() => setIsCreateModalOpen(false)}
@@ -1009,10 +1009,10 @@ export default function StudentBillsManagementPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl dark:bg-slate-900"
+              className="w-full max-w-md rounded-xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-800 dark:bg-slate-900"
             >
               <div className="flex items-center justify-between border-b border-slate-100 pb-3 dark:border-slate-800">
-                <h3 className="text-base font-black text-slate-900 dark:text-white">Catat Pelunasan Pembayaran</h3>
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Catat Pelunasan Pembayaran</h3>
                 <button
                   type="button"
                   onClick={() => setIsPayModalOpen(false)}

@@ -2146,7 +2146,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
         title="Pilih Kelas / Rombel"
         description="Pilih rombongan belajar / kelas terdaftar."
         icon={Layers}
-        maxWidth="max-w-2xl"
+        maxWidth="max-w-xl"
       >
         <div className="space-y-4">
           {(isScopedUnitRole || formData.unit_pendidikan_id) && (
@@ -2255,7 +2255,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
         title="Pilih Mata Pelajaran"
         description="Pilih mata pelajaran yang akan diampu pada modul semester ini."
         icon={BookOpenCheck}
-        maxWidth="max-w-2xl"
+        maxWidth="max-w-xl"
       >
         <div className="space-y-4">
           {(isScopedUnitRole || formData.unit_pendidikan_id) && (

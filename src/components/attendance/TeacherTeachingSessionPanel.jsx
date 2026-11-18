@@ -341,7 +341,7 @@ export default function TeacherTeachingSessionPanel({ onNotify, isModal = false 
       )}
 
       {/* CAMERA SCANNER MODAL WITH ID CARD QR CODE GUIDE FRAME */}
-      <AppModal isOpen={showScanner} onClose={closeScanner} title="Scan QR Kartu Guru" description="Posisikan QR code pada ID card pegawai/guru di dalam bingkai" icon={Camera} maxWidth="max-w-2xl">
+      <AppModal isOpen={showScanner} onClose={closeScanner} title="Scan QR Kartu Guru" description="Posisikan QR code pada ID card pegawai/guru di dalam bingkai" icon={Camera} maxWidth="max-w-xl">
         <div className="space-y-4">
           <div className="relative aspect-video overflow-hidden rounded-2xl bg-slate-950 border border-slate-800 shadow-inner">
             <video ref={videoRef} autoPlay playsInline muted className="h-full w-full object-cover" />

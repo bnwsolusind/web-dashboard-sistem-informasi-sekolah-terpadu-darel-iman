@@ -931,25 +931,25 @@ function RowActions({ row, resource, onDrawer, onRefresh }) {
   const restore = async () => { try { await mutabaahService.enterpriseRestore(resource, row.id); onRefresh(); toast('success', 'Data berhasil dipulihkan.') } catch (error) { showError(error) } }
   return (
     <div className="flex items-center justify-center gap-1.5">
-      <button title="Detail" onClick={() => onDrawer({ mode: 'detail', row })} className="rounded-lg border border-slate-200 bg-white p-1.5 text-xs font-bold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 cursor-pointer">
-        <Eye className="size-3.5" />
+      <button title="Detail" onClick={() => onDrawer({ mode: 'detail', row })} className="h-8 w-8 rounded-lg inline-flex items-center justify-center border border-slate-200 bg-white text-xs font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 cursor-pointer">
+        <Eye className="size-4" />
       </button>
       {resource === 'templates' && !row.trashed && (
-        <button title="Susun Agenda" onClick={() => onDrawer({ mode: 'items', row })} className="rounded-lg border border-indigo-200 bg-indigo-50 p-1.5 text-xs font-bold text-indigo-700 hover:bg-indigo-100 dark:border-indigo-900/50 dark:bg-indigo-950/40 dark:text-indigo-300 cursor-pointer">
-          <GripVertical className="size-3.5" />
+        <button title="Susun Agenda" onClick={() => onDrawer({ mode: 'items', row })} className="h-8 w-8 rounded-lg inline-flex items-center justify-center border border-indigo-200 bg-indigo-50 text-xs font-medium text-indigo-700 hover:bg-indigo-100 dark:border-indigo-900/50 dark:bg-indigo-950/40 dark:text-indigo-300 cursor-pointer">
+          <GripVertical className="size-4" />
         </button>
       )}
       {row.trashed ? (
-        <button title="Pulihkan" onClick={restore} className="rounded-lg border border-emerald-200 bg-emerald-50 p-1.5 text-xs font-bold text-emerald-700 hover:bg-emerald-100 dark:border-emerald-900/50 dark:bg-emerald-950/40 dark:text-emerald-300 cursor-pointer">
-          <ArchiveRestore className="size-3.5" />
+        <button title="Pulihkan" onClick={restore} className="h-8 w-8 rounded-lg inline-flex items-center justify-center border border-emerald-200 bg-emerald-50 text-xs font-medium text-emerald-700 hover:bg-emerald-100 dark:border-emerald-900/50 dark:bg-emerald-950/40 dark:text-emerald-300 cursor-pointer">
+          <ArchiveRestore className="size-4" />
         </button>
       ) : (
         <>
-          <button title="Edit" onClick={() => onDrawer({ mode: 'edit', row })} className="rounded-lg border border-amber-200 bg-amber-50 p-1.5 text-xs font-bold text-amber-700 hover:bg-amber-100 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-300 cursor-pointer">
-            <Pencil className="size-3.5" />
+          <button title="Edit" onClick={() => onDrawer({ mode: 'edit', row })} className="h-8 w-8 rounded-lg inline-flex items-center justify-center border border-amber-200 bg-amber-50 text-xs font-medium text-amber-700 hover:bg-amber-100 dark:border-amber-900/50 dark:bg-amber-950/40 dark:text-amber-300 cursor-pointer">
+            <Pencil className="size-4" />
           </button>
-          <button title="Hapus" onClick={remove} className="rounded-lg border border-rose-200 bg-rose-50 p-1.5 text-xs font-bold text-rose-700 hover:bg-rose-100 dark:border-rose-900/50 dark:bg-rose-950/40 dark:text-rose-300 cursor-pointer">
-            <Trash2 className="size-3.5" />
+          <button title="Hapus" onClick={remove} className="h-8 w-8 rounded-lg inline-flex items-center justify-center border border-rose-200 bg-rose-50 text-xs font-medium text-rose-700 hover:bg-rose-100 dark:border-rose-900/50 dark:bg-rose-950/40 dark:text-rose-300 cursor-pointer">
+            <Trash2 className="size-4" />
           </button>
         </>
       )}

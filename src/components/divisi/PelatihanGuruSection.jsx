@@ -515,7 +515,7 @@ export default function PelatihanGuruSection({ onDataMutate }) {
                 onClose={() => setIsModalOpen(false)}
                 title={formData.id ? 'Ubah Program Workshop' : 'Buat Program Workshop Guru Baru'}
                 description="Rancang agenda pelatihan pengembangan kompetensi pendidik dan pemenuhan target 32 JP."
-                maxWidth="max-w-2xl"
+                maxWidth="max-w-xl"
                 footer={
                     <div className="flex justify-end gap-2">
                         <Button variant="ghost" size="sm" onClick={() => setIsModalOpen(false)} disabled={saving}>

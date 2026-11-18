@@ -135,22 +135,22 @@ export default function CsvImportModal({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 12 }}
           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-          className="font-sans w-full max-w-2xl my-auto"
+          className="font-sans w-full max-w-xl my-auto"
         >
-          <div className="relative flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-2xl shadow-emerald-950/20 dark:border-slate-800 dark:bg-[#182232] dark:shadow-black/60">
+          <div className="relative flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl dark:border-slate-800 dark:bg-[#182232]">
             {/* Top Accent Gradient Bar */}
             <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
 
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-slate-100 bg-white px-6 py-4.5 dark:border-slate-800 dark:bg-slate-950 shrink-0">
+            <div className="flex items-center justify-between border-b border-slate-100 bg-white px-6 py-4 dark:border-slate-800 dark:bg-slate-950 shrink-0">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-md shadow-emerald-500/20 border border-emerald-300/30 shrink-0">
-                  <Upload className="h-5 w-5 text-white" strokeWidth={2.25} />
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-600 text-white shadow-sm shrink-0">
+                  <Upload className="h-4.5 w-4.5 text-white" strokeWidth={2.25} />
                 </div>
                 <div>
                   <h3
                     id="csv-import-modal-title"
-                    className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2"
+                    className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2"
                   >
                     <span>Import {title}</span>
                     <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
@@ -158,7 +158,7 @@ export default function CsvImportModal({
                       Batch Import
                     </span>
                   </h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                     Unggah data berformat CSV atau Excel sesuai susunan kolom standar sistem.
                   </p>
                 </div>
@@ -168,15 +168,15 @@ export default function CsvImportModal({
                 disabled={busy}
                 onClick={onClose}
                 aria-label="Tutup modal"
-                className="size-9 flex items-center justify-center rounded-2xl bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white hover:scale-105 active:scale-95 transition-all duration-200 shadow-md shadow-rose-500/20 cursor-pointer shrink-0 disabled:opacity-50"
+                className="size-8 flex items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-400 cursor-pointer transition-all active:scale-95 shrink-0 disabled:opacity-50"
               >
-                <X className="size-4 text-white" strokeWidth={2.25} />
+                <X className="size-4" strokeWidth={2.2} />
               </button>
             </div>
 
             {/* Form */}
             <form onSubmit={submit} className="flex min-h-0 flex-1 flex-col">
-              <div className="min-h-0 flex-1 overflow-y-auto p-5 sm:p-6 space-y-4 text-sm text-slate-700 dark:text-slate-200">
+              <div className="min-h-0 flex-1 overflow-y-auto p-6 space-y-4 text-sm text-slate-700 dark:text-slate-200">
                 {/* 1. Download Template Card */}
                 <div className="rounded-2xl border border-emerald-200/80 bg-emerald-50/50 p-4 dark:border-emerald-800/50 dark:bg-emerald-950/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                   <div className="space-y-0.5">
@@ -303,30 +303,26 @@ export default function CsvImportModal({
               </div>
 
               {/* Footer */}
-              <div className="flex items-center justify-between border-t border-slate-100 bg-slate-50/80 px-6 py-4 dark:border-slate-800 dark:bg-[#131B27] shrink-0 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
+              <div className="flex items-center justify-end gap-2 border-t border-slate-100 bg-slate-50/50 px-6 py-4 dark:border-slate-800 dark:bg-slate-900/50 shrink-0 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
                 <button
                   type="button"
                   disabled={busy}
                   onClick={onClose}
-                  className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white px-4 py-2.5 text-xs font-extrabold border border-rose-300/40 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer shadow-sm shadow-rose-500/20 disabled:opacity-50"
+                  className="h-9 px-4 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-sm font-medium inline-flex items-center gap-1.5 transition-all duration-200 active:scale-95 cursor-pointer shadow-xs disabled:opacity-50"
                 >
-                  <div className="flex size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                    <X className="size-3.5 text-white" strokeWidth={2.2} />
-                  </div>
+                  <X className="size-4" strokeWidth={2} />
                   <span>Batal</span>
                 </button>
 
                 <button
                   type="submit"
                   disabled={busy || !file}
-                  className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-sky-400 via-sky-500 to-blue-600 text-white px-5 py-2.5 text-xs font-extrabold border border-sky-300/40 hover:scale-[1.03] transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer shadow-md shadow-sky-600/20"
+                  className="h-9 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium inline-flex items-center gap-2 transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer shadow-xs"
                 >
                   {busy ? (
                     <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
                   ) : (
-                    <div className="flex size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                      <Upload className="size-3.5 text-white" strokeWidth={2.25} />
-                    </div>
+                    <Upload className="size-4" strokeWidth={2} />
                   )}
                   <span>{busy ? 'Memproses Impor...' : 'Mulai Impor Data'}</span>
                 </button>

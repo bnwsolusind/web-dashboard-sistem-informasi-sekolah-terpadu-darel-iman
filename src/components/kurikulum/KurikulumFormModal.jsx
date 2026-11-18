@@ -192,7 +192,7 @@ export default function KurikulumFormModal({
       title={initialData ? 'Edit Data Master Kurikulum' : 'Tambah Master Kurikulum Baru'}
       subtitle={initialData ? 'Perbarui informasi rincian kurikulum yang berlaku.' : 'Lengkapi formulir untuk menambahkan kurikulum unit pendidikan.'}
       icon={<BookOpen className="h-5 w-5" />}
-      maxWidth="max-w-2xl"
+      maxWidth="max-w-xl"
       footer={
         <div className="flex items-center justify-end gap-3 w-full">
           <button

@@ -67,11 +67,11 @@ export default function ActionDropdown({
     <DropdownMenu>
       <DropdownMenuTrigger
         aria-label="Menu Aksi"
-        className="flex size-9 sm:size-10 items-center justify-center rounded-xl sm:rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-all duration-150 active:scale-95 cursor-pointer"
+        className="flex size-8 items-center justify-center rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-all duration-150 active:scale-95 cursor-pointer"
       >
         <Tooltip content="Menu Aksi">
           <span className="flex items-center justify-center size-full">
-            {trigger || <MenuMeatballs1 className="size-5 text-white" />}
+            {trigger || <MenuMeatballs1 className="size-4 text-white" />}
           </span>
         </Tooltip>
       </DropdownMenuTrigger>

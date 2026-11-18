@@ -594,7 +594,7 @@ export default function MunaqasyahTahfizhSection({ onDataMutate }) {
         onClose={() => setIsModalOpen(false)}
         title={formData.id ? 'Ubah Data Munaqasyah Akbar' : 'Daftarkan Santri Munaqasyah Akbar'}
         description="Kelola penilaian ujian sekali duduk dan kelayakan penerbitan syahadah resmi yayasan."
-        maxWidth="max-w-2xl"
+        maxWidth="max-w-xl"
         footer={
           <div className="flex justify-end gap-2">
             <Button variant="ghost" size="sm" onClick={() => setIsModalOpen(false)} disabled={saving}>
@@ -868,7 +868,7 @@ export default function MunaqasyahTahfizhSection({ onDataMutate }) {
         onClose={() => setIsCertificateOpen(false)}
         title="Syahadah Kelulusan Tahfizh Al-Qur'an"
         description="Dokumen resmi penjaminan mutu tahfizh sekali duduk Yayasan Dar el-Iman."
-        maxWidth="max-w-2xl"
+        maxWidth="max-w-xl"
         footer={
           <div className="flex justify-between w-full">
             <span className="text-xs text-slate-500 flex items-center gap-1 font-medium">

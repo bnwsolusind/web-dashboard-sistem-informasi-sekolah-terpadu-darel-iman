@@ -45,11 +45,11 @@ export default function AppPageHeader({
                   {eyebrow}
                 </p>
               )}
-              <h1 className="text-lg sm:text-xl md:text-2xl font-black tracking-tight text-slate-900 dark:text-white leading-tight">
+              <h1 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white leading-tight">
                 {title}
               </h1>
               {description && (
-                <p className="mt-1 w-full text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300 leading-relaxed">
+                <p className="mt-1 w-full text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
                   {description}
                 </p>
               )}
@@ -88,10 +88,10 @@ export default function AppPageHeader({
                 {eyebrow}
               </p>
             )}
-            <h1 className="truncate text-base sm:text-lg md:text-xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
+            <h1 className="truncate text-xl font-semibold tracking-tight text-slate-900 dark:text-white leading-tight">
               {title}
             </h1>
-            {description && <p className="mt-0.5 truncate text-xs text-slate-500 dark:text-slate-400">{description}</p>}
+            {description && <p className="mt-0.5 truncate text-sm text-slate-500 dark:text-slate-400">{description}</p>}
           </div>
         </div>
         {actions && <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div>}
@@ -131,9 +131,9 @@ export default function AppPageHeader({
           {welcomeName && (
             <p className="text-[10px] sm:text-[11px] font-semibold text-emerald-100/90">Selamat datang, {welcomeName}</p>
           )}
-          <h1 className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight text-white leading-tight">{title}</h1>
+          <h1 className="text-xl font-semibold tracking-tight text-white leading-tight">{title}</h1>
           {description && (
-            <p className="w-full text-xs leading-relaxed text-emerald-100/95 sm:text-sm">{description}</p>
+            <p className="w-full text-sm leading-relaxed text-emerald-100/95">{description}</p>
           )}
           {chips.length > 0 && (
             <div className="flex flex-wrap items-center gap-1.5 pt-1">

@@ -2910,7 +2910,7 @@ export default function TahfizhPage() {
       {/* MODAL TARIK MASTER AL-QUR'AN & SELEKSI JUZ / SURAH / AYAT (HEROUI 2-COLUMN LAYOUT WITH MUSHAF VIEWER) */}
       {showQuranModal && (
         <Backdrop isOpen={showQuranModal} onOpenChange={setShowQuranModal} className="z-[80] bg-slate-950/75 backdrop-blur-md flex items-center justify-center p-3 sm:p-5">
-          <Dialog showCloseButton={false} className="max-w-5xl w-full h-[88vh] max-h-[88vh] flex flex-col rounded-3xl border border-emerald-300/80 bg-white p-0 shadow-2xl overflow-hidden dark:border-slate-800 dark:bg-[#1B2433]">
+          <Dialog showCloseButton={false} className="max-w-4xl w-full h-[88vh] max-h-[88vh] flex flex-col rounded-xl border border-slate-200 bg-white p-0 shadow-xl overflow-hidden dark:border-slate-800 dark:bg-[#1B2433]">
             <div className="h-1.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
             <DialogHeader className="flex items-center justify-between border-b border-slate-100 bg-white px-6 py-4.5 dark:border-slate-800 dark:bg-slate-950 shrink-0">
               <div className="flex items-center gap-3">
@@ -3445,7 +3445,7 @@ export default function TahfizhPage() {
 
         return (
           <Backdrop isOpen={showSheetModal} onOpenChange={setShowSheetModal} className="z-[70] bg-slate-950/75 backdrop-blur-md flex items-center justify-center p-3 sm:p-5">
-            <Dialog showCloseButton={false} className="w-full max-w-5xl h-[92vh] max-h-[92vh] flex flex-col rounded-3xl border border-emerald-300/80 bg-white p-0 shadow-2xl overflow-hidden dark:border-slate-800 dark:bg-[#1B2433]">
+            <Dialog showCloseButton={false} className="w-full max-w-4xl h-[92vh] max-h-[92vh] flex flex-col rounded-xl border border-slate-200 bg-white p-0 shadow-xl overflow-hidden dark:border-slate-800 dark:bg-[#1B2433]">
               <div className="h-1.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
               {/* HEADER MODAL */}
               <DialogHeader className="flex items-center justify-between border-b border-slate-100 bg-white px-6 py-4.5 dark:border-slate-800 dark:bg-slate-950 shrink-0">

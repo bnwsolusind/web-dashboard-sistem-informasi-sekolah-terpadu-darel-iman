@@ -6,7 +6,7 @@ import { cn } from '../../lib/utils'
 const mapVariant = (variant) => {
   switch (variant) {
     case 'primary':
-      return { variant: 'primary', extraClass: 'bg-[#0E5C44] hover:bg-[#094533] text-white focus:ring-[#0E5C44]/20 shadow-xs' }
+      return { variant: 'primary', extraClass: 'bg-emerald-600 hover:bg-emerald-700 text-white focus:ring-emerald-500/20 shadow-xs' }
     case 'destructive':
     case 'danger':
     case 'error':
@@ -22,22 +22,24 @@ const mapVariant = (variant) => {
     case 'secondary':
     case 'default':
     default:
-      return { variant: 'outline', extraClass: 'border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-xs' }
+      return { variant: 'outline', extraClass: 'border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-medium shadow-xs' }
   }
 }
 
 const mapSize = (size) => {
   switch (size) {
     case 'xs':
-      return { size: 'sm', iconOnly: false, extraClass: 'text-xs h-8 px-2.5 rounded-xl' }
+      return { size: 'sm', iconOnly: false, extraClass: 'text-xs font-medium h-7 px-2.5 rounded-lg' }
     case 'sm':
-      return { size: 'sm', iconOnly: false, extraClass: 'text-xs h-9 px-3 rounded-xl' }
+      return { size: 'sm', iconOnly: false, extraClass: 'text-xs font-medium h-8 px-3 rounded-lg' }
     case 'lg':
-      return { size: 'lg', iconOnly: false, extraClass: 'text-base h-11 px-5 rounded-2xl' }
+      return { size: 'lg', iconOnly: false, extraClass: 'text-base font-medium h-10 px-5 rounded-lg' }
     case 'icon':
-      return { size: 'sm', iconOnly: true, extraClass: 'h-9 w-9 p-0 rounded-xl' }
+      return { size: 'sm', iconOnly: true, extraClass: 'h-8 w-8 p-0 rounded-lg inline-flex items-center justify-center' }
+    case 'default':
+    case 'md':
     default:
-      return { size: 'md', iconOnly: false, extraClass: 'text-sm h-10 px-4 rounded-2xl' }
+      return { size: 'md', iconOnly: false, extraClass: 'text-sm font-medium h-9 px-4 rounded-lg' }
   }
 }
 
@@ -56,7 +58,7 @@ export const Button = React.forwardRef(
         onPress={onPress || onClick}
         onClick={onClick}
         className={cn(
-          'inline-flex items-center justify-center gap-2 font-semibold transition-all duration-200 active:scale-95 cursor-pointer disabled:opacity-50 disabled:pointer-events-none',
+          'inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 active:scale-95 cursor-pointer disabled:opacity-50 disabled:pointer-events-none',
           v.extraClass,
           s.extraClass,
           className

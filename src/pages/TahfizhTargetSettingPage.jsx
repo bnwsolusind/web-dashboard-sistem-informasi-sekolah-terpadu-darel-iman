@@ -925,7 +925,7 @@ export default function TahfizhTargetSettingPage() {
         title={editingTarget ? 'Ubah Target KPI Tahfizh' : 'Tambah Target KPI Tahfizh Baru'}
         description="Konfigurasikan batas capaian ayat & surah untuk kurikulum jenjang."
         icon={Target}
-        maxWidth="max-w-2xl"
+        maxWidth="max-w-xl"
         footer={
           <div className="flex w-full items-center justify-between gap-3">
             <button

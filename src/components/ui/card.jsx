@@ -18,14 +18,14 @@ export const CardHeader = React.forwardRef(({ className, children, ...props }, r
 CardHeader.displayName = 'CardHeader'
 
 export const CardTitle = React.forwardRef(({ className, children, ...props }, ref) => (
-  <HeroCard.Title ref={ref} className={cn('text-base font-extrabold text-slate-900 dark:text-white', className)} {...props}>
+  <HeroCard.Title ref={ref} className={cn('text-lg font-semibold text-slate-900 dark:text-white tracking-tight', className)} {...props}>
     {children}
   </HeroCard.Title>
 ))
 CardTitle.displayName = 'CardTitle'
 
 export const CardDescription = React.forwardRef(({ className, children, ...props }, ref) => (
-  <HeroCard.Description ref={ref} className={cn('text-xs text-slate-500 dark:text-slate-400 mt-0.5', className)} {...props}>
+  <HeroCard.Description ref={ref} className={cn('text-sm text-slate-500 dark:text-slate-400 mt-1', className)} {...props}>
     {children}
   </HeroCard.Description>
 ))

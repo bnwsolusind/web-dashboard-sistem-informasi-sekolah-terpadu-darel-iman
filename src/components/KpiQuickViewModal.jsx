@@ -431,7 +431,7 @@ export default function KpiQuickViewModal({ type, isOpen, onClose, initialUnitId
       <Modal
         isOpen={isOpen}
         onClose={onClose}
-        maxWidth="max-w-6xl"
+        maxWidth="max-w-4xl"
         title={
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300">
