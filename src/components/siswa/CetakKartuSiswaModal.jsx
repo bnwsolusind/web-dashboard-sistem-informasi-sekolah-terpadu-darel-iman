@@ -420,22 +420,22 @@ export default function CetakKartuSiswaModal({ student, onClose, showSettings = 
   return (
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-950/65 p-3 backdrop-blur-sm">
-        <section className={`my-3 flex max-h-[calc(100vh-1.5rem)] w-full ${showSettings ? 'max-w-6xl' : 'max-w-3xl'} flex-col overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#1B2433] shadow-2xl`}>
-          <header className="flex shrink-0 items-center justify-between border-b border-slate-100 dark:border-slate-800 px-5 py-4">
+        <section className="my-3 flex max-h-[calc(100vh-1.5rem)] w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#1B2433] shadow-xl">
+          <header className="flex shrink-0 items-center justify-between border-b border-slate-100 dark:border-slate-800 px-6 py-4">
             <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400"><FaIdCard /></span>
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-600 text-white shadow-sm"><FaIdCard /></span>
               <div>
-                <h2 className="text-base font-bold text-slate-900 dark:text-white">Kartu Siswa (Pelajar)</h2>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">{showSettings ? 'Pratinjau kartu identitas, QR absensi Dareliman Edu, dan kustomisasi sisi belakang.' : 'Pratinjau kartu identitas resmi dan QR absensi Dareliman Edu.'}</p>
+                <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Kartu Siswa (Pelajar)</h2>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{showSettings ? 'Pratinjau kartu identitas, QR absensi Dareliman Edu, dan kustomisasi sisi belakang.' : 'Pratinjau kartu identitas resmi dan QR absensi Dareliman Edu.'}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
               {showSettings && (
-                <button type="button" onClick={saveTemplate} disabled={isSaving} className="hidden h-10 items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 px-4 text-xs font-semibold text-white disabled:opacity-60 sm:flex cursor-pointer transition-colors shadow-sm">
+                <button type="button" onClick={saveTemplate} disabled={isSaving} className="hidden h-9 items-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 px-4 text-sm font-medium text-white disabled:opacity-60 sm:flex cursor-pointer transition-colors shadow-xs">
                   {isSaving ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <FaBookmark />} {isSaving ? 'Menyimpan...' : 'Simpan Pilihan'}
                 </button>
               )}
-              <button type="button" onClick={onClose} aria-label="Tutup" className="flex h-10 w-10 items-center justify-center rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-colors"><FaTimes /></button>
+              <button type="button" onClick={onClose} aria-label="Tutup" className="flex size-8 items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-400 cursor-pointer transition-colors"><FaTimes /></button>
             </div>
           </header>
 
@@ -881,15 +881,15 @@ export default function CetakKartuSiswaModal({ student, onClose, showSettings = 
             </main>
           </div>
 
-          <footer className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-[#1B2433] px-5 py-4">
-            <button type="button" onClick={onClose} className="h-10 rounded-xl border border-slate-200 dark:border-slate-700 px-5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer transition-colors">Tutup</button>
+          <footer className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 px-6 py-4">
+            <button type="button" onClick={onClose} className="h-9 rounded-lg border border-slate-200 dark:border-slate-700 px-4 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer transition-colors shadow-xs">Tutup</button>
             <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={() => modalFileInputRef.current?.click()}
-                className="flex h-10 items-center gap-2 rounded-xl border border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-950/60 px-3.5 text-xs font-bold text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 cursor-pointer transition-colors"
+                className="flex h-9 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors shadow-xs"
               >
-                <Camera className="h-4 w-4 text-emerald-700 dark:text-emerald-400" /> Ubah Foto
+                <Camera className="h-4 w-4 text-slate-500" /> Ubah Foto
               </button>
               <input
                 ref={modalFileInputRef}
@@ -898,13 +898,13 @@ export default function CetakKartuSiswaModal({ student, onClose, showSettings = 
                 className="hidden"
                 onChange={handleModalPhotoChange}
               />
-              <button type="button" onClick={saveTemplate} disabled={isSaving} className="flex h-10 items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-700 px-4 text-xs font-bold text-slate-700 dark:text-slate-200 disabled:opacity-60 sm:hidden cursor-pointer">
+              <button type="button" onClick={saveTemplate} disabled={isSaving} className="flex h-9 items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 px-4 text-sm font-medium text-slate-700 dark:text-slate-200 disabled:opacity-60 sm:hidden cursor-pointer shadow-xs">
                 {isSaving ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <FaBookmark />} Simpan
               </button>
-              <button type="button" onClick={handleDownload} disabled={isProcessing} className="flex h-10 items-center gap-2 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-700 px-4 text-xs font-extrabold hover:bg-amber-100 dark:hover:bg-amber-900/50 disabled:opacity-60 cursor-pointer shadow-xs transition-colors">
-                <FaDownload className="text-amber-600 dark:text-amber-400" /> Unduh ID Card
+              <button type="button" onClick={handleDownload} disabled={isProcessing} className="flex h-9 items-center gap-2 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 px-4 text-sm font-medium disabled:opacity-60 cursor-pointer shadow-xs transition-colors">
+                <FaDownload className="text-slate-500" /> Unduh ID Card
               </button>
-              <button type="button" onClick={handlePrint} className="flex h-10 items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 px-5 text-xs font-bold text-white cursor-pointer shadow-xs transition-colors"><FaPrint /> Cetak ID Card</button>
+              <button type="button" onClick={handlePrint} className="flex h-9 items-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 px-4 text-sm font-medium text-white cursor-pointer shadow-xs transition-colors"><FaPrint /> Cetak ID Card</button>
             </div>
           </footer>
         </section>

@@ -1123,20 +1123,20 @@ export default function StudentFormModal({
         transition={{ type: 'spring', stiffness: 400, damping: 28 }}
         className="modal-dialog font-sans my-auto w-full max-w-4xl py-2 sm:py-0"
       >
-        <div className="modal-content flex max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-2xl shadow-emerald-950/20 dark:border-slate-800 dark:bg-[#182232] dark:shadow-black/60">
+        <div className="modal-content flex max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-2xl shadow-emerald-950/20 dark:border-slate-800 dark:bg-[#182232] dark:shadow-black/60">
 
           {/* Top Accent Gradient Bar */}
           <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
 
           {/* Modal Header — Clean Top with Icon Badge & Title */}
-          <div className="flex shrink-0 items-center justify-between border-b border-slate-100 bg-white px-4 py-3 sm:px-6 sm:py-4 dark:border-slate-800 dark:bg-slate-950">
+          <div className="modal-header flex shrink-0 items-center justify-between border-b border-slate-100 bg-white px-4 py-3 sm:px-6 sm:py-4 dark:border-slate-800 dark:bg-slate-950">
             <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-              <div className="flex size-9 sm:size-10 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200/60 p-2 text-emerald-700 dark:from-emerald-950/60 dark:to-teal-950/40 dark:border-emerald-800/60 dark:text-emerald-300 shrink-0">
+              <div className="flex size-9 sm:size-10 items-center justify-center rounded-lg bg-emerald-50 border border-emerald-200/60 p-2 text-emerald-700 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shrink-0">
                 <GraduationCap className="size-4 sm:size-5" />
               </div>
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                  <h2 className="text-sm sm:text-base font-bold tracking-tight text-slate-900 dark:text-white truncate">
+                  <h2 className="modal-title text-lg font-semibold tracking-tight text-slate-900 dark:text-white truncate">
                     {initialData ? 'Edit Data Siswa' : 'Tambah Siswa Baru'}
                   </h2>
                   <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60 shrink-0">
@@ -1732,16 +1732,14 @@ export default function StudentFormModal({
             </form>
           </div>
 
-          {/* Modal Footer — Canonical Vivid Gradient Squircle Actions */}
-          <div className="flex shrink-0 items-center justify-between border-t border-slate-100 bg-white px-4 py-3 sm:px-6 sm:py-4 dark:border-slate-800 dark:bg-slate-950 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))] sm:pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
+          {/* Modal Footer — Canonical Unified Actions */}
+          <div className="modal-footer flex shrink-0 items-center justify-between border-t border-slate-100 bg-white px-4 py-3 sm:px-6 sm:py-4 dark:border-slate-800 dark:bg-slate-950 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))] sm:pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex items-center gap-1.5 sm:gap-2 rounded-2xl bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs font-extrabold border border-rose-300/40 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer disabled:opacity-50 shrink-0"
+              className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 px-4 text-sm font-medium transition-all duration-200 cursor-pointer disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 shrink-0"
             >
-              <div className="flex size-4 sm:size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                <X className="size-3 sm:size-3.5 text-white" strokeWidth={2.2} />
-              </div>
+              <X className="size-4" strokeWidth={2} />
               <span>Batal</span>
             </button>
 
@@ -1750,11 +1748,9 @@ export default function StudentFormModal({
                 <button
                   type="button"
                   onClick={() => setActiveStep(prev => prev - 1)}
-                  className="inline-flex items-center gap-1.5 sm:gap-2 rounded-2xl bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700 text-white px-3 sm:px-4 py-2 sm:py-2.5 text-xs font-extrabold border border-blue-300/40 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer shadow-xs shadow-blue-500/20"
+                  className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 px-4 text-sm font-medium transition-all duration-200 cursor-pointer disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                 >
-                  <div className="flex size-4 sm:size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                    <ArrowLeft className="size-3 sm:size-3.5 text-white" strokeWidth={2.2} />
-                  </div>
+                  <ArrowLeft className="size-4" strokeWidth={2} />
                   <span>Kembali</span>
                 </button>
               )}
@@ -1763,22 +1759,18 @@ export default function StudentFormModal({
                 <button
                   type="button"
                   onClick={handleNextStep}
-                  className="inline-flex items-center gap-1.5 sm:gap-2 rounded-2xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white px-3.5 sm:px-5 py-2 sm:py-2.5 text-xs font-extrabold border border-emerald-300/40 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer shadow-md shadow-emerald-500/20"
+                  className="inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white px-4 text-sm font-medium transition-all duration-200 cursor-pointer disabled:opacity-50 shadow-sm"
                 >
                   <span>Selanjutnya</span>
-                  <div className="flex size-4 sm:size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                    <ArrowRight className="size-3 sm:size-3.5 text-white" strokeWidth={2.2} />
-                  </div>
+                  <ArrowRight className="size-4" strokeWidth={2} />
                 </button>
               ) : (
                 <button
                   type="submit"
                   form="student-main-form"
-                  className="inline-flex items-center gap-1.5 sm:gap-2 rounded-2xl bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 text-white px-3.5 sm:px-5 py-2 sm:py-2.5 text-xs font-extrabold border border-emerald-400/50 shadow-md shadow-emerald-700/20 hover:scale-[1.03] transition-all duration-200 active:scale-95 cursor-pointer"
+                  className="inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white px-4 text-sm font-medium transition-all duration-200 cursor-pointer disabled:opacity-50 shadow-sm"
                 >
-                  <div className="flex size-4 sm:size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                    <Save className="size-3 sm:size-3.5 text-white" strokeWidth={2.2} />
-                  </div>
+                  <Save className="size-4" strokeWidth={2} />
                   <span>Simpan Data</span>
                 </button>
               )}

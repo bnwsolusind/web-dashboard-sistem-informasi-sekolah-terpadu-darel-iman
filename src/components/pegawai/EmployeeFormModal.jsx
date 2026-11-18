@@ -118,25 +118,25 @@ export default function EmployeeFormModal({
       tabIndex={-1}
     >
       <div className="modal-dialog font-sans my-auto w-full max-w-4xl py-2 sm:py-0">
-        <div className="modal-content flex max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-950">
+        <div className="modal-content flex max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl dark:border-slate-800 dark:bg-[#1B2433]">
           {/* Top accent bar */}
           <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
 
           {/* Header */}
-          <div className="modal-header flex items-center justify-between gap-2 border-b border-slate-100 bg-white px-4 sm:px-6 py-3.5 sm:py-4.5 dark:border-slate-800 dark:bg-slate-950">
+          <div className="modal-header flex items-center justify-between gap-2 border-b border-slate-100 bg-white px-6 py-4 dark:border-slate-800 dark:bg-[#1B2433]">
             <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-              <div className="rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200/60 p-2 sm:p-2.5 text-[#0E5C44] dark:from-emerald-950/60 dark:to-teal-950/40 dark:border-emerald-800/60 dark:text-[#3FBF75] shrink-0">
-                <UserPlus className="h-4 sm:h-5 w-4 sm:w-5" strokeWidth={2.25} />
+              <div className="flex size-9 items-center justify-center rounded-lg bg-emerald-600 text-white shadow-sm shrink-0">
+                <UserPlus className="h-4.5 w-4.5" strokeWidth={2.25} />
               </div>
               <div className="min-w-0">
-                <h3 id="employee-form-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <h3 id="employee-form-title" className="modal-title text-lg font-semibold text-slate-900 dark:text-white flex flex-wrap items-center gap-1.5 sm:gap-2">
                   <span className="truncate">{isEditMode ? (isUnitPersonnelManager ? 'Edit Jabatan Pegawai' : 'Edit Pegawai') : 'Tambah Pegawai'}</span>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-[#0E5C44] border border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60 shrink-0">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60 shrink-0">
                     <Sparkles className="size-3" />
                     {isEditMode ? 'Update' : 'Baru'}
                   </span>
                 </h3>
-                <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+                <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5 truncate">
                   Langkah {currentStep} dari 4 · {
                     currentStep === 1 ? 'Identitas & Foto' :
                     currentStep === 2 ? 'Kepegawaian' :
@@ -155,7 +155,7 @@ export default function EmployeeFormModal({
               <button
                 type="button"
                 onClick={onClose}
-                className="rounded-xl p-2 bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white border border-rose-300/40 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer shrink-0"
+                className="size-8 flex items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-400 transition-all cursor-pointer active:scale-95 shrink-0"
                 aria-label="Tutup"
               >
                 <X className="size-4" strokeWidth={2.25} />
@@ -753,11 +753,9 @@ export default function EmployeeFormModal({
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white px-4 py-2.5 text-xs font-extrabold border border-rose-300/40 transition-all duration-200 hover:scale-[1.02] active:scale-95 cursor-pointer disabled:opacity-50"
+              className="inline-flex w-full sm:w-auto h-9 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 px-4 text-sm font-medium transition-all duration-200 cursor-pointer disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
             >
-              <div className="flex size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                <X className="size-3.5 text-white" strokeWidth={2.2} />
-              </div>
+              <X className="size-4" strokeWidth={2} />
               <span>Batal</span>
             </button>
 
@@ -767,11 +765,9 @@ export default function EmployeeFormModal({
                   type="button"
                   onClick={() => setCurrentStep((s) => Math.max(1, s - 1))}
                   disabled={isSubmitting}
-                  className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700 text-white px-4 py-2.5 text-xs font-extrabold border border-blue-300/40 transition-all duration-200 hover:scale-[1.02] active:scale-95 cursor-pointer disabled:opacity-50"
+                  className="inline-flex w-full sm:w-auto h-9 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 px-4 text-sm font-medium transition-all duration-200 cursor-pointer disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
                 >
-                  <div className="flex size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                    <ArrowLeft className="size-3.5 text-white" strokeWidth={2.2} />
-                  </div>
+                  <ArrowLeft className="size-4" strokeWidth={2} />
                   <span>Kembali</span>
                 </button>
               )}
@@ -780,12 +776,10 @@ export default function EmployeeFormModal({
                   type="button"
                   onClick={() => setCurrentStep((s) => Math.min(4, s + 1))}
                   disabled={isSubmitting}
-                  className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white px-5 py-2.5 text-xs font-extrabold border border-emerald-300/40 hover:scale-[1.02] transition-all duration-200 active:scale-95 cursor-pointer disabled:opacity-50"
+                  className="inline-flex w-full sm:w-auto h-9 items-center justify-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white px-4 text-sm font-medium transition-all duration-200 cursor-pointer disabled:opacity-50 shadow-sm"
                 >
                   <span>Selanjutnya</span>
-                  <div className="flex size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                    <ArrowRight className="size-3.5 text-white" strokeWidth={2.2} />
-                  </div>
+                  <ArrowRight className="size-4" strokeWidth={2} />
                 </button>
               )}
               {(currentStep === 4 || isEditMode || isUnitPersonnelManager) && (
@@ -793,14 +787,12 @@ export default function EmployeeFormModal({
                   type="button"
                   onClick={onSubmit}
                   disabled={isSubmitting}
-                  className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 text-white px-5 py-2.5 text-xs font-extrabold border border-emerald-400/50 shadow-md shadow-emerald-700/20 hover:scale-[1.02] transition-all duration-200 active:scale-95 cursor-pointer disabled:opacity-50"
+                  className="inline-flex w-full sm:w-auto h-9 items-center justify-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white px-4 text-sm font-medium transition-all duration-200 cursor-pointer disabled:opacity-50 shadow-sm"
                 >
                   {isSubmitting ? (
                     <Spinner size="xs" />
                   ) : (
-                    <div className="flex size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                      <CheckCircle2 className="size-3.5 text-white" strokeWidth={2.2} />
-                    </div>
+                    <CheckCircle2 className="size-4" strokeWidth={2} />
                   )}
                   <span>{isSubmitting ? 'Menyimpan...' : (isEditMode ? 'Simpan Perubahan' : 'Simpan Pegawai')}</span>
                 </button>

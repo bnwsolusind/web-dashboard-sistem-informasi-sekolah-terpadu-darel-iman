@@ -988,9 +988,8 @@ export default function StudentBillsManagementPage() {
                   <Button
                     type="submit"
                     variant="primary"
-                    size="sm"
                     disabled={creating}
-                    className="!bg-[#0E5C44] !text-white"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white"
                   >
                     {creating ? 'Menerbitkan...' : 'Terbitkan Sekarang'}
                   </Button>

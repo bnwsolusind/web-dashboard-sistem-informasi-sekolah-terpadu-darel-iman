@@ -822,29 +822,29 @@ function CrudDrawer({ config, state, options, close, save, saving }) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 16 }}
         transition={{ duration: 0.2, ease: 'easeOut' }}
-        className="w-full max-w-2xl bg-white dark:bg-[#1B2433] rounded-3xl shadow-2xl overflow-hidden my-auto max-h-[90vh] flex flex-col relative border border-slate-200/80 dark:border-slate-800"
+        className="modal-content w-full max-w-xl bg-white dark:bg-[#1B2433] rounded-xl shadow-2xl overflow-hidden my-auto max-h-[90vh] flex flex-col relative border border-slate-200/80 dark:border-slate-800"
         onSubmit={handleSubmit(save)}
       >
         <div className="h-1.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
-        <header className="flex items-center justify-between border-b border-slate-100 p-5 dark:border-slate-800 shrink-0">
+        <header className="modal-header flex items-center justify-between border-b border-slate-100 p-5 dark:border-slate-800 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-md shadow-emerald-500/20">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 dark:bg-emerald-950/60 dark:border-emerald-800 dark:text-emerald-300">
               {state.mode === 'create' ? <Plus className="size-5" /> : state.mode === 'detail' ? <Eye className="size-5" /> : <Pencil className="size-5" />}
             </div>
             <div>
               <small className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Mutaba’ah Yaumiyyah</small>
-              <h2 className="text-base font-black text-slate-900 dark:text-white">{state.mode === 'create' ? 'Tambah' : state.mode === 'detail' ? 'Detail' : 'Edit'} {config.title}</h2>
+              <h2 className="modal-title text-lg font-semibold text-slate-900 dark:text-white">{state.mode === 'create' ? 'Tambah' : state.mode === 'detail' ? 'Detail' : 'Edit'} {config.title}</h2>
             </div>
           </div>
-          <button type="button" onClick={close} className="rounded-xl p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-colors"><X className="size-5" /></button>
+          <button type="button" onClick={close} className="rounded-lg p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-colors"><X className="size-5" /></button>
         </header>
         <main className="p-5 space-y-4 flex-1 overflow-y-auto">
           {config.fields.filter((field) => !field.conditional || (field.conditional === 'boarding' ? boarding : !boarding)).map((field) => (
             <FormField key={field.name} field={field} register={register} setValue={setValue} watch={watch} error={errors[field.name]?.message} options={options} disabled={state.mode === 'detail'} />
           ))}
         </main>
-        <footer className="flex justify-end gap-2 border-t border-slate-100 p-4 bg-slate-50/50 dark:border-slate-800 dark:bg-slate-800/40 shrink-0">
-          <Button appearance="outline" size="sm" type="button" onClick={close} className="cursor-pointer">Tutup</Button>
+        <footer className="modal-footer flex justify-end gap-2 border-t border-slate-100 p-4 bg-slate-50/50 dark:border-slate-800 dark:bg-slate-800/40 shrink-0">
+          <Button appearance="outline" size="sm" type="button" onClick={close} className="cursor-pointer">Batal</Button>
           {state.mode !== 'detail' && (
             <Button variant="primary" size="sm" type="submit" disabled={saving} className="cursor-pointer">
               {saving && <Loader2 className="size-4 animate-spin mr-1" />} Simpan
