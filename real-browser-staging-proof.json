@@ -1,0 +1,173 @@
+{
+  "uiInteractionLog": [
+    {
+      "stepName": "1.1 Buka Halaman Masuk",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T00:51:42.936Z"
+    },
+    {
+      "stepName": "1.1 Buka Halaman Masuk",
+      "status": "SUCCESS",
+      "details": "Form login tampil",
+      "time": "2026-11-18T00:51:44.098Z"
+    },
+    {
+      "stepName": "1.2 Ketik Kredensial Super Admin & Klik Submit",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T00:51:44.098Z"
+    },
+    {
+      "stepName": "1.2 Ketik Kredensial Super Admin & Klik Submit",
+      "status": "SUCCESS",
+      "details": "Berhasil diarahkan ke /dashboard",
+      "time": "2026-11-18T00:51:45.616Z"
+    },
+    {
+      "stepName": "2.1 Navigasi ke Tagihan Siswa",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T00:51:45.616Z"
+    },
+    {
+      "stepName": "2.1 Navigasi ke Tagihan Siswa",
+      "status": "SUCCESS",
+      "details": "Halaman tagihan terbuka tanpa blank putih",
+      "time": "2026-11-18T00:51:48.055Z"
+    },
+    {
+      "stepName": "2.2 Interaksi Filter Dropdown",
+      "status": "START",
+      "details": "Ditemukan 3 filter",
+      "time": "2026-11-18T00:51:48.060Z"
+    },
+    {
+      "stepName": "2.2 Interaksi Filter Dropdown",
+      "status": "SUCCESS",
+      "details": "Pilihan filter berhasil diubah",
+      "time": "2026-11-18T00:51:48.069Z"
+    },
+    {
+      "stepName": "3.1 Buka Absensi Pembelajaran",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T00:51:48.085Z"
+    },
+    {
+      "stepName": "3.1 Buka Absensi Pembelajaran",
+      "status": "SUCCESS",
+      "details": "Absensi Pembelajaran termuat",
+      "time": "2026-11-18T00:51:50.265Z"
+    },
+    {
+      "stepName": "3.2 Buka Laporan Absensi & Uji Tombol Export/Cetak",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T00:51:50.265Z"
+    },
+    {
+      "stepName": "3.2.1 Klik Tombol Export Datatable",
+      "status": "SUCCESS",
+      "details": "Modal pilihan format export muncul",
+      "time": "2026-11-18T00:51:53.147Z"
+    },
+    {
+      "stepName": "3.2.2 Klik Tombol Cetak Laporan",
+      "status": "SUCCESS",
+      "details": "Modal Print Preview dengan kop surat terbuka",
+      "time": "2026-11-18T00:51:54.713Z"
+    },
+    {
+      "stepName": "4.1 Buka Halaman Setoran Tahfizh",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T00:51:54.809Z"
+    },
+    {
+      "stepName": "4.2 Tombol Tambah Setoran",
+      "status": "INFO",
+      "details": "Halaman tahfizh interaktif siap",
+      "time": "2026-11-18T00:51:57.588Z"
+    },
+    {
+      "stepName": "4.3 Klik Tombol Cetak Tahfizh",
+      "status": "SUCCESS",
+      "details": "Modal opsi cetak rapor/kartu tahfizh terbuka",
+      "time": "2026-11-18T00:51:57.687Z"
+    },
+    {
+      "stepName": "5.1 Buka Mutabaah Template Agenda",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T00:51:58.696Z"
+    },
+    {
+      "stepName": "5.1 Buka Mutabaah Template Agenda",
+      "status": "SUCCESS",
+      "details": "Halaman template agenda mutabaah terbuka sempurna",
+      "time": "2026-11-18T00:52:01.492Z"
+    },
+    {
+      "stepName": "5.2 Klik Tambah Template Data",
+      "status": "SUCCESS",
+      "details": "Drawer/Modal input template terbuka",
+      "time": "2026-11-18T00:52:01.600Z"
+    },
+    {
+      "stepName": "6. Login Role Wali Kelas",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T00:52:02.611Z"
+    },
+    {
+      "stepName": "6. Login Role Wali Kelas",
+      "status": "SUCCESS",
+      "details": "Tampil di portal /(dashboard|portal) dengan 0 error",
+      "time": "2026-11-18T00:52:06.634Z"
+    },
+    {
+      "stepName": "6. Login Role Guru / Musyrif",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T00:52:06.634Z"
+    },
+    {
+      "stepName": "6. Login Role Guru / Musyrif",
+      "status": "SUCCESS",
+      "details": "Tampil di portal /(portal-guru|dashboard) dengan 0 error",
+      "time": "2026-11-18T00:52:10.664Z"
+    },
+    {
+      "stepName": "6. Login Role Orang Tua",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T00:52:10.664Z"
+    },
+    {
+      "stepName": "6. Login Role Orang Tua",
+      "status": "SUCCESS",
+      "details": "Tampil di portal /(portal|dashboard) dengan 0 error",
+      "time": "2026-11-18T00:52:14.972Z"
+    }
+  ],
+  "consoleLogs": [
+    {
+      "type": "verbose",
+      "text": "[DOM] Input elements should have autocomplete attributes (suggested: \"current-password\"): (More info: https://goo.gl/9p2vKq) %o"
+    },
+    {
+      "type": "verbose",
+      "text": "[DOM] Input elements should have autocomplete attributes (suggested: \"current-password\"): (More info: https://goo.gl/9p2vKq) %o"
+    },
+    {
+      "type": "verbose",
+      "text": "[DOM] Input elements should have autocomplete attributes (suggested: \"current-password\"): (More info: https://goo.gl/9p2vKq) %o"
+    },
+    {
+      "type": "verbose",
+      "text": "[DOM] Input elements should have autocomplete attributes (suggested: \"current-password\"): (More info: https://goo.gl/9p2vKq) %o"
+    }
+  ],
+  "pageErrors": []
+}

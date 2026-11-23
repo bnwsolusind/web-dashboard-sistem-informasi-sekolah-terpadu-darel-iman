@@ -1,15 +1,16 @@
 import React from 'react'
 import { SlidersHorizontal, RotateCcw } from 'lucide-react'
 import { cn } from '../../lib/utils'
+import AppButton from './AppButton'
 
 /**
  * AppFilterBar - Canonical filter bar wrapper for page tables and data filters.
  *
  * Props:
- *  - label: string (default 'Filter')
- *  - activeCount: number of active filter conditions
- *  - onReset: callback function when reset filter button is clicked
- *  - children: select inputs, datepickers, radios, etc.
+ * - label: string (default 'Filter')
+ * - activeCount: number of active filter conditions
+ * - onReset: callback function when reset filter button is clicked
+ * - children: select inputs, datepickers, radios, etc.
  */
 export default function AppFilterBar({
   children,
@@ -21,31 +22,33 @@ export default function AppFilterBar({
   return (
     <section
       className={cn(
-        'flex flex-col gap-3 rounded-[20px] border border-emerald-300/60 bg-white p-4 shadow-xs transition-all sm:flex-row sm:items-center dark:border-emerald-800/60 dark:bg-[#1B2433]',
+        'flex flex-col gap-3 rounded-2xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xl shadow-emerald-950/15 bg-white p-4 shadow-xs transition-all sm:flex-row sm:items-center dark:border-emerald-800/60 dark:bg-[#1B2433]',
         className
       )}
     >
       {label && (
         <div className="flex shrink-0 items-center justify-between sm:justify-start gap-2">
           <span className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 dark:text-slate-300">
-            <SlidersHorizontal className="h-4 w-4 text-[#0E5C44] dark:text-[#3FBF75]" />
+            <SlidersHorizontal className="h-[18px] w-[18px] text-[#059669] dark:text-[#18A972]" strokeWidth={2} />
             {label}
             {activeCount > 0 && (
-              <span className="ml-1 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-[#0E5C44] px-1.5 text-[10px] font-extrabold text-white dark:bg-[#3FBF75] dark:text-slate-900">
+              <span className="ml-1 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-[#059669] px-1.5 text-[10px] font-extrabold text-white dark:bg-[#18A972] dark:text-slate-900">
                 {activeCount}
               </span>
             )}
           </span>
 
           {activeCount > 0 && onReset && (
-            <button
+            <AppButton
               type="button"
+              variant="ghost"
+              size="xs"
+              icon={RotateCcw}
               onClick={onReset}
-              className="inline-flex sm:hidden items-center gap-1 text-[11px] font-semibold text-rose-600 hover:text-rose-700 dark:text-rose-400"
+              className="sm:hidden text-rose-600 hover:text-rose-700 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/40"
             >
-              <RotateCcw className="h-3 w-3" />
               Reset
-            </button>
+            </AppButton>
           )}
         </div>
       )}
@@ -55,14 +58,16 @@ export default function AppFilterBar({
       </div>
 
       {activeCount > 0 && onReset && (
-        <button
+        <AppButton
           type="button"
+          variant="ghost"
+          size="xs"
+          icon={RotateCcw}
           onClick={onReset}
-          className="hidden sm:inline-flex shrink-0 items-center gap-1 text-xs font-bold text-slate-500 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-400 transition-colors"
+          className="hidden sm:inline-flex shrink-0 text-slate-500 hover:text-rose-600 hover:bg-rose-50 dark:text-slate-400 dark:hover:text-rose-400 dark:hover:bg-rose-950/40"
         >
-          <RotateCcw className="h-3.5 w-3.5" />
           Reset Filter
-        </button>
+        </AppButton>
       )}
     </section>
   )

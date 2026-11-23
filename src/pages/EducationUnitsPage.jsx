@@ -1,8 +1,22 @@
-import { useMemo, useState } from 'react'
-import { cn } from '../lib/utils'
-import { useDebounce } from '../hooks/useDebounce'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { motion, AnimatePresence } from 'framer-motion'
+import {
+  useMemo,
+  useState
+} from 'react'
+import {
+  cn
+} from '../lib/utils'
+import {
+  useDebounce
+} from '../hooks/useDebounce'
+import {
+  useMutation,
+  useQuery,
+  useQueryClient
+} from '@tanstack/react-query'
+import {
+  motion,
+  AnimatePresence
+} from 'framer-motion'
 import {
   AlertTriangle,
   ArrowLeft,
@@ -47,7 +61,7 @@ import {
   UserPlus,
   UsersRound,
   X,
-  XCircle,
+  XCircle
 } from 'lucide-react'
 import {
   ResponsiveContainer,
@@ -60,24 +74,51 @@ import {
   PieChart,
   Pie,
   Cell,
-  Legend,
+  Legend
 } from 'recharts'
-import { educationUnitService } from '../services/educationUnitService'
-import { employeeService } from '../services/employeeService'
-import { studentService } from '../services/studentService'
-import { kelasService } from '../services/kelasService'
-import { api } from '../services/api'
-import { downloadFileFromApi } from '../utils/exportUtils'
-import { PersonIdentityCell } from '../components/ui/PersonIdentityCell'
+import {
+  educationUnitService
+} from '../services/educationUnitService'
+import {
+  employeeService
+} from '../services/employeeService'
+import {
+  studentService
+} from '../services/studentService'
+import {
+  kelasService
+} from '../services/kelasService'
+import {
+  api
+} from '../services/api'
+import {
+  downloadFileFromApi
+} from '../utils/exportUtils'
+import {
+  PersonIdentityCell
+} from '../components/ui/PersonIdentityCell'
 import ActionDropdown from '../components/app/ActionDropdown'
-import { isFoundationUser } from '../auth/portalResolver'
-import { SmartScrollFab } from '../components/common'
-import { useAuthStore } from '../stores/authStore'
-import { usePengaturanStore } from '../stores/pengaturanStore'
+import {
+  isFoundationUser
+} from '../auth/portalResolver'
+import {
+  SmartScrollFab
+} from '../components/common'
+import {
+  useAuthStore
+} from '../stores/authStore'
+import {
+  usePengaturanStore
+} from '../stores/pengaturanStore'
 import AppPageHeader from '../components/app/AppPageHeader'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
-import { HeroUiHeader } from '../components/ui/HeroUiHeader'
 import KpiCard from '../components/app/KpiCard'
+import {
+  HeroUiHeader,
+  PageToolbarActions,
+  KpiStatCard,
+  EducationUnitWithProgramCell
+} from '../components/app'
 import AppDataTable from '../components/app/AppDataTable'
 import AppBadge from '../components/app/AppBadge'
 import AppDrawer from '../components/app/AppDrawer'
@@ -85,10 +126,30 @@ import AppSkeleton from '../components/app/AppSkeleton'
 import AppEmptyState from '../components/app/AppEmptyState'
 import AppErrorState from '../components/app/AppErrorState'
 import PageContainer from '../components/app/PageContainer'
-import { useToast } from '../components/app'
-import { MasterStatusBadge, MasterErrorState, MasterEmptyState, MasterStatsGrid, MasterStatCard, SquircleActionButton, PrintOptionModal } from '../components/master-data'
-import { printCleanTable, downloadPdfTable } from '../utils/printHelper'
-import { TableRoot, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../components/ui/table'
+import {
+  useToast
+} from '../components/app'
+import {
+  MasterStatusBadge,
+  MasterErrorState,
+  MasterEmptyState,
+  MasterStatsGrid,
+  MasterStatCard,
+  SquircleActionButton,
+  PrintOptionModal
+} from '../components/master-data'
+import {
+  printCleanTable,
+  downloadPdfTable
+} from '../utils/printHelper'
+import {
+  TableRoot,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell
+} from '../components/ui/table'
 
 // Animation Variants
 const containerVariants = {
@@ -110,21 +171,36 @@ const itemVariants = {
     transition: { duration: 0.35, ease: 'easeOut' },
   },
 }
-import { useProvinsiList, useKotaOptions, useKecamatanOptions, useKelurahanOptions } from '../hooks/useWilayah'
-import { getProvinsiList, getKotaOptions, getKecamatanOptions, getKelurahanOptions } from '../components/siswa/wilayahData'
+import {
+  useProvinsiList,
+  useKotaOptions,
+  useKecamatanOptions,
+  useKelurahanOptions
+} from '../hooks/useWilayah'
+import {
+  getProvinsiList,
+  getKotaOptions,
+  getKecamatanOptions,
+  getKelurahanOptions
+} from '../components/siswa/wilayahData'
 import SearchableRegionInput from '../components/common/SearchableRegionInput'
 import InteractiveMapPicker from '../components/common/InteractiveMapPicker'
-import { getPostalCode, enrichKelurahanWithPostal } from '../utils/postalCodeHelper'
+import {
+  getPostalCode,
+  enrichKelurahanWithPostal
+} from '../utils/postalCodeHelper'
 import HeroUiFilterSelect from '../components/ui/HeroUiFilterSelect'
 import {
   Button as HeroButton,
-  Chip as HeroChip,
   Card as HeroCard,
   Modal as HeroModal,
   Spinner as HeroSpinner,
-  Tooltip as HeroTooltip,
+  Tooltip as HeroTooltip
 } from '@heroui/react'
-import { Button } from '@/components/ui/button'
+import { Chip as HeroChip } from '../components/ui/badge'
+import {
+  Button
+} from '@/components/ui/button'
 import {
   Dialog,
   DialogBody,
@@ -132,17 +208,29 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
+  DialogTitle
 } from '@/components/ui/dialog'
-import { Backdrop } from '@/components/ui/dialog'
-import { FieldDescription, FieldError, FieldLabel } from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
-import { TextArea } from '@/components/ui/text-area'
-import { TextField } from '@/components/ui/text-field'
+import {
+  Backdrop
+} from '@/components/ui/dialog'
+import {
+  FieldDescription,
+  FieldError,
+  FieldLabel
+} from '@/components/ui/field'
+import {
+  Input
+} from '@/components/ui/input'
+import {
+  TextArea
+} from '@/components/ui/text-area'
+import {
+  TextField
+} from '@/components/ui/text-field'
 import {
   HoverCard,
   HoverCardContent,
-  HoverCardTrigger,
+  HoverCardTrigger
 } from '@/components/ui/hover-card'
 
 // ── Color Map per Unit Type ──────────────────────────────────────────────────
@@ -153,12 +241,23 @@ const UNIT_COLORS = {
   MIT: { bg: 'bg-amber-500', text: 'text-white', border: 'border-amber-400' },
   SMPIT: { bg: 'bg-cyan-600', text: 'text-white', border: 'border-cyan-500' },
   SMAIT: { bg: 'bg-purple-600', text: 'text-white', border: 'border-purple-500' },
-  PONPES: { bg: 'bg-emerald-900', text: 'text-white', border: 'border-emerald-800' },
-  Mahad: { bg: 'bg-amber-800', text: 'text-white', border: 'border-amber-700' },
+  PONPES: { bg: 'bg-emerald-950', text: 'text-white', border: 'border-emerald-900' },
+  MAHAD: { bg: 'bg-teal-800', text: 'text-white', border: 'border-teal-700' },
+  Mahad: { bg: 'bg-teal-800', text: 'text-white', border: 'border-teal-700' },
 }
 
 function getUnitStyle(type) {
-  return UNIT_COLORS[type] || { bg: 'bg-slate-700', text: 'text-white', border: 'border-slate-600' }
+  if (!type) return { bg: 'bg-emerald-700', text: 'text-white', border: 'border-emerald-600' }
+  const upper = String(type).toUpperCase().trim()
+  if (upper.includes('TK')) return UNIT_COLORS.TKIT
+  if (upper.includes('TAUD')) return UNIT_COLORS.TAUD
+  if (upper.includes('SD')) return UNIT_COLORS.SDIT
+  if (upper.includes('MIT') || upper.includes('MI')) return UNIT_COLORS.MIT
+  if (upper.includes('SMP')) return UNIT_COLORS.SMPIT
+  if (upper.includes('SMA')) return UNIT_COLORS.SMAIT
+  if (upper.includes('PONPES') || upper.includes('PESANTREN')) return UNIT_COLORS.PONPES
+  if (upper.includes('MAHAD')) return UNIT_COLORS.MAHAD
+  return UNIT_COLORS[type] || { bg: 'bg-emerald-800', text: 'text-white', border: 'border-emerald-700' }
 }
 
 // ── Form helpers ─────────────────────────────────────────────────────────────
@@ -256,9 +355,9 @@ function makePayload(form) {
 function InlineAlert({ type = 'error', message, onClose }) {
   if (!message) return null
   const map = {
-    error: { bg: 'bg-rose-50 border-rose-200 text-rose-700', Icon: XCircle },
-    warning: { bg: 'bg-amber-50 border-amber-200 text-amber-700', Icon: AlertTriangle },
-    success: { bg: 'bg-emerald-50 border-emerald-200 text-emerald-700', Icon: CheckCircle2 },
+    error: { bg: 'bg-rose-50 border-rose-300 dark:border-rose-800 text-rose-700', Icon: XCircle },
+    warning: { bg: 'bg-amber-50 border-amber-300 dark:border-amber-800 text-amber-700', Icon: AlertTriangle },
+    success: { bg: 'bg-emerald-50 border-emerald-300 dark:border-emerald-800 text-emerald-700', Icon: CheckCircle2 },
   }
   const { bg, Icon } = map[type] || map.error
   return (
@@ -279,44 +378,180 @@ function InlineAlert({ type = 'error', message, onClose }) {
 // ── DEFINISI TONE WARNA KARTU KPI MODERN (HEROUI SPEC) ──
 const MODERN_CARD_TONES = {
   emerald: {
-    card: 'border-emerald-300/70 bg-gradient-to-br from-emerald-50 via-teal-50/60 to-white hover:border-emerald-400 dark:border-emerald-700/50 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-slate-900',
+    card: 'rounded-container border-2 border-emerald-300 dark:border-emerald-700/80 bg-gradient-to-b from-[#E6F8F3] via-[#E6F8F3]/30 to-white dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-emerald-400',
     glow: 'bg-emerald-400/20 group-hover:bg-emerald-400/30',
-    iconBox: 'bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-sm shadow-emerald-500/30',
-    tag: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300',
-    title: 'text-emerald-700 dark:text-emerald-400',
+    iconBox: '!bg-emerald-600 !text-white shadow-xs rounded-full',
+    iconGradient: '!bg-emerald-600 !text-white shadow-xs rounded-full',
+    tag: 'bg-[#D1FAE5] text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs',
+    badgeBg: 'bg-[#D1FAE5] text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs',
+    tagHeader: 'text-emerald-800 dark:text-emerald-300',
+    title: 'text-emerald-800 dark:text-emerald-300',
     val: 'text-slate-900 dark:text-white',
-    sub: 'text-slate-600 dark:text-slate-400',
-    cta: 'text-emerald-700 dark:text-emerald-400',
-  },
-  amber: {
-    card: 'border-amber-300/70 bg-gradient-to-br from-amber-50 via-orange-50/60 to-white hover:border-amber-400 dark:border-amber-700/50 dark:from-amber-950/40 dark:via-orange-950/20 dark:to-slate-900',
-    glow: 'bg-amber-400/20 group-hover:bg-amber-400/30',
-    iconBox: 'bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-sm shadow-amber-500/30',
-    tag: 'bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-300',
-    title: 'text-amber-700 dark:text-amber-400',
-    val: 'text-slate-900 dark:text-white',
-    sub: 'text-slate-600 dark:text-slate-400',
-    cta: 'text-amber-700 dark:text-amber-400',
+    value: 'text-slate-900 dark:text-white',
+    sub: 'text-emerald-700 dark:text-emerald-400 font-bold',
+    subtext: 'text-emerald-700 dark:text-emerald-400 font-bold',
+    cta: 'text-emerald-700 dark:text-emerald-400 font-bold',
+    divider: 'border-emerald-100 dark:border-emerald-900/60',
   },
   blue: {
-    card: 'border-sky-300/70 bg-gradient-to-br from-sky-50 via-blue-50/60 to-white hover:border-sky-400 dark:border-sky-700/50 dark:from-sky-950/40 dark:via-blue-950/20 dark:to-slate-900',
+    card: 'rounded-container border-2 border-sky-300 dark:border-sky-700/80 bg-gradient-to-b from-[#E0F2FE]/70 via-[#E0F2FE]/20 to-white dark:from-sky-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-sky-400',
     glow: 'bg-sky-400/20 group-hover:bg-sky-400/30',
-    iconBox: 'bg-gradient-to-br from-sky-500 to-blue-600 text-white shadow-sm shadow-sky-500/30',
-    tag: 'bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300',
-    title: 'text-sky-700 dark:text-sky-400',
+    iconBox: 'bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-md shadow-emerald-600/20 rounded-2xl',
+    iconGradient: 'bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-md shadow-emerald-600/20 rounded-2xl',
+    tag: 'bg-[#E0F2FE] text-sky-900 dark:bg-sky-950/80 dark:text-sky-300 border border-sky-200/80 dark:border-sky-800/60 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs',
+    badgeBg: 'bg-[#E0F2FE] text-sky-900 dark:bg-sky-950/80 dark:text-sky-300 border border-sky-200/80 dark:border-sky-800/60 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs',
+    tagHeader: 'text-sky-800 dark:text-sky-300',
+    title: 'text-sky-800 dark:text-sky-300',
     val: 'text-slate-900 dark:text-white',
-    sub: 'text-slate-600 dark:text-slate-400',
-    cta: 'text-sky-700 dark:text-sky-400',
+    value: 'text-slate-900 dark:text-white',
+    sub: 'text-sky-700 dark:text-sky-400 font-bold',
+    subtext: 'text-sky-700 dark:text-sky-400 font-bold',
+    cta: 'text-sky-700 dark:text-sky-400 font-bold',
+    divider: 'border-sky-100 dark:border-sky-900/60',
+  },
+  sky: {
+    card: 'rounded-container border-2 border-sky-300 dark:border-sky-700/80 bg-gradient-to-b from-[#E0F2FE]/70 via-[#E0F2FE]/20 to-white dark:from-sky-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-sky-400',
+    glow: 'bg-sky-400/20 group-hover:bg-sky-400/30',
+    iconBox: 'bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-md shadow-emerald-600/20 rounded-2xl',
+    iconGradient: 'bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-md shadow-emerald-600/20 rounded-2xl',
+    tag: 'bg-[#E0F2FE] text-sky-900 dark:bg-sky-950/80 dark:text-sky-300 border border-sky-200/80 dark:border-sky-800/60 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs',
+    badgeBg: 'bg-[#E0F2FE] text-sky-900 dark:bg-sky-950/80 dark:text-sky-300 border border-sky-200/80 dark:border-sky-800/60 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs',
+    tagHeader: 'text-sky-800 dark:text-sky-300',
+    title: 'text-sky-800 dark:text-sky-300',
+    val: 'text-slate-900 dark:text-white',
+    value: 'text-slate-900 dark:text-white',
+    sub: 'text-sky-700 dark:text-sky-400 font-bold',
+    subtext: 'text-sky-700 dark:text-sky-400 font-bold',
+    cta: 'text-sky-700 dark:text-sky-400 font-bold',
+    divider: 'border-sky-100 dark:border-sky-900/60',
+  },
+  cyan: {
+    card: 'rounded-container border-2 border-teal-300 dark:border-teal-700/80 bg-gradient-to-b from-[#CCFBF1]/70 via-[#CCFBF1]/20 to-white dark:from-teal-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-teal-400',
+    glow: 'bg-teal-400/20 group-hover:bg-teal-400/30',
+    iconBox: '!bg-teal-600 !text-white shadow-xs rounded-full',
+    iconGradient: '!bg-teal-600 !text-white shadow-xs rounded-full',
+    tag: 'bg-[#CCFBF1] text-teal-900 dark:bg-teal-950/80 dark:text-teal-300 border border-teal-200/80 dark:border-teal-800/60 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs',
+    badgeBg: 'bg-[#CCFBF1] text-teal-900 dark:bg-teal-950/80 dark:text-teal-300 border border-teal-200/80 dark:border-teal-800/60 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs',
+    tagHeader: 'text-teal-800 dark:text-teal-300',
+    title: 'text-teal-800 dark:text-teal-300',
+    val: 'text-slate-900 dark:text-white',
+    value: 'text-slate-900 dark:text-white',
+    sub: 'text-teal-700 dark:text-teal-400 font-bold',
+    subtext: 'text-teal-700 dark:text-teal-400 font-bold',
+    cta: 'text-teal-700 dark:text-teal-400 font-bold',
+    divider: 'border-teal-100 dark:border-teal-900/60',
+  },
+  indigo: {
+    card: 'rounded-container border-2 border-indigo-300 dark:border-indigo-700/80 bg-gradient-to-b from-[#E0E7FF]/70 via-[#E0E7FF]/20 to-white dark:from-indigo-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-indigo-400',
+    glow: 'bg-indigo-400/20 group-hover:bg-indigo-400/30',
+    iconBox: '!bg-indigo-600 !text-white shadow-xs rounded-full',
+    iconGradient: '!bg-indigo-600 !text-white shadow-xs rounded-full',
+    tag: 'bg-[#E0E7FF] text-indigo-900 dark:bg-indigo-950/80 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800/60 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs',
+    badgeBg: 'bg-[#E0E7FF] text-indigo-900 dark:bg-indigo-950/80 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800/60 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs',
+    tagHeader: 'text-indigo-800 dark:text-indigo-300',
+    title: 'text-indigo-800 dark:text-indigo-300',
+    val: 'text-slate-900 dark:text-white',
+    value: 'text-slate-900 dark:text-white',
+    sub: 'text-indigo-700 dark:text-indigo-400 font-bold',
+    subtext: 'text-indigo-700 dark:text-indigo-400 font-bold',
+    cta: 'text-indigo-700 dark:text-indigo-400 font-bold',
+    divider: 'border-indigo-100 dark:border-indigo-900/60',
+  },
+  rose: {
+    card: 'rounded-container border-2 border-rose-300 dark:border-rose-700/80 bg-gradient-to-b from-[#FFE4E6]/70 via-[#FFE4E6]/20 to-white dark:from-rose-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-rose-400',
+    glow: 'bg-rose-400/20 group-hover:bg-rose-400/30',
+    iconBox: '!bg-rose-500 !text-white shadow-xs rounded-full',
+    iconGradient: '!bg-rose-500 !text-white shadow-xs rounded-full',
+    tag: 'bg-[#FFE4E6] text-rose-900 dark:bg-rose-950/80 dark:text-rose-300 border border-rose-200/80 dark:border-rose-800/60 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs',
+    badgeBg: 'bg-[#FFE4E6] text-rose-900 dark:bg-rose-950/80 dark:text-rose-300 border border-rose-200/80 dark:border-rose-800/60 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs',
+    tagHeader: 'text-rose-800 dark:text-rose-300',
+    title: 'text-rose-800 dark:text-rose-300',
+    val: 'text-slate-900 dark:text-white',
+    value: 'text-slate-900 dark:text-white',
+    sub: 'text-rose-700 dark:text-rose-400 font-bold',
+    subtext: 'text-rose-700 dark:text-rose-400 font-bold',
+    cta: 'text-rose-700 dark:text-rose-400 font-bold',
+    divider: 'border-rose-100 dark:border-rose-900/60',
+  },
+  amber: {
+    card: 'rounded-container border-2 border-amber-300 dark:border-amber-700/80 bg-gradient-to-b from-[#FEF3C7]/70 via-[#FEF3C7]/20 to-white dark:from-amber-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-amber-400',
+    glow: 'bg-amber-400/20 group-hover:bg-amber-400/30',
+    iconBox: '!bg-amber-500 !text-white shadow-xs rounded-full',
+    iconGradient: '!bg-amber-500 !text-white shadow-xs rounded-full',
+    tag: 'bg-[#FEF3C7] text-amber-900 dark:bg-amber-950/80 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs',
+    badgeBg: 'bg-[#FEF3C7] text-amber-900 dark:bg-amber-950/80 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs',
+    tagHeader: 'text-amber-800 dark:text-amber-300',
+    title: 'text-amber-800 dark:text-amber-300',
+    val: 'text-slate-900 dark:text-white',
+    value: 'text-slate-900 dark:text-white',
+    sub: 'text-amber-700 dark:text-amber-400 font-bold',
+    subtext: 'text-amber-700 dark:text-amber-400 font-bold',
+    cta: 'text-amber-700 dark:text-amber-400 font-bold',
+    divider: 'border-amber-100 dark:border-amber-900/60',
+  },
+  violet: {
+    card: 'rounded-container border-2 border-purple-300 dark:border-purple-700/80 bg-gradient-to-b from-[#F3E8FF]/70 via-[#F3E8FF]/20 to-white dark:from-purple-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-purple-400',
+    glow: 'bg-purple-400/20 group-hover:bg-purple-400/30',
+    iconBox: '!bg-purple-600 !text-white shadow-xs rounded-full',
+    iconGradient: '!bg-purple-600 !text-white shadow-xs rounded-full',
+    tag: 'bg-[#F3E8FF] text-purple-900 dark:bg-purple-950/80 dark:text-purple-300 border border-purple-200/80 dark:border-purple-800/60 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs',
+    badgeBg: 'bg-[#F3E8FF] text-purple-900 dark:bg-purple-950/80 dark:text-purple-300 border border-purple-200/80 dark:border-purple-800/60 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs',
+    tagHeader: 'text-purple-800 dark:text-purple-300',
+    title: 'text-purple-800 dark:text-purple-300',
+    val: 'text-slate-900 dark:text-white',
+    value: 'text-slate-900 dark:text-white',
+    sub: 'text-purple-700 dark:text-purple-400 font-bold',
+    subtext: 'text-purple-700 dark:text-purple-400 font-bold',
+    cta: 'text-purple-700 dark:text-purple-400 font-bold',
+    divider: 'border-purple-100 dark:border-purple-900/60',
+  },
+  purple: {
+    card: 'rounded-container border-2 border-purple-300 dark:border-purple-700/80 bg-gradient-to-b from-[#F3E8FF]/70 via-[#F3E8FF]/20 to-white dark:from-purple-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-purple-400',
+    glow: 'bg-purple-400/20 group-hover:bg-purple-400/30',
+    iconBox: '!bg-purple-600 !text-white shadow-xs rounded-full',
+    iconGradient: '!bg-purple-600 !text-white shadow-xs rounded-full',
+    tag: 'bg-[#F3E8FF] text-purple-900 dark:bg-purple-950/80 dark:text-purple-300 border border-purple-200/80 dark:border-purple-800/60 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs',
+    badgeBg: 'bg-[#F3E8FF] text-purple-900 dark:bg-purple-950/80 dark:text-purple-300 border border-purple-200/80 dark:border-purple-800/60 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs',
+    tagHeader: 'text-purple-800 dark:text-purple-300',
+    title: 'text-purple-800 dark:text-purple-300',
+    val: 'text-slate-900 dark:text-white',
+    value: 'text-slate-900 dark:text-white',
+    sub: 'text-purple-700 dark:text-purple-400 font-bold',
+    subtext: 'text-purple-700 dark:text-purple-400 font-bold',
+    cta: 'text-purple-700 dark:text-purple-400 font-bold',
+    divider: 'border-purple-100 dark:border-purple-900/60',
   },
   teal: {
-    card: 'border-teal-300/70 bg-gradient-to-br from-teal-50 via-emerald-50/60 to-white hover:border-teal-400 dark:border-teal-700/50 dark:from-teal-950/40 dark:via-emerald-950/20 dark:to-slate-900',
+    card: 'rounded-container border-2 border-teal-300 dark:border-teal-700/80 bg-gradient-to-b from-[#CCFBF1]/70 via-[#CCFBF1]/20 to-white dark:from-teal-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-teal-400',
     glow: 'bg-teal-400/20 group-hover:bg-teal-400/30',
-    iconBox: 'bg-gradient-to-br from-teal-500 to-emerald-600 text-white shadow-sm shadow-teal-500/30',
-    tag: 'bg-teal-100 text-teal-800 dark:bg-teal-900/60 dark:text-teal-300',
-    title: 'text-teal-700 dark:text-teal-400',
+    iconBox: '!bg-teal-600 !text-white shadow-xs rounded-full',
+    iconGradient: '!bg-teal-600 !text-white shadow-xs rounded-full',
+    tag: 'bg-[#CCFBF1] text-teal-900 dark:bg-teal-950/80 dark:text-teal-300 border border-teal-200/80 dark:border-teal-800/60 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs',
+    badgeBg: 'bg-[#CCFBF1] text-teal-900 dark:bg-teal-950/80 dark:text-teal-300 border border-teal-200/80 dark:border-teal-800/60 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs',
+    tagHeader: 'text-teal-800 dark:text-teal-300',
+    title: 'text-teal-800 dark:text-teal-300',
     val: 'text-slate-900 dark:text-white',
-    sub: 'text-slate-600 dark:text-slate-400',
-    cta: 'text-teal-700 dark:text-teal-400',
+    value: 'text-slate-900 dark:text-white',
+    sub: 'text-teal-700 dark:text-teal-400 font-bold',
+    subtext: 'text-teal-700 dark:text-teal-400 font-bold',
+    cta: 'text-teal-700 dark:text-teal-400 font-bold',
+    divider: 'border-teal-100 dark:border-teal-900/60',
+  },
+  slate: {
+    card: 'rounded-container border-2 border-emerald-300 dark:border-emerald-800/80 bg-gradient-to-b from-slate-100/70 via-slate-50/30 to-white dark:from-slate-900/60 dark:via-slate-900 dark:to-slate-950 hover:border-emerald-200/80',
+    glow: 'bg-slate-400/20 group-hover:bg-slate-400/30',
+    iconBox: '!bg-slate-600 !text-white shadow-xs rounded-full',
+    iconGradient: '!bg-slate-600 !text-white shadow-xs rounded-full',
+    tag: 'bg-emerald-50 text-slate-800 dark:bg-emerald-950/40 dark:text-slate-200 border border-emerald-200/80 dark:border-emerald-800/60 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs',
+    badgeBg: 'bg-emerald-50 text-slate-800 dark:bg-emerald-950/40 dark:text-slate-200 border border-emerald-200/80 dark:border-emerald-800/60 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs',
+    tagHeader: 'text-slate-800 dark:text-slate-300',
+    title: 'text-slate-800 dark:text-slate-300',
+    val: 'text-slate-900 dark:text-white',
+    value: 'text-slate-900 dark:text-white',
+    sub: 'text-slate-700 dark:text-slate-400 font-bold',
+    subtext: 'text-slate-700 dark:text-slate-400 font-bold',
+    cta: 'text-slate-700 dark:text-slate-400 font-bold',
+    divider: 'border-emerald-100/80 dark:border-emerald-900/40/60',
   },
 }
 
@@ -327,10 +562,10 @@ function HeroStatusBadge({ active, activeLabel = 'Aktif', inactiveLabel = 'Nonak
       variant="soft"
       color={active ? 'success' : 'default'}
       className={cn(
-        "font-bold text-[11px] inline-flex items-center gap-1.5",
+        "font-bold text-xs inline-flex items-center gap-1.5",
         active
-          ? "bg-emerald-50 text-emerald-800 border border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/60"
-          : "bg-slate-100 text-slate-600 border border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700"
+          ? "bg-emerald-50 text-emerald-800 border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/60"
+          : "bg-slate-100 text-slate-600 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300 dark:border-emerald-800/60"
       )}
     >
       <span className={cn("inline-block size-1.5 rounded-full shrink-0", active ? "bg-emerald-500 animate-pulse" : "bg-slate-400")} />
@@ -340,80 +575,18 @@ function HeroStatusBadge({ active, activeLabel = 'Aktif', inactiveLabel = 'Nonak
 }
 
 function ModernKpiCard({ icon: Icon, label, subtext, value, tag, ctaText = 'Rincian Unit', tone = 'emerald', onClick }) {
-  const t = MODERN_CARD_TONES[tone] || MODERN_CARD_TONES.emerald
-  const isClickable = typeof onClick === 'function'
-
+  const toneMap = { emerald: 'emerald', indigo: 'indigo', violet: 'indigo', teal: 'emerald', amber: 'amber', sky: 'sky' }
   return (
-    <motion.div
-      whileHover={{ scale: 1.02, y: -2 }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-      className="h-full"
-    >
-      <HeroCard
-        onClick={onClick}
-        onKeyDown={isClickable ? (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault()
-            onClick()
-          }
-        } : undefined}
-        role={isClickable ? 'button' : undefined}
-        tabIndex={isClickable ? 0 : undefined}
-        className={cn(
-          "group relative overflow-hidden rounded-[20px] border-2 p-5 shadow-xs transition-[border-color,box-shadow] duration-150 text-left flex flex-col justify-between h-full",
-          isClickable ? "cursor-pointer hover:shadow-md" : "cursor-default",
-          t.card
-        )}
-      >
-        {/* Ambient Glow */}
-        <div className={cn("pointer-events-none absolute -top-8 -right-8 h-28 w-28 rounded-full blur-2xl transition-all", t.glow)} />
-
-        {/* Header dengan Icon Box & Tag */}
-        <HeroCard.Header className="flex items-center justify-between p-0 mb-3 bg-transparent border-0">
-          <div className="flex items-center gap-2.5">
-            <div className={cn("flex h-10 w-10 items-center justify-center rounded-xl text-white shadow-sm", t.iconBox)}>
-              <Icon className="h-5 w-5" />
-            </div>
-            <div>
-              <p className={cn("text-[11px] font-bold uppercase tracking-wider", t.title)}>{label}</p>
-            </div>
-          </div>
-          {tag && (
-            <HeroChip
-              size="sm"
-              variant="soft"
-              color={tone === 'emerald' ? 'success' : tone === 'amber' ? 'warning' : 'default'}
-              className={cn("rounded-lg px-2.5 py-0.5 text-[10px] font-extrabold", t.tag)}
-            >
-              <HeroChip.Label>{tag}</HeroChip.Label>
-            </HeroChip>
-          )}
-        </HeroCard.Header>
-
-        {/* Nilai Utama */}
-        <HeroCard.Content className="p-0 bg-transparent">
-          <p className={cn("text-3xl sm:text-4xl font-black tabular-nums tracking-tight", t.val)}>
-            {value ?? '0'}
-          </p>
-          {subtext && (
-            <p className={cn("mt-1 text-[11px] font-semibold", t.sub)}>
-              {subtext}
-            </p>
-          )}
-        </HeroCard.Content>
-
-        {/* Click Affordance Footer */}
-        {isClickable && (
-          <HeroCard.Footer className={cn("mt-4 pt-3 p-0 bg-transparent border-t border-slate-200/60 dark:border-slate-800/60 flex items-center justify-between text-[11px] font-bold", t.cta)}>
-            <span>{ctaText}</span>
-            <span className="inline-flex items-center gap-0.5 group-hover:translate-x-1 transition-transform">
-              Detail &rarr;
-            </span>
-          </HeroCard.Footer>
-        )}
-      </HeroCard>
-    </motion.div>
+    <KpiStatCard
+      title={label}
+      value={value ?? '0'}
+      description={subtext}
+      badge={tag}
+      icon={Icon}
+      variant={toneMap[tone] || 'emerald'}
+      onClick={onClick}
+      footerAction={onClick ? { label: ctaText, onClick } : undefined}
+    />
   )
 }
 
@@ -656,7 +829,7 @@ export default function EducationUnitsPage() {
   }, [items])
 
   const teacherChartData = useMemo(() => {
-    const COLORS = ['#0E5C44', '#059669', '#0D9488', '#10B981', '#14B8A6', '#34D399', '#F59E0B', '#F43F5E']
+    const COLORS = ['#059669', '#0D9488', '#0D9488', '#10B981', '#14B8A6', '#34D399', '#F59E0B', '#F43F5E']
     return items.map((u, i) => ({
       name: u.code || u.unit_type || (u.name ? u.name.substring(0, 8) : 'Unit'),
       fullName: u.name,
@@ -1102,7 +1275,7 @@ export default function EducationUnitsPage() {
         return (
           <div className="flex min-w-0 items-center gap-3">
             {row.logo_url ? (
-              <img src={row.logo_url} alt="" className="h-10 w-10 shrink-0 rounded-xl border border-slate-200 object-cover shadow-sm" />
+              <img src={row.logo_url} alt="" className="h-9 w-10 shrink-0 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 object-cover shadow-sm" />
             ) : (
               <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[10px] font-black shadow-sm ${style.bg} ${style.text}`}>
                 {row.unit_type || 'UP'}
@@ -1116,12 +1289,12 @@ export default function EducationUnitsPage() {
                     e.stopPropagation()
                     openDetailModal(row)
                   }}
-                  className="inline-block max-w-full truncate text-[13px] font-extrabold leading-5 text-slate-900 dark:text-white border-b border-dashed border-slate-400/60 hover:border-[#0E5C44] transition-colors cursor-pointer"
+                  className="inline-block max-w-full truncate text-xs font-bold leading-5 text-slate-900 dark:text-white border-b border-dashed border-emerald-200/80 hover:border-[#059669] transition-colors cursor-pointer"
                   title={row.name}
                 >
                   {row.name || '—'}
                 </HoverCardTrigger>
-                <HoverCardContent className="w-64 p-0 overflow-hidden border border-slate-200 bg-white dark:border-slate-800 dark:bg-[#1B2433] shadow-xl rounded-xl">
+                <HoverCardContent className="w-64 p-0 overflow-hidden border-2 border-emerald-300/80 bg-white dark:border-emerald-700/80 dark:bg-card-dark shadow-xl rounded-xl">
                   <div className={`relative h-24 w-full ${style.bg} ${style.text} flex items-center justify-center font-black text-xl`}>
                     {row.logo_url ? (
                       <img src={row.logo_url} alt={row.name} className="h-full w-full object-cover" />
@@ -1138,7 +1311,7 @@ export default function EducationUnitsPage() {
                         {row.unit_type || '—'}
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
                       NPSN: {row.npsn || '—'}
                     </p>
                     <p className="text-[10px] text-slate-400 truncate">
@@ -1147,7 +1320,7 @@ export default function EducationUnitsPage() {
                     <button
                       type="button"
                       onClick={() => openDetailModal(row)}
-                      className="w-full py-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all hover:from-emerald-700 hover:to-teal-700 mt-2 cursor-pointer"
+                      className="w-full py-1.5 bg-[#059669] hover:bg-[#047857] text-white dark:bg-[#059669] dark:text-white text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all hover:from-emerald-700 hover:to-teal-700 mt-2 cursor-pointer"
                     >
                       Lihat Rincian Data
                     </button>
@@ -1170,82 +1343,47 @@ export default function EducationUnitsPage() {
       key: 'unit_type',
       label: 'Jenis & Program',
       className: 'hidden md:table-cell',
-      render: (row) => {
-        const style = getUnitStyle(row.unit_type)
-        const isBoarding = row.program_type === 'boarding'
-        return (
-          <div className="flex flex-col gap-1 items-start">
-            <HeroChip
-              size="sm"
-              variant="soft"
-              className={cn("inline-flex rounded-lg border px-2 py-0.5 text-[9px] font-bold", style.bg, style.text, style.border)}
-            >
-              <HeroChip.Label>{row.unit_type || '—'}</HeroChip.Label>
-            </HeroChip>
-            <span className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[9px] font-extrabold border ${isBoarding
-              ? 'bg-teal-50 text-teal-700 border-teal-200/80 dark:bg-teal-950/60 dark:text-teal-300 dark:border-teal-800/60'
-              : 'bg-emerald-50 text-emerald-700 border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/60'
-              }`}>
-              {isBoarding ? <Moon className="size-2.5" /> : <Sun className="size-2.5" />}
-              {isBoarding ? 'Boarding' : 'Fullday'}
-              {row.jam_pulang && <span className="opacity-75 font-normal">({row.jam_pulang})</span>}
-            </span>
-          </div>
-        )
-      },
+      render: (row) => (
+        <EducationUnitWithProgramCell
+          unitType={row.unit_type}
+          programType={row.program_type}
+          jamPulang={row.jam_pulang}
+        />
+      ),
     },
     {
-      key: 'city',
-      label: 'Kota',
-      className: 'hidden xl:table-cell',
+      key: 'statistik',
+      label: 'Statistik Civitas',
+      className: 'text-center',
       render: (row) => (
-        <span>
-          <span className="flex items-center gap-1.5 text-xs font-bold text-slate-700 dark:text-slate-200">
-            <MapPin className="h-3.5 w-3.5 text-slate-400" />
-            {row.city || '-'}
+        <div className="flex items-center justify-center gap-3 text-xs font-bold text-slate-700 dark:text-slate-200">
+          <span className="inline-flex items-center gap-1" title="Total Siswa">
+            <GraduationCap className="h-3.5 w-3.5 text-sky-600 dark:text-sky-400" />
+            <span>{Number(row.total_siswa ?? 0).toLocaleString('id-ID')} Siswa</span>
           </span>
-          <span className="mt-1 block pl-5 text-[10px] text-slate-500">{row.province || '-'}</span>
-        </span>
-      ),
-    },
-    {
-      key: 'total_siswa',
-      label: 'Siswa',
-      className: 'hidden xl:table-cell text-right',
-      render: (row) => (
-        <span className="inline-flex items-center justify-end gap-1.5 text-xs font-extrabold tabular-nums text-slate-800 dark:text-slate-100">
-          <GraduationCap className="h-3.5 w-3.5 text-slate-400" />
-          {Number(row.total_siswa ?? 0).toLocaleString('id-ID')}
-        </span>
-      ),
-    },
-    {
-      key: 'total_guru',
-      label: 'Pendidik',
-      className: 'hidden xl:table-cell text-right',
-      render: (row) => (
-        <span className="inline-flex items-center justify-end gap-1.5 text-xs font-extrabold tabular-nums text-slate-800 dark:text-slate-100">
-          <UsersRound className="h-3.5 w-3.5 text-slate-400" />
-          {Number(row.total_guru ?? 0).toLocaleString('id-ID')}
-        </span>
+          <span className="text-slate-300 dark:text-slate-600">•</span>
+          <span className="inline-flex items-center gap-1" title="Total Pendidik">
+            <UsersRound className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400" />
+            <span>{Number(row.total_guru ?? 0).toLocaleString('id-ID')} Guru</span>
+          </span>
+        </div>
       ),
     },
     {
       key: 'is_active',
       label: 'Status',
-      className: 'hidden sm:table-cell text-center',
+      className: 'text-center',
       render: (row) => <HeroStatusBadge active={row.is_active} inactiveLabel="Nonaktif" />,
     },
   ]
-
   // ── Mobile Card Renderer ───────────────────────────────────────────────
   const renderMobileCard = ({ row, onView, onEdit, onDelete }) => {
     const style = getUnitStyle(row.unit_type)
     return (
-      <div className="rounded-[18px] border border-slate-200/80 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-[#1B2433]">
+      <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-4 shadow-sm dark:border-emerald-800/60 dark:bg-card-dark">
         <div className="flex items-start gap-3">
           {row.logo_url ? (
-            <img src={row.logo_url} alt="" className="h-12 w-12 shrink-0 rounded-xl border border-slate-200 object-cover" />
+            <img src={row.logo_url} alt="" className="h-9 w-12 shrink-0 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 object-cover" />
           ) : (
             <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-[10px] font-black ${style.bg} ${style.text}`}>
               {row.unit_type || 'UP'}
@@ -1254,12 +1392,12 @@ export default function EducationUnitsPage() {
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-2">
               <div>
-                <p className="text-[13px] font-extrabold text-slate-900 dark:text-white">{row.name}</p>
+                <p className="text-sm font-extrabold text-slate-900 dark:text-white">{row.name}</p>
                 <p className="text-[10px] font-semibold text-slate-400">{row.code}</p>
               </div>
               <HeroStatusBadge active={row.is_active} inactiveLabel="Nonaktif" />
             </div>
-            <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-slate-500 dark:text-slate-400">
+            <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
               {(row.city || row.province) && (
                 <span className="flex items-center gap-1">
                   <MapPin className="h-3 w-3" />
@@ -1368,18 +1506,18 @@ export default function EducationUnitsPage() {
         {/* ── Visual Analytics Section (Grafik Murid/Santri & Grafik Perbandingan Guru) ── */}
         <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
           {/* Grafik 1: Jumlah Murid / Santri per Unit */}
-          <article className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-md shadow-emerald-500/10 dark:bg-[#1B2433] flex flex-col justify-between h-full">
+          <article className="relative overflow-hidden rounded-container border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-card-dark flex flex-col justify-between h-full">
             <div>
-              <div className="flex items-center justify-between mb-4 pb-3.5 border-b border-emerald-200/90 dark:border-emerald-800/60">
+              <div className="flex items-center justify-between border-b border-emerald-500/20 dark:border-emerald-800/40 bg-emerald-500/10 dark:bg-emerald-950/40 px-5 py-4 min-h-[72px] h-[72px]">
                 <div className="flex items-center gap-3">
-                  <div className="flex size-10 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-500 via-amber-600 to-orange-700 text-white shadow-md shadow-amber-500/20 shrink-0">
-                    <GraduationCap className="size-5 text-white" />
+                  <div className="flex size-8.5 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-xs">
+                    <GraduationCap className="size-4.5 text-white" strokeWidth={2.2} />
                   </div>
                   <div>
-                    <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
+                    <h2 className="text-base font-bold text-emerald-900 dark:text-emerald-200 leading-tight">
                       Grafik Jumlah Murid / Santri
-                    </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                    </h2>
+                    <p className="text-xs font-semibold text-emerald-700/80 dark:text-emerald-400/80 mt-0.5">
                       Perbandingan total peserta didik terdaftar di tiap unit sekolah
                     </p>
                   </div>
@@ -1400,10 +1538,10 @@ export default function EducationUnitsPage() {
                         if (active && payload && payload.length) {
                           const data = payload[0].payload
                           return (
-                            <div className="rounded-xl border border-slate-800 bg-slate-900/95 p-3 text-white shadow-xl backdrop-blur-sm">
+                            <div className="rounded-xl border border-emerald-200/80 bg-slate-900/95 p-3 text-white shadow-xl backdrop-blur-sm">
                               <p className="text-xs font-bold text-amber-400 mb-1">{data.fullName}</p>
                               <p className="text-xs font-extrabold">Total Siswa: {data.siswa} orang</p>
-                              <div className="mt-1 pt-1 border-t border-slate-700/80 text-[10px] text-slate-300 flex gap-3">
+                              <div className="mt-1 pt-1 border-t border-emerald-200/80 text-[10px] text-slate-300 flex gap-3">
                                 <span>Santriwan (L): {data.santriwan}</span>
                                 <span>Santriwati (P): {data.santriwati}</span>
                               </div>
@@ -1418,76 +1556,89 @@ export default function EducationUnitsPage() {
                 </ResponsiveContainer>
               </div>
             </div>
-            <div className="pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between text-[11px] font-semibold text-slate-500">
+            <div className="pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between text-xs font-semibold text-slate-500">
               <span>Distribusi berdasarkan jenjang sekolah</span>
               <span className="text-amber-600 dark:text-amber-400 font-bold">Terupdate Otomatis</span>
             </div>
           </article>
 
           {/* Grafik 2: Perbandingan Guru per Unit */}
-          <article className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-md shadow-emerald-500/10 dark:bg-[#1B2433] flex flex-col justify-between h-full">
+          <article className="relative overflow-hidden rounded-container border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-card-dark flex flex-col justify-between h-full">
             <div>
-              <div className="flex items-center justify-between mb-4 pb-3.5 border-b border-emerald-200/90 dark:border-emerald-800/60">
+              <div className="flex items-center justify-between border-b border-emerald-500/20 dark:border-emerald-800/40 bg-emerald-500/10 dark:bg-emerald-950/40 px-5 py-4 min-h-[72px] h-[72px]">
                 <div className="flex items-center gap-3">
-                  <div className="flex size-10 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-md shadow-emerald-500/20 shrink-0">
-                    <UsersRound className="size-5 text-white" />
+                  <div className="flex size-8.5 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-xs">
+                    <UsersRound className="size-4.5 text-white" strokeWidth={2.2} />
                   </div>
                   <div>
-                    <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
+                    <h2 className="text-base font-bold text-emerald-900 dark:text-emerald-200 leading-tight">
                       Grafik Perbandingan Guru
-                    </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                    </h2>
+                    <p className="text-xs font-semibold text-emerald-700/80 dark:text-emerald-400/80 mt-0.5">
                       Komposisi penyebaran tenaga pendidik & pengajar di setiap unit
                     </p>
                   </div>
                 </div>
-                <AppBadge variant="success" size="sm">
-                  {Number(statistics.total_tenaga_pendidik ?? 0).toLocaleString('id-ID')} Pendidik
+                <AppBadge variant="success" size="sm" className="font-bold shadow-xs">
+                  {Number(statistics.total_tenaga_pendidik ?? 0).toLocaleString("id-ID")} Pendidik
                 </AppBadge>
               </div>
 
-              <div className="h-64 w-full flex items-center justify-center">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={teacherChartData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={55}
-                      outerRadius={85}
-                      paddingAngle={3}
-                      dataKey="value"
-                    >
-                      {teacherChartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      content={({ active, payload }) => {
-                        if (active && payload && payload.length) {
-                          const data = payload[0].payload
-                          return (
-                            <div className="rounded-xl border border-slate-800 bg-slate-900/95 p-3 text-white shadow-xl backdrop-blur-sm">
-                              <p className="text-xs font-bold text-emerald-400 mb-1">{data.fullName}</p>
-                              <p className="text-xs font-extrabold">Total Guru: {data.value} orang</p>
-                            </div>
-                          )
-                        }
-                        return null
-                      }}
-                    />
-                    <Legend
-                      formatter={(value, entry) => (
-                        <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
-                          {entry.payload.fullName || value} ({entry.payload.value})
-                        </span>
-                      )}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
+              <div className="flex-1 flex flex-col justify-center items-center w-full p-4 space-y-4">
+                <div className="relative w-56 h-56 sm:w-64 sm:h-64 flex items-center justify-center">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={teacherChartData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={65}
+                        outerRadius={95}
+                        paddingAngle={3}
+                        dataKey="value"
+                      >
+                        {teacherChartData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} stroke="transparent" />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "#0F172A",
+                          borderColor: "#334155",
+                          borderRadius: "14px",
+                          color: "#F8FAFC",
+                          fontSize: "12px",
+                        }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <strong className="text-2xl font-black text-slate-900 dark:text-white tabular-nums tracking-tight">
+                      {Number(statistics.total_tenaga_pendidik ?? 0).toLocaleString("id-ID")}
+                    </strong>
+                    <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest mt-0.5">
+                      TOTAL GURU
+                    </span>
+                  </div>
+                </div>
+
+                {/* Legend Pills Standardized */}
+                <div className="w-full grid grid-cols-2 gap-2.5 px-1">
+                  {teacherChartData.map((item) => (
+                    <div key={item.name} className="flex items-center justify-between gap-1.5 p-2 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-800/60 min-w-0">
+                      <div className="flex items-center gap-1.5 min-w-0 truncate">
+                        <span className="size-2.5 rounded-full shrink-0 shadow-xs" style={{ backgroundColor: item.color }} />
+                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300 truncate">{item.name}</span>
+                      </div>
+                      <span className="text-xs font-black text-slate-900 dark:text-white tabular-nums shrink-0">
+                        {item.value} guru
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-            <div className="pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between text-[11px] font-semibold text-slate-500">
+            <div className="pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between text-xs font-semibold text-slate-500">
               <span>Proporsi guru pengajar per unit</span>
               <span className="text-emerald-600 dark:text-emerald-400 font-bold">100% Terverifikasi</span>
             </div>
@@ -1497,86 +1648,21 @@ export default function EducationUnitsPage() {
         {/* ── AppDataTable with Toolbar ── */}
         <motion.div variants={itemVariants} id="tabel-unit-pendidikan" className="scroll-mt-6">
           <AppDataTable
-            title="Data Unit Pendidikan"
+            title="Daftar Master Data Unit Pendidikan"
             icon={Building2}
-            iconClassName="bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 border border-emerald-300/40"
-            description="Daftar unit sesuai filter dan kewenangan pengguna."
+            description="Tabel direktori unit pendidikan, jenjang, status akreditasi, dan manajemen operasional sekolah SIT."
+            countLabel={`${Number(statistics.total_unit ?? items.length).toLocaleString("id-ID")} unit`}
             actions={
-              <div className="flex flex-wrap items-center gap-2">
-                {/* Tombol Cetak Laporan (Vivid Indigo / Purple Squircle) */}
-                <HeroTooltip>
-                  <HeroTooltip.Trigger>
-                    <HeroButton
-                      isIconOnly
-                      aria-label="Cetak & Download Data Unit"
-                      onPress={() => setPrintOptionModalOpen(true)}
-                      className="flex size-10 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 via-indigo-600 to-violet-700 text-white border border-indigo-300/40 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer shadow-xs"
-                    >
-                      <Printer className="size-5 text-white" strokeWidth={2.2} />
-                    </HeroButton>
-                  </HeroTooltip.Trigger>
-                  <HeroTooltip.Content className="z-50 rounded-lg bg-slate-900 px-2.5 py-1 text-[11px] font-bold text-white shadow-xl dark:bg-slate-100 dark:text-slate-900">
-                    Cetak & Export
-                  </HeroTooltip.Content>
-                </HeroTooltip>
-
-                {/* Import Button (Vivid Sky Blue Squircle) */}
-                {canCreate && (
-                  <HeroTooltip>
-                    <HeroTooltip.Trigger>
-                      <HeroButton
-                        isIconOnly
-                        aria-label="Import Data Unit"
-                        onPress={() => setShowImportModal(true)}
-                        className="flex size-10 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-400 via-sky-500 to-blue-600 text-white border border-sky-300/40 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer shadow-xs"
-                      >
-                        <Upload className="size-5 text-white" strokeWidth={2.2} />
-                      </HeroButton>
-                    </HeroTooltip.Trigger>
-                    <HeroTooltip.Content className="z-50 rounded-lg bg-slate-900 px-2.5 py-1 text-[11px] font-bold text-white shadow-xl dark:bg-slate-100 dark:text-slate-900">
-                      Import Data
-                    </HeroTooltip.Content>
-                  </HeroTooltip>
-                )}
-
-                {/* Export / Download Button (Vivid Amber / Orange Squircle) */}
-                {(canCreate || permissions.includes('unit.export')) && (
-                  <HeroTooltip>
-                    <HeroTooltip.Trigger>
-                      <HeroButton
-                        isIconOnly
-                        aria-label="Export Data Unit"
-                        onPress={() => setShowExportModal(true)}
-                        className="flex size-10 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-400 via-amber-500 to-orange-600 text-white border border-amber-300/40 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer shadow-xs"
-                      >
-                        <Download className="size-5 text-white" strokeWidth={2.2} />
-                      </HeroButton>
-                    </HeroTooltip.Trigger>
-                    <HeroTooltip.Content className="z-50 rounded-lg bg-slate-900 px-2.5 py-1 text-[11px] font-bold text-white shadow-xl dark:bg-slate-100 dark:text-slate-900">
-                      Export Data
-                    </HeroTooltip.Content>
-                  </HeroTooltip>
-                )}
-
-                {/* Tambah Unit Button (HeroUI v3 Emerald Primary #065F46) */}
-                {canCreate && (
-                  <HeroTooltip>
-                    <HeroTooltip.Trigger>
-                      <HeroButton
-                        isIconOnly
-                        aria-label="Tambah Unit Baru"
-                        onPress={openAddModal}
-                        className="flex size-10 items-center justify-center rounded-2xl bg-gradient-to-br from-[#065F46] via-emerald-600 to-teal-700 text-white border border-emerald-300/40 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer shadow-md shadow-emerald-950/20"
-                      >
-                        <Plus className="size-5 text-white" strokeWidth={2.5} />
-                      </HeroButton>
-                    </HeroTooltip.Trigger>
-                    <HeroTooltip.Content className="z-50 rounded-lg bg-slate-900 px-2.5 py-1 text-[11px] font-bold text-white shadow-xl dark:bg-slate-100 dark:text-slate-900">
-                      Tambah Unit
-                    </HeroTooltip.Content>
-                  </HeroTooltip>
-                )}
-              </div>
+              <PageToolbarActions
+                onPrint={() => setPrintOptionModalOpen(true)}
+                onImport={canCreate ? () => setShowImportModal(true) : undefined}
+                onExport={(canCreate || permissions.includes('unit.export')) ? () => setShowExportModal(true) : undefined}
+                primaryAction={canCreate ? {
+                  label: 'Tambah Unit',
+                  icon: Plus,
+                  onClick: openAddModal,
+                } : null}
+              />
             }
             columns={columns}
             data={items}
@@ -1654,7 +1740,7 @@ export default function EducationUnitsPage() {
                     variant="outline"
                     size="sm"
                     onPress={resetFilters}
-                    className="h-10 cursor-pointer rounded-xl border border-emerald-300/80 bg-white hover:bg-emerald-50 text-emerald-800 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-emerald-300 font-bold text-xs gap-1.5 px-3 transition-colors inline-flex items-center"
+                    className="h-9 cursor-pointer rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-white hover:bg-emerald-50 text-emerald-800 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-emerald-300 font-bold text-xs gap-1.5 px-3 transition-colors inline-flex items-center"
                   >
                     <RefreshCcw className="size-3.5" />
                     <span>Reset</span>
@@ -1705,22 +1791,22 @@ export default function EducationUnitsPage() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
               transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-              className="modal-dialog font-sans my-auto w-full max-w-2xl"
+              className="modal-dialog font-sans my-auto w-full max-w-xl"
             >
-              <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-2xl shadow-emerald-950/20 dark:border-slate-800 dark:bg-[#182232] dark:shadow-black/60">
+              <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
                 {/* Top Accent Gradient Bar */}
-                <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
 
                 {/* Header */}
-                <div className="modal-header flex items-center justify-between border-b border-slate-100 bg-white px-6 py-4.5 dark:border-slate-800 dark:bg-slate-950">
+                <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-md shadow-emerald-500/20 border border-emerald-300/30 shrink-0">
-                      <Building2 className="h-5 w-5 text-white" strokeWidth={2.25} />
+                    <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
+
+                      <Building2 className="size-6 sm:size-7 h-5 w-5 text-white" strokeWidth={2.25} />
                     </div>
                     <div>
                       <h3 id="edu-unit-detail-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
                         <span>{detailUnit.name || 'Detail Unit Pendidikan'}</span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
                           <Sparkles className="size-3" />
                           Detail Unit
                         </span>
@@ -1734,20 +1820,20 @@ export default function EducationUnitsPage() {
                     type="button"
                     onClick={() => setDetailUnit(null)}
                     aria-label="Tutup detail unit"
-                    className="size-9 flex items-center justify-center rounded-2xl bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white hover:scale-105 active:scale-95 transition-all duration-200 shadow-md shadow-rose-500/20 cursor-pointer"
+                    className="size-9 flex items-center justify-center rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer"
                   >
-                    <X className="size-4 text-white" strokeWidth={2.25} />
+                    <X className="size-4 text-rose-600" strokeWidth={2.25} />
                   </button>
                 </div>
 
                 {/* Body */}
                 <div className="modal-body min-h-0 flex-1 overflow-y-auto p-5 text-sm space-y-5">
                   {/* Hero Card */}
-                  <div className="flex items-center gap-4 rounded-2xl border-2 border-emerald-300/60 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 p-4 dark:border-emerald-800/60 dark:bg-slate-800/40">
+                  <div className="flex items-center gap-4 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50 p-4 dark:border-emerald-800/60 dark:bg-slate-800/40">
                     {detailUnit.logo_url ? (
-                      <img src={detailUnit.logo_url} alt={detailUnit.name} className="h-16 w-16 shrink-0 rounded-2xl border border-slate-200 object-cover shadow-sm" />
+                      <img src={detailUnit.logo_url} alt={detailUnit.name} className="h-16 w-16 shrink-0 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 object-cover shadow-sm" />
                     ) : (
-                      <span className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-xs font-black shadow-sm ${getUnitStyle(detailUnit.unit_type).bg} ${getUnitStyle(detailUnit.unit_type).text}`}>
+                      <span className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-xl text-xs font-black shadow-sm ${getUnitStyle(detailUnit.unit_type).bg} ${getUnitStyle(detailUnit.unit_type).text}`}>
                         {detailUnit.unit_type || 'UP'}
                       </span>
                     )}
@@ -1760,7 +1846,7 @@ export default function EducationUnitsPage() {
                         {detailUnit.unit_type && <AppBadge variant="neutral">{detailUnit.unit_type}</AppBadge>}
                       </div>
                       {detailUnit.principal_name && (
-                        <p className="mt-1 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                        <p className="mt-1 text-xs font-semibold text-slate-500 dark:text-slate-400">
                           Pimpinan: {detailUnit.principal_name}
                         </p>
                       )}
@@ -1768,14 +1854,14 @@ export default function EducationUnitsPage() {
                   </div>
 
                   {/* Tabs */}
-                  <div className="flex gap-1.5 overflow-x-auto rounded-2xl border-2 border-emerald-200/70 bg-emerald-50/40 p-1.5 dark:border-emerald-900/50 dark:bg-slate-900/40">
+                  <div className="flex gap-1.5 overflow-x-auto rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/40 p-1.5 dark:border-emerald-800/60 dark:bg-slate-900/40">
                     {['Informasi', 'Statistik', 'Guru', 'Siswa', 'Kelas'].map(tab => (
                       <button
                         key={tab}
                         type="button"
                         onClick={() => setActiveDetailTab(tab)}
                         className={`flex-1 rounded-xl px-3.5 py-2 text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${activeDetailTab === tab
-                          ? 'bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-md shadow-emerald-500/20'
+                          ? 'bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm'
                           : 'text-slate-600 hover:text-slate-900 hover:bg-white/60 dark:text-slate-400 dark:hover:text-slate-200'
                           }`}
                       >
@@ -1796,7 +1882,7 @@ export default function EducationUnitsPage() {
                           ['Email', detailUnit.email || 'info@sekolah.sch.id'],
                           ['Telepon', detailUnit.phone || '-'],
                         ].map(([label, value]) => (
-                          <div key={label} className="rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-800/50">
+                          <div key={label} className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 dark:border-emerald-800/60 dark:bg-slate-800/50">
                             <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">{label}</p>
                             <p className="mt-0.5 text-xs font-bold text-slate-900 dark:text-white">{value}</p>
                           </div>
@@ -1804,30 +1890,30 @@ export default function EducationUnitsPage() {
                       </div>
 
                       {/* Model Program & Jadwal Kegiatan Card */}
-                      <div className="rounded-xl border border-emerald-200/90 bg-emerald-50/50 p-3.5 dark:border-emerald-800/80 dark:bg-emerald-950/30 space-y-2">
+                      <div className="rounded-lg border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 p-3.5 dark:border-emerald-800/60 dark:bg-emerald-950/30 space-y-2">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2 text-xs font-bold text-slate-900 dark:text-white">
                             <School className="size-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                             Model Sistem Pembelajaran & Jam Operasional
                           </div>
                           <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-extrabold border ${detailUnit.program_type === 'boarding'
-                            ? 'bg-teal-100 text-teal-800 border-teal-300 dark:bg-teal-950/80 dark:text-teal-300 dark:border-teal-700'
-                            : 'bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-700'
+                            ? 'bg-emerald-50 text-emerald-700 dark:text-emerald-300  border-emerald-300 dark:border-emerald-800  dark:bg-emerald-50/70 dark:text-emerald-700 dark:text-emerald-300  dark:border-emerald-800/60 '
+                            : 'bg-emerald-100 text-emerald-800 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800/60'
                             }`}>
                             {detailUnit.program_type === 'boarding' ? <Moon className="size-3" /> : <Sun className="size-3" />}
                             {detailUnit.program_type === 'boarding' ? 'Boarding / Pesantren (24 Jam)' : 'Fullday School'}
                           </span>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1 text-xs">
-                          <div className="rounded-lg bg-white/80 p-2 border border-emerald-100 dark:bg-slate-800/80 dark:border-emerald-900/40">
+                          <div className="rounded-lg bg-white/80 p-2 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-800/80 dark:border-emerald-800/60">
                             <span className="text-[10px] font-semibold text-slate-400 block">Jam Masuk / KBM</span>
                             <span className="font-bold text-slate-800 dark:text-slate-100">{detailUnit.jam_masuk || (detailUnit.program_type === 'boarding' ? '04:00' : '07:15')} WIB</span>
                           </div>
-                          <div className="rounded-lg bg-white/80 p-2 border border-emerald-100 dark:bg-slate-800/80 dark:border-emerald-900/40">
+                          <div className="rounded-lg bg-white/80 p-2 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-800/80 dark:border-emerald-800/60">
                             <span className="text-[10px] font-semibold text-slate-400 block">Jam Pulang Siswa/Santri</span>
                             <span className="font-bold text-slate-800 dark:text-slate-100">{detailUnit.jam_pulang || (detailUnit.program_type === 'boarding' ? '21:00' : '16:00')} WIB</span>
                           </div>
-                          <div className="rounded-lg bg-white/80 p-2 border border-emerald-100 dark:bg-slate-800/80 dark:border-emerald-900/40">
+                          <div className="rounded-lg bg-white/80 p-2 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-800/80 dark:border-emerald-800/60">
                             <span className="text-[10px] font-semibold text-slate-400 block">Keterangan Kegiatan</span>
                             <span className="font-bold text-slate-800 dark:text-slate-100 truncate block">{detailUnit.jam_kegiatan || (detailUnit.program_type === 'boarding' ? '24 Jam Pengasuhan' : '07:15 - 16:00 WIB')}</span>
                           </div>
@@ -1836,13 +1922,13 @@ export default function EducationUnitsPage() {
 
                       {/* Titik Peta & Geofencing Card */}
                       {(detailUnit.latitude || detailUnit.longitude) && (
-                        <div className="rounded-xl border border-teal-200/90 bg-teal-50/50 p-3.5 dark:border-teal-800/80 dark:bg-teal-950/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/70 p-3.5 dark:border-emerald-300 dark:border-emerald-800 dark:bg-emerald-50/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                           <div className="space-y-0.5">
                             <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900 dark:text-white">
-                              <MapPin className="size-4 text-teal-600 dark:text-teal-400 shrink-0" />
+                              <MapPin className="size-4 text-emerald-700 dark:text-emerald-300  dark:text-emerald-700 dark:text-emerald-300  shrink-0" />
                               Titik Koordinat Map & Geofencing Presensi
                             </div>
-                            <p className="text-[11px] font-mono text-slate-600 dark:text-slate-300">
+                            <p className="text-xs font-mono text-slate-600 dark:text-slate-300">
                               Lat: <span className="font-bold">{detailUnit.latitude}</span>, Lng: <span className="font-bold">{detailUnit.longitude}</span> (Radius: {detailUnit.radius_meter || 100}m)
                             </p>
                           </div>
@@ -1850,7 +1936,7 @@ export default function EducationUnitsPage() {
                             href={`https://www.google.com/maps?q=${detailUnit.latitude},${detailUnit.longitude}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white px-3 py-1.5 text-xs font-bold shadow-xs transition shrink-0 cursor-pointer"
+                            className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white px-3 py-1.5 text-xs font-bold shadow-xs transition shrink-0 cursor-pointer"
                           >
                             <ExternalLink className="size-3.5" /> Buka Google Maps
                           </a>
@@ -1858,7 +1944,7 @@ export default function EducationUnitsPage() {
                       )}
 
                       {/* Alamat Lengkap */}
-                      <div className="rounded-xl border border-slate-200 bg-white p-3.5 dark:border-slate-700 dark:bg-slate-800/50">
+                      <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3.5 dark:border-emerald-800/60 dark:bg-slate-800/50">
                         <div className="flex items-center gap-2 text-xs font-bold text-slate-900 dark:text-white mb-1">
                           <MapPin className="size-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                           Alamat Lengkap Unit
@@ -1877,18 +1963,18 @@ export default function EducationUnitsPage() {
                         const pctP = totalS > 0 ? Math.round((sP / totalS) * 100) : 0
 
                         return (
-                          <div className="rounded-xl border border-slate-200 bg-slate-50/80 p-4 dark:border-slate-700 dark:bg-slate-900/40 space-y-3">
+                          <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/80 p-4 dark:border-emerald-800/60 dark:bg-slate-900/40 space-y-3">
                             <div className="flex items-center justify-between">
                               <h4 className="text-xs font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5">
                                 <GraduationCap className="size-4 text-amber-500" />
                                 Komposisi Gender Peserta Didik
                               </h4>
-                              <span className="text-[11px] font-bold text-amber-600 dark:text-amber-400">
+                              <span className="text-xs font-bold text-amber-600 dark:text-amber-400">
                                 Total: {totalS.toLocaleString('id-ID')} Siswa
                               </span>
                             </div>
                             <div className="grid grid-cols-2 gap-3">
-                              <div className="rounded-xl border border-sky-200/80 bg-sky-50/70 p-3 dark:border-sky-900/40 dark:bg-sky-950/30">
+                              <div className="rounded-xl border-2 border-sky-300 dark:border-sky-800 bg-sky-50/70 p-3 dark:border-emerald-800/60 dark:bg-sky-950/30">
                                 <p className="text-[10px] font-bold uppercase tracking-wide text-sky-700 dark:text-sky-300">Siswa Laki-laki (Santriwan)</p>
                                 <p className="mt-1 text-xl font-black text-sky-900 dark:text-sky-100 tabular-nums">
                                   {sL.toLocaleString('id-ID')}{' '}
@@ -1897,7 +1983,7 @@ export default function EducationUnitsPage() {
                                   </span>
                                 </p>
                               </div>
-                              <div className="rounded-xl border border-rose-200/80 bg-rose-50/70 p-3 dark:border-rose-900/40 dark:bg-rose-950/30">
+                              <div className="rounded-xl border-2 border-rose-300 dark:border-rose-800 bg-rose-50/70 p-3 dark:border-emerald-800/60 dark:bg-rose-950/30">
                                 <p className="text-[10px] font-bold uppercase tracking-wide text-rose-700 dark:text-rose-300">Siswa Perempuan (Santriwati)</p>
                                 <p className="mt-1 text-xl font-black text-rose-900 dark:text-rose-100 tabular-nums">
                                   {sP.toLocaleString('id-ID')}{' '}
@@ -1913,14 +1999,14 @@ export default function EducationUnitsPage() {
 
                       {/* Ringkasan SDM Pendidik & Pegawai */}
                       <div className="grid grid-cols-2 gap-3">
-                        <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-800/50">
+                        <div className="flex items-center justify-between rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 dark:border-emerald-800/60 dark:bg-slate-800/50">
                           <div>
                             <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Tenaga Pendidik (Guru)</p>
                             <p className="text-base font-black text-emerald-700 dark:text-emerald-400 tabular-nums">{Number(detailUnit.total_guru ?? 0).toLocaleString('id-ID')}</p>
                           </div>
                           <UsersRound className="size-5 text-emerald-500 shrink-0 opacity-60" />
                         </div>
-                        <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-800/50">
+                        <div className="flex items-center justify-between rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 dark:border-emerald-800/60 dark:bg-slate-800/50">
                           <div>
                             <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Rombongan Belajar</p>
                             <p className="text-base font-black text-purple-700 dark:text-purple-400 tabular-nums">{Number(detailUnit.total_rombel ?? detailUnit.total_kelas ?? 0).toLocaleString('id-ID')} Rombel</p>
@@ -1943,9 +2029,9 @@ export default function EducationUnitsPage() {
                           {/* Grid 2 Kolom untuk Kartu Statistik */}
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                             {/* Kartu Siswa */}
-                            <div className="group relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm transition-all hover:border-amber-300 hover:shadow-md dark:border-slate-700/80 dark:bg-slate-800/60 dark:hover:border-amber-500/50">
+                            <div className="relative overflow-hidden rounded-2xl border-2 border-emerald-200/80 bg-white p-5 sm:p-6 shadow-sm dark:border-emerald-700/80 dark:bg-card-dark print:hidden">
                               <div className="flex items-center justify-between">
-                                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400">
+                                <div className="flex h-9 w-10 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400">
                                   <GraduationCap className="h-5 w-5" />
                                 </div>
                                 <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-extrabold text-amber-700 dark:bg-amber-950/60 dark:text-amber-300">
@@ -1953,7 +2039,7 @@ export default function EducationUnitsPage() {
                                 </span>
                               </div>
                               <div className="mt-3">
-                                <p className="text-[11px] font-bold tracking-wide text-slate-500 dark:text-slate-400">TOTAL SISWA</p>
+                                <p className="text-xs font-bold tracking-wide text-slate-500 dark:text-slate-400">TOTAL SISWA</p>
                                 <p className="mt-0.5 text-2xl font-black tabular-nums text-slate-900 dark:text-white">
                                   {Number(unitStatsQuery.data?.statistik?.siswa ?? detailUnit.total_siswa ?? 0).toLocaleString('id-ID')}
                                 </p>
@@ -1964,17 +2050,18 @@ export default function EducationUnitsPage() {
                             </div>
 
                             {/* Kartu Guru */}
-                            <div className="group relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm transition-all hover:border-emerald-300 hover:shadow-md dark:border-slate-700/80 dark:bg-slate-800/60 dark:hover:border-emerald-500/50">
+                            <div className="relative overflow-hidden rounded-2xl border-2 border-emerald-200/80 bg-white p-5 sm:p-6 shadow-sm dark:border-emerald-700/80 dark:bg-card-dark print:hidden">
                               <div className="flex items-center justify-between">
-                                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400">
-                                  <UsersRound className="h-5 w-5" />
+                                <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
+
+                                  <UsersRound className="size-6 sm:size-7 h-5 w-5 text-white" />
                                 </div>
                                 <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-extrabold text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300">
                                   Pendidik
                                 </span>
                               </div>
                               <div className="mt-3">
-                                <p className="text-[11px] font-bold tracking-wide text-slate-500 dark:text-slate-400">TOTAL GURU</p>
+                                <p className="text-xs font-bold tracking-wide text-slate-500 dark:text-slate-400">TOTAL GURU</p>
                                 <p className="mt-0.5 text-2xl font-black tabular-nums text-slate-900 dark:text-white">
                                   {Number(unitStatsQuery.data?.statistik?.guru ?? detailUnit.total_guru ?? 0).toLocaleString('id-ID')}
                                 </p>
@@ -1985,9 +2072,9 @@ export default function EducationUnitsPage() {
                             </div>
 
                             {/* Kartu Pegawai */}
-                            <div className="group relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm transition-all hover:border-cyan-300 hover:shadow-md dark:border-slate-700/80 dark:bg-slate-800/60 dark:hover:border-cyan-500/50">
+                            <div className="relative overflow-hidden rounded-2xl border-2 border-emerald-200/80 bg-white p-5 sm:p-6 shadow-sm dark:border-emerald-700/80 dark:bg-card-dark print:hidden">
                               <div className="flex items-center justify-between">
-                                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-600 dark:bg-cyan-500/20 dark:text-cyan-400">
+                                <div className="flex h-9 w-10 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-600 dark:bg-cyan-500/20 dark:text-cyan-400">
                                   <UsersRound className="h-5 w-5" />
                                 </div>
                                 <span className="rounded-full bg-cyan-50 px-2 py-0.5 text-[10px] font-extrabold text-cyan-700 dark:bg-cyan-950/60 dark:text-cyan-300">
@@ -1995,7 +2082,7 @@ export default function EducationUnitsPage() {
                                 </span>
                               </div>
                               <div className="mt-3">
-                                <p className="text-[11px] font-bold tracking-wide text-slate-500 dark:text-slate-400">TOTAL PEGAWAI</p>
+                                <p className="text-xs font-bold tracking-wide text-slate-500 dark:text-slate-400">TOTAL PEGAWAI</p>
                                 <p className="mt-0.5 text-2xl font-black tabular-nums text-slate-900 dark:text-white">
                                   {Number(unitStatsQuery.data?.statistik?.pegawai ?? 0).toLocaleString('id-ID')}
                                 </p>
@@ -2006,9 +2093,9 @@ export default function EducationUnitsPage() {
                             </div>
 
                             {/* Kartu Kelas & Rombel */}
-                            <div className="group relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm transition-all hover:border-purple-300 hover:shadow-md dark:border-slate-700/80 dark:bg-slate-800/60 dark:hover:border-purple-500/50">
+                            <div className="relative overflow-hidden rounded-2xl border-2 border-emerald-200/80 bg-white p-5 sm:p-6 shadow-sm dark:border-emerald-700/80 dark:bg-card-dark print:hidden">
                               <div className="flex items-center justify-between">
-                                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/10 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400">
+                                <div className="flex h-9 w-10 items-center justify-center rounded-xl bg-purple-500/10 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400">
                                   <School className="h-5 w-5" />
                                 </div>
                                 <span className="rounded-full bg-purple-50 px-2 py-0.5 text-[10px] font-extrabold text-purple-700 dark:bg-purple-950/60 dark:text-purple-300">
@@ -2016,7 +2103,7 @@ export default function EducationUnitsPage() {
                                 </span>
                               </div>
                               <div className="mt-3">
-                                <p className="text-[11px] font-bold tracking-wide text-slate-500 dark:text-slate-400">KELAS / ROMBEL</p>
+                                <p className="text-xs font-bold tracking-wide text-slate-500 dark:text-slate-400">KELAS / ROMBEL</p>
                                 <div className="mt-0.5 flex items-baseline gap-1.5">
                                   <span className="text-2xl font-black tabular-nums text-slate-900 dark:text-white">
                                     {unitStatsQuery.data?.statistik?.kelas ?? detailUnit.total_kelas ?? 0}
@@ -2035,15 +2122,15 @@ export default function EducationUnitsPage() {
                           </div>
 
                           {/* Ringkasan Rasio & Insight Bar */}
-                          <div className="rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50/70 to-teal-50/40 p-4 dark:border-emerald-900/40 dark:from-emerald-950/20 dark:to-slate-800/40">
+                          <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-card-dark p-4 dark:border-emerald-800/60 dark:from-emerald-950/20 dark:to-slate-800/40">
                             <div className="flex items-center justify-between">
                               <div>
                                 <p className="text-xs font-extrabold text-emerald-900 dark:text-emerald-300">Rasio Pendidik : Peserta Didik</p>
-                                <p className="mt-0.5 text-[11px] text-emerald-700/80 dark:text-emerald-400/80">
+                                <p className="mt-0.5 text-xs text-emerald-700/80 dark:text-emerald-400/80">
                                   Perbandingan jumlah guru terhadap siswa terdaftar
                                 </p>
                               </div>
-                              <div className="rounded-xl bg-white px-3 py-1.5 text-xs font-black text-[#0E5C44] shadow-xs dark:bg-slate-800 dark:text-[#3FBF75]">
+                              <div className="rounded-xl bg-white px-3 py-1.5 text-xs font-black text-[#059669] shadow-xs dark:bg-slate-800 dark:text-[#10B981] border border-emerald-200/80 dark:border-emerald-800/60">
                                 1 : {
                                   (unitStatsQuery.data?.statistik?.guru ?? detailUnit.total_guru ?? 0) > 0
                                     ? Math.round((unitStatsQuery.data?.statistik?.siswa ?? detailUnit.total_siswa ?? 0) / (unitStatsQuery.data?.statistik?.guru ?? detailUnit.total_guru ?? 1))
@@ -2065,7 +2152,7 @@ export default function EducationUnitsPage() {
                           unitGuruQuery.data?.length === 0 ? <AppEmptyState title="Belum ada data guru" description="Tidak ada tenaga pendidik terdaftar pada unit ini." /> :
                             <div className="space-y-2">
                               {unitGuruQuery.data.map(guru => (
-                                <div key={guru.id || guru.niy} className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-800/50">
+                                <div key={guru.id || guru.niy} className="flex items-center gap-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 dark:border-emerald-800/60 dark:bg-slate-800/50">
                                   <PersonIdentityCell
                                     src={guru.foto || guru.avatar}
                                     name={guru.nama_lengkap || guru.nama || guru.name}
@@ -2087,7 +2174,7 @@ export default function EducationUnitsPage() {
                           unitSiswaQuery.data?.length === 0 ? <AppEmptyState title="Belum ada data siswa" description="Tidak ada peserta didik terdaftar aktif pada unit ini." /> :
                             <div className="space-y-2">
                               {unitSiswaQuery.data.map(siswa => (
-                                <div key={siswa.id || siswa.nis} className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-800/50">
+                                <div key={siswa.id || siswa.nis} className="flex items-center justify-between rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 dark:border-emerald-800/60 dark:bg-slate-800/50">
                                   <PersonIdentityCell
                                     src={siswa.foto}
                                     name={siswa.nama || siswa.full_name}
@@ -2111,7 +2198,7 @@ export default function EducationUnitsPage() {
                               {unitKelasQuery.data.map(kelas => {
                                 const namaKelas = typeof kelas.nama_kelas === 'object' ? (kelas.nama_kelas?.name || '-') : (kelas.nama_kelas || kelas.name || '-')
                                 return (
-                                  <div key={kelas.id || namaKelas} className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-800/50">
+                                  <div key={kelas.id || namaKelas} className="flex items-center justify-between rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 dark:border-emerald-800/60 dark:bg-slate-800/50">
                                     <div>
                                       <p className="text-xs font-bold text-slate-900 dark:text-white">{namaKelas}</p>
                                       <p className="text-[10px] text-slate-500">{kelas.tingkat || kelas.level || ''}</p>
@@ -2127,14 +2214,14 @@ export default function EducationUnitsPage() {
                 </div>
 
                 {/* Footer */}
-                <div className="modal-footer flex items-center justify-between border-t border-slate-100 bg-slate-50/50 px-6 py-4 dark:border-slate-800 dark:bg-slate-900/30">
+                <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
                   <button
                     type="button"
                     onClick={() => setDetailUnit(null)}
-                    className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white px-4 py-2.5 text-xs font-extrabold border border-rose-300/40 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
+                    className="inline-flex items-center gap-2 rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
                   >
-                    <div className="flex size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                      <X className="size-3.5 text-white" strokeWidth={2.2} />
+                    <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
+                      <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
                     </div>
                     <span>Tutup</span>
                   </button>
@@ -2142,10 +2229,10 @@ export default function EducationUnitsPage() {
                     <button
                       type="button"
                       onClick={() => { const t = detailUnit; setDetailUnit(null); openEditModal(t) }}
-                      className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-amber-400 via-amber-500 to-orange-600 text-white px-5 py-2.5 text-xs font-extrabold border border-amber-300/40 hover:scale-[1.03] transition-all duration-200 active:scale-95 cursor-pointer"
+                      className="inline-flex items-center gap-2 rounded-xl bg-[#059669] hover:bg-[#047857] text-white px-5 py-2.5 text-xs font-extrabold shadow-sm hover:scale-[1.02] transition-all duration-200 active:scale-95 cursor-pointer"
                     >
-                      <div className="flex size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                        <Pencil className="size-3.5 text-white" strokeWidth={2.25} />
+                      <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
+                        <Pencil className="size-3.5 text-emerald-600" strokeWidth={2.25} />
                       </div>
                       <span>Ubah Data Unit</span>
                     </button>
@@ -2174,20 +2261,19 @@ export default function EducationUnitsPage() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
               transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-              className="modal-dialog font-sans my-auto w-full max-w-3xl"
+              className="modal-dialog font-sans my-auto w-full max-w-4xl"
             >
-              <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-2xl shadow-emerald-950/20 dark:border-slate-800 dark:bg-[#182232] dark:shadow-black/60">
+              <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
                 {/* Top Accent Gradient Bar */}
-                <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
 
                 {/* Header */}
-                <div className="modal-header flex items-center justify-between border-b border-slate-100 bg-white px-6 py-4.5 dark:border-slate-800 dark:bg-slate-950">
+                <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-md shadow-emerald-500/20 border border-emerald-300/30 shrink-0">
-                      {activeKpiModal === 'total_unit' && <Building2 className="h-5 w-5 text-white" strokeWidth={2.25} />}
-                      {activeKpiModal === 'total_siswa' && <GraduationCap className="h-5 w-5 text-white" strokeWidth={2.25} />}
-                      {activeKpiModal === 'total_guru' && <UsersRound className="h-5 w-5 text-white" strokeWidth={2.25} />}
-                      {activeKpiModal === 'unit_aktif' && <CheckCircle2 className="h-5 w-5 text-white" strokeWidth={2.25} />}
+                    <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
+                      {activeKpiModal === 'total_unit' && <Building2 className="h-5 w-5 text-slate-600" strokeWidth={2.25} />}
+                      {activeKpiModal === 'total_siswa' && <GraduationCap className="h-5 w-5 text-amber-600" strokeWidth={2.25} />}
+                      {activeKpiModal === 'total_guru' && <UsersRound className="h-5 w-5 text-current" strokeWidth={2.25} />}
+                      {activeKpiModal === 'unit_aktif' && <CheckCircle2 className="h-5 w-5 text-current" strokeWidth={2.25} />}
                     </div>
                     <div>
                       <h3 className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
@@ -2197,7 +2283,7 @@ export default function EducationUnitsPage() {
                           {activeKpiModal === 'total_guru' && 'Distribusi Tenaga Pendidik & Guru Aktif'}
                           {activeKpiModal === 'unit_aktif' && 'Status Operasional Unit Pendidikan Aktif'}
                         </span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
                           <Sparkles className="size-3" />
                           Metrik KPI
                         </span>
@@ -2211,9 +2297,9 @@ export default function EducationUnitsPage() {
                     type="button"
                     onClick={() => setActiveKpiModal(null)}
                     aria-label="Tutup modal"
-                    className="size-9 flex items-center justify-center rounded-2xl bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white hover:scale-105 active:scale-95 transition-all duration-200 shadow-md shadow-rose-500/20 cursor-pointer"
+                    className="size-9 flex items-center justify-center rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer"
                   >
-                    <X className="size-4 text-white" strokeWidth={2.25} />
+                    <X className="size-4 text-rose-600" strokeWidth={2.25} />
                   </button>
                 </div>
 
@@ -2221,15 +2307,15 @@ export default function EducationUnitsPage() {
                 <div className="modal-body min-h-0 flex-1 overflow-y-auto p-6 space-y-4">
                   {/* Summary Bar */}
                   <div className="grid grid-cols-3 gap-3">
-                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800/40">
+                    <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 p-3 dark:border-emerald-800/60 dark:bg-slate-800/40">
                       <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Unit Terdaftar</p>
                       <p className="text-xl font-black text-slate-900 dark:text-white mt-0.5">{Number(statistics.total_unit ?? items.length ?? 0).toLocaleString('id-ID')}</p>
                     </div>
-                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800/40">
+                    <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 p-3 dark:border-emerald-800/60 dark:bg-slate-800/40">
                       <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Siswa Active</p>
                       <p className="text-xl font-black text-amber-600 dark:text-amber-400 mt-0.5">{Number(statistics.total_siswa ?? 0).toLocaleString('id-ID')}</p>
                     </div>
-                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800/40">
+                    <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 p-3 dark:border-emerald-800/60 dark:bg-slate-800/40">
                       <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Guru Aktif</p>
                       <p className="text-xl font-black text-emerald-600 dark:text-emerald-400 mt-0.5">{Number(statistics.total_tenaga_pendidik ?? 0).toLocaleString('id-ID')}</p>
                     </div>
@@ -2244,7 +2330,7 @@ export default function EducationUnitsPage() {
                     {items.length === 0 ? (
                       <div className="text-center py-8 text-xs text-slate-400">Tidak ada data unit tersedia.</div>
                     ) : (
-                      <div className="divide-y divide-slate-100 rounded-xl border border-slate-200/90 bg-white dark:divide-slate-800 dark:border-slate-700 dark:bg-slate-800/40">
+                      <div className="divide-y divide-emerald-100/80 rounded-xl border border-emerald-200/80 bg-white dark:divide-slate-800 dark:border-emerald-800/60 dark:bg-slate-800/40">
                         {items
                           .filter(u => activeKpiModal !== 'unit_aktif' || u.is_active)
                           .map((u, idx) => {
@@ -2253,7 +2339,7 @@ export default function EducationUnitsPage() {
                             const sLaki = u.total_siswa_laki ?? 0
                             const sPerempuan = u.total_siswa_perempuan ?? 0
                             return (
-                              <div key={u.id || idx} className="flex flex-wrap items-center justify-between gap-3 p-3.5 hover:bg-slate-50/80 dark:hover:bg-slate-800/80 transition-colors">
+                              <div key={u.id || idx} className="flex flex-wrap items-center justify-between gap-3 p-3.5 hover:bg-emerald-50/40 dark:hover:bg-emerald-950/30 transition-colors">
                                 <div className="flex items-center gap-3 min-w-0">
                                   <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[10px] font-black ${uStyle.bg} ${uStyle.text}`}>
                                     {u.unit_type || 'UP'}
@@ -2316,16 +2402,16 @@ export default function EducationUnitsPage() {
                 </div>
 
                 {/* Footer */}
-                <div className="modal-footer flex items-center justify-between border-t border-slate-100 bg-slate-50/50 px-6 py-4 dark:border-slate-800 dark:bg-slate-900/30">
+                <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
                   <span className="text-xs font-semibold text-slate-400 dark:text-slate-500">
                     Menampilkan rincian agregat unit pendidikan Dareliman Edu
                   </span>
                   <button
                     type="button"
                     onClick={() => setActiveKpiModal(null)}
-                    className="inline-flex items-center gap-1.5 rounded-2xl bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white px-4 py-2 text-xs font-extrabold border border-rose-300/40 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
+                    className="inline-flex items-center gap-1.5 rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs px-4 py-2 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
                   >
-                    <X className="size-4 text-white" />
+                    <X className="size-4 text-rose-600" />
                     <span>Tutup Rincian</span>
                   </button>
                 </div>
@@ -2353,25 +2439,24 @@ export default function EducationUnitsPage() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
               transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-              className="modal-dialog font-sans my-auto w-full max-w-2xl"
+              className="modal-dialog font-sans my-auto w-full max-w-xl"
             >
-              <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-2xl shadow-emerald-950/20 dark:border-slate-800 dark:bg-[#182232] dark:shadow-black/60">
+              <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
                 {/* Top Accent Gradient Bar */}
-                <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
 
                 {/* Header */}
-                <div className="modal-header flex items-center justify-between border-b border-slate-100 bg-white px-6 py-4.5 dark:border-slate-800 dark:bg-slate-950">
+                <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
                   <div className="flex items-center gap-3">
                     <div className={cn(
-                      "flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-2xl text-white shadow-md shrink-0 border",
+                      "flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl text-white shadow-md shrink-0 border",
                       isEditMode
-                        ? "bg-gradient-to-br from-amber-400 via-amber-500 to-orange-600 border-amber-300/40 shadow-amber-500/20"
-                        : "bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 border-emerald-300/40 shadow-emerald-500/20"
+                        ? "bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 shadow-sm"
+                        : "bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 shadow-sm"
                     )}>
                       {isEditMode ? (
-                        <Pencil className="h-5 w-5 text-white" strokeWidth={2.25} />
+                        <Pencil className="h-5 w-5 text-emerald-600" strokeWidth={2.25} />
                       ) : (
-                        <School className="h-5 w-5 text-white" strokeWidth={2.25} />
+                        <School className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
                       )}
                     </div>
                     <div>
@@ -2380,8 +2465,8 @@ export default function EducationUnitsPage() {
                         <span className={cn(
                           "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold border",
                           isEditMode
-                            ? "bg-amber-50 text-amber-700 border-amber-200/80 dark:bg-amber-950/60 dark:text-amber-400 dark:border-amber-800/60"
-                            : "bg-emerald-50 text-emerald-800 border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60"
+                            ? "bg-amber-50 text-amber-700 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/60 dark:text-amber-400 dark:border-emerald-800/60"
+                            : "bg-emerald-50 text-emerald-800 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60"
                         )}>
                           <Sparkles className="size-3" />
                           {isEditMode ? 'Update Data' : 'Unit Baru'}
@@ -2401,14 +2486,14 @@ export default function EducationUnitsPage() {
                     type="button"
                     onClick={closeFormModal}
                     aria-label="Tutup form"
-                    className="size-9 flex items-center justify-center rounded-2xl bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white hover:scale-105 active:scale-95 transition-all duration-200 shadow-md shadow-rose-500/20 cursor-pointer"
+                    className="size-9 flex items-center justify-center rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer"
                   >
-                    <X className="size-4 text-white" strokeWidth={2.25} />
+                    <X className="size-4 text-rose-600" strokeWidth={2.25} />
                   </button>
                 </div>
 
                 {/* Step Wizard Indicator */}
-                <div className="border-b border-slate-100 bg-slate-50/70 p-2.5 dark:border-slate-800 dark:bg-slate-900/50">
+                <div className="border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/70 p-2.5 dark:border-emerald-800/60 dark:bg-slate-900/50">
                   <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
                     {[
                       { step: 1, label: 'Info Unit', icon: Building2 },
@@ -2423,11 +2508,11 @@ export default function EducationUnitsPage() {
                           key={s.step}
                           type="button"
                           onClick={() => setCurrentStep(s.step)}
-                          className={`flex items-center justify-center gap-1.5 rounded-xl py-2 px-2.5 text-[11px] font-extrabold transition-all duration-200 cursor-pointer ${isActive
-                            ? 'bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white border border-emerald-300/40 dark:from-emerald-400 dark:via-emerald-500 dark:to-teal-600'
+                          className={`flex items-center justify-center gap-1.5 rounded-xl py-2 px-2.5 text-xs font-extrabold transition-all duration-200 cursor-pointer ${isActive
+                            ? 'bg-emerald-600 text-white shadow-xs border border-emerald-500/40 dark:border-emerald-600/50'
                             : isDone
-                              ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 hover:bg-emerald-100/80 border border-emerald-200/50 dark:border-emerald-800/40'
-                              : 'bg-white text-slate-400 border border-slate-200/80 hover:bg-slate-100 dark:bg-slate-800/60 dark:border-slate-700/60 dark:text-slate-500'
+                              ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 hover:bg-emerald-100/80 border-2 border-emerald-300 dark:border-emerald-800'
+                              : 'bg-white text-slate-400 border border-emerald-200/80 hover:bg-emerald-50 hover:text-emerald-700 dark:bg-slate-800/60 dark:border-emerald-800/60 dark:text-slate-500'
                             }`}
                         >
                           <s.icon className={`size-3.5 shrink-0 ${isActive ? 'text-white' : isDone ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}`} />
@@ -2439,7 +2524,7 @@ export default function EducationUnitsPage() {
                 </div>
 
                 {/* Body */}
-                <div className="min-h-0 flex-1 overflow-y-auto p-6 space-y-4">
+                <div className="min-h-0 flex-1 overflow-y-auto p-6 pb-8 space-y-4">
                   {(formAlert || formMutationAlert) && (
                     <InlineAlert
                       type={formMutationAlert ? 'error' : 'warning'}
@@ -2451,28 +2536,28 @@ export default function EducationUnitsPage() {
                   {/* Step 1: Informasi */}
                   {currentStep === 1 && (
                     <div className="space-y-4">
-                      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800/60 pb-2">
+                      <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-2">
                         <h3 className="text-xs font-extrabold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                          <Building2 className="size-4 text-[#0E5C44] dark:text-[#3FBF75]" />
+                          <Building2 className="size-4 text-[#059669] dark:text-[#10B981]" />
                           Informasi Utama Unit Pendidikan
                         </h3>
-                        <span className="text-[11px] font-semibold text-slate-400">* Wajib diisi</span>
+                        <span className="text-xs font-semibold text-slate-400">* Wajib diisi</span>
                       </div>
 
                       {/* Logo upload */}
                       <div className="space-y-1.5">
                         <label className="block text-xs font-bold text-slate-700 dark:text-slate-200">Foto / Logo Unit</label>
                         {formData.logo_url ? (
-                          <div className="flex items-center gap-4 rounded-2xl border border-emerald-200 bg-emerald-50/70 p-3.5 dark:border-emerald-900/40 dark:bg-emerald-950/30">
-                            <img src={formData.logo_url} alt="Logo" className="h-14 w-14 shrink-0 rounded-xl border-2 border-emerald-600 object-cover shadow-xs" />
+                          <div className="flex items-center gap-4 rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/70 p-3.5 dark:border-emerald-800/60 dark:bg-emerald-950/30">
+                            <img src={formData.logo_url} alt="Logo" className="h-14 w-14 shrink-0 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 object-cover shadow-xs" />
                             <div>
                               <p className="text-xs font-extrabold text-slate-800 dark:text-slate-100">Logo unit terpasang</p>
                               <button type="button" onClick={() => setFormData(p => ({ ...p, logo_url: '' }))} className="mt-1 text-xs font-bold text-rose-600 hover:underline cursor-pointer">Hapus & Upload Ulang</button>
                             </div>
                           </div>
                         ) : (
-                          <label className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-emerald-300/80 bg-emerald-50/40 p-6 text-center transition-all hover:border-emerald-500 hover:bg-emerald-50/70 dark:border-emerald-800/60 dark:bg-emerald-950/20 dark:hover:border-emerald-600">
-                            <div className="mb-2 flex size-11 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300 shadow-xs">
+                          <label className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/40 p-6 text-center transition-all hover:border-emerald-300 dark:hover:border-emerald-200/80 hover:bg-emerald-50/70 dark:border-emerald-800/60 dark:bg-emerald-950/20 dark:hover:border-emerald-200/80">
+                            <div className="mb-2 flex size-11 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300 shadow-xs">
                               <Upload className="size-5" />
                             </div>
                             <span className="text-xs font-bold text-slate-700 dark:text-slate-200">Klik untuk Unggah Logo Unit</span>
@@ -2498,10 +2583,10 @@ export default function EducationUnitsPage() {
                             placeholder="Contoh: Nama Unit Sekolah"
                             value={formData.name}
                             onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
-                            className="w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-500 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                            className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
                           />
                         </div>
-                        <p className="text-[11px] font-medium text-slate-400">Nama resmi unit pendidikan yang terdaftar</p>
+                        <p className="text-xs font-medium text-slate-400">Nama resmi unit pendidikan yang terdaftar</p>
                       </div>
 
                       {/* Kode Unit & NPSN */}
@@ -2521,7 +2606,7 @@ export default function EducationUnitsPage() {
                               placeholder="Contoh: SDIT-002"
                               value={formData.code}
                               onChange={e => setFormData(p => ({ ...p, code: e.target.value }))}
-                              className="w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-500 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                              className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
                             />
                           </div>
                         </div>
@@ -2541,7 +2626,7 @@ export default function EducationUnitsPage() {
                               placeholder="Nomor Pokok Sekolah Nasional"
                               value={formData.npsn}
                               onChange={e => setFormData(p => ({ ...p, npsn: e.target.value }))}
-                              className="w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-500 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                              className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
                             />
                           </div>
                         </div>
@@ -2564,7 +2649,7 @@ export default function EducationUnitsPage() {
                               placeholder="info@sekolah.sch.id"
                               value={formData.email}
                               onChange={e => setFormData(p => ({ ...p, email: e.target.value }))}
-                              className="w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-500 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                              className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
                             />
                           </div>
                         </div>
@@ -2584,7 +2669,7 @@ export default function EducationUnitsPage() {
                               placeholder="0751-xxxxxx / 08xxxxxxxxxx"
                               value={formData.phone}
                               onChange={e => setFormData(p => ({ ...p, phone: e.target.value }))}
-                              className="w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-500 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                              className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
                             />
                           </div>
                         </div>
@@ -2614,13 +2699,13 @@ export default function EducationUnitsPage() {
                       </div>
 
                       {/* Model Program & Jam Kegiatan Unit */}
-                      <div className="space-y-3 rounded-2xl border border-emerald-200/80 bg-emerald-50/40 p-4 dark:border-emerald-800/60 dark:bg-emerald-950/20">
+                      <div className="space-y-3 rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/40 p-4 dark:border-emerald-800/60 dark:bg-emerald-950/20">
                         <div className="flex items-center justify-between">
                           <label className="block text-xs font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5">
                             <School className="size-4 text-emerald-600 dark:text-emerald-400" />
                             Model Sistem Pembelajaran <span className="text-rose-500">*</span>
                           </label>
-                          <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/60 px-2.5 py-0.5 rounded-full border border-emerald-300/60 dark:border-emerald-700/60">
+                          <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/60 px-2.5 py-0.5 rounded-full border-2 border-emerald-300 dark:border-emerald-800">
                             Fullday vs Boarding
                           </span>
                         </div>
@@ -2638,8 +2723,8 @@ export default function EducationUnitsPage() {
                               }))
                             }}
                             className={`relative flex items-start gap-3 rounded-xl border-2 p-3 transition-all cursor-pointer ${formData.program_type === 'fullday'
-                              ? 'border-emerald-600 bg-white shadow-sm ring-2 ring-emerald-500/20 dark:bg-slate-800 dark:border-emerald-400'
-                              : 'border-slate-200 bg-white/70 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800/60'
+                              ? 'border-emerald-200/80 bg-white shadow-sm ring-2 ring-emerald-500/20 dark:bg-slate-800 dark:border-emerald-800/60'
+                              : 'border-emerald-200/80 bg-white/70 hover:border-emerald-300 dark:border-emerald-800/60 dark:bg-slate-800/60'
                               }`}
                           >
                             <div className={`mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl ${formData.program_type === 'fullday'
@@ -2655,7 +2740,7 @@ export default function EducationUnitsPage() {
                                   <span className="size-2 rounded-full bg-emerald-500 ring-4 ring-emerald-100 dark:ring-emerald-900/50" />
                                 )}
                               </div>
-                              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
+                              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
                                 Siswa pulang harian sore hari. Kemitraan KBM sekolah & pengasuhan rumah.
                               </p>
                             </div>
@@ -2673,12 +2758,12 @@ export default function EducationUnitsPage() {
                               }))
                             }}
                             className={`relative flex items-start gap-3 rounded-xl border-2 p-3 transition-all cursor-pointer ${formData.program_type === 'boarding'
-                              ? 'border-teal-600 bg-white shadow-sm ring-2 ring-teal-500/20 dark:bg-slate-800 dark:border-teal-400'
-                              : 'border-slate-200 bg-white/70 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800/60'
+                              ? 'border-emerald-200/80  bg-white shadow-sm ring-2 ring-emerald-500/20 dark:bg-slate-800 dark:border-emerald-800/60 '
+                              : 'border-emerald-200/80 bg-white/70 hover:border-emerald-300 dark:border-emerald-800/60 dark:bg-slate-800/60'
                               }`}
                           >
                             <div className={`mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl ${formData.program_type === 'boarding'
-                              ? 'bg-teal-600 text-white'
+                              ? 'bg-emerald-50 text-emerald-700  text-white'
                               : 'bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400'
                               }`}>
                               <Moon className="size-5" />
@@ -2687,10 +2772,10 @@ export default function EducationUnitsPage() {
                               <div className="flex items-center justify-between">
                                 <p className="text-xs font-black text-slate-900 dark:text-white">Boarding / Pesantren</p>
                                 {formData.program_type === 'boarding' && (
-                                  <span className="size-2 rounded-full bg-teal-500 ring-4 ring-teal-100 dark:ring-teal-900/50" />
+                                  <span className="size-2 rounded-full bg-emerald-50 text-emerald-700  ring-4 ring-emerald-100 dark:ring-emerald-900/50" />
                                 )}
                               </div>
-                              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
+                              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
                                 Santri mukim asrama 24 jam. Pengasuhan intensif, halaqah quran & musyrif.
                               </p>
                             </div>
@@ -2698,9 +2783,9 @@ export default function EducationUnitsPage() {
                         </div>
 
                         {/* Jam Masuk, Jam Pulang, Jam Kegiatan */}
-                        <div className="pt-3 border-t border-emerald-100 dark:border-emerald-900/40 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div className="pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 grid grid-cols-1 sm:grid-cols-3 gap-3">
                           <div className="space-y-1">
-                            <label htmlFor="jam_masuk" className="block text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                            <label htmlFor="jam_masuk" className="block text-xs font-bold text-slate-700 dark:text-slate-300">
                               Jam Masuk / Mulai
                             </label>
                             <div className="relative flex items-center">
@@ -2712,13 +2797,13 @@ export default function EducationUnitsPage() {
                                 type="time"
                                 value={formData.jam_masuk}
                                 onChange={e => setFormData(p => ({ ...p, jam_masuk: e.target.value }))}
-                                className="w-full rounded-xl border border-slate-200 bg-white pl-9 pr-3 py-2 text-xs font-semibold text-slate-800 shadow-xs focus:border-emerald-500 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                                className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-9 pr-3 py-2 text-xs font-semibold text-slate-800 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100"
                               />
                             </div>
                           </div>
 
                           <div className="space-y-1">
-                            <label htmlFor="jam_pulang" className="block text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                            <label htmlFor="jam_pulang" className="block text-xs font-bold text-slate-700 dark:text-slate-300">
                               Jam Pulang Siswa/Santri
                             </label>
                             <div className="relative flex items-center">
@@ -2730,13 +2815,13 @@ export default function EducationUnitsPage() {
                                 type="time"
                                 value={formData.jam_pulang}
                                 onChange={e => setFormData(p => ({ ...p, jam_pulang: e.target.value }))}
-                                className="w-full rounded-xl border border-slate-200 bg-white pl-9 pr-3 py-2 text-xs font-semibold text-slate-800 shadow-xs focus:border-emerald-500 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                                className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-9 pr-3 py-2 text-xs font-semibold text-slate-800 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100"
                               />
                             </div>
                           </div>
 
                           <div className="space-y-1">
-                            <label htmlFor="jam_kegiatan" className="block text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                            <label htmlFor="jam_kegiatan" className="block text-xs font-bold text-slate-700 dark:text-slate-300">
                               Keterangan Jam Kegiatan
                             </label>
                             <div className="relative flex items-center">
@@ -2746,7 +2831,7 @@ export default function EducationUnitsPage() {
                                 placeholder="07:15 - 16:00 WIB"
                                 value={formData.jam_kegiatan}
                                 onChange={e => setFormData(p => ({ ...p, jam_kegiatan: e.target.value }))}
-                                className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-500 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                                className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 py-2 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100"
                               />
                             </div>
                           </div>
@@ -2756,17 +2841,17 @@ export default function EducationUnitsPage() {
                       {/* Status switch card */}
                       <div
                         onClick={() => setFormData(p => ({ ...p, is_active: !p.is_active }))}
-                        className={`group relative flex items-center justify-between gap-3.5 rounded-2xl border-2 p-3.5 sm:p-4 transition-all duration-200 cursor-pointer ${formData.is_active
-                          ? 'border-emerald-500/35 bg-gradient-to-r from-emerald-50/80 via-teal-50/40 to-emerald-50/60 shadow-xs shadow-emerald-500/10 dark:border-emerald-600/40 dark:bg-gradient-to-r dark:from-emerald-950/40 dark:via-teal-950/30 dark:to-slate-900/60'
-                          : 'border-slate-200/90 bg-slate-50/60 hover:bg-slate-100/60 dark:border-slate-800 dark:bg-slate-900/40 dark:hover:bg-slate-800/40'
+                        className={`group relative flex items-center justify-between gap-3.5 rounded-xl border-2 p-3.5 sm:p-4 transition-all duration-200 cursor-pointer ${formData.is_active
+                          ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-card-dark shadow-xs shadow-sm dark:border-emerald-800/60 dark:bg-card-dark'
+                          : 'border-emerald-200/80 bg-slate-50/60 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-800/60 dark:bg-slate-900/40 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300'
                           }`}
                       >
                         <div className="flex items-center gap-3.5 min-w-0">
                           {/* Squircle Status Icon */}
                           <div
-                            className={`flex size-11 shrink-0 items-center justify-center rounded-2xl border transition-all duration-200 ${formData.is_active
-                              ? 'border-emerald-300/80 bg-gradient-to-br from-emerald-500/15 via-teal-500/10 to-emerald-500/20 text-[#0E5C44] shadow-xs dark:border-emerald-700/60 dark:from-emerald-950/80 dark:to-teal-950/60 dark:text-[#3FBF75]'
-                              : 'border-slate-200 bg-white text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-500'
+                            className={`flex size-11 shrink-0 items-center justify-center rounded-xl border transition-all duration-200 ${formData.is_active
+                              ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-card-dark text-[#059669] shadow-xs dark:border-emerald-800/60 dark:from-emerald-950/80 dark:to-teal-950/60 dark:text-[#10B981]'
+                              : 'border-emerald-200/80 bg-white text-slate-400 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-500'
                               }`}
                           >
                             {formData.is_active ? (
@@ -2783,13 +2868,13 @@ export default function EducationUnitsPage() {
                                 Status Operasional Unit
                               </p>
                               {formData.is_active && (
-                                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100/90 px-2 py-0.5 text-[10px] font-extrabold text-emerald-800 border border-emerald-300/70 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700/60">
+                                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100/90 px-2 py-0.5 text-[10px] font-extrabold text-emerald-800 border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-800/60">
                                   <Sparkles className="size-2.5 text-emerald-600 dark:text-emerald-400" />
                                   Aktif
                                 </span>
                               )}
                             </div>
-                            <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
+                            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
                               Aktifkan agar unit dapat dipilih pada transaksi & data siswa
                             </p>
                           </div>
@@ -2813,7 +2898,7 @@ export default function EducationUnitsPage() {
                             aria-label="Toggle status operasional unit"
                             onClick={() => setFormData(p => ({ ...p, is_active: !p.is_active }))}
                             className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-4 focus:ring-emerald-500/20 ${formData.is_active
-                              ? 'bg-gradient-to-r from-emerald-600 to-teal-600 shadow-sm shadow-emerald-700/30'
+                              ? 'bg-[#059669] hover:bg-[#047857] text-white dark:bg-[#059669] dark:text-white shadow-sm'
                               : 'bg-slate-300 dark:bg-slate-700'
                               }`}
                           >
@@ -2836,9 +2921,9 @@ export default function EducationUnitsPage() {
                   {/* Step 2: Alamat */}
                   {currentStep === 2 && (
                     <div className="space-y-4">
-                      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800/60 pb-2">
+                      <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-2">
                         <h3 className="text-xs font-extrabold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                          <MapPin className="size-4 text-[#0E5C44] dark:text-[#3FBF75]" />
+                          <MapPin className="size-4 text-[#059669] dark:text-[#10B981]" />
                           Alamat & Wilayah Operasional
                         </h3>
                       </div>
@@ -2852,7 +2937,7 @@ export default function EducationUnitsPage() {
                           <button
                             type="button"
                             onClick={() => setMapSearchTriggerKey(Date.now())}
-                            className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 dark:text-emerald-300 px-2.5 py-1 text-[11px] font-bold border border-emerald-300/80 dark:border-emerald-700/80 transition-all cursor-pointer shadow-2xs"
+                            className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 dark:text-emerald-300 px-2.5 py-1 text-xs font-bold border-2 border-emerald-300 dark:border-emerald-800 transition-all cursor-pointer shadow-2xs"
                             title="Langsung arahkan pin peta ke alamat yang Anda ketik ini"
                           >
                             <Compass className="size-3 text-emerald-600 dark:text-emerald-400" />
@@ -2870,10 +2955,10 @@ export default function EducationUnitsPage() {
                             placeholder="Jl. Khatib Sulaiman No. 10..."
                             value={formData.address}
                             onChange={e => setFormData(p => ({ ...p, address: e.target.value }))}
-                            className="w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-500 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                            className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
                           />
                         </div>
-                        <p className="text-[11px] font-medium text-slate-400">
+                        <p className="text-xs font-medium text-slate-400">
                           Alamat fisik unit pendidikan. Mengetik alamat akan otomatis mengarahkan titik pada peta (atau geser pin pada peta untuk mengisi otomatis alamat).
                         </p>
                       </div>
@@ -2987,7 +3072,7 @@ export default function EducationUnitsPage() {
                             Kode Pos
                           </label>
                           {formData.postal_code && (
-                            <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-200/80 dark:border-emerald-800/60">
+                            <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-full border-2 border-emerald-300 dark:border-emerald-800/80">
                               Terisi Otomatis
                             </span>
                           )}
@@ -3003,14 +3088,14 @@ export default function EducationUnitsPage() {
                             placeholder="25136"
                             value={formData.postal_code}
                             onChange={e => setFormData(p => ({ ...p, postal_code: e.target.value }))}
-                            className="w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-500 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                            className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
                           />
                         </div>
-                        <p className="text-[11px] font-medium text-slate-400">Kode pos terisi otomatis saat memilih kelurahan / kecamatan (dapat disunting manual)</p>
+                        <p className="text-xs font-medium text-slate-400">Kode pos terisi otomatis saat memilih kelurahan / kecamatan (dapat disunting manual)</p>
                       </div>
 
                       {/* Peta Interaktif & Penentuan Titik Koordinat Lokasi */}
-                      <div className="space-y-4 rounded-2xl border-2 border-emerald-300/80 bg-white p-4 shadow-sm dark:border-emerald-700/80 dark:bg-slate-900/60">
+                      <div className="space-y-4 rounded-xl border border-emerald-200/80 dark:border-emerald-800/80 bg-white p-4 shadow-sm dark:border-emerald-800/60 dark:bg-slate-900/60">
                         <InteractiveMapPicker
                           latitude={formData.latitude}
                           longitude={formData.longitude}
@@ -3054,15 +3139,15 @@ export default function EducationUnitsPage() {
                   {/* Step 3: Pimpinan */}
                   {currentStep === 3 && (
                     <div className="space-y-4">
-                      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800/60 pb-2">
+                      <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-2">
                         <h3 className="text-xs font-extrabold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                          <UsersRound className="size-4 text-[#0E5C44] dark:text-[#3FBF75]" />
+                          <UsersRound className="size-4 text-[#059669] dark:text-[#10B981]" />
                           Kepala Sekolah & SK Pendirian
                         </h3>
                         <button
                           type="button"
                           onClick={() => setIsAddEmployeeModalOpen(true)}
-                          className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 px-3 py-1.5 text-xs font-bold text-[#0E5C44] dark:text-[#3FBF75] hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition border border-emerald-200/80 dark:border-emerald-800/60 cursor-pointer"
+                          className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 px-3 py-1.5 text-xs font-bold text-[#059669] dark:text-[#10B981] hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition border-2 border-emerald-300 dark:border-emerald-800/80 cursor-pointer"
                         >
                           <Plus className="h-3.5 w-3.5" /> Tambah Pegawai Baru
                         </button>
@@ -3075,7 +3160,7 @@ export default function EducationUnitsPage() {
                             Pilih dari Data Pegawai
                           </label>
                           {selectedEmployeeId && (
-                            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-200/80 dark:border-emerald-800/60">
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-full border-2 border-emerald-300 dark:border-emerald-800/80">
                               <Sparkles className="size-2.5 text-emerald-600 dark:text-emerald-400" />
                               Terisi Otomatis
                             </span>
@@ -3104,7 +3189,7 @@ export default function EducationUnitsPage() {
                           size="md"
                           ariaLabel="Pilih dari Data Pegawai"
                         />
-                        <p className="text-[11px] font-medium text-slate-400">
+                        <p className="text-xs font-medium text-slate-400">
                           Pilih pegawai terdaftar untuk mengisi nama & NIP pimpinan unit secara instan (atau ketik manual di bawah).
                         </p>
                       </div>
@@ -3125,7 +3210,7 @@ export default function EducationUnitsPage() {
                             placeholder="Ust. Fadli Rahman, S.Pd"
                             value={formData.principal_name}
                             onChange={e => setFormData(p => ({ ...p, principal_name: e.target.value }))}
-                            className="w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-500 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                            className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
                           />
                         </div>
                       </div>
@@ -3146,7 +3231,7 @@ export default function EducationUnitsPage() {
                             placeholder="1985xxxxxx"
                             value={formData.principal_nip}
                             onChange={e => setFormData(p => ({ ...p, principal_nip: e.target.value }))}
-                            className="w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-500 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                            className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
                           />
                         </div>
                       </div>
@@ -3167,7 +3252,7 @@ export default function EducationUnitsPage() {
                             placeholder="Contoh: SK-YDI/2021/005"
                             value={formData.sk_pendirian}
                             onChange={e => setFormData(p => ({ ...p, sk_pendirian: e.target.value }))}
-                            className="w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-500 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                            className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
                           />
                         </div>
                       </div>
@@ -3222,10 +3307,10 @@ export default function EducationUnitsPage() {
                           <CheckCircle2 className="size-4 text-emerald-600 dark:text-emerald-400" />
                           Ringkasan Data Unit
                         </h3>
-                        <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">Siap Disimpan</span>
+                        <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">Siap Disimpan</span>
                       </div>
 
-                      <div className="divide-y divide-slate-100 rounded-2xl border border-slate-200/80 bg-slate-50/80 text-xs dark:divide-slate-700/70 dark:border-slate-700/80 dark:bg-slate-800/30 overflow-hidden">
+                      <div className="divide-y divide-emerald-100/80 rounded-xl border border-emerald-200/80 bg-slate-50/80 text-xs dark:divide-slate-700/70 dark:border-emerald-800/80 dark:bg-slate-800/30 overflow-hidden">
                         {[
                           ['Nama Unit', formData.name || '-'],
                           ['Jenis Unit', formData.unit_type || '-'],
@@ -3244,8 +3329,8 @@ export default function EducationUnitsPage() {
                         ))}
                       </div>
 
-                      <div className="rounded-2xl border border-emerald-200/80 bg-emerald-50/70 p-4 dark:border-emerald-800/50 dark:bg-emerald-950/30 flex items-start gap-3">
-                        <ShieldCheck className="size-5 text-[#0E5C44] dark:text-emerald-400 shrink-0 mt-0.5" />
+                      <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/70 p-4 dark:border-emerald-800/60 dark:bg-emerald-950/30 flex items-start gap-3">
+                        <ShieldCheck className="size-5 text-[#059669] dark:text-emerald-400 shrink-0 mt-0.5" />
                         <p className="text-xs text-slate-700 dark:text-slate-200 leading-relaxed">
                           Pastikan seluruh data unit yang dimasukkan telah sesuai dengan dokumen resmi yayasan sebelum menekan tombol simpan.
                         </p>
@@ -3255,14 +3340,14 @@ export default function EducationUnitsPage() {
                 </div>
 
                 {/* Footer */}
-                <div className="modal-footer flex items-center justify-between border-t border-slate-100 bg-slate-50/50 px-6 py-4 dark:border-slate-800 dark:bg-slate-900/30">
+                <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
                   <button
                     type="button"
                     onClick={closeFormModal}
-                    className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white px-4 py-2.5 text-xs font-extrabold border border-rose-300/40 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
+                    className="inline-flex items-center gap-2 rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
                   >
-                    <div className="flex size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                      <X className="size-3.5 text-white" strokeWidth={2.2} />
+                    <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
+                      <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
                     </div>
                     <span>Batal</span>
                   </button>
@@ -3271,9 +3356,9 @@ export default function EducationUnitsPage() {
                       <button
                         type="button"
                         onClick={() => setCurrentStep(s => s - 1)}
-                        className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700 text-white px-4 py-2.5 text-xs font-extrabold border border-blue-300/40 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
+                        className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-card-dark px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
                       >
-                        <div className="flex size-5 items-center justify-center rounded-lg bg-white/20 text-white">
+                        <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
                           <ArrowLeft className="size-3.5" strokeWidth={2.2} />
                         </div>
                         <span>Kembali</span>
@@ -3283,11 +3368,11 @@ export default function EducationUnitsPage() {
                       <button
                         type="button"
                         onClick={() => setCurrentStep(s => Math.min(4, s + 1))}
-                        className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white px-5 py-2.5 text-xs font-extrabold border border-emerald-300/40 hover:scale-[1.03] transition-all duration-200 active:scale-95 cursor-pointer"
+                        className="inline-flex items-center gap-2 rounded-xl bg-[#059669] hover:bg-[#047857] text-white px-5 py-2.5 text-xs font-extrabold shadow-sm hover:scale-[1.02] transition-all duration-200 active:scale-95 cursor-pointer"
                       >
                         <span>Selanjutnya</span>
-                        <div className="flex size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                          <ArrowRight className="size-3.5 text-white" strokeWidth={2.2} />
+                        <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
+                          <ArrowRight className="size-3.5 text-emerald-600" strokeWidth={2.2} />
                         </div>
                       </button>
                     ) : (
@@ -3296,17 +3381,17 @@ export default function EducationUnitsPage() {
                         onClick={handleFormSubmit}
                         disabled={isMutating}
                         className={cn(
-                          "inline-flex items-center gap-2 rounded-2xl text-white px-5 py-2.5 text-xs font-extrabold transition-all duration-200 hover:scale-[1.03] active:scale-95 disabled:opacity-50 cursor-pointer",
+                          "inline-flex items-center gap-2 rounded-xl text-white px-5 py-2.5 text-xs font-extrabold transition-all duration-200 hover:scale-[1.03] active:scale-95 disabled:opacity-50 cursor-pointer",
                           isEditMode
-                            ? "bg-gradient-to-br from-amber-400 via-amber-500 to-orange-600 border border-amber-300/40 "
-                            : "bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 border border-emerald-300/40 "
+                            ? "bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 border-2 border-emerald-300 dark:border-emerald-800 "
+                            : "bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 border-2 border-emerald-300 dark:border-emerald-800 "
                         )}
                       >
                         {isMutating ? (
-                          <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                          <span className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent" />
                         ) : (
-                          <div className="flex size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                            <Save className="size-3.5 text-white" strokeWidth={2.2} />
+                          <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
+                            <Save className="size-3.5 text-slate-600" strokeWidth={2.2} />
                           </div>
                         )}
                         <span>{isEditMode ? 'Simpan Perubahan' : 'Simpan Unit'}</span>
@@ -3321,8 +3406,8 @@ export default function EducationUnitsPage() {
       </AnimatePresence>
 
       {/* ══════════════════════════════════════════════════════════════════
-      SAVE / UPDATE CONFIRMATION DIALOG — Harmonized with HeroUI & Full Responsive
-      ══════════════════════════════════════════════════════════════════ */}
+ SAVE / UPDATE CONFIRMATION DIALOG — Harmonized with HeroUI & Full Responsive
+ ══════════════════════════════════════════════════════════════════ */}
       <HeroModal
         isOpen={showSaveConfirmDialog}
         onOpenChange={(open) => {
@@ -3331,32 +3416,32 @@ export default function EducationUnitsPage() {
       >
         <HeroModal.Backdrop isDismissable={!isMutating} className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto">
           <HeroModal.Container placement="center" className="w-full max-w-md my-auto">
-            <HeroModal.Dialog className="modal-dialog font-sans my-auto w-full max-w-md flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-2xl shadow-emerald-950/20 dark:border-slate-800 dark:bg-[#182232] dark:shadow-black/60 outline-hidden">
+            <HeroModal.Dialog className="modal-dialog font-sans my-auto w-full max-w-md flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60 outline-hidden">
               {/* Top Accent Gradient Bar */}
               <div
                 className={cn(
                   "h-1.5 w-full shrink-0",
                   isEditMode
-                    ? "bg-gradient-to-r from-amber-500 via-teal-400 to-[#065F46]"
-                    : "bg-gradient-to-r from-emerald-500 via-teal-400 to-[#065F46]"
+                    ? "bg-white dark:bg-card-dark"
+                    : "bg-white dark:bg-card-dark"
                 )}
               />
 
               {/* Header */}
-              <HeroModal.Header className="modal-header flex flex-row items-start sm:items-center justify-between border-b border-slate-100 bg-white px-4.5 sm:px-6 py-4 dark:border-slate-800 dark:bg-slate-950 gap-3">
+              <HeroModal.Header className="modal-header flex flex-row items-start sm:items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 bg-white px-4.5 sm:px-6 py-4 dark:border-emerald-800/60 dark:bg-slate-950 gap-3">
                 <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1">
                   <div
                     className={cn(
-                      "size-10 sm:size-11 flex items-center justify-center rounded-2xl text-white shadow-md shrink-0 border",
+                      "size-10 sm:size-11 flex items-center justify-center rounded-xl text-white shadow-md shrink-0 border",
                       isEditMode
-                        ? "bg-gradient-to-br from-amber-500 via-amber-600 to-orange-600 shadow-amber-500/30 border-amber-300/30"
-                        : "bg-gradient-to-br from-[#065F46] via-emerald-600 to-teal-700 shadow-emerald-500/30 border-emerald-300/30"
+                        ? "bg-white dark:bg-card-dark shadow-sm border-emerald-200/80 dark:border-emerald-800/60"
+                        : "bg-white dark:bg-card-dark shadow-sm border-emerald-300/30"
                     )}
                   >
                     {isEditMode ? (
-                      <Pencil className="size-5 text-white" strokeWidth={2.25} />
+                      <Pencil className="size-5 text-amber-600" strokeWidth={2.25} />
                     ) : (
-                      <School className="size-5 text-white" strokeWidth={2.25} />
+                      <School className="size-5 text-current" strokeWidth={2.25} />
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
@@ -3374,15 +3459,15 @@ export default function EducationUnitsPage() {
                         className={cn(
                           "font-bold text-[10px] shrink-0 border inline-flex items-center gap-1 px-2 py-0.5",
                           isEditMode
-                            ? "bg-amber-50 text-amber-700 border-amber-200/80 dark:bg-amber-950/60 dark:text-amber-400 dark:border-amber-800/60"
-                            : "bg-emerald-50 text-emerald-800 border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60"
+                            ? "bg-amber-50 text-amber-700 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/60 dark:text-amber-400 dark:border-emerald-800/60"
+                            : "bg-emerald-50 text-emerald-800 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60"
                         )}
                       >
                         <Sparkles className="size-3" />
                         <HeroChip.Label>{isEditMode ? "Update Data" : "Unit Baru"}</HeroChip.Label>
                       </HeroChip>
                     </div>
-                    <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mt-1 leading-snug">
+                    <p className="text-xs sm:text-xs text-slate-500 dark:text-slate-400 mt-1 leading-snug">
                       {isEditMode
                         ? "Verifikasi data unit sebelum pembaruan diterapkan ke sistem."
                         : "Verifikasi data unit baru sebelum disimpan ke sistem."}
@@ -3397,16 +3482,16 @@ export default function EducationUnitsPage() {
                   disabled={isMutating}
                   onPress={() => setShowSaveConfirmDialog(false)}
                   aria-label="Tutup dialog konfirmasi"
-                  className="size-8 sm:size-9 shrink-0 flex items-center justify-center rounded-xl sm:rounded-2xl bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white hover:scale-105 active:scale-95 transition-all duration-200 shadow-md shadow-rose-500/20 cursor-pointer disabled:opacity-50"
+                  className="size-8 sm:size-9 shrink-0 flex items-center justify-center rounded-xl sm:rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer disabled:opacity-50"
                 >
-                  <X className="size-4 text-white" strokeWidth={2.25} />
+                  <X className="size-4 text-rose-600" strokeWidth={2.25} />
                 </HeroButton>
               </HeroModal.Header>
 
               {/* Body */}
               <HeroModal.Body className="modal-body p-4 sm:p-6 space-y-3.5 sm:space-y-4 text-slate-700 dark:text-slate-200 overflow-y-auto">
                 {/* Target Info Summary Card using HeroCard */}
-                <HeroCard className="rounded-2xl border border-slate-200/90 bg-slate-50/70 p-3.5 sm:p-4 dark:border-slate-800/80 dark:bg-slate-900/50 space-y-2.5 shadow-none">
+                <HeroCard className="rounded-xl border border-emerald-200/80 bg-slate-50/70 p-3.5 sm:p-4 dark:border-emerald-800/80 dark:bg-slate-900/50 space-y-2.5 shadow-none">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2">
                     <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Unit Pendidikan</span>
                     <span className="text-xs font-extrabold text-slate-900 dark:text-white sm:text-right break-words min-w-0">
@@ -3414,7 +3499,7 @@ export default function EducationUnitsPage() {
                     </span>
                   </div>
                   {formData.code && (
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-slate-200/60 pt-2 dark:border-slate-800/60">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-emerald-200/60 pt-2 dark:border-emerald-800/60">
                       <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Kode Unit</span>
                       <span className="font-mono text-xs font-bold text-slate-800 dark:text-slate-200 sm:text-right">
                         {formData.code}
@@ -3422,21 +3507,21 @@ export default function EducationUnitsPage() {
                     </div>
                   )}
                   {formData.unit_type && (
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-slate-200/60 pt-2 dark:border-slate-800/60">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-emerald-200/60 pt-2 dark:border-emerald-800/60">
                       <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Jenjang / Jenis</span>
                       <span className="text-xs font-bold text-slate-800 dark:text-slate-200 sm:text-right">
                         {formData.unit_type}
                       </span>
                     </div>
                   )}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-slate-200/60 pt-2 dark:border-slate-800/60">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-emerald-200/60 pt-2 dark:border-emerald-800/60">
                     <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Model Program</span>
                     <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400 capitalize sm:text-right">
                       {formData.program_type === "boarding" ? "Boarding / Pesantren (24 Jam)" : "Fullday School"}
                     </span>
                   </div>
                   {formData.jam_pulang && (
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-slate-200/60 pt-2 dark:border-slate-800/60">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-emerald-200/60 pt-2 dark:border-emerald-800/60">
                       <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Jam Operasional</span>
                       <span className="text-xs font-bold text-slate-800 dark:text-slate-200 sm:text-right">
                         {formData.jam_masuk ? `${formData.jam_masuk} - ` : ""}{formData.jam_pulang} WIB
@@ -3444,9 +3529,9 @@ export default function EducationUnitsPage() {
                     </div>
                   )}
                   {formData.latitude && formData.longitude && (
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-slate-200/60 pt-2 dark:border-slate-800/60">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-emerald-200/60 pt-2 dark:border-emerald-800/60">
                       <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Titik Koordinat & Radius</span>
-                      <span className="text-xs font-mono font-bold text-teal-700 dark:text-teal-400 sm:text-right break-all">
+                      <span className="text-xs font-mono font-bold text-emerald-700 dark:text-emerald-300  dark:text-emerald-700 dark:text-emerald-300  sm:text-right break-all">
                         {formData.latitude}, {formData.longitude} (R: {formData.radius_meter || 100}m)
                       </span>
                     </div>
@@ -3456,21 +3541,21 @@ export default function EducationUnitsPage() {
                 {/* Callout Notice Box */}
                 <div
                   className={cn(
-                    "rounded-2xl border p-3.5 text-xs font-medium leading-relaxed flex items-start gap-2.5 sm:gap-3",
+                    "rounded-xl border p-3.5 text-xs font-medium leading-relaxed flex items-start gap-2.5 sm:gap-3",
                     isEditMode
-                      ? "border-amber-200/80 bg-amber-50/70 text-amber-950 dark:border-amber-900/40 dark:bg-amber-950/30 dark:text-amber-200"
-                      : "border-emerald-200/80 bg-emerald-50/70 text-emerald-950 dark:border-emerald-900/40 dark:bg-emerald-950/30 dark:text-emerald-200"
+                      ? "border-emerald-200/80 dark:border-emerald-800/60 bg-amber-50/70 text-amber-950 dark:border-emerald-800/60 dark:bg-amber-950/30 dark:text-amber-200"
+                      : "border-emerald-300 dark:border-emerald-800 bg-emerald-50/70 text-emerald-950 dark:border-emerald-800/60 dark:bg-emerald-950/30 dark:text-emerald-200"
                   )}
                 >
                   <div
                     className={cn(
                       "flex size-6 shrink-0 items-center justify-center rounded-xl text-white mt-0.5 shadow-xs",
                       isEditMode
-                        ? "bg-gradient-to-br from-amber-500 to-orange-600 shadow-amber-500/20"
-                        : "bg-gradient-to-br from-[#065F46] to-teal-600 shadow-emerald-500/20"
+                        ? "bg-white dark:bg-card-dark shadow-sm"
+                        : "bg-white dark:bg-card-dark shadow-sm"
                     )}
                   >
-                    <Sparkles className="size-3.5 text-white" />
+                    <Sparkles className="size-3.5 text-emerald-600" />
                   </div>
                   <div className="flex-1 leading-relaxed">
                     {isEditMode
@@ -3481,16 +3566,16 @@ export default function EducationUnitsPage() {
               </HeroModal.Body>
 
               {/* Footer */}
-              <HeroModal.Footer className="modal-footer flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-2.5 border-t border-slate-100 bg-white px-4.5 sm:px-6 py-3.5 sm:py-4 dark:border-slate-800 dark:bg-slate-950">
+              <HeroModal.Footer className="modal-footer flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-2.5 border-t border-emerald-200/80 bg-white px-4.5 sm:px-6 py-3.5 sm:py-4 dark:border-emerald-800/60 dark:bg-slate-950">
                 <HeroButton
                   variant="outline"
                   size="sm"
                   isDisabled={isMutating}
                   disabled={isMutating}
                   onPress={() => setShowSaveConfirmDialog(false)}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white px-4 py-2.5 text-xs font-extrabold border border-rose-300/40 transition-all duration-200 hover:scale-[1.02] active:scale-95 cursor-pointer disabled:opacity-50 shadow-md shadow-rose-900/20"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.02] active:scale-95 cursor-pointer disabled:opacity-50 shadow-sm"
                 >
-                  <div className="flex size-4 shrink-0 items-center justify-center rounded-md bg-white/20 text-white">
+                  <div className="flex size-4 shrink-0 items-center justify-center rounded-md bg-white/20">
                     <X className="size-3" strokeWidth={2.2} />
                   </div>
                   <span>Batal</span>
@@ -3503,17 +3588,17 @@ export default function EducationUnitsPage() {
                   disabled={isMutating}
                   onPress={handleConfirmSave}
                   className={cn(
-                    "w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl text-white px-5 py-2.5 text-xs font-extrabold transition-all duration-200 hover:scale-[1.02] active:scale-95 disabled:opacity-50 cursor-pointer shadow-md",
+                    "w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl text-white px-5 py-2.5 text-xs font-extrabold transition-all duration-200 hover:scale-[1.02] active:scale-95 disabled:opacity-50 cursor-pointer shadow-md",
                     isEditMode
-                      ? "bg-gradient-to-br from-amber-500 via-amber-600 to-orange-600 border border-amber-300/40 shadow-amber-500/20"
-                      : "bg-gradient-to-br from-[#065F46] via-emerald-600 to-teal-700 border border-emerald-300/40 shadow-emerald-500/20"
+                      ? "bg-white dark:bg-card-dark border border-emerald-200/80 dark:border-emerald-800/60 shadow-sm"
+                      : "bg-white dark:bg-card-dark border border-emerald-200/80 dark:border-emerald-800/60 shadow-sm"
                   )}
                 >
                   {isMutating ? (
-                    <HeroSpinner size="sm" className="size-3.5 text-white" />
+                    <HeroSpinner size="sm" className="size-3.5 text-amber-600" />
                   ) : (
-                    <div className="flex size-4 shrink-0 items-center justify-center rounded-md bg-white/20 text-white">
-                      <Save className="size-3 text-white" strokeWidth={2.2} />
+                    <div className="flex size-4 shrink-0 items-center justify-center rounded-md bg-white/20">
+                      <Save className="size-3 text-current" strokeWidth={2.2} />
                     </div>
                   )}
                   <span>
@@ -3529,8 +3614,8 @@ export default function EducationUnitsPage() {
       </HeroModal>
 
       {/* ══════════════════════════════════════════════════════════════════
-      DELETE CONFIRM DIALOG — Harmonized with HeroUI & Full Responsive
-      ══════════════════════════════════════════════════════════════════ */}
+ DELETE CONFIRM DIALOG — Harmonized with HeroUI & Full Responsive
+ ══════════════════════════════════════════════════════════════════ */}
       <HeroModal
         isOpen={!!deleteTarget}
         onOpenChange={(open) => {
@@ -3540,15 +3625,14 @@ export default function EducationUnitsPage() {
         <HeroModal.Backdrop isDismissable={!deleteMutation.isPending} className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto">
           <HeroModal.Container placement="center" className="w-full max-w-md my-auto">
             {deleteTarget && (
-              <HeroModal.Dialog className="modal-dialog font-sans my-auto w-full max-w-md flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border border-rose-200/60 bg-white shadow-2xl shadow-rose-950/20 dark:border-rose-900/50 dark:bg-[#182232] dark:shadow-black/60 outline-hidden">
+              <HeroModal.Dialog className="modal-dialog font-sans my-auto w-full max-w-md flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60 outline-hidden">
                 {/* Top Accent Gradient Bar */}
-                <div className="h-1.5 w-full bg-gradient-to-r from-rose-500 via-rose-600 to-red-700 shrink-0" />
 
                 {/* Header */}
-                <HeroModal.Header className="modal-header flex flex-row items-start sm:items-center justify-between border-b border-slate-100 bg-white px-4.5 sm:px-6 py-4 dark:border-slate-800 dark:bg-slate-950 gap-3">
+                <HeroModal.Header className="modal-header flex flex-row items-start sm:items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 bg-white px-4.5 sm:px-6 py-4 dark:border-emerald-800/60 dark:bg-slate-950 gap-3">
                   <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1">
-                    <div className="size-10 sm:size-11 flex items-center justify-center rounded-2xl text-white shadow-md shrink-0 border bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 shadow-rose-500/30 border-rose-300/30">
-                      <Trash2 className="size-5 text-white" strokeWidth={2.25} />
+                    <div className="size-10 sm:size-11 flex items-center justify-center rounded-xl  shadow-md shrink-0 border border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs shadow-sm border-emerald-200/80 dark:border-emerald-800/60">
+                      <Trash2 className="size-5 text-rose-600" strokeWidth={2.25} />
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-1.5">
@@ -3562,13 +3646,13 @@ export default function EducationUnitsPage() {
                           size="sm"
                           variant="soft"
                           color="danger"
-                          className="font-bold text-[10px] shrink-0 border inline-flex items-center gap-1 px-2 py-0.5 bg-rose-50 text-rose-700 border-rose-200/80 dark:bg-rose-950/60 dark:text-rose-400 dark:border-rose-800/60"
+                          className="font-bold text-[10px] shrink-0 border inline-flex items-center gap-1 px-2 py-0.5 bg-rose-50 text-rose-700 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-rose-950/60 dark:text-rose-400 dark:border-emerald-800/60"
                         >
                           <AlertTriangle className="size-3" />
                           <HeroChip.Label>Hapus Permanen</HeroChip.Label>
                         </HeroChip>
                       </div>
-                      <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mt-1 leading-snug">
+                      <p className="text-xs sm:text-xs text-slate-500 dark:text-slate-400 mt-1 leading-snug">
                         Tindakan ini permanen dan tidak dapat dibatalkan.
                       </p>
                     </div>
@@ -3581,16 +3665,16 @@ export default function EducationUnitsPage() {
                     disabled={deleteMutation.isPending}
                     onPress={() => setDeleteTarget(null)}
                     aria-label="Tutup dialog konfirmasi"
-                    className="size-8 sm:size-9 shrink-0 flex items-center justify-center rounded-xl sm:rounded-2xl bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white hover:scale-105 active:scale-95 transition-all duration-200 shadow-md shadow-rose-500/20 cursor-pointer disabled:opacity-50"
+                    className="size-8 sm:size-9 shrink-0 flex items-center justify-center rounded-xl sm:rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer disabled:opacity-50"
                   >
-                    <X className="size-4 text-white" strokeWidth={2.25} />
+                    <X className="size-4 text-rose-600" strokeWidth={2.25} />
                   </HeroButton>
                 </HeroModal.Header>
 
                 {/* Body */}
                 <HeroModal.Body className="modal-body p-4 sm:p-6 space-y-3.5 sm:space-y-4 text-slate-700 dark:text-slate-200 overflow-y-auto">
                   {/* Target Info Summary Card */}
-                  <HeroCard className="rounded-2xl border border-rose-100/90 bg-rose-50/40 p-3.5 sm:p-4 dark:border-rose-900/40 dark:bg-rose-950/20 space-y-2.5 shadow-none">
+                  <HeroCard className="rounded-xl border-2 border-rose-300 dark:border-rose-800 bg-rose-50/40 p-3.5 sm:p-4 dark:border-emerald-800/60 dark:bg-rose-950/20 space-y-2.5 shadow-none">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2">
                       <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Unit Pendidikan</span>
                       <span className="text-xs font-extrabold text-slate-900 dark:text-white sm:text-right break-words min-w-0">
@@ -3598,7 +3682,7 @@ export default function EducationUnitsPage() {
                       </span>
                     </div>
                     {deleteTarget.code && (
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-rose-100 dark:border-rose-900/40 pt-2">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 pt-2">
                         <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Kode Unit</span>
                         <span className="font-mono text-xs font-bold text-slate-800 dark:text-slate-200 sm:text-right">
                           {deleteTarget.code}
@@ -3606,7 +3690,7 @@ export default function EducationUnitsPage() {
                       </div>
                     )}
                     {deleteTarget.unit_type && (
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-rose-100 dark:border-rose-900/40 pt-2">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 pt-2">
                         <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Jenjang / Jenis</span>
                         <span className="text-xs font-bold text-slate-800 dark:text-slate-200 sm:text-right">
                           {deleteTarget.unit_type}
@@ -3616,9 +3700,9 @@ export default function EducationUnitsPage() {
                   </HeroCard>
 
                   {/* Danger Notice Box */}
-                  <div className="rounded-2xl border border-rose-200/80 bg-rose-50/70 p-3.5 text-xs font-medium text-rose-900 dark:border-rose-900/50 dark:bg-rose-950/30 dark:text-rose-300 leading-relaxed flex items-start gap-2.5 sm:gap-3">
-                    <div className="flex size-6 shrink-0 items-center justify-center rounded-xl text-white bg-gradient-to-br from-rose-500 to-red-600 mt-0.5 shadow-xs">
-                      <AlertTriangle className="size-3.5 text-white" />
+                  <div className="rounded-xl border-2 border-rose-300 dark:border-rose-800 bg-rose-50/70 p-3.5 text-xs font-medium text-rose-900 dark:border-emerald-800/60 dark:bg-rose-950/30 dark:text-rose-300 leading-relaxed flex items-start gap-2.5 sm:gap-3">
+                    <div className="flex size-6 shrink-0 items-center justify-center rounded-xl  border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs mt-0.5 shadow-xs">
+                      <AlertTriangle className="size-3.5 text-rose-600" />
                     </div>
                     <div className="flex-1 leading-relaxed">
                       Data unit <strong>"{deleteTarget.name}"</strong> akan dihapus secara permanen dari server. Semua data kelas, siswa, dan relasi terkait akan terpengaruh.
@@ -3627,16 +3711,16 @@ export default function EducationUnitsPage() {
                 </HeroModal.Body>
 
                 {/* Footer */}
-                <HeroModal.Footer className="modal-footer flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-2.5 border-t border-slate-100 bg-white px-4.5 sm:px-6 py-3.5 sm:py-4 dark:border-slate-800 dark:bg-slate-950">
+                <HeroModal.Footer className="modal-footer flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-2.5 border-t border-emerald-200/80 bg-white px-4.5 sm:px-6 py-3.5 sm:py-4 dark:border-emerald-800/60 dark:bg-slate-950">
                   <HeroButton
                     variant="outline"
                     size="sm"
                     isDisabled={deleteMutation.isPending}
                     disabled={deleteMutation.isPending}
                     onPress={() => setDeleteTarget(null)}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 px-4 py-2.5 text-xs font-extrabold transition-all duration-200 hover:scale-[1.02] active:scale-95 cursor-pointer disabled:opacity-50"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-100 hover:bg-slate-200 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 px-4 py-2.5 text-xs font-extrabold transition-all duration-200 hover:scale-[1.02] active:scale-95 cursor-pointer disabled:opacity-50"
                   >
-                    <div className="flex size-4 shrink-0 items-center justify-center rounded-md bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+                    <div className="flex size-4 shrink-0 items-center justify-center rounded-md bg-emerald-50 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300">
                       <X className="size-3" strokeWidth={2.2} />
                     </div>
                     <span>Batal</span>
@@ -3651,12 +3735,12 @@ export default function EducationUnitsPage() {
                       if (deleteMutation.isPending) return
                       deleteMutation.mutate(deleteTarget.id)
                     }}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white px-5 py-2.5 text-xs font-extrabold border border-rose-300/40 hover:scale-[1.02] transition-all duration-200 active:scale-95 disabled:opacity-50 cursor-pointer shadow-md shadow-rose-500/25"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs px-5 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-[1.02] transition-all duration-200 active:scale-95 disabled:opacity-50 cursor-pointer shadow-sm"
                   >
                     {deleteMutation.isPending ? (
-                      <HeroSpinner size="sm" className="size-3.5 text-white" />
+                      <HeroSpinner size="sm" className="size-3.5 text-slate-600" />
                     ) : (
-                      <div className="flex size-4 shrink-0 items-center justify-center rounded-md bg-white/20 text-white">
+                      <div className="flex size-4 shrink-0 items-center justify-center rounded-md bg-white/20">
                         <Trash2 className="size-3 text-white" strokeWidth={2.2} />
                       </div>
                     )}
@@ -3692,20 +3776,19 @@ export default function EducationUnitsPage() {
               transition={{ type: 'spring', stiffness: 400, damping: 28 }}
               className="modal-dialog font-sans my-auto w-full max-w-md"
             >
-              <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-2xl shadow-emerald-950/20 dark:border-slate-800 dark:bg-[#182232] dark:shadow-black/60">
+              <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
                 {/* Top Accent Gradient Bar */}
-                <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
 
                 {/* Header */}
-                <div className="modal-header flex items-center justify-between border-b border-slate-100 bg-white px-6 py-4.5 dark:border-slate-800 dark:bg-slate-950">
+                <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
                   <div className="flex items-center gap-3">
-                    <div className="rounded-2xl bg-gradient-to-br from-amber-500 via-amber-600 to-orange-600 text-white p-2.5 shadow-md shadow-amber-500/30 border border-amber-300/30 shrink-0">
-                      <Download className="h-5 w-5 text-white" strokeWidth={2.25} />
+                    <div className="rounded-xl bg-white dark:bg-card-dark p-2.5 shadow-md shadow-xs shrink-0 border border-emerald-200/80 dark:border-emerald-800/60">
+                      <Download className="h-5 w-5 text-current" strokeWidth={2.25} />
                     </div>
                     <div>
                       <h3 id="edu-unit-export-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
                         <span>Export Data Unit</span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-[#0E5C44] border border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-[#059669] border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
                           <Sparkles className="size-3" />
                           Unduh
                         </span>
@@ -3719,7 +3802,7 @@ export default function EducationUnitsPage() {
                     type="button"
                     onClick={() => setShowExportModal(false)}
                     aria-label="Tutup modal export"
-                    className="rounded-xl p-2 bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white border border-rose-300/40 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer"
+                    className="rounded-xl p-2 border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer"
                   >
                     <X className="size-4" strokeWidth={2.25} />
                   </button>
@@ -3736,10 +3819,10 @@ export default function EducationUnitsPage() {
                     <label
                       key={opt.value}
                       className={cn(
-                        "flex cursor-pointer items-center gap-3 rounded-2xl border p-3.5 transition-all",
+                        "flex cursor-pointer items-center gap-3 rounded-xl border p-3.5 transition-all",
                         exportFormat === opt.value
-                          ? "border-emerald-500 bg-emerald-50/60 shadow-2xs dark:border-emerald-600 dark:bg-emerald-950/40"
-                          : "border-slate-200 hover:border-slate-300 hover:bg-slate-50/50 dark:border-slate-800 dark:hover:border-slate-700 dark:hover:bg-slate-800/40"
+                          ? "border-emerald-300 dark:border-emerald-800 bg-emerald-50/60 shadow-2xs dark:border-emerald-800/60 dark:bg-emerald-950/40"
+                          : "border-emerald-200/80 hover:border-emerald-300 hover:bg-emerald-50/40 dark:border-emerald-800/60 dark:hover:border-emerald-200/80 dark:hover:bg-emerald-950/30"
                       )}
                     >
                       <input
@@ -3752,31 +3835,31 @@ export default function EducationUnitsPage() {
                       />
                       <div>
                         <p className="text-xs font-bold text-slate-800 dark:text-slate-100">{opt.label}</p>
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400">{opt.desc}</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">{opt.desc}</p>
                       </div>
                     </label>
                   ))}
                 </div>
 
                 {/* Footer */}
-                <div className="modal-footer flex items-center justify-between border-t border-slate-100 bg-slate-50/50 px-6 py-4 dark:border-slate-800 dark:bg-slate-900/30">
+                <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
                   <button
                     type="button"
                     onClick={() => setShowExportModal(false)}
-                    className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white px-4 py-2.5 text-xs font-extrabold border border-rose-300/40 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
+                    className="inline-flex items-center gap-2 rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
                   >
-                    <div className="flex size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                      <X className="size-3.5 text-white" strokeWidth={2.2} />
+                    <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
+                      <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
                     </div>
                     <span>Batal</span>
                   </button>
                   <button
                     type="button"
                     onClick={handleProcessExport}
-                    className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-amber-400 via-amber-500 to-orange-600 text-white px-5 py-2.5 text-xs font-extrabold border border-amber-300/40 hover:scale-[1.03] transition-all duration-200 active:scale-95 cursor-pointer"
+                    className="inline-flex items-center gap-2 rounded-xl bg-[#059669] hover:bg-[#047857] text-white px-5 py-2.5 text-xs font-extrabold shadow-sm hover:scale-[1.02] transition-all duration-200 active:scale-95 cursor-pointer"
                   >
-                    <div className="flex size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                      <Download className="size-3.5 text-white" strokeWidth={2.25} />
+                    <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
+                      <Download className="size-3.5 text-emerald-600" strokeWidth={2.25} />
                     </div>
                     <span>Unduh Berkas</span>
                   </button>
@@ -3807,20 +3890,19 @@ export default function EducationUnitsPage() {
               transition={{ type: 'spring', stiffness: 400, damping: 28 }}
               className="modal-dialog font-sans my-auto w-full max-w-xl"
             >
-              <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-2xl shadow-emerald-950/20 dark:border-slate-800 dark:bg-[#182232] dark:shadow-black/60">
+              <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
                 {/* Top Accent Gradient Bar */}
-                <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
 
                 {/* Header */}
-                <div className="modal-header flex items-center justify-between border-b border-slate-100 bg-white px-6 py-4.5 dark:border-slate-800 dark:bg-slate-950">
+                <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
                   <div className="flex items-center gap-3">
-                    <div className="rounded-2xl bg-gradient-to-br from-sky-500 via-sky-600 to-blue-600 text-white p-2.5 shadow-md shadow-sky-500/30 border border-sky-300/30 shrink-0">
-                      <Upload className="h-5 w-5 text-white" strokeWidth={2.25} />
+                    <div className="rounded-xl bg-white dark:bg-card-dark p-2.5 shadow-md shadow-sky-500/30 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
+                      <Upload className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
                     </div>
                     <div>
                       <h3 id="edu-unit-import-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
                         <span>Import Data Unit Pendidikan</span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-sky-50 px-2 py-0.5 text-[10px] font-bold text-sky-700 border border-sky-200/80 dark:bg-sky-950/60 dark:text-sky-300 dark:border-sky-800/60">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-sky-50 px-2 py-0.5 text-[10px] font-bold text-sky-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300 dark:border-emerald-800/60">
                           <Sparkles className="size-3" />
                           Batch Import
                         </span>
@@ -3834,7 +3916,7 @@ export default function EducationUnitsPage() {
                     type="button"
                     onClick={() => setShowImportModal(false)}
                     aria-label="Tutup form import"
-                    className="rounded-xl p-2 bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white border border-rose-300/40 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer"
+                    className="rounded-xl p-2 border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer"
                   >
                     <X className="size-4" strokeWidth={2.25} />
                   </button>
@@ -3843,33 +3925,33 @@ export default function EducationUnitsPage() {
                 {/* Modal Body */}
                 <div className="modal-body min-h-0 flex-1 space-y-4.5 overflow-y-auto p-6 text-sm text-slate-700 dark:text-slate-200">
                   {/* Unduh Template Card */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border border-sky-200/70 bg-gradient-to-r from-sky-50/50 via-teal-50/20 to-white p-4 dark:border-sky-850/50 dark:bg-slate-900/40">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-card-dark p-4 dark:border-emerald-800/60 dark:bg-slate-900/40">
                     <div className="flex items-center gap-3">
-                      <div className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-br from-sky-500 via-sky-600 to-blue-600 text-white border border-sky-300/30 shrink-0">
-                        <Download className="size-4.5 text-white" strokeWidth={2.2} />
+                      <div className="flex size-9 items-center justify-center rounded-xl bg-white dark:bg-card-dark border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
+                        <Download className="size-4.5 text-current" strokeWidth={2.2} />
                       </div>
                       <div>
                         <p className="text-xs font-bold text-slate-800 dark:text-slate-100">Unduh Format Berkas</p>
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400">Gunakan berkas template resmi agar kolom terpetakan otomatis</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">Gunakan berkas template resmi agar kolom terpetakan otomatis</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
                       <button
                         type="button"
                         onClick={() => handleDownloadTemplate('xlsx')}
-                        className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200 bg-emerald-50/50 hover:bg-emerald-100/70 text-[#0E5C44] px-3 py-1.5 text-xs font-bold transition-all dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300 cursor-pointer hover:scale-[1.02] active:scale-95"
+                        className="inline-flex items-center gap-1.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 hover:bg-emerald-100/70 text-[#059669] px-3 py-1.5 text-xs font-bold transition-all dark:border-emerald-800/60 dark:bg-emerald-950/40 dark:text-emerald-300 cursor-pointer hover:scale-[1.02] active:scale-95"
                       >
                         <div className="flex size-5 items-center justify-center rounded-md bg-emerald-600 text-white">
-                          <Download className="size-3 text-white" strokeWidth={2.2} />
+                          <Download className="size-3 text-emerald-600" strokeWidth={2.2} />
                         </div>
                         <span>Excel (.xlsx)</span>
                       </button>
                       <button
                         type="button"
                         onClick={() => handleDownloadTemplate('csv')}
-                        className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-100 transition-all dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 cursor-pointer hover:scale-[1.02] active:scale-95"
+                        className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-all dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 cursor-pointer hover:scale-[1.02] active:scale-95"
                       >
-                        <div className="flex size-5 items-center justify-center rounded-md bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-200">
+                        <div className="flex size-5 items-center justify-center rounded-md bg-slate-100 text-slate-600 dark:bg-emerald-950/60 dark:text-emerald-300">
                           <Download className="size-3" strokeWidth={2.2} />
                         </div>
                         <span>CSV</span>
@@ -3878,18 +3960,18 @@ export default function EducationUnitsPage() {
                   </div>
 
                   {/* Dropzone Upload */}
-                  <label className="group relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-emerald-300/80 bg-gradient-to-b from-emerald-50/25 to-slate-50/50 p-6 text-center transition-all duration-200 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-xs dark:border-emerald-800/60 dark:bg-slate-900/30 dark:hover:border-emerald-600 dark:hover:bg-emerald-950/20">
-                    <div className="mb-2.5 flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200/60 text-[#0E5C44] transition-transform duration-200 group-hover:scale-110 dark:from-emerald-950/60 dark:to-teal-950/40 dark:border-emerald-800/60 dark:text-[#3FBF75]">
+                  <label className="group relative flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-card-dark p-6 text-center transition-all duration-200 hover:border-emerald-300 dark:hover:border-emerald-200/80 hover:bg-emerald-50/40 hover:shadow-xs dark:border-emerald-800/60 dark:bg-slate-900/30 dark:hover:border-emerald-200/80 dark:hover:bg-emerald-950/20">
+                    <div className="mb-2.5 flex size-12 items-center justify-center rounded-xl bg-white dark:bg-card-dark border border-emerald-200/80 dark:border-emerald-800/60 text-[#059669] transition-transform duration-200 group-hover:scale-110 dark:from-emerald-950/60 dark:to-teal-950/40 dark:border-emerald-800/60 dark:text-[#10B981]">
                       <FileSpreadsheet className="size-6" strokeWidth={2.2} />
                     </div>
                     <p className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100">
                       {importFile ? importFile.name : 'Pilih atau Tarik Berkas Spreadsheet ke Sini'}
                     </p>
-                    <p className="mt-1 text-[11px] text-slate-400 dark:text-slate-400">
+                    <p className="mt-1 text-xs text-slate-400 dark:text-slate-400">
                       Mendukung format Microsoft Excel (.xlsx, .xls) & CSV
                     </p>
                     {importFile && (
-                      <div className="mt-2.5 inline-flex items-center gap-1.5 rounded-full bg-emerald-100/80 px-3 py-1 text-[11px] font-bold text-[#0E5C44] border border-emerald-200 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800/80">
+                      <div className="mt-2.5 inline-flex items-center gap-1.5 rounded-full bg-emerald-100/80 px-3 py-1 text-xs font-bold text-[#059669] border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800/60">
                         <CheckCircle2 className="size-3.5" />
                         <span>{(importFile.size / 1024).toFixed(1)} KB · Berkas Siap Diunggah</span>
                       </div>
@@ -3903,14 +3985,14 @@ export default function EducationUnitsPage() {
                       <div className="flex items-center justify-between">
                         <p className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
                           <span>Preview Data Berkas</span>
-                          <span className="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                          <span className="inline-flex items-center rounded-full bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300">
                             {importPreviewData.length} baris
                           </span>
                         </p>
                       </div>
-                      <div className="max-h-44 overflow-auto rounded-2xl border border-emerald-200/80 bg-white shadow-2xs dark:border-emerald-900/50 dark:bg-[#182232]">
-                        <TableRoot className="w-full text-left text-[11px]">
-                          <TableHeader className="bg-gradient-to-r from-emerald-100/80 via-teal-50/60 to-emerald-100/80 border-b border-emerald-200/80 dark:from-emerald-950/80 dark:via-teal-950/60 dark:to-emerald-950/80 dark:border-emerald-900/50 font-bold text-slate-700 dark:text-slate-200">
+                      <div className="max-h-44 overflow-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-2xs dark:border-emerald-800/60 dark:bg-surface-dark-inner">
+                        <TableRoot className="w-full text-left text-xs">
+                          <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 text-slate-800 border-b-2 border-emerald-200/90 text-xs font-black uppercase tracking-wider dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:text-emerald-300">
                             <TableRow>
                               {['Kode', 'Nama Unit', 'Jenis / Jenjang', 'Status'].map(h => (
                                 <TableHead key={h} className="px-3 py-2.5">{h}</TableHead>
@@ -3919,16 +4001,16 @@ export default function EducationUnitsPage() {
                           </TableHeader>
                           <TableBody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40">
                             {importPreviewData.map((r, i) => (
-                              <TableRow key={i} className="hover:bg-emerald-50/30 dark:hover:bg-slate-800/40 transition-colors">
+                              <TableRow key={i} className="hover:bg-emerald-50/30 dark:hover:bg-emerald-950/30 transition-colors">
                                 <TableCell className="px-3 py-2 font-mono font-semibold text-slate-700 dark:text-slate-300">{r.kode}</TableCell>
-                                <TableCell className="px-3 py-2 font-medium text-slate-900 dark:text-white">{r.nama}</TableCell>
+                                <TableCell className="px-3 py-2 font-medium text-slate-900 dark:text-emerald-600">{r.nama}</TableCell>
                                 <TableCell className="px-3 py-2 text-slate-600 dark:text-slate-300">{r.tingkat}</TableCell>
                                 <TableCell className="px-3 py-2">
                                   <span className={cn(
                                     "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold",
                                     r.status === 'Valid' || r.status === 'Siap Impor'
-                                      ? "bg-emerald-50 text-[#0E5C44] border border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60"
-                                      : "bg-rose-50 text-rose-700 border border-rose-200/80 dark:bg-rose-950/60 dark:text-rose-400 dark:border-rose-800/60"
+                                      ? "bg-emerald-50 text-[#059669] border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60"
+                                      : "bg-rose-50 text-rose-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-rose-950/60 dark:text-rose-400 dark:border-emerald-800/60"
                                   )}>
                                     {r.status}
                                   </span>
@@ -3943,17 +4025,17 @@ export default function EducationUnitsPage() {
 
                   {/* Opsi Timpa Data Jika Ada yang Sama */}
                   <div className={cn(
-                    "rounded-2xl border p-4 transition-all duration-200",
+                    "rounded-xl border p-4 transition-all duration-200",
                     overwriteExisting
-                      ? "border-amber-300/80 bg-amber-50/70 dark:border-amber-700/60 dark:bg-amber-950/25"
-                      : "border-slate-200/80 bg-slate-50/50 dark:border-slate-800 dark:bg-slate-900/30"
+                      ? "border-emerald-200/80 dark:border-emerald-800/60 bg-amber-50/70 dark:border-emerald-800/60 dark:bg-amber-950/25"
+                      : "border-emerald-200/80 bg-slate-50/50 dark:border-emerald-800/60 dark:bg-slate-900/30"
                   )}>
                     <label className="flex items-start gap-3 cursor-pointer select-none">
                       <input
                         type="checkbox"
                         checked={overwriteExisting}
                         onChange={(e) => setOverwriteExisting(e.target.checked)}
-                        className="mt-0.5 h-4.5 w-4.5 rounded-lg border-slate-300 text-amber-600 focus:ring-amber-500 dark:border-slate-700 dark:bg-slate-800 cursor-pointer"
+                        className="mt-0.5 h-4.5 w-4.5 rounded-lg border-emerald-300 text-amber-600 focus:ring-amber-500 dark:border-emerald-800/60 dark:bg-slate-800 cursor-pointer"
                       />
                       <div className="flex-1 text-xs">
                         <span className="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5">
@@ -3963,12 +4045,12 @@ export default function EducationUnitsPage() {
                               Mode Timpa Aktif
                             </span>
                           ) : (
-                            <span className="rounded-full bg-slate-200/70 px-2 py-0.5 text-[10px] font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-400">
+                            <span className="rounded-full bg-sky-50 border border-sky-200/80 px-2 py-0.5 text-[10px] font-bold text-sky-700 dark:bg-sky-950/60 dark:text-sky-300">
                               Lewati Duplikat
                             </span>
                           )}
                         </span>
-                        <p className="mt-1 text-slate-500 dark:text-slate-400 leading-relaxed text-[11px]">
+                        <p className="mt-1 text-slate-500 dark:text-slate-400 leading-relaxed text-xs">
                           Jika dicentang, unit dengan kode atau nama yang cocok akan diperbarui (ditimpa) dengan isi data terbaru dari berkas. Jika tidak dicentang, baris duplikat akan dilewati dengan aman.
                         </p>
                       </div>
@@ -3984,8 +4066,8 @@ export default function EducationUnitsPage() {
                   )}
 
                   {/* Guidance Banner */}
-                  <div className="rounded-2xl border border-emerald-200/80 bg-emerald-50/70 p-3.5 dark:border-emerald-800/50 dark:bg-emerald-950/30 flex items-start gap-2.5">
-                    <ShieldCheck className="size-4.5 text-[#0E5C44] dark:text-emerald-400 shrink-0 mt-0.5" />
+                  <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/70 p-3.5 dark:border-emerald-800/60 dark:bg-emerald-950/30 flex items-start gap-2.5">
+                    <ShieldCheck className="size-4.5 text-[#059669] dark:text-emerald-400 shrink-0 mt-0.5" />
                     <p className="text-xs text-slate-700 dark:text-slate-200 leading-relaxed">
                       Sistem akan otomatis memvalidasi keunikan kode unit dan menyinkronkan data master unit tanpa merusak integritas relasi yang sudah ada.
                     </p>
@@ -3993,14 +4075,14 @@ export default function EducationUnitsPage() {
                 </div>
 
                 {/* Footer */}
-                <div className="modal-footer flex items-center justify-between border-t border-slate-100 bg-slate-50/50 px-6 py-4 dark:border-slate-800 dark:bg-slate-900/30">
+                <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
                   <button
                     type="button"
                     onClick={() => setShowImportModal(false)}
-                    className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white px-4 py-2.5 text-xs font-extrabold border border-rose-300/40 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
+                    className="inline-flex items-center gap-2 rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
                   >
-                    <div className="flex size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                      <X className="size-3.5 text-white" strokeWidth={2.2} />
+                    <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
+                      <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
                     </div>
                     <span>Batal</span>
                   </button>
@@ -4008,12 +4090,12 @@ export default function EducationUnitsPage() {
                     type="button"
                     onClick={handleProcessImport}
                     disabled={!importFile || isImporting}
-                    className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-sky-400 via-sky-500 to-blue-600 text-white px-5 py-2.5 text-xs font-extrabold border border-sky-300/40 hover:scale-[1.03] transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+                    className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-card-dark px-5 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-[1.03] transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
                   >
                     {isImporting ? (
-                      <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                      <span className="size-4 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent" />
                     ) : (
-                      <div className="flex size-5 items-center justify-center rounded-lg bg-white/20 text-white">
+                      <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
                         <Upload className="size-3.5 text-white" strokeWidth={2.25} />
                       </div>
                     )}
@@ -4040,38 +4122,38 @@ export default function EducationUnitsPage() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
               transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-              className="modal-dialog font-sans my-auto w-full max-w-2xl"
+              className="modal-dialog font-sans my-auto w-full max-w-xl"
             >
-              <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-2xl shadow-emerald-950/20 dark:border-slate-800 dark:bg-[#182232] dark:shadow-black/60">
+              <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
                 {/* Top Accent Gradient Bar */}
                 <div className={cn(
                   "h-1.5 w-full shrink-0",
                   duplicateModalData.diperbarui > 0
-                    ? "bg-gradient-to-r from-amber-500 via-orange-400 to-amber-600"
+                    ? "bg-white dark:bg-card-dark"
                     : duplicateModalData.duplikat > 0
-                      ? "bg-gradient-to-r from-sky-500 via-teal-400 to-emerald-500"
-                      : "bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600"
+                      ? "bg-white dark:bg-card-dark"
+                      : "bg-white dark:bg-card-dark"
                 )} />
 
                 {/* Header */}
-                <div className="modal-header flex items-center justify-between border-b border-slate-100 bg-white px-6 py-4.5 dark:border-slate-800 dark:bg-slate-950">
+                <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
                   <div className="flex items-center gap-3">
                     <div className={cn(
-                      "rounded-2xl p-2.5 text-white shadow-md shrink-0 border",
+                      "rounded-xl p-2.5 text-white shadow-md shrink-0 border",
                       duplicateModalData.diperbarui > 0
-                        ? "bg-gradient-to-br from-amber-500 to-orange-600 border-amber-300/30 shadow-amber-500/30"
-                        : "bg-gradient-to-br from-emerald-500 to-teal-700 border-emerald-300/30 shadow-emerald-500/30"
+                        ? "bg-white dark:bg-card-dark border-emerald-200/80 dark:border-emerald-800/60 shadow-sm"
+                        : "bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 shadow-sm"
                     )}>
                       {duplicateModalData.diperbarui > 0 ? (
-                        <RefreshCcw className="h-5 w-5 text-white" strokeWidth={2.25} />
+                        <RefreshCcw className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
                       ) : (
-                        <CheckCircle2 className="h-5 w-5 text-white" strokeWidth={2.25} />
+                        <CheckCircle2 className="h-5 w-5 text-amber-600" strokeWidth={2.25} />
                       )}
                     </div>
                     <div>
                       <h3 id="unit-duplicate-report-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
                         <span>Hasil Impor & Pemberitahuan Data Unit</span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-0.5 text-[10px] font-bold text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300">
                           Total {duplicateModalData.total || 0} Data
                         </span>
                       </h3>
@@ -4084,7 +4166,7 @@ export default function EducationUnitsPage() {
                     type="button"
                     onClick={() => setDuplicateModalData(null)}
                     aria-label="Tutup ringkasan impor"
-                    className="size-9 flex items-center justify-center rounded-2xl bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400 transition cursor-pointer"
+                    className="size-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-sky-950/60 dark:text-sky-300 transition cursor-pointer"
                   >
                     <X className="size-4" strokeWidth={2.25} />
                   </button>
@@ -4094,19 +4176,19 @@ export default function EducationUnitsPage() {
                 <div className="modal-body min-h-0 flex-1 space-y-4 overflow-y-auto p-6 text-sm text-slate-700 dark:text-slate-200">
                   {/* KPI Summary Cards */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                    <div className="p-3 rounded-2xl border border-emerald-200/80 bg-emerald-50/50 dark:border-emerald-900/40 dark:bg-emerald-950/30 text-center">
+                    <div className="p-3 rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 dark:bg-emerald-950/30 text-center">
                       <p className="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 uppercase">Baru Ditambah</p>
                       <p className="text-xl font-black text-emerald-700 dark:text-emerald-400 mt-0.5">{duplicateModalData.berhasil || 0}</p>
                     </div>
-                    <div className="p-3 rounded-2xl border border-amber-200/80 bg-amber-50/50 dark:border-amber-900/40 dark:bg-amber-950/30 text-center">
+                    <div className="p-3 rounded-xl border-2 border-amber-300 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-950/30 text-center">
                       <p className="text-[10px] font-bold text-amber-800 dark:text-amber-300 uppercase">Ditimpa / Diupdate</p>
                       <p className="text-xl font-black text-amber-700 dark:text-amber-400 mt-0.5">{duplicateModalData.diperbarui || 0}</p>
                     </div>
-                    <div className="p-3 rounded-2xl border border-sky-200/80 bg-sky-50/50 dark:border-sky-900/40 dark:bg-sky-950/30 text-center">
+                    <div className="p-3 rounded-xl border-2 border-sky-300 dark:border-sky-800 bg-sky-50/50 dark:bg-sky-950/30 text-center">
                       <p className="text-[10px] font-bold text-sky-800 dark:text-sky-300 uppercase">Duplikat Dilewati</p>
                       <p className="text-xl font-black text-sky-700 dark:text-sky-400 mt-0.5">{duplicateModalData.duplikat || 0}</p>
                     </div>
-                    <div className="p-3 rounded-2xl border border-rose-200/80 bg-rose-50/50 dark:border-rose-900/40 dark:bg-rose-950/30 text-center">
+                    <div className="p-3 rounded-xl border-2 border-rose-300 dark:border-rose-800 bg-rose-50/50 dark:bg-rose-950/30 text-center">
                       <p className="text-[10px] font-bold text-rose-800 dark:text-rose-300 uppercase">Gagal Diproses</p>
                       <p className="text-xl font-black text-rose-700 dark:text-rose-400 mt-0.5">{duplicateModalData.gagal || 0}</p>
                     </div>
@@ -4124,9 +4206,9 @@ export default function EducationUnitsPage() {
                           </span>
                         </p>
                       </div>
-                      <div className="max-h-56 overflow-auto rounded-2xl border border-slate-200/80 bg-white shadow-2xs dark:border-slate-800 dark:bg-[#182232]">
-                        <TableRoot className="w-full text-left text-[11px]">
-                          <TableHeader className="bg-slate-50 dark:bg-slate-900/60 border-b border-slate-200/80 dark:border-slate-800 font-bold text-slate-700 dark:text-slate-300">
+                      <div className="max-h-56 overflow-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-2xs dark:border-emerald-800/60 dark:bg-surface-dark-inner">
+                        <TableRoot className="w-full text-left text-xs">
+                          <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 text-slate-800 border-b-2 border-emerald-200/90 text-xs font-black uppercase tracking-wider dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:text-emerald-300">
                             <TableRow>
                               <TableHead className="px-3 py-2 w-14">Baris</TableHead>
                               <TableHead className="px-3 py-2">Kode</TableHead>
@@ -4135,18 +4217,18 @@ export default function EducationUnitsPage() {
                               <TableHead className="px-3 py-2">Keterangan</TableHead>
                             </TableRow>
                           </TableHeader>
-                          <TableBody className="divide-y divide-slate-100 dark:divide-slate-800">
+                          <TableBody className="divide-y divide-emerald-100/80 dark:divide-slate-800">
                             {duplicateModalData.duplicates.map((item, idx) => (
-                              <TableRow key={idx} className="hover:bg-slate-50/50 dark:hover:bg-slate-850/40">
+                              <TableRow key={idx} className="hover:bg-emerald-50/40 transition-colors dark:hover:bg-emerald-950/30">
                                 <TableCell className="px-3 py-2 font-mono text-slate-500">{item.baris}</TableCell>
                                 <TableCell className="px-3 py-2 font-mono font-bold text-slate-800 dark:text-slate-200">{item.kode || '-'}</TableCell>
-                                <TableCell className="px-3 py-2 font-semibold text-slate-900 dark:text-white">{item.nama}</TableCell>
+                                <TableCell className="px-3 py-2 font-semibold text-slate-900 dark:text-emerald-600">{item.nama}</TableCell>
                                 <TableCell className="px-3 py-2">
                                   <span className={cn(
                                     "inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold",
                                     item.status === 'Ditimpa'
-                                      ? "bg-amber-100 text-amber-800 border border-amber-300/80 dark:bg-amber-950 dark:text-amber-300"
-                                      : "bg-sky-100 text-sky-800 border border-sky-300/80 dark:bg-sky-950 dark:text-sky-300"
+                                      ? "bg-amber-100 text-amber-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950 dark:text-amber-300"
+                                      : "bg-sky-100 text-sky-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-sky-950 dark:text-sky-300"
                                   )}>
                                     {item.status}
                                   </span>
@@ -4162,12 +4244,12 @@ export default function EducationUnitsPage() {
 
                   {/* Error List if exists */}
                   {duplicateModalData.errors && duplicateModalData.errors.length > 0 && (
-                    <div className="rounded-2xl border border-rose-200 bg-rose-50/70 p-3.5 dark:border-rose-900/50 dark:bg-rose-950/30 text-xs">
+                    <div className="rounded-xl border-2 border-rose-300 dark:border-rose-800 bg-rose-50/70 p-3.5 dark:border-emerald-800/60 dark:bg-rose-950/30 text-xs">
                       <p className="font-bold text-rose-800 dark:text-rose-300 flex items-center gap-1.5 mb-1.5">
                         <XCircle className="size-3.5" />
                         <span>Catatan Kesalahan Baris Data:</span>
                       </p>
-                      <ul className="list-disc list-inside space-y-1 text-rose-700 dark:text-rose-400 text-[11px]">
+                      <ul className="list-disc list-inside space-y-1 text-rose-700 dark:text-rose-400 text-xs">
                         {duplicateModalData.errors.slice(0, 5).map((err, i) => (
                           <li key={i}>{typeof err === 'string' ? err : JSON.stringify(err)}</li>
                         ))}
@@ -4180,11 +4262,11 @@ export default function EducationUnitsPage() {
                 </div>
 
                 {/* Footer */}
-                <div className="modal-footer flex items-center justify-end border-t border-slate-100 bg-slate-50/50 px-6 py-3.5 dark:border-slate-800 dark:bg-slate-900/30">
+                <div className="modal-footer flex items-center justify-end border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 px-6 py-3.5 dark:border-emerald-800/60 dark:bg-slate-900/30">
                   <button
                     type="button"
                     onClick={() => setDuplicateModalData(null)}
-                    className="inline-flex items-center gap-1.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 text-xs font-bold transition shadow-sm cursor-pointer"
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 text-xs font-bold transition shadow-sm cursor-pointer"
                   >
                     <Check className="size-3.5" strokeWidth={2.2} />
                     <span>Tutup & Mengerti</span>
@@ -4214,22 +4296,22 @@ export default function EducationUnitsPage() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: 12 }}
               transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-              className="modal-dialog font-sans w-full max-w-lg"
+              className="modal-dialog font-sans w-full max-w-xl"
             >
-              <div className="modal-content relative flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-2xl shadow-emerald-950/20 dark:border-slate-800 dark:bg-[#182232] dark:shadow-black/60">
+              <div className="modal-content relative flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
                 {/* Top Accent Gradient Bar */}
-                <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
 
                 {/* Header */}
-                <div className="modal-header flex items-center justify-between border-b border-slate-100 bg-white px-6 py-4.5 dark:border-slate-800 dark:bg-slate-950">
+                <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-md shadow-emerald-500/20 border border-emerald-300/30 shrink-0">
-                      <UserPlus className="h-5 w-5 text-white" strokeWidth={2.25} />
+                    <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
+
+                      <UserPlus className="size-6 sm:size-7 h-5 w-5 text-white" strokeWidth={2.25} />
                     </div>
                     <div>
                       <h3 id="quick-add-emp-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
                         <span>Tambah Pegawai Cepat</span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
                           <Sparkles className="size-3" />
                           Pimpinan Baru
                         </span>
@@ -4243,9 +4325,9 @@ export default function EducationUnitsPage() {
                     type="button"
                     onClick={() => setIsAddEmployeeModalOpen(false)}
                     aria-label="Tutup modal"
-                    className="size-9 flex items-center justify-center rounded-2xl bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white hover:scale-105 active:scale-95 transition-all duration-200 shadow-md shadow-rose-500/20 cursor-pointer"
+                    className="size-9 flex items-center justify-center rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer"
                   >
-                    <X className="size-4 text-white" strokeWidth={2.25} />
+                    <X className="size-4 text-rose-600" strokeWidth={2.25} />
                   </button>
                 </div>
 
@@ -4297,7 +4379,7 @@ export default function EducationUnitsPage() {
                           placeholder="Contoh: Dr. H. Ahmad Dahlan, M.Pd."
                           value={employeeFormData.name}
                           onChange={e => setEmployeeFormData(p => ({ ...p, name: e.target.value }))}
-                          className="w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-500 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                          className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
                         />
                       </div>
                     </div>
@@ -4317,7 +4399,7 @@ export default function EducationUnitsPage() {
                           placeholder="Contoh: 198001012005011001 atau NIY-2024001"
                           value={employeeFormData.nip}
                           onChange={e => setEmployeeFormData(p => ({ ...p, nip: e.target.value }))}
-                          className="w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-500 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                          className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
                         />
                       </div>
                     </div>
@@ -4337,7 +4419,7 @@ export default function EducationUnitsPage() {
                           placeholder="Contoh: Kepala Sekolah / Pimpinan Pondok"
                           value={employeeFormData.jabatan_name}
                           onChange={e => setEmployeeFormData(p => ({ ...p, jabatan_name: e.target.value }))}
-                          className="w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-500 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                          className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
                         />
                       </div>
                     </div>
@@ -4356,7 +4438,7 @@ export default function EducationUnitsPage() {
                             placeholder="pegawai@sekolah.sch.id"
                             value={employeeFormData.email}
                             onChange={e => setEmployeeFormData(p => ({ ...p, email: e.target.value }))}
-                            className="w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-500 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                            className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
                           />
                         </div>
                       </div>
@@ -4372,7 +4454,7 @@ export default function EducationUnitsPage() {
                             placeholder="08123456789"
                             value={employeeFormData.phone}
                             onChange={e => setEmployeeFormData(p => ({ ...p, phone: e.target.value }))}
-                            className="w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-500 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                            className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
                           />
                         </div>
                       </div>
@@ -4380,27 +4462,27 @@ export default function EducationUnitsPage() {
                   </div>
 
                   {/* Footer */}
-                  <div className="modal-footer flex items-center justify-end gap-2.5 border-t border-slate-100 bg-slate-50/80 px-6 py-4 dark:border-slate-800 dark:bg-[#131B27]">
+                  <div className="modal-footer flex items-center justify-end gap-2.5 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 px-6 py-4 dark:border-emerald-800/60 dark:bg-[#131B27]">
                     <button
                       type="button"
                       onClick={() => setIsAddEmployeeModalOpen(false)}
-                      className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white px-4 py-2.5 text-xs font-extrabold border border-rose-300/40 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
+                      className="inline-flex items-center gap-2 rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
                     >
-                      <div className="flex size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                        <X className="size-3.5 text-white" strokeWidth={2.2} />
+                      <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
+                        <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
                       </div>
                       <span>Batal</span>
                     </button>
                     <button
                       type="submit"
                       disabled={createEmployeeMutation.isPending}
-                      className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white px-5 py-2.5 text-xs font-extrabold border border-emerald-300/40 transition-all duration-200 hover:scale-[1.03] active:scale-95 disabled:opacity-50 cursor-pointer"
+                      className="inline-flex items-center gap-2 rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 px-5 py-2.5 text-xs font-extrabold border-2 border-emerald-300 dark:border-emerald-800 transition-all duration-200 hover:scale-[1.03] active:scale-95 disabled:opacity-50 cursor-pointer"
                     >
                       {createEmployeeMutation.isPending ? (
-                        <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                        <span className="size-4 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent" />
                       ) : (
-                        <div className="flex size-5 items-center justify-center rounded-lg bg-white/20 text-white">
-                          <Save className="size-3.5 text-white" strokeWidth={2.2} />
+                        <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
+                          <Save className="size-3.5 text-emerald-600" strokeWidth={2.2} />
                         </div>
                       )}
                       <span>{createEmployeeMutation.isPending ? 'Menyimpan...' : 'Simpan Pegawai'}</span>
@@ -4429,22 +4511,21 @@ export default function EducationUnitsPage() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: 12 }}
               transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-              className="modal-dialog font-sans w-full max-w-lg"
+              className="modal-dialog font-sans w-full max-w-xl"
             >
-              <div className="modal-content relative flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-2xl shadow-emerald-950/20 dark:border-slate-800 dark:bg-[#182232] dark:shadow-black/60">
+              <div className="modal-content relative flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
                 {/* Top Accent Gradient Bar */}
-                <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
 
                 {/* Header */}
-                <div className="modal-header flex items-center justify-between border-b border-slate-100 bg-white px-6 py-4.5 dark:border-slate-800 dark:bg-slate-950">
+                <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
                   <div className="flex items-center gap-3">
-                    <div className="rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200/60 p-2.5 text-[#0E5C44] shadow-xs dark:from-emerald-950/60 dark:to-teal-950/40 dark:border-emerald-800/60 dark:text-[#3FBF75]">
+                    <div className="rounded-xl bg-white dark:bg-card-dark border border-emerald-200/80 dark:border-emerald-800/60 p-2.5 text-[#059669] shadow-xs dark:from-emerald-950/60 dark:to-teal-950/40 dark:border-emerald-800/60 dark:text-[#10B981]">
                       <Printer className="h-5 w-5" strokeWidth={2.25} />
                     </div>
                     <div>
                       <h3 id="print-option-modal-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
                         <span>Opsi & Scope Cetak Laporan</span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-[#0E5C44] border border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-[#059669] border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
                           <Sparkles className="size-3" />
                           Cetak & PDF
                         </span>
@@ -4458,7 +4539,7 @@ export default function EducationUnitsPage() {
                     type="button"
                     onClick={() => setPrintOptionModalOpen(false)}
                     aria-label="Tutup modal"
-                    className="rounded-xl p-2 bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white border border-rose-300/40 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer"
+                    className="rounded-xl p-2 border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer"
                   >
                     <X className="size-4" strokeWidth={2.25} />
                   </button>
@@ -4475,23 +4556,23 @@ export default function EducationUnitsPage() {
                     {/* Mode 1: Seluruh Data Unit */}
                     <div
                       onClick={() => setPrintScopeMode('all')}
-                      className={`flex items-start gap-3.5 p-4 rounded-2xl border cursor-pointer transition-all duration-200 ${printScopeMode === 'all'
-                        ? 'border-[#0E5C44] bg-emerald-50/70 dark:border-emerald-500 dark:bg-emerald-950/40 shadow-xs ring-1 ring-[#0E5C44]'
-                        : 'border-slate-200/80 bg-white hover:bg-slate-50/80 dark:border-slate-800 dark:bg-slate-900/40'
+                      className={`flex items-start gap-3.5 p-4 rounded-xl border cursor-pointer transition-all duration-200 ${printScopeMode === 'all'
+                        ? 'border-[#059669] bg-emerald-50/70 dark:border-emerald-800/60 dark:bg-emerald-950/40 shadow-xs ring-1 ring-[#059669]'
+                        : 'border-emerald-200/80 bg-white hover:bg-slate-50/80 dark:border-emerald-800/60 dark:bg-slate-900/40'
                         }`}
                     >
-                      <div className={`mt-0.5 size-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${printScopeMode === 'all' ? 'border-[#0E5C44] bg-[#0E5C44] text-white' : 'border-slate-300 dark:border-slate-600'
+                      <div className={`mt-0.5 size-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${printScopeMode === 'all' ? 'border-[#059669] bg-[#059669] text-white' : 'border-emerald-300 dark:border-emerald-800/60'
                         }`}>
                         {printScopeMode === 'all' && <span className="size-2 rounded-full bg-white" />}
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
-                          <Building2 className="size-4 text-[#0E5C44] dark:text-emerald-400" />
+                          <Building2 className="size-4 text-[#059669] dark:text-emerald-400" />
                           <h4 className="text-xs font-extrabold text-slate-900 dark:text-white">
                             Cetak Seluruh Data Unit Pendidikan
                           </h4>
                         </div>
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                           Laporan lengkap master data unit: Kode, NPSN, Kota, Provinsi, Pimpinan, Total Siswa, Total Guru, dan Status.
                         </p>
                       </div>
@@ -4500,12 +4581,12 @@ export default function EducationUnitsPage() {
                     {/* Mode 2: Jumlah Pegawai Menurut Unit */}
                     <div
                       onClick={() => setPrintScopeMode('pegawai')}
-                      className={`flex items-start gap-3.5 p-4 rounded-2xl border cursor-pointer transition-all duration-200 ${printScopeMode === 'pegawai'
-                        ? 'border-[#0E5C44] bg-emerald-50/70 dark:border-emerald-500 dark:bg-emerald-950/40 shadow-xs ring-1 ring-[#0E5C44]'
-                        : 'border-slate-200/80 bg-white hover:bg-slate-50/80 dark:border-slate-800 dark:bg-slate-900/40'
+                      className={`flex items-start gap-3.5 p-4 rounded-xl border cursor-pointer transition-all duration-200 ${printScopeMode === 'pegawai'
+                        ? 'border-[#059669] bg-emerald-50/70 dark:border-emerald-800/60 dark:bg-emerald-950/40 shadow-xs ring-1 ring-[#059669]'
+                        : 'border-emerald-200/80 bg-white hover:bg-slate-50/80 dark:border-emerald-800/60 dark:bg-slate-900/40'
                         }`}
                     >
-                      <div className={`mt-0.5 size-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${printScopeMode === 'pegawai' ? 'border-[#0E5C44] bg-[#0E5C44] text-white' : 'border-slate-300 dark:border-slate-600'
+                      <div className={`mt-0.5 size-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${printScopeMode === 'pegawai' ? 'border-[#059669] bg-[#059669] text-white' : 'border-emerald-300 dark:border-emerald-800/60'
                         }`}>
                         {printScopeMode === 'pegawai' && <span className="size-2 rounded-full bg-white" />}
                       </div>
@@ -4516,7 +4597,7 @@ export default function EducationUnitsPage() {
                             Cetak Jumlah Pegawai & Guru Menurut Unit
                           </h4>
                         </div>
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                           Rekapitulasi SDM: Guru Pendidik, Staf Kependidikan, Total SDM, Pimpinan, dan Rasio Guru.
                         </p>
                       </div>
@@ -4525,12 +4606,12 @@ export default function EducationUnitsPage() {
                     {/* Mode 3: Jumlah Siswa/Santri Menurut Unit */}
                     <div
                       onClick={() => setPrintScopeMode('siswa')}
-                      className={`flex items-start gap-3.5 p-4 rounded-2xl border cursor-pointer transition-all duration-200 ${printScopeMode === 'siswa'
-                        ? 'border-[#0E5C44] bg-emerald-50/70 dark:border-emerald-500 dark:bg-emerald-950/40 shadow-xs ring-1 ring-[#0E5C44]'
-                        : 'border-slate-200/80 bg-white hover:bg-slate-50/80 dark:border-slate-800 dark:bg-slate-900/40'
+                      className={`flex items-start gap-3.5 p-4 rounded-xl border cursor-pointer transition-all duration-200 ${printScopeMode === 'siswa'
+                        ? 'border-[#059669] bg-emerald-50/70 dark:border-emerald-800/60 dark:bg-emerald-950/40 shadow-xs ring-1 ring-[#059669]'
+                        : 'border-emerald-200/80 bg-white hover:bg-slate-50/80 dark:border-emerald-800/60 dark:bg-slate-900/40'
                         }`}
                     >
-                      <div className={`mt-0.5 size-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${printScopeMode === 'siswa' ? 'border-[#0E5C44] bg-[#0E5C44] text-white' : 'border-slate-300 dark:border-slate-600'
+                      <div className={`mt-0.5 size-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${printScopeMode === 'siswa' ? 'border-[#059669] bg-[#059669] text-white' : 'border-emerald-300 dark:border-emerald-800/60'
                         }`}>
                         {printScopeMode === 'siswa' && <span className="size-2 rounded-full bg-white" />}
                       </div>
@@ -4541,7 +4622,7 @@ export default function EducationUnitsPage() {
                             Cetak Jumlah Siswa / Santri Menurut Unit
                           </h4>
                         </div>
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                           Rekapitulasi peserta didik: Breakdown Santriwan (Laki-laki), Santriwati (Perempuan), Total Siswa, & Jumlah Rombel.
                         </p>
                       </div>
@@ -4549,22 +4630,22 @@ export default function EducationUnitsPage() {
                   </div>
 
                   {/* Actions */}
-                  <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2.5">
+                  <div className="pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60 space-y-2.5">
                     <button
                       type="button"
                       onClick={() => {
                         setPrintOptionModalOpen(false)
                         handlePrintClean(printScopeMode)
                       }}
-                      className="w-full flex items-center justify-between p-3.5 rounded-2xl border border-emerald-200/80 bg-emerald-50/70 hover:bg-emerald-100/70 dark:border-emerald-800/60 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/50 text-left transition-all duration-200 cursor-pointer shadow-2xs hover:shadow-xs group"
+                      className="w-full flex items-center justify-between p-3.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/70 hover:bg-emerald-100/70 dark:border-emerald-800/60 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/50 text-left transition-all duration-200 cursor-pointer shadow-2xs hover:shadow-xs group"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="size-9 rounded-xl bg-gradient-to-br from-[#0E5C44] to-[#147B5B] text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                        <div className="size-9 rounded-xl bg-white dark:bg-card-dark flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform border border-emerald-200/80 dark:border-emerald-800/60">
                           <Printer className="size-4.5" strokeWidth={2.25} />
                         </div>
                         <div>
                           <h5 className="text-xs font-black text-slate-900 dark:text-white">Cetak Langsung (Print Clean)</h5>
-                          <p className="text-[11px] text-slate-500 dark:text-slate-400">Buka tampilan cetak bersih tanpa artefak UI</p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400">Buka tampilan cetak bersih tanpa artefak UI</p>
                         </div>
                       </div>
                     </button>
@@ -4575,15 +4656,15 @@ export default function EducationUnitsPage() {
                         setPrintOptionModalOpen(false)
                         handleDownloadPdfTable(printScopeMode)
                       }}
-                      className="w-full flex items-center justify-between p-3.5 rounded-2xl border border-rose-200/80 bg-rose-50/70 hover:bg-rose-100/70 dark:border-rose-900/40 dark:bg-rose-950/30 dark:hover:bg-rose-900/40 text-left transition-all duration-200 cursor-pointer shadow-2xs hover:shadow-xs group"
+                      className="w-full flex items-center justify-between p-3.5 rounded-xl border-2 border-rose-300 dark:border-rose-800 bg-rose-50/70 hover:bg-rose-100/70 dark:border-emerald-800/60 dark:bg-rose-950/30 dark:hover:bg-rose-900/40 text-left transition-all duration-200 cursor-pointer shadow-2xs hover:shadow-xs group"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="size-9 rounded-xl bg-gradient-to-br from-rose-600 to-rose-700 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                        <div className="size-9 rounded-xl bg-white dark:bg-card-dark flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform border border-emerald-200/80 dark:border-emerald-800/60">
                           <Download className="size-4.5" strokeWidth={2.25} />
                         </div>
                         <div>
                           <h5 className="text-xs font-black text-slate-900 dark:text-white">Unduh Berkas PDF (.pdf)</h5>
-                          <p className="text-[11px] text-slate-500 dark:text-slate-400">Unduh berkas laporan dalam format PDF resmi</p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400">Unduh berkas laporan dalam format PDF resmi</p>
                         </div>
                       </div>
                     </button>
@@ -4591,11 +4672,11 @@ export default function EducationUnitsPage() {
                 </div>
 
                 {/* Footer */}
-                <div className="modal-footer flex items-center justify-end border-t border-slate-100 bg-slate-50/80 px-6 py-4 dark:border-slate-800 dark:bg-[#131B27]">
+                <div className="modal-footer flex items-center justify-end border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 px-6 py-4 dark:border-emerald-800/60 dark:bg-[#131B27]">
                   <button
                     type="button"
                     onClick={() => setPrintOptionModalOpen(false)}
-                    className="inline-flex items-center gap-1.5 rounded-2xl bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white px-4 py-2.5 text-xs font-extrabold border border-rose-300/40 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
+                    className="inline-flex items-center gap-1.5 rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
                   >
                     Batal
                   </button>
@@ -4611,4 +4692,5 @@ export default function EducationUnitsPage() {
 
     </PageContainer>
   )
+  be
 }

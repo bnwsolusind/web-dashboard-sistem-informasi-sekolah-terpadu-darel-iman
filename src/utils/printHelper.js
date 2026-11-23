@@ -539,14 +539,14 @@ export function getOfficialYayasanLogoSvg(orgNameParam = '') {
 
   return `
     <svg width="76" height="76" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="50,2 62,24 86,14 80,38 98,50 80,62 86,86 62,76 50,98 38,76 14,86 20,62 2,50 20,38 14,14 38,24" fill="#047857" stroke="#064E3B" stroke-width="1.5" />
+      <polygon points="50,2 62,24 86,14 80,38 98,50 80,62 86,86 62,76 50,98 38,76 14,86 20,62 2,50 20,38 14,14 38,24" fill="#047857" stroke="#047857" stroke-width="1.5" />
       <polygon points="50,6 60,26 82,17 76,39 93,50 76,61 82,83 60,74 50,94 40,74 18,83 24,61 7,50 24,39 18,17 40,26" fill="#059669" />
       <circle cx="50" cy="50" r="32" fill="#FFFFFF" stroke="#047857" stroke-width="1.5" />
       <circle cx="50" cy="50" r="28" fill="#ECFDF5" />
       <path d="M40 45 C42 40, 58 40, 60 45 C60 52, 40 52, 40 58 C40 64, 60 64, 60 58" stroke="#047857" stroke-width="2.5" stroke-linecap="round" fill="none"/>
       <path d="M35 50 Q50 43 65 50 Q50 57 35 50 Z" fill="#10B981" opacity="0.6"/>
-      <text x="50" y="44" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="900" fill="#064E3B" text-anchor="middle">${logoText}</text>
-      <text x="50" y="65" font-family="system-ui, -apple-system, sans-serif" font-size="5" font-weight="800" fill="#064E3B" text-anchor="middle" letter-spacing="0.2">${shortText}</text>
+      <text x="50" y="44" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="900" fill="#047857" text-anchor="middle">${logoText}</text>
+      <text x="50" y="65" font-family="system-ui, -apple-system, sans-serif" font-size="5" font-weight="800" fill="#047857" text-anchor="middle" letter-spacing="0.2">${shortText}</text>
     </svg>
   `
 }
@@ -903,7 +903,7 @@ export function printCleanTable({
         }
         th {
           background-color: #ecfdf5;
-          color: #064e3b;
+          color: #047857;
           font-size: 8.5pt;
           font-weight: 800;
           text-transform: uppercase;
@@ -1254,7 +1254,7 @@ export function printOfficialMutabaahSheet({
           padding: 1px 5px;
           border-radius: 4px;
           background: ${boardingFlag ? '#fef3c7' : '#ecfdf5'};
-          color: ${boardingFlag ? '#92400e' : '#065f46'};
+          color: ${boardingFlag ? '#92400e' : '#059669'};
           border: 1px solid ${boardingFlag ? '#fde68a' : '#a7f3d0'};
         }
         table.mutabaah-grid {
@@ -1416,7 +1416,7 @@ export function printOfficialMutabaahSheet({
           ${teacherNotes || `Alhamdulillah ananda ${studentName} menunjukkan kedisiplinan dan adab harian yang baik. Terus pertahankan shalat berjamaah dan mutaba'ah harian.`}
         </div>
         <div class="closing-box">
-          <div style="font-weight: 600; color: #065f46;">
+          <div style="font-weight: 600; color: #059669;">
             🤝 Sinergi Pendidikan Karakter & Ibadah Ananda
           </div>
           <div class="closing-arabic">
@@ -1752,7 +1752,7 @@ export function printWeeklyStudentEvaluation({
           padding: 1px 6px;
           border-radius: 4px;
           background: ${isBoarding ? '#fef3c7' : '#ecfdf5'};
-          color: ${isBoarding ? '#92400e' : '#065f46'};
+          color: ${isBoarding ? '#92400e' : '#059669'};
           border: 1px solid ${isBoarding ? '#fde68a' : '#a7f3d0'};
         }
 
@@ -1783,7 +1783,7 @@ export function printWeeklyStudentEvaluation({
         }
         .data-table th {
           background: #ecfdf5;
-          color: #064e3b;
+          color: #047857;
           font-weight: 800;
           font-size: 7.5pt;
           border: 1px solid #cbd5e1;
@@ -2205,7 +2205,7 @@ export function printWeeklyMutabaahSheet(params = {}) {
       return `
         <tr>
           <td style="text-align: center; font-family: monospace; font-size: 8pt; color: #475569;">${idx + 1}</td>
-          <td style="font-weight: 700; color: #065f46; font-size: 8pt;">${item.category || '-'}</td>
+          <td style="font-weight: 700; color: #059669; font-size: 8pt;">${item.category || '-'}</td>
           <td style="font-size: 8pt; color: #0f172a;">
             <strong>${item.name || '-'}</strong>
             ${programType === 'fullday' ? scopeBadge : ''}
@@ -2272,7 +2272,7 @@ export function printWeeklyMutabaahSheet(params = {}) {
       return `
         <tr>
           <td style="text-align: center; font-family: monospace; font-size: 8pt; color: #475569;">${idx + 1}</td>
-          <td style="font-weight: 800; color: #065f46; font-size: 8.5pt;">${cat}</td>
+          <td style="font-weight: 800; color: #059669; font-size: 8.5pt;">${cat}</td>
           <td style="font-size: 8pt; color: #0f172a;">
             <strong>${catItems.map((i) => i.name).join(', ')}</strong>
           </td>
@@ -2332,7 +2332,7 @@ export function printWeeklyMutabaahSheet(params = {}) {
       return `
         <tr>
           <td style="text-align: center; font-family: monospace; font-size: 8pt; color: #475569;">${idx + 1}</td>
-          <td style="font-weight: 700; color: #065f46; font-size: 8pt;">${item.category || '-'}</td>
+          <td style="font-weight: 700; color: #059669; font-size: 8pt;">${item.category || '-'}</td>
           <td style="font-size: 8pt; color: #0f172a;">
             <strong>${item.name || '-'}</strong>
             ${programType === 'fullday' ? scopeBadge : ''}
@@ -2493,7 +2493,7 @@ export function printWeeklyMutabaahSheet(params = {}) {
         }
         .data-table th {
           background: #ecfdf5;
-          color: #064e3b;
+          color: #047857;
           font-weight: 800;
           font-size: 7.5pt;
           border: 1px solid #cbd5e1;
@@ -2777,7 +2777,7 @@ export function printMatrixSchedule(matrixData) {
           font-size: 14px;
           font-weight: 800;
           letter-spacing: 0.5px;
-          color: #064E3B;
+          color: #047857;
           text-transform: uppercase;
         }
         .kop-unit {

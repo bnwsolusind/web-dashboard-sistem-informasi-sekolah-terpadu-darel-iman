@@ -52,7 +52,7 @@ export default function ConfirmDialog({
     : 'Konfirmasi Tindakan'
 
   const finalTitle = title || defaultTitle
-  const finalConfirmLabel = confirmLabel || (isDelete ? 'Ya, Hapus Data' : action === 'create' ? 'Simpan Data' : action === 'update' ? 'Simpan Perubahan' : 'Ya, Lanjutkan')
+  const finalConfirmLabel = confirmLabel || (isDelete ? 'Ya, Hapus Permanen' : action === 'create' ? 'Simpan Data' : action === 'update' ? 'Simpan Perubahan' : 'Ya, Lanjutkan')
 
   const IconComponent = IconProps || (isDelete ? Trash2 : action === 'create' ? CheckCircle2 : action === 'update' ? Sparkles : Info)
 
@@ -75,13 +75,22 @@ export default function ConfirmDialog({
       isOpen={Boolean(isOpen)}
       onOpenChange={handleOpenChange}
     >
-      <HeroModal.Backdrop className="bg-slate-950/70 backdrop-blur-md fixed inset-0 z-[80] flex items-start sm:items-center justify-center p-3 sm:p-5 overflow-y-auto">
+      <HeroModal.Backdrop className="bg-slate-950/70 backdrop-blur-md fixed inset-0 z-[80] flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
         <HeroModal.Container className="w-full flex items-center justify-center min-h-full my-auto">
-          <HeroModal.Dialog className="relative w-full max-w-md my-auto max-h-[calc(100dvh-1.5rem)] flex flex-col overflow-hidden rounded-xl bg-white shadow-xl dark:bg-[#1B2433] border border-slate-200 dark:border-slate-800">
+          <HeroModal.Dialog
+            className={cn(
+              'relative w-full max-w-md my-auto max-h-[calc(100dvh-1.5rem)] flex flex-col overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-[#182232]',
+              accentColor === 'rose'
+                ? 'border-2 border-rose-300 dark:border-rose-700/80 shadow-rose-950/20'
+                : accentColor === 'amber'
+                ? 'border-2 border-amber-300 dark:border-amber-700/80 shadow-amber-950/20'
+                : 'border-2 border-emerald-300 dark:border-emerald-700/80 shadow-emerald-950/20'
+            )}
+          >
             {/* Top Accent Gradient Line */}
             <div
               className={cn(
-                'h-1.5 w-full bg-gradient-to-r',
+                'h-1.5 w-full bg-gradient-to-r shrink-0',
                 accentColor === 'rose'
                   ? 'from-rose-500 via-rose-600 to-red-700'
                   : accentColor === 'amber'
@@ -90,34 +99,44 @@ export default function ConfirmDialog({
               )}
             />
 
-            <HeroModal.Header className="flex items-center justify-between border-b border-slate-100 bg-white px-6 py-4 dark:border-slate-800 dark:bg-[#1B2433]">
+            <HeroModal.Header
+              className={cn(
+                'flex items-center justify-between border-b px-6 py-4.5 bg-white dark:bg-[#182232] shrink-0',
+                accentColor === 'rose'
+                  ? 'border-rose-100 dark:border-rose-900/40'
+                  : accentColor === 'amber'
+                  ? 'border-amber-100 dark:border-amber-900/40'
+                  : 'border-emerald-200/80 dark:border-emerald-800/60'
+              )}
+            >
               <div className="flex items-center gap-3">
                 <div
                   className={cn(
-                    'flex size-9 items-center justify-center rounded-lg text-white shadow-sm',
+                    'flex size-11 items-center justify-center rounded-2xl text-white shadow-md shrink-0',
                     accentColor === 'rose'
-                      ? 'bg-rose-600'
+                      ? 'bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 shadow-rose-600/25'
                       : accentColor === 'amber'
-                      ? 'bg-amber-600'
-                      : 'bg-emerald-600'
+                      ? 'bg-gradient-to-br from-amber-400 via-amber-500 to-orange-600 shadow-amber-600/25'
+                      : 'bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 shadow-emerald-600/25'
                   )}
                 >
-                  <IconComponent className="size-4.5 text-white" strokeWidth={2.2} />
+                  <IconComponent className="size-5 text-white" strokeWidth={2.2} />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white leading-tight">
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white leading-tight">
                     {finalTitle}
                   </h3>
                   <span
                     className={cn(
-                      'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold border mt-0.5',
+                      'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-wider border mt-0.5',
                       accentColor === 'rose'
-                        ? 'bg-rose-50 text-rose-700 border-rose-200/80 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800/80'
+                        ? 'bg-rose-50 text-rose-700 border-rose-200 dark:border-rose-800 dark:bg-rose-950/60 dark:text-rose-300'
                         : accentColor === 'amber'
-                        ? 'bg-amber-50 text-amber-700 border-amber-200/80 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800/80'
-                        : 'bg-emerald-50 text-emerald-800 border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/80'
+                        ? 'bg-amber-50 text-amber-700 border-amber-200 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-300'
+                        : 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
                     )}
                   >
+                    {isDelete ? <AlertTriangle className="size-2.5" /> : <Sparkles className="size-2.5" />}
                     {isDelete ? 'Hapus Permanen' : action === 'update' ? 'Pembaruan Data' : 'Penyimpanan'}
                   </span>
                 </div>
@@ -129,34 +148,41 @@ export default function ConfirmDialog({
                 isDisabled={isLoading}
                 onPress={onClose}
                 aria-label="Tutup dialog"
-                className="size-8 flex items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-400 cursor-pointer transition-all active:scale-95 disabled:opacity-50"
+                className="size-9 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-400 hover:border-rose-200 dark:bg-slate-800 dark:hover:bg-rose-950/40 dark:hover:text-rose-400 cursor-pointer transition-all active:scale-95 disabled:opacity-50 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs shrink-0"
               >
                 <X className="size-4" strokeWidth={2.2} />
               </HeroButton>
             </HeroModal.Header>
 
-            <HeroModal.Body className="p-6 space-y-4">
+            <HeroModal.Body className="p-6 space-y-4 bg-white dark:bg-[#182232]">
               <div
                 className={cn(
-                  'rounded-lg p-3.5 text-sm font-medium leading-relaxed border',
+                  'rounded-2xl p-4 text-xs sm:text-sm font-medium leading-relaxed border',
                   accentColor === 'rose'
-                    ? 'border-rose-200/80 bg-rose-50/70 text-rose-900 dark:border-rose-900/50 dark:bg-rose-950/30 dark:text-rose-300'
+                    ? 'border-rose-200 dark:border-rose-900/60 bg-rose-50/70 text-rose-950 dark:bg-rose-950/30 dark:text-rose-200'
                     : accentColor === 'amber'
-                    ? 'border-amber-200/80 bg-amber-50/70 text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-300'
-                    : 'border-emerald-200/80 bg-emerald-50/70 text-emerald-950 dark:border-emerald-900/50 dark:bg-emerald-950/30 dark:text-emerald-200'
+                    ? 'border-amber-200 dark:border-amber-900/60 bg-amber-50/70 text-amber-950 dark:bg-amber-950/30 dark:text-amber-200'
+                    : 'border-emerald-200/80 dark:border-emerald-900/60 bg-emerald-50/70 text-emerald-950 dark:bg-emerald-950/30 dark:text-emerald-200'
                 )}
               >
                 {question}
               </div>
             </HeroModal.Body>
 
-            <HeroModal.Footer className="flex items-center justify-end gap-2 border-t border-slate-100 bg-slate-50/50 px-6 py-4 dark:border-slate-800 dark:bg-slate-900/50">
+            <HeroModal.Footer
+              className={cn(
+                'flex items-center justify-end gap-2.5 border-t px-6 py-4 shrink-0',
+                accentColor === 'rose'
+                  ? 'border-rose-100 bg-rose-50/30 dark:border-rose-900/40 dark:bg-slate-900/60'
+                  : 'border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900'
+              )}
+            >
               <HeroButton
                 variant="outline"
                 size="sm"
                 isDisabled={isLoading}
                 onPress={onClose}
-                className="h-9 px-4 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 text-sm font-medium cursor-pointer transition-all active:scale-95 disabled:opacity-50"
+                className="h-10 px-4 rounded-xl border-2 border-emerald-200/80 dark:border-emerald-700/80 bg-white hover:bg-slate-50 text-slate-700 dark:bg-slate-800 dark:text-slate-200 text-xs font-bold cursor-pointer transition-all active:scale-95 disabled:opacity-50"
               >
                 {cancelLabel}
               </HeroButton>
@@ -165,17 +191,17 @@ export default function ConfirmDialog({
                 isDisabled={isLoading}
                 onPress={handleConfirmAction}
                 className={cn(
-                  'h-9 px-4 inline-flex items-center gap-2 rounded-lg text-white text-sm font-medium transition-all duration-200 active:scale-95 cursor-pointer disabled:opacity-50 shadow-xs',
+                  'h-10 px-5 inline-flex items-center gap-2 rounded-xl text-white text-xs font-bold transition-all duration-200 active:scale-95 cursor-pointer disabled:opacity-50 shadow-md',
                   accentColor === 'rose'
-                    ? 'bg-rose-600 hover:bg-rose-700'
+                    ? 'bg-rose-600 hover:bg-rose-700 shadow-rose-600/20'
                     : accentColor === 'amber'
-                    ? 'bg-amber-600 hover:bg-amber-700'
-                    : 'bg-emerald-600 hover:bg-emerald-700'
+                    ? 'bg-amber-600 hover:bg-amber-700 shadow-amber-600/20'
+                    : 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-600/20'
                 )}
               >
                 {isLoading ? (
                   <>
-                    <HeroSpinner size="sm" className="size-3.5 text-white" />
+                    <HeroSpinner size="sm" color="current" className="size-3.5 text-current shrink-0" />
                     <span>Memproses...</span>
                   </>
                 ) : (
@@ -189,5 +215,6 @@ export default function ConfirmDialog({
     </HeroModal>
   )
 }
+
 
 

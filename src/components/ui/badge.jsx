@@ -35,8 +35,17 @@ const mapHeroColor = (variant, colorProp) => {
     case 'outline':
     case 'gray':
     default:
-      return 'secondary'
+      return 'default'
   }
+}
+
+const colorClassMap = {
+  success: 'bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800',
+  warning: 'bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-950/80 dark:text-amber-300 dark:border-amber-800',
+  danger: 'bg-rose-100 text-rose-800 border-rose-300 dark:bg-rose-950/80 dark:text-rose-300 dark:border-rose-800',
+  accent: 'bg-sky-100 text-sky-800 border-sky-300 dark:bg-sky-950/80 dark:text-sky-300 dark:border-sky-800',
+  secondary: 'bg-indigo-100 text-indigo-800 border-indigo-300 dark:bg-indigo-950/80 dark:text-indigo-300 dark:border-indigo-800',
+  default: 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800',
 }
 
 const renderIcon = (icon) => {
@@ -51,25 +60,40 @@ const renderIcon = (icon) => {
 
 export function Badge({ className, variant = 'default', color, size = 'sm', children, prefixIcon, suffixIcon, ...props }) {
   const heroColor = mapHeroColor(variant, color)
-  const heroSize = size === 'xs' || size === 'sm' || size === 'default' ? 'sm' : size === 'lg' ? 'lg' : 'md'
   const renderedPrefix = renderIcon(prefixIcon)
   const renderedSuffix = renderIcon(suffixIcon)
+  const resolvedColorClass = colorClassMap[heroColor] || colorClassMap.default
+
+  const sizeClass = size === 'xs'
+    ? 'text-[10px] px-2 py-0.5'
+    : size === 'lg'
+      ? 'text-sm px-3.5 py-1'
+      : 'text-xs px-2.5 py-0.5'
+
   return (
-    <HeroChip
-      color={heroColor}
-      size={heroSize}
-      variant="soft"
-      className={cn('font-semibold rounded-full px-2.5 py-0.5 inline-flex items-center gap-1.5', className)}
+    <span
+      className={cn(
+        'font-bold rounded-full inline-flex items-center gap-1.5 border shadow-2xs transition-colors shrink-0 whitespace-nowrap',
+        sizeClass,
+        resolvedColorClass,
+        className
+      )}
       {...props}
     >
       {renderedPrefix && <span className="inline-flex shrink-0">{renderedPrefix}</span>}
       {children}
       {renderedSuffix && <span className="inline-flex shrink-0">{renderedSuffix}</span>}
-    </HeroChip>
+    </span>
   )
 }
 
+export function Chip({ children, ...props }) {
+  return <Badge {...props}>{children}</Badge>
+}
+Chip.Label = ({ children }) => <>{children}</>
+
 Badge.displayName = 'Badge'
+Chip.displayName = 'Chip'
 
 Badge.propTypes = {
   className: PropTypes.string,
@@ -79,4 +103,3 @@ Badge.propTypes = {
 }
 
 export default Badge
-

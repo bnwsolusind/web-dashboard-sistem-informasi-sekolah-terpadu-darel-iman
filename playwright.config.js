@@ -4,9 +4,9 @@ export default defineConfig({
   testDir: './tests',
   timeout: 120000,
   use: {
-    baseURL: 'http://localhost:5173',
+    baseURL: process.env.BASE_URL || 'http://localhost:5173',
     launchOptions: {
-      executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+      executablePath: process.env.CHROME_BIN || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     }

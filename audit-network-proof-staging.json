@@ -1,0 +1,312 @@
+[
+  {
+    "role": "Super Admin",
+    "routeUrl": "/masuk",
+    "timestamp": "2026-11-17T14:48:50.061Z",
+    "method": "POST",
+    "apiUrl": "/api/login",
+    "status": 200,
+    "recordId": "01a19504-1fe8-72db-adb0-bab1afa78de8",
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/master/unit-pendidikan",
+    "timestamp": "2026-11-17T14:48:52.265Z",
+    "method": "POST",
+    "apiUrl": "/api/education-units",
+    "status": 201,
+    "recordId": "01a1e9fb-705d-7090-a190-ffc5593c8a90",
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/master/unit-pendidikan",
+    "timestamp": "2026-11-17T14:48:52.270Z",
+    "method": "POST",
+    "apiUrl": "/api/education-units",
+    "status": 201,
+    "recordId": "01a1e9fb-705d-7090-a190-ffc5593c8a90",
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/master/unit-pendidikan",
+    "timestamp": "2026-11-17T14:48:53.491Z",
+    "method": "PUT",
+    "apiUrl": "/api/education-units/01a1e9fb-705d-7090-a190-ffc5593c8a90",
+    "status": 200,
+    "recordId": "01a1e9fb-705d-7090-a190-ffc5593c8a90",
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/master/unit-pendidikan",
+    "timestamp": "2026-11-17T14:48:53.500Z",
+    "method": "PUT",
+    "apiUrl": "/api/education-units/01a1e9fb-705d-7090-a190-ffc5593c8a90",
+    "status": 200,
+    "recordId": "01a1e9fb-705d-7090-a190-ffc5593c8a90",
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/master/unit-pendidikan",
+    "timestamp": "2026-11-17T14:48:54.131Z",
+    "method": "DELETE",
+    "apiUrl": "/api/education-units/01a1e9fb-705d-7090-a190-ffc5593c8a90",
+    "status": 200,
+    "recordId": null,
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/absensi-gerbang",
+    "timestamp": "2026-11-17T14:48:54.137Z",
+    "method": "DELETE",
+    "apiUrl": "/api/education-units/01a1e9fb-705d-7090-a190-ffc5593c8a90",
+    "status": 200,
+    "recordId": null,
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/absensi-gerbang",
+    "timestamp": "2026-11-17T14:48:54.887Z",
+    "method": "POST",
+    "apiUrl": "/api/gate-attendance/scan-in",
+    "status": 200,
+    "recordId": "01a1e9fb-7ade-7378-9760-e09e71efd466",
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/absensi-gerbang",
+    "timestamp": "2026-11-17T14:48:54.906Z",
+    "method": "POST",
+    "apiUrl": "/api/gate-attendance/scan-in",
+    "status": 200,
+    "recordId": "01a1e9fb-7ade-7378-9760-e09e71efd466",
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/absensi-gerbang",
+    "timestamp": "2026-11-17T14:48:55.814Z",
+    "method": "DELETE",
+    "apiUrl": "/api/attendance/01a1e9fb-7ade-7378-9760-e09e71efd466",
+    "status": 200,
+    "recordId": null,
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/tahfizh",
+    "timestamp": "2026-11-17T14:48:55.818Z",
+    "method": "DELETE",
+    "apiUrl": "/api/attendance/01a1e9fb-7ade-7378-9760-e09e71efd466",
+    "status": 200,
+    "recordId": null,
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/tahfizh",
+    "timestamp": "2026-11-17T14:48:56.415Z",
+    "method": "POST",
+    "apiUrl": "/api/tahfizh/daily-log",
+    "status": 422,
+    "recordId": null,
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/tahfizh",
+    "timestamp": "2026-11-17T14:48:56.420Z",
+    "method": "POST",
+    "apiUrl": "/api/tahfizh/daily-log",
+    "status": 422,
+    "recordId": null,
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/tahfizh",
+    "timestamp": "2026-11-17T14:48:57.304Z",
+    "method": "POST",
+    "apiUrl": "/api/tahfizh/daily-log",
+    "status": 200,
+    "recordId": "01a1e9fb-8474-73b4-8b30-b93182a6fb51",
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/tahfizh",
+    "timestamp": "2026-11-17T14:48:57.321Z",
+    "method": "POST",
+    "apiUrl": "/api/tahfizh/daily-log",
+    "status": 200,
+    "recordId": "01a1e9fb-8474-73b4-8b30-b93182a6fb51",
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/tahfizh",
+    "timestamp": "2026-11-17T14:48:57.712Z",
+    "method": "POST",
+    "apiUrl": "/api/tahfizh/daily-log",
+    "status": 200,
+    "recordId": "01a1e9fb-8474-73b4-8b30-b93182a6fb51",
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/tahfizh",
+    "timestamp": "2026-11-17T14:48:57.717Z",
+    "method": "POST",
+    "apiUrl": "/api/tahfizh/daily-log",
+    "status": 200,
+    "recordId": "01a1e9fb-8474-73b4-8b30-b93182a6fb51",
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/tahfizh",
+    "timestamp": "2026-11-17T14:48:58.090Z",
+    "method": "DELETE",
+    "apiUrl": "/api/tahfizh/daily-log/01a1e9fb-8474-73b4-8b30-b93182a6fb51",
+    "status": 200,
+    "recordId": null,
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/mutabaah",
+    "timestamp": "2026-11-17T14:48:58.094Z",
+    "method": "DELETE",
+    "apiUrl": "/api/tahfizh/daily-log/01a1e9fb-8474-73b4-8b30-b93182a6fb51",
+    "status": 200,
+    "recordId": null,
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/mutabaah",
+    "timestamp": "2026-11-17T14:48:58.694Z",
+    "method": "POST",
+    "apiUrl": "/api/mutabaah/enterprise/categories",
+    "status": 201,
+    "recordId": "01a1e9fb-8a32-7198-a25a-6e673d94ad6a",
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/mutabaah",
+    "timestamp": "2026-11-17T14:48:58.698Z",
+    "method": "POST",
+    "apiUrl": "/api/mutabaah/enterprise/categories",
+    "status": 201,
+    "recordId": "01a1e9fb-8a32-7198-a25a-6e673d94ad6a",
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/mutabaah",
+    "timestamp": "2026-11-17T14:48:59.855Z",
+    "method": "DELETE",
+    "apiUrl": "/api/mutabaah/enterprise/categories/01a1e9fb-8a32-7198-a25a-6e673d94ad6a",
+    "status": 200,
+    "recordId": null,
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/master/mata-pelajaran",
+    "timestamp": "2026-11-17T14:48:59.858Z",
+    "method": "DELETE",
+    "apiUrl": "/api/mutabaah/enterprise/categories/01a1e9fb-8a32-7198-a25a-6e673d94ad6a",
+    "status": 200,
+    "recordId": null,
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard/master/mata-pelajaran",
+    "timestamp": "2026-11-17T14:49:01.127Z",
+    "method": "POST",
+    "apiUrl": "/api/subjects",
+    "status": 404,
+    "recordId": null,
+    "isDownload": false
+  },
+  {
+    "role": "Super Admin",
+    "routeUrl": "/dashboard",
+    "timestamp": "2026-11-17T14:49:01.130Z",
+    "method": "POST",
+    "apiUrl": "/api/subjects",
+    "status": 404,
+    "recordId": null,
+    "isDownload": false
+  },
+  {
+    "role": "Kepala Sekolah",
+    "routeUrl": "/masuk",
+    "timestamp": "2026-11-17T14:49:04.107Z",
+    "method": "POST",
+    "apiUrl": "/api/login",
+    "status": 200,
+    "recordId": "01a19504-2a7b-70b7-b768-3a02c889f7fd",
+    "isDownload": false
+  },
+  {
+    "role": "Divisi Pendidikan",
+    "routeUrl": "/masuk",
+    "timestamp": "2026-11-17T14:49:07.133Z",
+    "method": "POST",
+    "apiUrl": "/api/login",
+    "status": 200,
+    "recordId": "01a1dde3-16fa-71e4-9083-ace4ae10042b",
+    "isDownload": false
+  },
+  {
+    "role": "Tata Usaha",
+    "routeUrl": "/masuk",
+    "timestamp": "2026-11-17T14:49:10.013Z",
+    "method": "POST",
+    "apiUrl": "/api/login",
+    "status": 200,
+    "recordId": "01a19504-2dde-7231-aed3-617db613a5ad",
+    "isDownload": false
+  },
+  {
+    "role": "Wali Kelas",
+    "routeUrl": "/masuk",
+    "timestamp": "2026-11-17T14:49:12.820Z",
+    "method": "POST",
+    "apiUrl": "/api/login",
+    "status": 200,
+    "recordId": "01a19504-336f-7062-8f4a-f1ee7d9796ff",
+    "isDownload": false
+  },
+  {
+    "role": "Guru / Musyrif",
+    "routeUrl": "/masuk",
+    "timestamp": "2026-11-17T14:49:15.549Z",
+    "method": "POST",
+    "apiUrl": "/api/login",
+    "status": 200,
+    "recordId": "01a19504-3001-72a9-a536-a17f17c619d5",
+    "isDownload": false
+  },
+  {
+    "role": "Orang Tua",
+    "routeUrl": "/masuk",
+    "timestamp": "2026-11-17T14:49:18.146Z",
+    "method": "POST",
+    "apiUrl": "/api/login",
+    "status": 200,
+    "recordId": "01a19504-359a-70a5-9424-99ad0e21a844",
+    "isDownload": false
+  }
+]

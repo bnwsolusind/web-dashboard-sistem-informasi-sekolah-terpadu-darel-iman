@@ -13,6 +13,14 @@
 export { default as AppButton } from './AppButton'
 export { default as AppIconButton } from './IconButton'
 export { default as AppBadge, getStatusVariant } from './AppBadge'
+export { default as AppStatus } from './AppStatus'
+export { default as AppInput } from './AppInput'
+export { default as AppSelect } from './AppSelect'
+export { default as AppTextarea } from './AppTextarea'
+export { default as AppCheckbox } from './AppCheckbox'
+export { default as AppRadio, AppRadioGroup } from './AppRadio'
+export { default as AppDatePicker } from './AppDatePicker'
+export { default as AppTableActions } from './ActionDropdown'
 export { default as AppModal } from './AppModal'
 export { default as AppDrawer } from './AppDrawer'
 export { default as AppPagination } from './AppPagination'
@@ -60,6 +68,13 @@ export { default as DeleteDialog } from './DeleteDialog'
 export { default as ExportDialog } from './ExportDialog'
 export { default as ImportDialog } from './ImportDialog'
 export { default as AppConfirmDialog } from './ConfirmDialog'
+export {
+  default as EducationUnitWithProgramCell,
+  EducationUnitBadge,
+  ProgramTypeBadge,
+  getEducationUnitCategoryStyle,
+  UNIT_CATEGORY_MAP,
+} from './EducationUnitBadge'
 export { default as AppDeleteDialog } from './DeleteDialog'
 export { default as AppExportDialog } from './ExportDialog'
 export { default as AppImportDialog } from './ImportDialog'
@@ -74,3 +89,10 @@ export { ToastProvider, useToast, showToast, globalToast } from './ToastProvider
 export { default as PersonAvatar } from '../ui/PersonAvatar'
 export { default as PersonIdentityCell } from '../ui/PersonIdentityCell'
 export { PersonIdentityCell as PersonIdentityCellNamed } from '../ui/PersonIdentityCell'
+
+// --- Wave 1 Canonical Components ---
+export { PageToolbarActions, default as PageActions } from './PageToolbarActions'
+export { StandardSubTabs, default as SubTabs } from './StandardSubTabs'
+export { StandardFilterBar, StandardSearchInput, StandardFilterSelect } from './StandardFilterBar'
+export { KpiStatCard, ModernKpiCard, KpiStatGrid } from './KpiStatCard'
+

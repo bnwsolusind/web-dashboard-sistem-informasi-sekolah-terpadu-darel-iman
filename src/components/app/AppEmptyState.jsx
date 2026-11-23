@@ -14,24 +14,24 @@ import { EmptyState } from '../ui/empty-state'
  * @param {string} [props.className]
  */
 export default function AppEmptyState({
-  icon = undefined,
-  title = 'Belum Ada Data',
-  description = '',
-  action = undefined,
-  actionLabel = undefined,
-  onAction = undefined,
-  className = '',
+ icon = undefined,
+ title = 'Belum Ada Data',
+ description = '',
+ action = undefined,
+ actionLabel = undefined,
+ onAction = undefined,
+ className = '',
 }) {
-  return (
-    <div className={className}>
-      <EmptyState
-        icon={icon}
-        title={title}
-        description={description}
-        action={action}
-        actionLabel={actionLabel}
-        onAction={onAction}
-      />
-    </div>
-  )
+ return (
+ <div className={className}>
+ <EmptyState
+ icon={icon}
+ title={title}
+ description={description}
+ action={action}
+ actionLabel={actionLabel}
+ onAction={onAction}
+ />
+ </div>
+ )
 }

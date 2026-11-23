@@ -24,11 +24,15 @@ export function AlertDialog({
         <HeroModal.Container className="w-full flex items-center justify-center min-h-full">
           <HeroModal.Dialog
             className={cn(
-              'relative w-full max-w-lg overflow-hidden rounded-[22px] border border-slate-200 bg-white p-6 shadow-2xl text-slate-800 dark:border-slate-800 dark:bg-[#1B2433] dark:text-slate-100',
+              'relative w-full max-w-xl overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-6 sm:p-7 shadow-2xl shadow-emerald-950/20 text-slate-800 dark:bg-[#182232] dark:text-slate-100 dark:shadow-black/60',
               className
             )}
           >
-            {children}
+            {/* Top Accent Gradient Bar */}
+            <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0 absolute top-0 left-0 right-0" />
+            <div className="pt-2">
+              {children}
+            </div>
           </HeroModal.Dialog>
         </HeroModal.Container>
       </HeroModal.Backdrop>

@@ -1,0 +1,339 @@
+{
+  "01-master-siswa-modal": {
+    "primaryBtn": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "maxWidth": "none",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "backgroundColor": "oklch(0.596 0.145 163.225)",
+      "color": "rgb(255, 255, 255)",
+      "padding": "0px 16px 0px 16px"
+    },
+    "cancelBtn": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "maxWidth": "none",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "backgroundColor": "rgb(255, 255, 255)",
+      "color": "oklch(0.372 0.044 257.287)",
+      "padding": "0px 16px 0px 16px"
+    },
+    "modalBox": {
+      "height": "688px",
+      "borderRadius": "0px",
+      "maxWidth": "896px",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "rgb(15, 23, 42)",
+      "padding": "0px 0px 0px 0px"
+    },
+    "modalTitle": {
+      "height": "28px",
+      "borderRadius": "0px",
+      "maxWidth": "none",
+      "fontSize": "18px",
+      "fontWeight": "600",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "oklch(0.208 0.042 265.755)",
+      "padding": "0px 0px 0px 0px"
+    },
+    "formLabel": {
+      "height": "16px",
+      "borderRadius": "0px",
+      "maxWidth": "none",
+      "fontSize": "12px",
+      "fontWeight": "700",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "oklch(0.372 0.044 257.287)",
+      "padding": "0px 0px 0px 0px"
+    }
+  },
+  "01b-kartu-pelajar-modal": {
+    "primaryBtn": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "maxWidth": "none",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "backgroundColor": "oklch(0.596 0.145 163.225)",
+      "color": "rgb(255, 255, 255)",
+      "padding": "0px 16px 0px 16px"
+    },
+    "cancelBtn": {
+      "height": "38px",
+      "borderRadius": "28px",
+      "maxWidth": "none",
+      "fontSize": "12px",
+      "fontWeight": "800",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "rgb(255, 255, 255)",
+      "padding": "10px 20px 10px 20px"
+    },
+    "modalBox": {
+      "height": "696px",
+      "borderRadius": "21px",
+      "maxWidth": "896px",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "backgroundColor": "rgb(255, 255, 255)",
+      "color": "rgb(15, 23, 42)",
+      "padding": "0px 0px 0px 0px"
+    },
+    "modalTitle": {
+      "height": "28px",
+      "borderRadius": "0px",
+      "maxWidth": "none",
+      "fontSize": "18px",
+      "fontWeight": "600",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "oklch(0.208 0.042 265.755)",
+      "padding": "0px 0px 0px 0px"
+    },
+    "formLabel": {
+      "height": "52px",
+      "borderRadius": "21px",
+      "maxWidth": "none",
+      "fontSize": "12px",
+      "fontWeight": "700",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "oklch(0.372 0.044 257.287)",
+      "padding": "10px 12px 10px 12px"
+    }
+  },
+  "02-master-pegawai-modal": {
+    "primaryBtn": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "maxWidth": "none",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "backgroundColor": "oklch(0.596 0.145 163.225)",
+      "color": "rgb(255, 255, 255)",
+      "padding": "0px 16px 0px 16px"
+    },
+    "cancelBtn": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "maxWidth": "none",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "backgroundColor": "rgb(255, 255, 255)",
+      "color": "oklch(0.372 0.044 257.287)",
+      "padding": "0px 16px 0px 16px"
+    },
+    "modalBox": {
+      "height": "680px",
+      "borderRadius": "0px",
+      "maxWidth": "896px",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "oklch(0.279 0.041 260.031)",
+      "padding": "0px 0px 0px 0px"
+    },
+    "modalTitle": {
+      "height": "20px",
+      "borderRadius": "0px",
+      "maxWidth": "none",
+      "fontSize": "14px",
+      "fontWeight": "800",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "oklch(0.208 0.042 265.755)",
+      "padding": "0px 0px 0px 0px"
+    },
+    "formLabel": {
+      "height": "16px",
+      "borderRadius": "0px",
+      "maxWidth": "none",
+      "fontSize": "12px",
+      "fontWeight": "700",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "oklch(0.372 0.044 257.287)",
+      "padding": "0px 0px 0px 0px"
+    }
+  },
+  "03-tagihan-siswa-modal": {
+    "primaryBtn": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "maxWidth": "none",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "backgroundColor": "oklch(0.596 0.145 163.225)",
+      "color": "rgb(255, 255, 255)",
+      "padding": "0px 16px 0px 16px"
+    },
+    "cancelBtn": {
+      "height": "32px",
+      "borderRadius": "14px",
+      "maxWidth": "none",
+      "fontSize": "12px",
+      "fontWeight": "500",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "oklch(0.372 0.044 257.287)",
+      "padding": "0px 12px 0px 12px"
+    },
+    "modalBox": {
+      "height": "586px",
+      "borderRadius": "21px",
+      "maxWidth": "512px",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "backgroundColor": "rgb(255, 255, 255)",
+      "color": "oklch(0.279 0.041 260.031)",
+      "padding": "24px 24px 24px 24px"
+    },
+    "modalTitle": {
+      "height": "28px",
+      "borderRadius": "0px",
+      "maxWidth": "none",
+      "fontSize": "18px",
+      "fontWeight": "600",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "oklch(0.208 0.042 265.755)",
+      "padding": "0px 0px 0px 0px"
+    },
+    "formLabel": {
+      "height": "16px",
+      "borderRadius": "0px",
+      "maxWidth": "none",
+      "fontSize": "12px",
+      "fontWeight": "700",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "oklch(0.372 0.044 257.287)",
+      "padding": "0px 0px 0px 0px"
+    }
+  },
+  "04-laporan-absensi-print-modal": {
+    "primaryBtn": null,
+    "cancelBtn": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "maxWidth": "none",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "backgroundColor": "rgb(255, 255, 255)",
+      "color": "oklch(0.372 0.044 257.287)",
+      "padding": "0px 16px 0px 16px"
+    },
+    "modalBox": {
+      "height": "456px",
+      "borderRadius": "0px",
+      "maxWidth": "576px",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "rgb(17, 28, 56)",
+      "padding": "0px 0px 0px 0px"
+    },
+    "modalTitle": {
+      "height": "56px",
+      "borderRadius": "0px",
+      "maxWidth": "none",
+      "fontSize": "18px",
+      "fontWeight": "600",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "oklch(0.208 0.042 265.755)",
+      "padding": "0px 0px 0px 0px"
+    },
+    "formLabel": {
+      "height": "16px",
+      "borderRadius": "0px",
+      "maxWidth": "none",
+      "fontSize": "12px",
+      "fontWeight": "700",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "oklch(0.372 0.044 257.287)",
+      "padding": "0px 0px 0px 0px"
+    }
+  },
+  "06-mutabaah-template-modal": {
+    "primaryBtn": {
+      "height": "32px",
+      "borderRadius": "14px",
+      "maxWidth": "none",
+      "fontSize": "12px",
+      "fontWeight": "500",
+      "backgroundColor": "oklch(0.596 0.145 163.225)",
+      "color": "rgb(255, 255, 255)",
+      "padding": "0px 12px 0px 12px"
+    },
+    "cancelBtn": {
+      "height": "32px",
+      "borderRadius": "14px",
+      "maxWidth": "none",
+      "fontSize": "12px",
+      "fontWeight": "500",
+      "backgroundColor": "oklch(0.596 0.145 163.225)",
+      "color": "rgb(255, 255, 255)",
+      "padding": "0px 12px 0px 12px"
+    },
+    "modalBox": {
+      "height": "648px",
+      "borderRadius": "21px",
+      "maxWidth": "576px",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "backgroundColor": "rgb(255, 255, 255)",
+      "color": "oklch(0.279 0.041 260.031)",
+      "padding": "0px 0px 0px 0px"
+    },
+    "modalTitle": {
+      "height": "28px",
+      "borderRadius": "0px",
+      "maxWidth": "none",
+      "fontSize": "18px",
+      "fontWeight": "600",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "oklch(0.208 0.042 265.755)",
+      "padding": "0px 0px 0px 0px"
+    },
+    "formLabel": {
+      "height": "16px",
+      "borderRadius": "0px",
+      "maxWidth": "none",
+      "fontSize": "12px",
+      "fontWeight": "700",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "oklch(0.372 0.044 257.287)",
+      "padding": "0px 0px 0px 0px"
+    }
+  },
+  "05-tahfizh-mushaf-modal": {
+    "primaryBtn": null,
+    "cancelBtn": null,
+    "modalBox": {
+      "height": "720px",
+      "borderRadius": "0px",
+      "maxWidth": "none",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "backgroundColor": "oklab(0.129 -0.0038832 -0.0418201 / 0.7)",
+      "color": "rgb(15, 23, 42)",
+      "padding": "16px 16px 16px 16px"
+    },
+    "modalTitle": {
+      "height": "48px",
+      "borderRadius": "0px",
+      "maxWidth": "none",
+      "fontSize": "16px",
+      "fontWeight": "900",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "oklch(0.208 0.042 265.755)",
+      "padding": "0px 0px 0px 0px"
+    },
+    "formLabel": {
+      "height": "16.5px",
+      "borderRadius": "0px",
+      "maxWidth": "none",
+      "fontSize": "11px",
+      "fontWeight": "800",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "color": "oklch(0.372 0.044 257.287)",
+      "padding": "0px 0px 0px 0px"
+    }
+  }
+}

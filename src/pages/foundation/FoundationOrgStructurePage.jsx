@@ -1,4 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState
+} from 'react'
 import {
   Award,
   BadgeCheck,
@@ -11,9 +16,10 @@ import {
   ShieldAlert,
   UserCheck,
   Users,
-  UsersRound,
+  UsersRound
 } from 'lucide-react'
 import api from '../../services/api'
+import AppBreadcrumb from '../../components/app/AppBreadcrumb'
 import {
   MasterActionButton,
   MasterBadge,
@@ -26,12 +32,18 @@ import {
   MasterSearchInput,
   MasterStatCard,
   MasterStatsGrid,
-  masterStyles,
+  masterStyles
 } from '../../components/master-data'
-import { PersonIdentityCell } from '../../components/ui/PersonIdentityCell'
+import {
+  PersonIdentityCell
+} from '../../components/ui/PersonIdentityCell'
 import KpiDetailDrawer from '../../components/KpiDetailDrawer'
-import { FoundationExportModal } from '../../components/foundation/FoundationExportModal'
-import { SmartScrollFab } from '../../components/common'
+import {
+  FoundationExportModal
+} from '../../components/foundation/FoundationExportModal'
+import {
+  SmartScrollFab
+} from '../../components/common'
 
 export function FoundationOrgStructurePage() {
   const [units, setUnits] = useState([])
@@ -165,6 +177,10 @@ export function FoundationOrgStructurePage() {
 
   return (
     <MasterDataPage hideBreadcrumb className="foundation-org-structure-page">
+      <div className="mb-4 print:hidden">
+        <AppBreadcrumb items={[{ label: 'Yayasan', href: '/dashboard/yayasan' }, { label: 'Struktur Organisasi' }]} />
+      </div>
+
       <MasterPageHeader
         title="Struktur Organisasi Unit Pendidikan"
         description="Bagan hirarki struktur jabatan & pejabat pengampu pada tiap Unit Pendidikan secara terstruktur."
@@ -172,8 +188,8 @@ export function FoundationOrgStructurePage() {
         icon={Network}
         actions={(
           <>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-2 text-[10px] font-bold text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">
-              <ShieldAlert className="h-3 w-3" />
+            <span className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 font-extrabold px-3 py-2 text-[10px] border border-emerald-300/80 dark:border-emerald-700/60">
+              <ShieldAlert className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
               Mode Monitoring • Akses Read-Only
             </span>
             <MasterActionButton variant="export" icon={FileSpreadsheet} onClick={() => setShowExport(true)}>
@@ -207,7 +223,7 @@ export function FoundationOrgStructurePage() {
               onClick={handleRefresh}
               aria-label="Muat ulang data"
               title="Muat ulang"
-              className="inline-flex h-12 w-12 items-center justify-center rounded-[var(--master-control-radius,14px)] border border-slate-200 text-slate-600 transition hover:bg-emerald-50 hover:text-emerald-800 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-emerald-950/40"
+              className="inline-flex h-9 w-10 items-center justify-center rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] text-emerald-800 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 shadow-xs transition cursor-pointer"
             >
               <RefreshCcw className={`h-4 w-4 ${isFetching ? 'animate-spin' : ''}`} />
             </button>
@@ -224,11 +240,11 @@ export function FoundationOrgStructurePage() {
       ) : loading ? (
         <div className="space-y-6">
           {[1, 2, 3].map((lvl) => (
-            <div key={lvl} className={`${masterStyles.card} animate-pulse p-6`}>
-              <div className="h-6 w-48 rounded-xl bg-slate-100 dark:bg-slate-800" />
+            <div key={lvl} className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433] animate-pulse p-6">
+              <div className="h-6 w-48 rounded-xl bg-emerald-50 dark:bg-emerald-950/40" />
               <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {[1, 2].map((i) => (
-                  <div key={i} className="h-28 rounded-2xl bg-slate-100 dark:bg-slate-800" />
+                  <div key={i} className="h-28 rounded-xl bg-emerald-50 dark:bg-emerald-950/40" />
                 ))}
               </div>
             </div>
@@ -242,20 +258,23 @@ export function FoundationOrgStructurePage() {
       ) : (
         <div id="bagan-struktur-organisasi" className="space-y-8 scroll-mt-6">
           {filteredLevels.map((lvlGroup) => (
-            <section key={lvlGroup.level} className={`${masterStyles.card} p-5 sm:p-6`}>
-              <div className="flex items-center justify-between border-b border-slate-200/80 pb-4 dark:border-slate-700">
+            <section
+              key={lvlGroup.level}
+              className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433] p-5 sm:p-6"
+            >
+              <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4">
                 <div className="flex items-center gap-3">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 font-mono text-xs font-bold text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-100 font-mono text-xs font-black text-emerald-900 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300/60 dark:border-emerald-700/60 shadow-xs">
                     L{lvlGroup.level}
                   </span>
                   <div>
-                    <h2 className="text-base font-bold text-slate-900 dark:text-white">{lvlGroup.title}</h2>
+                    <h2 className="text-base font-black text-emerald-950 dark:text-emerald-100">{lvlGroup.title}</h2>
                     <p className="text-xs text-slate-500 dark:text-slate-400">
                       {lvlGroup.positions.length} Jabatan pada tingkat ini
                     </p>
                   </div>
                 </div>
-                <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                <span className="rounded-xl bg-emerald-100 dark:bg-emerald-950/60 px-3 py-1 text-xs font-black text-emerald-900 dark:text-emerald-300 border border-emerald-300/60 dark:border-emerald-700/60">
                   Level {lvlGroup.level}
                 </span>
               </div>
@@ -266,16 +285,16 @@ export function FoundationOrgStructurePage() {
                   return (
                     <div
                       key={pos.id}
-                      className={`group relative flex flex-col justify-between rounded-2xl border p-4 transition-all duration-200 hover:shadow-md ${
+                      className={`group relative flex flex-col justify-between rounded-xl border-2 p-4 transition-all duration-200 hover:shadow-md ${
                         isFilled
-                          ? 'border-slate-200/90 bg-white hover:border-emerald-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-emerald-700'
-                          : 'border-dashed border-amber-200 bg-amber-50/30 dark:border-amber-900/50 dark:bg-amber-950/10'
+                          ? 'border-emerald-200/90 bg-white hover:border-emerald-400 dark:border-emerald-800/80 dark:bg-[#151D2A] dark:hover:border-emerald-600 shadow-xs'
+                          : 'border-dashed border-amber-300 dark:border-amber-700/70 bg-amber-50/30 dark:bg-amber-950/15'
                       }`}
                     >
                       <div>
                         <div className="flex items-start justify-between gap-2">
                           <span
-                            className="inline-block h-3 w-3 rounded-full"
+                            className="inline-block h-3.5 w-3.5 rounded-full shadow-xs"
                             style={{ backgroundColor: pos.warna || '#10B981' }}
                             title={`Kode: ${pos.code}`}
                           />
@@ -284,21 +303,21 @@ export function FoundationOrgStructurePage() {
                           </MasterBadge>
                         </div>
 
-                        <h3 className="mt-2 text-sm font-bold text-slate-900 dark:text-white group-hover:text-emerald-800 dark:group-hover:text-emerald-400">
+                        <h3 className="mt-2 text-sm font-black text-slate-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-300 transition-colors">
                           {pos.name}
                         </h3>
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                        <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
                           {pos.satuan_kerja || 'Unit Pendidikan'} • {pos.unit?.name || 'Seluruh Unit'}
                         </p>
 
-                        <div className="mt-3.5 space-y-2 border-t border-slate-100 pt-3 dark:border-slate-800">
+                        <div className="mt-3.5 space-y-2 border-t border-emerald-200/80 dark:border-emerald-800/60 pt-3">
                           {isFilled ? (
                             pos.employees.map((emp) => (
                               <button
                                 key={emp.id}
                                 type="button"
                                 onClick={() => handleOpenDetail(emp)}
-                                className="w-full text-left transition hover:opacity-80"
+                                className="w-full text-left transition hover:opacity-80 cursor-pointer"
                               >
                                 <PersonIdentityCell
                                   src={emp.foto}
@@ -316,9 +335,9 @@ export function FoundationOrgStructurePage() {
                         </div>
                       </div>
 
-                      <div className="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 text-[10px] text-slate-400 dark:border-slate-800">
-                        <span>Atasan: <strong className="font-semibold text-slate-600 dark:text-slate-300">{pos.atasan_nama}</strong></span>
-                        <ChevronRight className="h-3.5 w-3.5 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-emerald-800 dark:group-hover:text-emerald-400" />
+                      <div className="mt-3 flex items-center justify-between border-t border-emerald-200/80 dark:border-emerald-800/60 pt-2.5 text-[10px] text-slate-400">
+                        <span>Atasan: <strong className="font-bold text-slate-700 dark:text-slate-300">{pos.atasan_nama}</strong></span>
+                        <ChevronRight className="h-3.5 w-3.5 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-emerald-700 dark:group-hover:text-emerald-300" />
                       </div>
                     </div>
                   )

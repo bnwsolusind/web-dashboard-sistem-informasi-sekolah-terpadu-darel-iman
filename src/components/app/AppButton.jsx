@@ -2,13 +2,33 @@ import React from 'react'
 import { LoaderCircle } from 'lucide-react'
 import { Button } from '../ui/button'
 
-const VARIANTS = ['primary', 'secondary', 'ghost', 'outline', 'destructive', 'danger', 'warning', 'success', 'icon', 'link', 'default']
+const VARIANTS = [
+  'primary',
+  'secondary',
+  'accent',
+  'view',
+  'edit',
+  'restore',
+  'print',
+  'import',
+  'export',
+  'warning',
+  'success',
+  'destructive',
+  'danger',
+  'error',
+  'ghost',
+  'outline',
+  'icon',
+  'link',
+  'default',
+]
 
 /**
  * AppButton - canonical enterprise button.
  * Satu-satunya tombol yang boleh dipakai di seluruh aplikasi.
  *
- * variant: primary | secondary | ghost | outline | destructive | success | icon | link
+ * variant: primary | secondary | accent | view | edit | restore | print | import | export | warning | success | destructive | danger | ghost | outline | icon | link
  * loading: menampilkan spinner dan menonaktifkan tombol
  * tooltip: native tooltip (title)
  */
@@ -16,22 +36,25 @@ export default function AppButton({
   variant = 'primary',
   size,
   loading = false,
+  isLoading = false,
   loadingText,
   icon: Icon,
   iconPosition = 'left',
   className = '',
   children,
   disabled,
+  isDisabled,
   tooltip,
   ...props
 }) {
-  const isDestructive = variant === 'destructive' || variant === 'danger'
-  const isSuccess = variant === 'success'
-  const resolvedVariant = isDestructive ? 'destructive' : isSuccess ? 'primary' : variant
+  const isDestructive = variant === 'destructive' || variant === 'danger' || variant === 'error'
+  const resolvedVariant = isDestructive ? 'destructive' : variant
+  const isButtonLoading = Boolean(loading || isLoading)
+  const isButtonDisabled = Boolean(disabled || isDisabled || isButtonLoading)
 
   const content = (
     <>
-      {loading ? (
+      {isButtonLoading ? (
         <>
           <LoaderCircle className="h-4 w-4 animate-spin" />
           {loadingText || children}
@@ -50,8 +73,8 @@ export default function AppButton({
     <Button
       variant={resolvedVariant}
       size={size}
-      disabled={disabled || loading}
-      aria-busy={loading || undefined}
+      disabled={isButtonDisabled}
+      aria-busy={isButtonLoading || undefined}
       title={tooltip}
       className={className}
       {...props}

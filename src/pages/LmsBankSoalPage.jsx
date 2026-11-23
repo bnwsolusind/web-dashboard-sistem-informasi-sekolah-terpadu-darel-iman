@@ -1,8 +1,10 @@
+import { HeroUiHeader } from "../components/ui/HeroUiHeader"
 import { useToast } from '../components/app/ToastProvider'
 import React, { useState, useEffect, useMemo, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
+  FileQuestion,
   HelpCircle,
   CheckSquare,
   FileText,
@@ -48,10 +50,11 @@ import PageContainer from '../components/app/PageContainer'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
 import { printCleanTable, downloadPdfTable } from '../utils/printHelper'
 import {
-  MasterDataTable,
   SquircleActionButton,
   PrintOptionModal,
 } from '../components/master-data'
+import AppDataTable from '../components/app/AppDataTable'
+import MobileDataCard from '../components/app/MobileDataCard'
 import {
   TableRoot,
   TableHeader,
@@ -66,9 +69,9 @@ import { downloadSpreadsheetTemplate } from '../utils/spreadsheetParser'
 // ── 1. PALET WARNA RESMI MODERN KPI CARDS ──
 const MODERN_CARD_TONES = {
   emerald: {
-    card: 'border-emerald-300/70 bg-gradient-to-br from-emerald-50 via-teal-50/60 to-white hover:border-emerald-400 dark:border-emerald-700/50 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-slate-900',
+    card: 'border-emerald-200/80 bg-white dark:border-emerald-800/60 dark:bg-[#1B2433] hover:border-emerald-400 dark:border-emerald-700/50 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-slate-900',
     glow: 'bg-emerald-400/20 group-hover:bg-emerald-400/30',
-    iconBox: 'bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-emerald-500/30',
+    iconBox: 'bg-slate-100 border border-emerald-200/70 text-slate-700 shadow-xs dark:bg-slate-800 dark:border-emerald-800/60 dark:text-slate-300',
     tag: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300',
     title: 'text-emerald-700 dark:text-emerald-400',
     val: 'text-emerald-700 dark:text-emerald-300',
@@ -76,9 +79,9 @@ const MODERN_CARD_TONES = {
     cta: 'text-emerald-600/60 dark:text-emerald-500/60',
   },
   sky: {
-    card: 'border-sky-300/70 bg-gradient-to-br from-sky-50 via-cyan-50/60 to-white hover:border-sky-400 dark:border-sky-700/50 dark:from-sky-950/40 dark:via-cyan-950/20 dark:to-slate-900',
+    card: 'border-emerald-200/80 bg-white dark:border-emerald-800/60 dark:bg-[#1B2433] hover:border-sky-400 dark:border-sky-700/50 dark:from-sky-950/40 dark:via-cyan-950/20 dark:to-slate-900',
     glow: 'bg-sky-400/20 group-hover:bg-sky-400/30',
-    iconBox: 'bg-gradient-to-br from-sky-500 to-blue-600 text-white shadow-sky-500/30',
+    iconBox: 'bg-white dark:bg-[#1B2433] shadow-sky-500/30',
     tag: 'bg-sky-100 text-sky-700 dark:bg-sky-900/60 dark:text-sky-300',
     title: 'text-sky-700 dark:text-sky-400',
     val: 'text-sky-700 dark:text-sky-300',
@@ -86,9 +89,9 @@ const MODERN_CARD_TONES = {
     cta: 'text-sky-600/60 dark:text-sky-500/60',
   },
   blue: {
-    card: 'border-blue-300/70 bg-gradient-to-br from-blue-50 via-indigo-50/60 to-white hover:border-blue-400 dark:border-blue-700/50 dark:from-blue-950/40 dark:via-indigo-950/20 dark:to-slate-900',
+    card: 'border-emerald-200/80 bg-white dark:border-emerald-800/60 dark:bg-[#1B2433] hover:border-blue-400 dark:border-blue-700/50 dark:from-blue-950/40 dark:via-indigo-950/20 dark:to-slate-900',
     glow: 'bg-blue-400/20 group-hover:bg-blue-400/30',
-    iconBox: 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-blue-500/30',
+    iconBox: 'bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-800/60 dark:text-slate-300 shadow-sm',
     tag: 'bg-blue-100 text-blue-700 dark:bg-blue-900/60 dark:text-blue-300',
     title: 'text-blue-700 dark:text-blue-400',
     val: 'text-blue-700 dark:text-blue-300',
@@ -96,9 +99,9 @@ const MODERN_CARD_TONES = {
     cta: 'text-blue-600/60 dark:text-blue-500/60',
   },
   purple: {
-    card: 'border-purple-300/70 bg-gradient-to-br from-purple-50 via-fuchsia-50/60 to-white hover:border-purple-400 dark:border-purple-700/50 dark:from-purple-950/40 dark:via-fuchsia-950/20 dark:to-slate-900',
+    card: 'border-emerald-200/80 bg-white dark:border-emerald-800/60 dark:bg-[#1B2433] hover:border-purple-400 dark:border-purple-700/50 dark:from-purple-950/40 dark:via-fuchsia-950/20 dark:to-slate-900',
     glow: 'bg-purple-400/20 group-hover:bg-purple-400/30',
-    iconBox: 'bg-gradient-to-br from-purple-500 to-fuchsia-600 text-white shadow-purple-500/30',
+    iconBox: 'bg-white dark:bg-[#1B2433] shadow-sm',
     tag: 'bg-purple-100 text-purple-700 dark:bg-purple-900/60 dark:text-purple-300',
     title: 'text-purple-700 dark:text-purple-400',
     val: 'text-purple-700 dark:text-purple-300',
@@ -106,9 +109,9 @@ const MODERN_CARD_TONES = {
     cta: 'text-purple-600/60 dark:text-purple-500/60',
   },
   amber: {
-    card: 'border-amber-300/70 bg-gradient-to-br from-amber-50 via-orange-50/60 to-white hover:border-amber-400 dark:border-amber-700/50 dark:from-amber-950/40 dark:via-orange-950/20 dark:to-slate-900',
+    card: 'border-emerald-200/80 bg-white dark:border-emerald-800/60 dark:bg-[#1B2433] hover:border-amber-400 dark:border-amber-700/50 dark:from-amber-950/40 dark:via-orange-950/20 dark:to-slate-900',
     glow: 'bg-amber-400/20 group-hover:bg-amber-400/30',
-    iconBox: 'bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-amber-500/30',
+    iconBox: 'bg-white dark:bg-[#1B2433] shadow-sm',
     tag: 'bg-amber-100 text-amber-700 dark:bg-amber-900/60 dark:text-amber-300',
     title: 'text-amber-700 dark:text-amber-400',
     val: 'text-amber-700 dark:text-amber-300',
@@ -117,53 +120,22 @@ const MODERN_CARD_TONES = {
   },
 }
 
+import { KpiStatCard, PageToolbarActions } from '../components/app'
+
 function ModernKpiCard({ icon: Icon, label, subtext, value, tag, tone = 'emerald', onClick, active = false }) {
-  const t = MODERN_CARD_TONES[tone] || MODERN_CARD_TONES.emerald
-  const isClickable = typeof onClick === 'function'
+  const resolvedTone = tone === 'blue' || tone === 'sky' ? 'sky' : tone === 'purple' || tone === 'indigo' ? 'indigo' : tone === 'amber' ? 'amber' : tone === 'rose' ? 'rose' : 'emerald'
 
   return (
-    <motion.div
-      whileHover={{ scale: 1.02, y: -2 }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+    <KpiStatCard
+      title={label}
+      value={value ?? 0}
+      subtitle={subtext}
+      badge={tag}
+      icon={Icon}
+      tone={resolvedTone}
       onClick={onClick}
-      role={isClickable ? 'button' : undefined}
-      tabIndex={isClickable ? 0 : undefined}
-      className={`group relative overflow-hidden rounded-[18px] border-2 p-4 sm:p-5 shadow-xs transition-[border-color,box-shadow] duration-150 text-left ${isClickable ? 'cursor-pointer hover:shadow-md' : 'cursor-default'
-        } ${t.card} ${active ? '!ring-2 !ring-emerald-500 !border-emerald-500 shadow-md shadow-emerald-500/20' : ''}`}
-    >
-      <div className={`pointer-events-none absolute -top-8 -right-8 h-28 w-28 rounded-full blur-2xl transition-all ${t.glow}`} />
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2.5">
-          <div className={`flex h-9 w-9 items-center justify-center rounded-xl text-white shadow-sm ${t.iconBox}`}>
-            <Icon className="h-4.5 w-4.5" />
-          </div>
-          <div>
-            <p className={`text-[11px] font-bold uppercase tracking-wider ${t.title}`}>{label}</p>
-          </div>
-        </div>
-        {tag && (
-          <span className={`rounded-lg px-2 py-0.5 text-[10px] font-extrabold ${t.tag}`}>
-            {tag}
-          </span>
-        )}
-      </div>
-
-      <p className={`text-2xl sm:text-3xl font-black tabular-nums ${t.val}`}>
-        {value ?? '0'}
-      </p>
-      {subtext && (
-        <p className={`mt-0.5 text-[11px] font-semibold ${t.sub} truncate`}>
-          {subtext}
-        </p>
-      )}
-
-      {isClickable && (
-        <p className={`mt-3 text-[10px] font-bold flex items-center gap-1 ${t.cta}`}>
-          <Eye className="h-3 w-3" /> Filter tipe ini
-        </p>
-      )}
-    </motion.div>
+      className={active ? 'ring-2 ring-emerald-500 shadow-md' : ''}
+    />
   )
 }
 
@@ -241,10 +213,10 @@ function HeroUiModalSelect({
           }
         }}
         className={`w-full flex items-center justify-between rounded-xl border px-3.5 py-2.5 text-xs font-semibold transition-all duration-200 text-left cursor-pointer ${disabled
-            ? 'bg-slate-100 dark:bg-slate-800/60 border-slate-200 dark:border-slate-800 text-slate-400 cursor-not-allowed'
-            : isOpen
-              ? 'border-[#0E5C44] bg-white ring-4 ring-[#0E5C44]/12 dark:border-[#3FBF75] dark:bg-slate-900 dark:ring-[#3FBF75]/20 text-slate-800 dark:text-slate-100 shadow-sm'
-              : 'border-slate-200/90 bg-slate-50/50 hover:bg-white hover:border-slate-300 dark:border-slate-700/80 dark:bg-slate-900/50 dark:hover:bg-slate-900 dark:hover:border-slate-600 text-slate-800 dark:text-slate-100'
+          ? 'bg-slate-100 dark:bg-slate-800/60 border-emerald-200/80 dark:border-emerald-800/60 text-slate-400 cursor-not-allowed'
+          : isOpen
+            ? 'border-[#0E5C44] bg-white ring-4 ring-[#0E5C44]/12 dark:border-[#3FBF75] dark:bg-slate-900 dark:ring-[#3FBF75]/20 text-slate-800 dark:text-slate-100 shadow-sm'
+            : 'border-emerald-200/90 bg-slate-50/50 hover:bg-white hover:border-emerald-300 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:hover:bg-slate-900 dark:hover:border-emerald-200/80 text-slate-800 dark:text-slate-100'
           }`}
       >
         <div className="flex items-center gap-2 truncate">
@@ -271,19 +243,19 @@ function HeroUiModalSelect({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: -4 }}
             transition={{ duration: 0.15, ease: 'easeOut' }}
-            className="absolute left-0 right-0 top-full mt-1.5 z-[90] overflow-hidden rounded-xl border border-slate-200/90 bg-white/95 backdrop-blur-md shadow-2xl dark:border-slate-700/80 dark:bg-[#182232]/95"
+            className="absolute left-0 right-0 top-full mt-1.5 z-[90] overflow-hidden rounded-xl border border-emerald-200/90 bg-white/95 backdrop-blur-md shadow-2xl dark:border-emerald-800/80 dark:bg-[#182232]/95"
           >
             {/* Search Input jika searchable */}
             {searchable && options.length > 5 && (
-              <div className="p-2 border-b border-slate-100 dark:border-slate-800">
+              <div className="p-2 border-b border-emerald-200/80 dark:border-emerald-800/60">
                 <div className="relative">
-                  <Search className="size-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <Search className="size-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-emerald-600 dark:text-emerald-400" />
                   <input
                     type="text"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Ketik untuk mencari..."
-                    className="w-full rounded-lg border border-slate-200 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-[11px] font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#0E5C44] focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                    className="w-full rounded-lg border border-emerald-200/80 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#0E5C44] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
                     autoFocus
                   />
                 </div>
@@ -309,8 +281,8 @@ function HeroUiModalSelect({
                         setIsOpen(false)
                       }}
                       className={`w-full flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition-colors text-left cursor-pointer ${isSelected
-                          ? 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 font-bold'
-                          : 'text-slate-700 hover:bg-slate-100/80 dark:text-slate-200 dark:hover:bg-slate-800/70'
+                        ? 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 font-bold'
+                        : 'text-slate-700 hover:bg-slate-100/80 dark:text-slate-200 dark:hover:bg-slate-800/70'
                         }`}
                     >
                       <div className="truncate pr-2">
@@ -332,7 +304,7 @@ function HeroUiModalSelect({
       </AnimatePresence>
 
       {helperText && (
-        <p className="mt-1 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
+        <p className="mt-1 text-xs font-medium text-emerald-600 dark:text-emerald-400">
           {helperText}
         </p>
       )}
@@ -389,11 +361,11 @@ function HeroUiFilterSelect({
           setIsOpen((prev) => !prev)
           setSearch('')
         }}
-        className={`h-10 w-full sm:w-auto min-w-[140px] flex items-center justify-between gap-2 rounded-xl border px-3 text-xs font-bold transition-all duration-200 cursor-pointer shadow-2xs ${isOpen
-            ? 'border-emerald-600 bg-white ring-2 ring-emerald-500/20 dark:border-emerald-400 dark:bg-[#111827] dark:ring-emerald-400/20 text-slate-900 dark:text-white shadow-xs'
-            : value !== '' && value !== undefined && value !== null
-              ? 'border-emerald-500/80 bg-gradient-to-r from-emerald-50 via-teal-50/50 to-emerald-50 text-emerald-950 dark:border-emerald-600/80 dark:bg-gradient-to-r dark:from-emerald-950/60 dark:via-teal-950/40 dark:to-emerald-950/60 dark:text-emerald-200 font-extrabold shadow-emerald-500/10'
-              : 'border-slate-200/90 bg-white text-slate-700 hover:border-emerald-400 dark:border-slate-700 dark:bg-[#111827] dark:text-slate-200 dark:hover:border-emerald-600'
+        className={`h-9 w-full sm:w-auto min-w-[140px] flex items-center justify-between gap-2 rounded-lg border px-3 text-sm font-medium transition-colors cursor-pointer shadow-xs ${isOpen
+          ? 'border-emerald-600 bg-white ring-1 ring-emerald-500 dark:border-emerald-400 dark:bg-[#111827] dark:ring-emerald-400 text-slate-900 dark:text-white'
+          : value !== '' && value !== undefined && value !== null
+            ? 'border-emerald-500/70 bg-emerald-50/40 text-emerald-800 dark:border-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-300 font-semibold'
+            : 'border-emerald-200/80 bg-white text-slate-700 hover:bg-slate-50 dark:border-emerald-800/60 dark:bg-[#111827] dark:text-slate-200 dark:hover:bg-slate-800'
           }`}
       >
         <div className="flex items-center gap-1.5 truncate">
@@ -417,18 +389,18 @@ function HeroUiFilterSelect({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: -4 }}
             transition={{ duration: 0.15, ease: 'easeOut' }}
-            className={`absolute left-0 top-full mt-1.5 z-[100] ${popoverWidth} max-w-[92vw] overflow-hidden rounded-xl border border-emerald-200/90 bg-white/98 backdrop-blur-md shadow-2xl dark:border-emerald-800/80 dark:bg-[#182232]/98`}
+            className={`absolute left-0 top-full mt-1.5 z-[100] ${popoverWidth} max-w-[92vw] overflow-hidden rounded-lg border border-emerald-200/80 bg-white/98 backdrop-blur-md shadow-2xl dark:border-emerald-800/80 dark:bg-[#182232]/98`}
           >
             {searchable && options.length > 5 && (
-              <div className="p-2 border-b border-slate-100 dark:border-slate-800">
+              <div className="p-2 border-b border-emerald-200/80 dark:border-emerald-800/60">
                 <div className="relative">
-                  <Search className="size-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <Search className="size-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-emerald-600 dark:text-emerald-400" />
                   <input
                     type="text"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Cari..."
-                    className="w-full rounded-lg border border-slate-200 bg-slate-50/60 pl-8 pr-2.5 py-1 text-[11px] font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#0E5C44] focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                    className="w-full rounded-lg border border-emerald-200/80 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#0E5C44] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
                     autoFocus
                   />
                 </div>
@@ -452,8 +424,8 @@ function HeroUiFilterSelect({
                         setIsOpen(false)
                       }}
                       className={`w-full flex items-center justify-between rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors text-left cursor-pointer ${isSelected
-                          ? 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 font-bold'
-                          : 'text-slate-700 hover:bg-slate-100/80 dark:text-slate-200 dark:hover:bg-slate-800/70'
+                        ? 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 font-bold'
+                        : 'text-slate-700 hover:bg-slate-100/80 dark:text-slate-200 dark:hover:bg-slate-800/70'
                         }`}
                     >
                       <span className="truncate pr-2">{opt.label}</span>
@@ -571,12 +543,11 @@ function HarmonizedBatchImportModal({ isOpen, onClose, onImportSuccess, notify }
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.96 }}
-        className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl shadow-emerald-950/20 dark:border-slate-800 dark:bg-[#1B2433]"
+        className="relative w-full max-w-xl overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
       >
-        <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600" />
-        <div className="flex items-center justify-between border-b border-slate-100 p-6 dark:border-slate-800">
+        <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 p-6 dark:border-emerald-800/60">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-md shadow-emerald-500/20">
+            <div className="flex h-9 w-10 items-center justify-center rounded-xl bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-800/60 dark:text-slate-300 shadow-md shadow-sm">
               <Upload className="h-5 w-5" />
             </div>
             <div>
@@ -594,18 +565,18 @@ function HarmonizedBatchImportModal({ isOpen, onClose, onImportSuccess, notify }
 
         <div className="p-6 space-y-5">
           {/* Download Template Card */}
-          <div className="flex items-center justify-between rounded-2xl border border-emerald-200/80 bg-emerald-50/50 p-4 dark:border-emerald-900/60 dark:bg-emerald-950/20">
+          <div className="flex items-center justify-between rounded-xl border border-emerald-200/80 bg-emerald-50/50 p-4 dark:border-emerald-900/60 dark:bg-emerald-950/20">
             <div className="flex items-center gap-3">
               <FileSpreadsheet className="h-8 w-8 text-emerald-600 dark:text-emerald-400 shrink-0" />
               <div>
                 <p className="text-xs font-bold text-emerald-950 dark:text-emerald-200">Template Berkas Data Soal</p>
-                <p className="text-[11px] text-emerald-800/80 dark:text-emerald-400/80">Format standar untuk pilihan ganda, esai, dan tingkat kesulitan.</p>
+                <p className="text-xs text-emerald-800/80 dark:text-emerald-400/80">Format standar untuk pilihan ganda, esai, dan tingkat kesulitan.</p>
               </div>
             </div>
             <button
               type="button"
               onClick={handleDownloadTemplate}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-300/80 bg-white px-3.5 py-2 text-xs font-bold text-emerald-700 shadow-xs hover:bg-emerald-50 dark:border-emerald-700 dark:bg-slate-900 dark:text-emerald-300 dark:hover:bg-slate-800 transition-all"
+              className="inline-flex items-center gap-1.5 rounded-lg border-2 border-emerald-300/80 bg-white px-3.5 py-2 text-xs font-bold text-emerald-700 shadow-xs dark:border-emerald-700 dark:bg-emerald-600 dark:text-emerald-300 dark: transition-all text-sm font-medium"
             >
               <Download className="h-3.5 w-3.5" /> Unduh Format
             </button>
@@ -618,9 +589,9 @@ function HarmonizedBatchImportModal({ isOpen, onClose, onImportSuccess, notify }
             onDragOver={handleDrag}
             onDrop={handleDrop}
             onClick={() => fileInputRef.current?.click()}
-            className={`cursor-pointer rounded-2xl border-2 border-dashed p-7 text-center transition-all ${dragActive
-                ? 'border-emerald-500 bg-emerald-50/60 dark:border-emerald-400 dark:bg-emerald-950/30'
-                : 'border-emerald-300/80 bg-slate-50/50 hover:bg-emerald-50/30 dark:border-emerald-800/70 dark:bg-slate-900/40'
+            className={`cursor-pointer rounded-xl border-2 border-dashed p-7 text-center transition-all ${dragActive
+              ? 'border-emerald-500 bg-emerald-50/60 dark:border-emerald-400 dark:bg-emerald-950/30'
+              : 'border-emerald-300/80 bg-slate-50/50 hover:bg-emerald-50/30 dark:border-emerald-800/70 dark:bg-slate-900/40'
               }`}
           >
             <input
@@ -630,19 +601,19 @@ function HarmonizedBatchImportModal({ isOpen, onClose, onImportSuccess, notify }
               onChange={(e) => e.target.files?.[0] && handleProcessFile(e.target.files[0])}
               className="hidden"
             />
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300 mb-3">
+            <div className="mx-auto flex h-9 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300 mb-3">
               <Upload className="h-6 w-6" />
             </div>
             <p className="text-xs font-bold text-slate-800 dark:text-slate-200">
               {selectedFile ? selectedFile.name : 'Tarik & lepas berkas ke sini, atau klik untuk memilih'}
             </p>
-            <p className="text-[11px] text-slate-400 mt-1">Mendukung file .CSV, .XLSX (Maks. 5MB)</p>
+            <p className="text-xs text-slate-400 mt-1">Mendukung file .CSV, .XLSX (Maks. 5MB)</p>
           </div>
 
           {/* Mini Preview Datatable */}
           {previewRows.length > 0 && (
             <div className="space-y-2">
-              <p className="text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+              <p className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
                 Pratinjau Butir Soal (5 Baris Pertama)
               </p>
               <div className="overflow-x-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
@@ -659,7 +630,7 @@ function HarmonizedBatchImportModal({ isOpen, onClose, onImportSuccess, notify }
                   <TableBody className="divide-y divide-emerald-100/70 dark:divide-emerald-900/40">
                     {previewRows.map((r, i) => (
                       <TableRow key={i} className="hover:bg-emerald-50/30">
-                        <TableCell className="py-2 px-3 font-semibold text-slate-500">{i + 1}</TableCell>
+                        <TableCell className="py-2 px-3 font-semibold text-emerald-600">{i + 1}</TableCell>
                         <TableCell className="py-2 px-3 font-mono font-bold text-emerald-700 dark:text-emerald-400">{r.kode_soal || '-'}</TableCell>
                         <TableCell className="py-2 px-3 font-medium text-slate-800 dark:text-slate-100 truncate max-w-[200px]">{r.pertanyaan || '-'}</TableCell>
                         <TableCell className="py-2 px-3 text-slate-600 dark:text-slate-300 uppercase">{r.tipe_soal}</TableCell>
@@ -673,12 +644,12 @@ function HarmonizedBatchImportModal({ isOpen, onClose, onImportSuccess, notify }
           )}
         </div>
 
-        <div className="flex items-center justify-end gap-3 border-t border-slate-100 bg-slate-50/50 p-5 dark:border-slate-800 dark:bg-slate-900/50">
+        <div className="flex items-center justify-end gap-3 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 p-5 dark:border-emerald-800/60 dark:bg-slate-900/50">
           <button
             type="button"
             onClick={onClose}
             disabled={isSubmitting}
-            className="rounded-xl border border-slate-200 px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800 transition-all"
+            className="rounded-xl border border-emerald-200/80 px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:border-emerald-800/60 dark:text-slate-300 dark:hover:bg-slate-800 transition-all"
           >
             Batal
           </button>
@@ -686,7 +657,7 @@ function HarmonizedBatchImportModal({ isOpen, onClose, onImportSuccess, notify }
             type="button"
             onClick={handleSubmit}
             disabled={isSubmitting || !selectedFile}
-            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 via-sky-600 to-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-md shadow-sky-600/30 hover:brightness-105 disabled:opacity-50 transition-all"
+            className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-[#1B2433] px-5 py-2.5 text-xs font-bold shadow-md shadow-sky-600/30 hover:brightness-105 disabled:opacity-50 transition-all border border-emerald-200/80 dark:border-emerald-800/60"
           >
             {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
             <span>{isSubmitting ? 'Memproses Berkas...' : 'Proses Impor Soal'}</span>
@@ -707,18 +678,18 @@ function HarmonizedSaveModal({ isOpen, onClose, onConfirm, isEdit, title, isSubm
         initial={{ opacity: 0, scale: 0.94 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.94 }}
-        className="relative w-full max-w-md overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl shadow-emerald-950/20 dark:border-slate-800 dark:bg-[#1B2433]"
+        className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
       >
         <div
-          className={`h-1.5 w-full bg-gradient-to-r ${isEdit ? 'from-amber-400 via-amber-500 to-orange-600' : 'from-emerald-500 via-teal-400 to-emerald-600'
+          className={`h-1.5 w-full bg-white dark:bg-[#1B2433] ${isEdit ? 'from-amber-400 via-amber-500 to-orange-600' : 'from-emerald-500 via-teal-400 to-emerald-600'
             }`}
         />
         <div className="p-6">
           <div className="flex items-center gap-3.5 mb-4">
             <div
-              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-white shadow-md ${isEdit
-                  ? 'bg-gradient-to-br from-amber-500 to-orange-600 shadow-amber-500/30'
-                  : 'bg-gradient-to-br from-emerald-500 to-teal-600 shadow-emerald-500/30'
+              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-white shadow-md ${isEdit
+                ? 'bg-white dark:bg-[#1B2433] shadow-sm'
+                : 'bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-800/60 dark:text-slate-300 shadow-sm'
                 }`}
             >
               {isEdit ? <Edit3 className="h-6 w-6" /> : <BookOpen className="h-6 w-6" />}
@@ -726,8 +697,8 @@ function HarmonizedSaveModal({ isOpen, onClose, onConfirm, isEdit, title, isSubm
             <div>
               <span
                 className={`inline-block rounded-md px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider ${isEdit
-                    ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300'
-                    : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
+                  ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300'
+                  : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
                   }`}
               >
                 {isEdit ? 'Perbarui Soal' : 'Butir Soal Baru'}
@@ -751,7 +722,7 @@ function HarmonizedSaveModal({ isOpen, onClose, onConfirm, isEdit, title, isSubm
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800 transition-all"
+              className="rounded-xl border border-emerald-200/80 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:border-emerald-800/60 dark:text-slate-300 dark:hover:bg-slate-800 transition-all"
             >
               Batal
             </button>
@@ -760,8 +731,8 @@ function HarmonizedSaveModal({ isOpen, onClose, onConfirm, isEdit, title, isSubm
               onClick={onConfirm}
               disabled={isSubmitting}
               className={`inline-flex items-center gap-1.5 rounded-xl px-5 py-2 text-xs font-bold text-white shadow-md transition-all ${isEdit
-                  ? 'bg-gradient-to-r from-amber-500 via-amber-600 to-orange-600 shadow-amber-600/30 hover:brightness-105'
-                  : 'bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 shadow-emerald-600/30 hover:brightness-105'
+                ? 'bg-white dark:bg-[#1B2433] shadow-sm hover:brightness-105'
+                : 'bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white shadow-sm hover:brightness-105'
                 } disabled:opacity-50`}
             >
               {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
@@ -802,15 +773,14 @@ function HarmonizedBatchExportModal({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
         transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-        className="w-full max-w-lg"
+        className="w-full max-w-xl"
       >
-        <div className="flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border border-amber-200/80 bg-white shadow-2xl shadow-amber-950/20 dark:border-amber-900/50 dark:bg-[#182232]">
-          <div className="h-1.5 w-full bg-gradient-to-r from-amber-400 via-amber-500 to-orange-600 shrink-0" />
+        <div className="flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-2xl border border-amber-200/80 bg-white shadow-2xl shadow-sm dark:border-amber-900/50 dark:bg-[#182232]">
 
-          <div className="flex items-center justify-between border-b border-slate-100 bg-white px-6 py-4.5 dark:border-slate-800 dark:bg-slate-950 shrink-0">
+          <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232] shrink-0">
             <div className="flex items-center gap-3">
-              <div className="rounded-2xl bg-gradient-to-br from-amber-400 via-amber-500 to-orange-600 text-white p-2.5 shadow-md shadow-amber-500/25 border border-amber-300/40 shrink-0">
-                <Download className="h-5 w-5 text-white" strokeWidth={2.2} />
+              <div className="rounded-xl bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-800/60 dark:text-slate-300 p-2.5 shadow-md shadow-sm border border-amber-300/40 shrink-0">
+                <Download className="h-5 w-5 text-emerald-600" strokeWidth={2.2} />
               </div>
               <div>
                 <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
@@ -828,7 +798,7 @@ function HarmonizedBatchExportModal({
               type="button"
               disabled={isExporting}
               onClick={onClose}
-              className="size-9 flex items-center justify-center rounded-2xl bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400 transition-colors cursor-pointer disabled:opacity-50"
+              className="size-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-sky-950/60 dark:text-sky-300 transition-colors cursor-pointer disabled:opacity-50"
             >
               <X className="size-4" />
             </button>
@@ -845,9 +815,9 @@ function HarmonizedBatchExportModal({
                   key={value}
                   type="button"
                   onClick={() => setExportFormat(value)}
-                  className={`rounded-2xl border p-4 text-left transition-all duration-200 cursor-pointer ${exportFormat === value
-                      ? 'border-emerald-500 bg-emerald-50/70 shadow-sm dark:border-emerald-700 dark:bg-emerald-950/40'
-                      : 'border-slate-200 bg-white hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900/40'
+                  className={`rounded-xl border p-4 text-left transition-all duration-200 cursor-pointer ${exportFormat === value
+                    ? 'border-emerald-500 bg-emerald-50/70 shadow-sm dark:border-emerald-700 dark:bg-emerald-950/40'
+                    : 'border-emerald-200/80 bg-white hover:border-emerald-300 dark:border-emerald-800/60 dark:bg-slate-900/40'
                     }`}
                 >
                   <div className="flex items-center gap-2 mb-1.5">
@@ -862,22 +832,22 @@ function HarmonizedBatchExportModal({
               ))}
             </div>
 
-            <div className="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200/80 dark:bg-amber-950/30 dark:border-amber-800/60 text-xs text-amber-900 dark:text-amber-300 leading-relaxed">
+            <div className="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200/80 dark:bg-amber-950/30 dark:border-amber-800/60 text-xs text-amber-900 dark:text-amber-300 leading-relaxed">
               <p className="font-bold flex items-center gap-1.5 mb-0.5">
                 <Sparkles className="size-3.5 text-amber-600 dark:text-amber-400" />
                 Filter Ekspor Aktif
               </p>
-              <p className="text-[11px] text-amber-800/90 dark:text-amber-300/80">
+              <p className="text-xs text-amber-800/90 dark:text-amber-300/80">
                 Data yang diekspor akan mencakup seluruh entitas terfilter ({totalCount} butir {moduleTitle.toLowerCase()}).
               </p>
             </div>
           </div>
 
-          <div className="px-6 py-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-end gap-2.5 bg-slate-50/50 dark:bg-slate-900/40 shrink-0">
+          <div className="px-6 py-4 border-t border-emerald-200/80 dark:border-emerald-800/80 flex items-center justify-end gap-2.5 bg-slate-50/50 dark:bg-slate-900/40 shrink-0">
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex items-center gap-1.5 rounded-2xl border border-slate-200/90 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 transition cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200/90 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs dark:border-emerald-800/60 dark:bg-emerald-600 dark:text-slate-200 transition cursor-pointer text-sm font-medium"
             >
               Batal
             </button>
@@ -885,7 +855,7 @@ function HarmonizedBatchExportModal({
               type="button"
               disabled={isExporting}
               onClick={() => onExport(exportFormat)}
-              className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-amber-500 via-amber-600 to-orange-600 text-white px-5 py-2.5 text-xs font-extrabold shadow-md shadow-amber-500/25 hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200 disabled:opacity-50 cursor-pointer border border-amber-300/40"
+              className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-[#1B2433] px-5 py-2.5 text-xs font-extrabold shadow-md shadow-sm hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200 disabled:opacity-50 cursor-pointer border border-amber-300/40"
             >
               <Download className="size-4" />
               {isExporting ? 'Menyiapkan...' : 'Unduh Berkas'}
@@ -907,12 +877,11 @@ function HarmonizedDeleteModal({ isOpen, onClose, onConfirm, title, isSubmitting
         initial={{ opacity: 0, scale: 0.94 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.94 }}
-        className="relative w-full max-w-md overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl shadow-rose-950/20 dark:border-slate-800 dark:bg-[#1B2433]"
+        className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
       >
-        <div className="h-1.5 w-full bg-gradient-to-r from-rose-500 via-rose-600 to-red-700" />
         <div className="p-6">
           <div className="flex items-center gap-3.5 mb-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 text-white shadow-md shadow-rose-500/30">
+            <div className="flex h-9 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:border-rose-800/60 dark:text-rose-400 shadow-md shadow-sm">
               <Trash2 className="h-6 w-6" />
             </div>
             <div>
@@ -938,7 +907,7 @@ function HarmonizedDeleteModal({ isOpen, onClose, onConfirm, title, isSubmitting
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800 transition-all"
+              className="rounded-xl border border-emerald-200/80 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:border-emerald-800/60 dark:text-slate-300 dark:hover:bg-slate-800 transition-all"
             >
               Batal
             </button>
@@ -946,7 +915,7 @@ function HarmonizedDeleteModal({ isOpen, onClose, onConfirm, title, isSubmitting
               type="button"
               onClick={onConfirm}
               disabled={isSubmitting}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-rose-500 via-rose-600 to-red-700 px-5 py-2 text-xs font-bold text-white shadow-md shadow-rose-600/30 hover:brightness-105 disabled:opacity-50 transition-all"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white px-5 py-2 text-xs font-bold text-white shadow-md shadow-sm hover:brightness-105 disabled:opacity-50 transition-all"
             >
               {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
               <span>{isSubmitting ? 'Menghapus...' : 'Ya, Hapus Butir Soal'}</span>
@@ -1796,7 +1765,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
         )
       default:
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300">
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-800 dark:bg-emerald-950/60 dark:text-emerald-300">
             {tipe}
           </span>
         )
@@ -1806,15 +1775,129 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
   const getKesulitanBadge = (level) => {
     switch (level) {
       case 'mudah':
-        return <span className="px-2 py-0.5 text-[11px] rounded-md bg-teal-100 text-teal-800 dark:bg-teal-950/50 dark:text-teal-300 font-bold">Mudah</span>
+        return <span className="px-2 py-0.5 text-xs rounded-md bg-emerald- text-emerald- dark:bg-emerald-/50 dark:text-emerald- font-bold">Mudah</span>
       case 'sedang':
-        return <span className="px-2 py-0.5 text-[11px] rounded-md bg-amber-100 text-amber-800 dark:bg-amber-950/50 dark:text-amber-300 font-bold">Sedang</span>
+        return <span className="px-2 py-0.5 text-xs rounded-md bg-amber-100 text-amber-800 dark:bg-amber-950/50 dark:text-amber-300 font-bold">Sedang</span>
       case 'sulit':
-        return <span className="px-2 py-0.5 text-[11px] rounded-md bg-rose-100 text-rose-800 dark:bg-rose-950/50 dark:text-rose-300 font-bold">Sulit</span>
+        return <span className="px-2 py-0.5 text-xs rounded-md bg-rose-100 text-rose-800 dark:bg-rose-950/50 dark:text-rose-300 font-bold">Sulit</span>
       default:
-        return <span className="px-2 py-0.5 text-[11px] rounded-md bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300 font-semibold">{level}</span>
+        return <span className="px-2 py-0.5 text-xs rounded-md bg-slate-100 text-slate-800 dark:bg-emerald-950/60 dark:text-emerald-300 font-semibold">{level}</span>
     }
   }
+
+
+  // Memoized mapel options for filters
+  const filterMapelOptions = useMemo(() => {
+    if ((options.subjects || options.mata_pelajaran) && (options.subjects || options.mata_pelajaran).length > 0) {
+      return (options.subjects || options.mata_pelajaran).map((m) => ({
+        value: m.id,
+        label: m.name || m.nama_mapel || m.nama || m.label,
+      }))
+    }
+    return Array.from(
+      new Map(
+        (options.kisi_kisi || [])
+          .filter((k) => k.mata_pelajaran_id || k.mata_pelajaran)
+          .map((k) => {
+            const id = k.mata_pelajaran_id || k.mata_pelajaran?.id || (typeof k.mata_pelajaran === 'string' ? k.mata_pelajaran : k.id)
+            const name = typeof k.mata_pelajaran === 'object' ? (k.mata_pelajaran.name || k.mata_pelajaran.nama) : (k.mata_pelajaran || k.judul_kisi)
+            return [id, { id, name }]
+          })
+      ).values()
+    ).map((m) => ({
+      value: m.id,
+      label: m.name || m.nama_mapel || m.nama || m.label,
+    }))
+  }, [options.subjects, options.mata_pelajaran, options.kisi_kisi])
+
+  // Canonical Columns for Bank Soal
+  const soalColumns = useMemo(() => [
+    {
+      key: 'kode_soal',
+      label: 'Kode & Tipe',
+      width: '16%',
+      render: (item) => (
+        <div>
+          <span className="font-mono text-xs font-extrabold text-emerald-800 dark:text-emerald-400 block mb-1">
+            {item?.kode_soal || 'SOAL-SYS'}
+          </span>
+          <div>{getTipeBadge(item?.tipe_soal)}</div>
+        </div>
+      ),
+    },
+    {
+      key: 'pertanyaan',
+      label: 'Pertanyaan / Butir Soal',
+      render: (item) => (
+        <div>
+          <p className="font-bold text-slate-900 dark:text-white line-clamp-2 leading-relaxed group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
+            {item?.pertanyaan}
+          </p>
+          {item?.indikator && (
+            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1 truncate">
+              Indikator: {item.indikator}
+            </p>
+          )}
+        </div>
+      ),
+    },
+    {
+      key: 'kisi_kisi',
+      label: 'Kisi-kisi & Mapel',
+      width: '18%',
+      render: (item) => (
+        <div>
+          <div className="font-bold text-xs text-slate-800 dark:text-slate-200 truncate max-w-xs flex items-center gap-1.5">
+            <span className="truncate">{item?.kisi_kisi?.judul_kisi || 'Umum'}</span>
+            {item?.kisi_kisi?.kelas && (
+              <span className="inline-flex shrink-0 items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                {item.kisi_kisi.kelas}
+              </span>
+            )}
+          </div>
+          <div className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5 truncate max-w-xs">
+            {getMapelName(item)}
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: 'poin',
+      label: 'Poin & Level',
+      width: '10%',
+      align: 'center',
+      render: (item) => (
+        <div className="space-y-1">
+          <div>{getKesulitanBadge(item?.tingkat_kesulitan)}</div>
+          <span className="text-xs font-black text-emerald-700 dark:text-emerald-400 block tabular-nums">
+            {item?.poin} Poin
+          </span>
+        </div>
+      ),
+    },
+    {
+      key: 'status',
+      label: 'Status',
+      width: '8%',
+      align: 'center',
+      render: (item) => (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            handleToggleStatus(item)
+          }}
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-extrabold transition-all shadow-2xs ${item?.status
+            ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+            : 'bg-slate-100 text-slate-600 dark:bg-sky-950/60 dark:text-sky-300'
+            }`}
+        >
+          <span className={`w-1.5 h-1.5 rounded-full ${item?.status ? 'bg-emerald-500' : 'bg-slate-400'}`} />
+          {item?.status ? 'Aktif' : 'Non-Aktif'}
+        </button>
+      ),
+    },
+  ], [options])
 
   return (
     <PageContainer maxW="7xl">
@@ -1831,40 +1914,15 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
       )}
 
       <div className="lms-bank-soal-page space-y-6 pb-12">
-        {/* Modern Hero Header Card (Vivid Emerald Spec) */}
+        {/* Modern Hero Header Card */}
         {!hidePageHeader && (
-          <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-500/30 bg-gradient-to-r from-emerald-500/15 via-teal-500/10 to-emerald-600/15 p-4 sm:p-6 shadow-md shadow-emerald-500/10 dark:border-emerald-600/40 dark:bg-gradient-to-r dark:from-emerald-950/70 dark:via-teal-950/50 dark:to-slate-900">
-            <div className="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full bg-gradient-to-br from-emerald-500/40 via-teal-400/30 to-transparent blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-20 -left-20 h-56 w-56 rounded-full bg-gradient-to-tr from-teal-500/30 via-emerald-400/20 to-transparent blur-3xl" />
-
-            <div className="relative z-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-start gap-3.5 sm:gap-4 min-w-0">
-                <div className="flex size-11 sm:size-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-xl shadow-emerald-600/40 border border-emerald-300/40 dark:from-emerald-400 dark:via-emerald-500 dark:to-teal-600">
-                  <Layers className="size-5 sm:size-7 text-white" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 px-3 py-0.5 sm:px-3.5 sm:py-1 text-[11px] sm:text-xs font-extrabold text-white shadow-md shadow-emerald-600/30">
-                      <Sparkles className="size-3 text-amber-300 animate-pulse" />
-                      Evaluasi &amp; CBT Terpadu
-                    </span>
-                  </div>
-                  <h1 className="mt-1.5 text-lg sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white">
-                    Bank Soal &amp; Repositori Ujian
-                  </h1>
-                  <p className="mt-0.5 text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300 w-full leading-relaxed">
-                    Kelola repositori butir soal terintegrasi Kisi-kisi Ujian dengan dukungan Pilihan Ganda, Esai, Benar-Salah, dan Menjodohkan.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 shrink-0 self-start sm:self-center">
-                <span className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-300/80 bg-emerald-50/80 px-3 py-1.5 sm:px-3.5 sm:py-2 text-[11px] sm:text-xs font-extrabold text-emerald-800 shadow-xs dark:border-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300">
-                  <CheckSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-emerald-600 dark:text-emerald-400" />
-                  Repositori Soal CBT
-                </span>
-              </div>
-            </div>
+          <div className="mb-6">
+            <HeroUiHeader
+              title="Bank Soal & Repositori Ujian"
+              subtitle="Kelola repositori butir soal terintegrasi Kisi-kisi Ujian dengan dukungan Pilihan Ganda, Esai, Benar-Salah, dan Menjodohkan."
+              badge="Evaluasi & CBT Terpadu"
+              icon={Layers}
+            />
           </div>
         )}
 
@@ -1926,129 +1984,64 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
         {tabNav && <div>{typeof tabNav === 'function' ? tabNav() : tabNav}</div>}
 
         {/* Master Datatable Panel (Canonical Emerald Datatable Container) */}
-        <section
-          className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]"
-          aria-labelledby="banksoal-table-title"
-        >
-          {/* Toolbar Baris 1: Header Judul & 4 Tombol Soft Squircle Action */}
-          <div className="border-b border-emerald-200/90 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent px-4 py-3.5 sm:px-6 md:px-8 dark:border-emerald-800/60">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
-                  <h2 id="banksoal-table-title" className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
-                    Daftar Butir Bank Soal Ujian
-                  </h2>
-                  <span className="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-[11px] font-extrabold text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300">
-                    {pagination.total} Soal
-                  </span>
-                </div>
-                <p className="mt-0.5 text-xs font-medium text-slate-600 dark:text-slate-300">
-                  Repositori butir pertanyaan ujian berbasis kisi-kisi dan kurikulum aktif.
-                </p>
-              </div>
-
-              {/* Segmented Layout Mode Toggle & 4 Soft Squircle Action Buttons */}
-              <div className="flex items-center gap-2 sm:gap-3 shrink-0 self-start sm:self-auto flex-wrap">
-                {/* Layout Mode Segmented Control */}
-                <div className="inline-flex items-center rounded-xl bg-emerald-900/10 dark:bg-emerald-950/60 p-1 border border-emerald-200/80 dark:border-emerald-800/60">
-                  <button
-                    type="button"
-                    onClick={() => setViewLayout('grouped')}
-                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${viewLayout === 'grouped'
-                        ? 'bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-xs'
-                        : 'text-slate-600 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-emerald-300'
-                      }`}
-                    title="Tampilan Grup per Kisi-kisi & Mapel"
-                  >
-                    <Folder className="h-3.5 w-3.5" />
-                    <span>Grup Kisi-kisi</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setViewLayout('flat')}
-                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${viewLayout === 'flat'
-                        ? 'bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-xs'
-                        : 'text-slate-600 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-emerald-300'
-                      }`}
-                    title="Tampilan Tabel Rata Semua Soal"
-                  >
-                    <Table className="h-3.5 w-3.5" />
-                    <span>Semua Soal</span>
-                  </button>
-                </div>
-
-                <div className="hidden sm:block h-6 w-px bg-emerald-200 dark:bg-emerald-800" />
-
-                {/* 4 Soft Squircle Action Buttons */}
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <SquircleActionButton
-                    variant="view"
-                    icon={Printer}
-                    label="Cetak &amp; PDF"
-                    onClick={() => setIsPrintModalOpen(true)}
-                    className="!size-10 !rounded-2xl !bg-gradient-to-br !from-indigo-500 !via-indigo-600 !to-violet-700 !text-white !border-0 hover:!brightness-110 !shadow-sm"
-                  />
-                  <SquircleActionButton
-                    variant="import"
-                    icon={Upload}
-                    label="Import Data"
-                    onClick={() => setImportOpen(true)}
-                    className="!size-10 !rounded-2xl !bg-gradient-to-br !from-sky-400 !via-sky-500 !to-blue-600 !text-white !border-0 hover:!brightness-110 !shadow-sm"
-                  />
-                  <SquircleActionButton
-                    variant="export"
-                    icon={Download}
-                    label="Export Data"
-                    onClick={() => setIsExportModalOpen(true)}
-                    className="!size-10 !rounded-2xl !bg-gradient-to-br !from-amber-400 !via-amber-500 !to-orange-600 !text-white !border-0 hover:!brightness-110 !shadow-sm"
-                  />
-                  <SquircleActionButton
-                    variant="primary"
-                    icon={Plus}
-                    label="Tambah Soal Baru"
-                    onClick={() => handleOpenModal()}
-                    className="!size-10 !rounded-2xl !bg-gradient-to-br !from-emerald-500 !via-emerald-600 !to-teal-700 !text-white !border-0 hover:!brightness-110 !shadow-sm"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Toolbar Baris 2: Field Pencarian Full-Width Debounced */}
-          <div className="border-b border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-4 py-3 sm:px-6 md:px-8 dark:border-emerald-800/60 dark:from-emerald-950/20 dark:via-teal-950/10 dark:to-emerald-950/20">
-            <div className="relative w-full">
-              <Search className="pointer-events-none absolute left-3.5 sm:left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-emerald-600/70 dark:text-emerald-400" />
-              <input
-                type="text"
-                placeholder="Cari butir soal, kode soal, indikator kompetensi..."
-                value={searchInput}
-                onChange={(e) => {
-                  setSearchInput(e.target.value)
-                  setPage(1)
-                }}
-                className="h-10 w-full rounded-xl border border-emerald-300/80 bg-white pl-10 sm:pl-11 pr-10 text-xs font-medium text-slate-800 outline-none transition-all placeholder:text-slate-400 focus:border-[#0E5C44] focus:ring-2 focus:ring-[#0E5C44]/20 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100 shadow-2xs"
-              />
-              {searchInput && (
+        <AppDataTable
+          id="tabel-bank-soal"
+          title="Daftar Butir Bank Soal Ujian"
+          subtitle="Repositori butir pertanyaan ujian berbasis kisi-kisi dan kurikulum aktif."
+          icon={FileQuestion}
+          countLabel={`${pagination.total} Soal`}
+          actions={
+            <div className="flex items-center gap-2 sm:gap-3 shrink-0 self-start sm:self-auto flex-wrap">
+              <div className="inline-flex items-center rounded-xl bg-emerald-900/10 dark:bg-emerald-950/60 p-1 border border-emerald-200/80 dark:border-emerald-800/60">
                 <button
                   type="button"
-                  onClick={() => {
-                    setSearchInput('')
-                    setPage(1)
-                  }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  onClick={() => setViewLayout('grouped')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all ${viewLayout === 'grouped'
+                    ? 'bg-emerald-600 text-white shadow-xs font-black'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40'
+                    }`}
+                  title="Tampilan Grup per Kisi-kisi & Mapel"
                 >
-                  <X className="h-4 w-4" />
+                  <Folder className="h-3.5 w-3.5" />
+                  <span>Grup Kisi-kisi</span>
                 </button>
-              )}
-            </div>
-          </div>
+                <button
+                  type="button"
+                  onClick={() => setViewLayout('flat')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all ${viewLayout === 'flat'
+                    ? 'bg-emerald-600 text-white shadow-xs font-black'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40'
+                    }`}
+                  title="Tampilan Tabel Rata Semua Soal"
+                >
+                  <Table className="h-3.5 w-3.5" />
+                  <span>Semua Soal</span>
+                </button>
+              </div>
 
-          {/* Toolbar Baris 3: Dropdown Filter Horizontal & Reset */}
-          <div className="border-b border-emerald-200/80 bg-gradient-to-r from-emerald-50/60 via-teal-50/30 to-emerald-50/60 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-emerald-950/40 px-4 py-3 sm:px-6 md:px-8">
+              <div className="hidden sm:block h-6 w-px bg-emerald-200 dark:bg-emerald-800" />
+
+              <PageToolbarActions
+                onPrint={() => setIsPrintModalOpen(true)}
+                printLabel="Cetak & PDF"
+                onImport={() => setImportOpen(true)}
+                importLabel="Import Data"
+                onExport={() => setIsExportModalOpen(true)}
+                exportLabel="Export Data"
+                onAdd={() => handleOpenModal()}
+                addLabel="Tambah Soal Baru"
+              />
+            </div>
+          }
+          search={searchInput}
+          onSearchChange={(e) => {
+            setSearchInput(e.target.value)
+            setPage(1)
+          }}
+          searchPlaceholder="Cari butir soal, kode soal, indikator kompetensi..."
+          filters={
             <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3 w-full">
-              {/* Filter Controls Grid / Row */}
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:flex xl:flex-wrap items-center gap-2.5 flex-1 min-w-0">
-                {/* Unit Dropdown (Divisi Pendidikan / Global) atau Locked Unit Badge */}
                 {canSelectUnit ? (
                   <HeroUiFilterSelect
                     value={selectedUnit}
@@ -2068,7 +2061,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                 ) : (
                   <div
                     title="Unit Terkunci: Menampilkan data khusus unit wewenang Anda"
-                    className="inline-flex h-10 items-center justify-between gap-2 rounded-xl border border-emerald-300/80 bg-white/95 dark:bg-emerald-950/60 dark:border-emerald-700/80 px-3.5 text-xs font-bold text-emerald-800 dark:text-emerald-200 shadow-2xs w-full sm:w-auto shrink-0"
+                    className="inline-flex h-9 items-center justify-between gap-2 rounded-xl border-2 border-emerald-300/80 bg-white/95 dark:bg-emerald-950/60 dark:border-emerald-700/80 px-3.5 text-xs font-bold text-emerald-800 dark:text-emerald-200 shadow-2xs w-full sm:w-auto shrink-0"
                   >
                     <div className="flex items-center gap-2 min-w-0">
                       <School className="size-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
@@ -2078,7 +2071,6 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                   </div>
                 )}
 
-                {/* Filter Mata Pelajaran */}
                 <HeroUiFilterSelect
                   value={filters.mata_pelajaran_id || ''}
                   onChange={(val) => {
@@ -2091,27 +2083,10 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                   searchable
                   options={[
                     { value: '', label: 'Semua Mata Pelajaran' },
-                    ...(((options.subjects || options.mata_pelajaran) && (options.subjects || options.mata_pelajaran).length > 0
-                      ? (options.subjects || options.mata_pelajaran)
-                      : Array.from(
-                        new Map(
-                          (options.kisi_kisi || [])
-                            .filter((k) => k.mata_pelajaran_id || k.mata_pelajaran)
-                            .map((k) => {
-                              const id = k.mata_pelajaran_id || k.mata_pelajaran?.id || (typeof k.mata_pelajaran === 'string' ? k.mata_pelajaran : k.id)
-                              const name = typeof k.mata_pelajaran === 'object' ? (k.mata_pelajaran.name || k.mata_pelajaran.nama) : (k.mata_pelajaran || k.judul_kisi)
-                              return [id, { id, name }]
-                            })
-                        ).values()
-                      )
-                    ).map((m) => ({
-                      value: m.id,
-                      label: m.name || m.nama_mapel || m.nama || m.label,
-                    }))),
+                    ...filterMapelOptions,
                   ]}
                 />
 
-                {/* Filter Rombel / Kelas */}
                 <HeroUiFilterSelect
                   value={filters.kelas_id || ''}
                   onChange={(val) => {
@@ -2130,7 +2105,6 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                   ]}
                 />
 
-                {/* Filter Kisi-kisi */}
                 <HeroUiFilterSelect
                   value={filters.kisi_kisi_id || ''}
                   onChange={(val) => {
@@ -2150,7 +2124,6 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                   ]}
                 />
 
-                {/* Filter Tipe Soal */}
                 <HeroUiFilterSelect
                   value={filters.tipe_soal || ''}
                   onChange={(val) => {
@@ -2169,7 +2142,6 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                   ]}
                 />
 
-                {/* Filter Tingkat Kesulitan */}
                 <HeroUiFilterSelect
                   value={filters.tingkat_kesulitan || ''}
                   onChange={(val) => {
@@ -2188,7 +2160,6 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                 />
               </div>
 
-              {/* Reset Filter Button */}
               {((canSelectUnit && selectedUnit) || searchInput || filters.mata_pelajaran_id || filters.kisi_kisi_id || filters.kelas_id || filters.tipe_soal || filters.tingkat_kesulitan) && (
                 <button
                   type="button"
@@ -2198,7 +2169,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                     setFilters({ mata_pelajaran_id: '', kisi_kisi_id: '', kelas_id: '', tipe_soal: '', tingkat_kesulitan: '', status: '' })
                     setPage(1)
                   }}
-                  className="inline-flex h-10 items-center justify-center gap-1.5 rounded-xl border border-rose-300 bg-rose-50/90 hover:bg-rose-100 dark:border-rose-800 dark:bg-rose-950/60 dark:hover:bg-rose-900/80 px-3.5 text-xs font-bold text-rose-700 dark:text-rose-300 transition-all cursor-pointer shrink-0 shadow-2xs hover:scale-102 active:scale-98 self-end xl:self-center"
+                  className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-rose-300 bg-rose-50/90 hover:bg-rose-100 dark:border-rose-800 dark:bg-rose-950/60 dark:hover:bg-rose-900/80 px-3.5 text-xs font-bold text-rose-700 dark:text-rose-300 transition-all cursor-pointer shrink-0 shadow-2xs hover:scale-102 active:scale-98 self-end xl:self-center"
                   title="Reset Semua Filter"
                 >
                   <RotateCcw className="size-3.5 text-rose-600 dark:text-rose-400" />
@@ -2206,176 +2177,61 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                 </button>
               )}
             </div>
-          </div>
-
-          {/* Master Datatable / Grouped View Conditional Body */}
-          {viewLayout === 'flat' ? (
-            <MasterDataTable className="!rounded-none !border-0 !shadow-none">
-              <TableRoot className="w-full text-left text-sm border-collapse">
-                <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90">
-                  <TableRow className="border-b-2 border-emerald-200/90 dark:border-emerald-800/80 bg-transparent text-emerald-950 dark:text-emerald-200 text-xs font-black uppercase tracking-wider">
-                    <TableHead className="hidden sm:table-cell w-[16%] bg-transparent px-4 py-3.5 font-black text-[11px] uppercase tracking-wider">
-                      Kode &amp; Tipe
-                    </TableHead>
-                    <TableHead className="w-auto sm:w-[38%] md:w-[42%] bg-transparent px-3.5 sm:px-6 md:px-8 py-3.5 font-black text-[11px] uppercase tracking-wider">
-                      Pertanyaan / Butir Soal
-                    </TableHead>
-                    <TableHead className="hidden md:table-cell w-[18%] bg-transparent px-3 py-3.5 font-black text-[11px] uppercase tracking-wider">
-                      Kisi-kisi &amp; Mapel
-                    </TableHead>
-                    <TableHead className="hidden sm:table-cell w-[10%] bg-transparent px-3 py-3.5 text-center font-black text-[11px] uppercase tracking-wider">
-                      Poin &amp; Level
-                    </TableHead>
-                    <TableHead className="hidden lg:table-cell w-[8%] bg-transparent px-3 py-3.5 text-center font-black text-[11px] uppercase tracking-wider">
-                      Status
-                    </TableHead>
-                    <TableHead className="w-14 sm:w-[8%] bg-transparent px-2 sm:px-3.5 py-3.5 text-center font-black text-[11px] uppercase tracking-wider">
-                      Aksi
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40 text-sm">
-                  {loading ? (
-                    <TableRow>
-                      <TableCell colSpan={6} className="py-14 text-center text-slate-400">
-                        <RefreshCw className="h-7 w-7 animate-spin mx-auto mb-2 text-[#0E5C44]" />
-                        <p className="text-xs font-semibold">Memuat data butir bank soal...</p>
-                      </TableCell>
-                    </TableRow>
-                  ) : dataList.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={6} className="py-16 text-center text-slate-400">
-                        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 mb-3">
-                          <HelpCircle className="h-7 w-7" />
-                        </div>
-                        <p className="text-sm font-bold text-slate-700 dark:text-slate-200">Belum Ada Butir Soal</p>
-                        <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
-                          Tidak ditemukan butir soal sesuai kata kunci pencarian atau filter yang dipilih.
-                        </p>
-                        <button
-                          type="button"
-                          onClick={() => handleOpenModal()}
-                          className="mt-4 inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-700 px-4 py-2 text-xs font-bold text-white shadow-md shadow-emerald-600/30 hover:brightness-105 transition-all"
-                        >
-                          <Plus className="h-4 w-4" /> Tambah Soal Pertama
-                        </button>
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    dataList.map((item) => (
-                      <TableRow
-                        key={item.id}
-                        onClick={() => {
-                          setRowDetailItem(item)
-                          setShowRowDetailModal(true)
-                        }}
-                        className="hover:bg-emerald-50/40 dark:hover:bg-emerald-950/20 transition-colors cursor-pointer group"
-                      >
-                        {/* Kode & Tipe */}
-                        <TableCell className="hidden sm:table-cell py-3.5 px-4 align-top">
-                          <span className="font-mono text-xs font-extrabold text-emerald-800 dark:text-emerald-400 block mb-1">
-                            {item.kode_soal || 'SOAL-SYS'}
-                          </span>
-                          <div>{getTipeBadge(item.tipe_soal)}</div>
-                        </TableCell>
-
-                        {/* Pertanyaan */}
-                        <TableCell className="py-3.5 px-3.5 sm:px-6 md:px-8 align-top">
-                          <p className="font-bold text-slate-900 dark:text-white line-clamp-2 leading-relaxed group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
-                            {item.pertanyaan}
-                          </p>
-                          {item.indikator && (
-                            <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1 truncate">
-                              Indikator: {item.indikator}
-                            </p>
-                          )}
-
-                          {/* Mobile-only compact metadata row */}
-                          <div className="sm:hidden mt-2 flex flex-wrap items-center gap-1.5 pt-1.5 border-t border-emerald-100/80 dark:border-emerald-900/40">
-                            <span className="font-mono text-[10px] font-extrabold text-emerald-800 dark:text-emerald-400">
-                              {item.kode_soal || 'SOAL-SYS'}
-                            </span>
-                            <span className="text-slate-300 dark:text-slate-600">·</span>
-                            {getTipeBadge(item.tipe_soal)}
-                            <span className="text-slate-300 dark:text-slate-600">·</span>
-                            <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 truncate max-w-[120px]">
-                              {item.kisi_kisi?.judul_kisi || getMapelName(item)}
-                            </span>
-                            <span className="text-slate-300 dark:text-slate-600">·</span>
-                            <span className="text-[10px] font-black text-emerald-700 dark:text-emerald-400">
-                              {item.poin} Poin
-                            </span>
-                          </div>
-                        </TableCell>
-
-                        {/* Kisi-kisi & Mapel */}
-                        <TableCell className="hidden md:table-cell py-3.5 px-3 align-top">
-                          <div className="font-bold text-xs text-slate-800 dark:text-slate-200 truncate max-w-xs flex items-center gap-1.5">
-                            <span className="truncate">{item.kisi_kisi?.judul_kisi || 'Umum'}</span>
-                            {item.kisi_kisi?.kelas && (
-                              <span className="inline-flex shrink-0 items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-teal-100/80 text-teal-800 dark:bg-teal-950 dark:text-teal-300">
-                                {item.kisi_kisi.kelas}
-                              </span>
-                            )}
-                          </div>
-                          <div className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5 truncate max-w-xs">
-                            {getMapelName(item)}
-                          </div>
-                        </TableCell>
-
-                        {/* Poin & Level */}
-                        <TableCell className="hidden sm:table-cell py-3.5 px-3 text-center align-top">
-                          <div className="space-y-1">
-                            <div>{getKesulitanBadge(item.tingkat_kesulitan)}</div>
-                            <span className="text-xs font-black text-emerald-700 dark:text-emerald-400 block tabular-nums">
-                              {item.poin} Poin
-                            </span>
-                          </div>
-                        </TableCell>
-
-                        {/* Status */}
-                        <TableCell className="hidden lg:table-cell py-3.5 px-3 text-center align-top" onClick={(e) => e.stopPropagation()}>
-                          <button
-                            type="button"
-                            onClick={() => handleToggleStatus(item)}
-                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-extrabold transition-all shadow-2xs ${item.status
-                                ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
-                                : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
-                              }`}
-                          >
-                            <span className={`w-1.5 h-1.5 rounded-full ${item.status ? 'bg-emerald-500' : 'bg-slate-400'}`} />
-                            {item.status ? 'Aktif' : 'Non-Aktif'}
-                          </button>
-                        </TableCell>
-
-                        {/* Aksi */}
-                        <TableCell className="py-3.5 px-2 sm:px-3 text-center align-top" onClick={(e) => e.stopPropagation()}>
-                          <ActionDropdown
-                            onView={() => {
-                              setViewingItem(item)
-                              setShowDetailModal(true)
-                            }}
-                            onEdit={() => handleOpenModal(item)}
-                            onDelete={() => handleDeletePrompt(item)}
-                            customActions={[
-                              {
-                                label: 'Duplikasi Butir Soal',
-                                icon: Copy,
-                                onClick: () => handleDuplicate(item.id),
-                              },
-                            ]}
-                          />
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </TableRoot>
-            </MasterDataTable>
-          ) : (
+          }
+          columns={soalColumns}
+          data={dataList}
+          isLoading={loading}
+          page={pagination.currentPage}
+          totalPages={pagination.lastPage}
+          onPageChange={setPage}
+          onRowClick={(item) => {
+            setRowDetailItem(item)
+            setShowRowDetailModal(true)
+          }}
+          onView={(item) => {
+            setViewingItem(item)
+            setShowDetailModal(true)
+          }}
+          onEdit={(item) => handleOpenModal(item)}
+          onDelete={(item) => handleDeletePrompt(item)}
+          extraItems={(item) => [
+            {
+              label: 'Duplikasi Butir Soal',
+              icon: Copy,
+              onClick: () => handleDuplicate(item?.id),
+            },
+          ]}
+          renderMobileCard={(item) => (
+            <MobileDataCard
+              key={item?.id}
+              title={item?.pertanyaan || 'Pertanyaan'}
+              subtitle={`${item?.kode_soal || 'SOAL-SYS'} • ${getMapelName(item)}`}
+              badge={item?.tipe_soal?.toUpperCase()}
+              badgeVariant={item?.status ? 'success' : 'neutral'}
+              fields={[
+                { label: 'Kisi-kisi', value: item?.kisi_kisi?.judul_kisi || 'Umum', icon: FileText },
+                { label: 'Poin', value: `${item?.poin || 0} Poin`, icon: Sparkles },
+                { label: 'Level', value: item?.tingkat_kesulitan || '-', icon: Layers },
+              ]}
+              onView={() => {
+                setViewingItem(item)
+                setShowDetailModal(true)
+              }}
+              onEdit={() => handleOpenModal(item)}
+              onDelete={() => handleDeletePrompt(item)}
+              extraActions={[
+                {
+                  label: 'Duplikasi Soal',
+                  icon: Copy,
+                  onClick: () => handleDuplicate(item?.id),
+                },
+              ]}
+            />
+          )}
+          renderTable={viewLayout === 'grouped' ? () => (
             <div className="p-4 sm:p-6 space-y-4">
               {/* Group View Top Summary Bar */}
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-gradient-to-r from-emerald-50/70 via-teal-50/40 to-emerald-50/70 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-emerald-950/40 rounded-2xl p-3 sm:px-4 border border-emerald-200/80 dark:border-emerald-800/60">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white dark:bg-[#1B2433] dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-emerald-950/40 rounded-xl p-3 sm:px-4 border border-emerald-200/80 dark:border-emerald-800/60">
                 <div className="flex items-center gap-2 flex-wrap">
                   <div className="flex size-7 items-center justify-center rounded-lg bg-emerald-600 text-white font-black text-xs shadow-2xs">
                     <Folder className="h-4 w-4" />
@@ -2383,7 +2239,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                   <span className="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-slate-100">
                     Paket Soal per Kisi-kisi &amp; Mapel
                   </span>
-                  <span className="rounded-full bg-emerald-200/70 dark:bg-emerald-900/60 px-2 py-0.5 text-[11px] font-black text-emerald-800 dark:text-emerald-300">
+                  <span className="rounded-full bg-emerald-200/70 dark:bg-emerald-900/60 px-2 py-0.5 text-xs font-black text-emerald-800 dark:text-emerald-300">
                     {groupedData.length} Paket
                   </span>
                 </div>
@@ -2414,8 +2270,8 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                   <p className="text-xs font-semibold">Memuat paket kisi-kisi dan butir soal...</p>
                 </div>
               ) : groupedData.length === 0 ? (
-                <div className="py-16 text-center text-slate-400 rounded-2xl border-2 border-dashed border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/20 dark:bg-emerald-950/10">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 mb-3">
+                <div className="py-16 text-center text-slate-400 rounded-xl border-2 border-dashed border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/20 dark:bg-emerald-950/10">
+                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 mb-3">
                     <HelpCircle className="h-7 w-7" />
                   </div>
                   <p className="text-sm font-bold text-slate-700 dark:text-slate-200">Belum Ada Paket Kisi-kisi &amp; Soal</p>
@@ -2425,7 +2281,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                   <button
                     type="button"
                     onClick={() => handleOpenModal()}
-                    className="mt-4 inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-700 px-4 py-2 text-xs font-bold text-white shadow-md shadow-emerald-600/30 hover:brightness-105 transition-all"
+                    className="mt-4 inline-flex items-center gap-1.5 rounded-xl bg-white dark:bg-[#1B2433] px-4 py-2 text-xs font-bold shadow-md shadow-sm hover:brightness-105 transition-all border border-emerald-200/80 dark:border-emerald-800/60"
                   >
                     <Plus className="h-4 w-4" /> Tambah Soal Baru
                   </button>
@@ -2443,17 +2299,17 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                   return (
                     <div
                       key={groupKey}
-                      className="rounded-2xl border-2 border-emerald-200/90 dark:border-emerald-800/70 bg-white dark:bg-[#1B2433] shadow-xs overflow-hidden transition-all"
+                      className="rounded-xl border-2 border-emerald-200/90 dark:border-emerald-800/70 bg-white dark:bg-[#1B2433] shadow-xs overflow-hidden transition-all"
                     >
                       {/* Accordion Group Header */}
                       <div
                         onClick={() => toggleGroup(groupKey)}
-                        className="cursor-pointer select-none bg-gradient-to-r from-emerald-50/70 via-teal-50/30 to-transparent dark:from-emerald-950/50 dark:via-teal-950/20 dark:to-transparent px-4 py-3.5 sm:px-5 border-b border-emerald-200/70 dark:border-emerald-800/60 hover:bg-emerald-50/90 dark:hover:bg-emerald-950/70 transition-colors"
+                        className="cursor-pointer select-none bg-white dark:bg-[#1B2433] dark:from-emerald-950/50 dark:via-teal-950/20 dark:to-transparent px-4 py-3.5 sm:px-5 border-b border-emerald-200/70 dark:border-emerald-800/60 hover:bg-emerald-50/90 dark:hover:bg-emerald-950/70 transition-colors"
                       >
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                           {/* Left Group Info */}
                           <div className="flex items-start gap-3 min-w-0">
-                            <div className="size-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center shrink-0 shadow-2xs mt-0.5 sm:mt-0">
+                            <div className="size-9 rounded-xl bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-800/60 dark:text-slate-300 flex items-center justify-center shrink-0 shadow-2xs mt-0.5 sm:mt-0">
                               <Folder className="h-4.5 w-4.5" />
                             </div>
                             <div className="min-w-0">
@@ -2462,7 +2318,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                                   {group.judul_kisi}
                                 </h3>
                                 {group.kelas && (
-                                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-teal-100 text-teal-800 dark:bg-teal-950 dark:text-teal-300">
+                                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald- text-emerald- dark:bg-emerald- dark:text-emerald-">
                                     {group.kelas}
                                   </span>
                                 )}
@@ -2493,7 +2349,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                           <div className="flex items-center gap-2.5 sm:gap-4 shrink-0 justify-between sm:justify-end border-t sm:border-t-0 pt-2 sm:pt-0 border-emerald-100 dark:border-emerald-900/40">
                             {hasTarget && (
                               <div className="flex flex-col gap-1 min-w-[120px] max-w-[150px]">
-                                <div className="flex items-center justify-between text-[11px] font-extrabold">
+                                <div className="flex items-center justify-between text-xs font-extrabold">
                                   <span className={isComplete ? 'text-emerald-700 dark:text-emerald-400' : 'text-amber-700 dark:text-amber-400'}>
                                     {group.items.length}/{group.target_jumlah_soal} Soal
                                   </span>
@@ -2504,8 +2360,8 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                                 <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                                   <div
                                     className={`h-full rounded-full transition-all ${isComplete
-                                        ? 'bg-gradient-to-r from-emerald-500 to-teal-500'
-                                        : 'bg-gradient-to-r from-amber-400 to-emerald-500'
+                                      ? 'bg-white dark:bg-[#1B2433]'
+                                      : 'bg-white dark:bg-[#1B2433]'
                                       }`}
                                     style={{ width: `${percent}%` }}
                                   />
@@ -2523,7 +2379,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                                   mata_pelajaran_id: group.mata_pelajaran_id,
                                 })
                               }}
-                              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-700 px-3 py-1.5 text-xs font-bold text-white shadow-xs hover:brightness-105 transition-all"
+                              className="inline-flex items-center gap-1.5 rounded-xl bg-white dark:bg-[#1B2433] px-3 py-1.5 text-xs font-bold shadow-xs hover:brightness-105 transition-all border border-emerald-200/80 dark:border-emerald-800/60"
                               title={`Tambah Soal Baru ke ${group.judul_kisi}`}
                             >
                               <Plus className="h-3.5 w-3.5" />
@@ -2551,13 +2407,13 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                         <div>
                           {group.items.length === 0 ? (
                             <div className="p-8 text-center bg-emerald-50/20 dark:bg-emerald-950/10">
-                              <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-100/70 dark:bg-emerald-900/40 text-emerald-700 mb-2">
+                              <div className="mx-auto flex h-9 w-11 items-center justify-center rounded-xl bg-emerald-100/70 dark:bg-emerald-900/40 text-emerald-700 mb-2">
                                 <FileText className="h-5 w-5" />
                               </div>
                               <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
                                 Belum Ada Butir Soal di Paket Ini
                               </p>
-                              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                                 Mulai buat butir soal pertama untuk {group.judul_kisi} {hasTarget ? `(target ${group.target_jumlah_soal} soal)` : ''}.
                               </p>
                               <button
@@ -2568,7 +2424,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                                     mata_pelajaran_id: group.mata_pelajaran_id,
                                   })
                                 }
-                                className="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-700 px-3.5 py-1.5 text-xs font-bold text-white shadow-xs hover:brightness-105 transition-all"
+                                className="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-white dark:bg-[#1B2433] px-3.5 py-1.5 text-xs font-bold shadow-xs hover:brightness-105 transition-all border border-emerald-200/80 dark:border-emerald-800/60"
                               >
                                 <Plus className="h-3.5 w-3.5" /> Buat Butir Soal Pertama
                               </button>
@@ -2576,13 +2432,13 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                           ) : (
                             <div className="overflow-x-auto">
                               <TableRoot className="w-full text-left text-sm border-collapse">
-                                <TableHeader className="bg-emerald-100/60 dark:bg-emerald-950/60 border-b border-emerald-200/80 dark:border-emerald-800/60">
+                                <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
                                   <TableRow className="text-emerald-950 dark:text-emerald-200 text-xs font-black uppercase tracking-wider">
-                                    <TableHead className="w-[16%] px-4 py-2.5 text-[11px]">Kode &amp; Tipe</TableHead>
-                                    <TableHead className="w-auto px-4 py-2.5 text-[11px]">Pertanyaan / Butir Soal</TableHead>
-                                    <TableHead className="hidden sm:table-cell w-[14%] px-3 py-2.5 text-center text-[11px]">Poin &amp; Level</TableHead>
-                                    <TableHead className="hidden md:table-cell w-[10%] px-3 py-2.5 text-center text-[11px]">Status</TableHead>
-                                    <TableHead className="w-14 sm:w-[8%] px-3 py-2.5 text-center text-[11px]">Aksi</TableHead>
+                                    <TableHead className="w-[18%] px-4 py-2.5 text-xs">Kode & Tipe</TableHead>
+                                    <TableHead className="w-auto px-4 py-2.5 text-xs">Pertanyaan / Butir Soal</TableHead>
+                                    <TableHead className="hidden sm:table-cell w-[14%] px-3 py-2.5 text-center text-xs">Poin & Level</TableHead>
+                                    <TableHead className="hidden md:table-cell w-[10%] px-3 py-2.5 text-center text-xs">Status</TableHead>
+                                    <TableHead className="w-16 px-3 py-2.5 text-right select-none"></TableHead>
                                   </TableRow>
                                 </TableHeader>
                                 <TableBody className="divide-y divide-emerald-100/70 dark:divide-emerald-900/40 text-sm">
@@ -2598,7 +2454,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                                       {/* Kode & Tipe */}
                                       <TableCell className="py-3 px-4 align-top">
                                         <div className="flex items-center gap-1.5">
-                                          <span className="text-[11px] font-black text-slate-400 dark:text-slate-500 w-5">
+                                          <span className="text-xs font-black text-slate-400 dark:text-slate-500 w-5">
                                             #{itemIdx + 1}
                                           </span>
                                           <span className="font-mono text-xs font-extrabold text-emerald-800 dark:text-emerald-400">
@@ -2614,7 +2470,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                                           {item.pertanyaan}
                                         </p>
                                         {item.indikator && (
-                                          <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+                                          <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5 truncate">
                                             Indikator: {item.indikator}
                                           </p>
                                         )}
@@ -2638,9 +2494,9 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                                         <button
                                           type="button"
                                           onClick={() => handleToggleStatus(item)}
-                                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-extrabold transition-all shadow-2xs ${item.status
-                                              ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
-                                              : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
+                                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-extrabold transition-all shadow-2xs ${item.status
+                                            ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+                                            : 'bg-slate-100 text-slate-600 dark:bg-sky-950/60 dark:text-sky-300'
                                             }`}
                                         >
                                           <span className={`w-1.5 h-1.5 rounded-full ${item.status ? 'bg-emerald-500' : 'bg-slate-400'}`} />
@@ -2675,8 +2531,8 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                               </TableRoot>
 
                               {/* Footer of Kisi-kisi card */}
-                              <div className="bg-gradient-to-r from-emerald-50/40 via-white to-emerald-50/40 dark:bg-slate-900/50 p-2.5 px-4 border-t border-emerald-100 dark:border-emerald-900/40 flex items-center justify-between">
-                                <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                              <div className="bg-white dark:bg-[#1B2433] dark:bg-slate-900/50 p-2.5 px-4 border-t border-emerald-100 dark:border-emerald-900/40 flex items-center justify-between">
+                                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
                                   Menampilkan {group.items.length} butir pertanyaan
                                 </span>
                                 <button
@@ -2702,59 +2558,9 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                 })
               )}
             </div>
-          )}
 
-          {/* Pagination Toolbar Squircle Icon-Only */}
-          <div className="border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/40 via-white to-emerald-50/40 p-3.5 sm:px-6 md:px-8 py-3 sm:py-3.5 dark:border-emerald-800/60 dark:bg-[#1B2433] flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap text-xs font-medium text-slate-500 dark:text-slate-400">
-              <span>Menampilkan Halaman</span>
-              <span className="font-extrabold text-slate-800 dark:text-slate-200">{pagination.currentPage}</span>
-              <span>dari</span>
-              <span className="font-extrabold text-slate-800 dark:text-slate-200">{pagination.lastPage || 1}</span>
-              <span className="text-slate-300 dark:text-slate-700">|</span>
-              <span>Total</span>
-              <span className="font-extrabold text-emerald-700 dark:text-emerald-400">{pagination.total} Soal</span>
-            </div>
-
-            <div className="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-3 w-full sm:w-auto">
-              <HeroUiFilterSelect
-                value={perPage}
-                onChange={(val) => {
-                  setPerPage(Number(val))
-                  setPage(1)
-                }}
-                className="w-auto"
-                popoverWidth="min-w-[120px]"
-                options={[
-                  { value: 10, label: '10 Baris' },
-                  { value: 25, label: '25 Baris' },
-                  { value: 50, label: '50 Baris' },
-                ]}
-              />
-
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  disabled={page <= 1}
-                  onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-                  className="flex size-9 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-xs hover:bg-emerald-700 disabled:opacity-40 disabled:hover:bg-emerald-600 transition-all"
-                  aria-label="Halaman Sebelumnya"
-                >
-                  <ChevronLeft className="size-5 text-white" />
-                </button>
-                <button
-                  type="button"
-                  disabled={page >= pagination.lastPage}
-                  onClick={() => setPage((prev) => Math.min(prev + 1, pagination.lastPage))}
-                  className="flex size-9 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-xs hover:bg-emerald-700 disabled:opacity-40 disabled:hover:bg-emerald-600 transition-all"
-                  aria-label="Halaman Berikutnya"
-                >
-                  <ChevronRight className="size-5 text-white" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
+          ) : undefined}
+        />
 
         {/* Print & PDF Modal */}
         <PrintOptionModal
@@ -2835,14 +2641,13 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
             onClick={() => setShowRowDetailModal(false)}
           >
             <div
-              className="bg-white dark:bg-[#1B2433] rounded-3xl w-full max-w-lg shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden"
+              className="bg-white dark:bg-[#182232] rounded-3xl w-full max-w-lg shadow-2xl shadow-emerald-950/20 border-2 border-emerald-300 dark:border-emerald-700/80 dark:border-emerald-800/60 overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600" />
               {/* Header */}
-              <div className="flex items-start justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+              <div className="flex items-start justify-between px-6 py-4 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50">
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5 shadow-xs">
+                  <div className="w-10 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5 shadow-xs">
                     <HelpCircle className="w-5 h-5" />
                   </div>
                   <div>
@@ -2865,7 +2670,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                 <div className="flex flex-wrap gap-2">
                   {getTipeBadge(rowDetailItem.tipe_soal)}
                   {getKesulitanBadge(rowDetailItem.tingkat_kesulitan)}
-                  <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold ${rowDetailItem.status ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700'
+                  <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold ${rowDetailItem.status ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800' : 'bg-slate-100 text-slate-600 dark:bg-sky-950/60 dark:text-sky-300 border border-emerald-200/80 dark:border-emerald-800/60'
                     }`}>
                     <span className={`w-1.5 h-1.5 rounded-full ${rowDetailItem.status ? 'bg-emerald-500' : 'bg-slate-400'}`} />
                     {rowDetailItem.status ? 'Aktif' : 'Non-Aktif'}
@@ -2873,16 +2678,16 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                 </div>
 
                 <div className="grid grid-cols-2 gap-2.5">
-                  <div className="bg-emerald-50/80 dark:bg-emerald-950/30 rounded-2xl p-3 border border-emerald-100 dark:border-emerald-900/40">
+                  <div className="bg-emerald-50/80 dark:bg-emerald-950/30 rounded-xl p-3 border border-emerald-100 dark:border-emerald-900/40">
                     <p className="text-[10px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">Poin Bobot</p>
                     <p className="text-base font-black text-emerald-800 dark:text-emerald-300 mt-0.5 tabular-nums">{rowDetailItem.poin} Poin</p>
                   </div>
-                  <div className="bg-slate-50 dark:bg-slate-900/60 rounded-2xl p-3 border border-slate-200 dark:border-slate-800">
+                  <div className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-3 border border-emerald-200/80 dark:border-emerald-800/60">
                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-wider">Kisi-kisi Ujian</p>
                     <p className="text-xs font-bold text-slate-800 dark:text-white mt-0.5 line-clamp-1">{rowDetailItem.kisi_kisi?.judul_kisi || 'Umum'}</p>
                   </div>
                   {rowDetailItem.kunci_jawaban && (
-                    <div className="bg-blue-50/80 dark:bg-blue-950/30 rounded-2xl p-3 col-span-2 border border-blue-100 dark:border-blue-900/40">
+                    <div className="bg-blue-50/80 dark:bg-blue-950/30 rounded-xl p-3 col-span-2 border border-blue-100 dark:border-blue-900/40">
                       <p className="text-[10px] font-black text-blue-700 dark:text-blue-400 uppercase tracking-wider">Kunci Jawaban</p>
                       <p className="text-xs font-bold text-blue-900 dark:text-blue-200 mt-0.5">{rowDetailItem.kunci_jawaban}</p>
                     </div>
@@ -2890,14 +2695,14 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                 </div>
 
                 {rowDetailItem.indikator && (
-                  <div className="bg-slate-50 dark:bg-slate-900/60 rounded-2xl p-3 border border-slate-200 dark:border-slate-800">
+                  <div className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-3 border border-emerald-200/80 dark:border-emerald-800/60">
                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-wider mb-1">Indikator Soal</p>
                     <p className="text-xs font-medium text-slate-700 dark:text-slate-300 leading-relaxed">{rowDetailItem.indikator}</p>
                   </div>
                 )}
 
                 {rowDetailItem.pembahasan && (
-                  <div className="bg-purple-50/80 dark:bg-purple-950/30 rounded-2xl p-3 border border-purple-100 dark:border-purple-900/40">
+                  <div className="bg-purple-50/80 dark:bg-purple-950/30 rounded-xl p-3 border border-purple-100 dark:border-purple-900/40">
                     <p className="text-[10px] font-black text-purple-700 dark:text-purple-400 uppercase tracking-wider mb-1">Pembahasan &amp; Keterangan</p>
                     <p className="text-xs font-medium text-slate-700 dark:text-slate-300 leading-relaxed line-clamp-4">{rowDetailItem.pembahasan}</p>
                   </div>
@@ -2905,10 +2710,10 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
               </div>
 
               {/* Footer Actions */}
-              <div className="px-6 py-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3 bg-slate-50/50 dark:bg-slate-900/40">
+              <div className="px-6 py-4 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between gap-3 bg-slate-50/50 dark:bg-slate-900/40">
                 <button
                   onClick={() => setShowRowDetailModal(false)}
-                  className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="px-4 py-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                 >
                   Tutup
                 </button>
@@ -2928,7 +2733,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                       setShowRowDetailModal(false)
                       handleOpenModal(rowDetailItem)
                     }}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-700 text-white text-xs font-bold shadow-md hover:brightness-105 transition-all"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white dark:bg-[#1B2433] text-xs font-bold shadow-md hover:brightness-105 transition-all border border-emerald-200/80 dark:border-emerald-800/60"
                   >
                     <Edit3 className="w-3.5 h-3.5" />
                     Edit Soal
@@ -2947,12 +2752,11 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.96 }}
-              className="bg-white dark:bg-[#1B2433] rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col"
+              className="bg-white dark:bg-[#1B2433] rounded-xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 flex flex-col"
             >
-              <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
-              <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-white dark:bg-[#1B2433] shrink-0">
+              <div className="px-6 py-4 border-b border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between bg-white dark:bg-[#1B2433] shrink-0">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-md shadow-emerald-500/20 shrink-0">
+                  <div className="flex h-9 w-10 items-center justify-center rounded-xl bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-800/60 dark:text-slate-300 shadow-md shadow-sm shrink-0">
                     {editingItem ? <Edit3 className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
                   </div>
                   <div>
@@ -2974,9 +2778,9 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
 
               <form onSubmit={handleTriggerSave} className="p-6 space-y-5 flex-1 overflow-y-auto overflow-x-hidden">
                 {/* Active Question Step Indicator (Multi-question builder header) */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-gradient-to-r from-emerald-500/15 via-teal-500/10 to-emerald-500/5 border border-emerald-300/80 dark:border-emerald-700/60 rounded-2xl shadow-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-white dark:bg-[#1B2433] border-2 border-emerald-300/80 dark:border-emerald-700/60 rounded-xl shadow-xs">
                   <div className="flex items-center gap-3">
-                    <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600 to-teal-700 text-white font-black text-sm shadow-md shadow-emerald-700/20">
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] font-black text-sm shadow-md shadow-sm border border-emerald-200/80 dark:border-emerald-800/60">
                       #{editingModalQuestionId ? (modalSessionQuestions.findIndex((q) => q.id === editingModalQuestionId) + 1 || '?') : (modalSessionQuestions.length + 1)}
                     </div>
                     <div>
@@ -2988,7 +2792,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                           {formData.tipe_soal.toUpperCase()}
                         </span>
                       </div>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                      <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
                         {modalSessionQuestions.length > 0
                           ? `${modalSessionQuestions.length} soal telah tersimpan di kisi-kisi ini. Klik "Simpan & Tambah Soal #${modalSessionQuestions.length + 2}" setelah butir ini selesai.`
                           : 'Mulai buat butir soal pertama untuk kisi-kisi ini, lalu lanjutkan ke soal kedua dan seterusnya.'}
@@ -3001,13 +2805,13 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                       <button
                         type="button"
                         onClick={() => resetSingleQuestionForm(modalSessionQuestions.length + 1)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 transition shadow-xs cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 transition shadow-xs cursor-pointer"
                       >
                         <Plus className="w-3.5 h-3.5 text-emerald-600" />
                         <span>Batal &amp; Tambah Soal Baru</span>
                       </button>
                     ) : (
-                      <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-400 bg-white/80 dark:bg-slate-900/80 px-3 py-1 rounded-xl border border-emerald-200/60 shadow-2xs">
+                      <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400 bg-white/80 dark:bg-slate-900/80 px-3 py-1 rounded-xl border border-emerald-200/60 shadow-2xs">
                         {modalSessionQuestions.length} Soal Tersimpan
                       </span>
                     )}
@@ -3016,7 +2820,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
 
                 {/* Notification Banner when in Edit Mode */}
                 {editingModalQuestionId && (
-                  <div className="p-3 bg-amber-50 border border-amber-200 dark:bg-amber-950/40 dark:border-amber-800 rounded-2xl flex items-center justify-between text-xs text-amber-800 dark:text-amber-300 font-bold">
+                  <div className="p-3 bg-amber-50 border border-amber-200 dark:bg-amber-950/40 dark:border-amber-800 rounded-xl flex items-center justify-between text-xs text-amber-800 dark:text-amber-300 font-bold">
                     <span>Anda sedang mengubah butir pertanyaan terpilih dari tabel di bawah.</span>
                     <button
                       type="button"
@@ -3055,7 +2859,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                       placeholder="Contoh: PPKN-001 / SOAL-01"
                       value={formData.kode_soal}
                       onChange={(e) => setFormData((prev) => ({ ...prev, kode_soal: e.target.value }))}
-                      className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-xl border border-emerald-200/90 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-[#0E5C44] focus:ring-4 focus:ring-[#0E5C44]/12 outline-none"
+                      className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 focus:border-[#0E5C44] focus:ring-4 focus:ring-[#0E5C44]/12 outline-none"
                     />
                   </div>
                 </div>
@@ -3079,9 +2883,9 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                           key={t.id}
                           type="button"
                           onClick={() => handleTypeChange(t.id)}
-                          className={`flex items-center gap-2 p-3 rounded-2xl border text-left text-xs font-bold transition-all ${isSelected
-                              ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 ring-2 ring-emerald-500'
-                              : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50'
+                          className={`flex items-center gap-2 p-3 rounded-xl border text-left text-xs font-bold transition-all ${isSelected
+                            ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 ring-2 ring-emerald-500'
+                            : 'border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50'
                             }`}
                         >
                           <IconComp className="w-4 h-4 shrink-0" />
@@ -3102,7 +2906,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                     placeholder="Tuliskan butir soal atau instruksi pertanyaan di sini..."
                     value={formData.pertanyaan}
                     onChange={(e) => setFormData((prev) => ({ ...prev, pertanyaan: e.target.value }))}
-                    className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-xl border border-emerald-200/90 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-[#0E5C44] focus:ring-4 focus:ring-[#0E5C44]/12 outline-none leading-relaxed"
+                    className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 focus:border-[#0E5C44] focus:ring-4 focus:ring-[#0E5C44]/12 outline-none leading-relaxed"
                     required
                   />
                 </div>
@@ -3110,7 +2914,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                 {/* DYNAMIC FORM SECTION BASED ON TIPE_SOAL */}
                 {/* 1. PILIHAN GANDA */}
                 {formData.tipe_soal === 'pg' && (
-                  <div className="bg-emerald-50/60 dark:bg-emerald-950/20 p-4.5 rounded-2xl border border-emerald-200/80 dark:border-emerald-900/50 space-y-3">
+                  <div className="bg-emerald-50/60 dark:bg-emerald-950/20 p-4.5 rounded-xl border border-emerald-200/80 dark:border-emerald-900/50 space-y-3">
                     <h4 className="text-xs font-black text-[#0E5C44] dark:text-emerald-300 uppercase tracking-wider">
                       Opsi Jawaban &amp; Kunci Pilihan Ganda
                     </h4>
@@ -3130,8 +2934,8 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                             />
                             <span
                               className={`w-6 h-6 rounded-full font-black text-xs flex items-center justify-center ${isCorrect
-                                  ? 'bg-[#0E5C44] text-white'
-                                  : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
+                                ? 'bg-[#0E5C44] text-white'
+                                : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
                                 }`}
                             >
                               {optKey.toUpperCase()}
@@ -3142,12 +2946,12 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                             placeholder={`Teks Pilihan ${optKey.toUpperCase()}`}
                             value={formData[fieldKey]}
                             onChange={(e) => setFormData((prev) => ({ ...prev, [fieldKey]: e.target.value }))}
-                            className="w-full px-3 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 outline-none focus:border-[#0E5C44]"
+                            className="w-full px-3 py-2 text-xs font-semibold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 outline-none focus:border-[#0E5C44]"
                           />
                         </div>
                       )
                     })}
-                    <p className="text-[11px] text-slate-500 italic mt-1 font-medium">
+                    <p className="text-xs text-slate-500 italic mt-1 font-medium">
                       * Tandai radio button pada opsi yang menjadi kunci jawaban benar.
                     </p>
                   </div>
@@ -3155,7 +2959,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
 
                 {/* 2. ESSAY */}
                 {formData.tipe_soal === 'esai' && (
-                  <div className="bg-purple-50/60 dark:bg-purple-950/20 p-4.5 rounded-2xl border border-purple-200/80 dark:border-purple-900/50 space-y-2">
+                  <div className="bg-purple-50/60 dark:bg-purple-950/20 p-4.5 rounded-xl border border-purple-200/80 dark:border-purple-900/50 space-y-2">
                     <h4 className="text-xs font-black text-purple-800 dark:text-purple-300 uppercase tracking-wider">
                       Kunci Jawaban / Rubrik Penskoran Essay
                     </h4>
@@ -3164,14 +2968,14 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                       placeholder="Tuliskan kata kunci acuan, poin penting, atau kriteria penilaian..."
                       value={formData.kunci_jawaban}
                       onChange={(e) => setFormData((prev) => ({ ...prev, kunci_jawaban: e.target.value }))}
-                      className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 outline-none focus:border-purple-500 leading-relaxed"
+                      className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 outline-none focus:border-purple-500 leading-relaxed"
                     />
                   </div>
                 )}
 
                 {/* 3. BENAR SALAH */}
                 {formData.tipe_soal === 'benar_salah' && (
-                  <div className="bg-blue-50/60 dark:bg-blue-950/20 p-4.5 rounded-2xl border border-blue-200/80 dark:border-blue-900/50 space-y-3">
+                  <div className="bg-blue-50/60 dark:bg-blue-950/20 p-4.5 rounded-xl border border-blue-200/80 dark:border-blue-900/50 space-y-3">
                     <h4 className="text-xs font-black text-blue-800 dark:text-blue-300 uppercase tracking-wider">
                       Pernyataan Kunci Jawaban
                     </h4>
@@ -3179,9 +2983,9 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                       {['Benar', 'Salah'].map((val) => (
                         <label
                           key={val}
-                          className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-2xl border cursor-pointer font-black text-xs transition-all ${formData.kunci_jawaban === val
-                              ? 'bg-emerald-600 text-white border-emerald-600 shadow-md shadow-emerald-600/20'
-                              : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700'
+                          className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-xl border cursor-pointer font-black text-xs transition-all ${formData.kunci_jawaban === val
+                            ? 'bg-emerald-600 text-white border-emerald-600 shadow-md shadow-sm'
+                            : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-emerald-200/80 dark:border-emerald-800/60'
                             }`}
                         >
                           <input
@@ -3201,7 +3005,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
 
                 {/* 4. MENJODOHKAN */}
                 {formData.tipe_soal === 'menjodohkan' && (
-                  <div className="bg-amber-50/60 dark:bg-amber-950/20 p-4.5 rounded-2xl border border-amber-200/80 dark:border-amber-900/50 space-y-3">
+                  <div className="bg-amber-50/60 dark:bg-amber-950/20 p-4.5 rounded-xl border border-amber-200/80 dark:border-amber-900/50 space-y-3">
                     <div className="flex items-center justify-between">
                       <h4 className="text-xs font-black text-amber-800 dark:text-amber-300 uppercase tracking-wider">
                         Daftar Pasangan Menjodohkan
@@ -3216,14 +3020,14 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                     </div>
 
                     {matchingPairs.map((pair, idx) => (
-                      <div key={idx} className="flex items-center gap-2 bg-white dark:bg-slate-900 p-2.5 rounded-2xl border border-slate-200 dark:border-slate-700">
+                      <div key={idx} className="flex items-center gap-2 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
                         <span className="text-xs font-black text-amber-700 dark:text-amber-400 w-6 text-center">{idx + 1}.</span>
                         <input
                           type="text"
                           placeholder="Pernyataan / Item Kiri"
                           value={pair.kiri}
                           onChange={(e) => handlePairChange(idx, 'kiri', e.target.value)}
-                          className="w-1/2 px-3 py-1.5 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 outline-none"
+                          className="w-1/2 px-3 py-1.5 text-xs font-semibold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 outline-none"
                         />
                         <ArrowRight className="w-4 h-4 text-amber-500 shrink-0" />
                         <input
@@ -3231,7 +3035,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                           placeholder="Pasangan / Item Kanan"
                           value={pair.kanan}
                           onChange={(e) => handlePairChange(idx, 'kanan', e.target.value)}
-                          className="w-1/2 px-3 py-1.5 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 outline-none"
+                          className="w-1/2 px-3 py-1.5 text-xs font-semibold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 outline-none"
                         />
                         {matchingPairs.length > 1 && (
                           <button
@@ -3260,7 +3064,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                       max="100"
                       value={formData.poin}
                       onChange={(e) => setFormData((prev) => ({ ...prev, poin: parseFloat(e.target.value) || 0 }))}
-                      className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-xl border border-emerald-200/90 dark:border-slate-700 bg-white dark:bg-slate-900 outline-none focus:border-[#0E5C44]"
+                      className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 outline-none focus:border-[#0E5C44]"
                     />
                   </div>
 
@@ -3288,7 +3092,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                     placeholder="Contoh: Peserta didik mampu menganalisis Pancasila Sila I..."
                     value={formData.indikator}
                     onChange={(e) => setFormData((prev) => ({ ...prev, indikator: e.target.value }))}
-                    className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-xl border border-emerald-200/90 dark:border-slate-700 bg-white dark:bg-slate-900 outline-none focus:border-[#0E5C44]"
+                    className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 outline-none focus:border-[#0E5C44]"
                   />
                 </div>
 
@@ -3301,11 +3105,11 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                     placeholder="Tuliskan pembahasan singkat atau alasan kunci jawaban..."
                     value={formData.pembahasan}
                     onChange={(e) => setFormData((prev) => ({ ...prev, pembahasan: e.target.value }))}
-                    className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-xl border border-emerald-200/90 dark:border-slate-700 bg-white dark:bg-slate-900 outline-none focus:border-[#0E5C44] leading-relaxed"
+                    className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 outline-none focus:border-[#0E5C44] leading-relaxed"
                   />
                 </div>
 
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60">
                   <div className="flex items-center gap-2">
                     <input
                       type="checkbox"
@@ -3325,7 +3129,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                         <button
                           type="button"
                           onClick={() => resetSingleQuestionForm(modalSessionQuestions.length + 1)}
-                          className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all cursor-pointer"
+                          className="px-4 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all cursor-pointer"
                         >
                           Batal Ubah
                         </button>
@@ -3333,7 +3137,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                           type="button"
                           onClick={() => handleSaveQuestion(false)}
                           disabled={isSubmittingForm}
-                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-bold shadow-md hover:brightness-105 transition-all cursor-pointer"
+                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white dark:bg-[#1B2433] text-xs font-bold shadow-md hover:brightness-105 transition-all cursor-pointer border border-emerald-200/80 dark:border-emerald-800/60"
                         >
                           <Edit3 className="w-4 h-4" />
                           <span>Simpan Perubahan Soal</span>
@@ -3346,7 +3150,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                           type="button"
                           onClick={() => handleSaveQuestion(true)}
                           disabled={isSubmittingForm}
-                          className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700 bg-emerald-50/60 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 text-xs font-bold hover:bg-emerald-100 transition-all cursor-pointer"
+                          className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-700 bg-emerald-50/60 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 text-xs font-bold hover:bg-emerald-100 transition-all cursor-pointer"
                           title="Simpan butir soal ini dan tutup form modal"
                         >
                           <CheckCircle2 className="w-4 h-4" />
@@ -3358,7 +3162,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                           type="button"
                           onClick={() => handleSaveQuestion(false)}
                           disabled={isSubmittingForm}
-                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-700 text-white text-xs font-bold shadow-md hover:brightness-105 transition-all cursor-pointer active:scale-95"
+                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white dark:bg-[#1B2433] text-xs font-bold shadow-md hover:brightness-105 transition-all cursor-pointer active:scale-95 border border-emerald-200/80 dark:border-emerald-800/60"
                           title={`Simpan soal #${modalSessionQuestions.length + 1} dan langsung siapkan input untuk soal #${modalSessionQuestions.length + 2}`}
                         >
                           {isSubmittingForm ? (
@@ -3378,7 +3182,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                 </div>
 
                 {/* DATATABLE DALAM MODAL: DAFTAR PERTANYAAN TERSIMPAN */}
-                <div className="pt-6 border-t border-slate-200 dark:border-slate-700 space-y-3">
+                <div className="pt-6 border-t border-emerald-200/80 dark:border-emerald-800/60 space-y-3">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div>
                       <h3 className="text-xs font-black text-slate-800 dark:text-white uppercase tracking-wider flex items-center gap-2">
@@ -3389,35 +3193,35 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                         </span>
                       </h3>
                       {selectedKisiObj && (
-                        <p className="text-[11px] font-medium text-slate-500 mt-0.5">
+                        <p className="text-xs font-medium text-slate-500 mt-0.5">
                           {selectedKisiObj.judul_kisi} • {selectedKisiObj.subject_name || selectedKisiObj.mata_pelajaran} ({selectedKisiObj.jenis_ujian})
                         </p>
                       )}
                     </div>
                     {loadingModalQuestions ? (
-                      <span className="text-[11px] font-semibold text-slate-500 flex items-center gap-1.5">
+                      <span className="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
                         <RefreshCw className="w-3 h-3 animate-spin text-emerald-600" />
                         Memuat data database...
                       </span>
                     ) : (
                       <div className="flex items-center gap-2 flex-wrap">
                         {selectedKisiObj?.jumlah_soal > 0 && (
-                          <span className={`text-[11px] font-extrabold px-2.5 py-1 rounded-full ${modalSessionQuestions.length >= selectedKisiObj.jumlah_soal
-                              ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300'
-                              : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border border-amber-300'
+                          <span className={`text-xs font-extrabold px-2.5 py-1 rounded-full ${modalSessionQuestions.length >= selectedKisiObj.jumlah_soal
+                            ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border-2 border-emerald-300'
+                            : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border border-amber-300'
                             }`}>
                             {modalSessionQuestions.length >= selectedKisiObj.jumlah_soal
                               ? 'Target Terpenuhi (100%)'
                               : `Sisa ${selectedKisiObj.jumlah_soal - modalSessionQuestions.length} Soal Lagi`}
                           </span>
                         )}
-                        <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950 px-2.5 py-1 rounded-full border border-emerald-200/60">
+                        <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950 px-2.5 py-1 rounded-full border border-emerald-200/60">
                           {modalSessionQuestions.length} Tersimpan
                         </span>
                         <button
                           type="button"
                           onClick={() => resetSingleQuestionForm(modalSessionQuestions.length + 1)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white text-[11px] font-bold shadow-xs transition active:scale-95 cursor-pointer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white hover:from-emerald-700 hover:to-teal-800 text-xs font-bold shadow-xs transition active:scale-95 cursor-pointer border border-emerald-200/80 dark:border-emerald-800/60"
                           title="Siapkan form untuk mengisi soal baru berikutnya"
                         >
                           <Plus className="w-3.5 h-3.5" />
@@ -3428,18 +3232,18 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                   </div>
 
                   {loadingModalQuestions ? (
-                    <div className="p-8 text-center rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/30">
+                    <div className="p-8 text-center rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-800/30">
                       <RefreshCw className="w-5 h-5 animate-spin text-emerald-600 mx-auto mb-2" />
                       <p className="text-xs text-slate-500 font-medium">Memuat butir soal yang tersimpan dari database...</p>
                     </div>
                   ) : modalSessionQuestions.length === 0 ? (
-                    <div className="p-6 text-center rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 text-slate-400 text-xs font-medium">
+                    <div className="p-6 text-center rounded-xl border border-dashed border-emerald-300 dark:border-emerald-800/60 text-slate-400 text-xs font-medium">
                       Belum ada butir soal yang tersimpan untuk kisi-kisi ini. Gunakan form di atas lalu tekan <strong>"Simpan &amp; Selesai"</strong> atau <strong>"Simpan &amp; Tambah Soal Kedua (#2)"</strong>.
                     </div>
                   ) : (
-                    <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-700">
+                    <div className="overflow-x-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
                       <TableRoot className="w-full text-left text-xs">
-                        <TableHeader className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold border-b border-slate-200 dark:border-slate-700">
+                        <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
                           <TableRow>
                             <TableHead className="py-2.5 px-3 w-10 text-center">#</TableHead>
                             <TableHead className="py-2.5 px-3">Kode &amp; Pertanyaan</TableHead>
@@ -3449,16 +3253,16 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                             <TableHead className="py-2.5 px-3 text-right">Aksi</TableHead>
                           </TableRow>
                         </TableHeader>
-                        <TableBody className="divide-y divide-slate-100 dark:divide-slate-800 bg-white dark:bg-slate-900">
+                        <TableBody className="divide-y divide-emerald-100/80 dark:divide-slate-800 bg-white dark:bg-slate-900">
                           {modalSessionQuestions.map((q, idx) => (
                             <TableRow
                               key={q.id || idx}
-                              className={`hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors ${editingModalQuestionId === q.id ? 'bg-amber-50/80 dark:bg-amber-950/30' : ''
+                              className={`hover:bg-emerald-50/40 dark:hover:bg-emerald-950/30 transition-colors ${editingModalQuestionId === q.id ? 'bg-amber-50/80 dark:bg-amber-950/30' : ''
                                 }`}
                             >
                               <TableCell className="py-2.5 px-3 text-center font-bold text-slate-500">{idx + 1}</TableCell>
                               <TableCell className="py-2.5 px-3 max-w-xs">
-                                <span className="font-mono text-[11px] font-extrabold text-emerald-700 dark:text-emerald-400 block">
+                                <span className="font-mono text-xs font-extrabold text-emerald-700 dark:text-emerald-400 block">
                                   {q.kode_soal || `SOAL-${idx + 1}`}
                                 </span>
                                 <p className="text-slate-800 dark:text-slate-200 font-medium line-clamp-2">{q.pertanyaan}</p>
@@ -3467,7 +3271,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                                 {getTipeBadge(q.tipe_soal)}
                               </TableCell>
                               <TableCell className="py-2.5 px-3 text-center">
-                                <span className="inline-block px-2 py-0.5 rounded font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px]">
+                                <span className="inline-block px-2 py-0.5 rounded font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs">
                                   {q.kunci_jawaban || '-'}
                                 </span>
                               </TableCell>
@@ -3479,7 +3283,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                                   <button
                                     type="button"
                                     onClick={() => handleEditModalQuestionRow(q)}
-                                    className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-bold rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-950 dark:text-blue-300 transition cursor-pointer"
+                                    className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-950 dark:text-blue-300 transition cursor-pointer"
                                     title="Ubah Pertanyaan Ini"
                                   >
                                     <Edit3 className="w-3.5 h-3.5" />
@@ -3488,7 +3292,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                                   <button
                                     type="button"
                                     onClick={() => handleDeleteModalQuestionRow(q.id)}
-                                    className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-bold rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 dark:bg-rose-950 dark:text-rose-300 transition cursor-pointer"
+                                    className="inline-flex items-center gap-1 px-2 py-1 text-xs font-bold rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 dark:bg-rose-950 dark:text-rose-300 transition cursor-pointer"
                                     title="Hapus Pertanyaan Ini"
                                   >
                                     <Trash2 className="w-3.5 h-3.5" />
@@ -3505,7 +3309,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                 </div>
 
                 {/* Modal Footer Action */}
-                <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between shrink-0">
+                <div className="pt-4 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between shrink-0">
                   <span className="text-xs text-slate-500 font-medium">
                     {modalSessionQuestions.length > 0
                       ? `${modalSessionQuestions.length} pertanyaan telah tersimpan`
@@ -3514,7 +3318,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                   <button
                     type="button"
                     onClick={handleCloseModal}
-                    className="px-5 py-2.5 rounded-xl bg-[#0E5C44] text-white text-xs font-bold hover:bg-emerald-700 shadow-md transition-all cursor-pointer"
+                    className="px-5 py-2.5 rounded-lg bg-[#0E5C44] text-white text-xs font-bold shadow-md transition-all cursor-pointer border border-emerald-600 h-9 text-sm font-medium"
                   >
                     Selesai &amp; Tutup Modal
                   </button>
@@ -3527,9 +3331,8 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
         {/* Detail / Preview Modal */}
         {showDetailModal && viewingItem && (
           <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
-            <div className="bg-white dark:bg-[#1B2433] rounded-3xl max-w-2xl w-full max-h-[85vh] overflow-y-auto shadow-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-5">
-              <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 -mx-6 -mt-6 mb-4" />
-              <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+            <div className="bg-white dark:bg-[#1B2433] rounded-xl max-w-xl w-full max-h-[85vh] overflow-y-auto shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 p-6 space-y-5">
+              <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-3">
                 <div>
                   <span className="text-xs font-mono text-emerald-700 dark:text-emerald-400 font-bold">{viewingItem.kode_soal || 'SOAL-SYS'}</span>
                   <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2 mt-0.5">
@@ -3553,7 +3356,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                   </span>
                 </div>
 
-                <div className="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
+                <div className="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
                   <p className="font-bold text-slate-900 dark:text-slate-100 leading-relaxed text-xs sm:text-sm">
                     {viewingItem.pertanyaan}
                   </p>
@@ -3570,9 +3373,9 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                       return (
                         <div
                           key={optKey}
-                          className={`flex items-center gap-3 p-3 rounded-2xl border text-xs ${isKey
-                              ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-700 text-emerald-900 dark:text-emerald-200 font-bold'
-                              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300'
+                          className={`flex items-center gap-3 p-3 rounded-xl border text-xs ${isKey
+                            ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-700 text-emerald-900 dark:text-emerald-200 font-bold'
+                            : 'bg-white dark:bg-slate-900 border-emerald-200/80 dark:border-emerald-800/60 text-slate-700 dark:text-slate-300'
                             }`}
                         >
                           <span
@@ -3590,14 +3393,14 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                 )}
 
                 {viewingItem.tipe_soal === 'benar_salah' && (
-                  <div className="p-3 bg-emerald-50 dark:bg-emerald-950/30 rounded-2xl border border-emerald-200 dark:border-emerald-800 flex items-center justify-between text-xs">
+                  <div className="p-3 bg-emerald-50 dark:bg-emerald-950/30 rounded-xl border border-emerald-200 dark:border-emerald-800 flex items-center justify-between text-xs">
                     <span className="font-bold text-emerald-900 dark:text-emerald-200">Kunci Jawaban Benar/Salah:</span>
                     <span className="px-3 py-1 bg-emerald-600 text-white rounded-xl font-bold">{viewingItem.kunci_jawaban}</span>
                   </div>
                 )}
 
                 {viewingItem.tipe_soal === 'esai' && (
-                  <div className="p-3.5 bg-purple-50 dark:bg-purple-950/30 rounded-2xl border border-purple-200 dark:border-purple-800 space-y-1 text-xs">
+                  <div className="p-3.5 bg-purple-50 dark:bg-purple-950/30 rounded-xl border border-purple-200 dark:border-purple-800 space-y-1 text-xs">
                     <span className="font-bold text-purple-900 dark:text-purple-200 block">Kunci / Rubrik Jawaban:</span>
                     <p className="text-purple-950 dark:text-purple-300 leading-relaxed font-medium">
                       {viewingItem.kunci_jawaban || 'Penilaian manual oleh guru.'}
@@ -3610,7 +3413,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                     <h4 className="text-xs font-black text-amber-700 dark:text-amber-400 uppercase tracking-wider">Pasangan Menjodohkan:</h4>
                     <div className="space-y-1.5">
                       {(viewingItem.pasangan_menjodohkan || []).map((p, idx) => (
-                        <div key={idx} className="flex items-center gap-2 p-2.5 bg-amber-50/60 dark:bg-amber-950/30 rounded-2xl border border-amber-200 dark:border-amber-900 text-xs">
+                        <div key={idx} className="flex items-center gap-2 p-2.5 bg-amber-50/60 dark:bg-amber-950/30 rounded-xl border border-amber-200 dark:border-amber-900 text-xs">
                           <span className="font-semibold text-slate-800 dark:text-slate-200 w-1/2">{p.kiri}</span>
                           <ArrowRight className="w-4 h-4 text-amber-600 shrink-0" />
                           <span className="font-bold text-emerald-700 dark:text-emerald-400 w-1/2">{p.kanan}</span>
@@ -3621,14 +3424,14 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                 )}
 
                 {viewingItem.pembahasan && (
-                  <div className="bg-amber-50/40 dark:bg-amber-950/20 p-3.5 rounded-2xl border border-amber-200/70 dark:border-amber-900/40 space-y-1 text-xs">
+                  <div className="bg-amber-50/40 dark:bg-amber-950/20 p-3.5 rounded-xl border border-amber-200/70 dark:border-amber-900/40 space-y-1 text-xs">
                     <span className="font-black text-amber-800 dark:text-amber-300 block">Pembahasan:</span>
                     <p className="text-slate-700 dark:text-slate-300 leading-relaxed">{viewingItem.pembahasan}</p>
                   </div>
                 )}
               </div>
 
-              <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end">
+              <div className="pt-4 border-t border-emerald-200/80 dark:border-emerald-800/60 flex justify-end">
                 <button
                   onClick={() => setShowDetailModal(false)}
                   className="px-5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-200 transition-colors"

@@ -1,5 +1,15 @@
-import { useEffect, useMemo, lazy, Suspense } from 'react'
-import { Navigate, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import {
+  useEffect,
+  useMemo,
+  lazy,
+  Suspense
+} from 'react'
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useSearchParams
+} from 'react-router-dom'
 import {
   CalendarDays,
   Zap,
@@ -23,11 +33,15 @@ import {
   BarChart2,
   GraduationCap,
   Calculator,
-  ShieldCheck,
+  ShieldCheck
 } from 'lucide-react'
 import AcademicModuleContainer from '../components/akademik/AcademicModuleContainer'
-import { HeroUiPageFallback } from '../components/common'
-import { useAuthStore } from '../stores/authStore'
+import {
+  HeroUiPageFallback
+} from '../components/common'
+import {
+  useAuthStore
+} from '../stores/authStore'
 
 const MasterTahunAjaranPage = lazy(() => import('./MasterTahunAjaranPage'))
 const MasterModulSemesterPage = lazy(() => import('./MasterModulSemesterPage'))
@@ -54,358 +68,358 @@ const AssessmentFormulaPage = lazy(() => import('./AssessmentFormulaPage'))
 const WorshipAssessmentSettingPage = lazy(() => import('./WorshipAssessmentSettingPage'))
 
 const CONTAINERS = {
-  pengaturan: {
-    title: 'Pengaturan Akademik',
-    description: 'Kelola periode, kurikulum, kelas, mata pelajaran, dan jadwal tanpa mengubah alur CRUD masing-masing modul.',
-    hideHeaderCard: false,
-    tabs: [
-      {
-        key: 'tahun-ajaran',
-        label: 'Tahun Ajaran',
-        component: MasterTahunAjaranPage,
-        icon: BookOpen,
-        description: 'Periode Akademik',
-        squircleStyle: 'bg-sky-100 text-sky-600 dark:bg-sky-950/80 dark:text-sky-400 border border-sky-200/80 dark:border-sky-800/60',
-      },
-      {
-        key: 'semester',
-        label: 'Semester',
-        component: MasterModulSemesterPage,
-        icon: Zap,
-        description: 'Modul Semester',
-        squircleStyle: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/80 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800/60',
-      },
-      {
-        key: 'kurikulum',
-        label: 'Kurikulum',
-        component: MasterKurikulumPage,
-        icon: LayoutGrid,
-        description: 'Acuan Standar',
-        squircleStyle: 'bg-purple-100 text-purple-600 dark:bg-purple-950/80 dark:text-purple-400 border border-purple-200/80 dark:border-purple-800/60',
-      },
-      {
-        key: 'kelas-rombel',
-        label: 'Kelas & Rombel',
-        component: MasterKelasPage,
-        icon: Layers,
-        description: 'Rombongan Belajar',
-        squircleStyle: 'bg-orange-100 text-orange-600 dark:bg-orange-950/80 dark:text-orange-400 border border-orange-200/80 dark:border-orange-800/60',
-      },
-      {
-        key: 'mata-pelajaran',
-        label: 'Mata Pelajaran',
-        component: MasterSubjectPage,
-        icon: BookOpenCheck,
-        description: 'Master Subjek',
-        squircleStyle: 'bg-pink-100 text-pink-600 dark:bg-pink-950/80 dark:text-pink-400 border border-pink-200/80 dark:border-pink-800/60',
-      },
-      {
-        key: 'jadwal',
-        label: 'Jadwal Pelajaran',
-        component: MasterSchedulePage,
-        icon: Clock,
-        description: 'Waktu & Ruang',
-        squircleStyle: 'bg-rose-100 text-rose-600 dark:bg-rose-950/80 dark:text-rose-400 border border-rose-200/80 dark:border-rose-800/60',
-      },
-      {
-        key: 'rumus-penilaian',
-        label: 'Rumus Penilaian',
-        component: AssessmentFormulaPage,
-        icon: Calculator,
-        description: 'Akademik, Tahfizh & Mutabaah',
-        requiredPermission: 'assessment_formula.view',
-        squircleStyle: 'bg-teal-100 text-teal-700 dark:bg-teal-950/80 dark:text-teal-300 border border-teal-200/80 dark:border-teal-800/60',
-      },
-      {
-        key: 'program-ibadah',
-        label: 'Program & Ibadah',
-        component: WorshipAssessmentSettingPage,
-        icon: ShieldCheck,
-        description: 'Full Day & Ramadan',
-        requiredPermission: 'worship_assessment.setting.view',
-        squircleStyle: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60',
-      },
-    ],
-  },
-  perencanaan: {
-    title: 'Perencanaan Pembelajaran',
-    description: 'Susun CP, TP, Modul Ajar, Kisi-Kisi, dan Bank Soal dalam alur yang ringkas dengan data dan relasi dari API yang sudah tersedia.',
-    hideHeaderCard: false,
-    tabsBelowKpi: true,
-    tabs: [
-      {
-        key: 'cp',
-        label: 'Capaian Pembelajaran',
-        component: MasterCapaianPembelajaranPage,
-        icon: Target,
-        description: 'Standar Capaian',
-        squircleStyle: 'bg-sky-100 text-sky-600 dark:bg-sky-950/80 dark:text-sky-400 border border-sky-200/80 dark:border-sky-800/60',
-      },
-      {
-        key: 'tp',
-        label: 'Tujuan Pembelajaran',
-        component: MasterTujuanPembelajaranPage,
-        icon: FileText,
-        description: 'Tujuan & Alur',
-        squircleStyle: 'bg-purple-100 text-purple-600 dark:bg-purple-950/80 dark:text-purple-400 border border-purple-200/80 dark:border-purple-800/60',
-      },
-      {
-        key: 'modul-ajar',
-        label: 'Modul Ajar',
-        component: LmsModulAjarPage,
-        icon: BookOpen,
-        description: 'Perencanaan RPP/MA',
-        squircleStyle: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/80 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800/60',
-      },
-      {
-        key: 'kisi-kisi',
-        label: 'Kisi-kisi',
-        component: LmsKisiKisiPage,
-        icon: HelpCircle,
-        description: 'Matriks Soal',
-        squircleStyle: 'bg-purple-100 text-purple-600 dark:bg-purple-950/80 dark:text-purple-400 border border-purple-200/80 dark:border-purple-800/60',
-      },
-      {
-        key: 'bank-soal',
-        label: 'Bank Soal',
-        component: LmsBankSoalPage,
-        icon: Database,
-        description: 'Repository Soal',
-        squircleStyle: 'bg-orange-100 text-orange-600 dark:bg-orange-950/80 dark:text-orange-400 border border-orange-200/80 dark:border-orange-800/60',
-      },
-    ],
-  },
-  pembelajaran: {
-    title: 'Pembelajaran',
-    description: 'Akses konten pembelajaran, aktivitas, dan diskusi dari satu ruang kerja.',
-    hideHeaderCard: false,
-    tabsBelowKpi: true,
-    tabs: [
-      {
-        key: 'materi',
-        label: 'Materi',
-        component: LmsMateriPage,
-        icon: BookOpen,
-        description: 'Bahan Ajar',
-        squircleStyle: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/80 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800/60',
-      },
-      {
-        key: 'media',
-        label: 'Media',
-        component: LmsMediaPage,
-        icon: Film,
-        description: 'Video & Audio',
-        squircleStyle: 'bg-sky-100 text-sky-600 dark:bg-sky-950/80 dark:text-sky-400 border border-sky-200/80 dark:border-sky-800/60',
-      },
-      {
-        key: 'referensi',
-        label: 'Referensi',
-        component: LmsReferensiPage,
-        icon: Bookmark,
-        description: 'Pustaka & Link',
-        squircleStyle: 'bg-purple-100 text-purple-600 dark:bg-purple-950/80 dark:text-purple-400 border border-purple-200/80 dark:border-purple-800/60',
-      },
-      {
-        key: 'aktivitas',
-        label: 'Aktivitas Belajar',
-        component: LmsAktivitasBelajarPage,
-        icon: Activity,
-        description: 'Kegiatan Kelas',
-        squircleStyle: 'bg-orange-100 text-orange-600 dark:bg-orange-950/80 dark:text-orange-400 border border-orange-200/80 dark:border-orange-800/60',
-      },
-      {
-        key: 'diskusi',
-        label: 'Diskusi Kelas',
-        component: LmsDiskusiPage,
-        icon: MessageSquare,
-        description: 'Forum Interaktif',
-        squircleStyle: 'bg-pink-100 text-pink-600 dark:bg-pink-950/80 dark:text-pink-400 border border-pink-200/80 dark:border-pink-800/60',
-      },
-    ],
-  },
-  evaluasi: {
-    title: 'Tugas & Evaluasi',
-    description: 'Kelola penugasan, pengumpulan tugas, ujian CBT, dan rekap penilaian siswa dalam satu alur evaluasi.',
-    hideHeaderCard: false,
-    tabsBelowKpi: false,
-    tabs: [
-      {
-        key: 'penugasan',
-        label: 'Penugasan',
-        component: LmsPenugasanPage,
-        icon: ClipboardList,
-        description: 'Instruksi Tugas',
-        squircleStyle: 'bg-sky-100 text-sky-600 dark:bg-sky-950/80 dark:text-sky-400 border border-sky-200/80 dark:border-sky-800/60',
-      },
-      {
-        key: 'pengumpulan',
-        label: 'Pengumpulan Tugas',
-        component: LmsPengumpulanTugasPage,
-        icon: UploadCloud,
-        description: 'Lembar Kerja Siswa',
-        squircleStyle: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/80 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800/60',
-      },
-      {
-        key: 'cbt',
-        label: 'Ujian CBT',
-        component: LmsUjianPage,
-        icon: Laptop,
-        description: 'Evaluasi CBT',
-        squircleStyle: 'bg-rose-100 text-rose-600 dark:bg-rose-950/80 dark:text-rose-400 border border-rose-200/80 dark:border-rose-800/60',
-      },
-      {
-        key: 'penilaian',
-        label: 'Penilaian',
-        component: LmsPenilaianPage,
-        icon: Award,
-        description: 'Rekap Penilaian',
-        squircleStyle: 'bg-amber-100 text-amber-600 dark:bg-amber-950/80 dark:text-amber-400 border border-amber-200/80 dark:border-amber-800/60',
-      },
-    ],
-  },
-  'nilai-rapor': {
-    title: 'Nilai & Rapor',
-    description: 'Buku nilai, rekap, rapor digital, dan keluaran PDF tersedia dalam satu area.',
-    hideHeaderCard: false,
-    tabsBelowKpi: false,
-    tabs: [
-      {
-        key: 'buku-nilai',
-        label: 'Buku Nilai',
-        component: LmsPenilaianPage,
-        icon: Award,
-        description: 'Input & Formatif',
-        squircleStyle: 'bg-sky-100 text-sky-600 dark:bg-sky-950/80 dark:text-sky-400 border border-sky-200/80 dark:border-sky-800/60',
-      },
-      {
-        key: 'rekap',
-        label: 'Rekap Nilai',
-        component: LmsPenilaianPage,
-        icon: BarChart2,
-        description: 'Analisis Sumatif',
-        squircleStyle: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/80 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800/60',
-      },
-      {
-        key: 'rapor',
-        label: 'Rapor Digital',
-        component: LmsRaporPage,
-        icon: GraduationCap,
-        description: 'Cetak & PDF',
-        squircleStyle: 'bg-purple-100 text-purple-600 dark:bg-purple-950/80 dark:text-purple-400 border border-purple-200/80 dark:border-purple-800/60',
-      },
-    ],
-  },
+ pengaturan: {
+ title: 'Pengaturan Akademik',
+ description: 'Kelola periode, kurikulum, kelas, mata pelajaran, dan jadwal tanpa mengubah alur CRUD masing-masing modul.',
+ hideHeaderCard: false,
+ tabs: [
+ {
+ key: 'tahun-ajaran',
+ label: 'Tahun Ajaran',
+ component: MasterTahunAjaranPage,
+ icon: BookOpen,
+ description: 'Periode Akademik',
+ squircleStyle: 'bg-sky-100 text-sky-600 dark:bg-sky-950/80 dark:text-sky-400 border border-emerald-200/80 dark:border-emerald-800/60',
+ },
+ {
+ key: 'semester',
+ label: 'Semester',
+ component: MasterModulSemesterPage,
+ icon: Zap,
+ description: 'Modul Semester',
+ squircleStyle: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/80 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800/80',
+ },
+ {
+ key: 'kurikulum',
+ label: 'Kurikulum',
+ component: MasterKurikulumPage,
+ icon: LayoutGrid,
+ description: 'Acuan Standar',
+ squircleStyle: 'bg-purple-100 text-purple-600 dark:bg-purple-950/80 dark:text-purple-400 border border-emerald-200/80 dark:border-emerald-800/60',
+ },
+ {
+ key: 'kelas-rombel',
+ label: 'Kelas & Rombel',
+ component: MasterKelasPage,
+ icon: Layers,
+ description: 'Rombongan Belajar',
+ squircleStyle: 'bg-orange-100 text-orange-600 dark:bg-orange-950/80 dark:text-orange-400 border border-emerald-200/80 dark:border-emerald-800/60',
+ },
+ {
+ key: 'mata-pelajaran',
+ label: 'Mata Pelajaran',
+ component: MasterSubjectPage,
+ icon: BookOpenCheck,
+ description: 'Master Subjek',
+ squircleStyle: 'bg-pink-100 text-pink-600 dark:bg-pink-950/80 dark:text-pink-400 border border-emerald-200/80 dark:border-emerald-800/60',
+ },
+ {
+ key: 'jadwal',
+ label: 'Jadwal Pelajaran',
+ component: MasterSchedulePage,
+ icon: Clock,
+ description: 'Waktu & Ruang',
+ squircleStyle: 'bg-rose-100 text-rose-600 dark:bg-rose-950/80 dark:text-rose-400 border border-emerald-200/80 dark:border-emerald-800/60',
+ },
+ {
+ key: 'rumus-penilaian',
+ label: 'Rumus Penilaian',
+ component: AssessmentFormulaPage,
+ icon: Calculator,
+ description: 'Akademik, Tahfizh & Mutabaah',
+ requiredPermission: 'assessment_formula.view',
+ squircleStyle: 'bg-teal-100 text-teal-700 dark:bg-teal-950/80 dark:text-teal-300 border border-emerald-200/80 dark:border-emerald-800/60',
+ },
+ {
+ key: 'program-ibadah',
+ label: 'Program & Ibadah',
+ component: WorshipAssessmentSettingPage,
+ icon: ShieldCheck,
+ description: 'Full Day & Ramadan',
+ requiredPermission: 'worship_assessment.setting.view',
+ squircleStyle: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/80',
+ },
+ ],
+ },
+ perencanaan: {
+ title: 'Perencanaan Pembelajaran',
+ description: 'Susun CP, TP, Modul Ajar, Kisi-Kisi, dan Bank Soal dalam alur yang ringkas dengan data dan relasi dari API yang sudah tersedia.',
+ hideHeaderCard: false,
+ tabsBelowKpi: true,
+ tabs: [
+ {
+ key: 'cp',
+ label: 'Capaian Pembelajaran',
+ component: MasterCapaianPembelajaranPage,
+ icon: Target,
+ description: 'Standar Capaian',
+ squircleStyle: 'bg-sky-100 text-sky-600 dark:bg-sky-950/80 dark:text-sky-400 border border-emerald-200/80 dark:border-emerald-800/60',
+ },
+ {
+ key: 'tp',
+ label: 'Tujuan Pembelajaran',
+ component: MasterTujuanPembelajaranPage,
+ icon: FileText,
+ description: 'Tujuan & Alur',
+ squircleStyle: 'bg-purple-100 text-purple-600 dark:bg-purple-950/80 dark:text-purple-400 border border-emerald-200/80 dark:border-emerald-800/60',
+ },
+ {
+ key: 'modul-ajar',
+ label: 'Modul Ajar',
+ component: LmsModulAjarPage,
+ icon: BookOpen,
+ description: 'Perencanaan RPP/MA',
+ squircleStyle: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/80 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800/80',
+ },
+ {
+ key: 'kisi-kisi',
+ label: 'Kisi-kisi',
+ component: LmsKisiKisiPage,
+ icon: HelpCircle,
+ description: 'Matriks Soal',
+ squircleStyle: 'bg-purple-100 text-purple-600 dark:bg-purple-950/80 dark:text-purple-400 border border-emerald-200/80 dark:border-emerald-800/60',
+ },
+ {
+ key: 'bank-soal',
+ label: 'Bank Soal',
+ component: LmsBankSoalPage,
+ icon: Database,
+ description: 'Repository Soal',
+ squircleStyle: 'bg-orange-100 text-orange-600 dark:bg-orange-950/80 dark:text-orange-400 border border-emerald-200/80 dark:border-emerald-800/60',
+ },
+ ],
+ },
+ pembelajaran: {
+ title: 'Pembelajaran',
+ description: 'Akses konten pembelajaran, aktivitas, dan diskusi dari satu ruang kerja.',
+ hideHeaderCard: false,
+ tabsBelowKpi: true,
+ tabs: [
+ {
+ key: 'materi',
+ label: 'Materi',
+ component: LmsMateriPage,
+ icon: BookOpen,
+ description: 'Bahan Ajar',
+ squircleStyle: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/80 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800/80',
+ },
+ {
+ key: 'media',
+ label: 'Media',
+ component: LmsMediaPage,
+ icon: Film,
+ description: 'Video & Audio',
+ squircleStyle: 'bg-sky-100 text-sky-600 dark:bg-sky-950/80 dark:text-sky-400 border border-emerald-200/80 dark:border-emerald-800/60',
+ },
+ {
+ key: 'referensi',
+ label: 'Referensi',
+ component: LmsReferensiPage,
+ icon: Bookmark,
+ description: 'Pustaka & Link',
+ squircleStyle: 'bg-purple-100 text-purple-600 dark:bg-purple-950/80 dark:text-purple-400 border border-emerald-200/80 dark:border-emerald-800/60',
+ },
+ {
+ key: 'aktivitas',
+ label: 'Aktivitas Belajar',
+ component: LmsAktivitasBelajarPage,
+ icon: Activity,
+ description: 'Kegiatan Kelas',
+ squircleStyle: 'bg-orange-100 text-orange-600 dark:bg-orange-950/80 dark:text-orange-400 border border-emerald-200/80 dark:border-emerald-800/60',
+ },
+ {
+ key: 'diskusi',
+ label: 'Diskusi Kelas',
+ component: LmsDiskusiPage,
+ icon: MessageSquare,
+ description: 'Forum Interaktif',
+ squircleStyle: 'bg-pink-100 text-pink-600 dark:bg-pink-950/80 dark:text-pink-400 border border-emerald-200/80 dark:border-emerald-800/60',
+ },
+ ],
+ },
+ evaluasi: {
+ title: 'Tugas & Evaluasi',
+ description: 'Kelola penugasan, pengumpulan tugas, ujian CBT, dan rekap penilaian siswa dalam satu alur evaluasi.',
+ hideHeaderCard: false,
+ tabsBelowKpi: false,
+ tabs: [
+ {
+ key: 'penugasan',
+ label: 'Penugasan',
+ component: LmsPenugasanPage,
+ icon: ClipboardList,
+ description: 'Instruksi Tugas',
+ squircleStyle: 'bg-sky-100 text-sky-600 dark:bg-sky-950/80 dark:text-sky-400 border border-emerald-200/80 dark:border-emerald-800/60',
+ },
+ {
+ key: 'pengumpulan',
+ label: 'Pengumpulan Tugas',
+ component: LmsPengumpulanTugasPage,
+ icon: UploadCloud,
+ description: 'Lembar Kerja Siswa',
+ squircleStyle: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/80 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800/80',
+ },
+ {
+ key: 'cbt',
+ label: 'Ujian CBT',
+ component: LmsUjianPage,
+ icon: Laptop,
+ description: 'Evaluasi CBT',
+ squircleStyle: 'bg-rose-100 text-rose-600 dark:bg-rose-950/80 dark:text-rose-400 border border-emerald-200/80 dark:border-emerald-800/60',
+ },
+ {
+ key: 'penilaian',
+ label: 'Penilaian',
+ component: LmsPenilaianPage,
+ icon: Award,
+ description: 'Rekap Penilaian',
+ squircleStyle: 'bg-amber-100 text-amber-600 dark:bg-amber-950/80 dark:text-amber-400 border border-emerald-200/80 dark:border-emerald-800/60',
+ },
+ ],
+ },
+ 'nilai-rapor': {
+ title: 'Nilai & Rapor',
+ description: 'Buku nilai, rekap, rapor digital, dan keluaran PDF tersedia dalam satu area.',
+ hideHeaderCard: false,
+ tabsBelowKpi: false,
+ tabs: [
+ {
+ key: 'buku-nilai',
+ label: 'Buku Nilai',
+ component: LmsPenilaianPage,
+ icon: Award,
+ description: 'Input & Formatif',
+ squircleStyle: 'bg-sky-100 text-sky-600 dark:bg-sky-950/80 dark:text-sky-400 border border-emerald-200/80 dark:border-emerald-800/60',
+ },
+ {
+ key: 'rekap',
+ label: 'Rekap Nilai',
+ component: LmsPenilaianPage,
+ icon: BarChart2,
+ description: 'Analisis Sumatif',
+ squircleStyle: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/80 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800/80',
+ },
+ {
+ key: 'rapor',
+ label: 'Rapor Digital',
+ component: LmsRaporPage,
+ icon: GraduationCap,
+ description: 'Cetak & PDF',
+ squircleStyle: 'bg-purple-100 text-purple-600 dark:bg-purple-950/80 dark:text-purple-400 border border-emerald-200/80 dark:border-emerald-800/60',
+ },
+ ],
+ },
 }
 
 export default function AcademicLmsContainerPage({ section }) {
-  const user = useAuthStore((state) => state.user)
-  const userRoles = useMemo(() => {
-    const rList = user?.roles || []
-    return rList.map((r) => (typeof r === 'string' ? r : r.name || ''))
-  }, [user])
+ const user = useAuthStore((state) => state.user)
+ const userRoles = useMemo(() => {
+ const rList = user?.roles || []
+ return rList.map((r) => (typeof r === 'string' ? r : r.name || ''))
+ }, [user])
 
-  const isRestrictedRole = useMemo(() => {
-    if (section !== 'pengaturan') return false
-    const isSuperAdminOrAdminOrPrincipal = userRoles.some((r) =>
-      ['Super Admin', 'SuperAdmin', 'superadmin', 'Admin', 'admin', 'Kepala Sekolah', 'kepala_sekolah', 'KepalaSekolah', 'Divisi Pendidikan', 'divisi_pendidikan'].includes(r)
-    )
-    if (isSuperAdminOrAdminOrPrincipal) return false
+ const isRestrictedRole = useMemo(() => {
+ if (section !== 'pengaturan') return false
+ const isSuperAdminOrAdminOrPrincipal = userRoles.some((r) =>
+ ['Super Admin', 'SuperAdmin', 'superadmin', 'Admin', 'admin', 'Kepala Sekolah', 'kepala_sekolah', 'KepalaSekolah', 'Divisi Pendidikan', 'divisi_pendidikan'].includes(r)
+ )
+ if (isSuperAdminOrAdminOrPrincipal) return false
 
-    return userRoles.some((r) =>
-      ['Guru', 'guru', 'Wali Kelas', 'wali_kelas', 'Guru Mapel', 'Guru Tahfizh', 'Guru BK',
-       'Musyrif', 'Musyrifah', 'musyrif', 'musyrifah', 'Pengasuh', 'Wali Asrama', 'Pembimbing'].includes(r)
-    )
-  }, [section, userRoles])
+ return userRoles.some((r) =>
+ ['Guru', 'guru', 'Wali Kelas', 'wali_kelas', 'Guru Mapel', 'Guru Tahfizh', 'Guru BK',
+ 'Musyrif', 'Musyrifah', 'musyrif', 'musyrifah', 'Pengasuh', 'Wali Asrama', 'Pembimbing'].includes(r)
+ )
+ }, [section, userRoles])
 
-  const config = CONTAINERS[section]
-  const userPermissions = useMemo(() => new Set((user?.permissions || []).map((p) => typeof p === 'string' ? p : p.name)), [user])
-  const availableTabs = useMemo(() => config.tabs.filter((tab) => !tab.requiredPermission || userPermissions.has(tab.requiredPermission) || userPermissions.has('*')), [config.tabs, userPermissions])
-  const location = useLocation()
-  const [searchParams] = useSearchParams()
-  const navigate = useNavigate()
+ const config = CONTAINERS[section]
+ const userPermissions = useMemo(() => new Set((user?.permissions || []).map((p) => typeof p === 'string' ? p : p.name)), [user])
+ const availableTabs = useMemo(() => config.tabs.filter((tab) => !tab.requiredPermission || userPermissions.has(tab.requiredPermission) || userPermissions.has('*')), [config.tabs, userPermissions])
+ const location = useLocation()
+ const [searchParams] = useSearchParams()
+ const navigate = useNavigate()
 
-  const activeTab = searchParams.get('tab')
-  const defaultTab = availableTabs[0]?.key || ''
-  const selected = useMemo(() => {
-    return availableTabs.find((t) =>
-      t.key === activeTab ||
-      (activeTab === 'modul-semester' && t.key === 'semester') ||
-      (activeTab === 'semester' && t.key === 'modul-semester') ||
-      (activeTab === 'ujian-cbt' && t.key === 'cbt') ||
-      (activeTab === 'cbt' && t.key === 'ujian-cbt') ||
-      (activeTab === 'jadwal-pelajaran' && t.key === 'jadwal') ||
-      (activeTab === 'jadwal' && t.key === 'jadwal-pelajaran')
-    )
-  }, [activeTab, availableTabs])
+ const activeTab = searchParams.get('tab')
+ const defaultTab = availableTabs[0]?.key || ''
+ const selected = useMemo(() => {
+ return availableTabs.find((t) =>
+ t.key === activeTab ||
+ (activeTab === 'modul-semester' && t.key === 'semester') ||
+ (activeTab === 'semester' && t.key === 'modul-semester') ||
+ (activeTab === 'ujian-cbt' && t.key === 'cbt') ||
+ (activeTab === 'cbt' && t.key === 'ujian-cbt') ||
+ (activeTab === 'jadwal-pelajaran' && t.key === 'jadwal') ||
+ (activeTab === 'jadwal' && t.key === 'jadwal-pelajaran')
+ )
+ }, [activeTab, availableTabs])
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [activeTab])
+ useEffect(() => {
+ window.scrollTo({ top: 0, behavior: 'smooth' })
+ }, [activeTab])
 
-  const breadcrumbItems = useMemo(() => [
-    { label: 'Akademik', to: location.pathname },
-    { label: config.title, to: `${location.pathname}?tab=${defaultTab}` },
-    { label: selected?.label || '' }
-  ], [location.pathname, config.title, defaultTab, selected?.label])
+ const breadcrumbItems = useMemo(() => [
+ { label: 'Akademik', to: location.pathname },
+ { label: config.title, to: `${location.pathname}?tab=${defaultTab}` },
+ { label: selected?.label || '' }
+ ], [location.pathname, config.title, defaultTab, selected?.label])
 
-  const handleNavigateToBankSoal = (kisiKisiItem) => {
-    // Simpan kisi_kisi_id ke sessionStorage agar tab bank-soal bisa pre-filter
-    if (kisiKisiItem?.id) {
-      sessionStorage.setItem('bankSoal_prefill_kisi_id', kisiKisiItem.id)
-      sessionStorage.setItem('bankSoal_prefill_kisi_judul', kisiKisiItem.judul_kisi || '')
-      sessionStorage.setItem('bankSoal_prefill_mapel_id', kisiKisiItem.mata_pelajaran_id || '')
-    }
-    const params = new URLSearchParams(searchParams)
-    params.set('tab', 'bank-soal')
-    if (kisiKisiItem?.id) {
-      params.set('kisi_id', kisiKisiItem.id)
-    }
-    navigate(`${location.pathname}?${params.toString()}`)
-  }
+ const handleNavigateToBankSoal = (kisiKisiItem) => {
+ // Simpan kisi_kisi_id ke sessionStorage agar tab bank-soal bisa pre-filter
+ if (kisiKisiItem?.id) {
+ sessionStorage.setItem('bankSoal_prefill_kisi_id', kisiKisiItem.id)
+ sessionStorage.setItem('bankSoal_prefill_kisi_judul', kisiKisiItem.judul_kisi || '')
+ sessionStorage.setItem('bankSoal_prefill_mapel_id', kisiKisiItem.mata_pelajaran_id || '')
+ }
+ const params = new URLSearchParams(searchParams)
+ params.set('tab', 'bank-soal')
+ if (kisiKisiItem?.id) {
+ params.set('kisi_id', kisiKisiItem.id)
+ }
+ navigate(`${location.pathname}?${params.toString()}`)
+ }
 
-  if (isRestrictedRole) {
-    return <Navigate to="/dashboard" replace />
-  }
+ if (isRestrictedRole) {
+ return <Navigate to="/dashboard" replace />
+ }
 
-  if (!selected) {
-    const params = new URLSearchParams(searchParams)
-    params.set('tab', defaultTab)
-    return <Navigate to={`${location.pathname}?${params.toString()}`} replace />
-  }
+ if (!selected) {
+ const params = new URLSearchParams(searchParams)
+ params.set('tab', defaultTab)
+ return <Navigate to={`${location.pathname}?${params.toString()}`} replace />
+ }
 
-  const ActivePage = selected.component
-  const tabs = availableTabs.map((t) => ({
-    key: t.key,
-    label: t.label,
-    icon: t.icon,
-    description: t.description,
-    squircleStyle: t.squircleStyle,
-  }))
+ const ActivePage = selected.component
+ const tabs = availableTabs.map((t) => ({
+ key: t.key,
+ label: t.label,
+ icon: t.icon,
+ description: t.description,
+ squircleStyle: t.squircleStyle,
+ }))
 
-  return (
-    <AcademicModuleContainer
-      title={config.title}
-      description={config.description}
-      tabs={tabs}
-      hideHeader={config.hideHeaderCard}
-      tabsBelowKpi={config.tabsBelowKpi}
-      breadcrumbItems={breadcrumbItems}
-    >
-      <Suspense
-        fallback={
-          <HeroUiPageFallback
-            title={`Menyiapkan Modul ${selected?.label || 'Akademik'}...`}
-            message="Sedang memuat data kurikulum, materi, dan penugasan akademik."
-          />
-        }
-      >
-        <ActivePage
-          embedded
-          hidePageHeader
-          hideBreadcrumb
-          onNavigateToBankSoal={selected.key === 'kisi-kisi' ? handleNavigateToBankSoal : undefined}
-        />
-      </Suspense>
-    </AcademicModuleContainer>
-  )
+ return (
+ <AcademicModuleContainer
+ title={config.title}
+ description={config.description}
+ tabs={tabs}
+ hideHeader={config.hideHeaderCard}
+ tabsBelowKpi={config.tabsBelowKpi}
+ breadcrumbItems={breadcrumbItems}
+ >
+ <Suspense
+ fallback={
+ <HeroUiPageFallback
+ title={`Menyiapkan Modul ${selected?.label || 'Akademik'}...`}
+ message="Sedang memuat data kurikulum, materi, dan penugasan akademik."
+ />
+ }
+ >
+ <ActivePage
+ embedded
+ hidePageHeader
+ hideBreadcrumb
+ onNavigateToBankSoal={selected.key === 'kisi-kisi' ? handleNavigateToBankSoal : undefined}
+ />
+ </Suspense>
+ </AcademicModuleContainer>
+ )
 }

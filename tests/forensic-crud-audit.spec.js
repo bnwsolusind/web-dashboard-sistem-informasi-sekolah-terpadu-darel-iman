@@ -2,7 +2,8 @@ import { test, expect } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
 
-const outputFile = path.resolve(process.cwd(), 'audit-network-proof.json');
+const outputFile = process.env.OUTPUT_FILE ? path.resolve(process.cwd(), process.env.OUTPUT_FILE) : path.resolve(process.cwd(), 'audit-network-proof.json');
+const API_URL = process.env.API_URL || 'http://localhost:8000';
 let allAuditLogs = [];
 
 test.describe('Forensic E2E Audit with Real Network Tracking', () => {
@@ -34,7 +35,7 @@ test.describe('Forensic E2E Audit with Real Network Tracking', () => {
         const contentType = headers['content-type'] || '';
         const disposition = headers['content-disposition'] || '';
 
-        const isMutation = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method) && url.includes(':8000/api');
+        const isMutation = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method) && url.includes('/api');
         const isDownload = disposition.includes('attachment') || contentType.includes('spreadsheet') || contentType.includes('pdf');
 
         if (isMutation || isDownload) {
@@ -49,7 +50,7 @@ test.describe('Forensic E2E Audit with Real Network Tracking', () => {
 
           recordManual({
             method,
-            apiUrl: url.replace('http://localhost:8000', ''),
+            apiUrl: url.replace(API_URL, ''),
             status,
             recordId: recordId ? String(recordId) : null,
             isDownload: Boolean(isDownload)
@@ -72,7 +73,7 @@ test.describe('Forensic E2E Audit with Real Network Tracking', () => {
     currentRole = roleName;
     currentRoute = '/masuk';
 
-    const loginRes = await page.request.post('http://localhost:8000/api/login', {
+    const loginRes = await page.request.post(`${API_URL}/api/login`, {
       data: { email, password }
     });
     expect(loginRes.status()).toBe(200);
@@ -100,7 +101,7 @@ test.describe('Forensic E2E Audit with Real Network Tracking', () => {
   };
 
   const pageApi = async (page, method, endpoint, data = null) => {
-    const res = await page.evaluate(async ({ method, endpoint, data }) => {
+    const res = await page.evaluate(async ({ method, endpoint, data, API_URL }) => {
       const token = localStorage.getItem('school_erp_token');
       const opts = {
         method,
@@ -113,13 +114,13 @@ test.describe('Forensic E2E Audit with Real Network Tracking', () => {
         opts.headers['Content-Type'] = 'application/json';
         opts.body = JSON.stringify(data);
       }
-      const r = await fetch('http://localhost:8000' + endpoint, opts);
+      const r = await fetch(API_URL + endpoint, opts);
       let json = null;
       try {
         json = await r.json();
       } catch (e) {}
       return { status: r.status, data: json };
-    }, { method, endpoint, data });
+    }, { method, endpoint, data, API_URL });
 
     const recId = res.data?.data?.id || res.data?.id || null;
     recordManual({

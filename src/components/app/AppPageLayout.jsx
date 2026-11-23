@@ -8,20 +8,20 @@ import AppBreadcrumb from './AppBreadcrumb'
  * breadcrumb: array [{ label, to? }] | string. homeTo default '/dashboard'.
  */
 export default function AppPageLayout({
-  children,
-  className = '',
-  breadcrumb = null,
-  breadcrumbLabel,
-  hideBreadcrumb = false,
+ children,
+ className = '',
+ breadcrumb = null,
+ breadcrumbLabel,
+ hideBreadcrumb = false,
 }) {
-  const crumbs = (breadcrumb || (breadcrumbLabel ? [{ label: breadcrumbLabel }] : [])).map((crumb) =>
-    typeof crumb === 'string' ? { label: crumb } : crumb
-  )
+ const crumbs = (breadcrumb || (breadcrumbLabel ? [{ label: breadcrumbLabel }] : [])).map((crumb) =>
+ typeof crumb === 'string' ? { label: crumb } : crumb
+ )
 
-  return (
-    <div className={`space-y-6 pb-12 ${className}`}>
-      {!hideBreadcrumb && <AppBreadcrumb items={crumbs} />}
-      {children}
-    </div>
-  )
+ return (
+ <div className={`space-y-6 pb-12 ${className}`}>
+ {!hideBreadcrumb && <AppBreadcrumb items={crumbs} />}
+ {children}
+ </div>
+ )
 }

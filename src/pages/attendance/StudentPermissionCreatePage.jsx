@@ -1,29 +1,51 @@
-import { useCallback, useEffect, useState } from 'react'
-import CustomSelect from '@/components/ui/CustomSelect'
-import { Ban, CheckCircle2, Clock3, FilePlus2, Loader2, Paperclip, Send, ShieldAlert } from 'lucide-react'
+import CustomSelect from "../../components/ui/CustomSelect"
+import {
+  useCallback,
+  useEffect,
+  useState
+} from 'react'
+import {
+  Ban,
+  CheckCircle2,
+  Clock3,
+  FilePlus2,
+  Loader2,
+  Paperclip,
+  Send,
+  ShieldAlert
+} from 'lucide-react'
 import Swal from '@/components/ui/compat/swal-heroui'
-import { DatePicker } from '@/components/ui'
-import { attendancePermissionService } from '../../services/attendance/attendancePermissionService'
-import { MasterDataPage, MasterPageHeader, MasterStatCard, MasterStatsGrid } from '../../components/master-data'
+import {
+  DatePicker
+} from '@/components/ui'
+import {
+  attendancePermissionService
+} from '../../services/attendance/attendancePermissionService'
+import {
+  MasterDataPage,
+  MasterPageHeader,
+  MasterStatCard,
+  MasterStatsGrid
+} from '../../components/master-data'
 
 const today = new Date().toISOString().slice(0,10)
 const unwrap = (response) => response?.data?.data || response?.data || []
 const labelStatus = { draft:'Draft', submitted:'Menunggu verifikasi', waiting_verification:'Menunggu verifikasi', approved:'Disetujui', rejected:'Ditolak', needs_revision:'Perlu revisi', cancelled:'Dibatalkan' }
 
 export default function StudentPermissionCreatePage() {
-  const [form,setForm]=useState({type:'izin',start_date:today,end_date:today,reason:'',notes:'',attachment:null})
-  const [records,setRecords]=useState([]), [loading,setLoading]=useState(true), [saving,setSaving]=useState(false), [error,setError]=useState('')
-  const load=useCallback(()=>{setLoading(true);attendancePermissionService.getAttendancePermissions({per_page:50}).then(r=>setRecords(unwrap(r))).catch(e=>setError(e.response?.data?.message||'Riwayat pengajuan belum dapat dimuat.')).finally(()=>setLoading(false))},[])
-  useEffect(()=>{load()},[load])
-  const submit=async(e)=>{e.preventDefault();setSaving(true);setError('');try{const payload=new FormData();Object.entries(form).forEach(([key,value])=>{if(value!==null&&value!=='')payload.append(key,value)});payload.append('status','submitted');await attendancePermissionService.createAttendancePermission(payload);setForm({type:'izin',start_date:today,end_date:today,reason:'',notes:'',attachment:null});await load();Swal.fire({icon:'success',title:'Pengajuan terkirim',text:'Wali kelas akan memverifikasi pengajuan Anda.',confirmColor:'#0E5C44'})}catch(err){setError(err.response?.data?.message||'Pengajuan belum berhasil dikirim.')}finally{setSaving(false)}}
-  const cancel=async(id)=>{const result=await Swal.fire({icon:'warning',title:'Batalkan pengajuan?',showCancelButton:true,confirmButtonText:'Ya, batalkan',cancelButtonText:'Kembali',confirmButtonColor:'#E11D48'});if(!result.isConfirmed)return;try{await attendancePermissionService.cancelAttendancePermission(id);load()}catch(err){setError(err.response?.data?.message||'Pengajuan tidak dapat dibatalkan.')}}
-  const pending=records.filter(item=>['draft','submitted','waiting_verification'].includes(item.status)).length
-  const approved=records.filter(item=>item.status==='approved').length
-  const needsAction=records.filter(item=>['rejected','needs_revision'].includes(item.status)).length
-  return <MasterDataPage className="attendance-student-page" hideBreadcrumb><MasterPageHeader title="Pengajuan Izin/Sakit" description="Kirim bukti ketidakhadiran dan pantau hasil verifikasi wali kelas dalam satu tempat." tone="brand" icon={FilePlus2} />
-    <MasterStatsGrid className="lg:!grid-cols-3"><MasterStatCard icon={Clock3} label="Dalam Proses" value={pending} description="Menunggu verifikasi" variant="warning"/><MasterStatCard icon={CheckCircle2} label="Disetujui" value={approved} description="Pengajuan diterima" variant="success"/><MasterStatCard icon={ShieldAlert} label="Perlu Tindakan" value={needsAction} description="Ditolak atau perlu revisi" variant="danger"/></MasterStatsGrid>
-    {error&&<div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">{error}</div>}
-    <div className="grid gap-5 xl:grid-cols-[420px_1fr]"><form onSubmit={submit} className="h-fit space-y-4 rounded-[18px] border bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900"><div className="flex items-center gap-2"><FilePlus2 className="h-5 w-5 text-emerald-600"/><h2 className="font-bold">Form Pengajuan Baru</h2></div><label className="block text-xs font-bold">Jenis<CustomSelect value={form.type} onChange={e=>setForm({...form,type:e.target.value})} className="mt-2 h-11 w-full rounded-xl border bg-transparent px-3"><option value="izin">Izin</option><option value="sakit">Sakit</option></CustomSelect></label><div className="grid grid-cols-2 gap-3"><div><span className="block text-xs font-bold mb-1">Mulai</span><DatePicker required value={form.start_date} onChange={e=>setForm({...form,start_date:e.target.value})} /></div><div><span className="block text-xs font-bold mb-1">Selesai</span><DatePicker required min={form.start_date} value={form.end_date} onChange={e=>setForm({...form,end_date:e.target.value})} /></div></div><label className="block text-xs font-bold">Alasan<textarea required minLength={3} rows="4" value={form.reason} onChange={e=>setForm({...form,reason:e.target.value})} className="mt-2 w-full rounded-xl border bg-transparent p-3" placeholder="Jelaskan alasan izin atau sakit"/></label><label className="block text-xs font-bold">Lampiran <span className="font-normal text-slate-400">(PDF/JPG/PNG, maks. 5 MB)</span><span className="mt-2 flex min-h-11 items-center gap-2 rounded-xl border px-3"><Paperclip className="h-4 w-4"/><input type="file" accept=".pdf,.jpg,.jpeg,.png" onChange={e=>setForm({...form,attachment:e.target.files?.[0]||null})} className="w-full text-xs"/></span></label><button disabled={saving} className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#0E5C44] text-sm font-bold text-white disabled:opacity-60">{saving?<Loader2 className="h-4 w-4 animate-spin"/>:<Send className="h-4 w-4"/>}Kirim Pengajuan</button></form>
-      <section className="overflow-hidden rounded-[18px] border bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900"><div className="border-b p-5 dark:border-slate-800"><h2 className="font-bold">Status Pengajuan</h2><p className="mt-1 text-xs text-slate-500">Pengajuan aktif dan riwayat keputusan wali kelas.</p></div>{loading?<div className="grid min-h-48 place-items-center"><Loader2 className="h-7 w-7 animate-spin text-emerald-600"/></div>:records.length?<div className="divide-y dark:divide-slate-800">{records.map(item=><article key={item.id} className="p-5"><div className="flex flex-wrap items-start justify-between gap-3"><div><p className="text-xs font-bold uppercase text-emerald-600">{item.type}</p><h3 className="mt-1 font-bold">{item.start_date} — {item.end_date}</h3><p className="mt-2 text-sm text-slate-500">{item.reason}</p>{item.review_notes&&<p className="mt-2 rounded-lg bg-amber-50 p-2 text-xs text-amber-800">Catatan wali kelas: {item.review_notes}</p>}</div><span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold dark:bg-slate-800">{labelStatus[item.status]||item.status}</span></div>{['draft','submitted','waiting_verification'].includes(item.status)&&<button onClick={()=>cancel(item.id)} className="mt-4 flex items-center gap-1 text-xs font-bold text-rose-600"><Ban className="h-4 w-4"/>Batalkan</button>}</article>)}</div>:<div className="py-16 text-center text-sm text-slate-400">Belum ada pengajuan izin atau sakit.</div>}</section></div>
-  </MasterDataPage>
+ const [form,setForm]=useState({type:'izin',start_date:today,end_date:today,reason:'',notes:'',attachment:null})
+ const [records,setRecords]=useState([]), [loading,setLoading]=useState(true), [saving,setSaving]=useState(false), [error,setError]=useState('')
+ const load=useCallback(()=>{setLoading(true);attendancePermissionService.getAttendancePermissions({per_page:50}).then(r=>setRecords(unwrap(r))).catch(e=>setError(e.response?.data?.message||'Riwayat pengajuan belum dapat dimuat.')).finally(()=>setLoading(false))},[])
+ useEffect(()=>{load()},[load])
+ const submit=async(e)=>{e.preventDefault();setSaving(true);setError('');try{const payload=new FormData();Object.entries(form).forEach(([key,value])=>{if(value!==null&&value!=='')payload.append(key,value)});payload.append('status','submitted');await attendancePermissionService.createAttendancePermission(payload);setForm({type:'izin',start_date:today,end_date:today,reason:'',notes:'',attachment:null});await load();Swal.fire({icon:'success',title:'Pengajuan terkirim',text:'Wali kelas akan memverifikasi pengajuan Anda.',confirmColor:'#059669'})}catch(err){setError(err.response?.data?.message||'Pengajuan belum berhasil dikirim.')}finally{setSaving(false)}}
+ const cancel=async(id)=>{const result=await Swal.fire({icon:'warning',title:'Batalkan pengajuan?',showCancelButton:true,confirmButtonText:'Ya, batalkan',cancelButtonText:'Kembali',confirmButtonColor:'#E11D48'});if(!result.isConfirmed)return;try{await attendancePermissionService.cancelAttendancePermission(id);load()}catch(err){setError(err.response?.data?.message||'Pengajuan tidak dapat dibatalkan.')}}
+ const pending=records.filter(item=>['draft','submitted','waiting_verification'].includes(item.status)).length
+ const approved=records.filter(item=>item.status==='approved').length
+ const needsAction=records.filter(item=>['rejected','needs_revision'].includes(item.status)).length
+ return <MasterDataPage className="attendance-student-page" hideBreadcrumb><MasterPageHeader title="Pengajuan Izin/Sakit" description="Kirim bukti ketidakhadiran dan pantau hasil verifikasi wali kelas dalam satu tempat." tone="brand" icon={FilePlus2} />
+ <MasterStatsGrid className="lg:!grid-cols-3"><MasterStatCard icon={Clock3} label="Dalam Proses" value={pending} description="Menunggu verifikasi" variant="warning"/><MasterStatCard icon={CheckCircle2} label="Disetujui" value={approved} description="Pengajuan diterima" variant="success"/><MasterStatCard icon={ShieldAlert} label="Perlu Tindakan" value={needsAction} description="Ditolak atau perlu revisi" variant="danger"/></MasterStatsGrid>
+ {error&&<div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50 p-4 text-sm text-rose-700">{error}</div>}
+ <div className="grid gap-5 xl:grid-cols-[420px_1fr]"><form onSubmit={submit} className="h-fit space-y-4 rounded-xl border bg-white p-5 shadow-sm dark:border-emerald-800/60 dark:bg-slate-900"><div className="flex items-center gap-2"><FilePlus2 className="h-5 w-5 text-emerald-600"/><h2 className="font-bold">Form Pengajuan Baru</h2></div><label className="block text-xs font-bold">Jenis<CustomSelect value={form.type} onChange={e=>setForm({...form,type:e.target.value})} className="mt-2 h-9 w-full rounded-xl border bg-transparent px-3"><option value="izin">Izin</option><option value="sakit">Sakit</option></CustomSelect></label><div className="grid grid-cols-2 gap-3"><div><span className="block text-xs font-bold mb-1">Mulai</span><DatePicker required value={form.start_date} onChange={e=>setForm({...form,start_date:e.target.value})} /></div><div><span className="block text-xs font-bold mb-1">Selesai</span><DatePicker required min={form.start_date} value={form.end_date} onChange={e=>setForm({...form,end_date:e.target.value})} /></div></div><label className="block text-xs font-bold">Alasan<textarea required minLength={3} rows="4" value={form.reason} onChange={e=>setForm({...form,reason:e.target.value})} className="mt-2 w-full rounded-xl border bg-transparent p-3" placeholder="Jelaskan alasan izin atau sakit"/></label><label className="block text-xs font-bold">Lampiran <span className="font-normal text-slate-400">(PDF/JPG/PNG, maks. 5 MB)</span><span className="mt-2 flex min-h-9 items-center gap-2 rounded-xl border px-3"><Paperclip className="h-4 w-4"/><input type="file" accept=".pdf,.jpg,.jpeg,.png" onChange={e=>setForm({...form,attachment:e.target.files?.[0]||null})} className="w-full text-xs"/></span></label><button disabled={saving} className="flex h-9 w-full items-center justify-center gap-2 rounded-xl bg-[#059669] hover:bg-[#047857] text-sm font-bold text-white disabled:opacity-60">{saving?<Loader2 className="h-4 w-4 animate-spin"/>:<Send className="h-4 w-4"/>}Kirim Pengajuan</button></form>
+ <section className="overflow-hidden rounded-xl border bg-white shadow-sm dark:border-emerald-800/60 dark:bg-slate-900"><div className="border-b p-5 dark:border-emerald-800/60"><h2 className="font-bold">Status Pengajuan</h2><p className="mt-1 text-xs text-slate-500">Pengajuan aktif dan riwayat keputusan wali kelas.</p></div>{loading?<div className="grid min-h-48 place-items-center"><Loader2 className="h-7 w-7 animate-spin text-emerald-600"/></div>:records.length?<div className="divide-y dark:divide-emerald-900/40">{records.map(item=><article key={item.id} className="p-5"><div className="flex flex-wrap items-start justify-between gap-3"><div><p className="text-xs font-bold uppercase text-emerald-600">{item.type}</p><h3 className="mt-1 font-bold">{item.start_date} — {item.end_date}</h3><p className="mt-2 text-sm text-slate-500">{item.reason}</p>{item.review_notes&&<p className="mt-2 rounded-lg bg-amber-50 p-2 text-xs text-amber-800">Catatan wali kelas: {item.review_notes}</p>}</div><span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold dark:bg-slate-800">{labelStatus[item.status]||item.status}</span></div>{['draft','submitted','waiting_verification'].includes(item.status)&&<button onClick={()=>cancel(item.id)} className="mt-4 flex items-center gap-1 text-xs font-bold text-rose-600"><Ban className="h-4 w-4"/>Batalkan</button>}</article>)}</div>:<div className="py-16 text-center text-sm text-slate-400">Belum ada pengajuan izin atau sakit.</div>}</section></div>
+ </MasterDataPage>
 }

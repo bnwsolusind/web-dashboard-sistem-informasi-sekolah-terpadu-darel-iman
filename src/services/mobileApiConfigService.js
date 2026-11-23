@@ -4,10 +4,10 @@ export const DEFAULT_MOBILE_API_CONFIG = {
   platform: 'android',
   version: 1,
   theme: {
-    primary_color: '#0E5C44',
+    primary_color: '#059669',
     secondary_color: '#10B981',
-    accent_color: '#3FBF75',
-    background_color: '#F7F9FC',
+    accent_color: '#10B981',
+    background_color: '#F2FBF7',
     background_gradient_enabled: true,
     background_gradient_start: '#F7FCFA',
     background_gradient_end: '#EAF8F2',

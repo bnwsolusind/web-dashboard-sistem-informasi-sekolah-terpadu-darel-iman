@@ -1,0 +1,926 @@
+{
+  "local": {
+    "Dashboard": {
+      "routeName": "Dashboard",
+      "canvasBg": "rgb(244, 248, 246)",
+      "primaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(5, 150, 105)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "3.35544e+07px",
+        "height": "36px",
+        "iconColor": "rgb(255, 255, 255)"
+      },
+      "secondaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "sidebarActive": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "tableHeader": null,
+      "kpiCount": 1,
+      "kpis": [
+        {
+          "cardBg": "oklab(0.984 -0.0177531 -0.00676966 / 0.8)",
+          "cardRadius": "12px",
+          "boxBg": null,
+          "boxRadius": null,
+          "iconColor": "oklch(0.609 0.126 221.723)"
+        }
+      ]
+    },
+    "Master Siswa": {
+      "routeName": "Master Siswa",
+      "canvasBg": "rgb(244, 248, 246)",
+      "primaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(5, 150, 105)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "3.35544e+07px",
+        "height": "36px",
+        "iconColor": "rgb(255, 255, 255)"
+      },
+      "secondaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "sidebarActive": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "tableHeader": null,
+      "kpiCount": 1,
+      "kpis": [
+        {
+          "cardBg": "oklab(0.984 -0.0177531 -0.00676966 / 0.8)",
+          "cardRadius": "12px",
+          "boxBg": null,
+          "boxRadius": null,
+          "iconColor": "oklch(0.609 0.126 221.723)"
+        }
+      ]
+    },
+    "Pegawai & Guru": {
+      "routeName": "Pegawai & Guru",
+      "canvasBg": "rgb(244, 248, 246)",
+      "primaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(5, 150, 105)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "3.35544e+07px",
+        "height": "48px",
+        "iconColor": "rgb(255, 255, 255)"
+      },
+      "secondaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "sidebarActive": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "tableHeader": {
+        "tag": "THEAD",
+        "text": "NO\t\nNama SDM\n\t\nJenis\n\t\nUnit Ke",
+        "bg": "rgb(232, 246, 240)",
+        "color": "rgb(51, 65, 85)",
+        "borderRadius": "0px",
+        "height": "56.5px",
+        "iconColor": "rgb(5, 150, 105)"
+      },
+      "kpiCount": 9,
+      "kpis": [
+        {
+          "cardBg": "oklab(0.984 -0.0177531 -0.00676966 / 0.8)",
+          "cardRadius": "12px",
+          "boxBg": null,
+          "boxRadius": null,
+          "iconColor": "oklch(0.609 0.126 221.723)"
+        },
+        {
+          "cardBg": "rgb(255, 255, 255)",
+          "cardRadius": "16px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "oklch(0.372 0.044 257.287)"
+        },
+        {
+          "cardBg": "rgb(255, 255, 255)",
+          "cardRadius": "12px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "rgb(5, 150, 105)"
+        }
+      ]
+    },
+    "Unit Pendidikan": {
+      "routeName": "Unit Pendidikan",
+      "canvasBg": "rgb(244, 248, 246)",
+      "primaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(5, 150, 105)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "3.35544e+07px",
+        "height": "48px",
+        "iconColor": "rgb(255, 255, 255)"
+      },
+      "secondaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "sidebarActive": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "tableHeader": {
+        "tag": "THEAD",
+        "text": "NO\t\nIdentitas Unit\n\t\nLokasi\n\t\n",
+        "bg": "rgb(232, 246, 240)",
+        "color": "rgb(51, 65, 85)",
+        "borderRadius": "0px",
+        "height": "40.5px",
+        "iconColor": "rgb(5, 150, 105)"
+      },
+      "kpiCount": 9,
+      "kpis": [
+        {
+          "cardBg": "oklab(0.984 -0.0177531 -0.00676966 / 0.8)",
+          "cardRadius": "12px",
+          "boxBg": null,
+          "boxRadius": null,
+          "iconColor": "oklch(0.609 0.126 221.723)"
+        },
+        {
+          "cardBg": "rgb(255, 255, 255)",
+          "cardRadius": "16px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "oklch(0.372 0.044 257.287)"
+        },
+        {
+          "cardBg": "rgb(255, 255, 255)",
+          "cardRadius": "12px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "rgb(5, 150, 105)"
+        }
+      ]
+    },
+    "Tahfizh": {
+      "routeName": "Tahfizh",
+      "canvasBg": "rgb(244, 248, 246)",
+      "primaryBtn": {
+        "tag": "BUTTON",
+        "text": "Pilih Siswa",
+        "bg": "rgb(5, 150, 105)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "10px",
+        "height": "36px",
+        "iconColor": "rgb(255, 255, 255)"
+      },
+      "secondaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "sidebarActive": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "tableHeader": null,
+      "kpiCount": 9,
+      "kpis": [
+        {
+          "cardBg": "oklab(0.984 -0.0177531 -0.00676966 / 0.8)",
+          "cardRadius": "12px",
+          "boxBg": null,
+          "boxRadius": null,
+          "iconColor": "oklch(0.609 0.126 221.723)"
+        },
+        {
+          "cardBg": "rgb(255, 255, 255)",
+          "cardRadius": "16px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "rgb(5, 150, 105)"
+        },
+        {
+          "cardBg": "rgb(255, 255, 255)",
+          "cardRadius": "16px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "rgb(5, 150, 105)"
+        }
+      ]
+    },
+    "Keuangan Tagihan": {
+      "routeName": "Keuangan Tagihan",
+      "canvasBg": "rgb(244, 248, 246)",
+      "primaryBtn": {
+        "tag": "BUTTON",
+        "text": "Terbitkan Tagihan",
+        "bg": "rgb(5, 150, 105)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "10px",
+        "height": "36px",
+        "iconColor": "rgb(255, 255, 255)"
+      },
+      "secondaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "sidebarActive": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "tableHeader": {
+        "tag": "THEAD",
+        "text": "SISWA\tKELAS & UNIT\tURAIAN TAGI",
+        "bg": "rgb(232, 246, 240)",
+        "color": "rgb(51, 65, 85)",
+        "borderRadius": "0px",
+        "height": "44.5px",
+        "iconColor": null
+      },
+      "kpiCount": 7,
+      "kpis": [
+        {
+          "cardBg": "oklab(0.984 -0.0177531 -0.00676966 / 0.8)",
+          "cardRadius": "12px",
+          "boxBg": null,
+          "boxRadius": null,
+          "iconColor": "oklch(0.609 0.126 221.723)"
+        },
+        {
+          "cardBg": "rgb(255, 255, 255)",
+          "cardRadius": "16px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "oklch(0.372 0.044 257.287)"
+        },
+        {
+          "cardBg": "rgb(255, 255, 255)",
+          "cardRadius": "16px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "rgb(5, 150, 105)"
+        }
+      ]
+    },
+    "LMS Bank Soal": {
+      "routeName": "LMS Bank Soal",
+      "canvasBg": "rgb(244, 248, 246)",
+      "primaryBtn": {
+        "tag": "BUTTON",
+        "text": "Tambah Soal Baru",
+        "bg": "rgb(5, 150, 105)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "10px",
+        "height": "36px",
+        "iconColor": "rgb(255, 255, 255)"
+      },
+      "secondaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "sidebarActive": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "tableHeader": null,
+      "kpiCount": 9,
+      "kpis": [
+        {
+          "cardBg": "oklab(0.984 -0.0177531 -0.00676966 / 0.8)",
+          "cardRadius": "12px",
+          "boxBg": null,
+          "boxRadius": null,
+          "iconColor": "oklch(0.609 0.126 221.723)"
+        },
+        {
+          "cardBg": "rgb(255, 255, 255)",
+          "cardRadius": "16px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "rgb(5, 150, 105)"
+        },
+        {
+          "cardBg": "rgb(255, 255, 255)",
+          "cardRadius": "16px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "rgb(5, 150, 105)"
+        }
+      ]
+    },
+    "Laporan Absensi": {
+      "routeName": "Laporan Absensi",
+      "canvasBg": "rgb(244, 248, 246)",
+      "primaryBtn": {
+        "tag": "BUTTON",
+        "text": "Segarkan Data",
+        "bg": "rgb(255, 255, 255)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "10px",
+        "height": "32px",
+        "iconColor": null
+      },
+      "secondaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "sidebarActive": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "tableHeader": {
+        "tag": "THEAD",
+        "text": "NO\tSISWA\tNIS\tUNIT PENDIDIKAN\tK",
+        "bg": "rgb(232, 246, 240)",
+        "color": "rgb(51, 65, 85)",
+        "borderRadius": "0px",
+        "height": "45px",
+        "iconColor": null
+      },
+      "kpiCount": 9,
+      "kpis": [
+        {
+          "cardBg": "oklab(0.984 -0.0177531 -0.00676966 / 0.8)",
+          "cardRadius": "12px",
+          "boxBg": null,
+          "boxRadius": null,
+          "iconColor": "oklch(0.609 0.126 221.723)"
+        },
+        {
+          "cardBg": "rgb(255, 255, 255)",
+          "cardRadius": "16px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "rgb(5, 150, 105)"
+        },
+        {
+          "cardBg": "rgb(255, 255, 255)",
+          "cardRadius": "16px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "oklch(0.372 0.044 257.287)"
+        }
+      ]
+    }
+  },
+  "staging": {
+    "Dashboard": {
+      "routeName": "Dashboard",
+      "canvasBg": "rgb(247, 249, 252)",
+      "primaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "oklch(0.424 0.091 161.4)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "28px",
+        "height": "40px",
+        "iconColor": "rgb(255, 255, 255)"
+      },
+      "secondaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "sidebarActive": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "tableHeader": {
+        "tag": "THEAD",
+        "text": "Nama Unit Pendidikan\n\t\nSiswa A",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "oklch(0.262 0.051 172.552)",
+        "borderRadius": "0px",
+        "height": "44.1562px",
+        "iconColor": "oklch(0.704 0.04 256.788)"
+      },
+      "kpiCount": 5,
+      "kpis": [
+        {
+          "cardBg": "oklab(0.984 -0.0177531 -0.00676966 / 0.8)",
+          "cardRadius": "28px",
+          "boxBg": null,
+          "boxRadius": null,
+          "iconColor": "oklch(0.609 0.126 221.723)"
+        },
+        {
+          "cardBg": "oklch(1 0 0)",
+          "cardRadius": "22px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "rgb(255, 255, 255)"
+        },
+        {
+          "cardBg": "oklab(0.979 -0.0203862 0.00504016 / 0.7)",
+          "cardRadius": "28px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "oklch(0.588 0.158 241.966)"
+        }
+      ]
+    },
+    "Master Siswa": {
+      "routeName": "Master Siswa",
+      "canvasBg": "rgb(247, 249, 252)",
+      "primaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "oklch(0.596 0.145 163.225)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "3.35544e+07px",
+        "height": "44px",
+        "iconColor": "rgb(255, 255, 255)"
+      },
+      "secondaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "sidebarActive": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "tableHeader": {
+        "tag": "THEAD",
+        "text": "RANK\tIDENTITAS SISWA\tKELAS & U",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "oklch(0.262 0.051 172.552)",
+        "borderRadius": "0px",
+        "height": "46px",
+        "iconColor": null
+      },
+      "kpiCount": 7,
+      "kpis": [
+        {
+          "cardBg": "oklab(0.984 -0.0177531 -0.00676966 / 0.8)",
+          "cardRadius": "28px",
+          "boxBg": null,
+          "boxRadius": null,
+          "iconColor": "oklch(0.609 0.126 221.723)"
+        },
+        {
+          "cardBg": "oklch(1 0 0)",
+          "cardRadius": "22px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "rgb(255, 255, 255)"
+        },
+        {
+          "cardBg": "rgb(255, 255, 255)",
+          "cardRadius": "21px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "oklch(0.704 0.04 256.788)"
+        }
+      ]
+    },
+    "Pegawai & Guru": {
+      "routeName": "Pegawai & Guru",
+      "canvasBg": "rgb(247, 249, 252)",
+      "primaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "oklab(0.596 -0.13883 0.041849 / 0.3)",
+        "color": "oklab(0.999994 0.0000455678 0.0000200868 / 0.4)",
+        "borderRadius": "21px",
+        "height": "36px",
+        "iconColor": "rgb(255, 255, 255)"
+      },
+      "secondaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "sidebarActive": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "tableHeader": {
+        "tag": "THEAD",
+        "text": "NO\t\nNama SDM\n\t\nJenis\n\t\nUnit Ke",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "oklch(0.279 0.041 260.031)",
+        "borderRadius": "0px",
+        "height": "59.2812px",
+        "iconColor": "oklch(0.596 0.145 163.225)"
+      },
+      "kpiCount": 7,
+      "kpis": [
+        {
+          "cardBg": "oklab(0.984 -0.0177531 -0.00676966 / 0.8)",
+          "cardRadius": "28px",
+          "boxBg": null,
+          "boxRadius": null,
+          "iconColor": "oklch(0.609 0.126 221.723)"
+        },
+        {
+          "cardBg": "rgb(255, 255, 255)",
+          "cardRadius": "28px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "oklch(0.596 0.145 163.225)"
+        },
+        {
+          "cardBg": "rgb(255, 255, 255)",
+          "cardRadius": "28px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "oklch(0.588 0.158 241.966)"
+        }
+      ]
+    },
+    "Unit Pendidikan": {
+      "routeName": "Unit Pendidikan",
+      "canvasBg": "rgb(247, 249, 252)",
+      "primaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "oklch(0.596 0.145 163.225)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "28px",
+        "height": "40px",
+        "iconColor": "rgb(255, 255, 255)"
+      },
+      "secondaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "sidebarActive": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "tableHeader": {
+        "tag": "THEAD",
+        "text": "NO\t\nIdentitas Unit\n\t\nLokasi\n\t\n",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "oklch(0.279 0.041 260.031)",
+        "borderRadius": "0px",
+        "height": "42.1406px",
+        "iconColor": "oklch(0.596 0.145 163.225)"
+      },
+      "kpiCount": 7,
+      "kpis": [
+        {
+          "cardBg": "oklab(0.984 -0.0177531 -0.00676966 / 0.8)",
+          "cardRadius": "28px",
+          "boxBg": null,
+          "boxRadius": null,
+          "iconColor": "oklch(0.609 0.126 221.723)"
+        },
+        {
+          "cardBg": "rgb(255, 255, 255)",
+          "cardRadius": "28px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "oklch(0.596 0.145 163.225)"
+        },
+        {
+          "cardBg": "rgb(255, 255, 255)",
+          "cardRadius": "28px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "oklch(0.588 0.158 241.966)"
+        }
+      ]
+    },
+    "Tahfizh": {
+      "routeName": "Tahfizh",
+      "canvasBg": "rgb(247, 249, 252)",
+      "primaryBtn": {
+        "tag": "BUTTON",
+        "text": "Pilih Siswa",
+        "bg": "oklch(0.424 0.091 161.4)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "28px",
+        "height": "36px",
+        "iconColor": "rgb(255, 255, 255)"
+      },
+      "secondaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "sidebarActive": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "tableHeader": null,
+      "kpiCount": 5,
+      "kpis": [
+        {
+          "cardBg": "oklab(0.984 -0.0177531 -0.00676966 / 0.8)",
+          "cardRadius": "28px",
+          "boxBg": null,
+          "boxRadius": null,
+          "iconColor": "oklch(0.609 0.126 221.723)"
+        },
+        {
+          "cardBg": "rgb(255, 255, 255)",
+          "cardRadius": "22px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "rgb(255, 255, 255)"
+        },
+        {
+          "cardBg": "rgb(255, 255, 255)",
+          "cardRadius": "21px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "oklch(0.596 0.145 163.225)"
+        }
+      ]
+    },
+    "Keuangan Tagihan": {
+      "routeName": "Keuangan Tagihan",
+      "canvasBg": "rgb(247, 249, 252)",
+      "primaryBtn": {
+        "tag": "BUTTON",
+        "text": "Terbitkan Tagihan",
+        "bg": "rgb(14, 92, 68)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "21px",
+        "height": "36px",
+        "iconColor": "rgb(255, 255, 255)"
+      },
+      "secondaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "sidebarActive": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "tableHeader": {
+        "tag": "THEAD",
+        "text": "SISWA\tKELAS & UNIT\tURAIAN TAGI",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "oklch(0.262 0.051 172.552)",
+        "borderRadius": "0px",
+        "height": "61px",
+        "iconColor": null
+      },
+      "kpiCount": 1,
+      "kpis": [
+        {
+          "cardBg": "oklab(0.984 -0.0177531 -0.00676966 / 0.8)",
+          "cardRadius": "28px",
+          "boxBg": null,
+          "boxRadius": null,
+          "iconColor": "oklch(0.609 0.126 221.723)"
+        }
+      ]
+    },
+    "LMS Bank Soal": {
+      "routeName": "LMS Bank Soal",
+      "canvasBg": "rgb(247, 249, 252)",
+      "primaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "oklch(0.424 0.091 161.4)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "28px",
+        "height": "40px",
+        "iconColor": "rgb(255, 255, 255)"
+      },
+      "secondaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "sidebarActive": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "tableHeader": null,
+      "kpiCount": 4,
+      "kpis": [
+        {
+          "cardBg": "oklab(0.984 -0.0177531 -0.00676966 / 0.8)",
+          "cardRadius": "28px",
+          "boxBg": null,
+          "boxRadius": null,
+          "iconColor": "oklch(0.609 0.126 221.723)"
+        },
+        {
+          "cardBg": "rgb(255, 255, 255)",
+          "cardRadius": "21px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "oklch(0.596 0.145 163.225)"
+        },
+        {
+          "cardBg": "rgba(0, 0, 0, 0)",
+          "cardRadius": "28px",
+          "boxBg": "rgba(0, 0, 0, 0)",
+          "boxRadius": "0px",
+          "iconColor": "rgb(255, 255, 255)"
+        }
+      ]
+    },
+    "Laporan Absensi": {
+      "routeName": "Laporan Absensi",
+      "canvasBg": "rgb(247, 249, 252)",
+      "primaryBtn": {
+        "tag": "BUTTON",
+        "text": "Segarkan Data",
+        "bg": "rgb(14, 92, 68)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "21px",
+        "height": "36px",
+        "iconColor": null
+      },
+      "secondaryBtn": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "sidebarActive": {
+        "tag": "BUTTON",
+        "text": "",
+        "bg": "rgb(255, 255, 255)",
+        "color": "oklch(0.446 0.043 257.281)",
+        "borderRadius": "3.35544e+07px",
+        "height": "26px",
+        "iconColor": "oklch(0.446 0.043 257.281)"
+      },
+      "tableHeader": {
+        "tag": "THEAD",
+        "text": "NO\tSISWA\tNIS\tUNIT PENDIDIKAN\tK",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "oklch(0.262 0.051 172.552)",
+        "borderRadius": "0px",
+        "height": "72.9688px",
+        "iconColor": null
+      },
+      "kpiCount": 1,
+      "kpis": [
+        {
+          "cardBg": "oklab(0.984 -0.0177531 -0.00676966 / 0.8)",
+          "cardRadius": "28px",
+          "boxBg": null,
+          "boxRadius": null,
+          "iconColor": "oklch(0.609 0.126 221.723)"
+        }
+      ]
+    }
+  }
+}

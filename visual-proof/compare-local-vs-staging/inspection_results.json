@@ -1,0 +1,299 @@
+{
+  "local_login": {
+    "env": "Local Login",
+    "canvasBg": "rgb(244, 248, 246)",
+    "primaryButton": {
+      "tag": "BUTTON",
+      "text": "Masuk ke Sistem",
+      "bg": "rgb(5, 150, 105)",
+      "color": "rgb(255, 255, 255)",
+      "borderRadius": "10px",
+      "height": "36px",
+      "boxShadow": "rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
+      "iconColor": null
+    },
+    "primaryButtonIconColor": null,
+    "secondaryButton": {
+      "tag": "BUTTON",
+      "text": "Scan QR ID Card Pegawai / Kart",
+      "bg": "rgb(255, 255, 255)",
+      "color": "oklch(0.372 0.044 257.287)",
+      "borderRadius": "8px",
+      "height": "36px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 1px 0px 0px",
+      "iconColor": "rgb(255, 255, 255)"
+    },
+    "secondaryButtonIconColor": "rgb(255, 255, 255)",
+    "card": {
+      "tag": "DIV",
+      "text": "PUSAT PENDIDIKAN ISLAM TERPADU",
+      "bg": "rgb(255, 255, 255)",
+      "color": "oklch(0.208 0.042 265.755)",
+      "borderRadius": "16px",
+      "height": "712px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.1) 0px 8px 10px -6px",
+      "iconColor": "oklch(0.704 0.04 256.788)"
+    },
+    "tableHeader": null,
+    "sidebarActive": {
+      "tag": "BUTTON",
+      "text": "Masuk ke Sistem",
+      "bg": "rgb(5, 150, 105)",
+      "color": "rgb(255, 255, 255)",
+      "borderRadius": "10px",
+      "height": "36px",
+      "boxShadow": "rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
+      "iconColor": null
+    },
+    "title": "Dareliman Edu - Yayasan Dar El-Iman"
+  },
+  "local_dashboard": {
+    "env": "Local Dashboard",
+    "canvasBg": "rgb(244, 248, 246)",
+    "primaryButton": {
+      "tag": "BUTTON",
+      "text": "Bantuan & Panduan",
+      "bg": "rgb(5, 150, 105)",
+      "color": "rgb(255, 255, 255)",
+      "borderRadius": "12px",
+      "height": "32.5px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
+      "iconColor": "rgb(255, 255, 255)"
+    },
+    "primaryButtonIconColor": "rgb(255, 255, 255)",
+    "secondaryButton": {
+      "tag": "BUTTON",
+      "text": "",
+      "bg": "rgb(255, 255, 255)",
+      "color": "oklch(0.446 0.043 257.281)",
+      "borderRadius": "3.35544e+07px",
+      "height": "26px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.1) 0px 2px 4px -2px",
+      "iconColor": "oklch(0.446 0.043 257.281)"
+    },
+    "secondaryButtonIconColor": "oklch(0.446 0.043 257.281)",
+    "card": {
+      "tag": "BUTTON",
+      "text": "",
+      "bg": "rgb(255, 255, 255)",
+      "color": "oklch(0.446 0.043 257.281)",
+      "borderRadius": "3.35544e+07px",
+      "height": "26px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.1) 0px 2px 4px -2px",
+      "iconColor": "oklch(0.446 0.043 257.281)"
+    },
+    "tableHeader": null,
+    "sidebarActive": {
+      "tag": "BUTTON",
+      "text": "Bantuan & Panduan",
+      "bg": "rgb(5, 150, 105)",
+      "color": "rgb(255, 255, 255)",
+      "borderRadius": "12px",
+      "height": "32.5px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
+      "iconColor": "rgb(255, 255, 255)"
+    },
+    "title": "Dareliman Edu"
+  },
+  "local_siswa": {
+    "env": "Local Siswa",
+    "canvasBg": "rgb(244, 248, 246)",
+    "primaryButton": {
+      "tag": "BUTTON",
+      "text": "Bantuan & Panduan",
+      "bg": "rgb(5, 150, 105)",
+      "color": "rgb(255, 255, 255)",
+      "borderRadius": "12px",
+      "height": "32.5px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
+      "iconColor": "rgb(255, 255, 255)"
+    },
+    "primaryButtonIconColor": "rgb(255, 255, 255)",
+    "secondaryButton": {
+      "tag": "BUTTON",
+      "text": "",
+      "bg": "rgb(255, 255, 255)",
+      "color": "oklch(0.446 0.043 257.281)",
+      "borderRadius": "3.35544e+07px",
+      "height": "26px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.1) 0px 2px 4px -2px",
+      "iconColor": "oklch(0.446 0.043 257.281)"
+    },
+    "secondaryButtonIconColor": "oklch(0.446 0.043 257.281)",
+    "card": {
+      "tag": "BUTTON",
+      "text": "",
+      "bg": "rgb(255, 255, 255)",
+      "color": "oklch(0.446 0.043 257.281)",
+      "borderRadius": "3.35544e+07px",
+      "height": "26px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.1) 0px 2px 4px -2px",
+      "iconColor": "oklch(0.446 0.043 257.281)"
+    },
+    "tableHeader": {
+      "tag": "THEAD",
+      "text": "RANK\tIDENTITAS SISWA\tKELAS & U",
+      "bg": "rgb(232, 246, 240)",
+      "color": "rgb(51, 65, 85)",
+      "borderRadius": "0px",
+      "height": "45.5px",
+      "boxShadow": "none",
+      "iconColor": null
+    },
+    "sidebarActive": {
+      "tag": "BUTTON",
+      "text": "Bantuan & Panduan",
+      "bg": "rgb(5, 150, 105)",
+      "color": "rgb(255, 255, 255)",
+      "borderRadius": "12px",
+      "height": "32.5px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
+      "iconColor": "rgb(255, 255, 255)"
+    },
+    "title": "Dareliman Edu"
+  },
+  "staging_login": {
+    "env": "Staging Login",
+    "canvasBg": "rgb(247, 249, 252)",
+    "primaryButton": {
+      "tag": "BUTTON",
+      "text": "Masuk ke Sistem",
+      "bg": "rgb(14, 92, 68)",
+      "color": "rgb(255, 255, 255)",
+      "borderRadius": "28px",
+      "height": "44px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.432 -0.0925326 0.0215109 / 0.2) 0px 4px 6px -1px, oklab(0.432 -0.0925326 0.0215109 / 0.2) 0px 2px 4px -2px",
+      "iconColor": null
+    },
+    "primaryButtonIconColor": null,
+    "secondaryButton": null,
+    "secondaryButtonIconColor": null,
+    "card": {
+      "tag": "IMG",
+      "text": "",
+      "bg": "rgb(255, 255, 255)",
+      "color": "rgb(255, 255, 255)",
+      "borderRadius": "28px",
+      "height": "80px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.1) 0px 8px 10px -6px",
+      "iconColor": null
+    },
+    "tableHeader": null,
+    "sidebarActive": null,
+    "title": "Dareliman Edu - Yayasan Dar El-Iman"
+  },
+  "staging_dashboard": {
+    "env": "Staging Dashboard",
+    "canvasBg": "rgb(247, 249, 252)",
+    "primaryButton": {
+      "tag": "BUTTON",
+      "text": "",
+      "bg": "oklch(0.424 0.091 161.4)",
+      "color": "rgb(255, 255, 255)",
+      "borderRadius": "28px",
+      "height": "40px",
+      "boxShadow": "none",
+      "iconColor": "rgb(255, 255, 255)"
+    },
+    "primaryButtonIconColor": "rgb(255, 255, 255)",
+    "secondaryButton": {
+      "tag": "BUTTON",
+      "text": "",
+      "bg": "rgb(255, 255, 255)",
+      "color": "oklch(0.446 0.043 257.281)",
+      "borderRadius": "3.35544e+07px",
+      "height": "26px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.1) 0px 2px 4px -2px",
+      "iconColor": "oklch(0.446 0.043 257.281)"
+    },
+    "secondaryButtonIconColor": "oklch(0.446 0.043 257.281)",
+    "card": {
+      "tag": "BUTTON",
+      "text": "",
+      "bg": "rgb(255, 255, 255)",
+      "color": "oklch(0.446 0.043 257.281)",
+      "borderRadius": "3.35544e+07px",
+      "height": "26px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.1) 0px 2px 4px -2px",
+      "iconColor": "oklch(0.446 0.043 257.281)"
+    },
+    "tableHeader": {
+      "tag": "THEAD",
+      "text": "Nama Unit Pendidikan\n\t\nSiswa A",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "oklch(0.262 0.051 172.552)",
+      "borderRadius": "0px",
+      "height": "44.1562px",
+      "boxShadow": "none",
+      "iconColor": "oklch(0.704 0.04 256.788)"
+    },
+    "sidebarActive": {
+      "tag": "DIV",
+      "text": "",
+      "bg": "oklch(0.596 0.145 163.225)",
+      "color": "rgb(255, 255, 255)",
+      "borderRadius": "14px",
+      "height": "24px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.696 -0.162114 0.0511766 / 0.3) 0px 0px 0px 1px, rgba(0, 0, 0, 0.05) 0px 1px 0px 0px",
+      "iconColor": "rgb(255, 255, 255)"
+    },
+    "title": "Dareliman Edu"
+  },
+  "staging_siswa": {
+    "env": "Staging Siswa",
+    "canvasBg": "rgb(247, 249, 252)",
+    "primaryButton": {
+      "tag": "BUTTON",
+      "text": "",
+      "bg": "oklch(0.596 0.145 163.225)",
+      "color": "rgb(255, 255, 255)",
+      "borderRadius": "28px",
+      "height": "40px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
+      "iconColor": "rgb(255, 255, 255)"
+    },
+    "primaryButtonIconColor": "rgb(255, 255, 255)",
+    "secondaryButton": {
+      "tag": "BUTTON",
+      "text": "",
+      "bg": "rgb(255, 255, 255)",
+      "color": "oklch(0.446 0.043 257.281)",
+      "borderRadius": "3.35544e+07px",
+      "height": "26px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.1) 0px 2px 4px -2px",
+      "iconColor": "oklch(0.446 0.043 257.281)"
+    },
+    "secondaryButtonIconColor": "oklch(0.446 0.043 257.281)",
+    "card": {
+      "tag": "BUTTON",
+      "text": "",
+      "bg": "rgb(255, 255, 255)",
+      "color": "oklch(0.446 0.043 257.281)",
+      "borderRadius": "3.35544e+07px",
+      "height": "26px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.1) 0px 2px 4px -2px",
+      "iconColor": "oklch(0.446 0.043 257.281)"
+    },
+    "tableHeader": {
+      "tag": "THEAD",
+      "text": "RANK\tIDENTITAS SISWA\tKELAS & U",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "oklch(0.262 0.051 172.552)",
+      "borderRadius": "0px",
+      "height": "46px",
+      "boxShadow": "none",
+      "iconColor": null
+    },
+    "sidebarActive": {
+      "tag": "DIV",
+      "text": "",
+      "bg": "oklch(0.596 0.145 163.225)",
+      "color": "rgb(255, 255, 255)",
+      "borderRadius": "14px",
+      "height": "24px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.696 -0.162114 0.0511766 / 0.3) 0px 0px 0px 1px, rgba(0, 0, 0, 0.05) 0px 1px 0px 0px",
+      "iconColor": "rgb(255, 255, 255)"
+    },
+    "title": "Dareliman Edu"
+  }
+}

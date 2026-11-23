@@ -1,0 +1,326 @@
+[
+  {
+    "name": "01-students",
+    "path": "/dashboard/master/siswa",
+    "consoleErrorsCount": 0,
+    "consoleErrors": [],
+    "skeletonCount": 0,
+    "buttonComputed": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "text": "Cetak"
+    },
+    "searchComputed": {
+      "height": "48px",
+      "borderRadius": "12px",
+      "fontSize": "12px"
+    },
+    "kpiComputed": {
+      "borderRadius": "21px",
+      "backgroundColor": "rgb(255, 255, 255)"
+    },
+    "largeRadiiCount": 0,
+    "screenshot": "01-students.png"
+  },
+  {
+    "name": "02-employees",
+    "path": "/dashboard/employees",
+    "consoleErrorsCount": 0,
+    "consoleErrors": [],
+    "skeletonCount": 0,
+    "buttonComputed": null,
+    "searchComputed": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "fontSize": "14px"
+    },
+    "kpiComputed": {
+      "borderRadius": "21px",
+      "backgroundColor": "rgb(255, 255, 255)"
+    },
+    "largeRadiiCount": 0,
+    "screenshot": "02-employees.png"
+  },
+  {
+    "name": "03-education-units",
+    "path": "/dashboard/master/unit-pendidikan",
+    "consoleErrorsCount": 0,
+    "consoleErrors": [],
+    "skeletonCount": 0,
+    "buttonComputed": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "text": "Cetak"
+    },
+    "searchComputed": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "fontSize": "14px"
+    },
+    "kpiComputed": {
+      "borderRadius": "21px",
+      "backgroundColor": "rgb(255, 255, 255)"
+    },
+    "largeRadiiCount": 0,
+    "screenshot": "03-education-units.png"
+  },
+  {
+    "name": "04-master-kelas",
+    "path": "/dashboard/master/kelas",
+    "consoleErrorsCount": 0,
+    "consoleErrors": [],
+    "skeletonCount": 0,
+    "buttonComputed": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "text": "Cetak"
+    },
+    "searchComputed": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "fontSize": "14px"
+    },
+    "kpiComputed": {
+      "borderRadius": "21px",
+      "backgroundColor": "rgb(255, 255, 255)"
+    },
+    "largeRadiiCount": 0,
+    "screenshot": "04-master-kelas.png"
+  },
+  {
+    "name": "05-master-subject",
+    "path": "/dashboard/master/mata-pelajaran",
+    "consoleErrorsCount": 0,
+    "consoleErrors": [],
+    "skeletonCount": 0,
+    "buttonComputed": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "text": "Cetak"
+    },
+    "searchComputed": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "fontSize": "14px"
+    },
+    "kpiComputed": {
+      "borderRadius": "21px",
+      "backgroundColor": "rgb(255, 255, 255)"
+    },
+    "largeRadiiCount": 0,
+    "screenshot": "05-master-subject.png"
+  },
+  {
+    "name": "06-kelola-alumni",
+    "path": "/dashboard/alumni",
+    "consoleErrorsCount": 0,
+    "consoleErrors": [],
+    "skeletonCount": 0,
+    "buttonComputed": null,
+    "searchComputed": {
+      "height": "48px",
+      "borderRadius": "12px",
+      "fontSize": "14px"
+    },
+    "kpiComputed": {
+      "borderRadius": "21px",
+      "backgroundColor": "rgb(255, 255, 255)"
+    },
+    "largeRadiiCount": 0,
+    "screenshot": "06-kelola-alumni.png"
+  },
+  {
+    "name": "07-master-hak-akses",
+    "path": "/dashboard/master/hak-akses",
+    "consoleErrorsCount": 0,
+    "consoleErrors": [],
+    "skeletonCount": 0,
+    "buttonComputed": null,
+    "searchComputed": null,
+    "kpiComputed": null,
+    "largeRadiiCount": 0,
+    "screenshot": "07-master-hak-akses.png"
+  },
+  {
+    "name": "08-tahfizh",
+    "path": "/dashboard/tahfizh",
+    "consoleErrorsCount": 0,
+    "consoleErrors": [],
+    "skeletonCount": 0,
+    "buttonComputed": {
+      "height": "34px",
+      "borderRadius": "21px",
+      "fontSize": "12px",
+      "fontWeight": "700",
+      "text": "Segarkan"
+    },
+    "searchComputed": {
+      "height": "44px",
+      "borderRadius": "21px",
+      "fontSize": "12px"
+    },
+    "kpiComputed": {
+      "borderRadius": "21px",
+      "backgroundColor": "rgb(255, 255, 255)"
+    },
+    "largeRadiiCount": 0,
+    "screenshot": "08-tahfizh.png"
+  },
+  {
+    "name": "09-student-bills",
+    "path": "/dashboard/keuangan/tagihan-siswa",
+    "consoleErrorsCount": 0,
+    "consoleErrors": [],
+    "skeletonCount": 0,
+    "buttonComputed": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "text": "Segarkan"
+    },
+    "searchComputed": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "fontSize": "14px"
+    },
+    "kpiComputed": {
+      "borderRadius": "21px",
+      "backgroundColor": "rgb(255, 255, 255)"
+    },
+    "largeRadiiCount": 0,
+    "screenshot": "09-student-bills.png"
+  },
+  {
+    "name": "10-attendance-workspace",
+    "path": "/dashboard/absensi-workspace",
+    "consoleErrorsCount": 0,
+    "consoleErrors": [],
+    "skeletonCount": 0,
+    "buttonComputed": null,
+    "searchComputed": null,
+    "kpiComputed": null,
+    "largeRadiiCount": 0,
+    "screenshot": "10-attendance-workspace.png"
+  },
+  {
+    "name": "11-teaching-workspace",
+    "path": "/dashboard/teacher/teaching-workspace",
+    "consoleErrorsCount": 0,
+    "consoleErrors": [],
+    "skeletonCount": 0,
+    "buttonComputed": null,
+    "searchComputed": null,
+    "kpiComputed": null,
+    "largeRadiiCount": 0,
+    "screenshot": "11-teaching-workspace.png"
+  },
+  {
+    "name": "12-lms-bank-soal",
+    "path": "/dashboard/lms/bank-soal",
+    "consoleErrorsCount": 0,
+    "consoleErrors": [],
+    "skeletonCount": 0,
+    "buttonComputed": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "text": "Cetak & PDF"
+    },
+    "searchComputed": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "fontSize": "14px"
+    },
+    "kpiComputed": {
+      "borderRadius": "21px",
+      "backgroundColor": "rgb(255, 255, 255)"
+    },
+    "largeRadiiCount": 0,
+    "screenshot": "12-lms-bank-soal.png"
+  },
+  {
+    "name": "13-lms-modul-ajar",
+    "path": "/dashboard/lms/modul-ajar",
+    "consoleErrorsCount": 0,
+    "consoleErrors": [],
+    "skeletonCount": 0,
+    "buttonComputed": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "text": "Cetak & Export"
+    },
+    "searchComputed": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "fontSize": "14px"
+    },
+    "kpiComputed": {
+      "borderRadius": "21px",
+      "backgroundColor": "rgb(255, 255, 255)"
+    },
+    "largeRadiiCount": 0,
+    "screenshot": "13-lms-modul-ajar.png"
+  },
+  {
+    "name": "14-lms-materi",
+    "path": "/dashboard/lms/materi",
+    "consoleErrorsCount": 0,
+    "consoleErrors": [],
+    "skeletonCount": 0,
+    "buttonComputed": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "text": "Cetak & Export"
+    },
+    "searchComputed": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "fontSize": "14px"
+    },
+    "kpiComputed": {
+      "borderRadius": "21px",
+      "backgroundColor": "rgb(255, 255, 255)"
+    },
+    "largeRadiiCount": 0,
+    "screenshot": "14-lms-materi.png"
+  },
+  {
+    "name": "15-lms-ujian",
+    "path": "/dashboard/lms/ujian",
+    "consoleErrorsCount": 0,
+    "consoleErrors": [],
+    "skeletonCount": 0,
+    "buttonComputed": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "fontSize": "14px",
+      "fontWeight": "500",
+      "text": "Cetak & PDF"
+    },
+    "searchComputed": {
+      "height": "36px",
+      "borderRadius": "14px",
+      "fontSize": "14px"
+    },
+    "kpiComputed": {
+      "borderRadius": "21px",
+      "backgroundColor": "rgb(255, 255, 255)"
+    },
+    "largeRadiiCount": 0,
+    "screenshot": "15-lms-ujian.png"
+  }
+]

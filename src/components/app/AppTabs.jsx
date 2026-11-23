@@ -6,7 +6,7 @@ import { Tabs as TabsPrimitive, Tab, TabList, TabPanel } from '../ui/tabs'
  * Delegasi ke ui/tabs: tabs={[{id,label,icon,badge}]}, activeTab, onChange.
  */
 export default function AppTabs(props) {
-  return <TabsPrimitive {...props} />
+ return <TabsPrimitive {...props} />
 }
 
 export { Tab, TabList, TabPanel }

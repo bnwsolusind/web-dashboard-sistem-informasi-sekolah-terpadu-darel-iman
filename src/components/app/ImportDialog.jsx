@@ -7,16 +7,16 @@ import ConfirmDialog from './ConfirmDialog'
  * Pesan bawaan: "Import akan menambahkan atau memperbarui data."
  */
 export default function ImportDialog({ isOpen, onClose, onConfirm, title = 'Import Data?', isLoading = false }) {
-  return (
-    <ConfirmDialog
-      isOpen={isOpen}
-      onClose={onClose}
-      onConfirm={onConfirm}
-      title={title}
-      action="import"
-      confirmLabel="Import Sekarang"
-      isLoading={isLoading}
-      icon={FileInput}
-    />
-  )
+ return (
+ <ConfirmDialog
+ isOpen={isOpen}
+ onClose={onClose}
+ onConfirm={onConfirm}
+ title={title}
+ action="import"
+ confirmLabel="Import Sekarang"
+ isLoading={isLoading}
+ icon={FileInput}
+ />
+ )
 }

@@ -1,3 +1,0 @@
-TAG COUNTS IN TahfizhPage.jsx:
-  <DialogClose> open: 4, close: 0 (DIFF: 4)
-  <PrintOptionModal> open: 1, close: 0 (DIFF: 1)

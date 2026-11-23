@@ -668,94 +668,94 @@ export default function DashboardLayout() {
     return false
   }
 
-const sidebarIconStyles = {
-  'dashboard': 'bg-emerald-100/90 text-emerald-600 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-200/70 dark:border-emerald-800/60 shadow-2xs',
-  'dashboard-yayasan': 'bg-emerald-100/90 text-emerald-600 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-200/70 dark:border-emerald-800/60 shadow-2xs',
-  'dashboard-yayasan-menu': 'bg-emerald-100/90 text-emerald-600 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-200/70 dark:border-emerald-800/60 shadow-2xs',
-  'master-data': 'bg-purple-100/90 text-purple-600 dark:bg-purple-950/70 dark:text-purple-300 border border-purple-200/70 dark:border-purple-800/60 shadow-2xs',
-  'akademik': 'bg-sky-100/90 text-sky-600 dark:bg-sky-950/70 dark:text-sky-300 border border-sky-200/70 dark:border-sky-800/60 shadow-2xs',
-  'lms': 'bg-indigo-100/90 text-indigo-600 dark:bg-indigo-950/70 dark:text-indigo-300 border border-indigo-200/70 dark:border-indigo-800/60 shadow-2xs',
-  'portal-guru': 'bg-indigo-100/90 text-indigo-600 dark:bg-indigo-950/70 dark:text-indigo-300 border border-indigo-200/70 dark:border-indigo-800/60 shadow-2xs',
-  'portal-ortu-siswa': 'bg-rose-100/90 text-rose-600 dark:bg-rose-950/70 dark:text-rose-300 border border-rose-200/70 dark:border-rose-800/60 shadow-2xs',
-  'portal-utama': 'bg-sky-100/90 text-sky-600 dark:bg-sky-950/70 dark:text-sky-300 border border-sky-200/70 dark:border-sky-800/60 shadow-2xs',
-  'portal-akademik': 'bg-violet-100/90 text-violet-600 dark:bg-violet-950/70 dark:text-violet-300 border border-violet-200/70 dark:border-violet-800/60 shadow-2xs',
-  'portal-ujian': 'bg-lime-100/90 text-lime-700 dark:bg-lime-950/70 dark:text-lime-300 border border-lime-200/70 dark:border-lime-800/60 shadow-2xs',
-  'portal-tahfizh': 'bg-emerald-100/90 text-emerald-600 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-200/70 dark:border-emerald-800/60 shadow-2xs',
-  'portal-kehadiran': 'bg-orange-100/90 text-orange-600 dark:bg-orange-950/70 dark:text-orange-300 border border-orange-200/70 dark:border-orange-800/60 shadow-2xs',
-  'absensi': 'bg-teal-100/90 text-teal-600 dark:bg-teal-950/70 dark:text-teal-300 border border-teal-200/70 dark:border-teal-800/60 shadow-2xs',
-  'presensi': 'bg-teal-100/90 text-teal-600 dark:bg-teal-950/70 dark:text-teal-300 border border-teal-200/70 dark:border-teal-800/60 shadow-2xs',
-  'musyrif-asrama': 'bg-violet-100/90 text-violet-600 dark:bg-violet-950/70 dark:text-violet-300 border border-violet-200/70 dark:border-violet-800/60 shadow-2xs',
-  'mutabaah': 'bg-amber-100/90 text-amber-600 dark:bg-amber-950/70 dark:text-amber-300 border border-amber-200/70 dark:border-amber-800/60 shadow-2xs',
-  'tahfizh': 'bg-emerald-100/90 text-emerald-600 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-200/70 dark:border-emerald-800/60 shadow-2xs',
-  'rekap-data': 'bg-fuchsia-100/90 text-fuchsia-600 dark:bg-fuchsia-950/70 dark:text-fuchsia-300 border border-fuchsia-200/70 dark:border-fuchsia-800/60 shadow-2xs',
-  'laporan': 'bg-fuchsia-100/90 text-fuchsia-600 dark:bg-fuchsia-950/70 dark:text-fuchsia-300 border border-fuchsia-200/70 dark:border-fuchsia-800/60 shadow-2xs',
-  'pengaturan': 'bg-slate-100/90 text-slate-600 dark:bg-slate-800/90 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700 shadow-2xs',
-  'yayasan-monitoring': 'bg-sky-100/90 text-sky-600 dark:bg-sky-950/70 dark:text-sky-300 border border-sky-200/70 dark:border-sky-800/60 shadow-2xs',
-  'yayasan-laporan': 'bg-fuchsia-100/90 text-fuchsia-600 dark:bg-fuchsia-950/70 dark:text-fuchsia-300 border border-fuchsia-200/70 dark:border-fuchsia-800/60 shadow-2xs',
-  'yayasan-pengaturan': 'bg-slate-100/90 text-slate-600 dark:bg-slate-800/90 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700 shadow-2xs',
-}
-
-const pastelPaletteCycle = [
-  'bg-sky-100/90 text-sky-600 dark:bg-sky-950/70 dark:text-sky-300 border border-sky-200/70 dark:border-sky-800/60 shadow-2xs',
-  'bg-emerald-100/90 text-emerald-600 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-200/70 dark:border-emerald-800/60 shadow-2xs',
-  'bg-purple-100/90 text-purple-600 dark:bg-purple-950/70 dark:text-purple-300 border border-purple-200/70 dark:border-purple-800/60 shadow-2xs',
-  'bg-amber-100/90 text-amber-600 dark:bg-amber-950/70 dark:text-amber-300 border border-amber-200/70 dark:border-amber-800/60 shadow-2xs',
-  'bg-fuchsia-100/90 text-fuchsia-600 dark:bg-fuchsia-950/70 dark:text-fuchsia-300 border border-fuchsia-200/70 dark:border-fuchsia-800/60 shadow-2xs',
-  'bg-rose-100/90 text-rose-600 dark:bg-rose-950/70 dark:text-rose-300 border border-rose-200/70 dark:border-rose-800/60 shadow-2xs',
-]
-
-const getSidebarIconBadgeClass = (key, idx) => {
-  return sidebarIconStyles[key] || pastelPaletteCycle[idx % pastelPaletteCycle.length]
-}
-
-const SUBMENU_ICON_STYLES = {
-  ringkasan: 'bg-sky-100/90 text-sky-600 dark:bg-sky-950/70 dark:text-sky-300 border border-sky-200/80 dark:border-sky-800/60 shadow-2xs',
-  profile: 'bg-blue-100/90 text-blue-600 dark:bg-blue-950/70 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/60 shadow-2xs',
-  calendar: 'bg-cyan-100/90 text-cyan-600 dark:bg-cyan-950/70 dark:text-cyan-300 border border-cyan-200/80 dark:border-cyan-800/60 shadow-2xs',
-  announcements: 'bg-indigo-100/90 text-indigo-600 dark:bg-indigo-950/70 dark:text-indigo-300 border border-indigo-200/80 dark:border-indigo-800/60 shadow-2xs',
-  schedules: 'bg-violet-100/90 text-violet-600 dark:bg-violet-950/70 dark:text-violet-300 border border-violet-200/80 dark:border-violet-800/60 shadow-2xs',
-  materials: 'bg-purple-100/90 text-purple-600 dark:bg-purple-950/70 dark:text-purple-300 border border-purple-200/80 dark:border-purple-800/60 shadow-2xs',
-  assignments: 'bg-fuchsia-100/90 text-fuchsia-600 dark:bg-fuchsia-950/70 dark:text-fuchsia-300 border border-fuchsia-200/80 dark:border-fuchsia-800/60 shadow-2xs',
-  tahfizh: 'bg-emerald-100/90 text-emerald-600 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
-  grades: 'bg-teal-100/90 text-teal-600 dark:bg-teal-950/70 dark:text-teal-300 border border-teal-200/80 dark:border-teal-800/60 shadow-2xs',
-  'student-notes': 'bg-cyan-100/90 text-cyan-600 dark:bg-cyan-950/70 dark:text-cyan-300 border border-cyan-200/80 dark:border-cyan-800/60 shadow-2xs',
-  bills: 'bg-emerald-100/90 text-emerald-600 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
-  mutabaah: 'bg-amber-100/90 text-amber-600 dark:bg-amber-950/70 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60 shadow-2xs',
-  attendance: 'bg-orange-100/90 text-orange-600 dark:bg-orange-950/70 dark:text-orange-300 border border-orange-200/80 dark:border-orange-800/60 shadow-2xs',
-  kisi: 'bg-yellow-100/90 text-yellow-700 dark:bg-yellow-950/70 dark:text-yellow-300 border border-yellow-200/80 dark:border-yellow-800/60 shadow-2xs',
-  ujian: 'bg-lime-100/90 text-lime-700 dark:bg-lime-950/70 dark:text-lime-300 border border-lime-200/80 dark:border-lime-800/60 shadow-2xs',
-  hasil: 'bg-rose-100/90 text-rose-600 dark:bg-rose-950/70 dark:text-rose-300 border border-rose-200/80 dark:border-rose-800/60 shadow-2xs',
-  chat: 'bg-pink-100/90 text-pink-600 dark:bg-pink-950/70 dark:text-pink-300 border border-pink-200/80 dark:border-pink-800/60 shadow-2xs',
-  quran: 'bg-teal-100/90 text-teal-600 dark:bg-teal-950/70 dark:text-teal-300 border border-teal-200/80 dark:border-teal-800/60 shadow-2xs',
-  doa: 'bg-amber-100/90 text-amber-600 dark:bg-amber-950/70 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60 shadow-2xs',
-}
-
-const getSubmenuIconBadgeClass = (sub, sIdx) => {
-  if (sub?.colorClass) return sub.colorClass
-  if (sub?.to) {
-    const rawTo = sub.to.toLowerCase()
-    if (rawTo.includes('tab=ringkasan') || rawTo.endsWith('/portal-siswa')) return SUBMENU_ICON_STYLES.ringkasan
-    if (rawTo.includes('tab=profile') || rawTo.includes('/profil')) return SUBMENU_ICON_STYLES.profile
-    if (rawTo.includes('tab=calendar') || rawTo.includes('/kalender')) return SUBMENU_ICON_STYLES.calendar
-    if (rawTo.includes('tab=announcements') || rawTo.includes('/informasi-sekolah')) return SUBMENU_ICON_STYLES.announcements
-    if (rawTo.includes('tab=schedules') || rawTo.includes('/jadwal')) return SUBMENU_ICON_STYLES.schedules
-    if (rawTo.includes('tab=materials') || rawTo.includes('/materi')) return SUBMENU_ICON_STYLES.materials
-    if (rawTo.includes('tab=assignments') || rawTo.includes('/tugas')) return SUBMENU_ICON_STYLES.assignments
-    if (rawTo.includes('tab=tahfizh') || rawTo.includes('/tahfizh')) return SUBMENU_ICON_STYLES.tahfizh
-    if (rawTo.includes('tab=grades') || rawTo.includes('/nilai')) return SUBMENU_ICON_STYLES.grades
-    if (rawTo.includes('tab=student-notes') || rawTo.includes('/komentar-guru')) return SUBMENU_ICON_STYLES['student-notes']
-    if (rawTo.includes('tab=bills')) return SUBMENU_ICON_STYLES.bills
-    if (rawTo.includes('tab=mutabaah') || rawTo.includes('/mutabaah')) return SUBMENU_ICON_STYLES.mutabaah
-    if (rawTo.includes('tab=attendance') || rawTo.includes('/absensi')) return SUBMENU_ICON_STYLES.attendance
-    if (rawTo.includes('tab=kisi') || rawTo.includes('/kisi-kisi')) return SUBMENU_ICON_STYLES.kisi
-    if (rawTo.includes('tab=ujian') || rawTo.includes('/ujian-cbt')) return SUBMENU_ICON_STYLES.ujian
-    if (rawTo.includes('tab=hasil') || rawTo.includes('/hasil')) return SUBMENU_ICON_STYLES.hasil
-    if (rawTo.includes('tab=chat')) return SUBMENU_ICON_STYLES.chat
-    if (rawTo.includes('/quran')) return SUBMENU_ICON_STYLES.quran
-    if (rawTo.includes('/doa')) return SUBMENU_ICON_STYLES.doa
+  const sidebarIconStyles = {
+    'dashboard': 'bg-emerald-100/90 text-emerald-600 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    'dashboard-yayasan': 'bg-emerald-100/90 text-emerald-600 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    'dashboard-yayasan-menu': 'bg-emerald-100/90 text-emerald-600 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    'master-data': 'bg-purple-100/90 text-purple-600 dark:bg-purple-950/70 dark:text-purple-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    'akademik': 'bg-sky-100/90 text-sky-600 dark:bg-sky-950/70 dark:text-sky-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    'lms': 'bg-indigo-100/90 text-indigo-600 dark:bg-indigo-950/70 dark:text-indigo-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    'portal-guru': 'bg-indigo-100/90 text-indigo-600 dark:bg-indigo-950/70 dark:text-indigo-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    'portal-ortu-siswa': 'bg-rose-100/90 text-rose-600 dark:bg-rose-950/70 dark:text-rose-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    'portal-utama': 'bg-sky-100/90 text-sky-600 dark:bg-sky-950/70 dark:text-sky-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    'portal-akademik': 'bg-violet-100/90 text-violet-600 dark:bg-violet-950/70 dark:text-violet-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    'portal-ujian': 'bg-lime-100/90 text-lime-700 dark:bg-lime-950/70 dark:text-lime-300 border border-lime-200/70 dark:border-lime-800/60 shadow-2xs',
+    'portal-tahfizh': 'bg-emerald-100/90 text-emerald-600 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    'portal-kehadiran': 'bg-orange-100/90 text-orange-600 dark:bg-orange-950/70 dark:text-orange-300 border border-emerald-200/70 dark:border-emerald-800/60 shadow-2xs',
+    'absensi': 'bg-teal-100/90 text-teal-600 dark:bg-teal-950/70 dark:text-teal-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    'presensi': 'bg-teal-100/90 text-teal-600 dark:bg-teal-950/70 dark:text-teal-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    'musyrif-asrama': 'bg-violet-100/90 text-violet-600 dark:bg-violet-950/70 dark:text-violet-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    'mutabaah': 'bg-amber-100/90 text-amber-600 dark:bg-amber-950/70 dark:text-amber-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    'tahfizh': 'bg-emerald-100/90 text-emerald-600 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    'rekap-data': 'bg-fuchsia-100/90 text-fuchsia-600 dark:bg-fuchsia-950/70 dark:text-fuchsia-300 border border-fuchsia-200/70 dark:border-fuchsia-800/60 shadow-2xs',
+    'laporan': 'bg-fuchsia-100/90 text-fuchsia-600 dark:bg-fuchsia-950/70 dark:text-fuchsia-300 border border-fuchsia-200/70 dark:border-fuchsia-800/60 shadow-2xs',
+    'pengaturan': 'bg-slate-100/90 text-slate-600 dark:bg-slate-800/90 dark:text-slate-300 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 shadow-2xs',
+    'yayasan-monitoring': 'bg-sky-100/90 text-sky-600 dark:bg-sky-950/70 dark:text-sky-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    'yayasan-laporan': 'bg-fuchsia-100/90 text-fuchsia-600 dark:bg-fuchsia-950/70 dark:text-fuchsia-300 border border-fuchsia-200/70 dark:border-fuchsia-800/60 shadow-2xs',
+    'yayasan-pengaturan': 'bg-slate-100/90 text-slate-600 dark:bg-slate-800/90 dark:text-slate-300 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 shadow-2xs',
   }
-  return pastelPaletteCycle[sIdx % pastelPaletteCycle.length]
-}
+
+  const pastelPaletteCycle = [
+    'bg-sky-100/90 text-sky-600 dark:bg-sky-950/70 dark:text-sky-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    'bg-emerald-100/90 text-emerald-600 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    'bg-purple-100/90 text-purple-600 dark:bg-purple-950/70 dark:text-purple-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    'bg-amber-100/90 text-amber-600 dark:bg-amber-950/70 dark:text-amber-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    'bg-fuchsia-100/90 text-fuchsia-600 dark:bg-fuchsia-950/70 dark:text-fuchsia-300 border border-fuchsia-200/70 dark:border-fuchsia-800/60 shadow-2xs',
+    'bg-rose-100/90 text-rose-600 dark:bg-rose-950/70 dark:text-rose-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+  ]
+
+  const getSidebarIconBadgeClass = (key, idx) => {
+    return sidebarIconStyles[key] || pastelPaletteCycle[idx % pastelPaletteCycle.length]
+  }
+
+  const SUBMENU_ICON_STYLES = {
+    ringkasan: 'bg-sky-100/90 text-sky-600 dark:bg-sky-950/70 dark:text-sky-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    profile: 'bg-blue-100/90 text-blue-600 dark:bg-blue-950/70 dark:text-blue-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    calendar: 'bg-cyan-100/90 text-cyan-600 dark:bg-cyan-950/70 dark:text-cyan-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    announcements: 'bg-indigo-100/90 text-indigo-600 dark:bg-indigo-950/70 dark:text-indigo-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    schedules: 'bg-violet-100/90 text-violet-600 dark:bg-violet-950/70 dark:text-violet-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    materials: 'bg-purple-100/90 text-purple-600 dark:bg-purple-950/70 dark:text-purple-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    assignments: 'bg-fuchsia-100/90 text-fuchsia-600 dark:bg-fuchsia-950/70 dark:text-fuchsia-300 border border-emerald-200/80 dark:border-fuchsia-800/60 shadow-2xs',
+    tahfizh: 'bg-emerald-100/90 text-emerald-600 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    grades: 'bg-teal-100/90 text-teal-600 dark:bg-teal-950/70 dark:text-teal-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    'student-notes': 'bg-cyan-100/90 text-cyan-600 dark:bg-cyan-950/70 dark:text-cyan-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    bills: 'bg-emerald-100/90 text-emerald-600 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    mutabaah: 'bg-amber-100/90 text-amber-600 dark:bg-amber-950/70 dark:text-amber-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    attendance: 'bg-orange-100/90 text-orange-600 dark:bg-orange-950/70 dark:text-orange-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    kisi: 'bg-yellow-100/90 text-yellow-700 dark:bg-yellow-950/70 dark:text-yellow-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    ujian: 'bg-lime-100/90 text-lime-700 dark:bg-lime-950/70 dark:text-lime-300 border border-emerald-200/80 dark:border-lime-800/60 shadow-2xs',
+    hasil: 'bg-rose-100/90 text-rose-600 dark:bg-rose-950/70 dark:text-rose-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    chat: 'bg-pink-100/90 text-pink-600 dark:bg-pink-950/70 dark:text-pink-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    quran: 'bg-teal-100/90 text-teal-600 dark:bg-teal-950/70 dark:text-teal-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+    doa: 'bg-amber-100/90 text-amber-600 dark:bg-amber-950/70 dark:text-amber-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs',
+  }
+
+  const getSubmenuIconBadgeClass = (sub, sIdx) => {
+    if (sub?.colorClass) return sub.colorClass
+    if (sub?.to) {
+      const rawTo = sub.to.toLowerCase()
+      if (rawTo.includes('tab=ringkasan') || rawTo.endsWith('/portal-siswa')) return SUBMENU_ICON_STYLES.ringkasan
+      if (rawTo.includes('tab=profile') || rawTo.includes('/profil')) return SUBMENU_ICON_STYLES.profile
+      if (rawTo.includes('tab=calendar') || rawTo.includes('/kalender')) return SUBMENU_ICON_STYLES.calendar
+      if (rawTo.includes('tab=announcements') || rawTo.includes('/informasi-sekolah')) return SUBMENU_ICON_STYLES.announcements
+      if (rawTo.includes('tab=schedules') || rawTo.includes('/jadwal')) return SUBMENU_ICON_STYLES.schedules
+      if (rawTo.includes('tab=materials') || rawTo.includes('/materi')) return SUBMENU_ICON_STYLES.materials
+      if (rawTo.includes('tab=assignments') || rawTo.includes('/tugas')) return SUBMENU_ICON_STYLES.assignments
+      if (rawTo.includes('tab=tahfizh') || rawTo.includes('/tahfizh')) return SUBMENU_ICON_STYLES.tahfizh
+      if (rawTo.includes('tab=grades') || rawTo.includes('/nilai')) return SUBMENU_ICON_STYLES.grades
+      if (rawTo.includes('tab=student-notes') || rawTo.includes('/komentar-guru')) return SUBMENU_ICON_STYLES['student-notes']
+      if (rawTo.includes('tab=bills')) return SUBMENU_ICON_STYLES.bills
+      if (rawTo.includes('tab=mutabaah') || rawTo.includes('/mutabaah')) return SUBMENU_ICON_STYLES.mutabaah
+      if (rawTo.includes('tab=attendance') || rawTo.includes('/absensi')) return SUBMENU_ICON_STYLES.attendance
+      if (rawTo.includes('tab=kisi') || rawTo.includes('/kisi-kisi')) return SUBMENU_ICON_STYLES.kisi
+      if (rawTo.includes('tab=ujian') || rawTo.includes('/ujian-cbt')) return SUBMENU_ICON_STYLES.ujian
+      if (rawTo.includes('tab=hasil') || rawTo.includes('/hasil')) return SUBMENU_ICON_STYLES.hasil
+      if (rawTo.includes('tab=chat')) return SUBMENU_ICON_STYLES.chat
+      if (rawTo.includes('/quran')) return SUBMENU_ICON_STYLES.quran
+      if (rawTo.includes('/doa')) return SUBMENU_ICON_STYLES.doa
+    }
+    return pastelPaletteCycle[sIdx % pastelPaletteCycle.length]
+  }
 
   const normalizePath = (to) => (to || '').split('?')[0].replace(/\/+$/, '') || '/'
 
@@ -1034,11 +1034,11 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
     <div
       className={`site-shell min-h-screen text-slate-800 flex flex-col font-sans antialiased dark:bg-slate-950 dark:text-slate-100 template-${pengaturan.template}`}
       style={{
-        '--site-sidebar': pengaturan.sidebar_color || '#0E5C44',
-        '--site-accent': pengaturan.sidebar_accent_color || '#3FBF75',
-        '--site-body': isDarkMode ? '#0F172A' : '#F7F9FC',
-        '--site-header': isDarkMode ? '#0F172A' : '#FFFFFF',
-        backgroundColor: isDarkMode ? '#0F172A' : '#F7F9FC',
+        '--site-sidebar': pengaturan.sidebar_color || '#059669',
+        '--site-accent': pengaturan.sidebar_accent_color || '#10B981',
+        '--site-body': isDarkMode ? '#0F172A' : '#F2F8F5',
+        '--site-header': isDarkMode ? '#1B2433' : '#FFFFFF',
+        backgroundColor: isDarkMode ? '#0F172A' : '#F2F8F5',
       }}
     >
       {/* Mobile Overlay */}
@@ -1055,7 +1055,7 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
           const isEffectiveCollapsed = collapsed && !mobileMenuOpen
           return (
             <aside
-              className={`site-sidebar fixed inset-y-0 z-50 flex flex-col justify-between border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#1B2433] transition-all duration-300 ease-in-out md:sticky md:top-0 md:h-screen ${pengaturan.sidebar_position === 'right' ? 'right-0 border-l' : 'left-0 border-r'} ${isEffectiveCollapsed ? 'md:w-20' : 'md:w-64'
+              className={`site-sidebar fixed inset-y-0 z-50 flex flex-col justify-between border-emerald-200/90 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] transition-all duration-300 ease-in-out md:sticky md:top-0 md:h-screen ${pengaturan.sidebar_position === 'right' ? 'right-0 border-l' : 'left-0 border-r'} ${isEffectiveCollapsed ? 'md:w-20' : 'md:w-64'
                 } ${mobileMenuOpen ? 'translate-x-0 w-72 shadow-2xl' : pengaturan.sidebar_position === 'right' ? 'translate-x-full md:translate-x-0' : '-translate-x-full md:translate-x-0'}`}
               style={{
                 background: isDarkMode
@@ -1069,21 +1069,21 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                       : `linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 50%, #F1F5F9 100%)`)),
               }}
             >
-              {/* Desktop Floating Toggle Button */}
+              {/* Desktop Floating Toggle Button (Hijau Zamrud #059669) */}
               <button
                 type="button"
                 onClick={() => setCollapsed(!collapsed)}
-                className="hidden md:flex absolute -right-3 top-4 z-30 h-6.5 w-6.5 items-center justify-center rounded-full bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-200 shadow-md border border-slate-200 dark:border-slate-700 hover:bg-emerald-50 dark:hover:bg-slate-700 hover:text-emerald-700 transition-all active:scale-95 cursor-pointer"
+                className="hidden md:flex absolute -right-3 top-4 z-30 h-6.5 w-6.5 items-center justify-center rounded-full bg-[#059669] hover:bg-[#047857] text-white shadow-md shadow-emerald-950/20 border border-emerald-400/40 transition-all active:scale-95 cursor-pointer"
                 title={collapsed ? 'Perluas Sidebar' : 'Ciutkan Sidebar'}
               >
-                {collapsed ? <ChevronRight className="h-3.5 w-3.5" /> : <ChevronLeft className="h-3.5 w-3.5" />}
+                {collapsed ? <ChevronRight className="h-3.5 w-3.5 text-white" /> : <ChevronLeft className="h-3.5 w-3.5 text-white" />}
               </button>
 
-              {/* Header Sidebar: Logo & Title */}
-              <div className={`relative z-10 ${isEffectiveCollapsed ? 'p-3' : 'p-4'} border-b border-slate-200/80 dark:border-slate-800 bg-white/90 dark:bg-[#1B2433]/90 backdrop-blur-xs`}>
-                <div className={`flex items-center ${isEffectiveCollapsed ? 'justify-center' : 'justify-between'}`}>
+              {/* Header Sidebar: Logo & Title (Tinggi 64px sejajar persis dengan Navbar Card) */}
+              <div className={`relative z-10 h-16 min-h-[4rem] flex items-center ${isEffectiveCollapsed ? 'px-3' : 'px-4'} border-b border-emerald-200/80 dark:border-emerald-800/60 bg-white/90 dark:bg-[#1B2433]/90 backdrop-blur-xs`}>
+                <div className={`flex items-center w-full ${isEffectiveCollapsed ? 'justify-center' : 'justify-between'}`}>
                   <div className={`flex items-center gap-3 overflow-hidden ${isEffectiveCollapsed ? 'justify-center w-full' : ''}`}>
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-2xl text-white shadow-md shadow-emerald-600/20 bg-gradient-to-br from-emerald-600 to-teal-700 border border-emerald-500/30" style={{ backgroundColor: pengaturan.sidebar_accent_color || '#064E3B' }}>
+                    <div className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center">
                       <img
                         src={pengaturan.logo_url || '/logo.png'}
                         onError={(e) => {
@@ -1092,12 +1092,12 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                           }
                         }}
                         alt={namaSekolah ? `Logo ${namaSekolah}` : 'Logo Sekolah'}
-                        className="h-full w-full bg-white object-contain p-0.5"
+                        className="h-full w-full object-contain drop-shadow-sm transition-transform duration-200 hover:scale-105"
                       />
                     </div>
                     {!isEffectiveCollapsed && (
                       <div className="min-w-0">
-                        <h1 className="text-xs font-black tracking-wider text-slate-900 dark:text-white uppercase truncate font-sans">
+                        <h1 className="text-xs font-black tracking-wider text-slate-900 dark:text-white uppercase font-sans">
                           {namaSekolah}
                         </h1>
                         <p className="text-[10px] font-bold tracking-widest text-emerald-600 dark:text-emerald-400">{(pengaturan.application_name && !pengaturan.application_name.includes('Sistem Manajemen Sekolah')) ? pengaturan.application_name : 'Dareliman Edu'}</p>
@@ -1105,303 +1105,303 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                     )}
                   </div>
 
-              {/* Mobile Close Button */}
-              <button
-                type="button"
-                aria-label="Tutup Menu Navigasi"
-                title="Tutup Menu Navigasi"
-                onClick={() => setMobileMenuOpen(false)}
-                className="md:hidden text-slate-600 hover:text-slate-900 dark:text-slate-400 p-1 cursor-pointer"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
+                  {/* Mobile Close Button */}
+                  <button
+                    type="button"
+                    aria-label="Tutup Menu Navigasi"
+                    title="Tutup Menu Navigasi"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="md:hidden text-slate-600 hover:text-slate-900 dark:text-slate-400 p-1 cursor-pointer"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
 
-          {/* Navigation Items */}
-          <nav className={`relative z-10 flex-1 space-y-1.5 ${isEffectiveCollapsed ? 'overflow-visible' : 'overflow-y-auto custom-scrollbar'} p-3 text-xs`}>
-            {/* Loading Skeleton */}
-            {isNavLoading && sidebarMenu.length === 0 && (
-              <div className="space-y-3 p-1">
-                {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div key={i} className={`flex items-center ${isEffectiveCollapsed ? 'justify-center' : 'gap-3 px-3'} py-2.5 rounded-xl animate-pulse`}>
-                    <div className="h-7.5 w-7.5 rounded-xl bg-slate-200 dark:bg-slate-700/60 shrink-0" />
+              {/* Navigation Items */}
+              <nav className={`relative z-10 flex-1 space-y-1.5 ${isEffectiveCollapsed ? 'overflow-visible' : 'overflow-y-auto custom-scrollbar'} p-3 text-xs`}>
+                {/* Loading Skeleton */}
+                {isNavLoading && sidebarMenu.length === 0 && (
+                  <div className="space-y-3 p-1">
+                    {[1, 2, 3, 4, 5, 6].map((i) => (
+                      <div key={i} className={`flex items-center ${isEffectiveCollapsed ? 'justify-center' : 'gap-3 px-3'} py-2.5 rounded-xl animate-pulse`}>
+                        <div className="h-7.5 w-7.5 rounded-xl bg-slate-200 dark:bg-slate-700/60 shrink-0" />
+                        {!isEffectiveCollapsed && (
+                          <div className="h-3.5 bg-slate-200 dark:bg-slate-700/60 rounded-md w-3/4" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Error State with Retry */}
+                {isNavError && sidebarMenu.length === 0 && (
+                  <div className="p-3 text-center space-y-2">
+                    <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-xl bg-rose-50 text-rose-500 dark:bg-rose-950/50 dark:text-rose-400 border border-emerald-200/80 dark:border-emerald-800/60">
+                      <AlertTriangle className="h-4.5 w-4.5" />
+                    </div>
                     {!isEffectiveCollapsed && (
-                      <div className="h-3.5 bg-slate-200 dark:bg-slate-700/60 rounded-md w-3/4" />
+                      <>
+                        <p className="text-[11px] font-semibold text-rose-600 dark:text-rose-400">Gagal memuat navigasi</p>
+                        <button
+                          type="button"
+                          onClick={() => refetchNav()}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition-colors cursor-pointer"
+                        >
+                          <RefreshCw className="h-3 w-3" />
+                          <span>Coba Lagi</span>
+                        </button>
+                      </>
                     )}
                   </div>
-                ))}
-              </div>
-            )}
+                )}
 
-            {/* Error State with Retry */}
-            {isNavError && sidebarMenu.length === 0 && (
-              <div className="p-3 text-center space-y-2">
-                <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-xl bg-rose-50 text-rose-500 dark:bg-rose-950/50 dark:text-rose-400 border border-rose-200 dark:border-rose-900">
-                  <AlertTriangle className="h-4.5 w-4.5" />
+                {/* Empty State */}
+                {!isNavLoading && !isNavError && sidebarMenu.length === 0 && (
+                  <div className="p-4 text-center text-slate-400 text-xs">
+                    {!isEffectiveCollapsed && 'Tidak ada menu navigasi yang tersedia.'}
+                  </div>
+                )}
+
+                {sidebarMenu.map((item, idx) => {
+                  const Icon = item.icon
+                  const isPengaturan = item.key === 'pengaturan'
+                  const content = !item.submenus ? (
+                    <div key={item.key} className="relative group">
+                      <NavLink
+                        to={item.to}
+                        onMouseEnter={() => prefetchRoute(item.to)}
+                        onFocus={() => prefetchRoute(item.to)}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={`group/link relative flex items-center ${isEffectiveCollapsed ? 'justify-center px-0' : 'gap-3 px-3'} py-2 rounded-xl text-xs font-bold transition-all duration-200 ${normalizePath(location.pathname) === normalizePath(item.to)
+                          ? 'bg-[#059669] text-white shadow-xs dark:bg-[#18A972] dark:text-white'
+                          : 'text-slate-600 dark:text-slate-300 hover:bg-emerald-50/70 hover:text-emerald-900 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-200'
+                          }`}
+                      >
+                        <div className={`flex h-7.5 w-7.5 shrink-0 items-center justify-center rounded-xl transition-all duration-200 ${normalizePath(location.pathname) === normalizePath(item.to) ? 'bg-white/20 text-white border border-emerald-200/30' : getSidebarIconBadgeClass(item.key, idx)}`}>
+                          <Icon className="h-4 w-4 stroke-[2]" />
+                        </div>
+                        {!isEffectiveCollapsed && <span>{item.label}</span>}
+                      </NavLink>
+
+                      {/* Hover Tooltip when Collapsed */}
+                      {isEffectiveCollapsed && (
+                        <div className="pointer-events-none absolute left-full top-1/2 ml-3 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 -translate-x-2 transition-all duration-150 z-50">
+                          <div className="relative rounded-xl bg-slate-900 dark:bg-slate-800 px-3 py-1.5 text-xs font-bold text-white shadow-xl shadow-slate-950/25 border border-emerald-700/80/80 whitespace-nowrap">
+                            {item.label}
+                            <div className="absolute top-1/2 -left-1 -mt-1 h-2 w-2 rotate-45 bg-slate-900 dark:bg-slate-800 border-l border-b border-emerald-700/80/80" />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (() => {
+                    const isOpen = openSection === item.key
+                    const hasActiveChild = isOpen && item.submenus.some((sub) => isSubActive(sub.to, item.submenus, item.key))
+
+                    return (
+                      <div key={item.key} className="relative group space-y-1">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (isEffectiveCollapsed) setCollapsed(false)
+                            toggleSection(item.key)
+                          }}
+                          className={`flex w-full items-center ${isEffectiveCollapsed ? 'justify-center px-0' : 'justify-between px-3'} py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${isOpen || hasActiveChild
+                            ? 'bg-[#059669] text-white shadow-xs dark:bg-[#18A972] dark:text-white'
+                            : 'text-slate-600 dark:text-slate-300 hover:bg-emerald-50/70 hover:text-emerald-900 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-200'
+                            }`}
+                        >
+                          <div className={`flex items-center ${isEffectiveCollapsed ? 'justify-center' : 'gap-3 min-w-0'}`}>
+                            <div className={`flex h-7.5 w-7.5 shrink-0 items-center justify-center rounded-xl transition-all duration-200 ${isOpen || hasActiveChild ? 'bg-white/20 text-white border border-emerald-200/30' : getSidebarIconBadgeClass(item.key, idx)}`}>
+                              <Icon className={`h-4 w-4 shrink-0 stroke-[2] ${isOpen || hasActiveChild ? 'text-white' : ''}`} />
+                            </div>
+                            {!isEffectiveCollapsed && <span className="truncate">{item.label}</span>}
+                          </div>
+                          {!isEffectiveCollapsed && (
+                            <span className="text-[10px]">
+                              {isOpen ? <ChevronDown className={`h-3.5 w-3.5 ${isOpen || hasActiveChild ? 'text-white' : 'text-slate-500'}`} /> : <ChevronRight className={`h-3.5 w-3.5 ${isOpen || hasActiveChild ? 'text-white' : 'text-slate-500'}`} />}
+                            </span>
+                          )}
+                        </button>
+
+                        {/* Hover Flyout Menu when Collapsed */}
+                        {isEffectiveCollapsed && (
+                          <div className="absolute left-full -top-1 pl-3 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-x-0 -translate-x-2 transition-all duration-150 z-50 min-w-[13.5rem]">
+                            <div className="relative rounded-xl bg-white dark:bg-[#1B2433] p-2.5 shadow-xl shadow-slate-900/15 border border-emerald-200/80 dark:border-emerald-800/60 space-y-1">
+                              <div className="px-2.5 py-1 text-[11px] font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400 border-b border-emerald-100/80 dark:border-emerald-800/60 mb-1.5 flex items-center justify-between">
+                                <span>{item.label}</span>
+                                <span className="text-[9px] text-slate-400 font-normal">Submenu</span>
+                              </div>
+                              {item.submenus.map((sub, sIdx) => {
+                                if (sub.action === 'calendar') {
+                                  return (
+                                    <button
+                                      key={`flyout-${item.key}-cal-${sIdx}`}
+                                      type="button"
+                                      onClick={() => {
+                                        setMobileMenuOpen(false)
+                                        setIsAcademicCalendarOpen(true)
+                                      }}
+                                      className="flex items-center gap-2.5 w-full text-left rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 cursor-pointer"
+                                    >
+                                      <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border transition-all duration-150 ${SUBMENU_ICON_STYLES.calendar}`}>
+                                        <CalendarDays className="h-3.5 w-3.5 stroke-[2.2]" />
+                                      </div>
+                                      <span className="truncate">{sub.label}</span>
+                                    </button>
+                                  )
+                                }
+                                const SubIcon = typeof sub.icon === 'function' || (typeof sub.icon === 'object' && sub.icon !== null)
+                                  ? sub.icon
+                                  : (resolveSidebarIcon(sub.icon) || null)
+                                const active = isSubActive(sub.to, item.submenus, item.key)
+                                const badgeClass = getSubmenuIconBadgeClass(sub, sIdx)
+                                return (
+                                  <NavLink
+                                    key={`flyout-${item.key}-${sub.to || sub.label}-${sIdx}`}
+                                    to={sub.to}
+                                    onMouseEnter={() => prefetchRoute(sub.to)}
+                                    onFocus={() => prefetchRoute(sub.to)}
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className={`block rounded-lg px-2.5 py-1.5 text-xs transition-colors ${active
+                                      ? 'bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/60'
+                                      : 'text-slate-600 hover:bg-emerald-50/50 hover:text-emerald-800 font-medium dark:text-slate-400 dark:hover:bg-slate-800'
+                                      }`}
+                                  >
+                                    <span className="flex items-center gap-2.5 min-w-0">
+                                      {SubIcon && (
+                                        <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border transition-all duration-150 ${active
+                                          ? 'bg-emerald-600 text-white border-emerald-600 shadow-2xs ring-1 ring-emerald-500/30'
+                                          : badgeClass
+                                          }`}>
+                                          <SubIcon className={`h-3.5 w-3.5 stroke-[2.2] ${active ? 'text-white' : ''}`} />
+                                        </div>
+                                      )}
+                                      <span className="truncate">{sub.label}</span>
+                                    </span>
+                                  </NavLink>
+                                )
+                              })}
+                              <div className="absolute top-4 -left-1 -mt-1 h-2 w-2 rotate-45 bg-white dark:bg-[#1B2433] border-l border-b border-emerald-200/90 dark:border-emerald-800/60" />
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Submenu Accordion when Expanded */}
+                        {!isEffectiveCollapsed && isOpen && (
+                          <div className="ml-5 space-y-1 border-l-2 border-emerald-200/80 dark:border-emerald-800/60 pl-3 pt-1 animate-[masterDropdownSlide_0.2s_ease-out]">
+                            {item.submenus.map((sub, sIdx) => {
+                              if (sub.action === 'calendar') {
+                                return (
+                                  <button
+                                    key={`${item.key}-cal-${sIdx}`}
+                                    type="button"
+                                    onClick={() => {
+                                      setMobileMenuOpen(false)
+                                      setIsAcademicCalendarOpen(true)
+                                    }}
+                                    className="flex items-center gap-2.5 w-full text-left rounded-lg px-2.5 py-1.5 text-xs font-medium transition-all duration-150 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200 cursor-pointer"
+                                  >
+                                    <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border transition-all duration-150 ${SUBMENU_ICON_STYLES.calendar}`}>
+                                      <CalendarDays className="h-3.5 w-3.5 stroke-[2.2]" />
+                                    </div>
+                                    <span className="truncate">{sub.label}</span>
+                                  </button>
+                                )
+                              }
+                              const SubIcon = typeof sub.icon === 'function' || (typeof sub.icon === 'object' && sub.icon !== null)
+                                ? sub.icon
+                                : (resolveSidebarIcon(sub.icon) || null)
+                              const active = isSubActive(sub.to, item.submenus, item.key)
+                              const badgeClass = getSubmenuIconBadgeClass(sub, sIdx)
+                              return (
+                                <NavLink
+                                  key={`${item.key}-${sub.to || sub.label}-${sIdx}`}
+                                  to={sub.to}
+                                  onMouseEnter={() => prefetchRoute(sub.to)}
+                                  onFocus={() => prefetchRoute(sub.to)}
+                                  onClick={() => setMobileMenuOpen(false)}
+                                  className={`block rounded-lg px-2.5 py-1.5 text-xs transition-all duration-150 ${active
+                                    ? 'bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-800/60'
+                                    : 'text-slate-600 hover:bg-emerald-50/50 hover:text-emerald-800 font-medium dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200'
+                                    }`}
+                                >
+                                  <span className="flex items-center gap-2.5 min-w-0">
+                                    {SubIcon && (
+                                      <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border transition-all duration-150 ${active
+                                        ? 'bg-emerald-600 text-white border-emerald-600 shadow-2xs ring-1 ring-emerald-500/30'
+                                        : badgeClass
+                                        }`}>
+                                        <SubIcon className={`h-3.5 w-3.5 stroke-[2.2] ${active ? 'text-white' : ''}`} />
+                                      </div>
+                                    )}
+                                    <span className="truncate">{sub.label}</span>
+                                  </span>
+                                </NavLink>
+                              )
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })()
+
+                  return (
+                    <Fragment key={item.key}>
+                      {isPengaturan && idx > 0 && (
+                        <div className="my-2 border-t border-emerald-200/80 dark:border-emerald-800/60" />
+                      )}
+                      {content}
+                    </Fragment>
+                  )
+                })}
+              </nav>
+
+              {/* User Status Bar & Help Link at Sidebar Bottom (Sama Persis dengan Staging) */}
+              <div className="relative z-10 p-3.5 border-t border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/90 dark:bg-[#131B29]/90 space-y-2.5">
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <PersonAvatar
+                      src={user?.photo_url || user?.avatar_url || user?.avatar || user?.photo || user?.profile_photo_url}
+                      name={namaTampil}
+                      size="sm"
+                      className="border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 shadow-sm"
+                    />
+                    <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-emerald-500 border-2 border-emerald-200/80 dark:border-emerald-950" />
+                  </div>
+                  {!isEffectiveCollapsed && (
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-xs font-bold text-slate-900 dark:text-white leading-tight">{namaTampil}</p>
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-semibold">• Online</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
+
                 {!isEffectiveCollapsed && (
-                  <>
-                    <p className="text-[11px] font-semibold text-rose-600 dark:text-rose-400">Gagal memuat navigasi</p>
-                    <button
-                      type="button"
-                      onClick={() => refetchNav()}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition-colors cursor-pointer"
-                    >
-                      <RefreshCw className="h-3 w-3" />
-                      <span>Coba Lagi</span>
-                    </button>
-                  </>
+                  <p className="truncate px-2 text-[9px] text-slate-400 dark:text-slate-500">{pengaturan.footer_text || `${namaSekolah} © ${new Date().getFullYear()}`}</p>
+                )}
+                {!isEffectiveCollapsed && (
+                  <button
+                    type="button"
+                    onClick={() => navigate('/dashboard/bantuan')}
+                    className="w-full flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-r from-[#059669] to-teal-700 hover:from-[#047857] hover:to-teal-800 text-white text-[11px] font-bold shadow-md shadow-emerald-950/20 border border-emerald-500/30 transition-all cursor-pointer active:scale-98"
+                  >
+                    <HelpCircle className="h-3.5 w-3.5 text-white shrink-0" />
+                    <span>Bantuan & Panduan</span>
+                  </button>
                 )}
               </div>
-            )}
+            </aside>
+          )
+        })()}
 
-            {/* Empty State */}
-            {!isNavLoading && !isNavError && sidebarMenu.length === 0 && (
-              <div className="p-4 text-center text-slate-400 text-xs">
-                {!isEffectiveCollapsed && 'Tidak ada menu navigasi yang tersedia.'}
-              </div>
-            )}
-
-            {sidebarMenu.map((item, idx) => {
-              const Icon = item.icon
-              const isPengaturan = item.key === 'pengaturan'
-              const content = !item.submenus ? (
-                <div key={item.key} className="relative group">
-                  <NavLink
-                    to={item.to}
-                    onMouseEnter={() => prefetchRoute(item.to)}
-                    onFocus={() => prefetchRoute(item.to)}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`group/link relative flex items-center ${isEffectiveCollapsed ? 'justify-center px-0' : 'gap-3 px-3'} py-2.5 rounded-xl font-bold transition-all duration-200 ${normalizePath(location.pathname) === normalizePath(item.to)
-                      ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-600/25 border border-emerald-500/40'
-                      : 'text-slate-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-slate-800/80 hover:text-emerald-700 dark:hover:text-emerald-400 border border-transparent hover:border-emerald-200/60 dark:hover:border-slate-700'
-                      }`}
-                  >
-                    <div className={`flex h-7.5 w-7.5 shrink-0 items-center justify-center rounded-xl transition-all duration-200 ${normalizePath(location.pathname) === normalizePath(item.to) ? 'bg-white/20 text-white border border-white/30' : getSidebarIconBadgeClass(item.key, idx)}`}>
-                      <Icon className="h-4 w-4 stroke-[2]" />
-                    </div>
-                    {!isEffectiveCollapsed && <span>{item.label}</span>}
-                  </NavLink>
-
-                  {/* Hover Tooltip when Collapsed */}
-                  {isEffectiveCollapsed && (
-                    <div className="pointer-events-none absolute left-full top-1/2 ml-3 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 -translate-x-2 transition-all duration-150 z-50">
-                      <div className="relative rounded-xl bg-slate-900 dark:bg-slate-800 px-3 py-1.5 text-xs font-bold text-white shadow-xl shadow-slate-950/25 border border-slate-700/80 whitespace-nowrap">
-                        {item.label}
-                        <div className="absolute top-1/2 -left-1 -mt-1 h-2 w-2 rotate-45 bg-slate-900 dark:bg-slate-800 border-l border-b border-slate-700/80" />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ) : (() => {
-                const isOpen = openSection === item.key
-                const hasActiveChild = isOpen && item.submenus.some((sub) => isSubActive(sub.to, item.submenus, item.key))
-
-                return (
-                  <div key={item.key} className="relative group space-y-1">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (isEffectiveCollapsed) setCollapsed(false)
-                        toggleSection(item.key)
-                      }}
-                      className={`flex w-full items-center ${isEffectiveCollapsed ? 'justify-center px-0' : 'justify-between px-3'} py-2.5 rounded-xl text-xs font-bold transition-all duration-200 ${isOpen || hasActiveChild
-                        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-600/25 border border-emerald-500/40'
-                        : 'text-slate-700 dark:text-slate-200 hover:bg-emerald-50 dark:hover:bg-slate-800/80 hover:text-emerald-700 dark:hover:text-emerald-400 border border-transparent hover:border-emerald-200/60 dark:hover:border-slate-700'
-                        }`}
-                    >
-                      <div className={`flex items-center ${isEffectiveCollapsed ? 'justify-center' : 'gap-3 min-w-0'}`}>
-                        <div className={`flex h-7.5 w-7.5 shrink-0 items-center justify-center rounded-xl transition-all duration-200 ${isOpen || hasActiveChild ? 'bg-white/20 text-white border border-white/30' : getSidebarIconBadgeClass(item.key, idx)}`}>
-                          <Icon className={`h-4 w-4 shrink-0 stroke-[2] ${isOpen || hasActiveChild ? 'text-white' : ''}`} />
-                        </div>
-                        {!isEffectiveCollapsed && <span className="truncate">{item.label}</span>}
-                      </div>
-                      {!isEffectiveCollapsed && (
-                        <span className="text-[10px]">
-                          {isOpen ? <ChevronDown className={`h-3.5 w-3.5 ${isOpen || hasActiveChild ? 'text-white' : 'text-slate-500'}`} /> : <ChevronRight className={`h-3.5 w-3.5 ${isOpen || hasActiveChild ? 'text-white' : 'text-slate-500'}`} />}
-                        </span>
-                      )}
-                    </button>
-
-                    {/* Hover Flyout Menu when Collapsed */}
-                    {isEffectiveCollapsed && (
-                      <div className="absolute left-full -top-1 pl-3 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-x-0 -translate-x-2 transition-all duration-150 z-50 min-w-[13.5rem]">
-                        <div className="relative rounded-2xl bg-white dark:bg-slate-900 p-2.5 shadow-xl shadow-slate-900/15 border border-slate-200/90 dark:border-slate-800 space-y-1">
-                          <div className="px-2.5 py-1 text-[11px] font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400 border-b border-slate-100 dark:border-slate-800 mb-1.5 flex items-center justify-between">
-                            <span>{item.label}</span>
-                            <span className="text-[9px] text-slate-400 font-normal">Submenu</span>
-                          </div>
-                          {item.submenus.map((sub, sIdx) => {
-                            if (sub.action === 'calendar') {
-                              return (
-                                <button
-                                  key={`flyout-${item.key}-cal-${sIdx}`}
-                                  type="button"
-                                  onClick={() => {
-                                    setMobileMenuOpen(false)
-                                    setIsAcademicCalendarOpen(true)
-                                  }}
-                                  className="flex items-center gap-2.5 w-full text-left rounded-lg px-2.5 py-1.5 text-xs transition-colors text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 cursor-pointer"
-                                >
-                                  <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border transition-all duration-150 ${SUBMENU_ICON_STYLES.calendar}`}>
-                                    <CalendarDays className="h-3.5 w-3.5 stroke-[2.2]" />
-                                  </div>
-                                  <span className="truncate">{sub.label}</span>
-                                </button>
-                              )
-                            }
-                            const SubIcon = typeof sub.icon === 'function' || (typeof sub.icon === 'object' && sub.icon !== null)
-                              ? sub.icon
-                              : (resolveSidebarIcon(sub.icon) || null)
-                            const active = isSubActive(sub.to, item.submenus, item.key)
-                            const badgeClass = getSubmenuIconBadgeClass(sub, sIdx)
-                            return (
-                              <NavLink
-                                key={`flyout-${item.key}-${sub.to || sub.label}-${sIdx}`}
-                                to={sub.to}
-                                onMouseEnter={() => prefetchRoute(sub.to)}
-                                onFocus={() => prefetchRoute(sub.to)}
-                                onClick={() => setMobileMenuOpen(false)}
-                                className={`block rounded-lg px-2.5 py-1.5 text-xs transition-colors ${active
-                                  ? 'bg-emerald-50 text-emerald-700 font-bold dark:bg-emerald-950/60 dark:text-emerald-300'
-                                  : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800'
-                                  }`}
-                              >
-                                <span className="flex items-center gap-2.5 min-w-0">
-                                  {SubIcon && (
-                                    <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border transition-all duration-150 ${active
-                                      ? 'bg-emerald-600 text-white border-emerald-600 shadow-2xs ring-1 ring-emerald-500/30'
-                                      : badgeClass
-                                      }`}>
-                                      <SubIcon className={`h-3.5 w-3.5 stroke-[2.2] ${active ? 'text-white' : ''}`} />
-                                    </div>
-                                  )}
-                                  <span className="truncate">{sub.label}</span>
-                                </span>
-                              </NavLink>
-                            )
-                          })}
-                          <div className="absolute top-4 -left-1 -mt-1 h-2 w-2 rotate-45 bg-white dark:bg-slate-900 border-l border-b border-slate-200/90 dark:border-slate-800" />
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Submenu Accordion when Expanded */}
-                    {!isEffectiveCollapsed && isOpen && (
-                      <div className="ml-5 space-y-1 border-l-2 border-emerald-500/50 dark:border-emerald-600/50 pl-3 pt-1 animate-[masterDropdownSlide_0.2s_ease-out]">
-                        {item.submenus.map((sub, sIdx) => {
-                          if (sub.action === 'calendar') {
-                            return (
-                              <button
-                                key={`${item.key}-cal-${sIdx}`}
-                                type="button"
-                                onClick={() => {
-                                  setMobileMenuOpen(false)
-                                  setIsAcademicCalendarOpen(true)
-                                }}
-                                className="flex items-center gap-2.5 w-full text-left rounded-lg px-2.5 py-1.5 text-xs font-medium transition-all duration-150 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200 cursor-pointer"
-                              >
-                                <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border transition-all duration-150 ${SUBMENU_ICON_STYLES.calendar}`}>
-                                  <CalendarDays className="h-3.5 w-3.5 stroke-[2.2]" />
-                                </div>
-                                <span className="truncate">{sub.label}</span>
-                              </button>
-                            )
-                          }
-                          const SubIcon = typeof sub.icon === 'function' || (typeof sub.icon === 'object' && sub.icon !== null)
-                            ? sub.icon
-                            : (resolveSidebarIcon(sub.icon) || null)
-                          const active = isSubActive(sub.to, item.submenus, item.key)
-                          const badgeClass = getSubmenuIconBadgeClass(sub, sIdx)
-                          return (
-                            <NavLink
-                              key={`${item.key}-${sub.to || sub.label}-${sIdx}`}
-                              to={sub.to}
-                              onMouseEnter={() => prefetchRoute(sub.to)}
-                              onFocus={() => prefetchRoute(sub.to)}
-                              onClick={() => setMobileMenuOpen(false)}
-                              className={`block rounded-lg px-2.5 py-1.5 text-xs transition-all duration-150 ${active
-                                ? 'bg-emerald-50/90 text-emerald-800 font-bold shadow-2xs border border-emerald-200/80 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-800/50'
-                                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 font-medium dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200'
-                                }`}
-                            >
-                              <span className="flex items-center gap-2.5 min-w-0">
-                                {SubIcon && (
-                                  <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border transition-all duration-150 ${active
-                                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-2xs ring-1 ring-emerald-500/30'
-                                    : badgeClass
-                                    }`}>
-                                    <SubIcon className={`h-3.5 w-3.5 stroke-[2.2] ${active ? 'text-white' : ''}`} />
-                                  </div>
-                                )}
-                                <span className="truncate">{sub.label}</span>
-                              </span>
-                            </NavLink>
-                          )
-                        })}
-                      </div>
-                    )}
-                  </div>
-                )
-              })()
-
-              return (
-                <Fragment key={item.key}>
-                  {isPengaturan && idx > 0 && (
-                    <div className="my-2 border-t border-slate-200/80 dark:border-slate-800" />
-                  )}
-                  {content}
-                </Fragment>
-              )
-            })}
-          </nav>
-
-          {/* User Status Bar & Help Link at Sidebar Bottom */}
-          <div className="relative z-10 p-3.5 border-t border-slate-200/80 dark:border-slate-800 bg-slate-50/90 dark:bg-[#131B29]/90 space-y-2.5">
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <PersonAvatar
-                  src={user?.photo_url || user?.avatar_url || user?.avatar || user?.photo || user?.profile_photo_url}
-                  name={namaTampil}
-                  size="sm"
-                  className="border border-slate-200 dark:border-slate-700 shadow-sm"
-                />
-                <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900" />
-              </div>
-              {!isEffectiveCollapsed && (
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-xs font-bold text-slate-900 dark:text-white leading-tight">{namaTampil}</p>
-                  <div className="flex items-center gap-1.5 mt-0.5">
-                    <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-semibold">• Online</span>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {!isEffectiveCollapsed && (
-              <p className="truncate px-2 text-[9px] text-slate-400 dark:text-slate-500">{pengaturan.footer_text || `${namaSekolah} © ${new Date().getFullYear()}`}</p>
-            )}
-            {!isEffectiveCollapsed && (
-              <button
-                type="button"
-                onClick={() => navigate('/dashboard/bantuan')}
-                className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 hover:text-slate-900 text-[11px] font-semibold transition border border-slate-200/90 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 dark:hover:bg-slate-700 cursor-pointer"
-              >
-                <HelpCircle className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-                <span>Bantuan & Panduan</span>
-              </button>
-            )}
-          </div>
-        </aside>
-      )
-    })()}
-
-        {/* Main Workspace Area (Light Gray Background bg-slate-50) */}
-        <div className="flex-1 flex flex-col min-w-0 bg-slate-50 dark:bg-[#0F172A]">
-          {/* Topbar Header (Clean White bg-white with subtle shadow shadow-sm) */}
+        {/* Main Workspace Area (SIMSIT Canvas Soft Mint Green bg-[#F2FBF7]) */}
+        <div className="flex-1 flex flex-col min-w-0 bg-[#F2FBF7] dark:bg-[#0F172A]">
+          {/* Topbar Header (Clean White bg-white with subtle shadow shadow-sm / Dark Mode Surface #1B2433) */}
           <header
-            className={`${pengaturan.header_sticky ? 'sticky top-0' : 'relative'} z-30 flex min-h-[4rem] min-w-0 items-center justify-between overflow-visible border-b border-slate-200/80 px-3 sm:px-4 lg:px-6 gap-3 bg-white dark:bg-slate-900 shadow-sm backdrop-blur-md transition-colors duration-200 dark:border-slate-800/80`}
+            className={`${pengaturan.header_sticky ? 'sticky top-0' : 'relative'} z-30 flex min-h-[4rem] min-w-0 items-center justify-between overflow-visible border-b border-emerald-200/80 px-3 sm:px-4 lg:px-6 gap-3 bg-white dark:bg-[#1B2433] shadow-sm backdrop-blur-md transition-colors duration-200 dark:border-emerald-800/80`}
             style={{
               backgroundColor: isDarkMode
                 ? undefined
@@ -1417,13 +1417,13 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(true)}
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-sky-200 bg-sky-50 text-sky-700 hover:bg-sky-100 dark:border-sky-800 dark:bg-sky-950/60 dark:text-sky-300 transition-all shadow-xs"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-sky-50 text-sky-700 hover:bg-sky-100 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300 transition-all shadow-xs"
                   aria-label="Buka Menu"
                 >
                   <Menu className="h-5 w-5" />
                 </button>
                 <div className="pointer-events-none absolute left-0 top-full mt-2.5 hidden group-hover:flex flex-col items-start z-50 animate-[masterDropdownSlide_0.15s_ease-out]">
-                  <div className="rounded-xl border border-slate-200 bg-slate-900/95 text-white px-3 py-1.5 text-xs font-extrabold shadow-xl whitespace-nowrap dark:border-slate-700 dark:bg-slate-800">
+                  <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-900/95 text-white px-3 py-1.5 text-xs font-extrabold shadow-xl whitespace-nowrap dark:border-emerald-700/80 dark:bg-slate-800">
                     Buka Menu Navigasi Samping
                   </div>
                 </div>
@@ -1431,7 +1431,7 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
 
               {/* 1. Active Unit Indicator (Static Badge for Unit-Scoped Staff/Teacher / Dropdown Switcher for Global Admin & Yayasan) */}
               {!canSwitchUnits ? (
-                <div className="flex items-center gap-2 rounded-2xl border border-emerald-200/90 bg-emerald-50/80 px-3.5 py-2 text-xs font-bold text-emerald-900 dark:border-emerald-800/80 dark:bg-emerald-950/60 dark:text-emerald-300 shadow-xs shrink-0 select-none">
+                <div className="flex items-center gap-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/80 px-3.5 py-2 text-xs font-bold text-emerald-900 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300 shadow-xs shrink-0 select-none">
                   <Layers className="h-4 w-4 text-emerald-600 dark:text-emerald-400 stroke-[2.2]" />
                   <span className="hidden sm:inline text-emerald-700/80 dark:text-emerald-400/80 font-medium">Unit:</span>
                   <span className="font-extrabold text-emerald-900 dark:text-emerald-200 max-w-[120px] xs:max-w-[160px] sm:max-w-none truncate inline-block">
@@ -1443,25 +1443,25 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                   <button
                     type="button"
                     onClick={() => setUnitDropdownOpen(!unitDropdownOpen)}
-                    className="flex items-center gap-2 rounded-2xl border border-sky-200/90 bg-sky-50/80 px-3.5 py-2 text-xs font-bold text-sky-900 hover:bg-sky-100/80 transition-all dark:border-sky-800/80 dark:bg-sky-950/60 dark:text-sky-300 shadow-xs cursor-pointer"
+                    className="flex items-center gap-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800 bg-emerald-50/80 px-3.5 py-2 text-xs font-bold text-emerald-900 hover:bg-emerald-100/90 transition-all dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300 shadow-xs cursor-pointer"
                   >
-                    <Layers className="h-4 w-4 text-sky-600 dark:text-sky-400 stroke-[2.2]" />
-                    <span className="hidden sm:inline text-sky-600/80 dark:text-sky-400/80 font-medium">Unit:</span>
-                    <span className="font-extrabold text-sky-900 dark:text-sky-200 max-w-[100px] xs:max-w-[140px] sm:max-w-none truncate inline-block">{activeUnit || 'Semua Unit'}</span>
-                    <ChevronDown className="h-3.5 w-3.5 text-sky-500" />
+                    <Layers className="h-4 w-4 text-emerald-600 dark:text-emerald-400 stroke-[2.2]" />
+                    <span className="hidden sm:inline text-emerald-700/80 dark:text-emerald-400/80 font-medium">Unit:</span>
+                    <span className="font-extrabold text-emerald-900 dark:text-emerald-200 max-w-[100px] xs:max-w-[140px] sm:max-w-none truncate inline-block">{activeUnit || 'Semua Unit'}</span>
+                    <ChevronDown className="h-3.5 w-3.5 text-emerald-600" />
                   </button>
 
                   {/* Instant Floating Tooltip */}
                   {!unitDropdownOpen && (
                     <div className="pointer-events-none absolute left-0 top-full mt-2.5 hidden group-hover:flex flex-col items-start z-50 animate-[masterDropdownSlide_0.15s_ease-out]">
-                      <div className="rounded-xl border border-slate-200 bg-slate-900/95 text-white px-3 py-1.5 text-xs font-extrabold shadow-xl whitespace-nowrap dark:border-slate-700 dark:bg-slate-800">
+                      <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-900/95 text-white px-3 py-1.5 text-xs font-extrabold shadow-xl whitespace-nowrap dark:border-emerald-700/80 dark:bg-slate-800">
                         Pilih unit pendidikan aktif untuk memfilter data
                       </div>
                     </div>
                   )}
 
                   {unitDropdownOpen && (
-                    <div className="absolute left-0 top-full mt-2 w-56 rounded-[18px] bg-white p-1.5 shadow-2xl border border-slate-200/80 z-50 animate-[masterDropdownSlide_0.2s_ease-out] dark:bg-[#1B2433] dark:border-slate-800">
+                    <div className="absolute left-0 top-full mt-2 w-56 rounded-xl bg-white p-1.5 shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 z-50 animate-[masterDropdownSlide_0.2s_ease-out] dark:bg-[#1B2433] dark:border-emerald-800/60">
                       <p className="px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
                         Pilih Unit Pendidikan
                       </p>
@@ -1473,11 +1473,10 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                             setActiveUnit(unit.id)
                             setUnitDropdownOpen(false)
                           }}
-                          className={`w-full text-left flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
-                            activeUnit === unit.id
+                          className={`w-full text-left flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all ${activeUnit === unit.id
                               ? 'bg-sky-100 text-sky-900 font-bold dark:bg-sky-950/80 dark:text-sky-300'
                               : 'text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800/60'
-                          }`}
+                            }`}
                         >
                           <span>{unit.name}</span>
                           {activeUnit === unit.id && <span className="h-2 w-2 rounded-full bg-sky-600 dark:bg-sky-400" />}
@@ -1489,22 +1488,22 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
               )}
 
               {/* 2. Field Pencarian (Search Bar - Soft Pastel Emerald Green, Geser ke kiri mendekati unit) */}
-              <div className="hidden sm:flex flex-1 min-w-0 max-w-xs items-center group relative">
+              <div className="hidden md:flex min-w-[200px] max-w-xs flex-1 items-center group relative">
                 <button
                   type="button"
                   onClick={() => setIsSearchModalOpen(true)}
-                  className="flex w-full items-center gap-2 rounded-2xl border border-emerald-200/90 bg-emerald-50/70 px-3.5 py-2 text-xs font-semibold text-emerald-900 shadow-xs transition-all hover:bg-emerald-100/80 hover:border-emerald-300 active:scale-[0.99] dark:border-emerald-800/80 dark:bg-emerald-950/60 dark:text-emerald-300 dark:hover:bg-emerald-900/60 focus:outline-none cursor-pointer"
+                  className="flex w-full items-center gap-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/70 px-3.5 py-2 text-xs font-semibold text-emerald-900 shadow-xs transition-all hover:bg-emerald-100/80 hover:border-emerald-300 dark:hover:border-emerald-700/80 active:scale-[0.99] dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300 dark:hover:bg-emerald-900/60 focus:outline-none cursor-pointer"
                 >
                   <Search className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400 stroke-[2.2]" />
                   <span className="flex-1 text-left text-xs font-semibold truncate text-emerald-800 dark:text-emerald-300">Cari siswa, guru, modul...</span>
-                  <kbd className="shrink-0 hidden lg:inline-flex items-center gap-1 rounded-lg border border-emerald-200 bg-white/90 px-1.5 py-0.5 text-[10px] font-black text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/80 dark:text-emerald-300">
+                  <kbd className="shrink-0 hidden lg:inline-flex items-center gap-1 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white/90 px-1.5 py-0.5 text-[10px] font-black text-emerald-700 dark:border-emerald-800/60 dark:bg-emerald-900/80 dark:text-emerald-300">
                     Ctrl + K
                   </kbd>
                 </button>
 
                 {/* Instant Floating Tooltip */}
                 <div className="pointer-events-none absolute left-0 top-full mt-2.5 hidden group-hover:flex flex-col items-start z-50 animate-[masterDropdownSlide_0.15s_ease-out]">
-                  <div className="rounded-xl border border-slate-200 bg-slate-900/95 text-white px-3 py-1.5 text-xs font-extrabold shadow-xl whitespace-nowrap dark:border-slate-700 dark:bg-slate-800">
+                  <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-900/95 text-white px-3 py-1.5 text-xs font-extrabold shadow-xl whitespace-nowrap dark:border-emerald-700/80 dark:bg-slate-800">
                     Pencarian cepat siswa, guru, kelas, modul & fitur (Ctrl + K)
                   </div>
                 </div>
@@ -1518,17 +1517,17 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                 <button
                   type="button"
                   onClick={() => setIsAcademicCalendarOpen(true)}
-                  className="shrink-0 flex items-center gap-1.5 rounded-2xl border border-cyan-200/90 bg-cyan-50/80 px-3 py-2 shadow-xs transition hover:scale-[1.02] hover:bg-cyan-100/90 active:scale-[0.98] dark:border-cyan-800/80 dark:bg-cyan-950/60 dark:hover:bg-cyan-900/60 cursor-pointer"
+                  className="shrink-0 flex items-center gap-1.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800 bg-emerald-50/80 px-3 py-2 shadow-xs transition hover:scale-[1.02] hover:bg-emerald-100/90 active:scale-[0.98] dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 cursor-pointer"
                 >
-                  <CalendarDays className="h-4 w-4 text-cyan-600 dark:text-cyan-400 stroke-[2.2]" />
-                  <span className="text-xs font-extrabold text-cyan-900 dark:text-cyan-200 whitespace-nowrap">{tanggalTampil}</span>
-                  <span className="ml-1 inline-flex items-center rounded-lg bg-cyan-200/70 px-1.5 py-0.5 text-[10px] font-black text-cyan-900 dark:bg-cyan-900 dark:text-cyan-200">
+                  <CalendarDays className="h-4 w-4 text-emerald-600 dark:text-emerald-400 stroke-[2.2]" />
+                  <span className="text-xs font-extrabold text-emerald-900 dark:text-emerald-200 whitespace-nowrap">{tanggalTampil}</span>
+                  <span className="ml-1 inline-flex items-center rounded-lg bg-emerald-200/70 px-1.5 py-0.5 text-[10px] font-black text-emerald-900 dark:bg-emerald-900 dark:text-emerald-200">
                     Kalender
                   </span>
                 </button>
                 {/* Instant Floating Tooltip */}
                 <div className="pointer-events-none absolute right-0 top-full mt-2.5 hidden group-hover:flex flex-col items-end z-50 animate-[masterDropdownSlide_0.15s_ease-out]">
-                  <div className="rounded-xl border border-slate-200 bg-slate-900/95 text-white px-3 py-1.5 text-xs font-extrabold shadow-xl whitespace-nowrap dark:border-slate-700 dark:bg-slate-800">
+                  <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-900/95 text-white px-3 py-1.5 text-xs font-extrabold shadow-xl whitespace-nowrap dark:border-emerald-700/80 dark:bg-slate-800">
                     Klik untuk membuka Kalender Akademik & Pengaturan Libur/Sekolah
                   </div>
                 </div>
@@ -1540,28 +1539,27 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                   <button
                     type="button"
                     onClick={() => setRoleAccessOpen(!roleAccessOpen)}
-                    className={`flex items-center gap-1.5 rounded-2xl border px-3 py-2 text-xs font-extrabold transition-all hover:scale-[1.03] active:scale-[0.97] shadow-xs focus:outline-none cursor-pointer ${
-                      roleAccessOpen
-                        ? 'border-purple-300 bg-purple-100 text-purple-900 dark:border-purple-700 dark:bg-purple-950 dark:text-purple-200'
-                        : 'border-purple-200/90 bg-purple-50/80 text-purple-900 hover:bg-purple-100/80 dark:border-purple-800/80 dark:bg-purple-950/60 dark:text-purple-300'
-                    }`}
+                    className={`flex items-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-extrabold transition-all hover:scale-[1.03] active:scale-[0.97] shadow-xs focus:outline-none cursor-pointer ${roleAccessOpen
+                        ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-purple-100 text-purple-900 dark:border-emerald-800/60 dark:bg-purple-950 dark:text-purple-200'
+                        : 'border-emerald-200/80 dark:border-emerald-800 bg-emerald-50/80 text-emerald-900 hover:bg-emerald-100/80 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300'
+                      }`}
                   >
-                    <ShieldCheck className="h-4 w-4 text-purple-600 dark:text-purple-400 stroke-[2.2]" />
+                    <ShieldCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400 stroke-[2.2]" />
                     <span className="hidden xl:inline">Akses Role</span>
-                    <ChevronDown className={`h-3.5 w-3.5 transition-transform text-purple-500 ${roleAccessOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`h-3.5 w-3.5 transition-transform text-emerald-600 ${roleAccessOpen ? 'rotate-180' : ''}`} />
                   </button>
 
                   {/* Instant Floating Tooltip */}
                   {!roleAccessOpen && (
                     <div className="pointer-events-none absolute right-0 top-full mt-2.5 hidden group-hover:flex flex-col items-end z-50 animate-[masterDropdownSlide_0.15s_ease-out]">
-                      <div className="rounded-xl border border-slate-200 bg-slate-900/95 text-white px-3 py-1.5 text-xs font-extrabold shadow-xl whitespace-nowrap dark:border-slate-700 dark:bg-slate-800">
+                      <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-900/95 text-white px-3 py-1.5 text-xs font-extrabold shadow-xl whitespace-nowrap dark:border-emerald-700/80 dark:bg-slate-800">
                         Beralih akun sebagai role pengguna lain (Super Admin / Admin)
                       </div>
                     </div>
                   )}
 
                   {roleAccessOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-52 rounded-[18px] bg-white p-1.5 shadow-2xl border border-slate-200/80 z-50 animate-[masterDropdownSlide_0.2s_ease-out] dark:bg-[#1B2433] dark:border-slate-800">
+                    <div className="absolute right-0 top-full mt-2 w-52 rounded-xl bg-white p-1.5 shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 z-50 animate-[masterDropdownSlide_0.2s_ease-out] dark:bg-[#1B2433] dark:border-emerald-800/60">
                       <p className="px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
                         Akses Sebagai Role
                       </p>
@@ -1575,7 +1573,7 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                         >
                           <span>{option.label}</span>
                           {roleAccessLoading === option.role && (
-                            <span className="h-3.5 w-3.5 rounded-full border-2 border-purple-600 border-t-transparent animate-spin" />
+                            <span className="h-3.5 w-3.5 rounded-full border border-emerald-200/80 dark:border-emerald-800/60 border-t-transparent animate-spin" />
                           )}
                         </button>
                       ))}
@@ -1587,11 +1585,11 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
               {/* 5. Notification Center Bell Icon (Soft Pastel Light Indigo/Blue) */}
               <div className="group relative">
                 <NotificationCenter
-                  bellClassName="border border-indigo-200/90 bg-indigo-50/80 text-indigo-700 hover:bg-indigo-100/90 dark:border-indigo-800/80 dark:bg-indigo-950/60 dark:text-indigo-300 shadow-xs transition hover:scale-[1.03]"
+                  bellClassName="border border-emerald-200/80 dark:border-emerald-800 bg-emerald-50/80 text-emerald-700 hover:bg-emerald-100/90 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300 shadow-xs transition hover:scale-[1.03]"
                 />
                 {/* Instant Floating Tooltip */}
                 <div className="pointer-events-none absolute right-0 top-full mt-2.5 hidden group-hover:flex flex-col items-end z-50 animate-[masterDropdownSlide_0.15s_ease-out]">
-                  <div className="rounded-xl border border-slate-200 bg-slate-900/95 text-white px-3 py-1.5 text-xs font-extrabold shadow-xl whitespace-nowrap dark:border-slate-700 dark:bg-slate-800">
+                  <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-900/95 text-white px-3 py-1.5 text-xs font-extrabold shadow-xl whitespace-nowrap dark:border-emerald-700/80 dark:bg-slate-800">
                     Pusat notifikasi & pemberitahuan sistem
                   </div>
                 </div>
@@ -1604,13 +1602,13 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                   onClick={handleResetCache}
                   disabled={isResettingCache}
                   aria-label="Atur ulang cache aplikasi"
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-amber-200/90 bg-amber-50/80 text-amber-800 shadow-xs transition-all hover:bg-amber-100/90 hover:scale-[1.03] active:scale-[0.97] dark:border-amber-800/80 dark:bg-amber-950/60 dark:text-amber-300 dark:hover:bg-amber-900/60 focus:outline-none cursor-pointer disabled:opacity-50"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-200/80 dark:border-emerald-800 bg-emerald-50/80 text-emerald-800 shadow-xs transition-all hover:bg-emerald-100/90 hover:scale-[1.03] active:scale-[0.97] dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300 dark:hover:bg-emerald-900/60 focus:outline-none cursor-pointer disabled:opacity-50"
                 >
-                  <RefreshCw className={`h-4.5 w-4.5 stroke-[2] text-amber-600 dark:text-amber-400 ${isResettingCache ? 'animate-spin' : ''}`} />
+                  <RefreshCw className={`h-4.5 w-4.5 stroke-[2] text-emerald-600 dark:text-emerald-400 ${isResettingCache ? 'animate-spin' : ''}`} />
                 </button>
                 {/* Instant Floating Tooltip */}
                 <div className="pointer-events-none absolute right-0 top-full mt-2.5 hidden group-hover:flex flex-col items-end z-50 animate-[masterDropdownSlide_0.15s_ease-out]">
-                  <div className="rounded-xl border border-slate-200 bg-slate-900/95 text-white px-3 py-1.5 text-xs font-extrabold shadow-xl whitespace-nowrap dark:border-slate-700 dark:bg-slate-800">
+                  <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-900/95 text-white px-3 py-1.5 text-xs font-extrabold shadow-xl whitespace-nowrap dark:border-emerald-700/80 dark:bg-slate-800">
                     Atur ulang cache sistem & bersihkan data sementara
                   </div>
                 </div>
@@ -1622,13 +1620,13 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                   type="button"
                   onClick={() => setIsDarkMode(!isDarkMode)}
                   aria-label="Toggle mode tampilan"
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-fuchsia-200/90 bg-fuchsia-50/80 text-fuchsia-800 shadow-xs transition-all hover:bg-fuchsia-100/90 hover:scale-[1.03] active:scale-[0.97] dark:border-fuchsia-800/80 dark:bg-fuchsia-950/60 dark:text-fuchsia-300 dark:hover:bg-fuchsia-900/60 focus:outline-none cursor-pointer"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-200/80 bg-emerald-50/80 text-emerald-800 shadow-xs transition-all hover:bg-emerald-100/90 hover:scale-[1.03] active:scale-[0.97] dark:border-emerald-800/80 dark:bg-emerald-950/60 dark:text-emerald-300 dark:hover:bg-emerald-900/60 focus:outline-none cursor-pointer"
                 >
                   {isDarkMode ? <Sun className="h-4.5 w-4.5 stroke-[2] text-amber-500" /> : <Moon className="h-4.5 w-4.5 stroke-[2] text-fuchsia-600 dark:text-fuchsia-400" />}
                 </button>
                 {/* Instant Floating Tooltip */}
                 <div className="pointer-events-none absolute right-0 top-full mt-2.5 hidden group-hover:flex flex-col items-end z-50 animate-[masterDropdownSlide_0.15s_ease-out]">
-                  <div className="rounded-xl border border-slate-200 bg-slate-900/95 text-white px-3 py-1.5 text-xs font-extrabold shadow-xl whitespace-nowrap dark:border-slate-700 dark:bg-slate-800">
+                  <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-900/95 text-white px-3 py-1.5 text-xs font-extrabold shadow-xl whitespace-nowrap dark:border-emerald-700/80 dark:bg-slate-800">
                     {isDarkMode ? 'Ganti ke Mode Terang' : 'Ganti ke Mode Gelap'}
                   </div>
                 </div>
@@ -1639,7 +1637,7 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                 <button
                   type="button"
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl overflow-hidden border border-rose-200/90 bg-rose-50/80 shadow-xs hover:scale-[1.03] active:scale-[0.97] transition-all cursor-pointer dark:border-rose-800/80 focus:outline-none"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl overflow-hidden border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/80 shadow-xs hover:scale-[1.03] active:scale-[0.97] transition-all cursor-pointer dark:border-emerald-800/60 focus:outline-none"
                   aria-label="Menu profil user"
                 >
                   <PersonAvatar
@@ -1648,14 +1646,14 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                     size="table"
                     shape="square"
                     alt={`Foto profil ${namaTampil}`}
-                    className="h-full w-full object-cover border-0 rounded-2xl"
+                    className="h-full w-full object-cover border-0 rounded-xl"
                   />
                 </button>
 
                 {/* Instant Floating Tooltip */}
                 {!profileDropdownOpen && (
                   <div className="pointer-events-none absolute right-0 top-full mt-2.5 hidden group-hover:flex flex-col items-end z-50 animate-[masterDropdownSlide_0.15s_ease-out]">
-                    <div className="rounded-xl border border-slate-200 bg-slate-900/95 text-white px-3 py-1.5 text-xs font-extrabold shadow-xl whitespace-nowrap dark:border-slate-700 dark:bg-slate-800">
+                    <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-900/95 text-white px-3 py-1.5 text-xs font-extrabold shadow-xl whitespace-nowrap dark:border-emerald-700/80 dark:bg-slate-800">
                       Menu profil & akun pengguna ({namaTampil})
                     </div>
                   </div>
@@ -1668,7 +1666,7 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                       animate={{ opacity: 1, scale: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95, y: 8 }}
                       transition={{ type: 'spring', stiffness: 420, damping: 28 }}
-                      className="absolute right-0 top-full mt-3 w-72 sm:w-80 rounded-xl bg-white dark:bg-[#1B2433] p-5 shadow-2xl border border-slate-200 dark:border-slate-800 z-50"
+                      className="absolute right-0 top-full mt-3 w-72 sm:w-80 rounded-xl bg-white dark:bg-[#1B2433] p-5 shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 z-50"
                     >
                       {/* Profile Header (Matching Image 3) */}
                       <div className="flex items-center gap-3.5">
@@ -1678,15 +1676,15 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                           size="card"
                           shape="square"
                           alt={`Foto profil ${namaTampil}`}
-                          className="h-14 w-14 rounded-2xl object-cover border border-slate-100 dark:border-slate-700 shadow-xs"
+                          className="h-14 w-14 rounded-xl object-cover border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 shadow-xs"
                         />
                         <div className="min-w-0">
-                          <h4 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white truncate tracking-tight">{namaTampil}</h4>
+                          <h4 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight">{namaTampil}</h4>
                           <p className="text-xs font-medium text-slate-400 dark:text-slate-400 truncate mt-0.5">{user?.email || ''}</p>
                         </div>
                       </div>
 
-                      <hr className="my-3.5 border-slate-100 dark:border-slate-800" />
+                      <hr className="my-3.5 border-emerald-100/80 dark:border-emerald-800/60" />
 
                       {/* Menu Items (Matching Image 3) */}
                       <div className="space-y-1">
@@ -1699,7 +1697,7 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                             else if (isFoundationUser) navigate('/dashboard/yayasan/profil')
                             else navigate('/dashboard/profil-akun')
                           }}
-                          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors cursor-pointer"
+                          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors cursor-pointer"
                         >
                           <Settings className="h-5 w-5 text-slate-600 dark:text-slate-300 stroke-[1.8]" />
                           <span>Pengaturan Akun</span>
@@ -1710,7 +1708,7 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                           onClick={() => {
                             setIsDarkMode(!isDarkMode)
                           }}
-                          className="w-full sm:hidden flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors cursor-pointer"
+                          className="w-full sm:hidden flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors cursor-pointer"
                         >
                           {isDarkMode ? <Sun className="h-5 w-5 text-amber-500 stroke-[1.8]" /> : <Moon className="h-5 w-5 text-fuchsia-600 dark:text-fuchsia-400 stroke-[1.8]" />}
                           <span>Mode {isDarkMode ? 'Terang' : 'Gelap'}</span>
@@ -1722,7 +1720,7 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                             setProfileDropdownOpen(false)
                             handleResetCache()
                           }}
-                          className="w-full sm:hidden flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors cursor-pointer"
+                          className="w-full sm:hidden flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors cursor-pointer"
                         >
                           <RefreshCw className="h-5 w-5 text-amber-600 dark:text-amber-400 stroke-[1.8]" />
                           <span>Atur Ulang Cache</span>
@@ -1735,7 +1733,7 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                               setProfileDropdownOpen(false)
                               navigate('/dashboard/students/unit-pendidikan')
                             }}
-                            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors cursor-pointer"
+                            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors cursor-pointer"
                           >
                             <Building2 className="h-5 w-5 text-slate-600 dark:text-slate-300 stroke-[1.8]" />
                             <span>Unit Pendidikan</span>
@@ -1748,7 +1746,7 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                             setProfileDropdownOpen(false)
                             setShowPwaModal(true)
                           }}
-                          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors cursor-pointer"
+                          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors cursor-pointer"
                         >
                           <Download className="h-5 w-5 text-emerald-600 dark:text-emerald-400 stroke-[1.8]" />
                           <span>Pasang Aplikasi (PWA)</span>
@@ -1760,14 +1758,14 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                             setProfileDropdownOpen(false)
                             navigate('/dashboard/bantuan')
                           }}
-                          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors cursor-pointer"
+                          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors cursor-pointer"
                         >
                           <HelpCircle className="h-5 w-5 text-slate-600 dark:text-slate-300 stroke-[1.8]" />
                           <span>Bantuan {'&'} Panduan</span>
                         </button>
                       </div>
 
-                      <hr className="my-3.5 border-slate-100 dark:border-slate-800" />
+                      <hr className="my-3.5 border-emerald-100/80 dark:border-emerald-800/60" />
 
                       <button
                         type="button"
@@ -1775,7 +1773,7 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
                           setProfileDropdownOpen(false)
                           logout()
                         }}
-                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-bold text-slate-700 hover:text-rose-600 dark:text-slate-200 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors cursor-pointer"
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-slate-700 hover:text-rose-600 dark:text-slate-200 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors cursor-pointer"
                       >
                         <LogOut className="h-5 w-5 text-slate-600 dark:text-slate-300 stroke-[1.8]" />
                         <span>Keluar</span>
@@ -1787,10 +1785,10 @@ const getSubmenuIconBadgeClass = (sub, sIdx) => {
             </div>
           </header>
 
-          {/* Main Page Workspace Container (Light Gray bg-slate-50) */}
-          <main className="min-w-0 flex-1 overflow-x-hidden px-3 py-3.5 sm:px-5 sm:py-5 lg:p-6 space-y-4 sm:space-y-6 max-w-none lg:max-w-7xl w-full mx-auto pb-28 lg:pb-24">
+          {/* Main Page Workspace Container (SIMSIT Canvas bg-[#F2FBF7]) */}
+          <main className="min-w-0 flex-1 overflow-x-hidden bg-[#F2FBF7] dark:bg-[#0F172A] px-3 py-3.5 sm:px-5 sm:py-5 lg:p-6 space-y-4 sm:space-y-6 max-w-none lg:max-w-7xl w-full mx-auto pb-28 lg:pb-24">
             {impersonating && !hasFullMenuAccess && (
-              <div className="auth-impersonating-banner flex flex-col gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-950 shadow-sm sm:flex-row sm:items-center sm:justify-between dark:border-amber-900/70 dark:bg-amber-950/40 dark:text-amber-100">
+              <div className="auth-impersonating-banner flex flex-col gap-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-amber-50 px-4 py-3 text-amber-950 shadow-sm sm:flex-row sm:items-center sm:justify-between dark:border-emerald-800/60 dark:bg-amber-950/40 dark:text-amber-100">
                 <div>
                   <p className="text-xs font-extrabold">Mode akses role aktif: {roleTampil}</p>
                   <p className="mt-0.5 text-[11px] opacity-75">Anda sedang melihat sistem sebagai {namaTampil}.</p>

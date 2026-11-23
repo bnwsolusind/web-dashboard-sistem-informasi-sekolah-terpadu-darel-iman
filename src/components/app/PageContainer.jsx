@@ -10,6 +10,6 @@ import React from 'react'
  * @param {string} [props.maxW]
  */
 export default function PageContainer({ children, className = '', maxWidth = 'max-w-7xl', maxW = undefined }) {
-  const effectiveMax = maxW ? (maxW.startsWith('max-w-') ? maxW : `max-w-${maxW}`) : maxWidth
-  return <div className={`mx-auto w-full ${effectiveMax} ${className}`}>{children}</div>
+ const effectiveMax = maxW ? (maxW.startsWith('max-w-') ? maxW : `max-w-${maxW}`) : maxWidth
+ return <div className={`mx-auto w-full ${effectiveMax} ${className}`}>{children}</div>
 }

@@ -1,0 +1,132 @@
+{
+  "executionLogs": [
+    {
+      "step": "0. Login Form Web Super Admin",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T01:15:02.828Z"
+    },
+    {
+      "step": "0. Login Form Web Super Admin",
+      "status": "SUCCESS",
+      "details": "Berhasil masuk ke /dashboard",
+      "time": "2026-11-18T01:15:05.675Z"
+    },
+    {
+      "step": "1.1 Buka Halaman Tahfizh",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T01:15:05.675Z"
+    },
+    {
+      "step": "1.2 Buka Dropdown Kelas & Pilih Kelas B",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T01:15:09.040Z"
+    },
+    {
+      "step": "1.2 Buka Dropdown Kelas & Pilih Kelas B",
+      "status": "SUCCESS",
+      "details": "Kelas B terpilih: true",
+      "time": "2026-11-18T01:15:09.759Z"
+    },
+    {
+      "step": "1.3 Buka Modal Siswa & Pilih Santri Aabid Muhammad Hafiy",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T01:15:11.765Z"
+    },
+    {
+      "step": "1.3 Buka Modal Siswa & Pilih Santri Aabid Muhammad Hafiy",
+      "status": "SUCCESS",
+      "details": "Santri Aabid terpilih, Sheet Formulir Terbuka",
+      "time": "2026-11-18T01:15:14.038Z"
+    },
+    {
+      "step": "1.4 Klik Tambah Setoran & Buka Mushaf Modal",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T01:15:16.040Z"
+    },
+    {
+      "step": "1.5 Konfigurasi Surah An-Naba Ayat 1 s/d 5 & Predikat Mumtaz",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T01:15:18.371Z"
+    },
+    {
+      "step": "1.5 Konfigurasi Surah An-Naba Ayat 1 s/d 5 & Predikat Mumtaz",
+      "status": "SUCCESS",
+      "details": "Diterapkan ke baris formulir",
+      "time": "2026-11-18T01:15:22.553Z"
+    },
+    {
+      "step": "1.6 Klik Tombol Simpan & Konfirmasi Modal",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T01:15:24.558Z"
+    },
+    {
+      "step": "1.6 Klik Tombol Simpan & Konfirmasi Modal",
+      "status": "SUCCESS",
+      "details": "Setoran tersimpan ke database staging",
+      "time": "2026-11-18T01:15:28.698Z"
+    },
+    {
+      "step": "1.7 Bersihkan Residu Log Tahfizh",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T01:15:28.715Z"
+    },
+    {
+      "step": "2.1 Buka Mutabaah Template Agenda",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T01:15:29.743Z"
+    },
+    {
+      "step": "2.2 Buka Drawer Tambah Template",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T01:15:32.443Z"
+    },
+    {
+      "step": "2.3 Isi Form Drawer [QA-FINAL-CHECK]",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T01:15:34.073Z"
+    },
+    {
+      "step": "2.4 Klik Simpan Template",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T01:15:34.155Z"
+    },
+    {
+      "step": "2.4 Klik Simpan Template",
+      "status": "SUCCESS",
+      "details": "Template [QA-FINAL-CHECK] berhasil disimpan",
+      "time": "2026-11-18T01:15:37.266Z"
+    },
+    {
+      "step": "2.5 Hapus Data Template [QA-FINAL-CHECK]",
+      "status": "START",
+      "details": "",
+      "time": "2026-11-18T01:15:37.266Z"
+    }
+  ],
+  "consoleLogs": [
+    {
+      "type": "verbose",
+      "text": "[DOM] Input elements should have autocomplete attributes (suggested: \"current-password\"): (More info: https://goo.gl/9p2vKq) %o"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 422 ()"
+    }
+  ],
+  "pageErrors": [],
+  "cleanCheck": {
+    "templateRemaining": 0
+  }
+}

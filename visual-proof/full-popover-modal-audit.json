@@ -1,0 +1,1816 @@
+[
+  {
+    "index": 1,
+    "route": "/dashboard",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 2,
+    "route": "/dashboard/yayasan/laporan/prestasi",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 3,
+    "route": "/dashboard/yayasan",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 4,
+    "route": "/dashboard/unit-pendidikan",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 5,
+    "route": "/dashboard/struktur-organisasi",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 6,
+    "route": "/dashboard/pegawai-guru",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 7,
+    "route": "/dashboard/siswa",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 8,
+    "route": "/dashboard/siswa-baru",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 9,
+    "route": "/dashboard/mutasi-siswa",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": true,
+    "popoverMetrics": null,
+    "modalMetrics": {
+      "modalStyles": {
+        "width": "448px",
+        "borderRadius": "21px",
+        "backgroundColor": "rgb(255, 255, 255)"
+      },
+      "btnStyles": {
+        "height": "44px",
+        "borderRadius": "21px"
+      }
+    },
+    "error": null
+  },
+  {
+    "index": 10,
+    "route": "/dashboard/kelulusan-alumni",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 11,
+    "route": "/dashboard/informasi-sekolah",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 12,
+    "route": "/dashboard/berita-informasi",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 13,
+    "route": "/dashboard/laporan",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 14,
+    "route": "/dashboard/laporan/sdm",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 15,
+    "route": "/dashboard/laporan/siswa",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 16,
+    "route": "/dashboard/laporan/tahfizh",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 17,
+    "route": "/dashboard/laporan/mutasi",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 18,
+    "route": "/dashboard/laporan/kelulusan",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 19,
+    "route": "/dashboard/laporan/alumni",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 20,
+    "route": "/dashboard/laporan/lintas-unit",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 21,
+    "route": "/dashboard/laporan/prestasi",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 22,
+    "route": "/dashboard/notifikasi",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 23,
+    "route": "/dashboard/profil",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 24,
+    "route": "/dashboard/guru",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 25,
+    "route": "/dashboard/kepala-sekolah",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 26,
+    "route": "/dashboard/wali-kelas",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 27,
+    "route": "/dashboard/divisi-pendidikan",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 28,
+    "route": "/dashboard/divisi-pendidikan/workspace",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 29,
+    "route": "/dashboard/waka-kurikulum",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 30,
+    "route": "/dashboard/waka-kesiswaan",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 31,
+    "route": "/dashboard/tata-usaha",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 32,
+    "route": "/dashboard/guru-tahfizh",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 33,
+    "route": "/dashboard/guru-bk",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 34,
+    "route": "/dashboard/operator",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 35,
+    "route": "/dashboard/musyrif",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 36,
+    "route": "/dashboard/asrama/izin",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 37,
+    "route": "/dashboard/chat-pegawai",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 38,
+    "route": "/dashboard/akademik",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 39,
+    "route": "/dashboard/akademik/dashboard",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 40,
+    "route": "/dashboard/akademik/pengaturan",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 41,
+    "route": "/dashboard/akademik/perencanaan",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 42,
+    "route": "/dashboard/akademik/pembelajaran",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 43,
+    "route": "/dashboard/akademik/evaluasi",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 44,
+    "route": "/dashboard/akademik/nilai-rapor",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 45,
+    "route": "/dashboard/pemantauan",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": {
+      "containerStyles": {
+        "borderRadius": "0px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "borderWidth": "0px",
+        "boxShadow": false
+      },
+      "normalItemStyles": {
+        "textColor": "oklch(0.372 0.044 257.287)",
+        "iconColor": null,
+        "borderRadius": "14px",
+        "padding": "6px 10px",
+        "hoveredBg": "oklch(0.979 0.021 166.113)"
+      },
+      "deleteItemStyles": null,
+      "isHeroUiCompliant": false
+    },
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 46,
+    "route": "/dashboard/monitoring-divisi",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": {
+      "containerStyles": {
+        "borderRadius": "0px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "borderWidth": "0px",
+        "boxShadow": false
+      },
+      "normalItemStyles": {
+        "textColor": "oklch(0.508 0.118 165.612)",
+        "iconColor": null,
+        "borderRadius": "14px",
+        "padding": "8px 10px",
+        "hoveredBg": "oklch(0.979 0.021 166.113)"
+      },
+      "deleteItemStyles": null,
+      "isHeroUiCompliant": false
+    },
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 47,
+    "route": "/dashboard/crud-demo",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 48,
+    "route": "/dashboard/pegawai",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": {
+      "containerStyles": {
+        "borderRadius": "0px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "borderWidth": "0px",
+        "boxShadow": false
+      },
+      "normalItemStyles": {
+        "textColor": "oklch(0.508 0.118 165.612)",
+        "iconColor": null,
+        "borderRadius": "14px",
+        "padding": "8px 10px",
+        "hoveredBg": "oklch(0.979 0.021 166.113)"
+      },
+      "deleteItemStyles": null,
+      "isHeroUiCompliant": false
+    },
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 49,
+    "route": "/dashboard/kurikulum",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 50,
+    "route": "/dashboard/kelas",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 51,
+    "route": "/dashboard/tahun-ajaran",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 52,
+    "route": "/dashboard/mata-pelajaran",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": {
+      "containerStyles": {
+        "borderRadius": "0px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "borderWidth": "0px",
+        "boxShadow": false
+      },
+      "normalItemStyles": {
+        "textColor": "oklch(0.508 0.118 165.612)",
+        "iconColor": null,
+        "borderRadius": "14px",
+        "padding": "8px 10px",
+        "hoveredBg": "oklch(0.979 0.021 166.113)"
+      },
+      "deleteItemStyles": null,
+      "isHeroUiCompliant": false
+    },
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 53,
+    "route": "/dashboard/units",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 54,
+    "route": "/dashboard/alumni",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 55,
+    "route": "/dashboard/super-admin",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 56,
+    "route": "/dashboard/laporan-prestasi",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 57,
+    "route": "/dashboard/laporan-lintas-unit",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 58,
+    "route": "/dashboard/rekap",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 59,
+    "route": "/dashboard/students",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 60,
+    "route": "/dashboard/input",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 61,
+    "route": "/dashboard/jabatan",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 62,
+    "route": "/dashboard/rombel",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 63,
+    "route": "/dashboard/employees",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": {
+      "containerStyles": {
+        "borderRadius": "0px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "borderWidth": "0px",
+        "boxShadow": false
+      },
+      "normalItemStyles": {
+        "textColor": "oklch(0.508 0.118 165.612)",
+        "iconColor": null,
+        "borderRadius": "14px",
+        "padding": "8px 10px",
+        "hoveredBg": "oklch(0.979 0.021 166.113)"
+      },
+      "deleteItemStyles": null,
+      "isHeroUiCompliant": false
+    },
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 64,
+    "route": "/dashboard/master-jabatan",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 65,
+    "route": "/dashboard/master-jenis-unit",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 66,
+    "route": "/dashboard/master-opsi-bisnis",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": true,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 67,
+    "route": "/dashboard/master/opsi-bisnis",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": true,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 68,
+    "route": "/dashboard/master-tahun-ajaran",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 69,
+    "route": "/dashboard/master/tahun-ajaran",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 70,
+    "route": "/dashboard/master/kurikulum",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 71,
+    "route": "/dashboard/master/modul-semester",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 72,
+    "route": "/dashboard/master/kelas",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 73,
+    "route": "/dashboard/master/mata-pelajaran",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": {
+      "containerStyles": {
+        "borderRadius": "0px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "borderWidth": "0px",
+        "boxShadow": false
+      },
+      "normalItemStyles": {
+        "textColor": "oklch(0.508 0.118 165.612)",
+        "iconColor": null,
+        "borderRadius": "14px",
+        "padding": "8px 10px",
+        "hoveredBg": "oklch(0.979 0.021 166.113)"
+      },
+      "deleteItemStyles": null,
+      "isHeroUiCompliant": false
+    },
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 74,
+    "route": "/dashboard/master-hak-akses",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 75,
+    "route": "/dashboard/akademik/jadwal",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 76,
+    "route": "/dashboard/akademik/jadwal-ujian",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": true,
+    "popoverMetrics": null,
+    "modalMetrics": {
+      "modalStyles": {
+        "width": "576px",
+        "borderRadius": "21px",
+        "backgroundColor": "rgb(255, 255, 255)"
+      },
+      "btnStyles": {
+        "height": "44px",
+        "borderRadius": "21px"
+      }
+    },
+    "error": null
+  },
+  {
+    "index": 77,
+    "route": "/dashboard/akademik/kalender",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": true,
+    "popoverMetrics": null,
+    "modalMetrics": {
+      "modalStyles": {
+        "width": "512px",
+        "borderRadius": "21px",
+        "backgroundColor": "rgb(255, 255, 255)"
+      },
+      "btnStyles": {
+        "height": "32px",
+        "borderRadius": "14px"
+      }
+    },
+    "error": null
+  },
+  {
+    "index": 78,
+    "route": "/dashboard/mutabaah/agenda",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": true,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 79,
+    "route": "/dashboard/master-quran-surah",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 80,
+    "route": "/dashboard/master-jadwal-sholat",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 81,
+    "route": "/dashboard/master/unit-pendidikan",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 82,
+    "route": "/dashboard/master/guru",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": {
+      "containerStyles": {
+        "borderRadius": "0px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "borderWidth": "0px",
+        "boxShadow": false
+      },
+      "normalItemStyles": {
+        "textColor": "oklch(0.508 0.118 165.612)",
+        "iconColor": null,
+        "borderRadius": "14px",
+        "padding": "8px 10px",
+        "hoveredBg": "oklch(0.979 0.021 166.113)"
+      },
+      "deleteItemStyles": null,
+      "isHeroUiCompliant": false
+    },
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 83,
+    "route": "/dashboard/master/pegawai",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": {
+      "containerStyles": {
+        "borderRadius": "0px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "borderWidth": "0px",
+        "boxShadow": false
+      },
+      "normalItemStyles": {
+        "textColor": "oklch(0.508 0.118 165.612)",
+        "iconColor": null,
+        "borderRadius": "14px",
+        "padding": "8px 10px",
+        "hoveredBg": "oklch(0.979 0.021 166.113)"
+      },
+      "deleteItemStyles": null,
+      "isHeroUiCompliant": false
+    },
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 84,
+    "route": "/dashboard/master/siswa",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 85,
+    "route": "/dashboard/master/status-siswa",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": true,
+    "popoverMetrics": null,
+    "modalMetrics": {
+      "modalStyles": {
+        "width": "1280px",
+        "borderRadius": "0px",
+        "backgroundColor": "oklab(0.129 -0.0038832 -0.0418201 / 0.7)"
+      },
+      "btnStyles": {
+        "height": "38px",
+        "borderRadius": "28px"
+      }
+    },
+    "error": null
+  },
+  {
+    "index": 86,
+    "route": "/dashboard/master/orang-tua",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 87,
+    "route": "/dashboard/master/alumni",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": true,
+    "popoverMetrics": null,
+    "modalMetrics": {
+      "modalStyles": {
+        "width": "448px",
+        "borderRadius": "21px",
+        "backgroundColor": "rgb(255, 255, 255)"
+      },
+      "btnStyles": {
+        "height": "44px",
+        "borderRadius": "21px"
+      }
+    },
+    "error": null
+  },
+  {
+    "index": 88,
+    "route": "/dashboard/akademik/kelas",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 89,
+    "route": "/dashboard/akademik/rombel",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 90,
+    "route": "/dashboard/persetujuan-hapus",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 91,
+    "route": "/dashboard/master-doa",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 92,
+    "route": "/dashboard/poin-penilaian-doa",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 93,
+    "route": "/dashboard/tata-tertib",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 94,
+    "route": "/dashboard/master/tata-tertib",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 95,
+    "route": "/dashboard/kesantrian/tata-tertib",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 96,
+    "route": "/dashboard/kedisiplinan",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 97,
+    "route": "/dashboard/hak-akses",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 98,
+    "route": "/dashboard/attendance",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 99,
+    "route": "/dashboard/absensi-gerbang",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 100,
+    "route": "/dashboard/absensi-ibadah",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 101,
+    "route": "/dashboard/absensi-ibadah-siswa",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 102,
+    "route": "/dashboard/tahfizh",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 103,
+    "route": "/dashboard/tahfizh/pengaturan-target",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": true,
+    "popoverMetrics": null,
+    "modalMetrics": {
+      "modalStyles": {
+        "width": "576px",
+        "borderRadius": "21px",
+        "backgroundColor": "rgb(255, 255, 255)"
+      },
+      "btnStyles": {
+        "height": "40px",
+        "borderRadius": "28px"
+      }
+    },
+    "error": null
+  },
+  {
+    "index": 104,
+    "route": "/dashboard/academic",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 105,
+    "route": "/dashboard/modul-ajar",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 106,
+    "route": "/dashboard/lms/modul-ajar",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 107,
+    "route": "/dashboard/master-modul-semester",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 108,
+    "route": "/dashboard/master-kurikulum",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 109,
+    "route": "/dashboard/master-subjects",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": {
+      "containerStyles": {
+        "borderRadius": "0px",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "borderWidth": "0px",
+        "boxShadow": false
+      },
+      "normalItemStyles": {
+        "textColor": "oklch(0.508 0.118 165.612)",
+        "iconColor": null,
+        "borderRadius": "14px",
+        "padding": "8px 10px",
+        "hoveredBg": "oklch(0.979 0.021 166.113)"
+      },
+      "deleteItemStyles": null,
+      "isHeroUiCompliant": false
+    },
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 110,
+    "route": "/dashboard/jadwal-pelajaran",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 111,
+    "route": "/dashboard/jadwal-ujian",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": true,
+    "popoverMetrics": null,
+    "modalMetrics": {
+      "modalStyles": {
+        "width": "576px",
+        "borderRadius": "21px",
+        "backgroundColor": "rgb(255, 255, 255)"
+      },
+      "btnStyles": {
+        "height": "44px",
+        "borderRadius": "21px"
+      }
+    },
+    "error": null
+  },
+  {
+    "index": 112,
+    "route": "/dashboard/master-capaian-pembelajaran",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 113,
+    "route": "/dashboard/lms/capaian-pembelajaran",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 114,
+    "route": "/dashboard/master-tujuan-pembelajaran",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 115,
+    "route": "/dashboard/lms/tujuan-pembelajaran",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 116,
+    "route": "/dashboard/materi-pembelajaran",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 117,
+    "route": "/dashboard/lms/materi-pembelajaran",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 118,
+    "route": "/dashboard/lms/materi",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 119,
+    "route": "/dashboard/media-pembelajaran",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 120,
+    "route": "/dashboard/lms/media-pembelajaran",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 121,
+    "route": "/dashboard/lms/media",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 122,
+    "route": "/dashboard/referensi-pembelajaran",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 123,
+    "route": "/dashboard/lms/referensi-pembelajaran",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 124,
+    "route": "/dashboard/lms/referensi",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 125,
+    "route": "/dashboard/aktivitas-belajar",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 126,
+    "route": "/dashboard/lms/aktivitas-belajar",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 127,
+    "route": "/dashboard/lms/aktivitas",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 128,
+    "route": "/dashboard/diskusi-kelas",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 129,
+    "route": "/dashboard/lms/diskusi-kelas",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 130,
+    "route": "/dashboard/lms/diskusi",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 131,
+    "route": "/dashboard/penugasan",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 132,
+    "route": "/dashboard/lms/penugasan",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 133,
+    "route": "/dashboard/pengumpulan-tugas",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 134,
+    "route": "/dashboard/lms/pengumpulan-tugas",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 135,
+    "route": "/dashboard/absensi-pembelajaran",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 136,
+    "route": "/dashboard/presensi-pembelajaran",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 137,
+    "route": "/dashboard/lms/presensi-pembelajaran",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 138,
+    "route": "/dashboard/kisi-kisi-ujian",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 139,
+    "route": "/dashboard/lms/kisi-kisi",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 140,
+    "route": "/dashboard/bank-soal",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 141,
+    "route": "/dashboard/lms/bank-soal",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 142,
+    "route": "/dashboard/ujian-online",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 143,
+    "route": "/dashboard/lms/ujian-online",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 144,
+    "route": "/dashboard/lms/ujian",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 145,
+    "route": "/dashboard/penilaian",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 146,
+    "route": "/dashboard/lms/penilaian",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 147,
+    "route": "/dashboard/lms/penilaian-rapor",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 148,
+    "route": "/dashboard/lms/rapor",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 149,
+    "route": "/dashboard/mutabaah",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 150,
+    "route": "/dashboard/mutabaah/rekap",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 151,
+    "route": "/dashboard/mutabaah/target-evaluasi",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 152,
+    "route": "/dashboard/mutabaah/rincian-agenda",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": true,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 153,
+    "route": "/dashboard/mutabaah/template-agenda",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": true,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 154,
+    "route": "/dashboard/mutabaah/assign-template",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": true,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 155,
+    "route": "/dashboard/mutabaah/assign-pembimbing",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": true,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 156,
+    "route": "/dashboard/mutabaah/monitoring-orang-tua",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 157,
+    "route": "/dashboard/monitoring-tahfizh-ibadah-non-pesantren",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 158,
+    "route": "/dashboard/keuangan/tagihan-siswa",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 159,
+    "route": "/dashboard/finance/bills",
+    "status": "PASS",
+    "hasPopover": true,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  },
+  {
+    "index": 160,
+    "route": "/dashboard/parents",
+    "status": "PASS",
+    "hasPopover": false,
+    "hasModal": false,
+    "popoverMetrics": null,
+    "modalMetrics": null,
+    "error": null
+  }
+]

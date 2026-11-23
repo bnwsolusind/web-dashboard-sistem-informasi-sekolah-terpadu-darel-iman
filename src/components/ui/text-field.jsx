@@ -4,16 +4,16 @@ import { TextField as HeroTextField } from '@heroui/react'
 import { cn } from '../../lib/utils'
 
 export function TextField({ className, ...props }) {
-  return (
-    <HeroTextField
-      className={cn('flex flex-col gap-1.5', className)}
-      {...props}
-    />
-  )
+ return (
+ <HeroTextField
+ className={cn('flex flex-col gap-1.5', className)}
+ {...props}
+ />
+ )
 }
 
 TextField.propTypes = {
-  className: PropTypes.string,
+ className: PropTypes.string,
 }
 
 export default TextField
