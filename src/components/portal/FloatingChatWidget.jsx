@@ -264,7 +264,7 @@ export default function FloatingChatWidget() {
  </div>
 
  {/* Mode Switcher Tabs inside Header for dual roles / employees */}
- {!isMinimized && (isTeacher || isSuperAdmin || ((isEmployee || isTeacher) && isParent)) && (
+ {!isMinimized && (isTeacher || isSuperAdmin || isEmployee || isParent) && (
  <div className="flex border-t border-emerald-200/10 bg-black/10 px-2 py-1 text-xs font-bold">
  <button
  type="button"
@@ -278,13 +278,13 @@ export default function FloatingChatWidget() {
  </button>
  <button
  type="button"
- onClick={() => setWidgetMode(isParent && !isTeacher ? 'parent' : 'teacher')}
+ onClick={() => setWidgetMode(isParent && !isTeacher && !isEmployee ? 'parent' : 'teacher')}
  className={`flex-1 py-1 text-center rounded-md transition cursor-pointer ${widgetMode !== 'employee'
  ? 'bg-white/20 shadow-xs font-black'
  : 'text-white/70 hover:text-white'
  }`}
  >
- {isParent && !isTeacher ? 'Chat Guru' : 'Chat Orang Tua'}
+ {isParent && !isTeacher && !isEmployee ? 'Chat Guru' : 'Chat Orang Tua'}
  </button>
  </div>
  )}

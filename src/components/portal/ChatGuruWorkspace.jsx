@@ -703,11 +703,12 @@ export default function ChatGuruWorkspace({
  if (!silent) setMessagesLoading(true)
  try {
  const targetUserId = selectedContact.user_id || selectedContact.id
+ const isParentContact = Boolean(selectedContact.student_id || selectedContact.is_parent || selectedContact.role === 'Orang Tua' || selectedContact.parent_user_id)
  let incoming = []
  if (mode === 'parent') {
  const res = await familyPortalService.chatMessages(targetUserId, childId).catch(() => ({ data: [] }))
  incoming = Array.isArray(res?.data) ? res.data : (Array.isArray(res) ? res : [])
- } else if (mode === 'employee') {
+ } else if (mode === 'employee' && !isParentContact) {
  const res = await familyPortalService.employeeMessages(targetUserId).catch(() => ({ data: [] }))
  incoming = Array.isArray(res?.data) ? res.data : (Array.isArray(res) ? res : [])
  } else {
@@ -1012,9 +1013,10 @@ export default function ChatGuruWorkspace({
 
  setSending(true)
  try {
+ const isParentContact = Boolean(selectedContact.student_id || selectedContact.is_parent || selectedContact.role === 'Orang Tua' || selectedContact.parent_user_id)
  if (mode === 'parent') {
  await familyPortalService.sendMessage(targetUserId, childId, fullText, file)
- } else if (mode === 'employee') {
+ } else if (mode === 'employee' && !isParentContact) {
  await familyPortalService.sendEmployeeMessage(targetUserId, fullText, file)
  } else {
  const parentUserId = selectedContact.parent_user_id || targetUserId
