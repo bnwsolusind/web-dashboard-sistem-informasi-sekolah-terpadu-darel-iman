@@ -438,7 +438,7 @@ function HeroUiModalSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Ketik untuk mencari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -584,7 +584,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-7 pr-2 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-7 pr-2 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -925,7 +925,7 @@ function HarmonizedSupervisiModal({
  ? 'Tuliskan poin-poin koreksi secara jelas (misal: perjelas instruksi latihan, sesuaikan durasi video, atau tambahkan referensi buku)...'
  : 'Tuliskan catatan apresiasi atau catatan pengingat tambahan untuk guru (opsional)...'
  }
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/60 p-3.5 text-xs text-slate-800 transition focus:border-emerald-200/80 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-900/70 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/60 p-3.5 text-xs text-slate-800 transition focus:border-emerald-200/80 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-900/70 dark:text-slate-100"
  />
  {errorMsg && (
  <p className="text-xs font-bold text-rose-600 flex items-center gap-1 mt-1">
@@ -1067,7 +1067,7 @@ function HarmonizedAjukanTelaahModal({
  value={catatan}
  onChange={(e) => setCatatan(e.target.value)}
  placeholder="Tuliskan pesan khusus untuk Kepala Sekolah atau Penelaah (misal: materi telah disesuaikan dengan masukan rapat kurikulum)..."
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/60 p-3.5 text-xs text-slate-800 transition focus:border-sky-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 dark:border-emerald-800/60 dark:bg-slate-900/70 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/60 p-3.5 text-xs text-slate-800 transition focus:border-sky-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 dark:border-emerald-800/60 dark:bg-slate-900/70 dark:text-slate-100"
  />
  </div>
 
@@ -1776,27 +1776,27 @@ export default function LmsMateriPage({ embedded = false, hideBreadcrumb = false
  const getStatusBadge = (status, deletedAt) => {
  if (deletedAt) {
  return (
- <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-extrabold bg-rose-100 text-rose-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-rose-950/80 dark:text-rose-300 dark:border-emerald-800/60">
+ <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-extrabold bg-rose-100 text-rose-800 border border-rose-300 dark:bg-rose-950/80 dark:text-rose-300 dark:border-rose-800/60">
  Terhapus
  </span>
  )
  }
  if (status === 'draft') {
  return (
- <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-extrabold bg-amber-50 text-amber-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/80 dark:text-amber-300 dark:border-emerald-800/60">
+ <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-extrabold bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-950/80 dark:text-amber-300 dark:border-amber-800/60">
  Draft
  </span>
  )
  }
  if (status === 'nonaktif') {
  return (
- <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/60">
+ <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-extrabold bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700">
  Nonaktif
  </span>
  )
  }
  return (
- <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800/60">
+ <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800/60">
  Aktif
  </span>
  )
@@ -1806,21 +1806,21 @@ export default function LmsMateriPage({ embedded = false, hideBreadcrumb = false
  switch (statusSupervisi) {
  case 'diajukan':
  return (
- <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-extrabold bg-amber-50 text-amber-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/80 dark:text-amber-300 dark:border-emerald-800/60 shadow-2xs">
+ <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-extrabold bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-950/80 dark:text-amber-300 dark:border-amber-800/60 shadow-2xs">
  <Clock className="size-3 text-amber-600 dark:text-amber-400" />
  Menunggu Telaah
  </span>
  )
  case 'perlu_revisi':
  return (
- <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-extrabold bg-rose-50 text-rose-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-rose-950/80 dark:text-rose-300 dark:border-emerald-800/60 shadow-2xs">
+ <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-extrabold bg-rose-100 text-rose-800 border border-rose-300 dark:bg-rose-950/80 dark:text-rose-300 dark:border-rose-800/60 shadow-2xs">
  <AlertTriangle className="size-3 text-rose-600 dark:text-rose-400" />
  Perlu Revisi
  </span>
  )
  case 'disetujui':
  return (
- <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800/60 shadow-2xs">
+ <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800/60 shadow-2xs">
  <CheckCircle2 className="size-3 text-emerald-600 dark:text-emerald-400" />
  Disetujui
  </span>
@@ -1966,7 +1966,7 @@ export default function LmsMateriPage({ embedded = false, hideBreadcrumb = false
  setSearch(e.target.value)
  setPage(1)
  }}
- className="h-9 w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-10 pr-10 text-sm text-slate-700 placeholder:text-slate-400 outline-none transition-colors focus:border-emerald-200/80 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-200"
+ className="h-9 w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white pl-10 pr-10 text-sm text-slate-700 placeholder:text-slate-400 outline-none transition-colors focus:border-emerald-200/80 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-200"
  />
  {search && (
  <button
@@ -2468,7 +2468,7 @@ export default function LmsMateriPage({ embedded = false, hideBreadcrumb = false
  placeholder="Contoh: Pengenalan Al-Qur'an dan Hukum Tajwid"
  value={formData.judul}
  onChange={(e) => setFormData({ ...formData, judul: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
  />
  </div>
 
@@ -2481,7 +2481,7 @@ export default function LmsMateriPage({ embedded = false, hideBreadcrumb = false
  min="1"
  value={formData.urutan}
  onChange={(e) => setFormData({ ...formData, urutan: parseInt(e.target.value) || 1 })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
  />
  </div>
  </div>
@@ -2527,7 +2527,7 @@ export default function LmsMateriPage({ embedded = false, hideBreadcrumb = false
  placeholder="Ringkasan poin-poin materi..."
  value={formData.ringkasan}
  onChange={(e) => setFormData({ ...formData, ringkasan: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
  />
  </div>
 
@@ -2541,7 +2541,7 @@ export default function LmsMateriPage({ embedded = false, hideBreadcrumb = false
  step="5"
  value={formData.bobot}
  onChange={(e) => setFormData({ ...formData, bobot: parseInt(e.target.value) || 0 })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
  />
  </div>
  </div>
@@ -2556,7 +2556,7 @@ export default function LmsMateriPage({ embedded = false, hideBreadcrumb = false
  placeholder="Tulis pembahasan materi lengkap atau petunjuk pengerjaan..."
  value={formData.isi}
  onChange={(e) => setFormData({ ...formData, isi: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 p-3 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100 resize-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 p-3 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100 resize-none"
  />
  </div>
 
@@ -2570,7 +2570,7 @@ export default function LmsMateriPage({ embedded = false, hideBreadcrumb = false
  placeholder="Pesan khusus untuk peserta didik..."
  value={formData.catatan}
  onChange={(e) => setFormData({ ...formData, catatan: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 p-3 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100 resize-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 p-3 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100 resize-none"
  />
  </div>
 
@@ -2605,7 +2605,7 @@ export default function LmsMateriPage({ embedded = false, hideBreadcrumb = false
  placeholder="https://.../dokumen.pdf"
  value={formData.file_url}
  onChange={(e) => setFormData({ ...formData, file_url: e.target.value })}
- className="w-full px-3 py-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-xs focus:ring-2 focus:ring-sky-600"
+ className="w-full px-3 py-2 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-xs focus:ring-2 focus:ring-sky-600"
  />
  </div>
  </div>
@@ -2635,7 +2635,7 @@ export default function LmsMateriPage({ embedded = false, hideBreadcrumb = false
  placeholder="Contoh: https://www.youtube.com/watch?v=... atau https://youtu.be/..."
  value={formData.video}
  onChange={(e) => setFormData({ ...formData, video: e.target.value })}
- className="w-full px-3.5 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-xs focus:ring-2 focus:ring-rose-600"
+ className="w-full px-3.5 py-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-xs focus:ring-2 focus:ring-rose-600"
  />
  </div>
 
@@ -2649,7 +2649,7 @@ export default function LmsMateriPage({ embedded = false, hideBreadcrumb = false
  placeholder="https://pustaka.kemdikbud.go.id/..."
  value={formData.link}
  onChange={(e) => setFormData({ ...formData, link: e.target.value })}
- className="w-full px-3.5 py-2.5 rounded-xl border border-emerald-200/80 bg-slate-50/50 text-xs font-semibold focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
+ className="w-full px-3.5 py-2.5 rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 text-xs font-semibold focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
  />
  </div>
  </form>

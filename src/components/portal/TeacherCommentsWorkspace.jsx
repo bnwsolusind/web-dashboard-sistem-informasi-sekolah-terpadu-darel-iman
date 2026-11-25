@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect } from 'react'
 import AppModal from '@/components/app/AppModal'
+import KpiStatCard from '@/components/app/KpiStatCard'
 import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -305,8 +306,8 @@ export default function TeacherCommentsWorkspace({
 
  if (loading) {
  return (
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-12 text-center shadow-sm dark:border-emerald-800/60 dark:bg-slate-900">
- <HeroCard.Content className="flex flex-col items-center justify-center p-0">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-12 text-center shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
+ <div className="flex flex-col items-center justify-center p-0">
  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-300">
  <Loader2 className="h-7 w-7 animate-spin" />
  </div>
@@ -314,18 +315,18 @@ export default function TeacherCommentsWorkspace({
  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
  Sinkronisasi catatan pembinaan guru, perkembangan karakter, dan tanda tangan buku penghubung.
  </p>
- </HeroCard.Content>
- </HeroCard>
+ </div>
+ </div>
  )
  }
 
  return (
  <div className="space-y-5">
  {/* 1. HERO UI MODERN HERO HEADER CARD */}
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:border-emerald-800/60 dark:bg-[#1B2433] p-5 sm:p-6 shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]">
- <HeroCard.Content className="relative flex flex-col justify-between gap-4 lg:flex-row lg:items-center p-0 bg-transparent">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-gradient-to-br from-[#E6F8F3] via-white to-[#F0FDF9] dark:from-emerald-950/40 dark:via-[#1B2433] dark:to-teal-950/30 p-5 sm:p-6 shadow-md shadow-emerald-500/10">
+ <div className="relative flex flex-col justify-between gap-4 lg:flex-row lg:items-center p-0 bg-transparent">
  <div className="flex items-center gap-3.5">
- <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-sm ring-4 ring-white/60 dark:ring-slate-800/80">
+ <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-md shadow-emerald-600/20 border border-emerald-500/30">
  <BookOpenCheck className="h-6 w-6" />
  </span>
  <div>
@@ -334,36 +335,27 @@ export default function TeacherCommentsWorkspace({
  Buku Penghubung & Catatan Guru
  </h2>
  {student?.unit_name && (
- <HeroChip
- size="sm"
- variant="soft"
- color="success"
- className="font-bold text-xs inline-flex items-center gap-1 bg-emerald-500/15 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-800 dark:text-emerald-300"
+ <span
+ className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-bold text-xs inline-flex items-center gap-1 bg-emerald-500/15 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-800 dark:text-emerald-300"
  >
  <School className="h-3 w-3 text-emerald-600 dark:text-emerald-400 mr-1 inline" />
- <HeroChip.Label>{student.unit_name}</HeroChip.Label>
- </HeroChip>
+ {student.unit_name}
+ </span>
  )}
  {(student?.kelas?.nama_kelas || student?.kelas?.name) && (
- <HeroChip
- size="sm"
- variant="soft"
- color="success"
- className="font-bold text-xs inline-flex items-center gap-1 bg-teal-500/15 border border-emerald-200/80 dark:border-emerald-800/60 text-teal-800 dark:text-teal-300"
+ <span
+ className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-bold text-xs inline-flex items-center gap-1 bg-teal-500/15 border border-emerald-200/80 dark:border-emerald-800/60 text-teal-800 dark:text-teal-300"
  >
  <Layers className="h-3 w-3 text-teal-600 mr-1 inline" />
- <HeroChip.Label>{student?.kelas?.nama_kelas || student?.kelas?.name}</HeroChip.Label>
- </HeroChip>
+ {student?.kelas?.nama_kelas || student?.kelas?.name}
+ </span>
  )}
- <HeroChip
- size="sm"
- variant="soft"
- color="primary"
- className="font-bold text-[10px] inline-flex items-center gap-1 bg-blue-500/15 border border-emerald-200/80 dark:border-emerald-800/60 text-blue-800 dark:text-blue-300"
+ <span
+ className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-bold text-[10px] inline-flex items-center gap-1 bg-blue-500/15 border border-emerald-200/80 dark:border-emerald-800/60 text-blue-800 dark:text-blue-300"
  >
  <Sparkles className="h-3 w-3 text-blue-600 mr-1 inline" />
- <HeroChip.Label>{isParent ? 'Portal Wali Murid' : 'Portal Siswa'}</HeroChip.Label>
- </HeroChip>
+ {isParent ? 'Portal Wali Murid' : 'Portal Siswa'}
+ </span>
  </div>
  <p className="mt-1 text-xs text-slate-600 dark:text-slate-300 font-medium max-w-xl">
  Media resmi komunikasi pembinaan perkembangan siswa antara dewan guru, wali kelas, musyrif, dan orang tua santri.
@@ -373,112 +365,71 @@ export default function TeacherCommentsWorkspace({
 
  {/* Quick Metrics KPI Counters using HeroChip */}
  <div className="flex flex-wrap items-center gap-2 pt-2 sm:pt-0">
- <HeroChip
- size="md"
- variant="flat"
- className="font-bold text-xs bg-white/85 dark:bg-slate-800/85 border border-emerald-200/80 dark:border-emerald-800/60 shadow-xs"
+ <span
+ className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-bold text-xs bg-white/85 dark:bg-slate-800/85 border border-emerald-200/80 dark:border-emerald-800/60 shadow-xs"
  >
  <span className="inline-flex h-5 w-5 items-center justify-center rounded-md bg-emerald-100 text-emerald-700 font-black text-xs mr-1.5 dark:bg-emerald-950 dark:text-emerald-300">
  {stats.total}
  </span>
- <HeroChip.Label className="text-slate-700 dark:text-slate-200">Total Catatan</HeroChip.Label>
- </HeroChip>
- <HeroChip
- size="md"
- variant="flat"
- className="font-bold text-xs bg-white/85 dark:bg-slate-800/85 border border-emerald-200/80 dark:border-emerald-800/60 shadow-xs"
+ <span className="text-slate-700 dark:text-slate-200">Total Catatan</span>
+ </span>
+ <span
+ className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-bold text-xs bg-white/85 dark:bg-slate-800/85 border border-emerald-200/80 dark:border-emerald-800/60 shadow-xs"
  >
  <span className="inline-flex h-5 w-5 items-center justify-center rounded-md bg-teal-100 text-teal-700 font-black text-xs mr-1.5 dark:bg-teal-950 dark:text-teal-300">
  {stats.signedCount}
  </span>
- <HeroChip.Label className="text-slate-700 dark:text-slate-200">Ditandatangani</HeroChip.Label>
- </HeroChip>
+ <span className="text-slate-700 dark:text-slate-200">Ditandatangani</span>
+ </span>
  {stats.unsignedCount > 0 && (
- <HeroChip
- size="md"
- variant="flat"
- className="font-bold text-xs bg-amber-50/90 dark:bg-amber-950/40 border border-emerald-200/80 dark:border-emerald-800/60 shadow-xs text-amber-800 dark:text-amber-300"
+ <span
+ className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-bold text-xs bg-amber-50/90 dark:bg-amber-950/40 border border-emerald-200/80 dark:border-emerald-800/60 shadow-xs text-amber-800 dark:text-amber-300"
  >
  <span className="inline-flex h-5 w-5 items-center justify-center rounded-md bg-amber-100 text-amber-800 font-black text-xs mr-1.5 dark:bg-amber-900/60 dark:text-amber-300">
  {stats.unsignedCount}
  </span>
- <HeroChip.Label>Perlu Respon</HeroChip.Label>
- </HeroChip>
+ Perlu Respon
+ </span>
  )}
  </div>
- </HeroCard.Content>
- </HeroCard>
+ </div>
+ </div>
 
- {/* 2. MASTER KPI STATS GRID USING HERO UI CARDS */}
+ {/* 2. MASTER KPI STATS GRID */}
  <div className="grid grid-cols-2 gap-3.5 lg:grid-cols-4">
- {/* Card 1: Total Catatan Guru */}
- <motion.div whileHover={{ y: -3 }}>
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-4 sm:p-5 shadow-xs transition-all hover:shadow-md dark:border-emerald-800/60 dark:bg-slate-900">
- <HeroCard.Content className="p-0 bg-transparent">
- <div className="flex items-center justify-between">
- <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] text-emerald-700 dark:from-emerald-950 dark:to-teal-950 dark:text-emerald-300 ring-1 ring-emerald-500/30">
- <MessageSquare className="h-5 w-5" />
- </span>
- <span className="text-2xl font-black text-slate-900 dark:text-white">{stats.total}</span>
- </div>
- <p className="mt-3 text-xs font-bold text-slate-700 dark:text-slate-200">Total Catatan</p>
- <p className="mt-0.5 text-xs text-slate-400">Komunikasi & pembinaan</p>
- </HeroCard.Content>
- </HeroCard>
- </motion.div>
-
- {/* Card 2: Sudah Ditandatangani */}
- <motion.div whileHover={{ y: -3 }}>
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-4 sm:p-5 shadow-xs transition-all hover:shadow-md dark:border-emerald-800/60 dark:bg-slate-900">
- <HeroCard.Content className="p-0 bg-transparent">
- <div className="flex items-center justify-between">
- <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] text-teal-700 dark:from-teal-950 dark:to-emerald-950 dark:text-teal-300 ring-1 ring-teal-500/30">
- <CheckCircle2 className="h-5 w-5" />
- </span>
- <span className="text-2xl font-black text-slate-900 dark:text-white">{stats.signedCount}</span>
- </div>
- <p className="mt-3 text-xs font-bold text-slate-700 dark:text-slate-200">Telah Disetujui</p>
- <p className="mt-0.5 text-xs text-slate-400">Ditandatangani orang tua</p>
- </HeroCard.Content>
- </HeroCard>
- </motion.div>
-
- {/* Card 3: Menunggu Tanggapan */}
- <motion.div whileHover={{ y: -3 }}>
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-4 sm:p-5 shadow-xs transition-all hover:shadow-md dark:border-emerald-800/60 dark:bg-slate-900">
- <HeroCard.Content className="p-0 bg-transparent">
- <div className="flex items-center justify-between">
- <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] text-amber-700 dark:from-amber-950 dark:to-orange-950 dark:text-amber-300 ring-1 ring-amber-500/30">
- <Clock className="h-5 w-5" />
- </span>
- <span className="text-2xl font-black text-slate-900 dark:text-white">{stats.unsignedCount}</span>
- </div>
- <p className="mt-3 text-xs font-bold text-slate-700 dark:text-slate-200">Menunggu Respon</p>
- <p className="mt-0.5 text-xs text-slate-400">Perlu tanggapan orang tua</p>
- </HeroCard.Content>
- </HeroCard>
- </motion.div>
-
- {/* Card 4: Kategori Bidang Pembinaan */}
- <motion.div whileHover={{ y: -3 }}>
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-4 sm:p-5 shadow-xs transition-all hover:shadow-md dark:border-emerald-800/60 dark:bg-slate-900">
- <HeroCard.Content className="p-0 bg-transparent">
- <div className="flex items-center justify-between">
- <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] text-blue-700 dark:from-blue-950 dark:to-indigo-950 dark:text-blue-300 ring-1 ring-blue-500/30">
- <Tag className="h-5 w-5" />
- </span>
- <span className="text-2xl font-black text-slate-900 dark:text-white">{stats.categoryCount}</span>
- </div>
- <p className="mt-3 text-xs font-bold text-slate-700 dark:text-slate-200">Bidang Pembinaan</p>
- <p className="mt-0.5 text-xs text-slate-400">Ragam kategori catatan guru</p>
- </HeroCard.Content>
- </HeroCard>
- </motion.div>
+ <KpiStatCard
+ icon={MessageSquare}
+ title="Total Catatan"
+ value={stats.total}
+ description="Komunikasi & pembinaan"
+ tone="emerald"
+ />
+ <KpiStatCard
+ icon={CheckCircle2}
+ title="Telah Disetujui"
+ value={stats.signedCount}
+ description="Ditandatangani orang tua"
+ tone="teal"
+ />
+ <KpiStatCard
+ icon={Clock}
+ title="Menunggu Respon"
+ value={stats.unsignedCount}
+ description="Perlu tanggapan orang tua"
+ tone="amber"
+ />
+ <KpiStatCard
+ icon={Tag}
+ title="Bidang Pembinaan"
+ value={stats.categoryCount}
+ description="Ragam kategori catatan guru"
+ tone="blue"
+ />
  </div>
 
- {/* 3. FILTER, SEARCH & STATUS TABS CONTAINER (HERO UI CARD) */}
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-4 sm:p-5 shadow-xs dark:border-emerald-800/60 dark:bg-slate-900" aria-label="Filter dan Pencarian Catatan">
- <HeroCard.Content className="p-0 bg-transparent space-y-4">
+ {/* 3. FILTER, SEARCH & STATUS TABS CONTAINER (GOLD STANDARD) */}
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-4 sm:p-5 shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]" aria-label="Filter dan Pencarian Catatan">
+ <div className="p-0 bg-transparent space-y-4">
  <div className="flex flex-col gap-3 lg:flex-row">
  {/* Search Bar with Debounce */}
  <div className="relative flex-1">
@@ -488,7 +439,7 @@ export default function TeacherCommentsWorkspace({
  value={draftSearch}
  onChange={(e) => setDraftSearch(e.target.value)}
  placeholder="Cari isi catatan, judul, nama guru, atau tindak lanjut..."
- className="h-11 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/70 pl-10 pr-4 text-xs font-medium outline-none transition-all focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/15 dark:border-emerald-800/60 dark:bg-slate-800 dark:focus:bg-slate-900 text-slate-800 dark:text-white"
+ className="h-11 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/70 pl-10 pr-4 text-xs font-medium outline-none transition-all focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/15 dark:border-emerald-800/60 dark:bg-slate-800 dark:focus:bg-slate-900 text-slate-800 dark:text-white"
  />
  </div>
 
@@ -548,8 +499,8 @@ export default function TeacherCommentsWorkspace({
  )
  })}
  </div>
- </HeroCard.Content>
- </HeroCard>
+ </div>
+ </div>
 
  {/* 4. COMMENTS LIST CARDS USING HERO UI CARDS */}
  <div className="space-y-4">
@@ -564,9 +515,9 @@ export default function TeacherCommentsWorkspace({
 
  return (
  <motion.div key={item.id || idx} whileHover={{ y: -2 }}>
- <HeroCard
+ <div
  className={cn(
- 'relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-xs transition-all hover:border-emerald-300 dark:hover:border-emerald-700 hover:shadow-lg hover:shadow-sm dark:border-emerald-800/60 dark:bg-slate-900',
+ 'relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 transition-all hover:border-emerald-400 dark:hover:border-emerald-600 dark:bg-[#1B2433]',
  theme.borderLeft
  )}
  >
@@ -574,7 +525,7 @@ export default function TeacherCommentsWorkspace({
  <div className={cn('h-1.5 w-full shrink-0', theme.topBar)} />
 
  {/* Card Header: Teacher Profile, Category & Signature Status */}
- <HeroCard.Header className="flex flex-wrap items-start justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 p-5 pb-3.5 bg-white dark:border-emerald-800/60 dark:bg-slate-900">
+ <div className="flex flex-wrap items-start justify-between gap-3 border-b border-emerald-500/20 p-5 pb-3.5 bg-emerald-500/10 dark:border-emerald-800/60 dark:bg-emerald-950/20">
  <div className="flex items-center gap-3">
  <span className={cn('flex h-11 w-11 shrink-0 items-center justify-center rounded-xl shadow-xs ring-2 ring-white/80 dark:ring-slate-800', theme.iconBg)}>
  <User className="h-5 w-5" />
@@ -590,18 +541,14 @@ export default function TeacherCommentsWorkspace({
  </div>
 
  <div className="flex flex-wrap items-center gap-2">
- <HeroChip
- size="sm"
- variant="soft"
+ <span
  className={cn('font-black text-xs inline-flex items-center gap-1.5 border', theme.badge)}
- >
+  className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-extrabold bg-emerald-100/90 text-emerald-800 border border-emerald-300/80 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700/80">
  <span className={cn('h-1.5 w-1.5 rounded-full inline-block mr-1', theme.dot)} />
- <HeroChip.Label>{item.category || item.kategori || '-'}</HeroChip.Label>
- </HeroChip>
+ {item.category || item.kategori || '-'}
+ </span>
 
- <HeroChip
- size="sm"
- variant="soft"
+ <span
  color={isSigned ? 'success' : isStale ? 'warning' : 'danger'}
  className={cn(
  'font-black text-[10px] inline-flex items-center gap-1 border',
@@ -615,29 +562,29 @@ export default function TeacherCommentsWorkspace({
  {isSigned ? (
  <>
  <CheckCircle2 className="h-3 w-3 text-emerald-600 inline mr-1" />
- <HeroChip.Label>Disetujui</HeroChip.Label>
+ Disetujui
  </>
  ) : isStale ? (
  <>
  <RotateCw className="h-3 w-3 text-amber-600 inline mr-1" />
- <HeroChip.Label>Perlu Tanda Tangan Ulang</HeroChip.Label>
+ Perlu Tanda Tangan Ulang
  </>
  ) : (
  <>
  <Clock className="h-3 w-3 text-rose-600 inline mr-1" />
- <HeroChip.Label>Menunggu Tanggapan</HeroChip.Label>
+ Menunggu Tanggapan
  </>
  )}
- </HeroChip>
+ </span>
 
  <span className="text-xs font-bold text-slate-400">
  {formatDate(item.date || item.created_at)}
  </span>
  </div>
- </HeroCard.Header>
+ </div>
 
  {/* Card Content: Title & Note Body */}
- <HeroCard.Content className="p-5 space-y-3 bg-white dark:bg-slate-900">
+ <div className="p-5 space-y-3 bg-white dark:bg-slate-900">
  <h3 className="text-base font-black text-slate-900 dark:text-white leading-snug">
  {noteTitle}
  </h3>
@@ -657,10 +604,10 @@ export default function TeacherCommentsWorkspace({
  </p>
  </div>
  )}
- </HeroCard.Content>
+ </div>
 
  {/* Card Footer: Action Bar */}
- <HeroCard.Footer className="flex flex-wrap items-center justify-between gap-3 border-t border-emerald-200/80 bg-slate-50/60 p-5 py-3.5 dark:border-emerald-800/60 dark:bg-slate-900/60">
+ <div className="flex flex-wrap items-center justify-between gap-3 border-t border-emerald-200/80 bg-slate-50/60 p-5 py-3.5 dark:border-emerald-800/60 dark:bg-slate-900/60">
  <div className="text-xs text-slate-400">
  {isSigned ? (
  <span className="inline-flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 font-bold">
@@ -700,16 +647,16 @@ export default function TeacherCommentsWorkspace({
  {!isSigned && isParent ? 'Isi tanggapan dan tanda tangani catatan guru' : 'Lihat detail dan histori tanda tangan'}
  </HeroTooltip.Content>
  </HeroTooltip>
- </HeroCard.Footer>
- </HeroCard>
+ </div>
+ </div>
  </motion.div>
  )
  })}
 
  {/* Empty State when no notes found */}
  {!filteredComments.length && (
- <HeroCard className="py-16 text-center rounded-xl border-2 border-dashed border-emerald-300 dark:border-emerald-700 bg-emerald-50/30 p-8 dark:border-emerald-800/60 dark:bg-slate-900/40">
- <HeroCard.Content className="flex flex-col items-center justify-center p-0">
+ <div className="py-16 text-center rounded-[22px] border-2 border-dashed border-emerald-300 dark:border-emerald-700/80 bg-emerald-50/30 p-8 dark:bg-slate-900/40">
+ <div className="flex flex-col items-center justify-center p-0">
  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
  <MessageSquare className="h-7 w-7" />
  </div>
@@ -724,8 +671,8 @@ export default function TeacherCommentsWorkspace({
  >
  Reset Filter
  </HeroButton>
- </HeroCard.Content>
- </HeroCard>
+ </div>
+ </div>
  )}
  </div>
 
@@ -805,7 +752,7 @@ export default function TeacherCommentsWorkspace({
  value={followUp}
  onChange={(e) => setFollowUp(e.target.value)}
  placeholder="Tuliskan respon, apresiasi, atau komitmen tindak lanjut pembinaan di rumah..."
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 text-xs font-medium text-slate-800 outline-none transition-all focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-white"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-3 text-xs font-medium text-slate-800 outline-none transition-all focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-white"
  />
 
  {/* Digital Agreement with HeroCheckbox */}

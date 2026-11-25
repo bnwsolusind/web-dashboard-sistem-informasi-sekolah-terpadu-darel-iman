@@ -508,7 +508,7 @@ export default function WorshipAssessmentSettingPage() {
                   placeholder="Cari nama amalan..."
                   value={searchRule}
                   onChange={(e) => setSearchRule(e.target.value)}
-                  className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-8 pr-3 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:border-emerald-200/80 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100"
+                  className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white pl-8 pr-3 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:border-emerald-200/80 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100"
                 />
               </div>
 
@@ -549,7 +549,7 @@ export default function WorshipAssessmentSettingPage() {
             </div>
 
             {/* Emerald Datatable */}
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
               <table className="w-full text-left text-xs">
                 <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 text-emerald-950 dark:text-emerald-200 font-extrabold uppercase tracking-wider text-xs">
                   <tr>
@@ -672,7 +672,7 @@ export default function WorshipAssessmentSettingPage() {
               />
             </div>
 
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
               <table className="w-full text-left text-xs">
                 <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 text-emerald-950 dark:text-emerald-200 font-extrabold uppercase tracking-wider text-xs">
                   <tr>
@@ -792,7 +792,7 @@ export default function WorshipAssessmentSettingPage() {
               />
             </div>
 
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
               <table className="w-full text-left text-xs">
                 <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 text-emerald-950 dark:text-emerald-200 font-extrabold uppercase tracking-wider text-xs">
                   <tr>
@@ -1160,7 +1160,7 @@ export default function WorshipAssessmentSettingPage() {
               placeholder="Contoh: Periode Semarak Ramadan 1448 H"
               value={periodForm.name}
               onChange={(e) => setPeriodForm({ ...periodForm, name: e.target.value })}
-              className="mt-1 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-2.5 dark:border-emerald-800/60 dark:bg-slate-800"
+              className="mt-1 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-2.5 dark:border-emerald-800/60 dark:bg-slate-800"
             />
           </div>
 

@@ -28,6 +28,7 @@ import {
  Input as HeroInput,
  Spinner as HeroSpinner,
 } from '@heroui/react'
+import { KpiStatCard } from '../app'
 import { familyPortalService } from '../../services/familyPortalService'
 
 export default function DisciplineSummaryWorkspace({ childId }) {
@@ -130,13 +131,13 @@ export default function DisciplineSummaryWorkspace({ childId }) {
  return (
  <div className="space-y-6">
  {/* ── 1. HERO HEADER: POIN DISIPLIN SANTRI (MODERN HERO CARD HEROUI) ── */}
- <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:border-emerald-800/60 dark:bg-[#1B2433] p-5 sm:p-6 shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-gradient-to-br from-[#E6F8F3] via-white to-[#F0FDF9] dark:from-emerald-950/40 dark:via-[#1B2433] dark:to-teal-950/30 p-5 sm:p-6 shadow-md shadow-emerald-500/10">
  {/* Dual Multi-tone Ambient Glow */}
 
  <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-5">
  <div className="flex items-start gap-4">
- <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm">
- <ShieldAlert className="h-7 w-7 text-slate-600" />
+ <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-md shadow-emerald-600/20 border border-emerald-500/30">
+ <ShieldAlert className="h-7 w-7 text-white" />
  </div>
  <div>
  <div className="flex flex-wrap items-center gap-2">
@@ -267,76 +268,34 @@ export default function DisciplineSummaryWorkspace({ childId }) {
         </div>
 
         {/* Card 2: Total Pelanggaran */}
-        <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 !bg-rose-100/90 hover:!bg-rose-200/70 p-4 shadow-xs transition hover:shadow-md dark:border-emerald-800/60 dark:!bg-rose-950/50 dark:hover:!bg-rose-950/70 hover:border-emerald-300 dark:hover:border-emerald-700">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-rose-800 dark:text-rose-300">
-              Total Pelanggaran
-            </span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl !bg-rose-600 !text-white shadow-sm dark:!bg-rose-600 dark:!text-white">
-              <TrendingDown className="h-4 w-4 text-white" />
-            </div>
-          </div>
-          <div className="mt-3 flex items-baseline gap-1.5">
-            <p className="text-2xl font-black text-rose-800 dark:text-rose-200">-{violationPoints}</p>
-            <span className="text-xs font-bold text-rose-700/80 dark:text-rose-300/80">Poin</span>
-          </div>
-          <div className="mt-2 flex items-center justify-between border-t border-emerald-200/80 dark:border-emerald-800/60 pt-2 dark:border-emerald-800/60">
-            <span className="text-[10px] text-rose-700/90 dark:text-rose-300/90 font-medium">Pengurangan kedisiplinan</span>
-            <span className="inline-flex items-center rounded-md bg-white/90 px-2 py-0.5 text-[10px] font-black text-rose-800 dark:bg-rose-900/80 dark:text-rose-200 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
-              {data?.total_violations_count || 0} Kasus
-            </span>
-          </div>
-        </div>
+        <KpiStatCard
+          icon={TrendingDown}
+          title="Total Pelanggaran"
+          value={`-${violationPoints} Poin`}
+          badge={`${data?.total_violations_count || 0} Kasus`}
+          description="Pengurangan kedisiplinan"
+          tone="rose"
+        />
 
         {/* Card 3: Total Prestasi */}
-        <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 !bg-emerald-100/90 hover:!bg-emerald-200/70 p-4 shadow-xs transition hover:shadow-md dark:border-emerald-800/60 dark:!bg-emerald-950/50 dark:hover:!bg-emerald-950/70 hover:border-emerald-300 dark:hover:border-emerald-700">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-800 dark:text-emerald-300">
-              Total Prestasi
-            </span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl !bg-emerald-600 !text-white shadow-sm dark:!bg-emerald-600 dark:!text-white">
-              <TrendingUp className="h-4 w-4 text-white" />
-            </div>
-          </div>
-          <div className="mt-3 flex items-baseline gap-1.5">
-            <p className="text-2xl font-black text-emerald-800 dark:text-emerald-200">+{achievementPoints}</p>
-            <span className="text-xs font-bold text-emerald-700/80 dark:text-emerald-300/80">Poin</span>
-          </div>
-          <div className="mt-2 flex items-center justify-between border-t border-emerald-200/80 dark:border-emerald-800/60 pt-2 dark:border-emerald-800/60">
-            <span className="text-[10px] text-emerald-700/90 dark:text-emerald-300/90 font-medium">Apresiasi adab & capaian</span>
-            <span className="inline-flex items-center rounded-md bg-white/90 px-2 py-0.5 text-[10px] font-black text-emerald-800 dark:bg-emerald-900/80 dark:text-emerald-200 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
-              {data?.total_achievements_count || 0} Apresiasi
-            </span>
-          </div>
-        </div>
+        <KpiStatCard
+          icon={TrendingUp}
+          title="Total Prestasi"
+          value={`+${achievementPoints} Poin`}
+          badge={`${data?.total_achievements_count || 0} Apresiasi`}
+          description="Apresiasi adab & capaian"
+          tone="emerald"
+        />
 
         {/* Card 4: Surat Peringatan */}
-        <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 !bg-amber-100/90 hover:!bg-amber-200/70 p-4 shadow-xs transition hover:shadow-md dark:border-emerald-800/60 dark:!bg-amber-950/50 dark:hover:!bg-amber-950/70 hover:border-emerald-300 dark:hover:border-emerald-700">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-amber-800 dark:text-amber-300">
-              Surat Peringatan (SP)
-            </span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl !bg-amber-600 !text-white shadow-sm dark:!bg-amber-600 dark:!text-white">
-              <FileText className="h-4 w-4 text-white" />
-            </div>
-          </div>
-          <div className="mt-3 flex items-baseline gap-1.5">
-            <p className="text-2xl font-black text-amber-800 dark:text-amber-200">
-              {data?.warning_letters?.length || 0}
-            </p>
-            <span className="text-xs font-bold text-amber-700/80 dark:text-amber-300/80">Surat</span>
-          </div>
-          <div className="mt-2 flex items-center justify-between border-t border-emerald-200/80 dark:border-emerald-800/60 pt-2 dark:border-emerald-800/60">
-            <span className="text-[10px] text-amber-700/90 dark:text-amber-300/90 font-medium">Diterbitkan Kesiswaan/TU</span>
-            <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-[10px] font-black ${
-              data?.warning_letters?.length
-                ? 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'
-                : 'bg-white/90 text-emerald-800 dark:bg-emerald-900/80 dark:text-emerald-200 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs'
-            }`}>
-              {data?.warning_letters?.length ? 'Ada SP Aktif' : 'Nihil SP'}
-            </span>
-          </div>
-        </div>
+        <KpiStatCard
+          icon={FileText}
+          title="Surat Peringatan (SP)"
+          value={`${data?.warning_letters?.length || 0} Surat`}
+          badge={data?.warning_letters?.length ? 'Ada SP Aktif' : 'Nihil SP'}
+          description="Diterbitkan Kesiswaan/TU"
+          tone="amber"
+        />
       </div>
 
       {/* ── 3. PANDUAN TINGKAT AMBANG BATAS SANKSI RESMI TU (COLLAPSIBLE ELEGANT) ── */}
@@ -438,11 +397,11 @@ export default function DisciplineSummaryWorkspace({ childId }) {
  )}
 
  {/* ── 4. DATATABLE OUTER CONTAINER: RIWAYAT PENILAIAN PERILAKU & TATA TERTIB ── */}
- <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  {/* Toolbar Header */}
- <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50 px-4 py-3 sm:px-5 dark:border-emerald-800/60">
+ <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-500/20 bg-emerald-500/10 px-4 py-3 sm:px-5 dark:border-emerald-800/60">
  <div className="flex items-center gap-2.5">
- <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm">
+ <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
  <FileText className="h-5 w-5" />
  </div>
  <div>
@@ -472,7 +431,7 @@ export default function DisciplineSummaryWorkspace({ childId }) {
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari pasal, kata kunci, guru pencatat..."
- className="h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-8.5 pr-3 text-xs outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white pl-8.5 pr-3 text-xs outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  </div>
 

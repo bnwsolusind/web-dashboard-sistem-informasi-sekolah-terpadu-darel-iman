@@ -533,7 +533,7 @@ function HeroUiFilterSelect({
                                         value={search}
                                         onChange={(e) => setSearch(e.target.value)}
                                         placeholder="Cari..."
-                                        className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                                        className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                                         autoFocus
                                     />
                                 </div>
@@ -1479,7 +1479,7 @@ export default function LaporanAbsensiPage() {
                 </div>
 
                 <div className="overflow-x-auto">
-                    <TableRoot className="w-full text-left border-collapse text-xs min-w-[940px]"><TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
+                    <TableRoot fullBleed={true} className="text-xs"><TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
                         <TableRow className="border-b border-emerald-200/80 dark:border-emerald-800/60 bg-transparent text-emerald-950 dark:text-emerald-200 font-bold tracking-wider uppercase text-xs">
                             <TableHead className="py-3.5 px-3 w-12 text-center bg-transparent">NO</TableHead>
                             {groupByMode === 'siswa' ? (
@@ -1487,14 +1487,12 @@ export default function LaporanAbsensiPage() {
                                     <TableHead className="py-3.5 px-3">SISWA & IDENTITAS</TableHead>
                                     <TableHead className="py-3.5 px-3">REKAP STATISTIK PRESENSI</TableHead>
                                     <TableHead className="py-3.5 px-3 text-center">% KEHADIRAN</TableHead>
-                                    <TableHead className="py-3.5 px-3 text-center w-20 whitespace-nowrap">AKSI</TableHead>
                                 </>
                             ) : (
                                 <>
                                     <TableHead className="py-3.5 px-3">MATA PELAJARAN & KELAS</TableHead>
                                     <TableHead className="py-3.5 px-3">REKAP STATISTIK PRESENSI</TableHead>
                                     <TableHead className="py-3.5 px-3 text-center">% KEHADIRAN</TableHead>
-                                    <TableHead className="py-3.5 px-3 text-center w-20 whitespace-nowrap">AKSI</TableHead>
                                 </>
                             )}
                         </TableRow>
@@ -1609,37 +1607,6 @@ export default function LaporanAbsensiPage() {
                                                     {group.percentHadir}% Hadir
                                                 </Badge>
                                             </TableCell>
-                                            <TableCell className="py-3.5 px-3 text-center whitespace-nowrap w-20" onClick={(e) => e.stopPropagation()}>
-                                                <div className="flex items-center justify-center">
-                                                    <ActionDropdown
-                                                        onView={() => setSelectedStudentGroup(group)}
-                                                        extraItems={[
-                                                            {
-                                                                label: 'Cetak Rincian',
-                                                                icon: Printer,
-                                                                onAction: () => {
-                                                                    const headers = ['No', 'Mata Pelajaran', 'Unit', 'Kelas', 'Tanggal', 'Status', 'Catatan']
-                                                                    const printRows = group.subjectRows.map((r, i) => [
-                                                                        i + 1,
-                                                                        r.jadwal_pelajaran?.subject?.name || '-',
-                                                                        getUnitName(r),
-                                                                        getNamaKelas(r),
-                                                                        formatTanggal(r.tanggal),
-                                                                        statusLabel[normalisasiStatus(r.status_hadir)] || r.status_hadir || '-',
-                                                                        r.catatan || r.keterangan || '-'
-                                                                    ])
-                                                                    printCleanTable({
-                                                                        title: `Rincian Presensi Pembelajaran — ${group.studentName}`,
-                                                                        subtitle: `NIS: ${group.nis} | Unit: ${group.unitName} | Kelas: ${group.kelasName}`,
-                                                                        headers,
-                                                                        rows: printRows,
-                                                                    })
-                                                                }
-                                                            }
-                                                        ]}
-                                                    />
-                                                </div>
-                                            </TableCell>
                                         </TableRow>
                                     )
                                 }
@@ -1746,43 +1713,11 @@ export default function LaporanAbsensiPage() {
                                                 {group.percentHadir}% Hadir
                                             </Badge>
                                         </TableCell>
-                                        <TableCell className="py-3.5 px-3 text-center whitespace-nowrap w-20" onClick={(e) => e.stopPropagation()}>
-                                            <div className="flex items-center justify-center">
-                                                <ActionDropdown
-                                                    onView={() => setSelectedSubjectGroup(group)}
-                                                    extraItems={[
-                                                        {
-                                                            label: 'Cetak Rincian',
-                                                            icon: Printer,
-                                                            onAction: () => {
-                                                                const headers = ['No', 'Siswa', 'NIS', 'Unit', 'Kelas', 'Tanggal', 'Status', 'Catatan']
-                                                                const printRows = group.studentRows.map((r, i) => [
-                                                                    i + 1,
-                                                                    r.siswa?.full_name || '-',
-                                                                    r.siswa?.nis || '-',
-                                                                    getUnitName(r),
-                                                                    getNamaKelas(r),
-                                                                    formatTanggal(r.tanggal),
-                                                                    statusLabel[normalisasiStatus(r.status_hadir)] || r.status_hadir || '-',
-                                                                    r.catatan || r.keterangan || '-'
-                                                                ])
-                                                                printCleanTable({
-                                                                    title: `Rincian Presensi Siswa — ${group.subjectName}`,
-                                                                    subtitle: `Unit: ${group.unitListStr} | Kelas: ${group.kelasListStr}`,
-                                                                    headers,
-                                                                    rows: printRows,
-                                                                })
-                                                            }
-                                                        }
-                                                    ]}
-                                                />
-                                            </div>
-                                        </TableCell>
                                     </TableRow>
                                 )
                             }) : (
                                 <TableRow>
-                                    <TableCell colSpan="5" className="py-12 text-center text-slate-400 font-medium">
+                                    <TableCell colSpan="4" className="py-12 text-center text-slate-400 font-medium">
                                         {loading ? 'Memuat data absensi...' : `Belum ada data ${groupByMode === 'siswa' ? 'siswa' : 'mata pelajaran'} pada filter ini.`}
                                     </TableCell>
                                 </TableRow>
@@ -1926,10 +1861,10 @@ export default function LaporanAbsensiPage() {
                         </div>
 
                         {/* Table of Students inside Modal */}
-                        <div className="overflow-x-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
+                        <div className="overflow-x-auto rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
                             <TableRoot className="w-full text-left text-xs border-collapse">
-                                <TableHeader>
-                                    <TableRow className="bg-slate-50 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 font-bold border-b border-emerald-200/80 dark:border-emerald-800/60">
+                                <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
+                                    <TableRow>
                                         <TableHead className="py-2.5 px-3 w-10 text-center">NO</TableHead>
                                         <TableHead className="py-2.5 px-3">SISWA</TableHead>
                                         <TableHead className="py-2.5 px-3">NIS</TableHead>
@@ -2197,7 +2132,7 @@ export default function LaporanAbsensiPage() {
                                         placeholder="Cari nama siswa, NIS, atau kelas..."
                                         value={cardModal.searchQuery}
                                         onChange={(e) => setCardModal((prev) => ({ ...prev, searchQuery: e.target.value, page: 1 }))}
-                                        className="w-full pl-9 pr-8 py-2 text-xs bg-white dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 rounded-lg outline-none focus:ring-2 focus:ring-primary-500"
+                                        className="w-full pl-9 pr-8 py-2 text-xs bg-white dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 rounded-lg outline-none focus:ring-2 focus:ring-primary-500"
                                     />
                                     {cardModal.searchQuery && (
                                         <button

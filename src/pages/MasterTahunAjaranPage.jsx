@@ -122,6 +122,7 @@ export default function MasterTahunAjaranPage({
  const [selectedForDetail, setSelectedForDetail] = useState(null)
  const [isFormModalOpen, setIsFormModalOpen] = useState(false)
  const [isImportModalOpen, setIsImportModalOpen] = useState(false)
+ const [kpiModalKey, setKpiModalKey] = useState(null)
  const [isExportModalOpen, setIsExportModalOpen] = useState(false)
  const [exportFormat, setExportFormat] = useState('xlsx')
  const [isPrintModalOpen, setIsPrintModalOpen] = useState(false)
@@ -524,6 +525,7 @@ export default function MasterTahunAjaranPage({
  value={statsValue(total)}
  subtext="Tersimpan di basis data"
  tone="emerald"
+ onClick={() => setKpiModalKey('total')}
  />
  <ModernKpiCard
  icon={Star}
@@ -532,6 +534,7 @@ export default function MasterTahunAjaranPage({
  subtext="Ditandai sebagai periode utama"
  tag="Aktif"
  tone="teal"
+ onClick={() => setKpiModalKey('active')}
  />
  <ModernKpiCard
  icon={Archive}
@@ -539,6 +542,7 @@ export default function MasterTahunAjaranPage({
  value={statsValue(inactiveCount)}
  subtext="Periode lampau atau mendatang"
  tone="amber"
+ onClick={() => setKpiModalKey('inactive')}
  />
  </div>
 
@@ -1032,6 +1036,86 @@ export default function MasterTahunAjaranPage({
           </>
         )}
       </AppModal>
+
+      {/* ── KPI Quick View Pop-up Modal ── */}
+      {(() => {
+        const allItems = Array.isArray(listData) ? listData : []
+        const kpiMap = {
+          total: {
+            title: 'Rincian Total Periode Tahun Ajaran',
+            badge: `${total} Periode`,
+            rows: allItems,
+          },
+          active: {
+            title: 'Rincian Periode Aktif',
+            badge: `${activeCount} Aktif`,
+            rows: allItems.filter((item) => Boolean(item.is_active)),
+          },
+          inactive: {
+            title: 'Rincian Periode Tidak Aktif / Arsip',
+            badge: `${inactiveCount} Arsip`,
+            rows: allItems.filter((item) => !item.is_active),
+          },
+        }
+        const meta = kpiModalKey ? kpiMap[kpiModalKey] : null
+        return (
+          <AppModal
+            isOpen={Boolean(kpiModalKey && meta)}
+            onClose={() => setKpiModalKey(null)}
+            maxWidth="max-w-2xl"
+            icon={CalendarDays}
+            title={meta?.title || 'Rincian Tahun Ajaran'}
+            badge={meta?.badge}
+            footer={
+              <button
+                type="button"
+                onClick={() => setKpiModalKey(null)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+              >
+                <X className="size-4" />
+                <span>Tutup</span>
+              </button>
+            }
+          >
+            <div className="rounded-2xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 overflow-hidden bg-white dark:bg-[#1B2433]">
+              <div className="max-h-[45vh] overflow-y-auto overflow-x-auto">
+                <table className="w-full text-left text-xs border-collapse">
+                  <thead className="sticky top-0 z-10 bg-gradient-to-r from-emerald-100/95 via-teal-50/90 to-emerald-100/95 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950 dark:via-teal-950 dark:to-emerald-950 dark:border-emerald-800/80 dark:text-emerald-200 font-bold uppercase tracking-wider text-[11px]">
+                    <tr>
+                      <th className="p-3">Nama Periode</th>
+                      <th className="p-3">Rentang Tanggal</th>
+                      <th className="p-3 text-center">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40">
+                    {(meta?.rows || []).length === 0 ? (
+                      <tr>
+                        <td colSpan={3} className="p-6 text-center text-xs font-semibold text-slate-500">
+                          Belum ada data periode pada kategori ini.
+                        </td>
+                      </tr>
+                    ) : (
+                      (meta?.rows || []).map((item, idx) => (
+                        <tr key={item.id || idx} className="hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition">
+                          <td className="p-3 font-extrabold text-slate-900 dark:text-white">{item.name || item.nama || '-'}</td>
+                          <td className="p-3 font-semibold text-slate-600 dark:text-slate-300 tabular-nums">
+                            {item.start_date || '-'} s/d {item.end_date || '-'}
+                          </td>
+                          <td className="p-3 text-center">
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${item.is_active ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'}`}>
+                              {item.is_active ? 'Aktif Utama' : 'Nonaktif'}
+                            </span>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </AppModal>
+        )
+      })()}
 
  {/* Smart Floating Scroll Navigator (Opsi A) */}
  <SmartScrollFab targetId="tabel-tahun-ajaran" downTooltip="Langsung ke Tabel Tahun Ajaran" />

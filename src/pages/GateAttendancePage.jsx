@@ -1,5 +1,6 @@
 import { HeroUiHeader } from "../components/ui/HeroUiHeader"
 import AppModal from '../components/app/AppModal'
+import { Pagination } from '../components/ui/pagination'
 import {
   KpiStatCard
 } from '../components/app'
@@ -462,6 +463,7 @@ export default function GateAttendancePage() {
  data: [],
  loading: false,
  search: '',
+ page: 1,
  })
 
  const openKpiModal = async (type) => {
@@ -564,6 +566,7 @@ export default function GateAttendancePage() {
  data: [],
  loading: false,
  search: '',
+ page: 1,
  })
  }
 
@@ -577,6 +580,14 @@ export default function GateAttendancePage() {
  String(item.kelas_name || '').toLowerCase().includes(s)
  )
  }, [kpiModal.data, kpiModal.search])
+
+ const KPI_PAGE_SIZE = 10
+ const kpiTotalPages = Math.max(1, Math.ceil(filteredKpiData.length / KPI_PAGE_SIZE))
+ const kpiSafePage = Math.min(kpiModal.page || 1, kpiTotalPages)
+ const paginatedKpiData = useMemo(() => {
+ const start = (kpiSafePage - 1) * KPI_PAGE_SIZE
+ return filteredKpiData.slice(start, start + KPI_PAGE_SIZE)
+ }, [filteredKpiData, kpiSafePage])
 
  // Status Badge (§T.2 — AppBadge semantik)
  const renderStatusBadge = (status, checkOutTime) => {
@@ -969,8 +980,8 @@ export default function GateAttendancePage() {
         className="mb-6"
       />
 
- {/* Modern KPI Cards Grid (§C + §7.3 flex-wrap isi-penuh: 4 sebaris, sisa melebar) */}
- <motion.div variants={containerVariants} className="flex flex-wrap gap-3.5">
+ {/* Modern KPI Cards Grid (Rapih & Simetris) */}
+ <motion.div variants={containerVariants} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3">
  <GateKpiCard
  icon={Users}
  title="Total Siswa"
@@ -1200,15 +1211,15 @@ export default function GateAttendancePage() {
  value={cardInput}
  onChange={(e) => setCardInput(e.target.value)}
  placeholder="Scan QR Code via scanner USB..."
- className="h-9 rounded-xl border-emerald-200/80 bg-slate-50/50 pl-10 pr-28 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-white"
+ className="h-11 rounded-xl border-2 border-[#b6f6d9] bg-white pl-10 pr-28 text-xs font-bold text-slate-800 placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white"
  />
  <button
  type="submit"
  disabled={processingScan}
- className="absolute right-1.5 z-10 inline-flex items-center gap-1.5 rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 px-4 py-2 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-[1.03] transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+ className="absolute right-1.5 z-10 inline-flex items-center gap-1.5 h-8 rounded-lg bg-emerald-600 hover:bg-emerald-700 border-2 border-emerald-600 text-white px-4 text-xs font-extrabold shadow-xs transition-all duration-150 active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
  >
  {processingScan ? (
- <span className="size-3.5 animate-spin rounded-full border-2 border-emerald-200/80 border-t-transparent" />
+ <span className="size-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
  ) : null}
  <span>{processingScan ? 'Proses...' : 'Proses'}</span>
  </button>
@@ -1875,10 +1886,20 @@ export default function GateAttendancePage() {
  maxWidth="max-w-3xl"
  zIndex="z-[70]"
  footer={
- <div className="flex w-full items-center justify-between gap-2.5">
+ <div className="flex flex-col sm:flex-row w-full items-center justify-between gap-2.5">
  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
- Menampilkan {filteredKpiData.length} data siswa Dareliman Edu
+ Menampilkan {filteredKpiData.length === 0 ? 0 : (kpiSafePage - 1) * KPI_PAGE_SIZE + 1}–{Math.min(kpiSafePage * KPI_PAGE_SIZE, filteredKpiData.length)} dari {filteredKpiData.length} siswa (maks. 10/halaman)
  </span>
+ <div className="flex items-center gap-2.5">
+ {kpiTotalPages > 1 && (
+ <Pagination
+ currentPage={kpiSafePage}
+ totalPages={kpiTotalPages}
+ onPageChange={(page) => setKpiModal((prev) => ({ ...prev, page }))}
+ sideLayout="icon"
+ variant="compact"
+ />
+ )}
  <button
  type="button"
  onClick={closeKpiModal}
@@ -1886,6 +1907,7 @@ export default function GateAttendancePage() {
  >
  Tutup Rincian
  </button>
+ </div>
  </div>
  }
  >
@@ -1899,7 +1921,7 @@ export default function GateAttendancePage() {
  <HeroInput
  type="text"
  value={kpiModal.search}
- onChange={(e) => setKpiModal((prev) => ({ ...prev, search: e.target.value }))}
+ onChange={(e) => setKpiModal((prev) => ({ ...prev, search: e.target.value, page: 1 }))}
  placeholder="Cari nama siswa, NIS, atau NISN..."
  aria-label="Cari siswa dalam modal"
  className="h-9 rounded-xl border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-10 pr-4 text-xs font-semibold text-slate-800 dark:border-emerald-800/60 dark:bg-slate-900"
@@ -1908,7 +1930,7 @@ export default function GateAttendancePage() {
  {kpiModal.search && (
  <button
  type="button"
- onClick={() => setKpiModal((prev) => ({ ...prev, search: '' }))}
+ onClick={() => setKpiModal((prev) => ({ ...prev, search: '', page: 1 }))}
  className="text-xs font-semibold text-slate-500 hover:text-slate-700 dark:text-slate-400 shrink-0 cursor-pointer"
  >
  Reset Cari
@@ -1925,7 +1947,7 @@ export default function GateAttendancePage() {
  title="Tidak ada data siswa"
  description={kpiModal.search ? 'Tidak ditemukan siswa dengan kriteria pencarian ini.' : 'Tidak ditemukan siswa dengan kriteria filter ini.'}
  actionLabel={kpiModal.search ? 'Reset Cari' : undefined}
- onAction={kpiModal.search ? () => setKpiModal((prev) => ({ ...prev, search: '' })) : undefined}
+ onAction={kpiModal.search ? () => setKpiModal((prev) => ({ ...prev, search: '', page: 1 })) : undefined}
  />
  ) : (
  <div className="overflow-x-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/80">
@@ -1941,9 +1963,9 @@ export default function GateAttendancePage() {
  </TableRow>
  </TableHeader>
  <TableBody className="divide-y divide-emerald-100/80 font-medium text-slate-700 dark:divide-emerald-900/40 dark:text-slate-300">
- {filteredKpiData.map((item, idx) => (
+ {paginatedKpiData.map((item, idx) => (
  <TableRow key={item.student_id || item.id || idx} className="hover:bg-emerald-50/40 dark:hover:bg-emerald-950/20 transition-colors">
- <TableCell className="px-4 py-3 font-bold text-slate-400 tabular-nums">{idx + 1}</TableCell>
+ <TableCell className="px-4 py-3 font-bold text-slate-400 tabular-nums">{(kpiSafePage - 1) * KPI_PAGE_SIZE + idx + 1}</TableCell>
  <TableCell className="px-4 py-3">
  <p className="font-bold text-slate-900 dark:text-white line-clamp-2">{item.nama_lengkap || item.full_name || item.student?.nama_lengkap || 'Siswa'}</p>
  <p className="text-xs text-slate-400 font-mono line-clamp-1 mt-0.5">NIS: {item.nis || item.nisn || item.student?.nis || '-'}</p>

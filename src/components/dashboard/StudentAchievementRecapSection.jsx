@@ -23,6 +23,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Pagination } from '@/components/ui/pagination'
 import AppModal from '../app/AppModal'
+import { showToast } from '@/components/app'
 
 import {
  TableRoot,
@@ -173,27 +174,34 @@ export default function StudentAchievementRecapSection({
  }
 
  const handleExportCSV = () => {
- if (!filteredAchievements.length) return
+ if (!filteredAchievements.length) {
+ showToast('Tidak ada data prestasi untuk diekspor.', 'warning')
+ return
+ }
+ const escapeCell = (val) => `"${String(val ?? '-').replace(/"/g, '""')}"`
  const headers = ['Nama Siswa', 'NIS', 'Unit Pendidikan', 'Kelas', 'Kategori', 'Nama Prestasi', 'Tingkat', 'Tanggal', 'Skor/Nilai']
  const rows = filteredAchievements.map((item) => [
- `"${item.nama_siswa}"`,
- `"${item.nis}"`,
- `"${item.unit_nama}"`,
- `"${item.kelas_nama}"`,
- `"${item.jenis_prestasi}"`,
- `"${item.nama_prestasi}"`,
- `"${item.tingkat_prestasi}"`,
- `"${item.tanggal_prestasi}"`,
- `"${item.nilai_prestasi || '-'}"`,
+ escapeCell(item.nama_siswa),
+ escapeCell(item.nis),
+ escapeCell(item.unit_nama),
+ escapeCell(item.kelas_nama),
+ escapeCell(item.jenis_prestasi),
+ escapeCell(item.nama_prestasi),
+ escapeCell(item.tingkat_prestasi),
+ escapeCell(item.tanggal_prestasi),
+ escapeCell(item.nilai_prestasi || '-'),
  ])
- const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map((e) => e.join(','))].join('\n')
- const encodedUri = encodeURI(csvContent)
+ const csvString = [headers.join(','), ...rows.map((e) => e.join(','))].join('\n')
+ const blob = new Blob(['\uFEFF' + csvString], { type: 'text/csv;charset=utf-8;' })
+ const url = URL.createObjectURL(blob)
  const link = document.createElement('a')
- link.setAttribute('href', encodedUri)
+ link.href = url
  link.setAttribute('download', `Rekap_Prestasi_Siswa_${new Date().toISOString().slice(0, 10)}.csv`)
  document.body.appendChild(link)
  link.click()
  document.body.removeChild(link)
+ URL.revokeObjectURL(url)
+ showToast(`Berhasil mengekspor ${filteredAchievements.length} data prestasi ke CSV.`, 'success')
  }
 
  return (

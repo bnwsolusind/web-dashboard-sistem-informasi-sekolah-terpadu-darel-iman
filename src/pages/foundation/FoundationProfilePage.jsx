@@ -626,7 +626,7 @@ export function FoundationProfilePage() {
                       placeholder="Masukkan password saat ini"
                       value={passwordForm.current_password}
                       onChange={(e) => setPasswordForm({ ...passwordForm, current_password: e.target.value })}
-                      className="w-full pl-10 pr-10 py-2.5 bg-emerald-50/20 dark:bg-emerald-950/20 border-2 border-emerald-300 dark:border-emerald-700/80 rounded-xl font-medium text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                      className="w-full pl-10 pr-10 py-2.5 bg-emerald-50/20 dark:bg-emerald-950/20 border-2 border-[#b6f6d9] dark:border-emerald-700/80 rounded-xl font-medium text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                     />
                     <button
                       type="button"
@@ -650,7 +650,7 @@ export function FoundationProfilePage() {
                       placeholder="Minimal 8 karakter"
                       value={passwordForm.password}
                       onChange={(e) => setPasswordForm({ ...passwordForm, password: e.target.value })}
-                      className="w-full pl-10 pr-10 py-2.5 bg-emerald-50/20 dark:bg-emerald-950/20 border-2 border-emerald-300 dark:border-emerald-700/80 rounded-xl font-medium text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                      className="w-full pl-10 pr-10 py-2.5 bg-emerald-50/20 dark:bg-emerald-950/20 border-2 border-[#b6f6d9] dark:border-emerald-700/80 rounded-xl font-medium text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                     />
                     <button
                       type="button"
@@ -673,7 +673,7 @@ export function FoundationProfilePage() {
                       placeholder="Ulangi password baru"
                       value={passwordForm.password_confirmation}
                       onChange={(e) => setPasswordForm({ ...passwordForm, password_confirmation: e.target.value })}
-                      className="w-full pl-10 pr-10 py-2.5 bg-emerald-50/20 dark:bg-emerald-950/20 border-2 border-emerald-300 dark:border-emerald-700/80 rounded-xl font-medium text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                      className="w-full pl-10 pr-10 py-2.5 bg-emerald-50/20 dark:bg-emerald-950/20 border-2 border-[#b6f6d9] dark:border-emerald-700/80 rounded-xl font-medium text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                     />
                     <button
                       type="button"

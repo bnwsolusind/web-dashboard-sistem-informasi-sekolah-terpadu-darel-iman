@@ -545,7 +545,7 @@ export default function AcademicCalendarPage() {
  placeholder="Cari agenda kegiatan..."
  value={searchTerm}
  onChange={(e) => setSearchTerm(e.target.value)}
- className="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
  </div>
@@ -806,7 +806,7 @@ export default function AcademicCalendarPage() {
  value={formData.title}
  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
  placeholder="Misal: Penilaian Akhir Semester (PAS) Ganjil"
- className="w-full px-3 py-2 text-xs rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+ className="w-full px-3 py-2 text-xs rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none"
  />
  </div>
 
@@ -890,7 +890,7 @@ export default function AcademicCalendarPage() {
  setFormData({ ...formData, customCategoryLabel: e.target.value })
  }
  placeholder="Misal: Perkemahan Akbar Santri, Study Tour"
- className="w-full px-3 py-2 text-xs rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+ className="w-full px-3 py-2 text-xs rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none"
  />
  </div>
  )}
@@ -961,7 +961,7 @@ export default function AcademicCalendarPage() {
  value={formData.notes}
  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
  placeholder="Keterangan pelaksanaan, ketentuan santri/siswa, dresscode, dll."
- className="w-full px-3 py-2 text-xs rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none"
+ className="w-full px-3 py-2 text-xs rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none"
  />
  </div>
  </div>

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import KpiStatCard from '@/components/app/KpiStatCard'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
  HeartHandshake,
@@ -502,14 +503,14 @@ export default function MutabaahWorkspace({
  return (
  <div className="space-y-6">
  {/* 1. HERO HEADER CONTAINER TERPADU */}
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-5 sm:p-7 shadow-lg shadow-violet-500/10 dark:border-emerald-800/60 dark:bg-[#1B2433]">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-gradient-to-br from-[#E6F8F3] via-white to-[#F0FDF9] dark:from-emerald-950/40 dark:via-[#1B2433] dark:to-teal-950/30 p-5 sm:p-7 shadow-md shadow-emerald-500/10">
  <div
  aria-hidden="true"
- className="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-white dark:bg-[#1B2433] blur-3xl"
+ className="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-emerald-400/20 dark:bg-emerald-500/15 blur-3xl"
  />
  <div
  aria-hidden="true"
- className="pointer-events-none absolute -right-20 -bottom-20 h-72 w-72 rounded-full bg-white dark:bg-[#1B2433] blur-3xl"
+ className="pointer-events-none absolute -right-20 -bottom-20 h-72 w-72 rounded-full bg-emerald-400/20 dark:bg-emerald-500/15 blur-3xl"
  />
  <div
  aria-hidden="true"
@@ -518,23 +519,19 @@ export default function MutabaahWorkspace({
 
  <div className="relative flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
  <div className="flex items-start gap-4">
- <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-xl shadow-violet-600/20">
+ <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-md shadow-emerald-600/20 border border-emerald-500/30">
  <HeartHandshake className="h-7 w-7" />
  </div>
  <div>
  <div className="flex flex-wrap items-center gap-2">
- <HeroChip
- size="sm"
- variant="flat"
- className="font-extrabold text-[10.5px] bg-violet-500/20 border border-emerald-200/80 dark:border-emerald-800/60 text-violet-800 dark:text-violet-300"
+ <span
+ className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-extrabold text-[10.5px] bg-violet-500/20 border border-emerald-200/80 dark:border-emerald-800/60 text-violet-800 dark:text-violet-300"
  >
  <Sparkles className="h-3 w-3 text-violet-600 mr-1 inline" />
  Mutaba'ah Yaumiyyah
- </HeroChip>
+ </span>
 
- <HeroChip
- size="sm"
- variant="flat"
+ <span
  className={cn(
  'font-black text-[10px]',
  isBoarding
@@ -543,12 +540,10 @@ export default function MutabaahWorkspace({
  )}
  >
  {isBoarding ? 'Boarding / Pesantren' : 'Full Day'}
- </HeroChip>
+ </span>
 
  {statusLabel && recapPeriod === 'daily' && (
- <HeroChip
- size="sm"
- variant="flat"
+ <span
  className={cn(
  'font-black text-[10px]',
  data?.status === 'verified' || data?.status === 'finalized'
@@ -557,16 +552,14 @@ export default function MutabaahWorkspace({
  )}
  >
  {statusLabel}
- </HeroChip>
+ </span>
  )}
 
- <HeroChip
- size="sm"
- variant="flat"
- className="font-extrabold text-[10px] bg-white/80 text-violet-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-violet-300 dark:border-emerald-700/80"
+ <span
+ className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-extrabold text-[10px] bg-white/80 text-violet-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-violet-300 dark:border-emerald-700/80"
  >
  Rekap {RECAP_PERIOD_OPTIONS.find((p) => p.id === recapPeriod)?.label}
- </HeroChip>
+ </span>
  </div>
 
  <h1 className="mt-1.5 text-xl font-semibold text-slate-900 dark:text-white tracking-tight">
@@ -656,10 +649,10 @@ export default function MutabaahWorkspace({
  </>
  )}
  </p>
- </HeroCard>
+ </div>
 
  {/* 2. FILTER RENTANG REKAPITULASI (HARIAN, MINGGUAN, BULANAN, SEMESTER) */}
- <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 sm:p-4 shadow-xs dark:border-emerald-800/60 dark:bg-slate-900">
+ <div className="flex flex-wrap items-center justify-between gap-3 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-3.5 sm:p-4 shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  <div className="flex items-center gap-2.5">
  <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-violet-100 text-violet-700 dark:bg-violet-950/80 dark:text-violet-300">
  <BarChart3 className="h-4 w-4" />
@@ -754,144 +747,48 @@ export default function MutabaahWorkspace({
  )}
  </AnimatePresence>
 
- {/* 3. DYNAMIC 4 KPI CARDS (MENYESUAIKAN FILTER HARIAN / MINGGUAN / BULANAN / SEMESTER) */}
+ {/* 3. DYNAMIC 4 KPI CARDS */}
  <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
- {/* Card 1: Target / Hari Terdata */}
- <motion.div whileHover={{ y: -2 }} transition={{ duration: 0.18 }}>
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-4.5 sm:p-5 shadow-xs transition-all hover:shadow-md dark:border-emerald-800/60 dark:bg-slate-900">
- <div
- aria-hidden="true"
- className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white dark:bg-[#1B2433] blur-xl"
+ <KpiStatCard
+ icon={HeartHandshake}
+ title={recapPeriod === 'daily' ? 'Aktivitas Target' : `Hari Terdata (${periodicMetrics?.label})`}
+ value={recapPeriod === 'daily' ? dailyStats.total : `${periodicMetrics?.days ?? 0} Hari`}
+ description={recapPeriod === 'daily' ? 'Agenda ibadah hari ini' : 'Hari dengan catatan mutabaah'}
+ tone="violet"
  />
- <div className="relative flex items-center justify-between gap-3">
- <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-md shadow-violet-500/20">
- <HeartHandshake className="h-5 w-5" />
- </div>
- <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
- {recapPeriod === 'daily'
- ? dailyStats.total
- : `${periodicMetrics?.days ?? 0} Hari`}
- </span>
- </div>
- <p className="relative mt-3.5 text-xs font-bold text-slate-700 dark:text-slate-200">
- {recapPeriod === 'daily'
- ? 'Aktivitas Target'
- : `Hari Terdata (${periodicMetrics?.label})`}
- </p>
- <p className="relative mt-0.5 text-xs font-medium text-slate-400 dark:text-slate-500">
- {recapPeriod === 'daily'
- ? 'Agenda ibadah hari ini'
- : 'Hari dengan catatan mutabaah'}
- </p>
- </HeroCard>
- </motion.div>
-
- {/* Card 2: Tercapai */}
- <motion.div whileHover={{ y: -2 }} transition={{ duration: 0.18 }}>
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-4.5 sm:p-5 shadow-xs transition-all hover:shadow-md dark:border-emerald-800/60 dark:bg-slate-900">
- <div
- aria-hidden="true"
- className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white dark:bg-[#1B2433] blur-xl"
+ <KpiStatCard
+ icon={CheckCircle2}
+ title={recapPeriod === 'daily' ? 'Tercapai Hari Ini' : 'Amalan Terlaksana'}
+ value={recapPeriod === 'daily' ? dailyStats.achieved : periodicMetrics?.good ?? 0}
+ description={recapPeriod === 'daily' ? 'Ibadah terlaksana' : `Akumulasi ${periodicMetrics?.label}`}
+ tone="emerald"
  />
- <div className="relative flex items-center justify-between gap-3">
- <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm">
- <CheckCircle2 className="h-5 w-5" />
- </div>
- <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
- {recapPeriod === 'daily'
- ? dailyStats.achieved
- : periodicMetrics?.good ?? 0}
- </span>
- </div>
- <p className="relative mt-3.5 text-xs font-bold text-slate-700 dark:text-slate-200">
- {recapPeriod === 'daily' ? 'Tercapai Hari Ini' : 'Amalan Terlaksana'}
- </p>
- <p className="relative mt-0.5 text-xs font-medium text-slate-400 dark:text-slate-500">
- {recapPeriod === 'daily'
- ? 'Ibadah terlaksana'
- : `Akumulasi ${periodicMetrics?.label}`}
- </p>
- </HeroCard>
- </motion.div>
-
- {/* Card 3: Belum Terlaksana / Perlu Ditingkatkan */}
- <motion.div whileHover={{ y: -2 }} transition={{ duration: 0.18 }}>
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-4.5 sm:p-5 shadow-xs transition-all hover:shadow-md dark:border-emerald-800/60 dark:bg-slate-900">
- <div
- aria-hidden="true"
- className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white dark:bg-[#1B2433] blur-xl"
+ <KpiStatCard
+ icon={Clock}
+ title={recapPeriod === 'daily' ? 'Belum Terlaksana' : 'Belum / Kurang'}
+ value={recapPeriod === 'daily' ? dailyStats.pending : periodicMetrics?.pending ?? 0}
+ description={recapPeriod === 'daily' ? 'Aktivitas tersisa hari ini' : 'Perlu bimbingan & peningkatan'}
+ tone="amber"
  />
- <div className="relative flex items-center justify-between gap-3">
- <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-sm">
- <Clock className="h-5 w-5" />
- </div>
- <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
- {recapPeriod === 'daily'
- ? dailyStats.pending
- : periodicMetrics?.pending ?? 0}
- </span>
- </div>
- <p className="relative mt-3.5 text-xs font-bold text-slate-700 dark:text-slate-200">
- {recapPeriod === 'daily' ? 'Belum Terlaksana' : 'Belum / Kurang'}
- </p>
- <p className="relative mt-0.5 text-xs font-medium text-slate-400 dark:text-slate-500">
- {recapPeriod === 'daily'
- ? 'Aktivitas tersisa hari ini'
- : 'Perlu bimbingan & peningkatan'}
- </p>
- </HeroCard>
- </motion.div>
-
- {/* Card 4: Persentase / Rata-rata Skor */}
- <motion.div whileHover={{ y: -2 }} transition={{ duration: 0.18 }}>
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-4.5 sm:p-5 shadow-xs transition-all hover:shadow-md dark:border-emerald-800/60 dark:bg-slate-900">
- <div
- aria-hidden="true"
- className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white dark:bg-[#1B2433] blur-xl"
- />
- <div className="relative flex items-center justify-between gap-3">
- <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-sm">
- <Award className="h-5 w-5" />
- </div>
- <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
- {recapPeriod === 'daily'
+ <KpiStatCard
+ icon={Award}
+ title={recapPeriod === 'daily' ? 'Persentase Capaian' : `Rata-rata Skor (${periodicMetrics?.label})`}
+ value={
+ recapPeriod === 'daily'
  ? dailyStats.percentage == null
  ? '-'
  : `${dailyStats.percentage}%`
- : `${periodicMetrics?.score ?? 0}%`}
- </span>
- </div>
- <p className="relative mt-3.5 text-xs font-bold text-slate-700 dark:text-slate-200">
- {recapPeriod === 'daily'
- ? 'Persentase Capaian'
- : `Rata-rata Skor (${periodicMetrics?.label})`}
- </p>
- <div className="relative mt-2 h-1.5 overflow-hidden rounded-full bg-emerald-50 dark:bg-emerald-950/40">
- <div
- className="h-full rounded-full bg-white dark:bg-[#1B2433] transition-all duration-500"
- style={{
- width: `${Math.max(
- 0,
- Math.min(
- 100,
- Number(
- recapPeriod === 'daily'
- ? dailyStats.percentage || 0
- : periodicMetrics?.score || 0
- )
- )
- )}%`,
- }}
+ : `${periodicMetrics?.score ?? 0}%`
+ }
+ description={recapPeriod === 'daily' ? 'Capaian harian mutabaah' : 'Rata-rata ketercapaian'}
+ tone="teal"
  />
- </div>
- </HeroCard>
- </motion.div>
  </div>
 
  {/* 4. MAIN CONTENT AREA: CHECKLIST HARIAN ATAU TABEL REKAPITULASI PERIODIK */}
  {recapPeriod === 'daily' ? (
  /* ================= TAMPILAN CHECKLIST HARIAN ================= */
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 sm:p-6 shadow-xs dark:border-emerald-800/60 dark:bg-slate-900">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  {/* Info Box: Penjelasan Tanggung Jawab */}
  <div className="mb-5 flex items-start gap-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-violet-50/60 p-3.5 text-xs text-violet-950 dark:border-emerald-800/60 dark:bg-violet-950/30 dark:text-violet-200">
  <Info className="h-4.5 w-4.5 text-violet-600 dark:text-violet-400 shrink-0 mt-0.5" />
@@ -1072,9 +969,7 @@ export default function MutabaahWorkspace({
 
  {/* Status Terlaksana / Oleh Guru / Musyrif Chip */}
  {isGood ? (
- <HeroChip
- size="sm"
- variant="flat"
+ <span
  className={cn(
  'shrink-0 font-extrabold text-[9px] border',
  isHome
@@ -1086,16 +981,14 @@ export default function MutabaahWorkspace({
  >
  <ShieldCheck className="h-2.5 w-2.5 mr-0.5 inline" />
  Terlaksana
- </HeroChip>
+ </span>
  ) : !canEdit ? (
- <HeroChip
- size="sm"
- variant="flat"
- className="shrink-0 font-bold text-[9px] bg-slate-100 text-slate-500 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300 dark:border-emerald-700/80"
+ <span
+ className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 shrink-0 font-bold text-[9px] bg-slate-100 text-slate-500 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300 dark:border-emerald-700/80"
  >
  <Lock className="h-2.5 w-2.5 mr-0.5 inline text-slate-400" />
  {isBoardingItem ? 'Dipantau Musyrif' : 'Dipantau Guru'}
- </HeroChip>
+ </span>
  ) : null}
  </div>
 
@@ -1210,10 +1103,10 @@ export default function MutabaahWorkspace({
  </HeroButton>
  </div>
  )}
- </HeroCard>
+ </div>
  ) : (
  /* ================= TAMPILAN REKAPITULASI PERIODIK (MINGGUAN / BULANAN / SEMESTER) ================= */
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 sm:p-6 shadow-xs dark:border-emerald-800/60 dark:bg-slate-900">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4 dark:border-emerald-800/60">
  <div className="flex items-center gap-3">
  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-md shadow-violet-500/15">
@@ -1229,13 +1122,11 @@ export default function MutabaahWorkspace({
  </div>
  </div>
 
- <HeroChip
- size="sm"
- variant="flat"
- className="font-extrabold text-xs bg-violet-100 text-violet-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-violet-950 dark:text-violet-300 dark:border-emerald-800/60"
+ <span
+ className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-extrabold text-xs bg-violet-100 text-violet-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-violet-950 dark:text-violet-300 dark:border-emerald-800/60"
  >
  {historyRows.length} Hari Terekam
- </HeroChip>
+ </span>
  </div>
 
  {/* Loading Indicator Riwayat */}
@@ -1287,9 +1178,7 @@ export default function MutabaahWorkspace({
  <p className="text-xs font-bold text-slate-800 dark:text-slate-200">
  {formatDateShort(row.activity_date)}
  </p>
- <HeroChip
- size="sm"
- variant="flat"
+ <span
  className={cn(
  'font-black text-[9.5px]',
  row.status === 'verified' || row.status === 'finalized' || row.status === 'parent_signed'
@@ -1302,7 +1191,7 @@ export default function MutabaahWorkspace({
  : row.status === 'parent_signed'
  ? 'Diparaf Ortu'
  : 'Draf'}
- </HeroChip>
+ </span>
  </div>
  <div className="mt-1 flex flex-wrap items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
  <span className="text-emerald-600 dark:text-emerald-400 font-bold">
@@ -1355,7 +1244,7 @@ export default function MutabaahWorkspace({
  })}
  </div>
  )}
- </HeroCard>
+ </div>
  )}
  </div>
  )

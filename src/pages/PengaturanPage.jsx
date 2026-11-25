@@ -1334,7 +1334,7 @@ export default function PengaturanPage() {
  rows={4}
  value={form.card_rules_student || ''}
  onChange={(e) => update('card_rules_student', e.target.value)}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 text-xs text-slate-900 shadow-2xs focus:border-emerald-200/80 focus:outline-hidden dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-3 text-xs text-slate-900 shadow-2xs focus:border-emerald-200/80 focus:outline-hidden dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  placeholder="1. Kartu ini adalah kartu identitas resmi..."
  />
  </div>
@@ -1346,7 +1346,7 @@ export default function PengaturanPage() {
  rows={4}
  value={form.card_rules_employee || ''}
  onChange={(e) => update('card_rules_employee', e.target.value)}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 text-xs text-slate-900 shadow-2xs focus:border-emerald-200/80 focus:outline-hidden dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-3 text-xs text-slate-900 shadow-2xs focus:border-emerald-200/80 focus:outline-hidden dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  placeholder="1. Kartu ini adalah tanda pengenal resmi pegawai..."
  />
  </div>
@@ -1382,7 +1382,7 @@ export default function PengaturanPage() {
  value={form.mapbox_token || ''}
  onChange={(e) => update('mapbox_token', e.target.value)}
  placeholder="pk.eyJ1Ijoi..."
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 pr-10 font-mono text-xs text-slate-900 shadow-2xs focus:border-emerald-200/80 focus:outline-hidden dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-3 pr-10 font-mono text-xs text-slate-900 shadow-2xs focus:border-emerald-200/80 focus:outline-hidden dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  />
  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
  <KeyRound className="h-4 w-4" />
@@ -2288,7 +2288,7 @@ export default function PengaturanPage() {
  value={form.sipdei_base_url || 'https://sipdei.dareliman.tech'}
  onChange={(e) => update('sipdei_base_url', e.target.value)}
  placeholder="https://sipdei.dareliman.tech"
- className="h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 pl-9 pr-3 text-xs font-medium text-slate-800 outline-none transition focus:border-emerald-200/80 focus:bg-white dark:border-emerald-800/60 dark:bg-slate-800/80 dark:text-slate-100 dark:focus:border-emerald-200/80"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/50 pl-9 pr-3 text-xs font-medium text-slate-800 outline-none transition focus:border-emerald-200/80 focus:bg-white dark:border-emerald-800/60 dark:bg-slate-800/80 dark:text-slate-100 dark:focus:border-emerald-200/80"
  />
  </div>
  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
@@ -2308,7 +2308,7 @@ export default function PengaturanPage() {
  value={form.sipdei_api_key || ''}
  onChange={(e) => update('sipdei_api_key', e.target.value)}
  placeholder="Masukkan token API Key dari SIPDEI..."
- className="h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 pl-9 pr-24 font-mono text-xs font-bold text-slate-800 outline-none transition focus:border-emerald-200/80 focus:bg-white dark:border-emerald-800/60 dark:bg-slate-800/80 dark:text-slate-100 dark:focus:border-emerald-200/80"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/50 pl-9 pr-24 font-mono text-xs font-bold text-slate-800 outline-none transition focus:border-emerald-200/80 focus:bg-white dark:border-emerald-800/60 dark:bg-slate-800/80 dark:text-slate-100 dark:focus:border-emerald-200/80"
  />
  <div className="absolute right-2 flex items-center gap-1">
  <button
@@ -2357,7 +2357,7 @@ export default function PengaturanPage() {
  value={form.sipdei_cache_ttl || 600}
  onChange={(e) => update('sipdei_cache_ttl', Number(e.target.value))}
  placeholder="600"
- className="h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 pl-9 pr-3 text-xs font-medium text-slate-800 outline-none transition focus:border-emerald-200/80 focus:bg-white dark:border-emerald-800/60 dark:bg-slate-800/80 dark:text-slate-100"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/50 pl-9 pr-3 text-xs font-medium text-slate-800 outline-none transition focus:border-emerald-200/80 focus:bg-white dark:border-emerald-800/60 dark:bg-slate-800/80 dark:text-slate-100"
  />
  </div>
  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
@@ -2602,7 +2602,7 @@ export default function PengaturanPage() {
  placeholder="Contoh: Bagaimana cara mengunduh modul ajar LMS?"
  value={faqForm.question}
  onChange={(e) => setFaqForm({ ...faqForm, question: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
 
@@ -2616,7 +2616,7 @@ export default function PengaturanPage() {
  placeholder="Tuliskan langkah-langkah penyelesaian secara jelas..."
  value={faqForm.answer}
  onChange={(e) => setFaqForm({ ...faqForm, answer: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
 
@@ -2630,7 +2630,7 @@ export default function PengaturanPage() {
  placeholder="Contoh: /dashboard/profil-akun"
  value={faqForm.actionUrl}
  onChange={(e) => setFaqForm({ ...faqForm, actionUrl: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
 
@@ -2643,7 +2643,7 @@ export default function PengaturanPage() {
  placeholder="Contoh: Buka Halaman Profil"
  value={faqForm.actionLabel}
  onChange={(e) => setFaqForm({ ...faqForm, actionLabel: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
  </div>
@@ -2657,7 +2657,7 @@ export default function PengaturanPage() {
  placeholder="Contoh: password, ganti, lupa, profil"
  value={faqForm.tags}
  onChange={(e) => setFaqForm({ ...faqForm, tags: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
  </form>
@@ -2707,7 +2707,7 @@ export default function PengaturanPage() {
  placeholder="Contoh: Buku Panduan Guru & Wali Kelas 2026"
  value={manualForm.title}
  onChange={(e) => setManualForm({ ...manualForm, title: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
 
@@ -2721,7 +2721,7 @@ export default function PengaturanPage() {
  placeholder="v2.4 (2026)"
  value={manualForm.version}
  onChange={(e) => setManualForm({ ...manualForm, version: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
 
@@ -2734,7 +2734,7 @@ export default function PengaturanPage() {
  placeholder="3.5 MB • PDF"
  value={manualForm.size}
  onChange={(e) => setManualForm({ ...manualForm, size: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
  </div>
@@ -2748,7 +2748,7 @@ export default function PengaturanPage() {
  placeholder="Contoh: Guru Mata Pelajaran, Wali Kelas, Kepsek"
  value={manualForm.target}
  onChange={(e) => setManualForm({ ...manualForm, target: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
 
@@ -2762,7 +2762,7 @@ export default function PengaturanPage() {
  placeholder="Jelaskan secara singkat isi cakupan panduan ini..."
  value={manualForm.desc}
  onChange={(e) => setManualForm({ ...manualForm, desc: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
  </form>
@@ -2827,7 +2827,7 @@ function Field({ label, value = '', onChange, icon: Icon, isTextarea = false, ..
  {...props}
  value={value}
  onChange={(e) => onChange(e.target.value)}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 px-3.5 py-2.5 text-xs font-medium outline-none transition focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-600/20 dark:border-emerald-800/60 dark:bg-slate-900 leading-relaxed"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50 px-3.5 py-2.5 text-xs font-medium outline-none transition focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-600/20 dark:border-emerald-800/60 dark:bg-slate-900 leading-relaxed"
  />
  ) : (
  <Input

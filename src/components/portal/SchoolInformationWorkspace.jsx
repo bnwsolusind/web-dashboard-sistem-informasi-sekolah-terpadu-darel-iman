@@ -422,11 +422,11 @@ export default function SchoolInformationWorkspace({ studentId, student, embedde
  </header>
  ) : (
  /* MODERN HERO HEADER CARD (SINKRON DENGAN STANDAR PROYEK HEROUI HERO) */
- <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:border-emerald-800/60 dark:bg-[#1B2433] p-5 sm:p-6 shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-white dark:from-emerald-950/40 dark:via-[#1B2433] dark:to-[#1B2433] p-5 sm:p-6 shadow-md shadow-emerald-500/10">
  <div className="relative flex flex-col justify-between gap-4 md:flex-row md:items-center">
  <div className="flex items-center gap-3.5">
- <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-sm ring-4 ring-white/60 dark:ring-slate-800/80">
- <Megaphone className="h-6 w-6" />
+ <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-md shadow-emerald-600/20">
+ <Megaphone className="h-6 w-6 text-white" />
  </span>
  <div>
  <div className="flex flex-wrap items-center gap-2">
@@ -565,7 +565,7 @@ export default function SchoolInformationWorkspace({ studentId, student, embedde
  <input
  value={draftSearch}
  onChange={(e) => setDraftSearch(e.target.value)}
- className="h-11 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/70 pl-11 pr-4 text-xs font-medium outline-none transition-all focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/15 dark:border-emerald-800/60 dark:bg-slate-800 dark:focus:bg-slate-900"
+ className="h-11 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/70 pl-11 pr-4 text-xs font-medium outline-none transition-all focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/15 dark:border-emerald-800/60 dark:bg-slate-800 dark:focus:bg-slate-900"
  placeholder="Cari pengumuman, agenda, berita, atau surat edaran..."
  />
  </label>
@@ -635,45 +635,43 @@ export default function SchoolInformationWorkspace({ studentId, student, embedde
  )}
  </section>
 
- {/* NAVIGASI KATEGORI TAB */}
- <nav role="tablist" className="flex gap-2 overflow-x-auto no-scrollbar rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-2 shadow-xs dark:border-emerald-800/60 dark:bg-slate-900" aria-label="Kategori informasi">
- {activeTabs.map(([id, label, Icon]) => {
- const isActive = tab === id
- const count = categoryCounts[id] ?? summaryData?.counts?.[id] ?? 0
- const pastelColor = tabPastelColors[id] || tabPastelColors.all
- return (
- <Button
- key={id}
- type="button"
- role="tab"
- aria-selected={isActive}
- variant={isActive ? 'primary' : 'ghost'}
- appearance={isActive ? 'fill' : 'outline'}
- size="xs"
- onClick={() => setTab(id)}
- prefixIcon={<Icon className={`h-4 w-4 shrink-0 ${isActive ? 'text-white' : ''}`} />}
- className={`cursor-pointer transition-all duration-200 font-bold shrink-0 rounded-xl ${
- isActive
- ? '!bg-white dark:bg-[#1B2433] !from-emerald-600 !to-teal-600 ! shadow-sm ring-2 ring-emerald-500/40 scale-[1.02]'
- : `${pastelColor} border-transparent`
- }`}
- >
- <span>{label}</span>
- <span
- className={`ml-1 flex h-4 min-w-[18px] items-center justify-center rounded-full px-1.5 text-[10px] font-black ${
- isActive
- ? 'bg-white/20'
- : count > 0
- ? 'bg-white/70 text-slate-800 dark:bg-slate-950 dark:text-slate-200'
- : 'bg-black/10 text-slate-500 dark:bg-white/10 dark:text-slate-400'
- }`}
- >
- {count}
- </span>
- </Button>
- )
- })}
- </nav>
+      {/* NAVIGASI KATEGORI TAB (HeroUI Segmented Tabs Standard) */}
+      <nav
+        role="tablist"
+        aria-label="Kategori informasi"
+        className="flex items-center gap-1.5 overflow-x-auto no-scrollbar p-1.5 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs"
+      >
+        {activeTabs.map(([id, label, Icon]) => {
+          const isActive = tab === id
+          const count = categoryCounts[id] ?? summaryData?.counts?.[id] ?? 0
+          return (
+            <button
+              key={id}
+              type="button"
+              role="tab"
+              aria-selected={isActive}
+              onClick={() => setTab(id)}
+              className={`shrink-0 rounded-lg px-3 py-1.5 text-xs transition-all flex items-center gap-1.5 cursor-pointer ${
+                isActive
+                  ? 'bg-emerald-600 text-white font-black shadow-xs active:scale-95'
+                  : 'text-slate-600 hover:text-emerald-700 hover:bg-emerald-100/60 dark:text-slate-300 dark:hover:bg-slate-800 font-black'
+              }`}
+            >
+              <Icon className={`h-3.5 w-3.5 shrink-0 ${isActive ? 'text-white' : ''}`} />
+              <span>{label}</span>
+              <span
+                className={`px-1.5 py-0.2 rounded-md text-[10px] font-black ${
+                  isActive
+                    ? 'bg-white text-emerald-800'
+                    : 'bg-emerald-200/80 text-emerald-900 dark:bg-emerald-900/80 dark:text-emerald-200'
+                }`}
+              >
+                {count}
+              </span>
+            </button>
+          )
+        })}
+      </nav>
 
  {/* KONTEN UTAMA & SIDEBAR */}
  <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
@@ -848,7 +846,7 @@ export default function SchoolInformationWorkspace({ studentId, student, embedde
  onClick={() => openDetail(item)}
  className="group flex w-full gap-3 rounded-xl border border-emerald-200/80 p-2.5 text-left transition-all hover:border-emerald-300 dark:hover:border-emerald-700 hover:bg-emerald-50/40 dark:border-emerald-800/60 dark:hover:bg-slate-800"
  >
- <div className="flex h-11 w-11 shrink-0 flex-col items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] font-black shadow-sm">
+ <div className="flex h-11 w-11 shrink-0 flex-col items-center justify-center rounded-xl bg-emerald-600 text-white font-black shadow-sm">
  <span className="text-sm leading-none">{dayNum}</span>
  <span className="text-[9px] uppercase tracking-wider text-emerald-100">{monthShort}</span>
  </div>

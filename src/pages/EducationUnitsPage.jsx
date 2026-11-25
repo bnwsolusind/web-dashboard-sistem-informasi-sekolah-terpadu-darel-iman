@@ -817,13 +817,30 @@ export default function EducationUnitsPage() {
 
   // ── Chart Data Calculations ────────────────────────────────────────────
   const studentChartData = useMemo(() => {
-    return items.map(u => ({
-      name: u.code || u.unit_type || (u.name ? u.name.substring(0, 8) : 'Unit'),
-      fullName: u.name,
-      siswa: u.total_siswa ?? 0,
-      santriwan: u.total_siswa_laki ?? 0,
-      santriwati: u.total_siswa_perempuan ?? 0,
-    }))
+    const UNIT_COLORS = [
+      { hex: '#10B981', label: 'Hijau' },
+      { hex: '#0EA5E9', label: 'Biru' },
+      { hex: '#8B5CF6', label: 'Ungu' },
+      { hex: '#14B8A6', label: 'Teal' },
+      { hex: '#F97316', label: 'Oranye' },
+      { hex: '#F59E0B', label: 'Kuning' },
+      { hex: '#6366F1', label: 'Indigo' },
+      { hex: '#EC4899', label: 'Pink' },
+      { hex: '#06B6D4', label: 'Cyan' },
+      { hex: '#F43F5E', label: 'Merah' },
+    ]
+    return items.map((u, i) => {
+      const palette = UNIT_COLORS[i % UNIT_COLORS.length]
+      return {
+        name: u.code || u.unit_type || (u.name ? u.name.substring(0, 8) : 'Unit'),
+        fullName: u.name,
+        siswa: u.total_siswa ?? 0,
+        santriwan: u.total_siswa_laki ?? 0,
+        santriwati: u.total_siswa_perempuan ?? 0,
+        color: palette.hex,
+        colorLabel: palette.label,
+      }
+    })
   }, [items])
 
   const teacherChartData = useMemo(() => {
@@ -1529,38 +1546,61 @@ export default function EducationUnitsPage() {
                 </AppBadge>
               </div>
 
-              <div className="h-64 w-full pt-2">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={studentChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" opacity={0.6} />
-                    <XAxis dataKey="name" tick={{ fontSize: 11, fontWeight: 700 }} stroke="#94A3B8" />
-                    <YAxis tick={{ fontSize: 11, fontWeight: 700 }} stroke="#94A3B8" />
-                    <Tooltip
-                      content={({ active, payload }) => {
-                        if (active && payload && payload.length) {
-                          const data = payload[0].payload
-                          return (
-                            <div className="rounded-xl border border-emerald-200/80 bg-slate-900/95 p-3 text-white shadow-xl backdrop-blur-sm">
-                              <p className="text-xs font-bold text-amber-400 mb-1">{data.fullName}</p>
-                              <p className="text-xs font-extrabold">Total Siswa: {data.siswa} orang</p>
-                              <div className="mt-1 pt-1 border-t border-emerald-200/80 text-[10px] text-slate-300 flex gap-3">
-                                <span>Santriwan (L): {data.santriwan}</span>
-                                <span>Santriwati (P): {data.santriwati}</span>
+              <div className="p-4 space-y-4">
+                <div className="h-64 w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={studentChartData} margin={{ top: 10, right: 12, left: -16, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" opacity={0.6} />
+                      <XAxis dataKey="name" tick={{ fontSize: 11, fontWeight: 700 }} stroke="#94A3B8" />
+                      <YAxis tick={{ fontSize: 11, fontWeight: 700 }} stroke="#94A3B8" />
+                      <Tooltip
+                        content={({ active, payload }) => {
+                          if (active && payload && payload.length) {
+                            const data = payload[0].payload
+                            return (
+                              <div className="rounded-xl border border-emerald-200/80 bg-slate-900/95 p-3 text-white shadow-xl backdrop-blur-sm">
+                                <p className="text-xs font-bold mb-1" style={{ color: data.color }}>{data.fullName} ({data.colorLabel})</p>
+                                <p className="text-xs font-extrabold">Total Siswa: {data.siswa} orang</p>
+                                <div className="mt-1 pt-1 border-t border-emerald-200/80 text-[10px] text-slate-300 flex gap-3">
+                                  <span>Santriwan (L): {data.santriwan}</span>
+                                  <span>Santriwati (P): {data.santriwati}</span>
+                                </div>
                               </div>
-                            </div>
-                          )
-                        }
-                        return null
-                      }}
-                    />
-                    <Bar dataKey="siswa" name="Jumlah Siswa" fill="#F59E0B" radius={[6, 6, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
+                            )
+                          }
+                          return null
+                        }}
+                      />
+                      <Bar dataKey="siswa" name="Jumlah Siswa" radius={[6, 6, 0, 0]}>
+                        {studentChartData.map((entry, index) => (
+                          <Cell key={`student-bar-${index}`} fill={entry.color} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+
+                {/* Legend Keterangan Warna Unit */}
+                <div className="w-full grid grid-cols-2 gap-2 px-1">
+                  {studentChartData.map((item, idx) => (
+                    <div key={`${item.name}-${idx}`} className="flex items-center justify-between gap-1.5 p-2 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-800/60 min-w-0">
+                      <div className="flex items-center gap-1.5 min-w-0 truncate">
+                        <span className="size-2.5 rounded-full shrink-0 shadow-xs" style={{ backgroundColor: item.color }} />
+                        <span className="text-xs font-bold text-slate-700 dark:text-slate-300 truncate">
+                          {item.colorLabel} - {item.name}
+                        </span>
+                      </div>
+                      <span className="text-xs font-black text-slate-900 dark:text-white tabular-nums shrink-0">
+                        {Number(item.siswa).toLocaleString('id-ID')}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-            <div className="pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between text-xs font-semibold text-slate-500">
+            <div className="px-5 py-3.5 border-t border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 dark:bg-slate-900/40 flex items-center justify-between gap-2 text-xs font-semibold text-slate-500">
               <span>Distribusi berdasarkan jenjang sekolah</span>
-              <span className="text-amber-600 dark:text-amber-400 font-bold">Terupdate Otomatis</span>
+              <span className="text-amber-600 dark:text-amber-400 font-bold shrink-0">Terupdate Otomatis</span>
             </div>
           </article>
 
@@ -1640,9 +1680,9 @@ export default function EducationUnitsPage() {
                 </div>
               </div>
             </div>
-            <div className="pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between text-xs font-semibold text-slate-500">
+            <div className="px-5 py-3.5 border-t border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 dark:bg-slate-900/40 flex items-center justify-between gap-2 text-xs font-semibold text-slate-500">
               <span>Proporsi guru pengajar per unit</span>
-              <span className="text-emerald-600 dark:text-emerald-400 font-bold">100% Terverifikasi</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-bold shrink-0">100% Terverifikasi</span>
             </div>
           </article>
         </motion.div>
@@ -3909,7 +3949,7 @@ export default function EducationUnitsPage() {
                           placeholder="Contoh: Dr. H. Ahmad Dahlan, M.Pd."
                           value={employeeFormData.name}
                           onChange={e => setEmployeeFormData(p => ({ ...p, name: e.target.value }))}
-                          className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                          className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
                         />
                       </div>
                     </div>
@@ -3929,7 +3969,7 @@ export default function EducationUnitsPage() {
                           placeholder="Contoh: 198001012005011001 atau NIY-2024001"
                           value={employeeFormData.nip}
                           onChange={e => setEmployeeFormData(p => ({ ...p, nip: e.target.value }))}
-                          className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                          className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
                         />
                       </div>
                     </div>
@@ -3949,7 +3989,7 @@ export default function EducationUnitsPage() {
                           placeholder="Contoh: Kepala Sekolah / Pimpinan Pondok"
                           value={employeeFormData.jabatan_name}
                           onChange={e => setEmployeeFormData(p => ({ ...p, jabatan_name: e.target.value }))}
-                          className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                          className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
                         />
                       </div>
                     </div>
@@ -3968,7 +4008,7 @@ export default function EducationUnitsPage() {
                             placeholder="pegawai@sekolah.sch.id"
                             value={employeeFormData.email}
                             onChange={e => setEmployeeFormData(p => ({ ...p, email: e.target.value }))}
-                            className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                            className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
                           />
                         </div>
                       </div>
@@ -3984,7 +4024,7 @@ export default function EducationUnitsPage() {
                             placeholder="08123456789"
                             value={employeeFormData.phone}
                             onChange={e => setEmployeeFormData(p => ({ ...p, phone: e.target.value }))}
-                            className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                            className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
                           />
                         </div>
                       </div>

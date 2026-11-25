@@ -1,7 +1,9 @@
 import AppModal from './app/AppModal'
+import KpiStatCard from './app/KpiStatCard'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import CustomSelect from '@/components/ui/CustomSelect'
 import {
+ BookOpen,
  CalendarDays,
  ChevronLeft,
  ChevronRight,
@@ -589,17 +591,17 @@ export default function TeacherMutabaahWeekly({
 
  // ── RENDER MODERN HERO HEADER BANNER ──────────────────────────────────────────
  const renderHeroHeader = () => (
- <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:border-emerald-800/60 dark:bg-[#1B2433] p-5 sm:p-6 shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]">
+ <div className="relative overflow-hidden rounded-2xl border-2 border-emerald-500/30 !bg-[#D5F2E3] p-5 sm:p-6 shadow-md shadow-emerald-500/10 dark:border-emerald-600/40 dark:!bg-[#112a22]">
 
  <div className="relative z-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
  <div className="flex items-start gap-4">
- <div className="flex size-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-xl shadow-xs">
- <Heart className="size-6 sm:size-7 text-emerald-600 fill-white/20" />
+ <div className="flex size-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md">
+ <Heart className="size-6 sm:size-7 text-white" />
  </div>
  <div className="min-w-0">
  <div className="flex items-center gap-2 flex-wrap">
- <span className="inline-flex items-center gap-1 rounded-full bg-white dark:bg-[#1B2433] px-3.5 py-1 text-xs font-extrabold shadow-sm">
- <Sparkles className="size-3 text-amber-300 animate-pulse" />
+ <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 text-white px-3.5 py-1 text-xs font-extrabold shadow-xs">
+ <Sparkles className="size-3 text-white animate-pulse" />
  Jurnal Mutaba'ah Yaumiyyah
  </span>
  <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100/90 dark:bg-emerald-950/80 px-3 py-1 text-xs font-bold text-emerald-800 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/80">
@@ -697,12 +699,12 @@ export default function TeacherMutabaahWeekly({
  {renderHeroHeader()}
 
  {/* ── DATATABLE OUTER CONTAINER ─────────────────────────────────── */}
- <section className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-sm dark:bg-[#1B2433]">
+ <section className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433]">
  {/* ── 1. TOP HEADER & NAVIGATION BAR ────────────────────────────────────── */}
- <div className="border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50 px-5 py-4 dark:border-emerald-800/60">
+ <div className="border-b border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-500/10 px-5 py-4">
  <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
  <div className="flex items-center gap-3">
- <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-700 dark:bg-emerald-950/40 dark:border-emerald-700/80 dark:text-emerald-300 shadow-xs">
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
  <Users className="size-5" />
  </div>
  <div>
@@ -730,12 +732,10 @@ export default function TeacherMutabaahWeekly({
  <div className="flex flex-wrap items-center gap-2.5">
  {/* Scope Selector if multiple assignments */}
  {assignments.length > 1 && (
- <div className="flex items-center gap-1.5 rounded-xl bg-white dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 px-2.5 py-1.5 shadow-xs">
- <Users className="size-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
  <CustomSelect
  value={assignmentId}
  onChange={(e) => setAssignmentId(e.target.value)}
- className="bg-transparent text-xs font-bold text-slate-800 dark:text-white outline-none cursor-pointer pr-1"
+ className="h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 px-3 text-xs font-bold text-slate-800 dark:text-white outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 cursor-pointer"
  >
  {assignments.map((item) => (
  <option key={item.id} value={item.id} className="dark:bg-slate-900 text-slate-900 dark:text-white">
@@ -743,7 +743,6 @@ export default function TeacherMutabaahWeekly({
  </option>
  ))}
  </CustomSelect>
- </div>
  )}
 
  {/* Week navigation */}
@@ -790,122 +789,57 @@ export default function TeacherMutabaahWeekly({
 
  {/* ── 2. DAFTAR SISWA UTAMA (STUDENT DIRECTORY) ─────────────────────────── */}
  <div className="p-5">
- {/* Quick Summary Interactive Modern KPI Cards */}
- <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 mb-5">
- {/* Card 1: Total Siswa (Emerald) */}
- <div
+ {/* Quick Summary Interactive Gold Standard KPI Cards */}
+ <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 mb-5">
+ <KpiStatCard
+ title="Total Siswa Rombel"
+ value={totalStudents}
+ description="Semua Data"
+ badge={currentAssignment?.kelas_name || 'Rombel Aktif'}
+ icon={Users}
+ tone="emerald"
+ ctaText="Filter"
  onClick={() => setStatusFilter('all')}
- className={`group relative overflow-hidden rounded-xl p-4 text-left transition-all duration-300 cursor-pointer ${
- statusFilter === 'all'
- ? 'bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 ring-2 ring-emerald-500/30 shadow-lg shadow-sm'
- : 'bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 hover:border-emerald-300 dark:hover:border-emerald-700 shadow-sm hover:shadow-md hover:shadow-sm hover:-translate-y-0.5'
- }`}
- >
- <div className="flex items-center justify-between">
- <span className="text-xs font-bold text-slate-600 dark:text-slate-300">Total Siswa Rombel</span>
- <div className="flex size-9 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-700 dark:bg-emerald-950/40 dark:border-emerald-700/80 dark:text-emerald-300 shadow-sm">
- <Users className="size-4.5 text-emerald-600" />
- </div>
- </div>
- <p className="mt-2 text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
- {totalStudents}
- </p>
- <div className="mt-2 flex items-center justify-between">
- <span className="inline-flex items-center rounded-full bg-emerald-100/90 dark:bg-emerald-950/80 px-2 py-0.5 text-[10px] font-bold text-emerald-800 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/80">
- {currentAssignment?.kelas_name || 'Rombel Aktif'}
- </span>
- <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">Semua Data</span>
- </div>
- </div>
-
- {/* Card 2: Lengkap Terisi (Teal) */}
- <div
+ className={statusFilter === 'all' ? 'ring-2 ring-emerald-500/50 shadow-md' : ''}
+ />
+ <KpiStatCard
+ title="Lengkap Terisi"
+ value={completedStudentsCount}
+ description={totalStudents > 0 ? `${Math.round((completedStudentsCount / totalStudents) * 100)}% Tuntas` : '0% Tuntas'}
+ badge="100% Agenda Terekam"
+ icon={CheckCircle2}
+ tone="teal"
+ ctaText="Filter"
  onClick={() => setStatusFilter('completed')}
- className={`group relative overflow-hidden rounded-xl p-4 text-left transition-all duration-300 cursor-pointer ${
- statusFilter === 'completed'
- ? 'bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 ring-2 ring-teal-500/30 shadow-lg shadow-sm'
- : 'bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 hover:border-emerald-300 dark:hover:border-emerald-700 shadow-sm hover:shadow-md hover:shadow-sm hover:-translate-y-0.5'
- }`}
- >
- <div className="flex items-center justify-between">
- <span className="text-xs font-bold text-slate-600 dark:text-slate-300">Lengkap Terisi</span>
- <div className="flex size-9 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-sm">
- <CheckCircle2 className="size-4.5 text-slate-600" />
- </div>
- </div>
- <p className="mt-2 text-2xl sm:text-3xl font-black text-teal-700 dark:text-teal-400">
- {completedStudentsCount}
- </p>
- <div className="mt-2 flex items-center justify-between">
- <span className="inline-flex items-center rounded-full bg-teal-100/90 dark:bg-teal-950/80 px-2 py-0.5 text-[10px] font-bold text-teal-800 dark:text-teal-300 border border-emerald-200/80 dark:border-emerald-800/60">
- 100% Agenda Terekam
- </span>
- <span className="text-[10px] font-bold text-teal-600 dark:text-teal-400">
- {totalStudents > 0 ? `${Math.round((completedStudentsCount / totalStudents) * 100)}%` : '0%'}
- </span>
- </div>
- </div>
-
- {/* Card 3: Terisi Sebagian (Amber) */}
- <div
+ className={statusFilter === 'completed' ? 'ring-2 ring-teal-500/50 shadow-md' : ''}
+ />
+ <KpiStatCard
+ title="Terisi Sebagian"
+ value={partialStudentsCount}
+ description={totalStudents > 0 ? `${Math.round((partialStudentsCount / totalStudents) * 100)}% Berjalan` : '0% Berjalan'}
+ badge="Dalam Proses"
+ icon={Clock}
+ tone="amber"
+ ctaText="Filter"
  onClick={() => setStatusFilter('partial')}
- className={`group relative overflow-hidden rounded-xl p-4 text-left transition-all duration-300 cursor-pointer ${
- statusFilter === 'partial'
- ? 'bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 ring-2 ring-amber-500/30 shadow-lg shadow-sm'
- : 'bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 hover:border-emerald-300 dark:hover:border-emerald-700 shadow-sm hover:shadow-md hover:shadow-sm hover:-translate-y-0.5'
- }`}
- >
- <div className="flex items-center justify-between">
- <span className="text-xs font-bold text-slate-600 dark:text-slate-300">Terisi Sebagian</span>
- <div className="flex size-9 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-sm">
- <Clock className="size-4.5 text-amber-600" />
- </div>
- </div>
- <p className="mt-2 text-2xl sm:text-3xl font-black text-amber-700 dark:text-amber-400">
- {partialStudentsCount}
- </p>
- <div className="mt-2 flex items-center justify-between">
- <span className="inline-flex items-center rounded-full bg-amber-100/90 dark:bg-amber-950/80 px-2 py-0.5 text-[10px] font-bold text-amber-800 dark:text-amber-300 border border-emerald-200/80 dark:border-emerald-800/60">
- Dalam Proses
- </span>
- <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400">
- {totalStudents > 0 ? `${Math.round((partialStudentsCount / totalStudents) * 100)}%` : '0%'}
- </span>
- </div>
- </div>
-
- {/* Card 4: Belum Diisi (Rose) */}
- <div
+ className={statusFilter === 'partial' ? 'ring-2 ring-amber-500/50 shadow-md' : ''}
+ />
+ <KpiStatCard
+ title="Belum Diisi"
+ value={emptyStudentsCount}
+ description={totalStudents > 0 ? `${Math.round((emptyStudentsCount / totalStudents) * 100)}% Kosong` : '0% Kosong'}
+ badge="Perlu Perhatian"
+ icon={AlertCircle}
+ tone="rose"
+ ctaText="Filter"
  onClick={() => setStatusFilter('empty')}
- className={`group relative overflow-hidden rounded-xl p-4 text-left transition-all duration-300 cursor-pointer ${
- statusFilter === 'empty'
- ? 'bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 ring-2 ring-rose-500/30 shadow-lg shadow-sm'
- : 'bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 hover:border-emerald-300 dark:hover:border-emerald-700 shadow-sm hover:shadow-md hover:shadow-sm hover:-translate-y-0.5'
- }`}
- >
- <div className="flex items-center justify-between">
- <span className="text-xs font-bold text-slate-600 dark:text-slate-300">Belum Diisi</span>
- <div className="flex size-9 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-sm">
- <AlertCircle className="size-4.5 text-white" />
- </div>
- </div>
- <p className="mt-2 text-2xl sm:text-3xl font-black text-rose-700 dark:text-rose-400">
- {emptyStudentsCount}
- </p>
- <div className="mt-2 flex items-center justify-between">
- <span className="inline-flex items-center rounded-full bg-rose-100/90 dark:bg-rose-950/80 px-2 py-0.5 text-[10px] font-bold text-rose-800 dark:text-rose-300 border border-emerald-200/80 dark:border-emerald-800/60">
- Perlu Perhatian
- </span>
- <span className="text-[10px] font-bold text-rose-600 dark:text-rose-400">
- {totalStudents > 0 ? `${Math.round((emptyStudentsCount / totalStudents) * 100)}%` : '0%'}
- </span>
- </div>
- </div>
+ className={statusFilter === 'empty' ? 'ring-2 ring-rose-500/50 shadow-md' : ''}
+ />
  </div>
 
  {/* Program Notice Box */}
  {!isBoarding ? (
- <div className="mb-5 flex items-start gap-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50 p-4 text-xs text-emerald-950 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-transparent dark:text-emerald-200 shadow-xs">
+ <div className="mb-5 flex items-start gap-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/50 dark:bg-emerald-950/30 p-4 text-xs text-emerald-950 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-transparent dark:text-emerald-200 shadow-xs">
  <div className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-xs">
  <School className="size-4.5" />
  </div>
@@ -935,7 +869,7 @@ export default function TeacherMutabaahWeekly({
  )}
 
  {/* Toolbar Search & Status Filter */}
- <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-4 rounded-xl border border-emerald-200/80 dark:border-emerald-800/80 bg-slate-50/50 dark:bg-slate-900/50 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-emerald-950/40 p-3">
+ <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-4 rounded-xl border border-emerald-200/80 dark:border-emerald-800/80 bg-emerald-50/50 dark:bg-emerald-950/30 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-emerald-950/40 p-3">
  <div className="relative flex-1 max-w-md">
  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-emerald-600 dark:text-emerald-400" />
  <input
@@ -943,7 +877,7 @@ export default function TeacherMutabaahWeekly({
  value={searchStudent}
  onChange={(e) => setSearchStudent(e.target.value)}
  placeholder="Cari nama atau NIS siswa..."
- className="h-10 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 pl-10 pr-9 text-xs font-semibold text-slate-800 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+ className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-9 text-xs font-bold text-slate-800 dark:text-white placeholder:text-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
  />
  {searchStudent && (
  <button
@@ -964,8 +898,8 @@ export default function TeacherMutabaahWeekly({
  onClick={() => setStatusFilter('all')}
  className={`rounded-lg px-2.5 py-1 text-xs font-bold transition cursor-pointer ${
  statusFilter === 'all'
- ? 'bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white shadow-xs'
- : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
+ ? 'bg-emerald-600 text-white shadow-xs'
+ : 'text-slate-600 hover:text-emerald-700 dark:text-slate-400 dark:hover:text-white'
  }`}
  >
  Semua ({students.length})
@@ -1113,7 +1047,7 @@ export default function TeacherMutabaahWeekly({
  <button
  type="button"
  onClick={() => handleOpenInputModal(student)}
- className="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-emerald-50 dark:text-slate-900 dark:hover:bg-white hover:from-emerald-700 hover:to-teal-700 px-3 py-1.5 text-xs font-bold shadow-xs transition cursor-pointer"
+ className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 text-xs font-bold shadow-xs transition cursor-pointer active:scale-95"
  >
  <Edit3 className="size-3.5" />
  <span>Isi Jurnal</span>
@@ -1121,7 +1055,7 @@ export default function TeacherMutabaahWeekly({
  <button
  type="button"
  onClick={() => handleOpenPrintPreview(student)}
- className="inline-flex items-center gap-1 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-700 dark:bg-sky-950/50 dark:hover:bg-sky-900/50 dark:text-sky-300 border border-emerald-200/80 dark:border-emerald-800/60 px-2.5 py-1.5 text-xs font-bold shadow-xs transition cursor-pointer"
+ className="inline-flex items-center gap-1 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-700 dark:bg-sky-950/50 dark:hover:bg-sky-900/50 dark:text-sky-300 border-2 border-sky-200 dark:border-sky-800/60 px-2.5 py-1.5 text-xs font-bold shadow-xs transition cursor-pointer active:scale-95"
  title="Preview Cetak Pekanan"
  >
  <Printer className="size-3.5" />
@@ -1137,7 +1071,7 @@ export default function TeacherMutabaahWeekly({
  </table>
 
  {/* Datatable Footer & Pagination */}
- <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-emerald-950/40 px-5 py-3.5">
+ <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-emerald-950/40 px-5 py-3.5">
  <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">
  Menampilkan <strong className="text-emerald-700 dark:text-emerald-400">{filteredStudents.length === 0 ? 0 : (currentPage - 1) * pageSize + 1}</strong>–<strong className="text-emerald-700 dark:text-emerald-400">{Math.min(currentPage * pageSize, filteredStudents.length)}</strong> dari <strong className="text-slate-900 dark:text-white">{filteredStudents.length}</strong> siswa
  </span>

@@ -172,7 +172,7 @@ export default function FamilyPortalLoginPage() {
  onChange={(e) => setForm({...form,identifier:e.target.value})}
  required
  autoComplete="username"
- className="h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-10 pr-4 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-emerald-700/80 dark:bg-slate-800"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white pl-10 pr-4 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-emerald-700/80 dark:bg-slate-800"
  placeholder={portalType === 'parent' ? 'Masukkan No. KK, NIK, HP, atau Email orang tua' : 'Masukkan NIS, NISN, atau Email siswa'}
  />
  </div>
@@ -187,7 +187,7 @@ export default function FamilyPortalLoginPage() {
  onChange={(e) => setForm({...form,password:e.target.value})}
  required
  autoComplete="current-password"
- className="h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-10 pr-11 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-emerald-700/80 dark:bg-slate-800"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white pl-10 pr-11 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-emerald-700/80 dark:bg-slate-800"
  placeholder="Masukkan password atau PIN"
  />
  <button

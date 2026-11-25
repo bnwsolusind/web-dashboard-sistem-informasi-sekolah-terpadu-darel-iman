@@ -51,6 +51,7 @@ import {
   familyPortalService
 } from '../services/familyPortalService'
 import api from '../services/api'
+import { KpiStatCard } from '../components/app'
 import StudentProfileWorkspace from '../components/portal/StudentProfileWorkspace'
 import SchoolInformationWorkspace from '../components/portal/SchoolInformationWorkspace'
 import ClassScheduleWorkspace from '../components/portal/ClassScheduleWorkspace'
@@ -654,10 +655,10 @@ export default function ParentPortalPage() {
  {children.map((c) => {
  const isPonpes = c.is_pesantren || c.unit_name?.toLowerCase().includes('pesantren') || c.unit_code === 'PONPES'
  return (
- <Card key={c.id} className="overflow-hidden border-emerald-200/80 shadow-md hover:shadow-xl transition-all">
- <CardHeader className="bg-white dark:bg-[#1B2433] p-5">
+ <div key={c.id} className="overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] shadow-md shadow-emerald-500/10 hover:shadow-lg transition-all">
+ <div className="bg-emerald-500/10 border-b border-emerald-500/20 p-5 dark:border-emerald-800/60">
  <div className="flex items-center justify-between gap-2">
- <Badge color="emerald" className="bg-white/20 font-extrabold">
+ <Badge color="emerald" className="font-extrabold">
  {c.unit_name || '-'}
  </Badge>
  {isPonpes && (
@@ -666,13 +667,13 @@ export default function ParentPortalPage() {
  </span>
  )}
  </div>
- <CardTitle className="mt-3 text-lg font-black text-emerald-600">{c.full_name}</CardTitle>
- <CardDescription className="text-xs text-emerald-200">
+ <h3 className="mt-3 text-lg font-black text-slate-900 dark:text-white">{c.full_name}</h3>
+ <p className="text-xs font-medium text-slate-600 dark:text-slate-400">
  {c.kelas?.nama_kelas || '-'} · NISN: {c.nisn || '-'}
- </CardDescription>
- </CardHeader>
+ </p>
+ </div>
 
- <CardContent className="p-5 space-y-4 text-xs">
+ <div className="p-5 space-y-4 text-xs">
  {/* Nilai Rapor */}
  <div className="flex items-center justify-between rounded-xl bg-slate-50 p-3 dark:bg-slate-800/60">
  <span className="font-bold text-slate-600 dark:text-slate-400">Rata-rata Nilai Rapor</span>
@@ -714,7 +715,7 @@ export default function ParentPortalPage() {
  )}
  </div>
  )}
- </CardContent>
+ </div>
 
  <div className="bg-slate-50 p-4 border-t border-emerald-200/80 flex items-center justify-between dark:bg-slate-800/40 dark:border-emerald-800/60">
  <span className="text-xs font-bold text-slate-500">Wali Kelas: {c.wali_kelas || '-'}</span>
@@ -727,7 +728,7 @@ export default function ParentPortalPage() {
  Buka Rincian Anak →
  </Button>
  </div>
- </Card>
+ </div>
  )
  })}
  </div>
@@ -743,62 +744,59 @@ export default function ParentPortalPage() {
  <div className="space-y-6">
  {/* Stat Grid Anak */}
           <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-            <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 !bg-emerald-100/90 hover:!bg-emerald-200/70 dark:!bg-emerald-950/50 p-5 shadow-sm transition-all duration-300">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl !bg-emerald-600 !text-white shadow-sm dark:!bg-emerald-600 dark:!text-white">
-                <UserCheck className="h-5 w-5 text-white" />
-              </div>
-              <p className="mt-3 text-[10px] font-black uppercase tracking-wider text-emerald-800 dark:text-emerald-300">Kehadiran Hari Ini</p>
-              <p className="mt-1 text-lg font-black text-emerald-800 dark:text-emerald-200">
-                {dashboard?.attendance_today || activeChild?.attendance_status || '-'}
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 !bg-blue-100/90 hover:!bg-blue-200/70 dark:!bg-blue-950/50 p-5 shadow-sm transition-all duration-300">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-sm dark:!bg-blue-600 dark:!text-white">
-                <Award className="h-5 w-5 text-white" />
-              </div>
-              <p className="mt-3 text-[10px] font-black uppercase tracking-wider text-blue-800 dark:text-blue-300">Rata-rata Rapor</p>
-              <p className="mt-1 text-lg font-black text-blue-800 dark:text-blue-200">
-                {activeChild?.gpa || '-'}
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 !bg-teal-100/90 hover:!bg-teal-200/70 dark:!bg-teal-950/50 p-5 shadow-sm transition-all duration-300">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl !bg-teal-600 !text-white shadow-sm dark:!bg-teal-600 dark:!text-white">
-                <BookOpenCheck className="h-5 w-5 text-white" />
-              </div>
-              <p className="mt-3 text-[10px] font-black uppercase tracking-wider text-teal-800 dark:text-teal-300">Capaian Tahfizh</p>
-              <p className="mt-1 text-lg font-black text-teal-800 dark:text-teal-200">
-                {activeChild?.tahfizh_summary || (dashboard?.kpi?.total_tahfizh_ayat ? `${dashboard.kpi.total_tahfizh_ayat} Ayat` : '-')}
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 !bg-purple-100/90 hover:!bg-purple-200/70 dark:!bg-purple-950/50 p-5 shadow-sm transition-all duration-300">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl !bg-purple-600 !text-white shadow-sm dark:!bg-purple-600 dark:!text-white">
-                <HeartHandshake className="h-5 w-5 text-white" />
-              </div>
-              <p className="mt-3 text-[10px] font-black uppercase tracking-wider text-purple-800 dark:text-purple-300">Mutabaah Yaumiyah</p>
-              <p className="mt-1 text-lg font-black text-purple-800 dark:text-purple-200">
-                {activeChild?.mutabaah_score ? `${activeChild.mutabaah_score}% Tertib` : '-'}
-              </p>
-            </div>
+            <KpiStatCard
+              icon={UserCheck}
+              title="Kehadiran Hari Ini"
+              value={dashboard?.attendance_today || activeChild?.attendance_status || '-'}
+              description="Status presensi harian ananda"
+              tone="emerald"
+              onClick={() => selectTab('attendance')}
+              ctaText="Lihat Presensi"
+            />
+            <KpiStatCard
+              icon={Award}
+              title="Rata-rata Rapor"
+              value={activeChild?.gpa || '-'}
+              description="Capaian nilai akademik"
+              tone="indigo"
+              onClick={() => selectTab('grades')}
+              ctaText="Lihat Nilai"
+            />
+            <KpiStatCard
+              icon={BookOpenCheck}
+              title="Capaian Tahfizh"
+              value={activeChild?.tahfizh_summary || (dashboard?.kpi?.total_tahfizh_ayat ? `${dashboard.kpi.total_tahfizh_ayat} Ayat` : '-')}
+              description="Akumulasi setoran hafalan"
+              tone="teal"
+              onClick={() => selectTab('tahfizh')}
+              ctaText="Lihat Tahfizh"
+            />
+            <KpiStatCard
+              icon={HeartHandshake}
+              title="Mutabaah Yaumiyah"
+              value={activeChild?.mutabaah_score ? `${activeChild.mutabaah_score}% Tertib` : '-'}
+              description="Indeks amalan harian"
+              tone="purple"
+              onClick={() => selectTab('mutabaah')}
+              ctaText="Lihat Mutabaah"
+            />
           </div>
 
           {/* ───────────────────────────────────────────────────────────────────────────── */}
           {/* 5 MODUL MONITORING INTEGRASI: MUTABA'AH, TAHFIZH, TARGET, ORTU & NON-PONPES */}
  {/* ───────────────────────────────────────────────────────────────────────────── */}
- <section className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-sm dark:bg-[#1B2433] p-5 space-y-5">
- <div className="space-y-3 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4 dark:border-emerald-800/60">
- <div className="flex items-center gap-2.5">
- <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300">
- <HeartHandshake className="h-5 w-5" />
+ <section className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433] p-5 space-y-5">
+ <div className="space-y-4 -mx-5 -mt-5 px-5 pt-4 pb-4 border-b border-emerald-500/20 dark:border-emerald-800/40 bg-emerald-500/10 dark:bg-emerald-950/40">
+ <div className="flex items-center gap-3">
+ <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-xs">
+ <HeartHandshake className="h-4.5 w-4.5 text-white" strokeWidth={2.2} />
  </div>
  <div>
- <h3 className="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
- Pemantauan Terpadu Mutaba’ah & Tahfizh — {activeChild?.full_name}
+ <h3 className="text-sm font-bold uppercase tracking-wider text-emerald-900 dark:text-emerald-200 leading-tight">
+ Pemantauan Terpadu Mutaba’ah &amp; Tahfizh — {activeChild?.full_name}
  </h3>
- <p className="text-xs text-slate-400">
- Monitoring amalan yaumiyah, setoran hafalan, target & evaluasi, serta log wali murid.
+ <p className="text-xs font-semibold text-emerald-700/80 dark:text-emerald-400/80 mt-0.5">
+ Monitoring amalan yaumiyah, setoran hafalan, target &amp; evaluasi, serta log wali murid.
  </p>
  </div>
  </div>
@@ -1753,18 +1751,18 @@ export default function ParentPortalPage() {
  {/* Grid Nilai, Kalender Akademik & Pengumuman Terbaru */}
  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-stretch">
  {/* 1. KARTU NILAI RAPOR TERBARU */}
- <Card className="flex flex-col rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] shadow-sm overflow-hidden transition-all duration-200 hover:shadow-lg hover:shadow-sm">
- <CardHeader className="border-b border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-5 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-teal-950/20">
+ <div className="flex flex-col rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] shadow-md shadow-emerald-500/10 overflow-hidden transition-all duration-200">
+ <div className="border-b border-emerald-500/20 dark:border-emerald-800/40 bg-emerald-500/10 dark:bg-emerald-950/40 px-5 py-4">
  <div className="flex items-center justify-between gap-2">
  <div className="flex items-center gap-2.5 min-w-0">
- <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-xs">
- <Award className="h-4 w-4" />
+ <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-xs">
+ <Award className="h-4 w-4 text-white" />
  </div>
  <div className="min-w-0">
- <CardTitle className="text-xs font-black text-slate-800 dark:text-slate-100 leading-tight">
+ <h3 className="text-xs font-black text-emerald-900 dark:text-emerald-200 leading-tight">
  Nilai Rapor Terbaru
- </CardTitle>
- <p className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 truncate max-w-[140px]">
+ </h3>
+ <p className="text-[10px] font-semibold text-emerald-700/80 dark:text-emerald-400/80 truncate max-w-[140px]">
  {activeChild?.full_name}
  </p>
  </div>
@@ -1772,15 +1770,15 @@ export default function ParentPortalPage() {
  <button
  type="button"
  onClick={() => selectTab('grades')}
- className="inline-flex items-center gap-1 shrink-0 rounded-xl bg-emerald-50 px-2 py-1 text-xs font-bold text-emerald-700 border border-emerald-200/80 dark:border-emerald-800/60 hover:bg-emerald-100/80 transition-all dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/60 dark:hover:bg-emerald-900/60 cursor-pointer"
+ className="inline-flex items-center gap-1 shrink-0 rounded-xl bg-white/80 px-2.5 py-1 text-xs font-bold text-emerald-700 border border-emerald-200/80 dark:border-emerald-800/60 hover:bg-emerald-100/80 transition-all dark:bg-emerald-950/60 dark:text-emerald-300 cursor-pointer"
  >
  <span>Semua</span>
  <ChevronRight className="h-3 w-3" />
  </button>
  </div>
- </CardHeader>
+ </div>
 
- <CardContent className="flex-1 p-5 flex flex-col justify-between space-y-4">
+ <div className="flex-1 p-5 flex flex-col justify-between space-y-4">
  {Array.isArray(dashboard?.latest_grades) && dashboard.latest_grades.length > 0 ? (
  <div className="space-y-2.5">
  {dashboard.latest_grades.slice(0, 4).map((g, idx) => {
@@ -1836,23 +1834,23 @@ export default function ParentPortalPage() {
  Buka Rapor Lengkap →
  </button>
  </div>
- </CardContent>
- </Card>
+ </div>
+ </div>
 
  {/* 2. KARTU KALENDER AKADEMIK UNIT SISWA */}
- <Card className="flex flex-col rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] shadow-md shadow-cyan-500/5 overflow-hidden transition-all duration-200 hover:shadow-lg hover:shadow-cyan-500/10">
- <CardHeader className="border-b border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-5 dark:border-emerald-800/60 dark:from-cyan-950/40 dark:via-teal-950/20">
+ <div className="flex flex-col rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] shadow-md shadow-emerald-500/10 overflow-hidden transition-all duration-200">
+ <div className="border-b border-emerald-500/20 dark:border-emerald-800/40 bg-emerald-500/10 dark:bg-emerald-950/40 px-5 py-4">
  <div className="flex items-center justify-between gap-2">
  <div className="flex items-center gap-2.5 min-w-0">
- <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-cyan-100 text-cyan-700 dark:bg-cyan-950 dark:text-cyan-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-xs">
- <CalendarDays className="h-4 w-4" />
+ <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-cyan-600 text-white shadow-xs">
+ <CalendarDays className="h-4 w-4 text-white" />
  </div>
  <div className="min-w-0">
- <CardTitle className="text-xs font-black text-slate-800 dark:text-slate-100 leading-tight">
+ <h3 className="text-xs font-black text-emerald-900 dark:text-emerald-200 leading-tight">
  Kalender Akademik
- </CardTitle>
+ </h3>
  {childUnitName ? (
- <p className="text-[10px] font-semibold text-cyan-700 dark:text-cyan-400 truncate max-w-[140px]">
+ <p className="text-[10px] font-semibold text-emerald-700/80 dark:text-emerald-400/80 truncate max-w-[140px]">
  {childUnitName}
  </p>
  ) : null}
@@ -1861,15 +1859,15 @@ export default function ParentPortalPage() {
  <button
  type="button"
  onClick={() => setIsCalendarModalOpen(true)}
- className="inline-flex items-center gap-1 shrink-0 rounded-xl bg-cyan-50 px-2 py-1 text-xs font-bold text-cyan-700 border border-emerald-200/80 dark:border-emerald-800/60 hover:bg-cyan-100/80 transition-all dark:bg-cyan-950/60 dark:text-cyan-300 dark:border-emerald-800/60 dark:hover:bg-cyan-900/60 cursor-pointer"
+ className="inline-flex items-center gap-1 shrink-0 rounded-xl bg-white/80 px-2.5 py-1 text-xs font-bold text-cyan-700 border border-emerald-200/80 dark:border-emerald-800/60 hover:bg-cyan-100/80 transition-all dark:bg-cyan-950/60 dark:text-cyan-300 cursor-pointer"
  >
  <span>Lihat</span>
  <ChevronRight className="h-3 w-3" />
  </button>
  </div>
- </CardHeader>
+ </div>
 
- <CardContent className="flex-1 p-5 flex flex-col justify-between space-y-3.5 text-xs">
+ <div className="flex-1 p-5 flex flex-col justify-between space-y-3.5 text-xs">
  <div className="space-y-3">
  <div className="rounded-xl bg-cyan-50/80 p-3 text-xs text-cyan-900 dark:bg-cyan-950/40 dark:text-cyan-200 border border-emerald-200/80 dark:border-emerald-800/60 leading-relaxed">
  <div className="flex items-center gap-1.5 font-bold mb-1">
@@ -1932,28 +1930,28 @@ export default function ParentPortalPage() {
  <button
  type="button"
  onClick={() => setIsCalendarModalOpen(true)}
- className="w-full flex items-center justify-center gap-2 rounded-xl bg-white dark:bg-[#1B2433] hover:from-cyan-700 hover:to-teal-800 font-bold text-xs py-2.5 px-4 shadow-md shadow-cyan-600/20 transition-all active:scale-98 cursor-pointer mt-2 border border-emerald-200/80 dark:border-emerald-800/60"
+ className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white border-2 border-cyan-500 font-black text-xs py-2.5 px-4 shadow-md shadow-cyan-600/20 transition-all active:scale-95 cursor-pointer mt-2"
  >
  <CalendarDays className="h-4 w-4" />
  <span>Buka Kalender Akademik{childUnitName ? ` ${childUnitName}` : ''}</span>
  </button>
- </CardContent>
- </Card>
+ </div>
+ </div>
 
  {/* 3. KARTU PENGUMUMAN TERBARU UNIT */}
- <Card className="flex flex-col rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] shadow-sm overflow-hidden transition-all duration-200 hover:shadow-lg hover:shadow-sm">
- <CardHeader className="border-b border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-5 dark:border-emerald-800/60 dark:from-teal-950/40 dark:via-emerald-950/20">
+ <div className="flex flex-col rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] shadow-md shadow-emerald-500/10 overflow-hidden transition-all duration-200">
+ <div className="border-b border-emerald-500/20 dark:border-emerald-800/40 bg-emerald-500/10 dark:bg-emerald-950/40 px-5 py-4">
  <div className="flex items-center justify-between gap-2">
  <div className="flex items-center gap-2.5 min-w-0">
- <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-teal-100 text-teal-700 dark:bg-teal-950 dark:text-teal-300 border border-emerald-200/80 dark:border-emerald-800/60 shadow-xs">
- <Megaphone className="h-4 w-4" />
+ <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-teal-600 text-white shadow-xs">
+ <Megaphone className="h-4 w-4 text-white" />
  </div>
  <div className="min-w-0">
- <CardTitle className="text-xs font-black text-slate-800 dark:text-slate-100 leading-tight">
+ <h3 className="text-xs font-black text-emerald-900 dark:text-emerald-200 leading-tight">
  Pengumuman Unit
- </CardTitle>
+ </h3>
  {childUnitName ? (
- <p className="text-[10px] font-semibold text-teal-700 dark:text-teal-400 truncate max-w-[140px]">
+ <p className="text-[10px] font-semibold text-emerald-700/80 dark:text-emerald-400/80 truncate max-w-[140px]">
  {childUnitName}
  </p>
  ) : null}
@@ -1962,15 +1960,15 @@ export default function ParentPortalPage() {
  <button
  type="button"
  onClick={() => selectTab('announcements')}
- className="inline-flex items-center gap-1 shrink-0 rounded-xl bg-teal-50 px-2 py-1 text-xs font-bold text-teal-700 border border-emerald-200/80 dark:border-emerald-800/60 hover:bg-teal-100/80 transition-all dark:bg-teal-950/60 dark:text-teal-300 dark:border-emerald-800/60 dark:hover:bg-teal-900/60 cursor-pointer"
+ className="inline-flex items-center gap-1 shrink-0 rounded-xl bg-white/80 px-2.5 py-1 text-xs font-bold text-teal-700 border border-emerald-200/80 dark:border-emerald-800/60 hover:bg-teal-100/80 transition-all dark:bg-teal-950/60 dark:text-teal-300 cursor-pointer"
  >
  <span>Semua</span>
  <ChevronRight className="h-3 w-3" />
  </button>
  </div>
- </CardHeader>
+ </div>
 
- <CardContent className="flex-1 p-5 flex flex-col justify-between space-y-3.5 text-xs">
+ <div className="flex-1 p-5 flex flex-col justify-between space-y-3.5 text-xs">
  <div className="space-y-2.5">
  {activeChildAnnouncements.slice(0, 3).map((a) => {
  const targetUnit = a.education_unit || a.unit_name || a.data_tambahan?.unit_name || (childUnitName || null)
@@ -2019,13 +2017,13 @@ export default function ParentPortalPage() {
  <button
  type="button"
  onClick={() => selectTab('announcements')}
- className="w-full flex items-center justify-center gap-2 rounded-xl bg-white dark:bg-[#1B2433] hover:from-teal-700 hover:to-emerald-800 font-bold text-xs py-2.5 px-4 shadow-sm transition-all active:scale-98 cursor-pointer mt-2 border border-emerald-200/80 dark:border-emerald-800/60"
+ className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white border-2 border-emerald-500 font-black text-xs py-2.5 px-4 shadow-md shadow-emerald-600/20 transition-all active:scale-95 cursor-pointer mt-2"
  >
  <Megaphone className="h-4 w-4" />
  <span>Buka Pusat Informasi{childUnitName ? ` ${childUnitName}` : ''}</span>
  </button>
- </CardContent>
- </Card>
+ </div>
+ </div>
  </div>
  </div>
  )}
@@ -2043,33 +2041,33 @@ export default function ParentPortalPage() {
 
  {active === 'calendar' && (
  <div className="space-y-4">
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-5 shadow-xs dark:border-emerald-800/60 dark:bg-slate-900">
- <div className="flex flex-wrap items-center justify-between gap-4">
+ <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] shadow-md shadow-emerald-500/10 overflow-hidden">
+ <div className="border-b border-emerald-500/20 dark:border-emerald-800/40 bg-emerald-500/10 dark:bg-emerald-950/40 px-5 py-4 flex flex-wrap items-center justify-between gap-4">
+ <div className="flex items-center gap-3">
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-cyan-600 text-white shadow-xs">
+ <CalendarDays className="h-5 w-5 text-white" />
+ </div>
  <div>
- <span className="inline-flex items-center gap-1.5 rounded-full bg-cyan-100 px-3 py-1 text-xs font-black text-cyan-800 dark:bg-cyan-950 dark:text-cyan-300">
- <CalendarDays className="h-3.5 w-3.5" />
- Kalender Akademik Terpadu
- </span>
- <h2 className="mt-2 text-lg font-black text-slate-900 dark:text-white">
+ <h2 className="text-base font-bold text-emerald-900 dark:text-emerald-200 leading-tight">
  Kalender Akademik{childUnitName ? ` Unit: ${childUnitName}` : ''}
  </h2>
- <p className="mt-1 text-xs text-slate-600 dark:text-slate-300">
+ <p className="mt-0.5 text-xs font-semibold text-emerald-700/80 dark:text-emerald-400/80">
  Jadwal resmi kegiatan belajar mengajar, penilaian, libur semester, dan agenda penting khusus ananda {activeChild?.full_name}.
  </p>
+ </div>
  </div>
  <button
  type="button"
  onClick={() => setIsCalendarModalOpen(true)}
- className="flex items-center gap-2 rounded-xl bg-white dark:bg-[#1B2433] px-4 py-2.5 text-xs font-black shadow-md transition hover:scale-[1.02] cursor-pointer border border-emerald-200/80 dark:border-emerald-800/60"
+ className="flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 text-xs font-black shadow-xs transition hover:scale-[1.02] cursor-pointer"
  >
  <CalendarDays className="h-4 w-4" />
  <span>Buka Kalender Interaktif</span>
  </button>
  </div>
- </div>
 
  {/* Kalender Embed Preview */}
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-6 shadow-xs dark:border-emerald-800/60 dark:bg-slate-900 text-center py-10">
+ <div className="p-6 text-center py-10">
  <CalendarDays className="mx-auto h-9 w-12 text-cyan-600 dark:text-cyan-400" />
  <h3 className="mt-3 text-base font-black text-slate-900 dark:text-white">
  Kalender Akademik & Agenda Kegiatan{childUnitName ? ` ${childUnitName}` : ''}
@@ -2080,11 +2078,12 @@ export default function ParentPortalPage() {
  <button
  type="button"
  onClick={() => setIsCalendarModalOpen(true)}
- className="mt-5 inline-flex items-center gap-2 rounded-xl bg-cyan-600 px-5 py-2.5 text-xs font-black text-white shadow-md transition hover:bg-cyan-700 cursor-pointer"
+ className="mt-5 inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-xs font-black text-white shadow-md transition hover:bg-emerald-700 cursor-pointer"
  >
  <CalendarDays className="h-4 w-4" />
  Buka Kalender Akademik{childUnitName ? ` ${childUnitName}` : ''}
  </button>
+ </div>
  </div>
  </div>
  )}

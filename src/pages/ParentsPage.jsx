@@ -515,7 +515,7 @@ export default function ParentsPage() {
  value={formData.nama}
  onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
  placeholder="Nama lengkap orang tua / wali"
- className="w-full rounded-xl border border-emerald-200/80 px-3.5 py-2.5 text-sm focus:border-emerald-500 focus:outline-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 px-3.5 py-2.5 text-sm focus:border-emerald-500 focus:outline-none"
  />
  </div>
 
@@ -539,7 +539,7 @@ export default function ParentsPage() {
  value={formData.nik}
  onChange={(e) => setFormData({ ...formData, nik: e.target.value })}
  placeholder="Nomor Induk Kependudukan"
- className="w-full rounded-xl border border-emerald-200/80 px-3.5 py-2.5 text-sm focus:border-emerald-500 focus:outline-none font-mono"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 px-3.5 py-2.5 text-sm focus:border-emerald-500 focus:outline-none font-mono"
  />
  </div>
 
@@ -550,7 +550,7 @@ export default function ParentsPage() {
  value={formData.phone}
  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
  placeholder="0812xxxxxxx"
- className="w-full rounded-xl border border-emerald-200/80 px-3.5 py-2.5 text-sm focus:border-emerald-500 focus:outline-none font-mono"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 px-3.5 py-2.5 text-sm focus:border-emerald-500 focus:outline-none font-mono"
  />
  </div>
 
@@ -561,7 +561,7 @@ export default function ParentsPage() {
  value={formData.email}
  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
  placeholder="email@example.com"
- className="w-full rounded-xl border border-emerald-200/80 px-3.5 py-2.5 text-sm focus:border-emerald-500 focus:outline-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 px-3.5 py-2.5 text-sm focus:border-emerald-500 focus:outline-none"
  />
  </div>
 
@@ -572,7 +572,7 @@ export default function ParentsPage() {
  value={formData.pekerjaan}
  onChange={(e) => setFormData({ ...formData, pekerjaan: e.target.value })}
  placeholder="Profesi atau instansi bekerja"
- className="w-full rounded-xl border border-emerald-200/80 px-3.5 py-2.5 text-sm focus:border-emerald-500 focus:outline-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 px-3.5 py-2.5 text-sm focus:border-emerald-500 focus:outline-none"
  />
  </div>
 
@@ -583,7 +583,7 @@ export default function ParentsPage() {
  value={formData.alamat}
  onChange={(e) => setFormData({ ...formData, alamat: e.target.value })}
  placeholder="Alamat lengkap domisili"
- className="w-full rounded-xl border border-emerald-200/80 px-3.5 py-2.5 text-sm focus:border-emerald-500 focus:outline-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 px-3.5 py-2.5 text-sm focus:border-emerald-500 focus:outline-none"
  />
  </div>
  </div>

@@ -350,7 +350,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900/60 px-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900/60 px-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
  autoFocus
  />
  </div>
@@ -948,7 +948,7 @@ export default function PoinPenilaianDoaPage() {
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
  placeholder="Ketik nama doa harian atau nomor urut..."
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white py-2.5 pl-10 pr-10 text-xs text-slate-800 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800/90 dark:text-white"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white py-2.5 pl-10 pr-10 text-xs text-slate-800 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800/90 dark:text-white"
  />
  {searchQuery && (
  <button
@@ -1085,7 +1085,7 @@ export default function PoinPenilaianDoaPage() {
  placeholder="-"
  value={currentScore !== undefined ? currentScore : ''}
  onChange={(e) => handleScoreChange(row.id, e.target.value)}
- className="w-20 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-2 py-1.5 text-center text-xs font-black text-slate-900 shadow-xs focus:border-emerald-600 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="w-20 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-2 py-1.5 text-center text-xs font-black text-slate-900 shadow-xs focus:border-emerald-600 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  </td>
  <td className="py-2 px-4 text-center">
@@ -1189,7 +1189,7 @@ export default function PoinPenilaianDoaPage() {
  next[idx].label = e.target.value
  setEditableGrades(next)
  }}
- className="mt-1 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-2 text-xs font-bold text-slate-900 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
+ className="mt-1 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-2 text-xs font-bold text-slate-900 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
  />
  </label>
  <div className="grid grid-cols-2 gap-2">
@@ -1203,7 +1203,7 @@ export default function PoinPenilaianDoaPage() {
  next[idx].min_score = Number(e.target.value)
  setEditableGrades(next)
  }}
- className="mt-0.5 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-1.5 text-center text-xs font-bold dark:border-slate-600 dark:bg-slate-700 dark:text-white"
+ className="mt-0.5 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-1.5 text-center text-xs font-bold dark:border-slate-600 dark:bg-slate-700 dark:text-white"
  />
  </label>
  <label className="block text-[10px] font-semibold text-slate-500">
@@ -1216,7 +1216,7 @@ export default function PoinPenilaianDoaPage() {
  next[idx].max_score = Number(e.target.value)
  setEditableGrades(next)
  }}
- className="mt-0.5 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-1.5 text-center text-xs font-bold dark:border-slate-600 dark:bg-slate-700 dark:text-white"
+ className="mt-0.5 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-1.5 text-center text-xs font-bold dark:border-slate-600 dark:bg-slate-700 dark:text-white"
  />
  </label>
  </div>
@@ -1257,7 +1257,7 @@ export default function PoinPenilaianDoaPage() {
  next[idx].order_number = e.target.value
  setEditableItems(next)
  }}
- className="w-12 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-1 text-center font-bold text-slate-900 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="w-12 rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-1 text-center font-bold text-slate-900 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  </td>
  <td className="px-4 py-2">
@@ -1269,7 +1269,7 @@ export default function PoinPenilaianDoaPage() {
  next[idx].name = e.target.value
  setEditableItems(next)
  }}
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-1.5 font-bold text-slate-900 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-1.5 font-bold text-slate-900 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  </td>
  <td className="px-3 py-2 text-center">
@@ -1281,7 +1281,7 @@ export default function PoinPenilaianDoaPage() {
  next[idx].group = e.target.value
  setEditableItems(next)
  }}
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-1 text-center text-xs dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-1 text-center text-xs dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  </td>
  <td className="px-3 py-2 text-center">
@@ -1293,7 +1293,7 @@ export default function PoinPenilaianDoaPage() {
  next[idx].max_score = e.target.value
  setEditableItems(next)
  }}
- className="w-16 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-1 text-center font-bold dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="w-16 rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-1 text-center font-bold dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  </td>
  <td className="px-3 py-2 text-center">
@@ -1305,7 +1305,7 @@ export default function PoinPenilaianDoaPage() {
  next[idx].passing_score = e.target.value
  setEditableItems(next)
  }}
- className="w-16 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-1 text-center font-bold text-emerald-700 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-emerald-400"
+ className="w-16 rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-1 text-center font-bold text-emerald-700 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-emerald-400"
  />
  </td>
  <td className="px-3 py-2 text-center">

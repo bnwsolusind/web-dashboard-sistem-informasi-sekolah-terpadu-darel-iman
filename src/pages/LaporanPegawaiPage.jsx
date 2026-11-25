@@ -1,4 +1,6 @@
 import ActionDropdown from "../components/app/ActionDropdown"
+import AppDataTable from "../components/app/AppDataTable"
+import { PageToolbarActions } from "../components/app/PageToolbarActions"
 import AppModal from "../components/app/AppModal"
 import { HeroUiHeader } from "../components/ui/HeroUiHeader"
 import CustomSelect from "../components/ui/CustomSelect"
@@ -738,44 +740,22 @@ export default function LaporanPegawaiPage() {
  </div>
 
  {/* ── Datatable Card (HeroUI Emerald Datatable - 5 Columns Standard) ── */}
-      <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
-        <div className="p-4 sm:p-6 space-y-4 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent border-b border-emerald-200/90 dark:border-emerald-800/60">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <div className="flex items-center gap-2.5">
-                <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">Daftar Pegawai & Guru</h2>
-                <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[11px] font-black text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300">
-                  Total {hasilFilter.length} Pegawai
-                </span>
-              </div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
-                Rincian data kepegawaian terdaftar beserta unit kerja dan jabatannya.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-2 shrink-0 py-1">
-              <SquircleActionButton variant="export" label="Export CSV" onClick={() => exportCsv('rekap-pegawai.csv', kolomCsv, hasilFilter)} />
-              <SquircleActionButton variant="print" label="Cetak Data" onClick={() => { setPrintTargetRow(null); setIsPrintModalOpen(true); }} />
-            </div>
-          </div>
-
-          <div className="relative w-full">
-            <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-emerald-600 dark:text-emerald-400" />
-            <Input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Cari NIP, Nama Pegawai, Jabatan, atau Unit Kerja..."
-              className="w-full pl-10 pr-9 h-9 text-xs font-semibold rounded-xl border border-emerald-200/90 bg-emerald-50/20 text-slate-800 placeholder:text-emerald-700/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 dark:text-emerald-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
-            />
-            {search && (
-              <button type="button" onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-600 hover:text-emerald-800 dark:text-emerald-400">
-                <X className="h-3.5 w-3.5" />
-              </button>
-            )}
-          </div>
-
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-1 text-xs">
+      <AppDataTable
+        title="Daftar Pegawai & Guru"
+        description="Rincian data kepegawaian terdaftar beserta unit kerja dan jabatannya."
+        icon={Users}
+        countLabel={`Total ${hasilFilter.length} Pegawai`}
+        actions={
+          <PageToolbarActions
+            onExport={() => exportCsv('rekap-pegawai.csv', kolomCsv, hasilFilter)}
+            onPrint={() => { setPrintTargetRow(null); setIsPrintModalOpen(true); }}
+          />
+        }
+        search={search}
+        onSearchChange={setSearch}
+        searchPlaceholder="Cari NIP, Nama Pegawai, Jabatan, atau Unit Kerja..."
+        filters={
+          <div className="flex flex-wrap items-center justify-between gap-3 w-full text-xs">
             <span className="text-slate-600 dark:text-slate-400 font-medium">Menampilkan <strong>{hasilFilter.length}</strong> pegawai terfilter</span>
 
             <div className="relative flex items-center gap-1.5">
@@ -797,15 +777,17 @@ export default function LaporanPegawaiPage() {
               </div>
             </div>
           </div>
-        </div>
-
-        <div className="w-full overflow-x-auto">
-          {hasilFilter.length === 0 ? (
-            <div className="py-8">
-              <MasterEmptyState message="Tidak ada data pegawai yang cocok dengan filter atau pencarian Anda." />
-            </div>
-          ) : (
-            <TableRoot className="w-full text-left border-collapse text-xs">
+        }
+        isEmpty={hasilFilter.length === 0}
+        emptyTitle="Tidak Ada Data Pegawai"
+        emptyDescription="Tidak ada data pegawai yang cocok dengan filter atau pencarian Anda."
+        showPagination={totalHalaman > 1}
+        page={halaman}
+        totalPages={totalHalaman}
+        totalItems={hasilFilter.length}
+        onPageChange={(page) => setHalaman(page)}
+      >
+        <TableRoot className="w-full text-left border-collapse text-xs">
               <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90">
                 <TableRow>
                   {/* Kolom 1: Pegawai / Guru (Nama & NIP) */}
@@ -900,13 +882,7 @@ export default function LaporanPegawaiPage() {
                 })}
               </TableBody>
             </TableRoot>
-          )}
-        </div>
-
-        <div className="w-full border-t border-emerald-200/80 bg-emerald-50/30 px-4 py-3 sm:px-6 dark:border-emerald-800/60 dark:bg-emerald-950/20">
-          <Pagination currentPage={halaman} totalPages={totalHalaman} onPageChange={(page) => setHalaman(page)} sideLayout="full" />
-        </div>
-      </div>
+      </AppDataTable>
 </PageContainer>
  )
 }

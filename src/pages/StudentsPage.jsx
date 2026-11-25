@@ -320,7 +320,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-200/80 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-200/80 focus:outline-none focus:ring-1 focus:ring-emerald-500"
  autoFocus
  />
  </div>
@@ -375,7 +375,7 @@ function HeroUiFilterSelect({
 
 const MODERN_CARD_TONES = {
   emerald: {
-    card: 'rounded-container border-2 border-emerald-300 dark:border-emerald-700/80 bg-gradient-to-b from-[#E6F8F3] via-[#E6F8F3]/30 to-white dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-emerald-400',
+    card: 'rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-gradient-to-b from-[#E6F8F3] via-[#E6F8F3]/30 to-white dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-emerald-400',
     glow: 'bg-emerald-400/20 group-hover:bg-emerald-400/30',
     iconBox: '!bg-emerald-600 !text-white shadow-xs rounded-full',
     iconGradient: '!bg-emerald-600 !text-white shadow-xs rounded-full',
@@ -391,7 +391,7 @@ const MODERN_CARD_TONES = {
     divider: 'border-emerald-100 dark:border-emerald-900/60',
   },
   blue: {
-    card: 'rounded-container border-2 border-sky-300 dark:border-sky-700/80 bg-gradient-to-b from-[#E0F2FE]/70 via-[#E0F2FE]/20 to-white dark:from-sky-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-sky-400',
+    card: 'rounded-[22px] border-2 border-sky-300 dark:border-sky-700/80 bg-gradient-to-b from-[#E0F2FE]/70 via-[#E0F2FE]/20 to-white dark:from-sky-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-sky-400',
     glow: 'bg-sky-400/20 group-hover:bg-sky-400/30',
     iconBox: 'bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-md shadow-emerald-600/20 rounded-2xl',
     iconGradient: 'bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-md shadow-emerald-600/20 rounded-2xl',
@@ -407,7 +407,7 @@ const MODERN_CARD_TONES = {
     divider: 'border-sky-100 dark:border-sky-900/60',
   },
   sky: {
-    card: 'rounded-container border-2 border-sky-300 dark:border-sky-700/80 bg-gradient-to-b from-[#E0F2FE]/70 via-[#E0F2FE]/20 to-white dark:from-sky-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-sky-400',
+    card: 'rounded-[22px] border-2 border-sky-300 dark:border-sky-700/80 bg-gradient-to-b from-[#E0F2FE]/70 via-[#E0F2FE]/20 to-white dark:from-sky-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-sky-400',
     glow: 'bg-sky-400/20 group-hover:bg-sky-400/30',
     iconBox: 'bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-md shadow-emerald-600/20 rounded-2xl',
     iconGradient: 'bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-md shadow-emerald-600/20 rounded-2xl',
@@ -423,7 +423,7 @@ const MODERN_CARD_TONES = {
     divider: 'border-sky-100 dark:border-sky-900/60',
   },
   cyan: {
-    card: 'rounded-container border-2 border-teal-300 dark:border-teal-700/80 bg-gradient-to-b from-[#CCFBF1]/70 via-[#CCFBF1]/20 to-white dark:from-teal-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-teal-400',
+    card: 'rounded-[22px] border-2 border-teal-300 dark:border-teal-700/80 bg-gradient-to-b from-[#CCFBF1]/70 via-[#CCFBF1]/20 to-white dark:from-teal-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-teal-400',
     glow: 'bg-teal-400/20 group-hover:bg-teal-400/30',
     iconBox: '!bg-teal-600 !text-white shadow-xs rounded-full',
     iconGradient: '!bg-teal-600 !text-white shadow-xs rounded-full',
@@ -439,7 +439,7 @@ const MODERN_CARD_TONES = {
     divider: 'border-teal-100 dark:border-teal-900/60',
   },
   indigo: {
-    card: 'rounded-container border-2 border-indigo-300 dark:border-indigo-700/80 bg-gradient-to-b from-[#E0E7FF]/70 via-[#E0E7FF]/20 to-white dark:from-indigo-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-indigo-400',
+    card: 'rounded-[22px] border-2 border-indigo-300 dark:border-indigo-700/80 bg-gradient-to-b from-[#E0E7FF]/70 via-[#E0E7FF]/20 to-white dark:from-indigo-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-indigo-400',
     glow: 'bg-indigo-400/20 group-hover:bg-indigo-400/30',
     iconBox: '!bg-indigo-600 !text-white shadow-xs rounded-full',
     iconGradient: '!bg-indigo-600 !text-white shadow-xs rounded-full',
@@ -455,7 +455,7 @@ const MODERN_CARD_TONES = {
     divider: 'border-indigo-100 dark:border-indigo-900/60',
   },
   rose: {
-    card: 'rounded-container border-2 border-rose-300 dark:border-rose-700/80 bg-gradient-to-b from-[#FFE4E6]/70 via-[#FFE4E6]/20 to-white dark:from-rose-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-rose-400',
+    card: 'rounded-[22px] border-2 border-rose-300 dark:border-rose-700/80 bg-gradient-to-b from-[#FFE4E6]/70 via-[#FFE4E6]/20 to-white dark:from-rose-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-rose-400',
     glow: 'bg-rose-400/20 group-hover:bg-rose-400/30',
     iconBox: '!bg-rose-500 !text-white shadow-xs rounded-full',
     iconGradient: '!bg-rose-500 !text-white shadow-xs rounded-full',
@@ -471,7 +471,7 @@ const MODERN_CARD_TONES = {
     divider: 'border-rose-100 dark:border-rose-900/60',
   },
   amber: {
-    card: 'rounded-container border-2 border-amber-300 dark:border-amber-700/80 bg-gradient-to-b from-[#FEF3C7]/70 via-[#FEF3C7]/20 to-white dark:from-amber-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-amber-400',
+    card: 'rounded-[22px] border-2 border-amber-300 dark:border-amber-700/80 bg-gradient-to-b from-[#FEF3C7]/70 via-[#FEF3C7]/20 to-white dark:from-amber-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-amber-400',
     glow: 'bg-amber-400/20 group-hover:bg-amber-400/30',
     iconBox: '!bg-amber-500 !text-white shadow-xs rounded-full',
     iconGradient: '!bg-amber-500 !text-white shadow-xs rounded-full',
@@ -487,7 +487,7 @@ const MODERN_CARD_TONES = {
     divider: 'border-amber-100 dark:border-amber-900/60',
   },
   violet: {
-    card: 'rounded-container border-2 border-purple-300 dark:border-purple-700/80 bg-gradient-to-b from-[#F3E8FF]/70 via-[#F3E8FF]/20 to-white dark:from-purple-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-purple-400',
+    card: 'rounded-[22px] border-2 border-purple-300 dark:border-purple-700/80 bg-gradient-to-b from-[#F3E8FF]/70 via-[#F3E8FF]/20 to-white dark:from-purple-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-purple-400',
     glow: 'bg-purple-400/20 group-hover:bg-purple-400/30',
     iconBox: '!bg-purple-600 !text-white shadow-xs rounded-full',
     iconGradient: '!bg-purple-600 !text-white shadow-xs rounded-full',
@@ -503,7 +503,7 @@ const MODERN_CARD_TONES = {
     divider: 'border-purple-100 dark:border-purple-900/60',
   },
   purple: {
-    card: 'rounded-container border-2 border-purple-300 dark:border-purple-700/80 bg-gradient-to-b from-[#F3E8FF]/70 via-[#F3E8FF]/20 to-white dark:from-purple-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-purple-400',
+    card: 'rounded-[22px] border-2 border-purple-300 dark:border-purple-700/80 bg-gradient-to-b from-[#F3E8FF]/70 via-[#F3E8FF]/20 to-white dark:from-purple-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-purple-400',
     glow: 'bg-purple-400/20 group-hover:bg-purple-400/30',
     iconBox: '!bg-purple-600 !text-white shadow-xs rounded-full',
     iconGradient: '!bg-purple-600 !text-white shadow-xs rounded-full',
@@ -519,7 +519,7 @@ const MODERN_CARD_TONES = {
     divider: 'border-purple-100 dark:border-purple-900/60',
   },
   teal: {
-    card: 'rounded-container border-2 border-teal-300 dark:border-teal-700/80 bg-gradient-to-b from-[#CCFBF1]/70 via-[#CCFBF1]/20 to-white dark:from-teal-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-teal-400',
+    card: 'rounded-[22px] border-2 border-teal-300 dark:border-teal-700/80 bg-gradient-to-b from-[#CCFBF1]/70 via-[#CCFBF1]/20 to-white dark:from-teal-950/40 dark:via-slate-900 dark:to-slate-950 hover:border-teal-400',
     glow: 'bg-teal-400/20 group-hover:bg-teal-400/30',
     iconBox: '!bg-teal-600 !text-white shadow-xs rounded-full',
     iconGradient: '!bg-teal-600 !text-white shadow-xs rounded-full',
@@ -535,7 +535,7 @@ const MODERN_CARD_TONES = {
     divider: 'border-teal-100 dark:border-teal-900/60',
   },
   slate: {
-    card: 'rounded-container border-2 border-emerald-300 dark:border-emerald-800/80 bg-gradient-to-b from-slate-100/70 via-slate-50/30 to-white dark:from-slate-900/60 dark:via-slate-900 dark:to-slate-950 hover:border-emerald-200/80',
+    card: 'rounded-[22px] border-2 border-emerald-300 dark:border-emerald-800/80 bg-gradient-to-b from-slate-100/70 via-slate-50/30 to-white dark:from-slate-900/60 dark:via-slate-900 dark:to-slate-950 hover:border-emerald-200/80',
     glow: 'bg-slate-400/20 group-hover:bg-slate-400/30',
     iconBox: '!bg-slate-600 !text-white shadow-xs rounded-full',
     iconGradient: '!bg-slate-600 !text-white shadow-xs rounded-full',
@@ -1642,7 +1642,7 @@ export default function StudentsPage() {
  />
 
  {/* Unit Performance Scope Bar (Hero UI Component) */}
- <div className="relative overflow-visible z-20 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-card-dark p-4 sm:p-5 mb-6 shadow-md shadow-emerald-500/10">
+ <div className="relative overflow-visible z-20 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] p-4 sm:p-5 mb-6 shadow-md shadow-emerald-500/10">
  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
  <div className="flex items-center gap-3">
  <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-700/80 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 shadow-sm shrink-0">
@@ -1798,7 +1798,7 @@ export default function StudentsPage() {
  title={`Daftar ${terms.siswa || 'Siswa'}`}
  icon={GraduationCap}
  iconClassName="!bg-emerald-600 !text-white !border-emerald-600 !rounded-xl !size-8.5 shadow-xs"
- actionColumnLabel=""
+ actionColumnLabel="Aksi"
  description={`Data ${terms.siswa?.toLowerCase() || 'siswa'} sesuai filter dan kewenangan pengguna.`}
  countLabel={`${Number(studentPagination.total || filteredStudents.length).toLocaleString('id-ID')} ${terms.siswa?.toLowerCase() || 'siswa'}`}
  actions={
@@ -1810,6 +1810,8 @@ export default function StudentsPage() {
  ...(!isFoundationRole ? [{
  label: `Pindahan Masuk${incomingMutations.length > 0 ? ` (${incomingMutations.length})` : ''}`,
  icon: ArrowRightLeft,
+ variant: 'primary',
+ className: '!bg-sky-600 hover:!bg-sky-700 !text-white !border-sky-600',
  onClick: () => {
  fetchIncomingMutations()
  setShowIncomingModal(true)
@@ -1818,6 +1820,8 @@ export default function StudentsPage() {
  ...(canManageVaBsi ? [{
  label: 'Generate VA BSI',
  icon: CreditCard,
+ variant: 'primary',
+ className: '!bg-teal-600 hover:!bg-teal-700 !text-white !border-teal-600',
  onClick: () => setShowGenerateVaModal(true),
  }] : []),
  ]}
@@ -2359,7 +2363,7 @@ export default function StudentsPage() {
  </div>
 
  {/* Quick Actions Card */}
- <div className="rounded-xl border border-emerald-200/80 bg-slate-50/50 p-4 dark:border-emerald-800/60 dark:bg-slate-900/40 shadow-xs">
+ <div className="rounded-xl border border-emerald-200/80 bg-emerald-500/10 p-4 dark:border-emerald-800/60 dark:bg-slate-900/40 shadow-xs">
  <h4 className="text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-3">AKSI CEPAT SISWA</h4>
  <div className="flex flex-wrap gap-2.5">
  {canUpdateStudent && (
@@ -2467,9 +2471,9 @@ export default function StudentsPage() {
           }
         >
           <div className="space-y-4">
- <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-card-dark p-4 dark:border-emerald-800/60 dark:bg-slate-900/40">
+ <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-4 dark:border-emerald-800/60 dark:bg-slate-900/40">
  <div className="flex items-center gap-3">
- <div className="flex size-9 items-center justify-center rounded-xl bg-white dark:bg-card-dark border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
+ <div className="flex size-9 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
  <Download className="size-4.5 text-slate-600" strokeWidth={2.2} />
  </div>
  <div>
@@ -2482,8 +2486,8 @@ export default function StudentsPage() {
 
  {/* Step 2: Upload Dropzone */}
  <div>
- <label className="group relative flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-card-dark p-6 text-center transition-all duration-200 hover:border-emerald-300 dark:hover:border-emerald-200/80 hover:bg-emerald-50/40 hover:shadow-xs dark:border-emerald-800/60 dark:bg-slate-900/30 dark:hover:border-emerald-200/80 dark:hover:bg-emerald-950/20">
- <div className="mb-2.5 flex size-12 items-center justify-center rounded-xl bg-white dark:bg-card-dark border border-emerald-200/80 dark:border-emerald-800/60 text-[#059669] transition-transform duration-200 group-hover:scale-110 dark:from-emerald-950/60 dark:to-teal-950/40 dark:border-emerald-800/60 dark:text-[#10B981]">
+ <label className="group relative flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-6 text-center transition-all duration-200 hover:border-emerald-300 dark:hover:border-emerald-200/80 hover:bg-emerald-50/40 hover:shadow-xs dark:border-emerald-800/60 dark:bg-slate-900/30 dark:hover:border-emerald-200/80 dark:hover:bg-emerald-950/20">
+ <div className="mb-2.5 flex size-12 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 text-[#059669] transition-transform duration-200 group-hover:scale-110 dark:from-emerald-950/60 dark:to-teal-950/40 dark:border-emerald-800/60 dark:text-[#10B981]">
  <FileSpreadsheet className="size-6" strokeWidth={2.2} />
  </div>
  <p className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100">
@@ -2570,7 +2574,7 @@ export default function StudentsPage() {
  "rounded-xl border p-4 transition-all duration-200",
  overwriteExisting
  ? "border-emerald-200/80 dark:border-emerald-800/60 bg-amber-50/70 dark:border-emerald-800/60 dark:bg-amber-950/25"
- : "border-emerald-200/80 bg-slate-50/50 dark:border-emerald-800/60 dark:bg-slate-900/30"
+ : "border-emerald-200/80 bg-emerald-500/10 dark:border-emerald-800/60 dark:bg-slate-900/30"
  )}>
  <label className="flex items-start gap-3 cursor-pointer select-none">
  <input
@@ -2745,7 +2749,7 @@ export default function StudentsPage() {
               <button
                 type="button"
                 disabled={isExporting}
-                onClick={handleConfirmExport}
+                onClick={() => handleProcessExport(exportFormat)}
                 className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
               >
                 {isExporting ? (
@@ -2831,7 +2835,7 @@ export default function StudentsPage() {
  className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white h-9.5 px-5 text-xs font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 transition-all active:scale-95 cursor-pointer"
  >
  <Printer className="size-3.5" strokeWidth={2.2} />
- <span>Cetak Tabel Popup</span>
+ <span>Cetak</span>
  </button>
  <button
  type="button"
@@ -2931,7 +2935,7 @@ export default function StudentsPage() {
         >
           {chatTargetModal && (
             <>
- <div className="rounded-xl bg-emerald-50/40 p-3.5 text-xs border-2 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-card-dark space-y-1.5">
+ <div className="rounded-xl bg-emerald-50/40 p-3.5 text-xs border-2 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-[#1B2433] space-y-1.5">
  <div className="flex justify-between py-0.5">
  <span className="text-slate-500">Nama Wali:</span>
  <strong className="text-slate-800 dark:text-slate-200">{chatTargetModal.orangTua || '-'}</strong>
@@ -2958,7 +2962,7 @@ export default function StudentsPage() {
  placeholder="Ketik pesan informasi atau konsultasi untuk orang tua/wali di sini..."
  rows={3}
  maxLength={1000}
- className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-3 text-xs text-slate-900 placeholder:text-slate-400 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:bg-card-dark dark:text-white dark:focus:border-emerald-400 resize-none transition shadow-2xs font-medium"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white p-3 text-xs text-slate-900 placeholder:text-slate-400 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:bg-[#1B2433] dark:text-white dark:focus:border-emerald-400 resize-none transition shadow-2xs font-medium"
  />
  </div>
 
@@ -2968,7 +2972,7 @@ export default function StudentsPage() {
  <button
  type="button"
  onClick={() => handleDirectChatPortal(chatTargetModal)}
- className="flex items-center gap-3 w-full p-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-card-dark hover:border-emerald-300 dark:hover:border-emerald-200/80 text-emerald-950 dark:bg-emerald-950/30 dark:border-emerald-800/60 dark:text-emerald-200 transition cursor-pointer text-left shadow-2xs hover:shadow-xs group"
+ className="flex items-center gap-3 w-full p-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] hover:border-emerald-300 dark:hover:border-emerald-200/80 text-emerald-950 dark:bg-emerald-950/30 dark:border-emerald-800/60 dark:text-emerald-200 transition cursor-pointer text-left shadow-2xs hover:shadow-xs group"
  >
  <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 font-black shadow-xs group-hover:scale-105 transition-transform">
  <MessageSquare className="size-5" />
@@ -2982,7 +2986,7 @@ export default function StudentsPage() {
  <button
  type="button"
  onClick={() => handleDirectWhatsApp(chatTargetModal.noHp, chatTargetModal)}
- className="flex items-center gap-3 w-full p-3 rounded-xl border-2 border-emerald-200/80 bg-white hover:border-emerald-400 text-slate-800 dark:bg-card-dark dark:border-emerald-800/60 dark:text-slate-200 transition cursor-pointer text-left shadow-2xs hover:shadow-xs group"
+ className="flex items-center gap-3 w-full p-3 rounded-xl border-2 border-emerald-200/80 bg-white hover:border-emerald-400 text-slate-800 dark:bg-[#1B2433] dark:border-emerald-800/60 dark:text-slate-200 transition cursor-pointer text-left shadow-2xs hover:shadow-xs group"
  >
  <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 font-black shadow-xs group-hover:scale-105 transition-transform">
  <Phone className="size-5" />
@@ -3075,7 +3079,7 @@ export default function StudentsPage() {
  className={cn(
  "flex size-5 shrink-0 items-center justify-center rounded-lg text-white mt-0.5",
  isEdit
- ? "bg-white dark:bg-card-dark"
+ ? "bg-white dark:bg-[#1B2433]"
  : "bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300"
  )}
  >
@@ -3181,7 +3185,7 @@ export default function StudentsPage() {
  value={mutasiForm.alasan}
  onChange={(e) => setMutasiForm((prev) => ({ ...prev, alasan: e.target.value }))}
  placeholder="Contoh: Lulus jenjang TK naik ke SD, mutasi tempat tinggal, dll"
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3.5 py-2.5 text-xs text-slate-800 focus:border-emerald-200/80 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3.5 py-2.5 text-xs text-slate-800 focus:border-emerald-200/80 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
 
@@ -3195,7 +3199,7 @@ export default function StudentsPage() {
  value={mutasiForm.catatan}
  onChange={(e) => setMutasiForm((prev) => ({ ...prev, catatan: e.target.value }))}
  placeholder="Catatan untuk operator/TU unit tujuan..."
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3.5 py-2 text-xs text-slate-800 focus:border-emerald-200/80 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3.5 py-2 text-xs text-slate-800 focus:border-emerald-200/80 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
 
@@ -3359,7 +3363,7 @@ export default function StudentsPage() {
  value={approvalCatatan}
  onChange={(e) => setApprovalCatatan(e.target.value)}
  placeholder="Contoh: Berkas lengkap, ditempatkan di rombel A"
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3.5 py-2 text-xs text-slate-800 focus:border-emerald-200/80 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3.5 py-2 text-xs text-slate-800 focus:border-emerald-200/80 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
         </AppModal>
@@ -3411,7 +3415,7 @@ export default function StudentsPage() {
  value={rejectReason}
  onChange={(e) => setRejectReason(e.target.value)}
  placeholder="Contoh: Kuota rombel penuh, persyaratan nilai/berkas belum lengkap..."
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3.5 py-2 text-xs text-slate-800 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3.5 py-2 text-xs text-slate-800 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  required
  />
  </div>

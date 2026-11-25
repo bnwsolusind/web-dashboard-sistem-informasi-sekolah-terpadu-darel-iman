@@ -30,6 +30,7 @@ import {
   Clock3,
   Download,
   Edit3,
+  Eye,
   History,
   MessageSquareText,
   Printer,
@@ -52,6 +53,8 @@ import PageContainer from '../components/app/PageContainer'
 import AppSkeleton from '../components/app/AppSkeleton'
 import AppEmptyState from '../components/app/AppEmptyState'
 import AppErrorState from '../components/app/AppErrorState'
+import { TableRoot, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
+import { Pagination } from '@/components/ui/pagination'
 import {
   MasterActionButton,
   MasterActionIconButton,
@@ -432,7 +435,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
  autoFocus
  />
  </div>
@@ -498,6 +501,9 @@ export default function MutabaahFamilyPortal({ mode }) {
  const [signatureOpen, setSignatureOpen] = useState(false)
  const [noteOpen, setNoteOpen] = useState(false)
  const [printModalOpen, setPrintModalOpen] = useState(false)
+ const [staffTableTab, setStaffTableTab] = useState('all')
+ const [staffProgramFilter, setStaffProgramFilter] = useState('all')
+ const [staffTablePage, setStaffTablePage] = useState(1)
 
  // Master options (units, classes) for staff filtering
  const optionsQuery = useQuery({
@@ -512,6 +518,80 @@ export default function MutabaahFamilyPortal({ mode }) {
  queryFn: () => mutabaahService.parentChildren({ unit_id: unitId, class_id: classId, search }),
  enabled: mode === 'parent' || isStaff,
  })
+
+ // Staff monitoring list (status pengisian & paraf orang tua per siswa)
+ const staffMonitoringQuery = useQuery({
+ queryKey: ['mutabaah-staff-parent-monitoring', unitId, classId, search, date],
+ enabled: isStaff,
+ queryFn: () => mutabaahService.recapAnalytics({
+ date_from: date,
+ date_to: date,
+ ...(unitId ? { education_unit_id: unitId } : {}),
+ ...(classId ? { class_id: classId } : {}),
+ ...(search ? { search } : {}),
+ per_page: 200,
+ page: 1,
+ }),
+ })
+
+ const staffMonitoringRows = useMemo(() => {
+ if (!isStaff) return []
+ const recapList = Array.isArray(staffMonitoringQuery.data?.rows?.data)
+ ? staffMonitoringQuery.data.rows.data
+ : (Array.isArray(staffMonitoringQuery.data?.data?.rows?.data) ? staffMonitoringQuery.data.data.rows.data : [])
+ const source = recapList.length > 0
+ ? recapList.map((r) => {
+ const uName = r.unit_name || '-'
+ const isBoarding = /ponpes|pesantren|mahad|boarding/i.test(uName)
+ const progress = Number(r.progress || 0)
+ const isSigned = Boolean(r.parent_signed || r.signature_status === 'signed' || r.signature_status === 'approved')
+ return {
+ id: String(r.id),
+ name: r.full_name || r.name || '-',
+ nis: r.nis || '-',
+ class_name: r.class_name || '-',
+ unit_name: uName,
+ program: isBoarding ? 'boarding' : 'fullday',
+ progress,
+ isSigned,
+ finalized: Boolean(r.finalized),
+ }
+ })
+ : (children.data || []).map((c) => {
+ const uName = c.unit || '-'
+ const isBoarding = /ponpes|pesantren|mahad|boarding/i.test(uName)
+ return {
+ id: String(c.id),
+ name: c.name || '-',
+ nis: c.nis || '-',
+ class_name: c.class_name || '-',
+ unit_name: uName,
+ program: isBoarding ? 'boarding' : 'fullday',
+ progress: Number(c.progress || 0),
+ isSigned: Boolean(c.parent_signed),
+ finalized: Boolean(c.finalized),
+ }
+ })
+ return source
+ }, [isStaff, staffMonitoringQuery.data, children.data])
+
+ const filteredStaffRows = useMemo(() => {
+ return staffMonitoringRows.filter((r) => {
+ if (staffProgramFilter !== 'all' && r.program !== staffProgramFilter) return false
+ if (staffTableTab === 'signed') return r.isSigned
+ if (staffTableTab === 'filled') return r.progress > 0 && !r.isSigned
+ if (staffTableTab === 'empty') return r.progress === 0
+ return true
+ })
+ }, [staffMonitoringRows, staffProgramFilter, staffTableTab])
+
+ const STAFF_PAGE_SIZE = 10
+ const staffTotalPages = Math.max(1, Math.ceil(filteredStaffRows.length / STAFF_PAGE_SIZE))
+ const staffSafePage = Math.min(staffTablePage, staffTotalPages)
+ const paginatedStaffRows = useMemo(() => {
+ const start = (staffSafePage - 1) * STAFF_PAGE_SIZE
+ return filteredStaffRows.slice(start, start + STAFF_PAGE_SIZE)
+ }, [filteredStaffRows, staffSafePage])
 
  const unitOptions = useMemo(() => {
  const list = (optionsQuery.data?.units || []).map((u) => ({
@@ -646,47 +726,57 @@ export default function MutabaahFamilyPortal({ mode }) {
  label="Total Santri Terhubung"
  value={children.data?.length || (data?.student ? 1 : 0)}
  subtext={isStaff ? 'Santri terpilih / binaan' : 'Anak terdaftar di portal'}
+ footerLabel="Data Terhubung"
  tag="Terhubung"
  tone="blue"
+ valueClassName="text-2xl sm:text-3xl"
  />
  <ModernKpiCard
  icon={CheckCircle2}
  label="Pencapaian Hari Ini"
  value={`${Math.round(data?.today?.score || 0)}%`}
  subtext="Capaian amalan ibadah harian"
+ footerLabel="Skor Harian"
  tag="Harian"
  tone="emerald"
+ valueClassName="text-2xl sm:text-3xl"
  />
  <ModernKpiCard
  icon={Signature}
  label="Status Paraf Ortu"
  value={data?.today?.signature ? 'Sudah Diparaf' : 'Menunggu Paraf'}
  subtext={data?.today?.signature ? `Jenis: ${data.today.signature.signature_status}` : 'Belum dikonfirmasi ortu'}
+ footerLabel="Konfirmasi Ortu"
  tag="Paraf"
  tone={data?.today?.signature ? 'emerald' : 'amber'}
+ valueClassName="text-base sm:text-lg"
  />
  <ModernKpiCard
  icon={History}
  label="Riwayat Mutabaah"
  value={history.data?.rows?.data?.length || 0}
  subtext="Hari difinalisasi tersimpan"
+ footerLabel="Log Tersimpan"
  tag="Riwayat"
  tone="blue"
+ valueClassName="text-2xl sm:text-3xl"
  />
  </motion.div>
 
  {/* 🧭 SUB NAV */}
  <MutabaahSubNav />
 
- {/* 🟢 MAIN WORKSPACE CARD (ANIMATED CONTAINER §K) */}
- <motion.section
+ {/* 🟢 MAIN WORKSPACE CONTAINER (SPLIT CARDS & GRIDS) */}
+ <motion.div
  initial="hidden"
  animate="visible"
  variants={containerVariants}
- className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433] space-y-5"
+ className="space-y-5"
  >
+ {/* CARD 1: HEADER & FILTERS */}
+ <section className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433]">
  {/* BARIS 1: TITLE & ACTION BUTTONS (§H.5) */}
- <motion.div variants={itemVariants} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-4 py-3.5 sm:px-6 md:px-8 bg-slate-50/50 dark:bg-slate-900/50 border-b border-emerald-200/80 dark:border-emerald-800/60">
+ <motion.div variants={itemVariants} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-4 py-3.5 sm:px-6 md:px-8 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent border-b border-emerald-200/80 dark:border-emerald-800/60">
  <div className="flex items-center gap-3">
  <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shrink-0 shadow-xs">
  <BookHeart className="size-5" />
@@ -713,11 +803,18 @@ export default function MutabaahFamilyPortal({ mode }) {
 
  {/* MUSYRIF / STAFF NOTE ACTION BUTTON */}
  {isStaff && data?.today && (
- <SquircleActionButton variant="edit" icon={Edit3} label="Edit Catatan Pembimbing" onClick={() => setNoteOpen(true)} />
+ <button
+ type="button"
+ onClick={() => setNoteOpen(true)}
+ title="Edit Catatan Pembimbing"
+ className="inline-flex size-9 items-center justify-center rounded-xl bg-amber-500 hover:bg-amber-600 text-white shadow-xs transition-all active:scale-95 cursor-pointer border-2 border-amber-500"
+ >
+ <Edit3 className="size-4" />
+ </button>
  )}
 
- {/* PARAF ACTION BUTTON */}
- {mode === 'parent' && data?.today && (
+ {/* PARAF ACTION BUTTON (Khusus Akun Orang Tua, bukan Staff) */}
+ {mode === 'parent' && !isStaff && data?.today && (
  <SquircleActionButton variant="secondary" icon={Signature} label="Beri Paraf Ortu" onClick={() => setSignatureOpen(true)} />
  )}
  </div>
@@ -759,7 +856,7 @@ export default function MutabaahFamilyPortal({ mode }) {
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari Nama Santri / NIS..."
- className="w-full h-9 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-800 pl-10 pr-4 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 dark:hover:border-emerald-700/80 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:text-slate-100 dark:hover:border-emerald-600/80"
+ className="w-full h-9 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-800 pl-10 pr-4 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 dark:hover:border-emerald-700/80 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:text-slate-100 dark:hover:border-emerald-600/80"
  />
  </div>
  </div>
@@ -822,12 +919,187 @@ export default function MutabaahFamilyPortal({ mode }) {
  setClassId('')
  setSearch('')
  }}
- className="w-full sm:w-auto sm:ml-auto inline-flex items-center justify-center gap-1.5 h-9 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-900 px-3 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-emerald-50/40 dark:hover:bg-emerald-950/30 transition-all cursor-pointer"
+ className="w-full sm:w-auto sm:ml-auto inline-flex items-center justify-center gap-1.5 h-9 rounded-xl border-2 border-emerald-300 bg-emerald-100/90 hover:bg-emerald-200 px-3.5 text-xs font-extrabold text-emerald-900 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300 dark:hover:bg-emerald-900/60 transition-all cursor-pointer"
  >
  <RotateCcw className="size-3.5" /> Reset
  </button>
  </div>
  </motion.div>
+ </section>
+
+ {/* CARD TABEL MONITORING ORANG TUA (KHUSUS STAFF / SEKOLAH) */}
+ {isStaff && (
+ <section className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433]">
+ <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-4 py-3.5 sm:px-6 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent border-b border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="flex items-center gap-3">
+ <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shrink-0">
+ <Users className="size-5" />
+ </div>
+ <div>
+ <div className="flex items-center gap-2 flex-wrap">
+ <h2 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white">
+ Daftar Status Pengisian &amp; Persetujuan Orang Tua
+ </h2>
+ <span className="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-extrabold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+ {filteredStaffRows.length} Santri
+ </span>
+ </div>
+ <p className="text-xs text-slate-500 dark:text-slate-400">
+ Pantau santri unit Fullday &amp; Boarding yang sudah diisi serta disetujui/diparaf oleh orang tua.
+ </p>
+ </div>
+ </div>
+
+ {/* Filter Program: Semua / Fullday / Boarding */}
+ <div className="flex items-center gap-1.5 p-1 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 self-start sm:self-auto">
+ {[
+ { id: 'all', label: 'Semua Program' },
+ { id: 'fullday', label: 'Fullday' },
+ { id: 'boarding', label: 'Boarding' },
+ ].map((p) => (
+ <button
+ key={p.id}
+ type="button"
+ onClick={() => { setStaffProgramFilter(p.id); setStaffTablePage(1) }}
+ className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer ${
+ staffProgramFilter === p.id
+ ? 'bg-emerald-600 text-white shadow-xs'
+ : 'text-slate-600 hover:text-emerald-700 dark:text-slate-300'
+ }`}
+ >
+ {p.label}
+ </button>
+ ))}
+ </div>
+ </div>
+
+ {/* Segmented Status Tabs */}
+ <div className="px-4 py-2.5 sm:px-6 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/40 dark:bg-emerald-950/20 flex flex-wrap items-center gap-1.5">
+ {[
+ { id: 'all', label: 'Semua', count: staffMonitoringRows.length },
+ { id: 'signed', label: 'Disetujui / Diparaf Ortu', count: staffMonitoringRows.filter((r) => r.isSigned).length },
+ { id: 'filled', label: 'Sudah Diisi (Belum Paraf)', count: staffMonitoringRows.filter((r) => r.progress > 0 && !r.isSigned).length },
+ { id: 'empty', label: 'Belum Diisi', count: staffMonitoringRows.filter((r) => r.progress === 0).length },
+ ].map((t) => (
+ <button
+ key={t.id}
+ type="button"
+ onClick={() => { setStaffTableTab(t.id); setStaffTablePage(1) }}
+ className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer ${
+ staffTableTab === t.id
+ ? 'bg-emerald-600 text-white shadow-xs'
+ : 'text-slate-600 hover:text-emerald-700 hover:bg-emerald-100/60 dark:text-slate-300'
+ }`}
+ >
+ <span>{t.label}</span>
+ <span className={`px-1.5 py-0.5 rounded-md text-[10px] font-black ${
+ staffTableTab === t.id ? 'bg-white text-emerald-800' : 'bg-emerald-200/80 text-emerald-900 dark:bg-emerald-900 dark:text-emerald-200'
+ }`}>
+ {t.count}
+ </span>
+ </button>
+ ))}
+ </div>
+
+ <div className="overflow-x-auto">
+ <TableRoot fullBleed={true} className="text-xs">
+ <TableHeader>
+ <TableRow className="bg-transparent">
+ <TableHead className="px-4 py-3 text-center w-12">No</TableHead>
+ <TableHead className="px-4 py-3">Santri &amp; NIS</TableHead>
+ <TableHead className="px-4 py-3">Kelas &amp; Unit</TableHead>
+ <TableHead className="px-4 py-3 text-center">Program</TableHead>
+ <TableHead className="px-4 py-3 text-center">Capaian</TableHead>
+ <TableHead className="px-4 py-3 text-center">Status Orang Tua</TableHead>
+ <TableHead className="px-4 py-3 text-center w-28">Aksi</TableHead>
+ </TableRow>
+ </TableHeader>
+ <TableBody>
+ {staffMonitoringQuery.isLoading ? (
+ <TableRow>
+ <TableCell colSpan={7} className="p-6 text-center text-slate-500">Memuat daftar status santri...</TableCell>
+ </TableRow>
+ ) : paginatedStaffRows.length === 0 ? (
+ <TableRow>
+ <TableCell colSpan={7} className="p-6 text-center text-slate-500 font-semibold">Belum ada data santri pada kategori ini.</TableCell>
+ </TableRow>
+ ) : (
+ paginatedStaffRows.map((row, idx) => (
+ <TableRow
+ key={row.id}
+ className={String(studentId) === String(row.id) ? 'bg-emerald-50/70 dark:bg-emerald-950/40' : ''}
+ >
+ <TableCell className="px-4 py-3 text-center font-bold text-slate-400 tabular-nums">
+ {(staffSafePage - 1) * STAFF_PAGE_SIZE + idx + 1}
+ </TableCell>
+ <TableCell className="px-4 py-3">
+ <div className="font-extrabold text-slate-900 dark:text-white">{row.name}</div>
+ <div className="text-[10px] font-mono text-indigo-700 dark:text-indigo-300">NIS: {row.nis}</div>
+ </TableCell>
+ <TableCell className="px-4 py-3">
+ <div className="font-semibold text-slate-800 dark:text-slate-200">{row.class_name}</div>
+ <div className="text-[10px] text-slate-500">{row.unit_name}</div>
+ </TableCell>
+ <TableCell className="px-4 py-3 text-center">
+ <span className={`inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase ${
+ row.program === 'boarding'
+ ? 'bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300'
+ : 'bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300'
+ }`}>
+ {row.program === 'boarding' ? 'Boarding' : 'Fullday'}
+ </span>
+ </TableCell>
+ <TableCell className="px-4 py-3 text-center font-black text-emerald-700 dark:text-emerald-300 tabular-nums">
+ {row.progress}%
+ </TableCell>
+ <TableCell className="px-4 py-3 text-center">
+ {row.isSigned ? (
+ <span className="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">
+ Disetujui Ortu
+ </span>
+ ) : row.progress > 0 ? (
+ <span className="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800">
+ Sudah Diisi · Menunggu Paraf
+ </span>
+ ) : (
+ <span className="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-100 text-rose-800">
+ Belum Diisi
+ </span>
+ )}
+ </TableCell>
+ <TableCell className="px-4 py-3 text-center">
+ <button
+ type="button"
+ onClick={() => setStudentId(row.id)}
+ className="inline-flex items-center gap-1 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 text-[11px] font-black shadow-xs transition-all active:scale-95 cursor-pointer"
+ >
+ <Eye className="size-3.5" />
+ <span>Lihat</span>
+ </button>
+ </TableCell>
+ </TableRow>
+ ))
+ )}
+ </TableBody>
+ </TableRoot>
+ </div>
+
+ <div className="flex flex-col sm:flex-row items-center justify-between gap-2 px-4 py-3 sm:px-6 border-t border-emerald-200/80 dark:border-emerald-800/60">
+ <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+ Menampilkan {filteredStaffRows.length === 0 ? 0 : (staffSafePage - 1) * STAFF_PAGE_SIZE + 1}–{Math.min(staffSafePage * STAFF_PAGE_SIZE, filteredStaffRows.length)} dari {filteredStaffRows.length} santri (10/halaman)
+ </span>
+ {staffTotalPages > 1 && (
+ <Pagination
+ currentPage={staffSafePage}
+ totalPages={staffTotalPages}
+ onPageChange={setStaffTablePage}
+ sideLayout="icon"
+ variant="compact"
+ />
+ )}
+ </div>
+ </section>
+ )}
 
  {/* LOADING & ERROR STATES (§U.1) */}
  {(overview.isLoading || children.isLoading) && <AppSkeleton variant="card" className="h-40" />}
@@ -842,7 +1114,7 @@ export default function MutabaahFamilyPortal({ mode }) {
  </motion.div>
 
  {/* REKAP MINGGUAN & BULANAN GRID */}
- <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+ <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
  <ProgressCard title="Rekap Mingguan" data={data.weekly} />
  <ProgressCard title="Rekap Bulanan" data={data.monthly} />
  </motion.div>
@@ -850,7 +1122,7 @@ export default function MutabaahFamilyPortal({ mode }) {
  {/* AGENDA HARI INI */}
  {data.today ? (
  <>
- <motion.div variants={itemVariants} className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 sm:p-6 shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]">
+ <motion.div variants={itemVariants} className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-sm dark:bg-[#1B2433]">
  <div className="flex items-center justify-between mb-4 pb-3.5 border-b border-emerald-200/80 dark:border-emerald-800/60">
  <div className="flex items-center gap-3">
  <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-xs">
@@ -894,26 +1166,35 @@ export default function MutabaahFamilyPortal({ mode }) {
  </div>
  </motion.div>
 
+ {/* GRID 2 KOLOM: CATATAN MUSYRIF & PARAF ORANG TUA */}
+ <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
  {/* CATATAN MUSYRIF / SUPERVISI */}
- <motion.div variants={itemVariants} className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-amber-50/50 p-5 dark:border-emerald-800/60 dark:bg-amber-950/20 flex items-start justify-between gap-3">
+ <div className="rounded-[22px] border-2 border-amber-300/80 dark:border-amber-800/60 bg-amber-50/50 p-5 dark:bg-amber-950/20 flex items-start justify-between gap-3 h-full">
  <div className="flex items-start gap-3">
- <div className="p-2.5 rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm shrink-0">
+ <div className="p-2.5 rounded-xl bg-amber-100 border-2 border-amber-300 dark:border-amber-800 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 shadow-xs shrink-0">
  <MessageSquareText className="size-5" />
  </div>
  <div>
- <h3 className="text-xs font-bold text-slate-900 dark:text-white">Catatan Pembimbing / Musyrif / Kepala Sekolah</h3>
- <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
+ <h3 className="text-xs sm:text-sm font-extrabold text-slate-900 dark:text-white">Catatan Pembimbing / Musyrif / Kepala Sekolah</h3>
+ <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
  {data.today.notes || 'Belum ada catatan pembimbing untuk hari ini.'}
  </p>
  </div>
  </div>
  {isStaff && (
- <MasterActionIconButton variant="edit" label="Edit Catatan" onClick={() => setNoteOpen(true)} />
+ <button
+ type="button"
+ onClick={() => setNoteOpen(true)}
+ title="Edit Catatan"
+ className="inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-amber-500 hover:bg-amber-600 text-white shadow-xs transition-all active:scale-95 cursor-pointer border-2 border-amber-500"
+ >
+ <Edit3 className="size-4" />
+ </button>
  )}
- </motion.div>
+ </div>
 
  {/* PARAF ORANG TUA (STATUS & CONFIRMATION) */}
- <motion.div variants={itemVariants} className="rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/60 p-5 dark:border-emerald-800/60 dark:bg-emerald-950/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+ <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-emerald-50/60 p-5 dark:bg-emerald-950/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 h-full">
  <div className="flex items-center gap-3">
  <div className="p-3 rounded-xl bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300 shrink-0">
  <Signature className="size-6" />
@@ -933,11 +1214,20 @@ export default function MutabaahFamilyPortal({ mode }) {
  </div>
  </div>
 
- {mode === 'parent' && (
+ {mode === 'parent' && !isStaff ? (
  <MasterActionButton variant="primary" icon={Signature} onClick={() => setSignatureOpen(true)}>
  {data.today.signature ? 'Perbarui Paraf' : 'Beri Paraf Persetujuan'}
  </MasterActionButton>
+ ) : (
+ <span className={`inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-extrabold border shrink-0 ${
+ data.today.signature
+ ? 'bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-900/60 dark:text-emerald-200 dark:border-emerald-700'
+ : 'bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-950/60 dark:text-amber-200 dark:border-amber-700'
+ }`}>
+ {data.today.signature ? 'Sudah Diparaf Ortu' : 'Menunggu Paraf Ortu'}
+ </span>
  )}
+ </div>
  </motion.div>
  </>
  ) : (
@@ -988,7 +1278,7 @@ export default function MutabaahFamilyPortal({ mode }) {
  subtitle={`Tanggal: ${new Date(`${date}T12:00:00`).toLocaleDateString('id-ID', { dateStyle: 'full' })}`}
  />
  )}
- </motion.section>
+ </motion.div>
  </PageContainer>
  )
 }
@@ -998,7 +1288,7 @@ function StudentSummary({ data }) {
  <motion.div
  whileHover={{ y: -2, scale: 1.01 }}
  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 shadow-xs dark:border-emerald-800/60 dark:bg-[#1B2433] flex items-center justify-between gap-4"
+ className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 shadow-sm dark:bg-[#1B2433] flex items-center justify-between gap-4"
  >
  <div className="flex items-center gap-3.5">
  {data.student.photo ? (
@@ -1070,8 +1360,8 @@ function ProgressRing({ value }) {
 
 function HistoryTimeline({ rows }) {
  return (
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 shadow-xs dark:border-emerald-800/60 dark:bg-[#1B2433]">
- <div className="flex items-center gap-2.5 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-3 dark:border-emerald-800/60 mb-4">
+ <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 shadow-sm dark:bg-[#1B2433]">
+ <div className="flex items-center gap-2.5 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-3 mb-4">
  <div className="flex size-8 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm shrink-0">
  <History className="size-4" />
  </div>

@@ -311,7 +311,7 @@ export default function BantuanPage() {
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
  placeholder="Cari topik bantuan (cth: reset password, absensi sholat, cetak rapor, setoran tahfizh, mutasi)..."
- className="w-full rounded-xl border border-emerald-200/80 bg-white/90 py-3.5 pl-12 pr-10 text-sm font-medium text-slate-800 shadow-lg shadow-sm transition-all placeholder:text-slate-400 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-900/90 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-emerald-200/80 dark:border-emerald-800/60 dark:focus:bg-slate-900"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white/90 py-3.5 pl-12 pr-10 text-sm font-medium text-slate-800 shadow-lg shadow-sm transition-all placeholder:text-slate-400 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-900/90 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-emerald-200/80 dark:border-emerald-800/60 dark:focus:bg-slate-900"
  />
  {searchQuery && (
  <button
@@ -723,7 +723,7 @@ export default function BantuanPage() {
  placeholder="Masukkan nama Anda"
  value={ticketForm.name}
  onChange={(e) => setTicketForm({ ...ticketForm, name: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
 
@@ -737,7 +737,7 @@ export default function BantuanPage() {
  placeholder="0812xxxxxxx"
  value={ticketForm.phone}
  onChange={(e) => setTicketForm({ ...ticketForm, phone: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
  </div>
@@ -789,7 +789,7 @@ export default function BantuanPage() {
  placeholder="Contoh: Tidak bisa akses menu input nilai rapor kelas 8A"
  value={ticketForm.subject}
  onChange={(e) => setTicketForm({ ...ticketForm, subject: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
 
@@ -803,7 +803,7 @@ export default function BantuanPage() {
  placeholder="Jelaskan kronologi kendala, pesan error yang muncul, atau halaman lokasi masalah..."
  value={ticketForm.description}
  onChange={(e) => setTicketForm({ ...ticketForm, description: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3.5 py-2.5 text-xs font-medium text-slate-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
  </form>

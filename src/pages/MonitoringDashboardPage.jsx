@@ -398,14 +398,14 @@ export default function MonitoringDashboardPage() {
             </div>
 
             <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
-              <button
- type="button"
- onClick={handleManualRefresh}
- className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] px-3.5 py-1.5 text-xs font-black text-emerald-900 dark:border-emerald-800/60 dark:bg-[#1B2433] dark:text-emerald-200 shadow-2xs hover:bg-emerald-200 transition-colors cursor-pointer"
- >
- <RefreshCw className={`h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 ${isTeacherLoading ? 'animate-spin' : ''}`} />
- <span>Segarkan Data</span>
- </button>
+              <SquircleActionButton
+                variant="refresh"
+                icon={RefreshCw}
+                label="Segarkan Data"
+                showLabel
+                loading={isTeacherLoading}
+                onClick={handleManualRefresh}
+              />
             </div>
           </div>
 
@@ -440,10 +440,10 @@ export default function MonitoringDashboardPage() {
  </div>
 
  {/* Indikator Perlu Perhatian Card Container */}
- <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-md shadow-emerald-500/10 dark:bg-card-dark">
- <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433]">
+ <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-emerald-500/10 border-b border-emerald-200/80 dark:border-emerald-800/60 p-4 sm:p-5">
  <div className="flex items-center gap-3">
- <div className="flex h-9 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-700 border-2 border-amber-300 dark:bg-amber-950/60 dark:border-amber-700/80 dark:text-amber-300 shadow-sm">
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-amber-500 text-white shadow-sm">
  <AlertTriangle className="h-5 w-5" />
  </div>
  <div>
@@ -457,14 +457,15 @@ export default function MonitoringDashboardPage() {
  </div>
  <div className="flex items-center gap-2">
  {alerts.length > 0 && (
- <span className="rounded-lg px-2.5 py-1 text-xs font-extrabold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border border-emerald-200/80 dark:border-emerald-800/60">
+ <span className="rounded-full px-2.5 py-1 text-xs font-extrabold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/60">
  {alerts.length} Perhatian
  </span>
  )}
  <SquircleActionButton
- variant="view"
+ variant="print"
  icon={Printer}
  label="Cetak"
+ showLabel
  onClick={() => {
  printCleanTable({
  title: 'Laporan Indikator Kinerja Perlu Perhatian',
@@ -476,7 +477,7 @@ export default function MonitoringDashboardPage() {
  />
  </div>
  </div>
- <div className="pt-4">
+ <div className="p-4 sm:p-5">
  {alerts.length ? (
  <div className="space-y-2.5">
  {alerts.map((item) => (

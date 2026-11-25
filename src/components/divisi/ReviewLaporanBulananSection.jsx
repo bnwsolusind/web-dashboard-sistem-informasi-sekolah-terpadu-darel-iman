@@ -385,8 +385,8 @@ export default function ReviewLaporanBulananSection({ onDataMutate }) {
  </div>
  ) : (
  <Table aria-label="Tabel Review Laporan Bulanan">
- <TableHeader>
- <TableRow className="bg-slate-50/80 border-b border-emerald-200/80 dark:bg-slate-900/80 dark:border-emerald-800/60">
+ <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
+ <TableRow>
  <TableCell className="font-extrabold text-xs text-emerald-950 dark:text-emerald-200">KODE & JUDUL LAPORAN</TableCell>
  <TableCell className="font-extrabold text-xs text-emerald-950 dark:text-emerald-200">UNIT SEKOLAH & PENGINPUT</TableCell>
  <TableCell className="font-extrabold text-xs text-emerald-950 dark:text-emerald-200">PERIODE & TANGGAL KIRIM</TableCell>

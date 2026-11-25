@@ -918,7 +918,7 @@ export function FoundationInformationPage() {
  placeholder="Contoh: Penerimaan Peserta Didik Baru (PPDB) T.A. 2026/2027"
  value={infoForm.judul}
  onChange={(e) => setInfoForm((prev) => ({ ...prev, judul: e.target.value }))}
- className="w-full h-9 px-3.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 dark:border-emerald-800/60 dark:bg-slate-800 text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-200/80"
+ className="w-full h-9 px-3.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50 dark:border-emerald-800/60 dark:bg-slate-800 text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-200/80"
  required
  />
  </div>
@@ -932,7 +932,7 @@ export function FoundationInformationPage() {
  placeholder="Tuliskan isi pengumuman atau berita secara lengkap..."
  value={infoForm.isi}
  onChange={(e) => setInfoForm((prev) => ({ ...prev, isi: e.target.value }))}
- className="w-full p-3.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 dark:border-emerald-800/60 dark:bg-slate-800 text-xs font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-200/80 leading-relaxed"
+ className="w-full p-3.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50 dark:border-emerald-800/60 dark:bg-slate-800 text-xs font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-200/80 leading-relaxed"
  required
  />
  </div>
@@ -947,7 +947,7 @@ export function FoundationInformationPage() {
  placeholder="Contoh: Humas Yayasan"
  value={infoForm.penulis}
  onChange={(e) => setInfoForm((prev) => ({ ...prev, penulis: e.target.value }))}
- className="w-full h-9 px-3.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 dark:border-emerald-800/60 dark:bg-slate-800 text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-200/80"
+ className="w-full h-9 px-3.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50 dark:border-emerald-800/60 dark:bg-slate-800 text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-200/80"
  />
  </div>
 

@@ -184,7 +184,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
  autoFocus
  />
  </div>
@@ -891,7 +891,7 @@ export default function MasterDataDinamisPage() {
  placeholder="Contoh: SD, TK, KLS"
  value={testExtra}
  onChange={(e) => setTestExtra(e.target.value)}
- className="w-full px-3 py-2 rounded-xl text-xs sm:text-sm border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100"
+ className="w-full px-3 py-2 rounded-xl text-xs sm:text-sm border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100"
  />
  </div>
 
@@ -1024,7 +1024,7 @@ export default function MasterDataDinamisPage() {
  placeholder="contoh: alumni_track_category"
  value={optionForm.custom_group}
  onChange={(e) => setOptionForm(prev => ({ ...prev, custom_group: e.target.value }))}
- className="w-full px-3 py-2 rounded-xl text-xs sm:text-sm border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-mono"
+ className="w-full px-3 py-2 rounded-xl text-xs sm:text-sm border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-mono"
  required
  />
  </div>
@@ -1039,7 +1039,7 @@ export default function MasterDataDinamisPage() {
  placeholder="Contoh: Pegawai Negeri, Asrama, dll."
  value={optionForm.name}
  onChange={(e) => setOptionForm(prev => ({ ...prev, name: e.target.value }))}
- className="w-full px-3 py-2 rounded-xl text-xs sm:text-sm border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100"
+ className="w-full px-3 py-2 rounded-xl text-xs sm:text-sm border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100"
  required
  />
  </div>
@@ -1054,7 +1054,7 @@ export default function MasterDataDinamisPage() {
  placeholder="AUTO-SLUG"
  value={optionForm.code}
  onChange={(e) => setOptionForm(prev => ({ ...prev, code: e.target.value }))}
- className="w-full px-3 py-2 rounded-xl text-xs sm:text-sm border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-mono"
+ className="w-full px-3 py-2 rounded-xl text-xs sm:text-sm border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-mono"
  />
  </div>
 
@@ -1067,7 +1067,7 @@ export default function MasterDataDinamisPage() {
  min="0"
  value={optionForm.order}
  onChange={(e) => setOptionForm(prev => ({ ...prev, order: e.target.value }))}
- className="w-full px-3 py-2 rounded-xl text-xs sm:text-sm border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100"
+ className="w-full px-3 py-2 rounded-xl text-xs sm:text-sm border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100"
  />
  </div>
  </div>
@@ -1081,7 +1081,7 @@ export default function MasterDataDinamisPage() {
  placeholder="Keterangan singkat mengenai opsi ini..."
  value={optionForm.description}
  onChange={(e) => setOptionForm(prev => ({ ...prev, description: e.target.value }))}
- className="w-full px-3 py-2 rounded-xl text-xs sm:text-sm border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100"
+ className="w-full px-3 py-2 rounded-xl text-xs sm:text-sm border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100"
  />
  </div>
 
@@ -1143,7 +1143,7 @@ export default function MasterDataDinamisPage() {
  type="text"
  value={ENTITY_TYPE_LABELS[configForm.entity_type] || configForm.entity_type}
  disabled
- className="w-full px-3 py-2 rounded-xl text-xs sm:text-sm border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-bold"
+ className="w-full px-3 py-2 rounded-xl text-xs sm:text-sm border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-bold"
  />
  </div>
 
@@ -1157,7 +1157,7 @@ export default function MasterDataDinamisPage() {
  placeholder="Contoh: KLS, MDS"
  value={configForm.prefix}
  onChange={(e) => setConfigForm(prev => ({ ...prev, prefix: e.target.value }))}
- className="w-full px-3 py-2 rounded-xl text-xs sm:text-sm border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-mono"
+ className="w-full px-3 py-2 rounded-xl text-xs sm:text-sm border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-mono"
  />
  </div>
 
@@ -1171,7 +1171,7 @@ export default function MasterDataDinamisPage() {
  maxLength={5}
  value={configForm.separator}
  onChange={(e) => setConfigForm(prev => ({ ...prev, separator: e.target.value }))}
- className="w-full px-3 py-2 rounded-xl text-xs sm:text-sm border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-mono"
+ className="w-full px-3 py-2 rounded-xl text-xs sm:text-sm border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-mono"
  />
  </div>
  </div>
@@ -1186,7 +1186,7 @@ export default function MasterDataDinamisPage() {
  max={10}
  value={configForm.padding_length}
  onChange={(e) => setConfigForm(prev => ({ ...prev, padding_length: e.target.value }))}
- className="w-full px-3 py-2 rounded-xl text-xs sm:text-sm border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-mono"
+ className="w-full px-3 py-2 rounded-xl text-xs sm:text-sm border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-mono"
  required
  />
  </div>
@@ -1200,7 +1200,7 @@ export default function MasterDataDinamisPage() {
  placeholder="{PREFIX}{SEPARATOR}{EXTRA}{SEPARATOR}{SEQUENCE}"
  value={configForm.format_pattern}
  onChange={(e) => setConfigForm(prev => ({ ...prev, format_pattern: e.target.value }))}
- className="w-full px-3 py-2 rounded-xl text-xs sm:text-sm border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-mono"
+ className="w-full px-3 py-2 rounded-xl text-xs sm:text-sm border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-mono"
  required
  />
  </div>

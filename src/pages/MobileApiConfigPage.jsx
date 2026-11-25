@@ -350,7 +350,7 @@ function HeroUiFilterSelect({
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Cari..."
-                    className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                     autoFocus
                   />
                 </div>
@@ -1446,7 +1446,7 @@ export default function MobileApiConfigPage() {
                         Pesan Pemeliharaan ke Pengguna
                         <textarea
                           rows={3}
-                          className="mt-1.5 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 text-xs text-slate-800 outline-none focus:border-amber-600 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+                          className="mt-1.5 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-3 text-xs text-slate-800 outline-none focus:border-amber-600 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
                           value={config.system?.maintenance_message || ''}
                           onChange={(e) => updateSystem('maintenance_message', e.target.value)}
                           placeholder="Tuliskan alasan pemeliharaan dan perkiraan waktu selesai..."
@@ -1689,7 +1689,7 @@ export default function MobileApiConfigPage() {
                                 Deskripsi Ringkas Fitur
                                 <textarea
                                   rows={3}
-                                  className="mt-1.5 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 text-xs leading-relaxed text-slate-800 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+                                  className="mt-1.5 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-3 text-xs leading-relaxed text-slate-800 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
                                   value={slide.description || slide.desc || ''}
                                   onChange={(e) => updateOnboardingSlide(idx, 'description', e.target.value)}
                                   placeholder="Jelaskan kemudahan dan manfaat fitur ini bagi pengguna baru..."

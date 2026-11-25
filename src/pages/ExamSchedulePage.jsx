@@ -1873,7 +1873,7 @@ export default function ExamSchedulePage() {
  value={scheduleForm.room}
  onChange={(e) => setScheduleForm({ ...scheduleForm, room: e.target.value })}
  placeholder="Contoh: Lab Komputer 1 / Ruang 10-A"
- className="h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3.5 outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3.5 outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white"
  />
  </div>
 
@@ -1906,7 +1906,7 @@ export default function ExamSchedulePage() {
  value={scheduleForm.notes}
  onChange={(e) => setScheduleForm({ ...scheduleForm, notes: e.target.value })}
  placeholder="Contoh: Membawa pensil 2B, kalkulator dilarang..."
- className="h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3.5 outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3.5 outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white"
  />
  </div>
  </form>
@@ -1951,7 +1951,7 @@ export default function ExamSchedulePage() {
  value={categoryForm.name}
  onChange={(e) => setCategoryForm({ ...categoryForm, name: e.target.value })}
  placeholder="Contoh: Penilaian Akhir Tahun (PAT Kenaikan Kelas)"
- className="h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3.5 outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3.5 outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white"
  />
  </div>
 
@@ -1965,7 +1965,7 @@ export default function ExamSchedulePage() {
  value={categoryForm.code}
  onChange={(e) => setCategoryForm({ ...categoryForm, code: e.target.value })}
  placeholder="Contoh: PAT / PTS"
- className="h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3.5 uppercase font-mono outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3.5 uppercase font-mono outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white"
  />
  </div>
 

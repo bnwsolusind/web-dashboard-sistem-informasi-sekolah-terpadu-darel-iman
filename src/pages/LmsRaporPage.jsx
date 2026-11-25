@@ -1418,7 +1418,7 @@ export default function LmsRaporPage({ tabNav = null }) {
  placeholder="Cari Siswa / NISN..."
  value={filters.search}
  onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value }))}
- className="w-full pl-8 pr-3 h-9 text-xs rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full pl-8 pr-3 h-9 text-xs rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
  </div>
@@ -1919,7 +1919,7 @@ export default function LmsRaporPage({ tabNav = null }) {
  rows={3}
  value={formData.catatan_wali_kelas}
  onChange={(e) => setFormData({ ...formData, catatan_wali_kelas: e.target.value })}
- className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-sm"
+ className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-sm"
  />
  </div>
 
@@ -1931,7 +1931,7 @@ export default function LmsRaporPage({ tabNav = null }) {
  rows={2}
  value={formData.catatan_kepala_sekolah}
  onChange={(e) => setFormData({ ...formData, catatan_kepala_sekolah: e.target.value })}
- className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-sm"
+ className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-sm"
  />
  </div>
 
@@ -2105,7 +2105,7 @@ export default function LmsRaporPage({ tabNav = null }) {
  placeholder="Cari nama, NIS, kelas..."
  value={cardModal.searchQuery}
  onChange={(e) => setCardModal((prev) => ({ ...prev, searchQuery: e.target.value, page: 1 }))}
- className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
 
@@ -2287,7 +2287,7 @@ export default function LmsRaporPage({ tabNav = null }) {
  placeholder="Cari siswa untuk dicetak..."
  value={printSearchQuery}
  onChange={(e) => setPrintSearchQuery(e.target.value)}
- className="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
 

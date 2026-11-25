@@ -14,7 +14,7 @@ import {
  Layers,
 } from 'lucide-react'
 import Swal from '@/components/ui/compat/swal-heroui'
-import { AppDataTable } from '../app'
+import { AppDataTable, KpiStatCard } from '../app'
 import { Card, CardHeader, CardTitle, CardDescription, CardAction, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -608,14 +608,14 @@ export default function TeacherMonitoringPanel({ data, loading, error, filters =
  return (
  <>
  {/* Modern Emerald Datatable Container */}
- <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]">
- <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-emerald-200/80 dark:border-emerald-800/80 bg-slate-50/50 dark:bg-slate-900/50 p-5">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433]">
+ <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-500/10 p-4 sm:p-5">
  <div className="flex items-center gap-3">
- <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-700 shadow-xs dark:bg-emerald-950/40 dark:border-emerald-700/80 dark:text-emerald-300 shadow-sm">
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
  <Radio className="h-5 w-5 animate-pulse" />
  </div>
  <div>
- <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+ <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
  Monitoring Data Guru Mengajar
  </h3>
  <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -626,9 +626,10 @@ export default function TeacherMonitoringPanel({ data, loading, error, filters =
 
  <div className="relative top-0 right-0 sm:static flex items-center gap-2">
  <SquircleActionButton
- variant="view"
+ variant="print"
  icon={Printer}
  label="Cetak"
+ showLabel
  onClick={() => setIsPrintModalOpen(true)}
  />
  </div>
@@ -636,7 +637,7 @@ export default function TeacherMonitoringPanel({ data, loading, error, filters =
 
  <div className="p-4 md:p-6 space-y-6">
  {/* FILTER PERIODE PILL TAB SWITCHER */}
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 p-4.5 shadow-xs dark:border-emerald-800/60 dark:bg-slate-900/40 space-y-4">
+ <div className="rounded-2xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/30 p-4.5 shadow-xs dark:bg-slate-900/40 space-y-4">
  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-100/80 dark:border-emerald-800/60 pb-3">
  <div className="flex items-center gap-2">
  <Filter className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
@@ -711,7 +712,7 @@ export default function TeacherMonitoringPanel({ data, loading, error, filters =
  value={String(filters.month || (new Date().getMonth() + 1))}
  onChange={(val) => onFilterChange({ ...filters, month: String(val) })}
  >
- <SelectTrigger className="h-10 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs font-semibold dark:border-emerald-700/80 dark:bg-slate-900 dark:text-emerald-600">
+ <SelectTrigger className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3 text-xs font-bold text-slate-800 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100">
  <SelectValue placeholder="Pilih Bulan..." />
  </SelectTrigger>
  <SelectContent className="z-50 max-h-60 overflow-y-auto bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 rounded-xl shadow-xl p-1">
@@ -730,7 +731,7 @@ export default function TeacherMonitoringPanel({ data, loading, error, filters =
  value={filters.year || String(new Date().getFullYear())}
  onChange={(e) => onFilterChange({ ...filters, year: e.target.value })}
  placeholder="2026"
- className="h-10 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs font-semibold dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white outline-none focus:border-emerald-600"
+ className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3 text-xs font-bold text-slate-800 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
  </>
@@ -743,7 +744,7 @@ export default function TeacherMonitoringPanel({ data, loading, error, filters =
  value={String(filters.semester_id || '')}
  onChange={(val) => onFilterChange({ ...filters, semester_id: String(val) })}
  >
- <SelectTrigger className="h-10 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs font-semibold dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-600">
+ <SelectTrigger className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3 text-xs font-bold text-slate-800 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100">
  <SelectValue placeholder="-- Semester Aktif --" />
  </SelectTrigger>
  <SelectContent className="z-50 max-h-60 overflow-y-auto bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 rounded-xl shadow-xl p-1">
@@ -765,7 +766,7 @@ export default function TeacherMonitoringPanel({ data, loading, error, filters =
  value={String(filters.academic_year_id || '')}
  onChange={(val) => onFilterChange({ ...filters, academic_year_id: String(val) })}
  >
- <SelectTrigger className="h-10 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs font-semibold dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white">
+ <SelectTrigger className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3 text-xs font-bold text-slate-800 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100">
  <SelectValue placeholder="-- Tahun Ajaran Aktif --" />
  </SelectTrigger>
  <SelectContent className="z-50 max-h-60 overflow-y-auto bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 rounded-xl shadow-xl p-1">
@@ -787,7 +788,7 @@ export default function TeacherMonitoringPanel({ data, loading, error, filters =
  value={String(filters.unit_id || '')}
  onChange={(val) => onFilterChange({ ...filters, unit_id: String(val) })}
  >
- <SelectTrigger className="h-10 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs font-semibold dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white">
+ <SelectTrigger className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3 text-xs font-bold text-slate-800 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100">
  <SelectValue placeholder="-- Semua Unit Pendidikan --" />
  </SelectTrigger>
  <SelectContent className="z-50 max-h-60 overflow-y-auto bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 rounded-xl shadow-xl p-1">
@@ -821,42 +822,29 @@ export default function TeacherMonitoringPanel({ data, loading, error, filters =
  {/* Modern KPI Summary Grid */}
  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
  {[
- { key: 'scheduled_today', title: 'Total Guru', icon: Users, tone: 'blue', tag: 'Guru' },
+ { key: 'scheduled_today', title: 'Total Guru', icon: Users, tone: 'sky', tag: 'Guru' },
  { key: 'checked_in', title: 'Sudah Presensi', icon: Clock3, tone: 'emerald', tag: 'Presensi' },
  { key: 'not_checked_in', title: 'Belum Presensi', icon: Activity, tone: 'amber', tag: 'Belum' },
  { key: 'late', title: 'Terlambat', icon: Clock3, tone: 'rose', tag: 'Terlambat' },
  { key: 'active', title: 'Sedang Mengajar', icon: Radio, tone: 'purple', tag: 'Mengajar' },
- { key: 'completed', title: 'Selesai / Capaian', icon: BookOpen, tone: 'cyan', tag: 'Selesai' },
- ].map(({ key, title, icon: Icon, tone, tag }) => {
- const t = MODERN_CARD_TONES[tone] || MODERN_CARD_TONES.emerald
- return (
- <div
+ { key: 'completed', title: 'Selesai / Capaian', icon: BookOpen, tone: 'teal', tag: 'Selesai' },
+ ].map(({ key, title, icon, tone, tag }) => (
+ <KpiStatCard
  key={key}
- className={`group relative overflow-hidden rounded-[22px] border-2 p-4 sm:p-5 shadow-xs transition-all duration-200 text-left ${t.card}`}
- >
- <div className="flex items-center justify-between gap-1.5 mb-3">
- <div className={`flex size-11 items-center justify-center rounded-full shadow-xs shrink-0 ${t.iconBox}`}>
- <Icon className="size-5 text-white" />
- </div>
- <div className="flex flex-col items-end gap-0.5">
- <span className={`text-[10px] font-extrabold uppercase tracking-wider ${t.tagHeader || t.title}`}>{title}</span>
- <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs ${t.tag}`}>
- {tag}
- </span>
- </div>
- </div>
- <strong className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tabular-nums tracking-tight block my-1">{summary[key] ?? 0}</strong>
- <div className={`flex items-center justify-between text-xs font-bold pt-2.5 mt-3 border-t ${t.divider}`}>
- <span className={`font-bold leading-tight truncate flex-1 ${t.sub}`}>Jumlah Guru</span>
- <span className={`inline-flex items-center gap-1 font-extrabold ${t.cta}`}>Detail &rarr;</span>
- </div>
- </div>
- )
- })}
+ title={title}
+ value={summary[key] ?? 0}
+ description="Jumlah Guru"
+ badge={tag}
+ icon={icon}
+ tone={tone}
+ leftFooterText="Data Guru"
+ ctaText="Detail"
+ />
+ ))}
  </div>
 
  {/* TOOLBAR UTAMA TOMBOL AKSI DI ATAS DATATABLE */}
- <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-emerald-200/80 bg-slate-50/80 p-3.5 dark:border-emerald-800/60 dark:bg-[#1B2433]/80">
+ <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/40 p-3.5 dark:bg-[#1B2433]/80">
  <div className="flex items-center gap-2">
  <Layers className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
  <span className="text-xs font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-200">
@@ -868,33 +856,37 @@ export default function TeacherMonitoringPanel({ data, loading, error, filters =
  <SquircleActionButton
  variant="import"
  label="Import Data"
+ showLabel
  onClick={() => setIsImportModalOpen(true)}
  />
  <SquircleActionButton
  variant="export"
  label="Export Data"
+ showLabel
  onClick={handleExportCSV}
  />
  <SquircleActionButton
- variant="view"
+ variant="print"
  icon={Printer}
  label="Cetak Data"
+ showLabel
  onClick={() => setIsPrintModalOpen(true)}
  />
- <Button
- variant="ghost"
- size="sm"
+ <SquircleActionButton
+ variant="refresh"
+ icon={RefreshCw}
+ label="Refresh"
+ showLabel
+ loading={loading}
  onClick={onRetry}
- pending={loading}
- prefixIcon={<RefreshCw className="h-4 w-4" />}
- >
- Refresh
- </Button>
+ />
  </div>
  </div>
 
  {/* DATA TABLE MONITORED TEACHERS WITH EXPLICIT COLOR BADGES */}
+ <div className="rounded-2xl border-2 border-emerald-200/90 dark:border-emerald-800/60 overflow-hidden bg-white dark:bg-[#1B2433]">
  <AppDataTable
+ embedded={true}
  title={`Data Ringkasan Guru Mengajar (${activePeriod.toUpperCase()})`}
  description={
  data?.range
@@ -915,6 +907,7 @@ export default function TeacherMonitoringPanel({ data, loading, error, filters =
  emptyDescription="Tidak ada data jadwal atau presensi mengajar guru pada periode terpilih."
  density="compact"
  />
+ </div>
  </>
  )}
  </div>

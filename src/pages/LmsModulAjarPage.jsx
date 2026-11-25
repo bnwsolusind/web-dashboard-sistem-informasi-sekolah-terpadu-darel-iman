@@ -75,6 +75,7 @@ import PageContainer from '../components/app/PageContainer'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
 import ActionDropdown from '../components/app/ActionDropdown'
 import AppModal from '../components/app/AppModal'
+import LmsKpiDetailModal from '../components/lms/LmsKpiDetailModal'
 import {
   printCleanTable,
   downloadPdfTable
@@ -466,7 +467,7 @@ function HeroUiModalSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Ketik untuk mencari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -688,6 +689,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  const [isPrintModalOpen, setIsPrintModalOpen] = useState(false)
  const [isImportModalOpen, setIsImportModalOpen] = useState(false)
  const [isExportModalOpen, setIsExportModalOpen] = useState(false)
+ const [kpiModalKey, setKpiModalKey] = useState(null)
  const [isExporting, setIsExporting] = useState(false)
  const [showSaveConfirmModal, setShowSaveConfirmModal] = useState(false)
  const [deleteTarget, setDeleteTarget] = useState(null)
@@ -1495,6 +1497,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  tone="emerald"
  tag={`${stats.total_modul || 0} Modul`}
  subtext="Terdaftar di sistem sekolah"
+ onClick={() => setKpiModalKey('total')}
  />
  <ModernKpiCard
  label="Draft & Review"
@@ -1503,6 +1506,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  tone="amber"
  tag="Penyusunan"
  subtext="Dalam penyusunan guru"
+ onClick={() => setKpiModalKey('draft_review')}
  />
  <ModernKpiCard
  label="Dipublikasikan"
@@ -1511,6 +1515,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  tone="blue"
  tag="Aktif KBM"
  subtext="Siap digunakan di KBM"
+ onClick={() => setKpiModalKey('published')}
  />
  <ModernKpiCard
  label="TP Ter-cover"
@@ -1519,6 +1524,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  tone="purple"
  tag="Tercakup"
  subtext="Terhubung ke silabus TP"
+ onClick={() => setKpiModalKey('tp_cover')}
  />
  </motion.div>
 
@@ -1583,7 +1589,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  setSearchInput(e.target.value)
  setPage(1)
  }}
- className="h-9 w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-10 pr-10 text-sm text-slate-700 placeholder:text-slate-400 outline-none transition-colors focus:border-emerald-200/80 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-200"
+ className="h-9 w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white pl-10 pr-10 text-sm text-slate-700 placeholder:text-slate-400 outline-none transition-colors focus:border-emerald-200/80 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-200"
  />
  {searchInput && (
  <button
@@ -1804,15 +1810,15 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
                         {item.judul_modul || item.nama_modul}
                       </div>
                       <div className="mt-1 flex items-center gap-1.5 flex-wrap">
-                        <span className="font-mono text-[10px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200/80 dark:border-emerald-800/80 px-2 py-0.5 rounded-md">
+                        <span className="font-mono text-[10px] font-bold text-indigo-800 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800/80 px-2 py-0.5 rounded-md">
                           {item.kode_modul || 'MA-AUTO'}
                         </span>
-                        <span className="font-mono text-[10px] text-slate-500 font-semibold">
+                        <span className="font-mono text-[10px] text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/50 border border-sky-200 dark:border-sky-800/60 px-1.5 py-0.5 rounded-md font-bold">
                           v{item.versi || '1.0'}
                         </span>
                         {item.semester && (
-                          <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400">
-                            • Sem. {item.semester}
+                          <span className="text-[10px] font-bold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/50 border border-purple-200 dark:border-purple-800/60 px-1.5 py-0.5 rounded-md">
+                            Sem. {item.semester}
                           </span>
                         )}
                       </div>
@@ -1821,32 +1827,34 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
 
                   {/* 2. Mapel & Guru */}
                   <TableCell className="px-3.5 py-3.5">
-                    <div className="font-semibold text-xs text-slate-800 dark:text-slate-200">
+                    <div className="font-extrabold text-xs text-indigo-800 dark:text-indigo-300">
                       {item.subject?.nama_mapel || item.subject?.name || '-'}
                     </div>
-                    <div className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5 mt-0.5">
-                      <span className="flex size-4 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-[9px] font-black text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200">
+                    <div className="text-xs text-slate-600 dark:text-slate-300 flex items-center gap-1.5 mt-0.5 font-semibold">
+                      <span className="flex size-4 shrink-0 items-center justify-center rounded-full bg-sky-100 text-[9px] font-black text-sky-700 dark:bg-sky-950 dark:text-sky-300">
                         <User className="size-2.5" />
                       </span>
                       <span className="truncate">
                         {item.user?.nama_lengkap || item.teacher?.nama_lengkap || item.teacher?.name || item.guru?.nama_lengkap || 'Guru Pengampu'}
                       </span>
                     </div>
-                    <div className="text-[10px] text-emerald-700 dark:text-emerald-400 font-bold mt-1">
-                      {item.alokasi_jam || item.alokasi_waktu_jp || 2} JP Alokasi
+                    <div className="mt-1">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200 dark:bg-amber-950/50 dark:text-amber-300 dark:border-amber-800/60 text-[10px] font-extrabold">
+                        {item.alokasi_jam || item.alokasi_waktu_jp || 2} JP Alokasi
+                      </span>
                     </div>
                   </TableCell>
 
                   {/* 3. Kelas, Fase & Tanggal */}
                   <TableCell className="px-3.5 py-3.5">
-                    <div className="font-semibold text-xs text-slate-800 dark:text-slate-200">
+                    <div className="font-bold text-xs text-teal-800 dark:text-teal-300">
                       {item.kelas?.nama_kelas || item.school_class?.name || '-'}
                     </div>
                     <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
-                      <span className="px-1.5 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/50 text-[10px] font-bold text-emerald-800 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60">
+                      <span className="px-2 py-0.5 rounded-md bg-purple-100 dark:bg-purple-950/60 text-[10px] font-extrabold text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-800/60">
                         {getJenjangShortLabel(item.fase)}
                       </span>
-                      <span className="text-[10px] text-slate-400">
+                      <span className="px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-[10px] font-semibold text-slate-600 dark:text-slate-300">
                         {item.created_at ? new Date(item.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}
                       </span>
                     </div>
@@ -1857,12 +1865,12 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
                     <span
                       className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-extrabold border ${
                         item.status === 'Publish'
-                          ? 'bg-emerald-50 text-emerald-800 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/80 dark:text-emerald-300'
+                          ? 'bg-emerald-100 text-emerald-800 border-emerald-300 dark:border-emerald-800/60 dark:bg-emerald-950/80 dark:text-emerald-300'
                           : item.status === 'Review'
-                          ? 'bg-blue-50 text-blue-800 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-blue-950/80 dark:text-blue-300'
+                          ? 'bg-sky-100 text-sky-800 border-sky-300 dark:border-sky-800/60 dark:bg-sky-950/80 dark:text-sky-300'
                           : item.status === 'Arsip'
-                          ? 'bg-slate-100 text-slate-700 border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-300'
-                          : 'bg-amber-50 text-amber-800 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/80 dark:text-amber-300'
+                          ? 'bg-rose-100 text-rose-800 border-rose-300 dark:bg-rose-950/60 dark:text-rose-300'
+                          : 'bg-amber-100 text-amber-800 border-amber-300 dark:border-amber-800/60 dark:bg-amber-950/80 dark:text-amber-300'
                       }`}
                     >
                       {item.status}
@@ -2126,7 +2134,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  value={formData.judul_modul}
  onChange={(e) => setFormData({ ...formData, judul_modul: e.target.value })}
  placeholder="Contoh: Toleransi & Indahnya Keberagaman dalam Islam"
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20"
  />
  </div>
  </div>
@@ -2139,7 +2147,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  type="text"
  value={formData.kode_modul}
  onChange={(e) => setFormData({ ...formData, kode_modul: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
  />
  </div>
 
@@ -2240,7 +2248,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  min="1"
  value={formData.alokasi_waktu_jp}
  onChange={(e) => setFormData({ ...formData, alokasi_waktu_jp: parseInt(e.target.value) || 2 })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
  />
  </div>
 
@@ -2253,7 +2261,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  value={formData.target_peserta_didik}
  onChange={(e) => setFormData({ ...formData, target_peserta_didik: e.target.value })}
  placeholder="Contoh: Peserta Didik Reguler (28-32 Siswa)"
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
  />
  </div>
  </div>
@@ -2271,7 +2279,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  value={formData.tujuan_pembelajaran}
  onChange={(e) => setFormData({ ...formData, tujuan_pembelajaran: e.target.value })}
  placeholder="Tuliskan tujuan pembelajaran yang ingin dicapai..."
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 p-3 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100 resize-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 p-3 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100 resize-none"
  />
  </div>
 
@@ -2283,7 +2291,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  type="text"
  value={formData.profil_pelajar_pancasila}
  onChange={(e) => setFormData({ ...formData, profil_pelajar_pancasila: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
  />
  </div>
 
@@ -2297,7 +2305,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  value={formData.model_pembelajaran}
  onChange={(e) => setFormData({ ...formData, model_pembelajaran: e.target.value })}
  placeholder="Problem Based Learning (PBL)"
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
  />
  </div>
  <div>
@@ -2309,7 +2317,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  value={formData.metode_pembelajaran}
  onChange={(e) => setFormData({ ...formData, metode_pembelajaran: e.target.value })}
  placeholder="Diskusi, Ceramah Interaktif, Presentasi"
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
  />
  </div>
  </div>
@@ -2323,7 +2331,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  value={formData.media_pembelajaran}
  onChange={(e) => setFormData({ ...formData, media_pembelajaran: e.target.value })}
  placeholder="Contoh: Slide PPT Interaktif, Video Pembelajaran YouTube, Canva, LKPD..."
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100"
  />
  </div>
 
@@ -2446,7 +2454,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  ? 'Contoh: Video Eksperimen Sains di YouTube'
  : 'Contoh: Modul Canva / Google Docs Ringkasan'
  }
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 py-2 text-xs font-medium text-slate-800 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3 py-2 text-xs font-medium text-slate-800 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
  <div>
@@ -2464,7 +2472,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  ? 'https://youtube.com/watch?v=...'
  : 'https://docs.google.com/document/d/...'
  }
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-8 pr-3 py-2 text-xs font-medium text-slate-800 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white pl-8 pr-3 py-2 text-xs font-medium text-slate-800 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
  </div>
@@ -2577,7 +2585,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  rows="3"
  value={formData.kegiatan_pendahuluan}
  onChange={(e) => setFormData({ ...formData, kegiatan_pendahuluan: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 p-3 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100 resize-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 p-3 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100 resize-none"
  />
  </div>
 
@@ -2589,7 +2597,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  rows="4"
  value={formData.kegiatan_inti}
  onChange={(e) => setFormData({ ...formData, kegiatan_inti: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 p-3 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100 resize-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 p-3 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100 resize-none"
  />
  </div>
 
@@ -2601,7 +2609,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  rows="3"
  value={formData.kegiatan_penutup}
  onChange={(e) => setFormData({ ...formData, kegiatan_penutup: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 p-3 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100 resize-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 p-3 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100 resize-none"
  />
  </div>
  </div>
@@ -2619,7 +2627,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  rows="3"
  value={formData.asesmen_awal}
  onChange={(e) => setFormData({ ...formData, asesmen_awal: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 p-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100 resize-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 p-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100 resize-none"
  />
  </div>
  <div>
@@ -2630,7 +2638,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  rows="3"
  value={formData.asesmen_proses}
  onChange={(e) => setFormData({ ...formData, asesmen_proses: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 p-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100 resize-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 p-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100 resize-none"
  />
  </div>
  <div>
@@ -2641,7 +2649,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  rows="3"
  value={formData.asesmen_akhir}
  onChange={(e) => setFormData({ ...formData, asesmen_akhir: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 p-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100 resize-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 p-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100 resize-none"
  />
  </div>
  </div>
@@ -2673,7 +2681,7 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  placeholder="Catatan revisi versi baru..."
  value={formData.catatan_revisi}
  onChange={(e) => setFormData({ ...formData, catatan_revisi: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-2 text-xs font-medium dark:bg-slate-900"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-2 text-xs font-medium dark:bg-slate-900"
  />
  )}
  </div>
@@ -3116,10 +3124,10 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  {importPreviewData.length > 0 && (
  <div className="space-y-2">
  <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Pratinjau Data Impor (5 baris pertama):</p>
- <div className="overflow-x-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="overflow-x-auto rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  <TableRoot className="w-full text-left text-xs">
- <TableHeader>
- <TableRow className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">
+ <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
+ <TableRow>
  <TableHead className="p-2">Kode</TableHead>
  <TableHead className="p-2">Judul Modul</TableHead>
  <TableHead className="p-2">Fase</TableHead>
@@ -3240,6 +3248,89 @@ export default function LmsModulAjarPage({ embedded = false, hideBreadcrumb = fa
  totalCount={totalItems}
  moduleTitle="Modul Ajar"
  />
+
+ {/* ── KPI Quick View Pop-up Modal (10/page + Pagination) ── */}
+ {(() => {
+   const allRows = Array.isArray(moduls) ? moduls : []
+   const filterByKpi = (list) => {
+     if (kpiModalKey === 'draft_review') return list.filter((m) => m.status === 'Draft' || m.status === 'Review')
+     if (kpiModalKey === 'published') return list.filter((m) => m.status === 'Publish')
+     return list
+   }
+   const metaMap = {
+     total: { title: 'Rincian Total Modul Ajar', badge: `${stats.total_modul || allRows.length} Modul` },
+     draft_review: { title: 'Modul dalam Draft & Review', badge: `${(stats.total_draft || 0) + (stats.total_review || 0)} Modul` },
+     published: { title: 'Modul Dipublikasikan (Aktif KBM)', badge: `${stats.total_published || 0} Modul` },
+     tp_cover: { title: 'Modul Terhubung Silabus TP', badge: `${stats.total_tp_tercover || 0} TP` },
+   }
+   const meta = kpiModalKey ? metaMap[kpiModalKey] : null
+   return (
+     <LmsKpiDetailModal
+       isOpen={Boolean(kpiModalKey && meta)}
+       onClose={() => setKpiModalKey(null)}
+       icon={BookOpen}
+       title={meta?.title || 'Rincian Modul Ajar'}
+       badge={meta?.badge}
+       rows={filterByKpi(allRows)}
+       fetchRows={async () => {
+         const res = await lmsModulAjarService.getAll({ per_page: 200 })
+         const raw = Array.isArray(res?.data) ? res.data : res?.data?.data || []
+         return filterByKpi(raw)
+       }}
+       searchPlaceholder="Cari kode, judul modul, mapel, guru, atau kelas..."
+       searchFilter={(m, q) =>
+         [m.judul_modul, m.nama_modul, m.kode_modul, m.subject?.nama_mapel, m.subject?.name, m.kelas?.nama_kelas, m.teacher?.full_name]
+           .filter(Boolean)
+           .join(' ')
+           .toLowerCase()
+           .includes(q)
+       }
+       emptyText="Tidak ada modul ajar pada kategori ini."
+       columns={[
+         {
+           header: 'Kode & Judul Modul',
+           render: (m) => (
+             <div>
+               <div className="font-extrabold text-slate-900 dark:text-white">{m.judul_modul || m.nama_modul || '-'}</div>
+               <div className="text-[10px] font-mono text-indigo-700 dark:text-indigo-300">{m.kode_modul || '-'}</div>
+             </div>
+           ),
+         },
+         {
+           header: 'Mata Pelajaran & Guru',
+           render: (m) => (
+             <div>
+               <div className="font-semibold text-indigo-700 dark:text-indigo-300">{m.subject?.nama_mapel || m.subject?.name || '-'}</div>
+               <div className="text-[10px] text-slate-500">{m.teacher?.full_name || m.guru?.nama_lengkap || '-'}</div>
+             </div>
+           ),
+         },
+         {
+           header: 'Kelas & Fase',
+           render: (m) => (
+             <div>
+               <div className="font-semibold text-teal-700 dark:text-teal-300">{m.kelas?.nama_kelas || m.school_class?.name || '-'}</div>
+               <div className="text-[10px] text-slate-500">{m.fase || m.semester?.nama_semester || '-'}</div>
+             </div>
+           ),
+         },
+         {
+           header: 'Status',
+           align: 'center',
+           render: (m) => (
+             <span className={`inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${
+               m.status === 'Publish' ? 'bg-emerald-100 text-emerald-800'
+                 : m.status === 'Review' ? 'bg-sky-100 text-sky-800'
+                   : 'bg-amber-100 text-amber-800'
+             }`}>
+               {m.status || 'Draft'}
+             </span>
+           ),
+         },
+       ]}
+     />
+   )
+ })()}
 
  </motion.div>
  </PageContainer>

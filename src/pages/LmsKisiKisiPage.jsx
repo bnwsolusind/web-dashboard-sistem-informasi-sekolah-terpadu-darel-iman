@@ -54,6 +54,7 @@ import {
 } from '../stores/pengaturanStore'
 import ActionDropdown from '../components/app/ActionDropdown'
 import AppModal from '../components/app/AppModal'
+import LmsKpiDetailModal from '../components/lms/LmsKpiDetailModal'
 import PageContainer from '../components/app/PageContainer'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
 import {
@@ -68,6 +69,7 @@ import {
   PrintOptionModal,
 } from '../components/master-data'
 import AppDataTable from '../components/app/AppDataTable'
+import { PageToolbarActions } from '../components/app/PageToolbarActions'
 import MobileDataCard from '../components/app/MobileDataCard'
 import {
   TableRoot,
@@ -499,7 +501,7 @@ function HeroUiModalSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Ketik untuk mencari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -647,7 +649,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -800,6 +802,7 @@ export default function LmsKisiKisiPage({ embedded, hidePageHeader, tabNav, onNa
  }, [debouncedSearch])
 
  const [isPrintModalOpen, setIsPrintModalOpen] = useState(false)
+ const [kpiModalKey, setKpiModalKey] = useState(null)
  const [importOpen, setImportOpen] = useState(false)
  const [showModal, setShowModal] = useState(false)
  const [editingItem, setEditingItem] = useState(null)
@@ -1193,7 +1196,7 @@ export default function LmsKisiKisiPage({ embedded, hidePageHeader, tabNav, onNa
  subtext={`${stats.aktif} Status Aktif`}
  tone="emerald"
  active={filters.jenis_ujian === '' && filters.status === ''}
- onClick={() => setFilters((p) => ({ ...p, jenis_ujian: '', status: '' }))}
+ onClick={() => setKpiModalKey('total')}
  />
  <ModernKpiCard
  icon={Target}
@@ -1202,7 +1205,7 @@ export default function LmsKisiKisiPage({ embedded, hidePageHeader, tabNav, onNa
  tag="Target Soal"
  subtext="Soal direncanakan"
  tone="blue"
- onClick={() => setFilters((p) => ({ ...p, jenis_ujian: '', status: '' }))}
+ onClick={() => setKpiModalKey('target_soal')}
  />
  <ModernKpiCard
  icon={BookOpen}
@@ -1212,7 +1215,7 @@ export default function LmsKisiKisiPage({ embedded, hidePageHeader, tabNav, onNa
  subtext={getJenisFullName('UH')}
  tone="purple"
  active={filters.jenis_ujian === 'UH'}
- onClick={() => setFilters((p) => ({ ...p, jenis_ujian: 'UH' }))}
+ onClick={() => setKpiModalKey('uh')}
  />
  <ModernKpiCard
  icon={Award}
@@ -1222,7 +1225,7 @@ export default function LmsKisiKisiPage({ embedded, hidePageHeader, tabNav, onNa
  subtext="Asesmen Berkala"
  tone="amber"
  active={filters.jenis_ujian === 'PTS'}
- onClick={() => setFilters((p) => ({ ...p, jenis_ujian: 'PTS' }))}
+ onClick={() => setKpiModalKey('pts_pas')}
  />
  </div>
 
@@ -1237,29 +1240,15 @@ export default function LmsKisiKisiPage({ embedded, hidePageHeader, tabNav, onNa
           icon={FileText}
           countLabel={`${pagination.total} Total`}
           actions={
-            <div className="flex items-center gap-1.5 sm:gap-2 self-start sm:self-auto flex-wrap">
-              <SquircleActionButton
-                variant="import"
-                label="Import"
-                onClick={() => setImportOpen(true)}
-              />
-              <SquircleActionButton
-                variant="export"
-                label="Export"
-                onClick={handleExportCSV}
-              />
-              <SquircleActionButton
-                variant="print"
-                label="Cetak"
-                icon={Printer}
-                onClick={() => setIsPrintModalOpen(true)}
-              />
-              <SquircleActionButton
-                variant="primary"
-                label="Buat Kisi-kisi Baru"
-                onClick={() => handleOpenModal()}
-              />
-            </div>
+            <PageToolbarActions
+              onImport={() => setImportOpen(true)}
+              onExport={handleExportCSV}
+              onPrint={() => setIsPrintModalOpen(true)}
+              primaryAction={{
+                label: 'Buat Kisi-kisi Baru',
+                onClick: () => handleOpenModal(),
+              }}
+            />
           }
           search={searchInput}
           onSearchChange={(e) => setSearchInput(e.target.value)}
@@ -1714,6 +1703,77 @@ export default function LmsKisiKisiPage({ embedded, hidePageHeader, tabNav, onNa
  item={deleteModal.item}
  isSubmitting={deleteModal.isSubmitting}
  />
+
+ {/* ── KPI Quick View Pop-up Modal (10/page + Pagination) ── */}
+ {(() => {
+   const allRows = Array.isArray(dataList) ? dataList : []
+   const filterByKpi = (list) => {
+     if (kpiModalKey === 'target_soal') return [...list].sort((a, b) => Number(b.jumlah_soal || 0) - Number(a.jumlah_soal || 0))
+     if (kpiModalKey === 'uh') return list.filter((r) => String(r.jenis_ujian || '').toUpperCase() === 'UH')
+     if (kpiModalKey === 'pts_pas') return list.filter((r) => ['PTS', 'PAS'].includes(String(r.jenis_ujian || '').toUpperCase()))
+     return list
+   }
+   const metaMap = {
+     total: { title: 'Rincian Total Kisi-kisi Ujian', badge: `${stats.total || allRows.length} Kisi-kisi` },
+     target_soal: { title: 'Rincian Target Butir Soal Kisi-kisi', badge: `${stats.total_soal_target || 0} Soal` },
+     uh: { title: `Rincian Kisi-kisi ${getJenisLabel('UH')}`, badge: `${stats.uh || 0} Kisi-kisi` },
+     pts_pas: { title: `Rincian Kisi-kisi ${getJenisLabel('PTS')} & ${getJenisLabel('PAS')}`, badge: `${(stats.pts || 0) + (stats.pas || 0)} Kisi-kisi` },
+   }
+   const meta = kpiModalKey ? metaMap[kpiModalKey] : null
+   return (
+     <LmsKpiDetailModal
+       isOpen={Boolean(kpiModalKey && meta)}
+       onClose={() => setKpiModalKey(null)}
+       icon={FileText}
+       title={meta?.title || 'Rincian Kisi-kisi Ujian'}
+       badge={meta?.badge}
+       rows={filterByKpi(allRows)}
+       fetchRows={async () => {
+         const res = await lmsKisiKisiService.getDaftar({ per_page: 200 })
+         const raw = Array.isArray(res?.data) ? res.data : res?.data?.data || []
+         return filterByKpi(raw)
+       }}
+       searchPlaceholder="Cari judul kisi-kisi, mata pelajaran, atau jenis ujian..."
+       searchFilter={(r, q) =>
+         [r.judul_kisi, getSubjectLabel(r.mata_pelajaran), r.jenis_ujian]
+           .filter(Boolean)
+           .join(' ')
+           .toLowerCase()
+           .includes(q)
+       }
+       emptyText="Tidak ada data kisi-kisi pada kategori ini."
+       columns={[
+         {
+           header: 'Judul Kisi-kisi',
+           render: (r) => <div className="font-extrabold text-slate-900 dark:text-white">{r.judul_kisi || '-'}</div>,
+         },
+         {
+           header: 'Mata Pelajaran',
+           render: (r) => <div className="font-semibold text-indigo-700 dark:text-indigo-300">{getSubjectLabel(r.mata_pelajaran)}</div>,
+         },
+         {
+           header: 'Jenis',
+           align: 'center',
+           render: (r) => <span className="px-2 py-0.5 rounded-md bg-purple-100 text-purple-800 text-[10px] font-extrabold">{r.jenis_ujian || '-'}</span>,
+         },
+         {
+           header: 'Target Soal',
+           align: 'center',
+           render: (r) => <span className="font-black text-emerald-700 dark:text-emerald-400 tabular-nums">{r.jumlah_soal || 0}</span>,
+         },
+         {
+           header: 'Status',
+           align: 'center',
+           render: (r) => (
+             <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold ${r.status ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}`}>
+               {r.status ? 'Aktif' : 'Nonaktif'}
+             </span>
+           ),
+         },
+       ]}
+     />
+   )
+ })()}
  </div>
  </PageContainer>
  )

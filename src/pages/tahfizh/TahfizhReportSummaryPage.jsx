@@ -58,6 +58,8 @@ import AppBadge from '../../components/app/AppBadge'
 import AppTabs from '../../components/app/AppTabs'
 import AppSkeleton from '../../components/app/AppSkeleton'
 import AppEmptyState from '../../components/app/AppEmptyState'
+import { PageToolbarActions } from '../../components/app/PageToolbarActions'
+import { TableRoot, TableHeader, TableRow, TableHead } from '@/components/ui/table'
 import TahfizhSubNav from '../../components/tahfizh/TahfizhSubNav'
 import {
   MasterDataPage,
@@ -372,6 +374,25 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  const [isPrintModalOpen, setIsPrintModalOpen] = useState(false)
  const [selectedRecordModal, setSelectedRecordModal] = useState(null)
  const [detailWeekOffset, setDetailWeekOffset] = useState(0)
+ const [detailFilterMode, setDetailFilterMode] = useState('weekly')
+ const [detailStartDate, setDetailStartDate] = useState('')
+ const [detailEndDate, setDetailEndDate] = useState('')
+
+ useEffect(() => {
+ if (!selectedRecordModal) return
+ setDetailFilterMode('weekly')
+ const anchor = selectedRecordModal.date ? new Date(selectedRecordModal.date) : new Date()
+ if (!isNaN(anchor.getTime())) {
+ const day = anchor.getDay() || 7
+ const mon = new Date(anchor)
+ mon.setDate(anchor.getDate() - day + 1)
+ const sun = new Date(mon)
+ sun.setDate(mon.getDate() + 6)
+ const toIso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+ setDetailStartDate(toIso(mon))
+ setDetailEndDate(toIso(sun))
+ }
+ }, [selectedRecordModal])
  const [printTargetRecord, setPrintTargetRecord] = useState(null)
  const [importNotice, setImportNotice] = useState(null)
  const [showImportModal, setShowImportModal] = useState(false)
@@ -851,20 +872,35 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
 
  const detailWeekRows = useMemo(() => {
  if (!selectedRecordModal) return []
- return Array.from({ length: 7 }, (_, index) => {
- const date = new Date(detailWeekStart)
- date.setDate(date.getDate() + index)
+ const buildRow = (date) => {
  const dateKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
-
  const log = records.find((item) => {
  const matchStudent = (selectedRecordModal.student_id && String(item.student_id) === String(selectedRecordModal.student_id)) ||
  (item.student_name && selectedRecordModal.student_name && item.student_name.toLowerCase() === selectedRecordModal.student_name.toLowerCase())
  return matchStudent && item.date === dateKey
  }) || (selectedRecordModal.date === dateKey ? selectedRecordModal : null)
-
  return { date, dateKey, log }
+ }
+
+ if (detailFilterMode === 'range' && detailStartDate && detailEndDate) {
+ const start = new Date(`${detailStartDate}T12:00:00`)
+ const end = new Date(`${detailEndDate}T12:00:00`)
+ if (!isNaN(start.getTime()) && !isNaN(end.getTime()) && start <= end) {
+ const diffDays = Math.min(62, Math.floor((end - start) / 86400000) + 1)
+ return Array.from({ length: diffDays }, (_, index) => {
+ const d = new Date(start)
+ d.setDate(d.getDate() + index)
+ return buildRow(d)
  })
- }, [detailWeekStart, selectedRecordModal, records])
+ }
+ }
+
+ return Array.from({ length: 7 }, (_, index) => {
+ const date = new Date(detailWeekStart)
+ date.setDate(date.getDate() + index)
+ return buildRow(date)
+ })
+ }, [detailWeekStart, selectedRecordModal, records, detailFilterMode, detailStartDate, detailEndDate])
 
  // Export & Print Handlers
  const handleExportCSV = () => {
@@ -1262,17 +1298,17 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  </div>
  </div>
 
- <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0 self-start sm:self-auto flex-wrap">
- <SquircleActionButton variant="import" icon={Upload} label="Import Data (Excel/CSV)" onClick={handleImportData} />
- <SquircleActionButton variant="export" icon={Download} label="Export Data CSV" onClick={handleExportCSV} />
- <SquircleActionButton
- variant="view"
- icon={Printer}
- label="Cetak Data"
- onClick={() => {
+ <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto flex-wrap">
+ <PageToolbarActions
+ onPrint={() => {
  setPrintTargetRecord(null)
  setIsPrintModalOpen(true)
  }}
+ printLabel="Cetak Data"
+ onImport={handleImportData}
+ importLabel="Import Data (Excel/CSV)"
+ onExport={handleExportCSV}
+ exportLabel="Export Data CSV"
  />
  </div>
  </div>
@@ -1328,8 +1364,8 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  />
  </div>
 
- <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2 sm:gap-2.5 w-full">
- <div className="w-full sm:w-auto min-w-[140px]">
+ <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-12 gap-2.5 items-center w-full">
+ <div className="lg:col-span-2">
  <label htmlFor="rekapan-dari" className="sr-only">Dari tanggal</label>
  <DatePicker
  id="rekapan-dari"
@@ -1339,12 +1375,12 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  setPeriodType('kustom')
  setCurrentPage(1)
  }}
- className="w-full sm:w-auto min-w-[140px]"
- inputClassName="py-2 text-xs font-semibold"
+ className="w-full"
+ inputClassName="h-10 text-xs font-bold"
  placeholder="Dari tanggal..."
  />
  </div>
- <div className="w-full sm:w-auto min-w-[140px]">
+ <div className="lg:col-span-2">
  <label htmlFor="rekapan-sampai" className="sr-only">Sampai tanggal</label>
  <DatePicker
  id="rekapan-sampai"
@@ -1354,12 +1390,12 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  setPeriodType('kustom')
  setCurrentPage(1)
  }}
- className="w-full sm:w-auto min-w-[140px]"
- inputClassName="py-2 text-xs font-semibold"
+ className="w-full"
+ inputClassName="h-10 text-xs font-bold"
  placeholder="Sampai tanggal..."
  />
  </div>
- <div className="w-full sm:w-auto min-w-[170px]">
+ <div className="lg:col-span-3">
  <HeroUiFilterSelect
  value={selectedUnit}
  disabled={!isGlobalScope && units.length <= 1}
@@ -1375,10 +1411,12 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  icon={Building2}
  searchable={units.length > 5}
  ariaLabel="Unit pendidikan"
+ size="lg"
+ className="!w-full !block"
  popoverWidth="min-w-[200px]"
  />
  </div>
- <div className="w-full sm:w-auto min-w-[170px]">
+ <div className="lg:col-span-3">
  <HeroUiFilterSelect
  value={selectedClass}
  onChange={(val) => {
@@ -1396,10 +1434,12 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  icon={Users}
  searchable={(isSubjectTeacherOnly ? teacherClasses : classes).length > 5}
  ariaLabel="Rombel kelas"
+ size="lg"
+ className="!w-full !block"
  popoverWidth="min-w-[200px]"
  />
  </div>
- <div className="w-full sm:w-auto min-w-[150px]">
+ <div className="lg:col-span-2">
  <HeroUiFilterSelect
  value={typeFilter}
  onChange={(val) => {
@@ -1416,10 +1456,12 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  placeholder="Semua Jenis"
  icon={BookOpen}
  ariaLabel="Jenis setoran"
+ size="lg"
+ className="!w-full !block"
  popoverWidth="min-w-[170px]"
  />
  </div>
- <div className="w-full sm:w-auto sm:flex-1 sm:min-w-[160px]">
+ <div className="sm:col-span-2 md:col-span-1 lg:col-span-8">
  <label htmlFor="rekapan-cari" className="sr-only">Pencarian santri</label>
  <div className="relative flex items-center">
  <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
@@ -1434,11 +1476,11 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  setSearchQuery(e.target.value)
  setCurrentPage(1)
  }}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-4 py-2 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-700/80/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-600/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20"
+ className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] bg-white pl-10 pr-4 text-xs font-bold text-slate-800 placeholder:text-slate-400 transition-all duration-200 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
  </div>
- <div className="w-full sm:w-auto min-w-[130px]">
+ <div className="lg:col-span-2">
  <HeroUiFilterSelect
  value={perPage}
  onChange={(val) => {
@@ -1456,49 +1498,54 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  placeholder="10 per hal"
  icon={Layers}
  ariaLabel="Tampilkan per halaman"
+ size="lg"
+ className="!w-full !block"
  popoverWidth="min-w-[140px]"
  />
  </div>
+ <div className="lg:col-span-2">
  <button
  type="button"
  onClick={resetFilters}
- className="w-full sm:w-auto sm:ml-auto inline-flex items-center justify-center gap-1.5 h-9 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 hover:border-emerald-300 dark:hover:border-emerald-700/80 bg-white hover:bg-emerald-50/60 px-3.5 text-sm font-medium text-slate-700 transition-colors cursor-pointer"
+ className="w-full inline-flex items-center justify-center gap-1.5 h-10 rounded-xl border-2 border-emerald-300 bg-emerald-100 hover:bg-emerald-200 px-3.5 text-xs font-extrabold text-emerald-900 dark:border-emerald-700/80 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/80 dark:text-emerald-200 transition-all active:scale-95 cursor-pointer shadow-xs"
  >
- <RotateCcw className="h-4 w-4 text-emerald-600 shrink-0" />
+ <RotateCcw className="h-3.5 w-3.5 shrink-0" />
  <span>Reset</span>
  </button>
  </div>
  </div>
+ </div>
 
- {/* Datatable Section matching Mutabaah styling */}
- <div className="px-4 sm:px-6 md:px-8 py-4 overflow-x-auto">
+ {/* Datatable Section matching Gold Standard flush layout */}
+ <div className="overflow-x-auto">
  {loading ? (
- <AppSkeleton variant="table" rows={5} cols={4} />
+ <div className="p-4"><AppSkeleton variant="table" rows={5} cols={4} /></div>
  ) : paginatedRecords.length === 0 ? (
+ <div className="p-4">
  <AppEmptyState
  title="Tidak ada data Rekapan Tahfizh"
  description="Tidak ada data Rekapan Tahfizh yang ditemukan. Coba ubah filter atau kata kunci pencarian Anda."
  actionLabel={searchQuery || startDate || endDate ? 'Reset Filter' : undefined}
  onAction={searchQuery || startDate || endDate ? resetFilters : undefined}
  />
+ </div>
  ) : (
- <div className="overflow-x-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/80">
- <table className="w-full text-left text-xs">
- <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-xs font-bold uppercase tracking-wider text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/80 dark:text-emerald-300">
- <tr className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 uppercase text-[10px] font-extrabold text-emerald-950 dark:text-emerald-200">
- 
- <th className="hidden md:table-cell px-3 py-2.5 text-center">Tanggal</th>
- <th className="px-3 py-2.5">Santri</th>
- <th className="hidden sm:table-cell px-3 py-2.5">Kelas & Unit</th>
- <th className="px-3 py-2.5 text-center">Jenis Setoran</th>
- <th className="hidden md:table-cell px-3 py-2.5">Capaian Hafalan</th>
- <th className="hidden lg:table-cell px-3 py-2.5 text-center">Kelancaran</th>
- <th className="hidden lg:table-cell px-3 py-2.5 text-center">Tajwid</th>
- <th className="hidden xl:table-cell px-3 py-2.5 text-center">Makhraj</th>
- <th className="hidden md:table-cell px-3 py-2.5">Pengajar</th>
- <th className="px-3 py-2.5 text-center"></th>
- </tr>
- </thead>
+ <div className="overflow-x-auto">
+ <TableRoot fullBleed={true} className="text-xs">
+ <TableHeader>
+ <TableRow className="bg-transparent uppercase text-xs font-black text-emerald-950 dark:text-emerald-200">
+ <TableHead className="px-3 py-3 text-center w-12">No</TableHead>
+ <TableHead className="hidden md:table-cell px-3 py-3 text-center">Tanggal</TableHead>
+ <TableHead className="px-3 py-3">Santri</TableHead>
+ <TableHead className="hidden sm:table-cell px-3 py-3">Kelas &amp; Unit</TableHead>
+ <TableHead className="px-3 py-3 text-center">Jenis Setoran</TableHead>
+ <TableHead className="hidden md:table-cell px-3 py-3">Capaian Hafalan</TableHead>
+ <TableHead className="hidden lg:table-cell px-3 py-3 text-center">Kelancaran</TableHead>
+ <TableHead className="hidden lg:table-cell px-3 py-3 text-center">Tajwid</TableHead>
+ <TableHead className="hidden xl:table-cell px-3 py-3 text-center">Makhraj</TableHead>
+ <TableHead className="hidden md:table-cell px-3 py-3">Pengajar</TableHead>
+ </TableRow>
+ </TableHeader>
  <tbody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40">
  {paginatedRecords.map((item, index) => {
  const studentName = item.student_name || 'Siswa'
@@ -1510,7 +1557,8 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  return (
  <tr
  key={item.id || index}
- className="hover:bg-emerald-50/40 dark:hover:bg-emerald-950/20 transition-colors"
+ onClick={() => handleOpenDetailModal(item)}
+ className="hover:bg-emerald-50/40 dark:hover:bg-emerald-950/20 transition-colors cursor-pointer"
  >
  <td className="px-3 py-3 text-center font-bold text-slate-400 text-xs tabular-nums">
  {(currentPage - 1) * perPage + index + 1}
@@ -1544,8 +1592,8 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  </div>
  </HoverCardTrigger>
 
- <HoverCardContent className="w-72 p-0 overflow-hidden border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:border-emerald-800/60 dark:bg-[#1B2433] shadow-xl rounded-xl z-50">
- <div className="relative h-20 w-full bg-white dark:bg-[#1B2433] p-3.5 flex items-center justify-between">
+ <HoverCardContent className="w-72 p-0 overflow-hidden border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] shadow-xl rounded-2xl z-50">
+ <div className="relative h-20 w-full bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white p-3.5 flex items-center justify-between">
  <div>
  <span className="text-[9px] font-bold uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-full">
  {item.class_name || 'Rombel'}
@@ -1679,26 +1727,11 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  <td className="hidden md:table-cell px-3 py-3 font-semibold text-slate-700 dark:text-slate-300 text-xs align-middle">
  {item.teacher_name}
  </td>
-
- <td className="px-3 py-3 text-center align-middle">
- <div className="flex items-center justify-center gap-1.5">
- <MasterActionIconButton variant="view" label="Lihat Detail" onClick={() => handleOpenDetailModal(item)} />
- <SquircleActionButton
- variant="view"
- icon={Printer}
- label="Cetak Detail"
- onClick={() => {
- setPrintTargetRecord(item)
- setIsPrintModalOpen(true)
- }}
- />
- </div>
- </td>
  </tr>
  )
  })}
  </tbody>
- </table>
+ </TableRoot>
  </div>
  )}
  </div>
@@ -1726,24 +1759,25 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  <Dialog
  isOpen={cardModal.isOpen}
  onOpenChange={(open) => !open && closeCardModal()}
- className="w-full max-w-xl max-h-[90vh] flex flex-col rounded-xl bg-white dark:bg-[#182232] border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xl shadow-sm dark:shadow-black/60 overflow-hidden p-0"
+ showCloseButton={false}
+ className="w-full max-w-xl max-h-[90vh] flex flex-col rounded-3xl bg-white dark:bg-[#1B2433] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 overflow-hidden p-0"
  >
- <DialogHeader className="flex flex-row items-center justify-between px-6 py-4.5 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:border-emerald-800/60 dark:bg-slate-950 shrink-0">
+ <div className="h-1.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
+ <DialogHeader className="flex flex-row items-center justify-between px-6 py-4.5 border-b border-emerald-500/20 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white shrink-0">
  <div className="flex items-center gap-3">
- <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
- 
-            <BookOpenCheck className="size-6 sm:size-7 h-5 w-5 text-white" strokeWidth={2.25} />
+ <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 text-white shadow-sm">
+ <BookOpenCheck className="size-5 text-white" strokeWidth={2.25} />
  </div>
  <div>
  <div className="flex items-center gap-2 flex-wrap">
- <DialogTitle className="text-sm sm:text-base font-black text-slate-900 dark:text-slate-600">
+ <DialogTitle className="text-sm sm:text-base font-black text-white">
  {cardModal.title}
  </DialogTitle>
- <AppBadge variant={cardModal.tone === 'rose' ? 'danger' : cardModal.tone === 'amber' ? 'warning' : 'success'}>
+ <span className="inline-flex items-center rounded-full bg-white/20 border border-white/30 px-2.5 py-0.5 text-[10px] font-black text-white">
  {modalRows.length} Data Setoran
- </AppBadge>
+ </span>
  </div>
- <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+ <DialogDescription className="text-xs text-emerald-100 mt-0.5">
  Daftar rincian log setoran tahfizh siswa dengan status {cardModal.title}
  </DialogDescription>
  </div>
@@ -1752,9 +1786,9 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  type="button"
  onClick={closeCardModal}
  aria-label="Tutup modal"
- className="size-9 flex items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer shrink-0"
+ className="size-9 flex items-center justify-center rounded-xl bg-white/20 hover:bg-rose-500 text-white border border-white/25 shadow-xs active:scale-95 transition-all duration-200 cursor-pointer shrink-0"
  >
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
+ <X className="size-4" strokeWidth={2.25} />
  </button>
  </DialogHeader>
 
@@ -1771,7 +1805,7 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  value={cardModal.searchQuery}
  onChange={(e) => setCardModal((prev) => ({ ...prev, searchQuery: e.target.value, page: 1 }))}
  aria-label="Cari dalam modal"
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-10 pr-8 py-2 appearance-none text-xs font-semibold text-slate-800 outline-none transition-all placeholder:text-slate-400 focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white pl-10 pr-8 py-2 appearance-none text-xs font-semibold text-slate-800 outline-none transition-all placeholder:text-slate-400 focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  />
  {cardModal.searchQuery && (
  <button
@@ -2137,6 +2171,78 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  >
  {selectedRecordModal && (
  <>
+ {/* Filter Bar Modal: Per Minggu vs Range Tanggal */}
+ <div className="mb-4 flex flex-col gap-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/50 dark:bg-emerald-950/30 p-3 sm:flex-row sm:items-center sm:justify-between">
+ <div className="flex items-center gap-1.5 p-1 rounded-xl bg-white dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-700/80 self-start">
+ <button
+ type="button"
+ onClick={() => setDetailFilterMode('weekly')}
+ className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer ${
+ detailFilterMode === 'weekly'
+ ? 'bg-emerald-600 text-white shadow-xs'
+ : 'text-slate-600 hover:text-emerald-700 dark:text-slate-300'
+ }`}
+ >
+ Per Minggu
+ </button>
+ <button
+ type="button"
+ onClick={() => setDetailFilterMode('range')}
+ className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer ${
+ detailFilterMode === 'range'
+ ? 'bg-emerald-600 text-white shadow-xs'
+ : 'text-slate-600 hover:text-emerald-700 dark:text-slate-300'
+ }`}
+ >
+ Range Tanggal
+ </button>
+ </div>
+
+ {detailFilterMode === 'weekly' ? (
+ <div className="flex items-center gap-2">
+ <button
+ type="button"
+ onClick={() => setDetailWeekOffset((v) => v - 1)}
+ className="flex size-8 items-center justify-center rounded-lg border border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-700 dark:bg-slate-900 dark:border-emerald-700 dark:text-emerald-300 cursor-pointer"
+ title="Minggu Sebelumnya"
+ >
+ <ChevronLeft className="size-4" />
+ </button>
+ <span className="text-xs font-extrabold text-emerald-900 dark:text-emerald-200 px-2">
+ {detailWeekRows.length > 0
+ ? `${new Intl.DateTimeFormat('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }).format(detailWeekRows[0].date)} – ${new Intl.DateTimeFormat('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }).format(detailWeekRows[detailWeekRows.length - 1].date)}`
+ : 'Minggu Ini'}
+ </span>
+ <button
+ type="button"
+ onClick={() => setDetailWeekOffset((v) => v + 1)}
+ className="flex size-8 items-center justify-center rounded-lg border border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-700 dark:bg-slate-900 dark:border-emerald-700 dark:text-emerald-300 cursor-pointer"
+ title="Minggu Berikutnya"
+ >
+ <ChevronRight className="size-4" />
+ </button>
+ </div>
+ ) : (
+ <div className="flex flex-nowrap items-center gap-2 shrink-0">
+ <DatePicker
+ value={detailStartDate}
+ onChange={(e) => setDetailStartDate(e.target.value)}
+ className="w-36 sm:w-44 shrink-0"
+ inputClassName="py-1.5 text-xs font-semibold"
+ placeholder="Dari tanggal..."
+ />
+ <span className="text-xs font-bold text-slate-500 shrink-0">s/d</span>
+ <DatePicker
+ value={detailEndDate}
+ onChange={(e) => setDetailEndDate(e.target.value)}
+ className="w-36 sm:w-44 shrink-0"
+ inputClassName="py-1.5 text-xs font-semibold"
+ placeholder="Sampai tanggal..."
+ />
+ </div>
+ )}
+ </div>
+
  {/* Mobile View: Cards */}
  <div className="space-y-3 lg:hidden">
  {detailWeekRows.map(({ date, dateKey, log }, index) => {
@@ -2204,28 +2310,29 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  {/* Desktop View: Table */}
  <table className="hidden w-full table-fixed border-collapse text-[10px] xl:text-xs lg:table [&_td]:!p-2 [&_td]:break-words [&_th]:!p-2">
  <colgroup>
- <col className="w-[3.5%]" />
- <col className="w-[11%]" />
+ <col className="w-[4%]" />
+ <col className="w-[12%]" />
  <col className="w-[10%]" />
- <col className="w-[5%]" />
- <col className="w-[17%]" />
- <col className="w-[7%]" />
- <col className="w-[11%]" />
  <col className="w-[6%]" />
- <col className="w-[20%]" />
- <col className="w-[9.5%]" />
+ <col className="w-[16%]" />
+ <col className="w-[8.5%]" />
+ <col className="w-[11%]" />
+ <col className="w-[7%]" />
+ <col className="w-[18.5%]" />
+ <col className="w-[7%]" />
  </colgroup>
- <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-xs font-bold uppercase tracking-wider text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/80 dark:text-emerald-300">
+ <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-[10px] font-bold uppercase tracking-wider text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/80 dark:text-emerald-300">
  <tr className="bg-emerald-100/80 text-slate-900 dark:bg-emerald-950/60 dark:text-emerald-100">
- <th className="border border-emerald-200/80 dark:border-emerald-800/60 p-2.5 text-left">Hari/Tanggal</th>
- <th className="border border-emerald-200/80 dark:border-emerald-800/60 p-2.5">Tilawah</th>
- <th className="border border-emerald-200/80 dark:border-emerald-800/60 p-2.5">Baris</th>
- <th className="border border-emerald-200/80 dark:border-emerald-800/60 p-2.5">Hafalan Baru</th>
- <th className="border border-emerald-200/80 dark:border-emerald-800/60 p-2.5">Baris/Ayat</th>
- <th className="border border-emerald-200/80 dark:border-emerald-800/60 p-2.5">Murajaah</th>
- <th className="border border-emerald-200/80 dark:border-emerald-800/60 p-2.5">Lembar</th>
- <th className="border border-emerald-200/80 dark:border-emerald-800/60 p-2.5">Catatan</th>
- <th className="border border-emerald-200/80 dark:border-emerald-800/60 p-2.5">Ttd</th>
+ <th className="border border-emerald-200/80 dark:border-emerald-800/60 p-2 text-center">No</th>
+ <th className="border border-emerald-200/80 dark:border-emerald-800/60 p-2 text-left">Hari/Tanggal</th>
+ <th className="border border-emerald-200/80 dark:border-emerald-800/60 p-2 text-center">Tilawah</th>
+ <th className="border border-emerald-200/80 dark:border-emerald-800/60 p-2 text-center">Baris</th>
+ <th className="border border-emerald-200/80 dark:border-emerald-800/60 p-2 text-center">Hafalan Baru</th>
+ <th className="border border-emerald-200/80 dark:border-emerald-800/60 p-2 text-center">Baris/Ayat</th>
+ <th className="border border-emerald-200/80 dark:border-emerald-800/60 p-2 text-center">Murajaah</th>
+ <th className="border border-emerald-200/80 dark:border-emerald-800/60 p-2 text-center">Lembar</th>
+ <th className="border border-emerald-200/80 dark:border-emerald-800/60 p-2 text-center">Catatan</th>
+ <th className="border border-emerald-200/80 dark:border-emerald-800/60 p-2 text-center">Ttd</th>
  </tr>
  </thead>
  <tbody>

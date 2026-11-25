@@ -29,6 +29,8 @@ import {
 } from '../services/reportService'
 import PageContainer from '../components/app/PageContainer'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
+import AppDataTable from '../components/app/AppDataTable'
+import { PageToolbarActions } from '../components/app/PageToolbarActions'
 import {
   useDebounce
 } from '../hooks/useDebounce'
@@ -299,48 +301,25 @@ export default function LaporanAkademikPage() {
  </div>
 
  {/* HEROUI EMERALD DATATABLE CONTAINER */}
- <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
- {/* Toolbar Header Terstruktur 3-Baris */}
- <div className="p-4 sm:p-6 space-y-4 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent border-b border-emerald-200/80 dark:border-emerald-800/60">
- <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
- <div>
- <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Leger Nilai Siswa</h2>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Daftar rincian leger nilai mata pelajaran, tugas, UTS, UAS, dan predikat akhir.
- </p>
- </div>
-
- <div className="flex items-center gap-2 flex-nowrap shrink-0 py-1">
- <SquircleActionButton
- variant="export"
- label="Export CSV"
- onClick={() => exportCsv('rekap-akademik.csv', columns, filteredRows)}
+ <AppDataTable
+ title="Leger Nilai Siswa"
+ description="Daftar rincian leger nilai mata pelajaran, tugas, UTS, UAS, dan predikat akhir."
+ icon={GraduationCap}
+ countLabel={`${filteredRows.length} Baris`}
+ actions={
+ <PageToolbarActions
+ onExport={() => exportCsv('rekap-akademik.csv', columns, filteredRows)}
+ onPrint={() => setIsPrintModalOpen(true)}
  />
- <SquircleActionButton
- variant="view"
- icon={Printer}
- label="Cetak Data"
- onClick={() => setIsPrintModalOpen(true)}
- />
- </div>
- </div>
-
- {/* Filter & Search Baris 2 */}
- <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
- <div className="relative">
- <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-emerald-600 dark:text-emerald-400" />
- <Input
- type="text"
- placeholder="Cari siswa, NIS, atau mapel..."
- value={search}
- onChange={(e) => {
- setSearch(e.target.value)
+ }
+ search={search}
+ onSearchChange={(val) => {
+ setSearch(val)
  setCurrentPage(1)
  }}
- className="pl-9 h-9 text-xs"
- />
- </div>
- <div>
+ searchPlaceholder="Cari siswa, NIS, atau mapel..."
+ filters={
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
  <Input
  type="text"
  placeholder="Filter ID Kelas (Opsional)"
@@ -351,8 +330,6 @@ export default function LaporanAkademikPage() {
  }}
  className="h-9 text-xs"
  />
- </div>
- <div>
  <Input
  type="text"
  placeholder="Filter ID Semester (Opsional)"
@@ -364,83 +341,65 @@ export default function LaporanAkademikPage() {
  className="h-9 text-xs"
  />
  </div>
- </div>
- </div>
-
- {/* Content Table */}
- <div className="px-4 sm:px-6 md:px-8 overflow-x-auto">
- {loading ? (
- <div className="py-12">
- <MasterEmptyState loading message="Memuat leger nilai akademik..." />
- </div>
- ) : error ? (
- <div className="py-12">
- <MasterErrorState message={error} onRetry={load} />
- </div>
- ) : paginatedRows.length === 0 ? (
- <div className="py-12">
- <MasterEmptyState message="Tidak ada catatan nilai yang cocok dengan filter atau pencarian Anda." />
- </div>
- ) : (
-                      <TableRoot fullBleed={false}>
-                        <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 text-emerald-950 dark:text-emerald-200 font-extrabold uppercase tracking-wider text-xs">
-                          <TableRow>
-                            <TableHead className="px-4 py-3.5">SISWA & NIS</TableHead>
-                            <TableHead className="px-4 py-3.5">MATA PELAJARAN</TableHead>
-                            <TableHead className="px-4 py-3.5">REKAP NILAI (TUGAS • UTS • UAS)</TableHead>
-                            <TableHead className="px-4 py-3.5">NILAI AKHIR & STATUS</TableHead>
-                            <TableHead className="w-16 sm:w-20 text-right select-none" />
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40 text-xs">
-                          {paginatedRows.map((r, i) => (
-                            <TableRow key={r.id || i} className="hover:bg-emerald-50/40 dark:hover:bg-emerald-950/20 transition-colors">
-                              <TableCell className="px-4 py-3">
-                                <div className="font-bold text-slate-900 dark:text-white text-xs">{r.student?.full_name || r.student?.nama || '-'}</div>
-                                <div className="font-mono text-[10px] text-slate-400">NIS: {r.student?.nis || '-'}</div>
-                              </TableCell>
-                              <TableCell className="px-4 py-3">
-                                <span className="inline-flex items-center gap-1.5 font-bold text-emerald-700 dark:text-emerald-400 text-xs">
-                                  {r.subject?.name || '-'}
-                                </span>
-                              </TableCell>
-                              <TableCell className="px-4 py-3">
-                                <div className="flex items-center gap-1.5 text-xs flex-wrap">
-                                  <span className="rounded bg-slate-100 px-1.5 py-0.5 font-semibold text-slate-700 dark:bg-emerald-950/60 dark:text-emerald-300">T: {r.assignment_score || 0}</span>
-                                  <span className="rounded bg-slate-100 px-1.5 py-0.5 font-semibold text-slate-700 dark:bg-emerald-950/60 dark:text-emerald-300">UTS: {r.midterm_score || 0}</span>
-                                  <span className="rounded bg-slate-100 px-1.5 py-0.5 font-semibold text-slate-700 dark:bg-emerald-950/60 dark:text-emerald-300">UAS: {r.final_exam_score || 0}</span>
-                                </div>
-                              </TableCell>
-                              <TableCell className="px-4 py-3">
-                                <div className="flex items-center gap-2">
-                                  <span className="text-xs font-black text-slate-900 dark:text-white">{r.final_score || 0} ({r.grade_letter || '-'})</span>
-                                  <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold ${r.is_passed ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'}`}>
-                                    {r.is_passed ? 'Tuntas' : 'Remedial'}
-                                  </span>
-                                </div>
-                              </TableCell>
-                              <TableCell className="px-4 py-3 text-right">
-                                <span className="inline-block size-2 rounded-full bg-emerald-500/60" />
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </TableRoot>
- )}
- </div>
-
- {/* Footer Pagination Baris 3 */}
- {filteredRows.length > 0 && (
- <div className="p-4 border-t border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50 dark:from-emerald-950/30 dark:via-teal-950/20 dark:to-emerald-950/30">
- <Pagination
- currentPage={currentPage}
+ }
+ isLoading={loading}
+ isError={Boolean(error)}
+ errorMessage={error}
+ onRetry={load}
+ isEmpty={!loading && !error && paginatedRows.length === 0}
+ emptyTitle="Tidak Ada Catatan Nilai"
+ emptyDescription="Tidak ada catatan nilai yang cocok dengan filter atau pencarian Anda."
+ showPagination={filteredRows.length > 0 && totalPages > 1}
+ page={currentPage}
  totalPages={totalPages}
+ totalItems={filteredRows.length}
  onPageChange={setCurrentPage}
- sideLayout="full"
- />
+ >
+ <TableRoot fullBleed={false}>
+ <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 text-emerald-950 dark:text-emerald-200 font-extrabold uppercase tracking-wider text-xs">
+ <TableRow>
+ <TableHead className="px-4 py-3.5">SISWA & NIS</TableHead>
+ <TableHead className="px-4 py-3.5">MATA PELAJARAN</TableHead>
+ <TableHead className="px-4 py-3.5">REKAP NILAI (TUGAS • UTS • UAS)</TableHead>
+ <TableHead className="px-4 py-3.5">NILAI AKHIR & STATUS</TableHead>
+ <TableHead className="w-16 sm:w-20 text-right select-none" />
+ </TableRow>
+ </TableHeader>
+ <TableBody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40 text-xs">
+ {paginatedRows.map((r, i) => (
+ <TableRow key={r.id || i} className="hover:bg-emerald-50/40 dark:hover:bg-emerald-950/20 transition-colors">
+ <TableCell className="px-4 py-3">
+ <div className="font-bold text-slate-900 dark:text-white text-xs">{r.student?.full_name || r.student?.nama || '-'}</div>
+ <div className="font-mono text-[10px] text-slate-400">NIS: {r.student?.nis || '-'}</div>
+ </TableCell>
+ <TableCell className="px-4 py-3">
+ <span className="inline-flex items-center gap-1.5 font-bold text-emerald-700 dark:text-emerald-400 text-xs">
+ {r.subject?.name || '-'}
+ </span>
+ </TableCell>
+ <TableCell className="px-4 py-3">
+ <div className="flex items-center gap-1.5 text-xs flex-wrap">
+ <span className="rounded bg-slate-100 px-1.5 py-0.5 font-semibold text-slate-700 dark:bg-emerald-950/60 dark:text-emerald-300">T: {r.assignment_score || 0}</span>
+ <span className="rounded bg-slate-100 px-1.5 py-0.5 font-semibold text-slate-700 dark:bg-emerald-950/60 dark:text-emerald-300">UTS: {r.midterm_score || 0}</span>
+ <span className="rounded bg-slate-100 px-1.5 py-0.5 font-semibold text-slate-700 dark:bg-emerald-950/60 dark:text-emerald-300">UAS: {r.final_exam_score || 0}</span>
  </div>
- )}
+ </TableCell>
+ <TableCell className="px-4 py-3">
+ <div className="flex items-center gap-2">
+ <span className="text-xs font-black text-slate-900 dark:text-white">{r.final_score || 0} ({r.grade_letter || '-'})</span>
+ <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold ${r.is_passed ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'}`}>
+ {r.is_passed ? 'Tuntas' : 'Remedial'}
+ </span>
  </div>
+ </TableCell>
+ <TableCell className="px-4 py-3 text-right">
+ <span className="inline-block size-2 rounded-full bg-emerald-500/60" />
+ </TableCell>
+ </TableRow>
+ ))}
+ </TableBody>
+ </TableRoot>
+ </AppDataTable>
  </PageContainer>
  )
 }

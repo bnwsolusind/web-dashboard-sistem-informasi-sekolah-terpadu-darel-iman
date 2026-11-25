@@ -1354,9 +1354,9 @@ export default function LaporanAlumniPage() {
 
  {/* Datatable Viewport */}
  {(viewModeTahunan === 'both' || viewModeTahunan === 'table') && (
- <div className="px-4 sm:px-6 md:px-8 overflow-x-auto">
+ <div className="mx-4 sm:mx-6 md:mx-8 overflow-x-auto rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  <TableRoot fullBleed={false}>
- <TableHeader>
+ <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
  <TableRow>
  <TableHead className="w-12 text-center">#</TableHead>
  <TableHead className="text-left">Tahun Ajaran / Lulus</TableHead>

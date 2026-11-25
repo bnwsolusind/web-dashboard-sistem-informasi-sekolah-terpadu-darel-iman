@@ -34,6 +34,7 @@ import {
   AppBreadcrumb,
   AppDataTable,
   AppBadge,
+  HeroUiHeader,
   PageContainer,
   KpiStatCard
 } from '../components/app'
@@ -219,7 +220,7 @@ export default function GuruTahfizhDashboardPage() {
  key: 'surah',
  label: 'Surah & Ayat',
  render: (row) => (
- <span className="font-bold text-[#0E5C44] dark:text-[#3FBF75] text-xs">
+ <span className="font-bold text-[#0E5C44] dark:text-[#3FBF75] text-xs whitespace-nowrap">
  {row.hafalan_surah_name || 'Surah'} ({row.hafalan_ayah_start || 1}-{row.hafalan_ayah_end || 1})
  </span>
  ),
@@ -227,18 +228,22 @@ export default function GuruTahfizhDashboardPage() {
  {
  key: 'baris',
  label: 'Baris',
- render: (row) => <span className="font-semibold text-slate-800 dark:text-slate-200 text-xs">{row.hafalan_baris || row.line_count || 0} Baris</span>,
+ render: (row) => <span className="font-semibold text-slate-800 dark:text-slate-200 text-xs whitespace-nowrap">{row.hafalan_baris || row.line_count || 0} Baris</span>,
  },
  {
  key: 'murajaah',
  label: 'Murajaah',
- render: (row) => <AppBadge variant="info">{row.murajaah_text || `${row.murajaah_lembar || 0} Lembar`}</AppBadge>,
+ render: (row) => (
+ <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-sky-50 text-sky-700 border border-sky-200 dark:bg-sky-950/50 dark:text-sky-300 dark:border-sky-800/60 max-w-[150px] truncate" title={row.murajaah_text || `${row.murajaah_lembar || 0} Lembar`}>
+ {row.murajaah_text || `${row.murajaah_lembar || 0} Lembar`}
+ </span>
+ ),
  },
  {
  key: 'date',
  label: 'Tanggal',
  render: (row) => (
- <span className="text-xs text-slate-500 font-medium">
+ <span className="text-xs text-slate-500 font-medium whitespace-nowrap">
  {row.record_date || row.date || (row.created_at ? new Date(row.created_at).toLocaleDateString('id-ID') : '-')}
  </span>
  ),
@@ -255,55 +260,31 @@ export default function GuruTahfizhDashboardPage() {
 
  {/* MODERN HERO CARD HEADER (HeroUI Vivid Emerald Spec) */}
  <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="print:hidden">
-        <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-500/30 bg-gradient-to-r from-emerald-500/15 via-teal-500/10 to-emerald-600/15 p-5 sm:p-6 shadow-md shadow-emerald-500/10 dark:border-emerald-600/40 dark:bg-gradient-to-r dark:from-emerald-950/70 dark:via-teal-950/50 dark:to-slate-900">
-
- <div className="relative z-10 flex flex-col gap-3">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-3.5 sm:gap-4 min-w-0">
-              <div className="flex size-11 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-lg shadow-emerald-600/30">
-                <BookOpen className="size-5 sm:size-7 text-white" />
-              </div>
-              <div className="min-w-0">
-                <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
- <span className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-3 py-0.5 sm:px-3.5 sm:py-1 text-xs sm:text-xs font-extrabold shadow-sm">
- <Sparkles className="size-3 sm:size-3.5 text-amber-300 animate-pulse" />
- Workspace Guru Tahfizh
- </span>
- <span className="inline-flex items-center rounded-full bg-emerald-100 px-3 py-0.5 text-xs font-bold text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60">
- {context.tahun_ajaran ? `TA ${context.tahun_ajaran.nama}` : 'Halaqah Tahfizh'}
- </span>
- </div>
-                <h1 className="mt-1.5 text-xl sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white">
-                  Dashboard Guru Tahfizh / Musyrif
-                </h1>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 shrink-0 self-start sm:self-center">
-              <SquircleActionButton
+ <HeroUiHeader
+ icon={BookOpen}
+ title="Dashboard Guru Tahfizh / Musyrif"
+ tag={{ text: 'Workspace Guru Tahfizh', icon: Sparkles }}
+ badge={context.tahun_ajaran ? `TA ${context.tahun_ajaran.nama}` : 'Halaqah Tahfizh'}
+ description="Monitor setoran hafalan Al-Qur'an, murajaah harian, dan capaian target santri/siswa binaan secara terpadu."
+ actions={
+ <div className="flex items-center gap-2 shrink-0">
+ <SquircleActionButton
  variant="primary"
  icon={Plus}
  label="Input Setoran"
  onClick={() => navigate('/portal-guru/workspace?tab=tahfizh')}
  />
  <SquircleActionButton
-                    variant="refresh"
-                    icon={RefreshCw}
-                    label="Segarkan Data"
-                    onClick={fetchDashboard}
-                    disabled={loading}
-                    className={loading ? 'animate-spin' : ''}
-                  />
-            </div>
-          </div>
-
-          <div className="w-full pt-2 border-t border-emerald-500/20 dark:border-emerald-500/30">
-            <p className="w-full text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300 leading-relaxed">
-              Monitor setoran hafalan Al-Qur&apos;an, murajaah harian, dan capaian target santri/siswa binaan secara terpadu.
-            </p>
-          </div>
-        </div>
+ variant="refresh"
+ icon={RefreshCw}
+ label="Segarkan Data"
+ onClick={fetchDashboard}
+ disabled={loading}
+ className={loading ? 'animate-spin' : ''}
+ />
  </div>
+ }
+ />
  </motion.div>
 
  {/* Tahfizh Sub-Navigation (5 tab modul terpadu) */}
@@ -418,16 +399,16 @@ export default function GuruTahfizhDashboardPage() {
  <section className="space-y-3">
  <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
  {/* RICH STATUS SETORAN HARI INI CARD */}
- <div className="lg:col-span-5 relative overflow-hidden rounded-2xl border-2 border-emerald-300/80 bg-white p-5 sm:p-6 shadow-md shadow-sm dark:border-emerald-700/80 dark:bg-[#1B2433] flex flex-col justify-between">
+ <div className="lg:col-span-5 relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] shadow-sm flex flex-col justify-between">
  <div>
  {/* Header Card */}
- <div className="flex items-start justify-between gap-3 mb-3.5">
- <div className="flex items-center gap-2.5">
- <div className="flex size-9 sm:size-10 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 via-teal-600 to-emerald-700 text-white shadow-sm shadow-teal-600/30">
- <Clock className="size-4.5 sm:size-5 text-white" />
+ <div className="flex items-start justify-between gap-3 bg-emerald-500/10 border-b border-emerald-200/80 dark:border-emerald-800/60 px-5 py-4">
+ <div className="flex items-center gap-3 min-w-0">
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
+ <Clock className="size-5 text-white" />
  </div>
- <div>
- <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
+ <div className="min-w-0">
+ <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white truncate">
  Status Setoran Hari Ini
  </h3>
  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -435,76 +416,52 @@ export default function GuruTahfizhDashboardPage() {
  </p>
  </div>
  </div>
- <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border-2 border-emerald-300/70 px-2.5 py-0.5 text-xs font-extrabold shrink-0">
+ <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-700/80 px-2.5 py-0.5 text-xs font-extrabold shrink-0">
  <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
  {persentaseSelesai}% Tuntas
  </span>
  </div>
 
+ <div className="p-5 space-y-4">
  {/* Progress Bar Capaian */}
- <div className="mb-3.5 p-3 rounded-xl bg-white dark:bg-[#1B2433] dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-[#151D2A] border border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="p-3 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-800/60">
  <div className="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
  <span className="flex items-center gap-1.5 text-slate-800 dark:text-slate-200">
  <Sparkles className="size-3 text-amber-500" />
  Capaian Halaqah Hari Ini
  </span>
- <span className="text-emerald-700 dark:text-emerald-300 font-extrabold">
+ <span className="text-emerald-700 dark:text-emerald-300 font-extrabold tabular-nums">
  {sudahCount} / {totalBinaan} Santri ({persentaseSelesai}%)
  </span>
  </div>
- <div className="w-full bg-emerald-50 dark:bg-emerald-950/40 rounded-full h-2.5 overflow-hidden p-0.5">
+ <div className="w-full bg-emerald-100 dark:bg-emerald-950/60 rounded-full h-2.5 overflow-hidden p-0.5">
  <div
- className="bg-white dark:bg-[#1B2433] h-full rounded-full transition-all duration-500"
+ className="bg-gradient-to-r from-emerald-500 to-teal-500 h-full rounded-full transition-all duration-500"
  style={{ width: `${Math.min(100, Math.max(0, persentaseSelesai))}%` }}
  />
  </div>
  </div>
 
- {/* Dual Interactive Status Tiles */}
- <div className="grid grid-cols-2 gap-2.5 mb-3.5">
- <div
+ {/* Dual Interactive Status KPI Cards (Gold Standard) */}
+ <div className="grid grid-cols-2 gap-3">
+ <KpiStatCard
+ title="Sudah Setor"
+ value={formatNumber(sudahCount)}
+ description="Santri Sudah Setor"
+ icon={CheckCircle2}
+ tone="emerald"
+ ctaText="Rincian"
  onClick={() => handleOpenSetoranModal('sudah')}
- role="button"
- tabIndex={0}
- className="group relative overflow-hidden rounded-2xl border-2 border-emerald-300/80 bg-white dark:bg-[#1B2433] dark:border-emerald-700/80 dark:bg-[#1B2433] p-3 cursor-pointer hover:border-emerald-500 dark:hover:border-emerald-500 transition-all hover:shadow-sm"
- >
- <div className="flex items-center justify-between mb-1">
- <span className="inline-flex size-6.5 items-center justify-center rounded-lg bg-emerald-600 text-white shadow-xs">
- <CheckCircle2 className="size-3.5" />
- </span>
- <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 group-hover:underline flex items-center gap-0.5">
- Rincian <ChevronRight className="size-3" />
- </span>
- </div>
- <div className="text-xl sm:text-2xl font-black text-emerald-800 dark:text-emerald-200">
- {sudahCount}
- </div>
- <div className="text-xs font-bold text-emerald-700/90 dark:text-emerald-400/90">
- Santri Sudah Setor
- </div>
- </div>
-
- <div
+ />
+ <KpiStatCard
+ title="Belum Setor"
+ value={formatNumber(belumCount)}
+ description="Santri Belum Setor"
+ icon={UserX}
+ tone="amber"
+ ctaText="Rincian"
  onClick={() => handleOpenSetoranModal('belum')}
- role="button"
- tabIndex={0}
- className="group relative overflow-hidden rounded-2xl border-2 border-amber-300/80 bg-white dark:bg-[#1B2433] dark:border-amber-700/80 dark:bg-[#1B2433] p-3 cursor-pointer hover:border-amber-500 dark:hover:border-amber-500 transition-all hover:shadow-sm"
- >
- <div className="flex items-center justify-between mb-1">
- <span className="inline-flex size-6.5 items-center justify-center rounded-lg bg-amber-600 text-white shadow-xs">
- <UserX className="size-3.5" />
- </span>
- <span className="text-[10px] font-bold text-amber-700 dark:text-amber-400 group-hover:underline flex items-center gap-0.5">
- Rincian <ChevronRight className="size-3" />
- </span>
- </div>
- <div className="text-xl sm:text-2xl font-black text-amber-800 dark:text-amber-200">
- {belumCount}
- </div>
- <div className="text-xs font-bold text-amber-700/90 dark:text-amber-400/90">
- Santri Belum Setor
- </div>
- </div>
+ />
  </div>
 
  {/* Donut Chart Visual */}
@@ -605,13 +562,14 @@ export default function GuruTahfizhDashboardPage() {
  )}
  </div>
  </div>
+ </div>
 
  {/* Card Footer CTA Button */}
- <div className="mt-3.5 pt-3 border-t border-emerald-100/90 dark:border-emerald-900/60">
+ <div className="px-5 pb-5 pt-3 border-t border-emerald-100/90 dark:border-emerald-900/60">
  <button
  type="button"
  onClick={() => handleOpenSetoranModal('sudah')}
- className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-white dark:bg-[#1B2433] hover:from-emerald-700 hover:to-teal-800 text-xs font-bold shadow-md shadow-sm transition-all cursor-pointer group"
+ className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition-all cursor-pointer group active:scale-[0.99]"
  >
  <Users className="size-4" />
  <span>Lihat Rincian Santri ({sudahCount} Sudah • {belumCount} Belum)</span>
@@ -621,25 +579,18 @@ export default function GuruTahfizhDashboardPage() {
  </div>
 
  {/* RIWAYAT SETORAN TERBARU DATATABLE */}
- <div className="lg:col-span-7 relative overflow-hidden rounded-2xl border-2 border-emerald-300/80 bg-white shadow-md shadow-sm dark:border-emerald-700/80 dark:bg-[#1B2433]">
- <div className="p-4 sm:p-5 border-b border-emerald-100/90 dark:border-emerald-900/60 bg-slate-50/50 dark:bg-slate-900/50">
- <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
- Riwayat Setoran Terbaru
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Catatan hafalan dan murajaah siswa binaan halaqah
- </p>
- </div>
- <div className="p-4">
+ <div className="lg:col-span-7">
  <AppDataTable
- title=""
- description=""
+ title="Riwayat Setoran Terbaru"
+ description="Catatan hafalan dan murajaah siswa binaan halaqah"
+ icon={BookOpen}
  data={tables.recent_logs || []}
  columns={setoranColumns}
  keyField="student"
  searchPlaceholder="Cari siswa atau surah..."
+ clientPagination
+ clientPageSize={7}
  />
- </div>
  </div>
  </div>
  </section>

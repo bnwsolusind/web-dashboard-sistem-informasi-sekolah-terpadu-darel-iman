@@ -161,6 +161,7 @@ export default function MasterSubjectPage({
  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
  const [selectedForDetail, setSelectedForDetail] = useState(null)
  const [isImportModalOpen, setIsImportModalOpen] = useState(false)
+ const [kpiModalKey, setKpiModalKey] = useState(null)
  const [isExportModalOpen, setIsExportModalOpen] = useState(false)
  const [exportFormat, setExportFormat] = useState('xlsx')
  const [isPrintModalOpen, setIsPrintModalOpen] = useState(false)
@@ -927,6 +928,7 @@ export default function MasterSubjectPage({
  value={Number(stats.total || 0).toLocaleString('id-ID')}
  subtext="Terdaftar di seluruh kurikulum"
  tone="emerald"
+ onClick={() => setKpiModalKey('total')}
  />
  <ModernKpiCard
  icon={CheckCircle2}
@@ -935,6 +937,7 @@ export default function MasterSubjectPage({
  subtext="Siap digunakan dalam pembelajaran"
  tag="Aktif"
  tone="teal"
+ onClick={() => setKpiModalKey('aktif')}
  />
  <ModernKpiCard
  icon={Archive}
@@ -942,6 +945,7 @@ export default function MasterSubjectPage({
  value={Number(archiveCount || 0).toLocaleString('id-ID')}
  subtext="Nonaktif atau dalam arsip"
  tone="amber"
+ onClick={() => setKpiModalKey('archive')}
  />
  </div>
 
@@ -1389,7 +1393,7 @@ export default function MasterSubjectPage({
  type="text"
  value={formData.warna}
  onChange={(e) => setFormData({ ...formData, warna: e.target.value })}
- className="flex-1 rounded-xl border border-emerald-200/90 bg-slate-50/50 px-3.5 py-2.5 text-xs font-mono font-bold text-slate-800 focus:border-[#0E5C44] focus:bg-white focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="flex-1 rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 px-3.5 py-2.5 text-xs font-mono font-bold text-slate-800 focus:border-[#0E5C44] focus:bg-white focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
  </div>
@@ -1951,6 +1955,87 @@ export default function MasterSubjectPage({
           </p>
         </div>
       </AppModal>
+
+      {/* ── KPI Quick View Pop-up Modal ── */}
+      {(() => {
+        const allItems = Array.isArray(items) ? items : []
+        const kpiMap = {
+          total: {
+            title: 'Rincian Total Mata Pelajaran',
+            badge: `${Number(stats.total || allItems.length).toLocaleString('id-ID')} Mapel`,
+            rows: allItems,
+          },
+          aktif: {
+            title: 'Rincian Mata Pelajaran Aktif',
+            badge: `${Number(stats.aktif || 0).toLocaleString('id-ID')} Aktif`,
+            rows: allItems.filter((s) => Boolean(s.is_active ?? (String(s.status || '').toLowerCase() === 'aktif'))),
+          },
+          archive: {
+            title: 'Rincian Mata Pelajaran Nonaktif / Arsip',
+            badge: `${Number(archiveCount || 0).toLocaleString('id-ID')} Arsip`,
+            rows: allItems.filter((s) => !(s.is_active ?? (String(s.status || '').toLowerCase() === 'aktif'))),
+          },
+        }
+        const meta = kpiModalKey ? kpiMap[kpiModalKey] : null
+        return (
+          <AppModal
+            isOpen={Boolean(kpiModalKey && meta)}
+            onClose={() => setKpiModalKey(null)}
+            maxWidth="max-w-2xl"
+            icon={BookOpen}
+            title={meta?.title || 'Rincian Mata Pelajaran'}
+            badge={meta?.badge}
+            footer={
+              <button
+                type="button"
+                onClick={() => setKpiModalKey(null)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+              >
+                <X className="size-4" />
+                <span>Tutup</span>
+              </button>
+            }
+          >
+            <div className="rounded-2xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 overflow-hidden bg-white dark:bg-[#1B2433]">
+              <div className="max-h-[45vh] overflow-y-auto overflow-x-auto">
+                <table className="w-full text-left text-xs border-collapse">
+                  <thead className="sticky top-0 z-10 bg-gradient-to-r from-emerald-100/95 via-teal-50/90 to-emerald-100/95 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950 dark:via-teal-950 dark:to-emerald-950 dark:border-emerald-800/80 dark:text-emerald-200 font-bold uppercase tracking-wider text-[11px]">
+                    <tr>
+                      <th className="p-3">Kode</th>
+                      <th className="p-3">Nama Mata Pelajaran</th>
+                      <th className="p-3 text-center">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40">
+                    {(meta?.rows || []).length === 0 ? (
+                      <tr>
+                        <td colSpan={3} className="p-6 text-center text-xs font-semibold text-slate-500">
+                          Belum ada data mata pelajaran pada halaman aktif ini.
+                        </td>
+                      </tr>
+                    ) : (
+                      (meta?.rows || []).map((s, idx) => {
+                        const isAktif = Boolean(s.is_active ?? (String(s.status || '').toLowerCase() === 'aktif'))
+                        return (
+                          <tr key={s.id || idx} className="hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition">
+                            <td className="p-3 font-mono font-bold text-emerald-700 dark:text-emerald-400">{s.code || s.kode || '-'}</td>
+                            <td className="p-3 font-extrabold text-slate-900 dark:text-white">{s.name || s.nama || '-'}</td>
+                            <td className="p-3 text-center">
+                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${isAktif ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'}`}>
+                                {isAktif ? 'Aktif' : 'Nonaktif'}
+                              </span>
+                            </td>
+                          </tr>
+                        )
+                      })
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </AppModal>
+        )
+      })()}
 
  {/* Smart Floating Scroll Navigator (Opsi A) */}
  <SmartScrollFab targetId="tabel-mata-pelajaran" downTooltip="Langsung ke Tabel Mata Pelajaran" />

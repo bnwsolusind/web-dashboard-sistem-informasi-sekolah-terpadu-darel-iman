@@ -414,7 +414,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
  autoFocus
  />
  </div>
@@ -832,7 +832,7 @@ export function LaporanLintasUnitPage() {
 
  {/* Datatable Body */}
  <div className="overflow-x-auto">
- <TableRoot className="w-full text-left border-collapse text-xs min-w-[700px]">
+ <TableRoot fullBleed={true} className="text-xs">
  <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
  <TableRow>
  <TableHead className="py-3.5 px-4">Unit Pendidikan</TableHead>
@@ -899,7 +899,7 @@ export function LaporanLintasUnitPage() {
  </div>
 
  <div className="overflow-x-auto">
- <TableRoot className="w-full text-left border-collapse text-xs min-w-[700px]">
+ <TableRoot fullBleed={true} className="text-xs">
  <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
  <TableRow>
  <TableHead className="py-3.5 px-4">Unit Pendidikan</TableHead>

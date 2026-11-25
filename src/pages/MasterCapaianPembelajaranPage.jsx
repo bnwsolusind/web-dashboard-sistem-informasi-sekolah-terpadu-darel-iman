@@ -1362,7 +1362,7 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
  placeholder="Contoh: CP-MTK-SD-01"
  value={formData.kode_cp}
  onChange={(e) => setFormData({ ...formData, kode_cp: e.target.value })}
- className="w-full px-4 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669] dark:text-slate-100"
+ className="w-full px-4 py-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669] dark:text-slate-100"
  required
  />
  </div>
@@ -1404,7 +1404,7 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
  placeholder="Contoh: Kelas 1, TK A"
  value={formData.kelas_target}
  onChange={(e) => setFormData({ ...formData, kelas_target: e.target.value })}
- className="w-full px-4 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669] dark:text-slate-100"
+ className="w-full px-4 py-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669] dark:text-slate-100"
  />
  </div>
  </div>
@@ -1418,7 +1418,7 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
  placeholder="Masukkan nama / ringkasan Capaian Pembelajaran..."
  value={formData.nama_cp}
  onChange={(e) => setFormData({ ...formData, nama_cp: e.target.value })}
- className="w-full px-4 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669] dark:text-slate-100"
+ className="w-full px-4 py-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669] dark:text-slate-100"
  required
  />
  </div>
@@ -1432,7 +1432,7 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
  placeholder="Deskripsi uraian kompetensi elemen CP..."
  value={formData.deskripsi}
  onChange={(e) => setFormData({ ...formData, deskripsi: e.target.value })}
- className="w-full px-4 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669] dark:text-slate-100"
+ className="w-full px-4 py-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669] dark:text-slate-100"
  />
  </div>
 
@@ -1446,7 +1446,7 @@ export default function MasterCapaianPembelajaranPage({ embedded = false, hideBr
  min={1}
  value={formData.urutan}
  onChange={(e) => setFormData({ ...formData, urutan: parseInt(e.target.value) || 1 })}
- className="w-full px-4 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669] dark:text-slate-100"
+ className="w-full px-4 py-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669] dark:text-slate-100"
  />
  </div>
 

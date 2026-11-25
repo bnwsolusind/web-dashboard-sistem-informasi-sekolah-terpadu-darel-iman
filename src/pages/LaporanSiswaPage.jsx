@@ -81,6 +81,7 @@ import {
 } from '../services/studentMutationService'
 import PageContainer from '../components/app/PageContainer'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
+import { KpiStatCard } from '../components/app'
 import {
   ReportSkeleton
 } from '../components/reports/ReportSkeleton'
@@ -443,7 +444,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
  autoFocus
  />
  </div>
@@ -1452,8 +1453,8 @@ export default function LaporanSiswaPage() {
  {/* ── KONTEN SUB-TAB 1: DEMOGRAFI & BUKU INDUK ──────────────────────── */}
  {activeSubTab === 'demografi' && (
  <>
- {/* ── KPI Stat Cards Grid (5 Equal & Colored Modern Cards Sesuai Standar Laporan) ── */}
- <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-5">
+ {/* ── KPI Stat Cards Grid (HeroUI Standard KpiStatCard) ── */}
+ <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
  {[
  {
  label: 'Total Siswa',
@@ -1468,7 +1469,7 @@ export default function LaporanSiswaPage() {
  label: 'Siswa Aktif',
  statusFilter: 'aktif',
  value: angka(aktif),
- subtitle: total > 0 ? `${aktif} dari ${total} siswa (${((aktif / total) * 100).toFixed(1)}%)` : 'Belum ada data',
+ subtitle: total > 0 ? `${aktif} dari ${total} siswa` : 'Belum ada data',
  icon: GraduationCap,
  tone: 'sky',
  percent: total > 0 ? `${((aktif / total) * 100).toFixed(1)}%` : '—',
@@ -1477,7 +1478,7 @@ export default function LaporanSiswaPage() {
  label: 'Siswa Alumni',
  statusFilter: 'alumni',
  value: angka(alumni),
- subtitle: total > 0 ? `${alumni} dari ${total} siswa (${((alumni / total) * 100).toFixed(1)}%)` : 'Belum ada data',
+ subtitle: total > 0 ? `${alumni} dari ${total} siswa` : 'Belum ada data',
  icon: UserCheck,
  tone: 'amber',
  percent: total > 0 ? `${((alumni / total) * 100).toFixed(1)}%` : '—',
@@ -1486,7 +1487,7 @@ export default function LaporanSiswaPage() {
  label: 'Mutasi Keluar',
  statusFilter: 'mutasi_keluar',
  value: angka(mutasi),
- subtitle: total > 0 ? `${mutasi} dari ${total} siswa (${((mutasi / total) * 100).toFixed(1)}%)` : 'Belum ada data',
+ subtitle: total > 0 ? `${mutasi} dari ${total} siswa` : 'Belum ada data',
  icon: UserMinus,
  tone: 'violet',
  percent: total > 0 ? `${((mutasi / total) * 100).toFixed(1)}%` : '—',
@@ -1495,66 +1496,28 @@ export default function LaporanSiswaPage() {
  label: 'Siswa Non-Aktif',
  statusFilter: 'nonaktif',
  value: angka(nonaktif),
- subtitle: total > 0 ? `${nonaktif} dari ${total} siswa (${((nonaktif / total) * 100).toFixed(1)}%)` : 'Belum ada data',
+ subtitle: total > 0 ? `${nonaktif} dari ${total} siswa` : 'Belum ada data',
  icon: UserX,
  tone: 'rose',
  percent: total > 0 ? `${((nonaktif / total) * 100).toFixed(1)}%` : '—',
  },
- ].map(({ label, statusFilter, value, subtitle, icon: Icon, tone, percent }) => {
- const t = MODERN_CARD_TONES[tone] || MODERN_CARD_TONES.emerald
- const isSelected = status === statusFilter
- return (
- <article
-                  key={label}
-                  onClick={() => {
-                    setStatus(statusFilter)
-                    setHalaman(1)
-                  }}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      setStatus(statusFilter)
-                      setHalaman(1)
-                    }
-                  }}
-                  className={`group relative overflow-hidden rounded-container border-2 p-4 sm:p-5 shadow-xs transition-all duration-200 cursor-pointer hover:shadow-md flex flex-col justify-between h-full ${t.card} ${
-                    isSelected ? 'ring-2 ring-emerald-500 shadow-md' : ''
-                  }`}
-                  title={`Klik untuk memfilter data ${label}`}
-                >
-                  <div>
-                    <div className="flex items-center justify-between gap-1.5 mb-3">
-                      <div className={`flex size-11 items-center justify-center rounded-full shadow-xs shrink-0 ${t.iconBox}`}>
-                        <Icon className="size-5 text-white" />
-                      </div>
-                      <div className="flex flex-col items-end gap-0.5">
-                        <span className={`text-[10px] font-extrabold uppercase tracking-wider ${t.tagHeader || t.title}`}>
-                          {label}
-                        </span>
-                        <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs ${t.tag}`}>
-                          {percent}
-                        </span>
-                      </div>
-                    </div>
-
-                    <strong className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tabular-nums tracking-tight block my-1">
-                      {value}
-                    </strong>
-                    <p className="text-xs text-slate-600 dark:text-slate-400 font-medium truncate block">
-                      {subtitle}
-                    </p>
-                  </div>
-
-                  <div className={`flex items-center justify-between text-xs font-bold pt-2.5 mt-3 border-t ${t.divider}`}>
-                    <span className={`font-bold leading-tight truncate flex-1 ${t.sub}`}>{subtitle}</span>
-                    <span className={`inline-flex items-center gap-1 font-extrabold group-hover:translate-x-0.5 transition-transform ${t.cta}`}>
-                      Filter &rarr;
-                    </span>
-                  </div>
-                </article>
- )
- })}
+ ].map(({ label, statusFilter, value, subtitle, icon, tone, percent }) => (
+ <KpiStatCard
+ key={label}
+ icon={icon}
+ title={label}
+ value={value}
+ description={subtitle}
+ badge={percent}
+ tone={tone}
+ ctaText="Filter"
+ onClick={() => {
+ setStatus(statusFilter)
+ setHalaman(1)
+ }}
+ className={status === statusFilter ? 'ring-2 ring-emerald-500 shadow-md' : ''}
+ />
+ ))}
  </div>
 
  {/* ── 3-Column Equal Grid: Filter Laporan, Grafik Siswa per Jenjang, & Distribusi Unit (Style persis LaporanAbsensiPage) ── */}
@@ -1792,9 +1755,9 @@ export default function LaporanSiswaPage() {
  </div>
 
  {/* ── Main Master Datatable Card ─────────────────────────────────────── */}
- <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-sm dark:border-emerald-800/60 dark:bg-card-dark">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-card-dark">
  {/* ── Toolbar Header Terstruktur 3-Baris ───────────────────────────── */}
- <div className="p-4 sm:p-6 space-y-4 bg-slate-50/50 dark:bg-slate-900/50 border-b border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="p-4 sm:p-6 space-y-4 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent border-b border-emerald-200/80 dark:border-emerald-800/60">
  {/* Baris 1: Title & Toolbar Squircle Action Buttons */}
  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
  <div>
@@ -1844,7 +1807,7 @@ export default function LaporanSiswaPage() {
  value={pencarian}
  onChange={(e) => setPencarian(e.target.value)}
  placeholder="Cari NIS, Nama Siswa, Kelas, atau Unit Pendidikan..."
- className="w-full pl-10 pr-9 h-9 text-xs rounded-xl bg-slate-50/70 dark:bg-slate-900/60"
+ className="w-full pl-10 pr-9 h-10 text-xs font-bold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
  />
  {pencarian && (
  <button
@@ -1898,14 +1861,13 @@ export default function LaporanSiswaPage() {
  />
  </div>
  ) : (
- <TableRoot className="w-full text-left border-collapse text-xs min-w-[940px]">
+ <TableRoot fullBleed={true} className="text-xs">
             <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
               <TableRow className="border-b border-emerald-200/80 dark:border-emerald-800/60 bg-transparent text-emerald-950 dark:text-emerald-200 font-bold tracking-wider uppercase text-xs">
-                <TableHead className="w-[36%] py-3.5 px-4">IDENTITAS SISWA & NIS</TableHead>
-                <TableHead className="w-[22%] py-3.5 px-3 text-center">UNIT PENDIDIKAN</TableHead>
-                <TableHead className="w-[20%] py-3.5 px-3 text-center">KELAS / ROMBEL</TableHead>
-                <TableHead className="w-[12%] py-3.5 px-3 text-center">STATUS</TableHead>
-                <TableHead className="w-16 py-3.5 px-3 text-right pr-4 select-none"></TableHead>
+                <TableHead className="w-[40%] py-3.5 px-4">IDENTITAS SISWA & NIS</TableHead>
+                <TableHead className="w-[24%] py-3.5 px-3 text-center">UNIT PENDIDIKAN</TableHead>
+                <TableHead className="w-[22%] py-3.5 px-3 text-center">KELAS / ROMBEL</TableHead>
+                <TableHead className="w-[14%] py-3.5 px-3 text-center">STATUS</TableHead>
               </TableRow>
             </TableHeader>
 
@@ -2003,18 +1965,6 @@ export default function LaporanSiswaPage() {
  onClick={() => setSelectedStudentModal(item)}
  />
  </TableCell>
-
- <TableCell className="py-3.5 px-3 text-right pr-4">
-                      <ActionDropdown
-                        extraItems={[
-                          {
-                            label: "Cetak Evaluasi Pekanan",
-                            icon: Printer,
-                            onClick: () => handlePrintWeekly(item)
-                          }
-                        ]}
-                      />
- </TableCell>
  </TableRow>
  )
  })}
@@ -2039,63 +1989,40 @@ export default function LaporanSiswaPage() {
  {/* ── KONTEN SUB-TAB 2: REKAP PRESTASI SISWA ──────────────────────────── */}
  {activeSubTab === 'prestasi' && (
  <div className="space-y-6">
- {/* 4 KPI Cards Prestasi */}
+ {/* 4 KPI Cards Prestasi (HeroUI Standard KpiStatCard) */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 !bg-sky-100/90 hover:!bg-sky-200/70 dark:border-emerald-800/60 dark:!bg-sky-950/50 dark:hover:!bg-sky-950/70 hover:border-emerald-300 dark:hover:border-emerald-700/80 p-5 shadow-xs transition-all duration-200">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="size-11 rounded-xl !bg-emerald-600 !text-white flex items-center justify-center shadow-sm dark:!bg-sky-600 dark:!text-white">
-                    <Trophy className="size-5 text-white" />
-                  </div>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-white/90 text-sky-800 dark:bg-sky-900/80 dark:text-sky-200 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
-                    Total
-                  </span>
-                </div>
-                <p className="text-2xl font-black text-sky-800 dark:text-sky-200">{angka(prestasiKpi.total)}</p>
-                <p className="text-xs font-bold text-sky-800 dark:text-sky-300 mt-0.5">Total Prestasi Siswa</p>
-                <p className="text-xs text-sky-700/90 dark:text-sky-300/90 mt-1">Capaian kejuaraan & penghargaan</p>
-              </div>
-
-              <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 !bg-amber-100/90 hover:!bg-amber-200/70 dark:border-emerald-800/60 dark:!bg-amber-950/50 dark:hover:!bg-amber-950/70 hover:border-emerald-300 dark:hover:border-emerald-700/80 p-5 shadow-xs transition-all duration-200">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="size-11 rounded-xl !bg-amber-600 !text-white flex items-center justify-center shadow-sm dark:!bg-amber-600 dark:!text-white">
-                    <Award className="size-5 text-white" />
-                  </div>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-white/90 text-amber-800 dark:bg-amber-900/80 dark:text-amber-200 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
-                    Nasional
-                  </span>
-                </div>
-                <p className="text-2xl font-black text-amber-800 dark:text-amber-200">{angka(prestasiKpi.nasional)}</p>
-                <p className="text-xs font-bold text-amber-800 dark:text-amber-300 mt-0.5">Tingkat Nasional</p>
-                <p className="text-xs text-amber-700/90 dark:text-amber-300/90 mt-1">Kompetisi nasional bergengsi</p>
-              </div>
-
-              <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 !bg-emerald-100/90 hover:!bg-emerald-200/70 dark:border-emerald-800/60 dark:!bg-emerald-950/50 dark:hover:!bg-emerald-950/70 hover:border-emerald-300 dark:hover:border-emerald-700/80 p-5 shadow-xs transition-all duration-200">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="size-11 rounded-xl !bg-emerald-600 !text-white flex items-center justify-center shadow-sm dark:!bg-emerald-600 dark:!text-white">
-                    <Sparkles className="size-5 text-white" />
-                  </div>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-white/90 text-emerald-800 dark:bg-emerald-900/80 dark:text-emerald-200 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
-                    Provinsi
-                  </span>
-                </div>
-                <p className="text-2xl font-black text-emerald-800 dark:text-emerald-200">{angka(prestasiKpi.provinsi)}</p>
-                <p className="text-xs font-bold text-emerald-800 dark:text-emerald-300 mt-0.5">Tingkat Provinsi</p>
-                <p className="text-xs text-emerald-700/90 dark:text-emerald-300/90 mt-1">Kompetisi tingkat wilayah</p>
-              </div>
-
-              <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 !bg-purple-100/90 hover:!bg-purple-200/70 dark:border-emerald-800/60 dark:!bg-purple-950/50 dark:hover:!bg-purple-950/70 hover:border-emerald-300 dark:hover:border-emerald-700/80 p-5 shadow-xs transition-all duration-200">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="size-11 rounded-xl !bg-purple-600 !text-white flex items-center justify-center shadow-sm dark:!bg-purple-600 dark:!text-white">
-                    <Building2 className="size-5 text-white" />
-                  </div>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-white/90 text-purple-800 dark:bg-purple-900/80 dark:text-purple-200 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
-                    Kota / Kab
-                  </span>
-                </div>
-                <p className="text-2xl font-black text-purple-800 dark:text-purple-200">{angka(prestasiKpi.kota)}</p>
-                <p className="text-xs font-bold text-purple-800 dark:text-purple-300 mt-0.5">Tingkat Kota / Kabupaten</p>
-                <p className="text-xs text-purple-700/90 dark:text-purple-300/90 mt-1">Ajang talenta daerah</p>
-              </div>
+              <KpiStatCard
+                icon={Trophy}
+                title="Total Prestasi Siswa"
+                value={angka(prestasiKpi.total)}
+                description="Capaian kejuaraan & penghargaan"
+                badge="Total"
+                tone="sky"
+              />
+              <KpiStatCard
+                icon={Award}
+                title="Tingkat Nasional"
+                value={angka(prestasiKpi.nasional)}
+                description="Kompetisi nasional bergengsi"
+                badge="Nasional"
+                tone="amber"
+              />
+              <KpiStatCard
+                icon={Sparkles}
+                title="Tingkat Provinsi"
+                value={angka(prestasiKpi.provinsi)}
+                description="Kompetisi tingkat wilayah"
+                badge="Provinsi"
+                tone="emerald"
+              />
+              <KpiStatCard
+                icon={Building2}
+                title="Tingkat Kota / Kabupaten"
+                value={angka(prestasiKpi.kota)}
+                description="Ajang talenta daerah"
+                badge="Kota / Kab"
+                tone="purple"
+              />
             </div>
 
             {/* 3-Column Equal Grid Prestasi */}
@@ -2130,7 +2057,7 @@ export default function LaporanSiswaPage() {
  value={prestasiSearch}
  onChange={(e) => setPrestasiSearch(e.target.value)}
  placeholder="Nama siswa, judul lomba, bidang..."
- className="w-full h-9 pl-8 pr-3 text-xs rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full h-10 pl-9 pr-3 text-xs font-bold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
  </div>
@@ -2238,21 +2165,22 @@ export default function LaporanSiswaPage() {
  </span>
  </div>
 
- <div className="overflow-x-auto">
- <TableRoot className="w-full">
+ <div className="overflow-x-auto rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
+ <TableRoot fullBleed={true} className="text-xs">
                     <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
-                      <TableRow>
+                      <TableRow className="bg-transparent hover:bg-transparent">
                         <TableHead className="text-xs font-black">SANTRI / SISWA</TableHead>
                         <TableHead className="text-xs font-black">NAMA PRESTASI</TableHead>
-                        <TableHead className="text-xs font-black">BIDANG &amp; TINGKAT</TableHead>
-                        <TableHead className="text-center text-xs font-black">PERINGKAT &amp; TAHUN</TableHead>
-                        <TableHead className="w-16 sm:w-20 text-right select-none" />
+                        <TableHead className="text-center text-xs font-black">TINGKAT</TableHead>
+                        <TableHead className="text-center text-xs font-black">BIDANG</TableHead>
+                        <TableHead className="text-center text-xs font-black">PERINGKAT</TableHead>
+                        <TableHead className="text-center text-xs font-black">TAHUN</TableHead>
                       </TableRow>
                     </TableHeader>
  <TableBody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40 text-xs">
  {hasilFilterPrestasi.length === 0 ? (
  <TableRow>
- <TableCell colSpan={5} className="text-center py-10 text-slate-500">
+ <TableCell colSpan={6} className="text-center py-10 text-slate-500">
  Tidak ada data prestasi yang cocok dengan pencarian.
  </TableCell>
  </TableRow>
@@ -2331,73 +2259,46 @@ export default function LaporanSiswaPage() {
  {/* ── KONTEN SUB-TAB 3: KELULUSAN & ALUMNI (Gaya Card Mutasi dengan Warna Khusus) ── */}
  {activeSubTab === 'kelulusan' && (
  <div className="space-y-6">
- {/* ── 4 KPI Stat Cards for Kelulusan (Harmonized with HEROUI_ALUMNI_MUTASI_CARDS & MutasiSiswaScreen) ── */}
+ {/* ── 4 KPI Stat Cards for Kelulusan (HeroUI Standard KpiStatCard) ── */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {/* Card 1: Total Kelulusan (Emerald) */}
-              <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 !bg-emerald-100/90 hover:!bg-emerald-200/70 dark:border-emerald-800/60 dark:!bg-emerald-950/50 dark:hover:!bg-emerald-950/70 hover:border-emerald-300 dark:hover:border-emerald-700/80 p-5 shadow-xs transition-all duration-200">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="size-11 rounded-xl !bg-emerald-600 !text-white flex items-center justify-center shadow-sm dark:!bg-emerald-600 dark:!text-white">
-                    <School className="size-5 text-white" />
-                  </div>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-white/90 text-emerald-800 dark:bg-emerald-900/80 dark:text-emerald-200 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
-                    Total Alumni
-                  </span>
-                </div>
-                <p className="text-2xl font-black text-emerald-800 dark:text-emerald-200">{angka(kelulusanKpi.total)}</p>
-                <p className="text-xs font-bold text-emerald-800 dark:text-emerald-300 mt-0.5">Total Kelulusan Siswa</p>
-                <p className="text-xs text-emerald-700/90 dark:text-emerald-300/90 mt-1">Akumulasi siswa & santri tamat</p>
-              </div>
-
-              {/* Card 2: Kelulusan per Tahun (Sky Blue) */}
-              <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 !bg-sky-100/90 hover:!bg-sky-200/70 dark:border-emerald-800/60 dark:!bg-sky-950/50 dark:hover:!bg-sky-950/70 hover:border-emerald-300 dark:hover:border-emerald-700/80 p-5 shadow-xs transition-all duration-200">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="size-11 rounded-xl !bg-emerald-600 !text-white flex items-center justify-center shadow-sm dark:!bg-sky-600 dark:!text-white">
-                    <CalendarCheck className="size-5 text-white" />
-                  </div>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-white/90 text-sky-800 dark:bg-sky-900/80 dark:text-sky-200 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
-                    Angkatan 2026
-                  </span>
-                </div>
-                <p className="text-2xl font-black text-sky-800 dark:text-sky-200">{angka(kelulusanKpi.tahunIni)}</p>
-                <p className="text-xs font-bold text-sky-800 dark:text-sky-300 mt-0.5">Kelulusan per Tahun</p>
-                <p className="text-xs text-sky-700/90 dark:text-sky-300/90 mt-1">Lulusan aktif periode tahun ini</p>
-              </div>
-
-              {/* Card 3: Kelulusan per Unit (Amber) */}
-              <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 !bg-amber-100/90 hover:!bg-amber-200/70 dark:border-emerald-800/60 dark:!bg-amber-950/50 dark:hover:!bg-amber-950/70 hover:border-emerald-300 dark:hover:border-emerald-700/80 p-5 shadow-xs transition-all duration-200">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="size-11 rounded-xl !bg-amber-600 !text-white flex items-center justify-center shadow-sm dark:!bg-amber-600 dark:!text-white">
-                    <Building2 className="size-5 text-white" />
-                  </div>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-white/90 text-amber-800 dark:bg-amber-900/80 dark:text-amber-200 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
-                    {kelulusanKpi.unitCount} Unit
-                  </span>
-                </div>
-                <p className="text-2xl font-black text-amber-800 dark:text-amber-200">{angka(kelulusanKpi.unitCount)}</p>
-                <p className="text-xs font-bold text-amber-800 dark:text-amber-300 mt-0.5">Kelulusan per Unit</p>
-                <p className="text-xs text-amber-700/90 dark:text-amber-300/90 mt-1">Distribusi kelulusan satuan pendidikan</p>
-              </div>
-
-              {/* Card 4: Tujuan Alumni (Royal Purple) */}
-              <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 !bg-purple-100/90 hover:!bg-purple-200/70 dark:border-emerald-800/60 dark:!bg-purple-950/50 dark:hover:!bg-purple-950/70 hover:border-emerald-300 dark:hover:border-emerald-700/80 p-5 shadow-xs transition-all duration-200">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="size-11 rounded-xl !bg-purple-600 !text-white flex items-center justify-center shadow-sm dark:!bg-purple-600 dark:!text-white">
-                    <Compass className="size-5 text-white" />
-                  </div>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-white/90 text-purple-800 dark:bg-purple-900/80 dark:text-purple-200 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
-                    Tracer Study
-                  </span>
-                </div>
-                <p className="text-2xl font-black text-purple-800 dark:text-purple-200">{angka(kelulusanKpi.lanjutStudi)}</p>
-                <p className="text-xs font-bold text-purple-800 dark:text-purple-300 mt-0.5">Tujuan Alumni (Studi Lanjut)</p>
-                <p className="text-xs text-purple-700/90 dark:text-purple-300/90 mt-1">PTN, Ma'had, PTS, & Karir</p>
-              </div>
+              <KpiStatCard
+                icon={School}
+                title="Total Kelulusan Siswa"
+                value={angka(kelulusanKpi.total)}
+                description="Akumulasi siswa & santri tamat"
+                badge="Total Alumni"
+                tone="emerald"
+              />
+              <KpiStatCard
+                icon={CalendarCheck}
+                title="Kelulusan per Tahun"
+                value={angka(kelulusanKpi.tahunIni)}
+                description="Lulusan aktif periode tahun ini"
+                badge="Angkatan 2026"
+                tone="sky"
+              />
+              <KpiStatCard
+                icon={Building2}
+                title="Kelulusan per Unit"
+                value={angka(kelulusanKpi.unitCount)}
+                description="Distribusi kelulusan satuan pendidikan"
+                badge={`${kelulusanKpi.unitCount} Unit`}
+                tone="amber"
+              />
+              <KpiStatCard
+                icon={Compass}
+                title="Tujuan Alumni (Studi Lanjut)"
+                value={angka(kelulusanKpi.lanjutStudi)}
+                description="PTN, Ma'had, PTS, & Karir"
+                badge="Tracer Study"
+                tone="purple"
+              />
             </div>
 
             {/* 3-Column Equal Grid for Kelulusan */}
  <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
  {/* Filter Panel Kelulusan */}
- <article className="relative rounded-xl border border-emerald-200/80 bg-white dark:bg-card-dark p-5 sm:p-6 shadow-xs flex flex-col justify-between h-full">
+ <article className="relative rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-card-dark p-5 sm:p-6 shadow-md shadow-emerald-500/10 flex flex-col justify-between h-full">
  <div>
  <div className="flex items-center justify-between mb-4 pb-3 border-b border-emerald-200/80 dark:border-emerald-800/60">
  <h2 className="text-base font-bold text-slate-900 dark:text-white">Filter Kelulusan & Alumni</h2>
@@ -2427,7 +2328,7 @@ export default function LaporanSiswaPage() {
  value={alumniSearch}
  onChange={(e) => setAlumniSearch(e.target.value)}
  placeholder="Nama alumni, NIS, perguruan tinggi..."
- className="w-full h-9 pl-8 pr-3 text-xs rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full h-10 pl-9 pr-3 text-xs font-bold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
  </div>
@@ -2569,8 +2470,8 @@ export default function LaporanSiswaPage() {
  </div>
  </div>
 
- <div className="overflow-x-auto">
- <TableRoot className="w-full">
+ <div className="overflow-x-auto rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
+ <TableRoot fullBleed={true} className="text-xs">
                     <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
                       <TableRow>
                         <TableHead className="w-12 text-center text-xs font-black text-emerald-950 dark:text-emerald-200">NO</TableHead>
@@ -2651,54 +2552,37 @@ export default function LaporanSiswaPage() {
  {/* ── KONTEN SUB-TAB 4: MUTASI MASUK & KELUAR ──────────────────────────── */}
  {activeSubTab === 'mutasi' && (
  <div className="space-y-6">
- {/* 3 KPI Cards Mutasi */}
+ {/* 3 KPI Cards Mutasi (HeroUI Standard KpiStatCard) */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 !bg-amber-100/90 hover:!bg-amber-200/70 dark:border-emerald-800/60 dark:!bg-amber-950/50 dark:hover:!bg-amber-950/70 hover:border-emerald-300 dark:hover:border-emerald-700/80 p-5 shadow-xs transition-all duration-200">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="size-11 rounded-xl !bg-amber-600 !text-white flex items-center justify-center shadow-sm dark:!bg-amber-600 dark:!text-white">
-                    <ArrowRightLeft className="size-5 text-white" />
-                  </div>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-white/90 text-amber-800 dark:bg-amber-900/80 dark:text-amber-200 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
-                    Internal
-                  </span>
-                </div>
-                <p className="text-2xl font-black text-amber-800 dark:text-amber-200">{angka(mutasiKpi.pindahUnit)}</p>
-                <p className="text-xs font-bold text-amber-800 dark:text-amber-300 mt-0.5">Pindah Unit Internal</p>
-                <p className="text-xs text-amber-700/90 dark:text-amber-300/90 mt-1">Antar satuan pendidikan yayasan</p>
-              </div>
-
-              <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 !bg-rose-100/90 hover:!bg-rose-200/70 dark:border-emerald-800/60 dark:!bg-rose-950/50 dark:hover:!bg-rose-950/70 hover:border-emerald-300 dark:hover:border-emerald-700/80 p-5 shadow-xs transition-all duration-200">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="size-11 rounded-xl !bg-rose-600 !text-white flex items-center justify-center shadow-sm dark:!bg-rose-600 dark:!text-white">
-                    <UserMinus className="size-5 text-white" />
-                  </div>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-white/90 text-rose-800 dark:bg-rose-900/80 dark:text-rose-200 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
-                    Eksternal
-                  </span>
-                </div>
-                <p className="text-2xl font-black text-rose-800 dark:text-rose-200">{angka(mutasiKpi.pindahKeluar)}</p>
-                <p className="text-xs font-bold text-rose-800 dark:text-rose-300 mt-0.5">Pindah Keluar Sekolah</p>
-                <p className="text-xs text-rose-700/90 dark:text-rose-300/90 mt-1">Santri pindah ke luar yayasan</p>
-              </div>
-
-              <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 !bg-purple-100/90 hover:!bg-purple-200/70 dark:border-emerald-800/60 dark:!bg-purple-950/50 dark:hover:!bg-purple-950/70 hover:border-emerald-300 dark:hover:border-emerald-700/80 p-5 shadow-xs transition-all duration-200">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="size-11 rounded-xl !bg-purple-600 !text-white flex items-center justify-center shadow-sm dark:!bg-purple-600 dark:!text-white">
-                    <Users className="size-5 text-white" />
-                  </div>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-white/90 text-purple-800 dark:bg-purple-900/80 dark:text-purple-200 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
-                    Arus Santri
-                  </span>
-                </div>
-                <p className="text-2xl font-black text-purple-800 dark:text-purple-200">{angka(mutasiKpi.total)}</p>
-                <p className="text-xs font-bold text-purple-800 dark:text-purple-300 mt-0.5">Total Mutasi Siswa</p>
-                <p className="text-xs text-purple-700/90 dark:text-purple-300/90 mt-1">Akumulasi permohonan mutasi</p>
-              </div>
+              <KpiStatCard
+                icon={ArrowRightLeft}
+                title="Pindah Unit Internal"
+                value={angka(mutasiKpi.pindahUnit)}
+                description="Antar satuan pendidikan yayasan"
+                badge="Internal"
+                tone="amber"
+              />
+              <KpiStatCard
+                icon={UserMinus}
+                title="Pindah Keluar Sekolah"
+                value={angka(mutasiKpi.pindahKeluar)}
+                description="Santri pindah ke luar yayasan"
+                badge="Eksternal"
+                tone="rose"
+              />
+              <KpiStatCard
+                icon={Users}
+                title="Total Mutasi Siswa"
+                value={angka(mutasiKpi.total)}
+                description="Akumulasi permohonan mutasi"
+                badge="Arus Santri"
+                tone="purple"
+              />
             </div>
 
             {/* Datatable Mutasi */}
- <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-sm dark:bg-card-dark">
- <div className="flex flex-col gap-3 p-4 sm:p-5 sm:flex-row sm:items-center sm:justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-card-dark">
+ <div className="flex flex-col gap-3 p-4 sm:p-5 sm:flex-row sm:items-center sm:justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent">
  <div>
  <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
  <ArrowRightLeft className="size-4 text-emerald-600" />
@@ -2714,7 +2598,7 @@ export default function LaporanSiswaPage() {
  </div>
 
  <div className="overflow-x-auto">
- <TableRoot className="w-full">
+ <TableRoot fullBleed={true} className="text-xs">
                     <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
                       <TableRow>
                         <TableHead className="text-xs font-black">SANTRI / SISWA</TableHead>

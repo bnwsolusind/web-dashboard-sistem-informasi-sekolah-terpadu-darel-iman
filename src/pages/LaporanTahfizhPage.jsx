@@ -70,6 +70,8 @@ import {
   PrintOptionModal,
   SquircleActionButton
 } from '../components/master-data'
+import { PageToolbarActions } from '../components/app/PageToolbarActions'
+import ActionDropdown from '../components/app/ActionDropdown'
 import {
   SmartScrollFab
 } from '../components/common'
@@ -714,7 +716,7 @@ export default function LaporanTahfizhPage() {
  {/* BARIS 1: TITLE & VIVID GRADIENT SQUIRCLE ACTION BUTTONS (§H.5) */}
  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-4 py-3.5 sm:px-6 md:px-8 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent border-b border-emerald-200/90 dark:border-emerald-800/60">
  <div className="flex items-center gap-3">
- <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shrink-0 shadow-xs">
+ <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-600 text-white shrink-0 shadow-xs">
  <FileText className="size-5" />
  </div>
  <div>
@@ -730,10 +732,15 @@ export default function LaporanTahfizhPage() {
  </div>
  </div>
 
- <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0 self-start sm:self-auto flex-wrap">
- <SquircleActionButton variant="import" icon={Upload} label="Import Data (Excel/CSV)" onClick={handleImport} />
- <SquircleActionButton variant="export" icon={Download} label="Export Data (Excel/CSV)" onClick={handleExportCsv} />
- <SquircleActionButton variant="print" icon={Printer} label="Cetak / PDF" onClick={() => setIsPrintModalOpen(true)} />
+ <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto flex-wrap">
+ <PageToolbarActions
+ onPrint={() => setIsPrintModalOpen(true)}
+ printLabel="Cetak / PDF"
+ onImport={handleImport}
+ importLabel="Import Data (Excel/CSV)"
+ onExport={handleExportCsv}
+ exportLabel="Export Data (Excel/CSV)"
+ />
  </div>
  </div>
 
@@ -760,7 +767,7 @@ export default function LaporanTahfizhPage() {
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Ketik nama santri, NIS, atau surah..."
- className="w-full rounded-xl border border-emerald-200/80 bg-white pl-10 pr-4 py-2 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-700/80/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-600/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white pl-10 pr-4 py-2 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-700/80/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-600/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20"
  />
  </div>
  </div>
@@ -792,25 +799,25 @@ export default function LaporanTahfizhPage() {
  type="button"
  onClick={handleResetFilter}
  title="Reset semua filter"
- className="w-full sm:w-auto sm:ml-auto inline-flex items-center justify-center gap-1.5 h-9 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 hover:border-emerald-300 dark:hover:border-emerald-700/80 bg-white hover:bg-emerald-50/60 px-3.5 text-sm font-medium text-slate-700 transition-colors cursor-pointer"
+ className="w-full sm:w-auto sm:ml-auto inline-flex items-center justify-center gap-1.5 h-9 rounded-xl border-2 border-emerald-300 bg-emerald-100/90 hover:bg-emerald-200 px-3.5 text-xs font-extrabold text-emerald-900 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300 transition-colors cursor-pointer"
  >
- <RotateCcw className="h-4 w-4 text-emerald-600 shrink-0" />
+ <RotateCcw className="h-3.5 w-3.5 shrink-0" />
  <span>Reset</span>
  </button>
  </div>
  </div>
 
  {/* BARIS 3: MASTER DATATABLE RINCIAN DATA (STABLE NON-SHIFTING LAYOUT) */}
- <div className="px-4 sm:px-6 md:px-8 py-4 overflow-x-auto">
+ <div className="overflow-x-auto">
  {error && !loading && (
- <div className="pb-4">
+ <div className="p-4">
  <AppErrorState title="Laporan tahfizh gagal dimuat" description={error} onRetry={load} compact />
  </div>
  )}
- <div className="overflow-x-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/80">
- <TableRoot fullBleed={false}>
-        <TableHeader>
-          <TableRow className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 text-emerald-950 dark:text-emerald-200">
+ <div className="overflow-x-auto">
+ <TableRoot fullBleed={true}>
+        <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 text-emerald-950 dark:text-emerald-200">
+          <TableRow className="bg-transparent">
             <TableHead className="py-2.5 px-4 font-black text-xs uppercase tracking-wider">
               Siswa / Santri & Tanggal
             </TableHead>
@@ -823,19 +830,18 @@ export default function LaporanTahfizhPage() {
             <TableHead className="py-2.5 px-4 font-black text-xs uppercase tracking-wider">
               Catatan Ustadz
             </TableHead>
-            <TableHead className="py-2.5 px-4 text-right select-none w-20" />
           </TableRow>
         </TableHeader>
  <TableBody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40">
  {loading ? (
  <TableRow>
- <TableCell colSpan={5} className="py-6">
- <AppSkeleton variant="table" rows={5} cols={5} />
+ <TableCell colSpan={4} className="py-6">
+ <AppSkeleton variant="table" rows={5} cols={4} />
  </TableCell>
  </TableRow>
  ) : paginatedRows.length === 0 ? (
  <TableRow>
- <TableCell colSpan={5} className="py-8">
+ <TableCell colSpan={4} className="py-8">
  <AppEmptyState
  title="Tidak ada data log setoran"
  description="Tidak ada data log setoran yang ditemukan untuk filter ini."
@@ -864,7 +870,8 @@ export default function LaporanTahfizhPage() {
  return (
  <TableRow
  key={row.id || idx}
- className="hover:bg-emerald-50/40 dark:hover:bg-emerald-950/20 transition-colors"
+ onClick={() => handlePrintWeeklyTahfizh(row)}
+ className="hover:bg-emerald-50/40 dark:hover:bg-emerald-950/20 transition-colors cursor-pointer"
  >
                   <TableCell className="py-3 px-4 align-top sm:align-middle">
                     <div className="flex items-center gap-2.5">
@@ -902,24 +909,6 @@ export default function LaporanTahfizhPage() {
                   <TableCell className="py-3 px-4 text-xs font-medium text-slate-600 dark:text-slate-400 align-middle">
                     <span className="line-clamp-2">{notesStr}</span>
                   </TableCell>
- <TableCell className="py-3 px-4 text-center align-middle">
- <Badge color={murajaahLembar > 0 ? 'violet' : 'gray'} size="sm">
- {murajaahLembar} Lembar
- </Badge>
- </TableCell>
- <TableCell className="hidden md:table-cell py-3 px-4 text-xs font-medium text-slate-600 dark:text-slate-400 align-middle">
- <span className="line-clamp-2">{notesStr}</span>
- </TableCell>
- <TableCell className="py-3 px-4 text-center align-middle">
- <button
- type="button"
- title="Cetak Laporan Perkembangan Pekanan"
- onClick={() => handlePrintWeeklyTahfizh(row)}
- className="inline-flex h-8 w-8 items-center justify-center rounded-lg border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 hover:scale-105 active:scale-95 transition-all dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300 shadow-2xs cursor-pointer"
- >
- <Printer className="h-4 w-4" />
- </button>
- </TableCell>
  </TableRow>
  )
  })
@@ -965,24 +954,25 @@ export default function LaporanTahfizhPage() {
  <Dialog
  isOpen={cardModal.isOpen}
  onOpenChange={(open) => !open && closeCardModal()}
- className="w-full max-w-xl max-h-[90vh] flex flex-col rounded-xl bg-white dark:bg-[#182232] border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xl shadow-sm dark:shadow-black/60 overflow-hidden p-0"
+ showCloseButton={false}
+ className="w-full max-w-xl max-h-[90vh] flex flex-col rounded-3xl bg-white dark:bg-[#1B2433] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 overflow-hidden p-0"
  >
- <DialogHeader className="flex flex-row items-center justify-between px-6 py-4.5 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:border-emerald-800/60 dark:bg-slate-950 shrink-0">
+ <div className="h-1.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
+ <DialogHeader className="flex flex-row items-center justify-between px-6 py-4.5 border-b border-emerald-500/20 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white shrink-0">
  <div className="flex items-center gap-3">
- <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
- 
-            <BookOpenCheck className="size-6 sm:size-7 h-5 w-5 text-white" strokeWidth={2.25} />
+ <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 text-white shadow-sm">
+ <BookOpenCheck className="size-5 text-white" strokeWidth={2.25} />
  </div>
  <div>
  <div className="flex items-center gap-2 flex-wrap">
- <DialogTitle className="text-sm sm:text-base font-black text-slate-900 dark:text-slate-600">
+ <DialogTitle className="text-sm sm:text-base font-black text-white">
  {cardModal.title}
  </DialogTitle>
- <AppBadge variant={cardModal.tone === 'rose' ? 'danger' : cardModal.tone === 'amber' ? 'warning' : 'success'}>
+ <span className="inline-flex items-center rounded-full bg-white/20 border border-white/30 px-2.5 py-0.5 text-[10px] font-black text-white">
  {modalRows.length} Data Setoran
- </AppBadge>
+ </span>
  </div>
- <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+ <DialogDescription className="text-xs text-emerald-100 mt-0.5">
  Daftar rincian log setoran tahfizh siswa dengan status {cardModal.title}
  </DialogDescription>
  </div>
@@ -991,9 +981,9 @@ export default function LaporanTahfizhPage() {
  type="button"
  onClick={closeCardModal}
  aria-label="Tutup modal"
- className="size-9 flex items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer shrink-0"
+ className="size-9 flex items-center justify-center rounded-xl bg-white/20 hover:bg-rose-500 text-white border border-white/25 shadow-xs active:scale-95 transition-all duration-200 cursor-pointer shrink-0"
  >
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
+ <X className="size-4" strokeWidth={2.25} />
  </button>
  </DialogHeader>
 
@@ -1010,7 +1000,7 @@ export default function LaporanTahfizhPage() {
  value={cardModal.searchQuery}
  onChange={(e) => setCardModal((prev) => ({ ...prev, searchQuery: e.target.value, page: 1 }))}
  aria-label="Cari dalam modal"
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-10 pr-8 py-2 appearance-none text-xs font-semibold text-slate-800 outline-none transition-all placeholder:text-slate-400 focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white pl-10 pr-8 py-2 appearance-none text-xs font-semibold text-slate-800 outline-none transition-all placeholder:text-slate-400 focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  />
  {cardModal.searchQuery && (
  <button

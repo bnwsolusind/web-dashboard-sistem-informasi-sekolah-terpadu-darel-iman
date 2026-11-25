@@ -260,7 +260,7 @@ export function FoundationNotificationsPage() {
  placeholder="Cari notifikasi berdasarkan judul atau pesan..."
  value={search}
  onChange={(e) => setSearch(e.target.value)}
- className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800/60 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-xs font-medium text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-[#059669] transition"
+ className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800/60 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-xs font-medium text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-[#059669] transition"
  />
  </div>
 

@@ -68,6 +68,7 @@ import {
 import {
   useAuthStore
 } from '../stores/authStore'
+import LmsKpiDetailModal from '../components/lms/LmsKpiDetailModal'
 import {
   useUnitStore
 } from '../stores/unitStore'
@@ -441,7 +442,7 @@ function HeroUiModalSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Ketik untuk mencari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -589,7 +590,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -858,6 +859,7 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  })
 
  const [loading, setLoading] = useState(true)
+ const [kpiModalKey, setKpiModalKey] = useState(null)
  const [errorMsg, setErrorMsg] = useState('')
  const [successMsg, setSuccessMsg] = useState('')
 
@@ -1534,10 +1536,8 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  tag={`${stats.total} Tugas`}
  subtext="Tercatat di sistem"
  tone="emerald"
- onClick={() => {
- setSelectedStatus('')
- setPage(1)
- }}
+ ctaText="Lihat Rincian"
+ onClick={() => setKpiModalKey('total')}
  />
  <ModernKpiCard
  icon={Globe}
@@ -1546,10 +1546,8 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  tag="Aktif"
  subtext="Dapat diakses siswa"
  tone="blue"
- onClick={() => {
- setSelectedStatus('dipublikasikan')
- setPage(1)
- }}
+ ctaText="Lihat Rincian"
+ onClick={() => setKpiModalKey('published')}
  />
  <ModernKpiCard
  icon={Lock}
@@ -1558,10 +1556,8 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  tag="Penyusunan"
  subtext="Belum dipublish"
  tone="amber"
- onClick={() => {
- setSelectedStatus('draft')
- setPage(1)
- }}
+ ctaText="Lihat Rincian"
+ onClick={() => setKpiModalKey('draft')}
  />
  <ModernKpiCard
  icon={Users}
@@ -1570,10 +1566,8 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  tag="Submisi"
  subtext="Tugas terkirim"
  tone="purple"
- onClick={() => {
- setSelectedStatus('dipublikasikan')
- setPage(1)
- }}
+ ctaText="Lihat Rincian"
+ onClick={() => setKpiModalKey('pengumpulan')}
  />
  <ModernKpiCard
  icon={Award}
@@ -1582,11 +1576,9 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  tag="Selesai"
  subtext="Sudah diberi nilai"
  tone="teal"
+ ctaText="Lihat Rincian"
  className="col-span-2 sm:col-span-1"
- onClick={() => {
- setSelectedStatus('dipublikasikan')
- setPage(1)
- }}
+ onClick={() => setKpiModalKey('dinilai')}
  />
  </motion.div>
 
@@ -1857,7 +1849,7 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  placeholder="Contoh: Penugasan 1: Analisis Hukum Newton / Setoran Surah Al-Mulk..."
  value={formData.judul}
  onChange={(e) => setFormData({ ...formData, judul: e.target.value })}
- className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
 
@@ -1983,7 +1975,7 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  metadata: { ...formData.metadata, surah: e.target.value },
  })
  }
- className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full px-3 py-2 bg-white dark:bg-slate-800 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
  <div>
@@ -1999,7 +1991,7 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  metadata: { ...formData.metadata, ayat_awal: e.target.value },
  })
  }
- className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full px-3 py-2 bg-white dark:bg-slate-800 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
  <div>
@@ -2015,7 +2007,7 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  metadata: { ...formData.metadata, ayat_akhir: e.target.value },
  })
  }
- className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full px-3 py-2 bg-white dark:bg-slate-800 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
  </div>
@@ -2065,7 +2057,7 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  metadata: { ...formData.metadata, min_words: parseInt(e.target.value) || 150 },
  })
  }
- className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500"
+ className="w-full px-3 py-2 bg-white dark:bg-slate-800 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500"
  />
  </div>
  <div className="flex items-center text-xs text-slate-600 dark:text-slate-400">
@@ -2103,7 +2095,7 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  metadata: { ...formData.metadata, max_group_members: parseInt(e.target.value) || 4 },
  })
  }
- className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500"
+ className="w-full px-3 py-2 bg-white dark:bg-slate-800 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-teal-500"
  />
  </div>
  <div className="flex items-center text-xs text-slate-600 dark:text-slate-400">
@@ -2153,7 +2145,7 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  max="1000"
  value={formData.nilai_maksimal}
  onChange={(e) => setFormData({ ...formData, nilai_maksimal: e.target.value })}
- className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
 
@@ -2167,7 +2159,7 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  max="100"
  value={formData.bobot_persen}
  onChange={(e) => setFormData({ ...formData, bobot_persen: e.target.value })}
- className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
  </div>
@@ -2182,7 +2174,7 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  type="datetime-local"
  value={formData.tanggal_mulai}
  onChange={(e) => setFormData({ ...formData, tanggal_mulai: e.target.value })}
- className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
 
@@ -2194,7 +2186,7 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  type="datetime-local"
  value={formData.tanggal_selesai}
  onChange={(e) => setFormData({ ...formData, tanggal_selesai: e.target.value })}
- className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
  </div>
@@ -2209,7 +2201,7 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  placeholder="Ringkasan atau gambaran umum penugasan..."
  value={formData.deskripsi}
  onChange={(e) => setFormData({ ...formData, deskripsi: e.target.value })}
- className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
 
@@ -2222,7 +2214,7 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  placeholder="Langkah-langkah pengerjaan, format berkas yang diminta, dsb..."
  value={formData.instruksi}
  onChange={(e) => setFormData({ ...formData, instruksi: e.target.value })}
- className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
 
@@ -2237,7 +2229,7 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  placeholder="URL berkas lampiran (e.g. /storage/...)"
  value={formData.lampiran}
  onChange={(e) => setFormData({ ...formData, lampiran: e.target.value })}
- className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
 
@@ -2268,7 +2260,7 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  placeholder="https://drive.google.com/... atau YouTube"
  value={formData.link_lampiran}
  onChange={(e) => setFormData({ ...formData, link_lampiran: e.target.value })}
- className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
  </div>
@@ -2578,7 +2570,7 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  max={selectedPenugasan.nilai_maksimal || 100}
  value={gradingForm.nilai_guru}
  onChange={(e) => setGradingForm({ ...gradingForm, nilai_guru: e.target.value })}
- className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-emerald-200/80 dark:border-emerald-800/60 rounded-xl text-sm font-black text-emerald-950 dark:text-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full px-3 py-2 bg-white dark:bg-slate-800 border-2 border-[#b6f6d9] dark:border-emerald-800/60 rounded-xl text-sm font-black text-emerald-950 dark:text-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
  <div className="sm:col-span-2">
@@ -2590,7 +2582,7 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  placeholder="Apresiasi atau evaluasi untuk siswa..."
  value={gradingForm.catatan_guru}
  onChange={(e) => setGradingForm({ ...gradingForm, catatan_guru: e.target.value })}
- className="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full px-3 py-2 bg-white dark:bg-slate-800 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
  </div>
@@ -2975,6 +2967,101 @@ export default function LmsPenugasanPage({ embedded = false, hideBreadcrumb = fa
  subtitle={embedViewer.subtitle}
  onClose={() => setEmbedViewer({ isOpen: false, url: '', title: '', subtitle: '' })}
  />
+
+ {/* ── KPI Quick View Pop-up Modal (10/page + Pagination) ── */}
+ {(() => {
+   const allRows = Array.isArray(dataPenugasan) ? dataPenugasan : []
+   const filterByKpi = (list) => {
+     if (kpiModalKey === 'published') return list.filter((t) => String(t.status || '').toLowerCase() === 'dipublikasikan')
+     if (kpiModalKey === 'draft') return list.filter((t) => String(t.status || '').toLowerCase() === 'draft')
+     if (kpiModalKey === 'pengumpulan') return [...list].sort((a, b) => Number(b.submissions_count || b.total_pengumpulan || 0) - Number(a.submissions_count || a.total_pengumpulan || 0))
+     if (kpiModalKey === 'dinilai') return list.filter((t) => Number(t.graded_count || t.total_dinilai || 0) > 0 || String(t.status || '').toLowerCase() === 'dipublikasikan')
+     return list
+   }
+   const metaMap = {
+     total: { title: 'Rincian Total Penugasan LMS', badge: `${stats.total || allRows.length} Tugas` },
+     published: { title: 'Penugasan Dipublikasikan (Aktif)', badge: `${stats.published || 0} Tugas` },
+     draft: { title: 'Penugasan Draft (Penyusunan)', badge: `${stats.draft || 0} Tugas` },
+     pengumpulan: { title: 'Rincian Pengumpulan Tugas Siswa', badge: `${stats.total_pengumpulan || 0} Submisi` },
+     dinilai: { title: 'Rincian Tugas Sudah Dinilai', badge: `${stats.total_dinilai || 0} Dinilai` },
+   }
+   const meta = kpiModalKey ? metaMap[kpiModalKey] : null
+   return (
+     <LmsKpiDetailModal
+       isOpen={Boolean(kpiModalKey && meta)}
+       onClose={() => setKpiModalKey(null)}
+       icon={ClipboardList}
+       title={meta?.title || 'Rincian Penugasan LMS'}
+       badge={meta?.badge}
+       rows={filterByKpi(allRows)}
+       fetchRows={async () => {
+         const effectiveUnit = canSelectUnit ? (selectedUnit || undefined) : (userUnitId || undefined)
+         const res = await lmsPenugasanService.getDaftar({ per_page: 200, ...(effectiveUnit ? { unit_pendidikan_id: effectiveUnit } : {}) })
+         const resObj = res?.data || res
+         const list = Array.isArray(resObj) ? resObj : (resObj?.data || (Array.isArray(res) ? res : []))
+         return filterByKpi(list)
+       }}
+       searchPlaceholder="Cari judul tugas, guru, mapel, atau kelas..."
+       searchFilter={(t, q) =>
+         [t.judul, t.guru?.nama_lengkap, t.teacher?.full_name, t.subject?.nama_mapel, t.subject?.name, t.kelas?.nama_kelas]
+           .filter(Boolean)
+           .join(' ')
+           .toLowerCase()
+           .includes(q)
+       }
+       emptyText="Belum ada data penugasan pada kategori ini."
+       columns={[
+         {
+           header: 'Judul Penugasan & Guru',
+           render: (t) => (
+             <div>
+               <div className="font-extrabold text-slate-900 dark:text-white">{t.judul || '-'}</div>
+               <div className="text-[10px] text-slate-500">{t.guru?.nama_lengkap || t.teacher?.full_name || '-'}</div>
+             </div>
+           ),
+         },
+         {
+           header: 'Mapel & Kelas',
+           render: (t) => (
+             <div>
+               <div className="font-semibold text-indigo-700 dark:text-indigo-300">{t.subject?.nama_mapel || t.subject?.name || t.modul_ajar?.subject?.nama_mapel || '-'}</div>
+               <div className="text-[10px] text-slate-500">{t.kelas?.nama_kelas || 'Semua Kelas'}</div>
+             </div>
+           ),
+         },
+         {
+           header: 'Tipe & Tenggat',
+           render: (t) => (
+             <div>
+               <div className="font-semibold capitalize text-slate-700 dark:text-slate-300">{t.tipe || 'individu'} • {t.jenis_tugas || 'tugas'}</div>
+               <div className="text-[10px] text-slate-500">{t.deadline ? String(t.deadline).slice(0, 16).replace('T', ' ') : '-'}</div>
+             </div>
+           ),
+         },
+         {
+           header: 'Submisi / Dinilai',
+           align: 'center',
+           render: (t) => (
+             <span className="font-bold text-emerald-700 dark:text-emerald-300 tabular-nums">
+               {t.submissions_count ?? t.total_pengumpulan ?? 0} / {t.graded_count ?? t.total_dinilai ?? 0}
+             </span>
+           ),
+         },
+         {
+           header: 'Status',
+           align: 'center',
+           render: (t) => (
+             <span className={`inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-extrabold capitalize ${
+               t.status === 'dipublikasikan' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+             }`}>
+               {t.status || 'draft'}
+             </span>
+           ),
+         },
+       ]}
+     />
+   )
+ })()}
 
  </motion.div>
  </div>

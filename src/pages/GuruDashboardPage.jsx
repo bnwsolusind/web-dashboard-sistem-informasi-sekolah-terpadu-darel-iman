@@ -786,7 +786,7 @@ export default function GuruDashboardPage() {
  value={presensiCatatan}
  onChange={(e) => setPresensiCatatan(e.target.value)}
  placeholder="Contoh: Pertemuan membahas bab 2. Ahmad izin mengikuti lomba sains."
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-medium transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 dark:focus:border-[#10B981] dark:focus:ring-[#10B981]/30 focus:outline-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-medium transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 dark:focus:border-[#10B981] dark:focus:ring-[#10B981]/30 focus:outline-none"
  />
  </div>
  </DialogBody>
@@ -877,7 +877,7 @@ export default function GuruDashboardPage() {
  value={materiJudul}
  onChange={(e) => setMateriJudul(e.target.value)}
  required
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-medium transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 dark:focus:border-[#10B981] dark:focus:ring-[#10B981]/30 focus:outline-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-medium transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 dark:focus:border-[#10B981] dark:focus:ring-[#10B981]/30 focus:outline-none"
  />
  </div>
 
@@ -891,7 +891,7 @@ export default function GuruDashboardPage() {
  placeholder="Tuliskan pokok pembahasan, poin penting, atau petunjuk membaca modul..."
  value={materiDeskripsi}
  onChange={(e) => setMateriDeskripsi(e.target.value)}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-medium transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 dark:focus:border-[#10B981] dark:focus:ring-[#10B981]/30 focus:outline-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-medium transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 dark:focus:border-[#10B981] dark:focus:ring-[#10B981]/30 focus:outline-none"
  />
  </div>
 
@@ -904,7 +904,7 @@ export default function GuruDashboardPage() {
  placeholder="https://.../modul-pembelajaran.pdf atau link dokumen drive"
  value={materiAttachmentUrl}
  onChange={(e) => setMateriAttachmentUrl(e.target.value)}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-medium transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 dark:focus:border-[#10B981] dark:focus:ring-[#10B981]/30 focus:outline-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-medium transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 dark:focus:border-[#10B981] dark:focus:ring-[#10B981]/30 focus:outline-none"
  />
  </div>
 
@@ -917,7 +917,7 @@ export default function GuruDashboardPage() {
  placeholder="https://www.youtube.com/watch?v=... (otomatis di-embed)"
  value={materiVideoUrl}
  onChange={(e) => setMateriVideoUrl(e.target.value)}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-medium transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 dark:focus:border-[#10B981] dark:focus:ring-[#10B981]/30 focus:outline-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-medium transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 dark:focus:border-[#10B981] dark:focus:ring-[#10B981]/30 focus:outline-none"
  />
  </div>
 
@@ -1019,7 +1019,7 @@ export default function GuruDashboardPage() {
  value={tugasJudul}
  onChange={(e) => setTugasJudul(e.target.value)}
  required
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-medium transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 dark:focus:border-[#10B981] dark:focus:ring-[#10B981]/30 focus:outline-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-medium transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 dark:focus:border-[#10B981] dark:focus:ring-[#10B981]/30 focus:outline-none"
  />
  </div>
 
@@ -1033,7 +1033,7 @@ export default function GuruDashboardPage() {
  type="datetime-local"
  value={tugasDeadline}
  onChange={(e) => setTugasDeadline(e.target.value)}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 font-medium transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 dark:focus:border-[#10B981] dark:focus:ring-[#10B981]/30 focus:outline-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 font-medium transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 dark:focus:border-[#10B981] dark:focus:ring-[#10B981]/30 focus:outline-none"
  />
  </div>
 
@@ -1048,7 +1048,7 @@ export default function GuruDashboardPage() {
  max={100}
  value={tugasMaxScore}
  onChange={(e) => setTugasMaxScore(Number(e.target.value))}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 font-medium transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 dark:focus:border-[#10B981] dark:focus:ring-[#10B981]/30 focus:outline-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 font-medium transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 dark:focus:border-[#10B981] dark:focus:ring-[#10B981]/30 focus:outline-none"
  />
  </div>
  </div>
@@ -1063,7 +1063,7 @@ export default function GuruDashboardPage() {
  placeholder="Kerjakan di buku latihan, foto hasilnya dan upload dalam format PDF atau gambar yang jelas..."
  value={tugasInstruksi}
  onChange={(e) => setTugasInstruksi(e.target.value)}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-medium transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 dark:focus:border-[#10B981] dark:focus:ring-[#10B981]/30 focus:outline-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-medium transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 dark:focus:border-[#10B981] dark:focus:ring-[#10B981]/30 focus:outline-none"
  />
  </div>
 
@@ -1194,7 +1194,7 @@ export default function GuruDashboardPage() {
  prev.map((s) => (s.id === item.id ? { ...s, nilai: val } : s))
  )
  }}
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 py-1 px-2 text-xs text-center font-extrabold transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-2 focus:ring-[#059669]/20 focus:outline-none disabled:opacity-50"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 py-1 px-2 text-xs text-center font-extrabold transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-2 focus:ring-[#059669]/20 focus:outline-none disabled:opacity-50"
  />
  </td>
  <td className="px-3 py-2">
@@ -1208,7 +1208,7 @@ export default function GuruDashboardPage() {
  prev.map((s) => (s.id === item.id ? { ...s, catatan: val } : s))
  )
  }}
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 py-1 px-2.5 text-xs transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-2 focus:ring-[#059669]/20 focus:outline-none disabled:opacity-50"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 py-1 px-2.5 text-xs transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-2 focus:ring-[#059669]/20 focus:outline-none disabled:opacity-50"
  />
  </td>
  </tr>
@@ -1280,7 +1280,7 @@ export default function GuruDashboardPage() {
  placeholder="Cari mata pelajaran, kelas, atau ruangan..."
  value={scheduleSearch}
  onChange={(e) => setScheduleSearch(e.target.value)}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 pl-9 pr-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-medium transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 dark:focus:border-[#10B981] dark:focus:ring-[#10B981]/30 focus:outline-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 pl-9 pr-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-medium transition-all duration-300 ease-in-out focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 dark:focus:border-[#10B981] dark:focus:ring-[#10B981]/30 focus:outline-none"
  />
  </div>
  </div>
@@ -1471,7 +1471,7 @@ export default function GuruDashboardPage() {
  disabled={pelanggaranSaving}
  value={pelanggaranPoin}
  onChange={(e) => setPelanggaranPoin(Math.max(1, parseInt(e.target.value || '1', 10)))}
- className="w-full pl-7 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 px-3.5 py-2.5 text-xs font-black text-slate-900 dark:text-slate-100 transition-all duration-300 ease-in-out focus:border-rose-500 focus:ring-4 focus:ring-rose-500/20 dark:focus:border-emerald-200/80 dark:border-emerald-800/60 dark:focus:ring-rose-400/30 focus:outline-none"
+ className="w-full pl-7 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 px-3.5 py-2.5 text-xs font-black text-slate-900 dark:text-slate-100 transition-all duration-300 ease-in-out focus:border-rose-500 focus:ring-4 focus:ring-rose-500/20 dark:focus:border-emerald-200/80 dark:border-emerald-800/60 dark:focus:ring-rose-400/30 focus:outline-none"
  />
  </div>
  </div>
@@ -1488,7 +1488,7 @@ export default function GuruDashboardPage() {
  onChange={(e) => setPelanggaranDeskripsi(e.target.value)}
  placeholder="Tuliskan catatan detail kronologi pelanggaran saat jam pelajaran..."
  required
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-medium transition-all duration-300 ease-in-out focus:border-rose-500 focus:ring-4 focus:ring-rose-500/20 dark:focus:border-emerald-200/80 dark:border-emerald-800/60 dark:focus:ring-rose-400/30 focus:outline-none resize-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-800/80 dark:border-emerald-700/80 px-3.5 py-2.5 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 font-medium transition-all duration-300 ease-in-out focus:border-rose-500 focus:ring-4 focus:ring-rose-500/20 dark:focus:border-emerald-200/80 dark:border-emerald-800/60 dark:focus:ring-rose-400/30 focus:outline-none resize-none"
  />
  </div>
 

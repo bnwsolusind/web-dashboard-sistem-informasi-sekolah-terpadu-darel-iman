@@ -39,6 +39,7 @@ import {
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
 import AppModal from '../components/app/AppModal'
 import PageToolbarActions from '../components/app/PageToolbarActions'
+import AppDataTable from '../components/app/AppDataTable'
 import { SquircleActionButton } from '../components/master-data'
 import {
   Badge
@@ -316,7 +317,7 @@ function HeroUiModalSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Ketik untuk mencari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -629,146 +630,138 @@ export default function TahfizhTargetSettingPage() {
               label: 'Tambah Target Baru',
               onClick: () => handleOpenForm(),
             }}
-          >
-            <SquircleActionButton
-              variant="neutral"
-              icon={ArrowLeft}
-              label="Kembali ke Tahfizh"
-              onClick={() => navigate('/dashboard/tahfizh')}
-            />
-          </PageToolbarActions>
+            secondaryActions={[
+              {
+                label: 'Kembali ke Tahfizh',
+                icon: ArrowLeft,
+                variant: 'secondary',
+                onClick: () => navigate('/dashboard/tahfizh'),
+                className: '!bg-slate-600 hover:!bg-slate-700 !text-white !border-slate-600',
+              },
+            ]}
+          />
         }
       />
 
       {/* 3. Modern Emerald Datatable Container */}
- <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-200/80 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
- {/* Baris 1: Toolbar Header */}
- <div className="bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent border-b border-emerald-200/80 p-4 sm:p-5 dark:border-emerald-800/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
- <div>
- <h2 className="text-base sm:text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
- <BookOpen className="size-5 text-emerald-600 dark:text-emerald-400" />
- Daftar Standar Target Hafalan
- </h2>
- <p className="text-xs text-slate-500 font-medium dark:text-slate-400 mt-0.5">
- Target ini otomatis digunakan untuk kalkulasi sisa ayat dan persentase di halaman Setoran & Portal.
- </p>
- </div>
+      <AppDataTable
+        title="Daftar Standar Target Hafalan"
+        description="Target ini otomatis digunakan untuk kalkulasi sisa ayat dan persentase di halaman Setoran & Portal."
+        icon={BookOpen}
+        actions={
+          <PageToolbarActions
+            onRefresh={() => fetchTargets()}
+            refreshLabel="Segarkan"
+            refreshing={loading}
+          />
+        }
+        search={search}
+        onSearchChange={setSearch}
+        searchPlaceholder="Cari target berdasarkan nama, target juz, atau deskripsi kurikulum..."
+        filters={
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 w-full">
+            {/* Filter Jenjang Unit */}
+            <div>
+              <label className="block text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">
+                Jenjang Pendidikan
+              </label>
+              <HeroUiFilterSelect
+                value={selectedLevel}
+                onChange={(val) => {
+                  setSelectedLevel(val)
+                  setCurrentPage(1)
+                }}
+                options={filterLevelOptions}
+                placeholder="Semua Jenjang"
+                icon={School}
+                searchable={filterLevelOptions.length > 5}
+                size="lg"
+                className="!w-full !block"
+                popoverWidth="min-w-[180px]"
+              />
+            </div>
 
- <PageToolbarActions
- onRefresh={() => fetchTargets()}
- refreshLabel="Segarkan"
- refreshing={loading}
- />
- </div>
+            {/* Filter Tingkat Kelas */}
+            <div>
+              <label className="block text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">
+                Tingkat Kelas
+              </label>
+              <HeroUiFilterSelect
+                value={selectedGrade}
+                onChange={(val) => {
+                  setSelectedGrade(val)
+                  setCurrentPage(1)
+                }}
+                options={filterGradeOptions}
+                placeholder="Semua Kelas"
+                icon={Layers}
+                searchable={filterGradeOptions.length > 5}
+                size="lg"
+                className="!w-full !block"
+                popoverWidth="min-w-[180px]"
+              />
+            </div>
 
- {/* Baris 2 & 3: Filter & Search Bar */}
- <div className="bg-slate-50/50 dark:bg-slate-900/50 border-b border-emerald-200/80 dark:border-emerald-800/60 p-4 dark:border-emerald-800/60 dark:bg-slate-900/40 space-y-3">
- <div className="relative">
- <Search className="pointer-events-none absolute left-3.5 top-1/2 z-10 -translate-y-1/2 size-4 text-emerald-600 dark:text-emerald-400" />
- <UiInput
- type="text"
- size="sm"
- value={search}
- onChange={(e) => setSearch(e.target.value)}
- placeholder="Cari target berdasarkan nama, target juz, atau deskripsi kurikulum..."
- className="w-full pl-10 pr-4 text-xs sm:text-sm rounded-xl border-emerald-200/80 dark:border-emerald-800/60 bg-white text-slate-900 placeholder:text-slate-400 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
- />
- </div>
+            {/* Filter Program */}
+            <div>
+              <label className="block text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">
+                Program Sekolah
+              </label>
+              <HeroUiFilterSelect
+                value={selectedProgram}
+                onChange={(val) => {
+                  setSelectedProgram(val)
+                  setCurrentPage(1)
+                }}
+                options={filterProgramOptions}
+                placeholder="Semua Program"
+                icon={Sparkles}
+                size="lg"
+                className="!w-full !block"
+                popoverWidth="min-w-[200px]"
+              />
+            </div>
 
- <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
- {/* Filter Jenjang Unit */}
- <div>
- <label className="block text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">
- Jenjang Pendidikan
- </label>
- <HeroUiFilterSelect
- value={selectedLevel}
- onChange={(val) => {
- setSelectedLevel(val)
- setCurrentPage(1)
- }}
- options={filterLevelOptions}
- placeholder="Semua Jenjang"
- icon={School}
- searchable={filterLevelOptions.length > 5}
- popoverWidth="min-w-[180px]"
- />
- </div>
-
- {/* Filter Tingkat Kelas */}
- <div>
- <label className="block text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">
- Tingkat Kelas
- </label>
- <HeroUiFilterSelect
- value={selectedGrade}
- onChange={(val) => {
- setSelectedGrade(val)
- setCurrentPage(1)
- }}
- options={filterGradeOptions}
- placeholder="Semua Kelas"
- icon={Layers}
- searchable={filterGradeOptions.length > 5}
- popoverWidth="min-w-[180px]"
- />
- </div>
-
- {/* Filter Program */}
- <div>
- <label className="block text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">
- Program Sekolah
- </label>
- <HeroUiFilterSelect
- value={selectedProgram}
- onChange={(val) => {
- setSelectedProgram(val)
- setCurrentPage(1)
- }}
- options={filterProgramOptions}
- placeholder="Semua Program"
- icon={Sparkles}
- popoverWidth="min-w-[200px]"
- />
- </div>
-
- {/* Filter Unit Spesifik */}
- <div>
- <label className="block text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">
- Unit Spesifik
- </label>
- <HeroUiFilterSelect
- value={selectedUnit}
- onChange={(val) => {
- setSelectedUnit(val)
- setCurrentPage(1)
- }}
- options={filterUnitOptions}
- placeholder="Semua Unit"
- icon={BookOpen}
- searchable={filterUnitOptions.length > 5}
- popoverWidth="min-w-[220px]"
- />
- </div>
- </div>
- </div>
-
- {/* Tabel Data */}
- <div className="overflow-x-auto">
- <table className="w-full text-left border-collapse text-xs">
+            {/* Filter Unit Spesifik */}
+            <div>
+              <label className="block text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400 mb-1">
+                Unit Spesifik
+              </label>
+              <HeroUiFilterSelect
+                value={selectedUnit}
+                onChange={(val) => {
+                  setSelectedUnit(val)
+                  setCurrentPage(1)
+                }}
+                options={filterUnitOptions}
+                placeholder="Semua Unit"
+                icon={BookOpen}
+                searchable={filterUnitOptions.length > 5}
+                size="lg"
+                className="!w-full !block"
+                popoverWidth="min-w-[220px]"
+              />
+            </div>
+          </div>
+        }
+        showPagination={totalPages > 1}
+        page={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      >
+        <table className="w-full text-left border-collapse text-xs">
               <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 text-emerald-950 dark:text-emerald-200 font-extrabold uppercase tracking-wider text-xs">
                 <tr>
-                  <th className="py-3.5 px-4 font-black">TARGET &amp; LINGKUP</th>
-                  <th className="py-3.5 px-4 font-black">JENJANG, KELAS &amp; PROGRAM</th>
-                  <th className="py-3.5 px-4 font-black">TARGET AYAT &amp; SURAH</th>
-                  <th className="py-3.5 px-4 font-black text-center">STATUS</th>
-                  <th className="py-3.5 px-4 font-black text-right w-16 sm:w-20 select-none"></th>
+                  <th className="py-3 px-4 font-black">TARGET &amp; LINGKUP</th>
+                  <th className="py-3 px-4 font-black">JENJANG, KELAS &amp; PROGRAM</th>
+                  <th className="py-3 px-4 font-black">TARGET AYAT &amp; SURAH</th>
+                  <th className="py-3 px-4 font-black text-center">STATUS</th>
                 </tr>
               </thead>
  <tbody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40">
  {loading ? (
  <tr>
- <td colSpan={7} className="py-12 text-center text-slate-500 font-medium">
+ <td colSpan={4} className="py-12 text-center text-slate-500 font-medium">
  <div className="inline-flex items-center gap-2">
  <RefreshCw className="size-4 animate-spin text-emerald-600" />
  <span>Memuat data target KPI Tahfizh...</span>
@@ -777,7 +770,7 @@ export default function TahfizhTargetSettingPage() {
  </tr>
  ) : targets.length === 0 ? (
  <tr>
- <td colSpan={7} className="py-12 text-center text-slate-400">
+ <td colSpan={4} className="py-12 text-center text-slate-400">
  <div className="flex flex-col items-center justify-center gap-2">
  <Target className="size-8 text-slate-300 dark:text-slate-600" />
  <p className="text-xs font-semibold text-slate-600 dark:text-slate-400">
@@ -788,7 +781,7 @@ export default function TahfizhTargetSettingPage() {
  </tr>
  ) : (
  targets.map((tgt) => (
- <tr key={tgt.id} className="hover:bg-emerald-50/40 dark:hover:bg-emerald-950/20 transition">
+ <tr key={tgt.id} onClick={() => handleOpenForm(tgt)} className="hover:bg-emerald-50/40 dark:hover:bg-emerald-950/20 transition cursor-pointer">
  <td className="py-3.5 px-4 font-medium">
  <div className="flex items-start gap-2.5">
  <div className="size-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 font-black text-xs dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60">
@@ -823,73 +816,45 @@ export default function TahfizhTargetSettingPage() {
  <span className="px-2 py-0.5 rounded-md font-bold text-[10px] bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
  {tgt.grade_level === 'ALL' || !tgt.grade_level ? 'Semua Kelas' : `Kelas ${tgt.grade_level}`}
  </span>
+ <span className="px-2 py-0.5 rounded-md font-bold text-[10px] bg-blue-50 text-blue-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-blue-950/40 dark:text-blue-300">
+ {PROGRAM_LABELS[tgt.program_type]?.label || tgt.program_type}
+ </span>
  </div>
  </td>
 
  <td className="py-3.5 px-4">
- <span className="px-2 py-0.5 rounded-md font-bold text-[10px] bg-blue-50 text-blue-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-blue-950/40 dark:text-blue-300 dark:border-emerald-800/60">
- {PROGRAM_LABELS[tgt.program_type]?.label || tgt.program_type}
- </span>
- </td>
-
- <td className="py-3.5 px-4 text-right">
  <div className="font-black text-emerald-900 dark:text-emerald-300 text-xs sm:text-sm">
  {Number(tgt.target_ayats || 0).toLocaleString('id-ID')}
  <span className="text-[10px] font-bold text-emerald-600 ml-1">Ayat</span>
  </div>
+ <div className="flex items-center gap-2 text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+ <span className="font-bold text-slate-700 dark:text-slate-300">
+ {tgt.target_surahs} Surah
+ </span>
  {tgt.minimum_kkm_ayats > 0 && (
- <div className="text-[10px] text-slate-400">
- KKM: {tgt.minimum_kkm_ayats}
- </div>
+ <span>• KKM: {tgt.minimum_kkm_ayats} Ayat</span>
  )}
- </td>
-
- <td className="py-3.5 px-4 text-right">
- <div className="font-bold text-slate-700 dark:text-slate-300 text-xs">
- {tgt.target_surahs}
- <span className="text-[10px] font-medium text-slate-500 ml-1">Surah</span>
  </div>
  </td>
 
  <td className="py-3.5 px-4 text-center">
  {tgt.is_active ? (
- <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+ <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
  <CheckCircle2 className="size-3" />
  Aktif
  </span>
  ) : (
- <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
+ <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300">
  Non-Aktif
  </span>
  )}
- </td>
-
- <td className="py-3.5 px-4 text-center">
-                        <ActionDropdown onEdit={() => handleOpenForm(tgt)} onDelete={() => { setTargetToDelete(tgt); setShowDeleteModal(true); }} />
  </td>
  </tr>
  ))
  )}
  </tbody>
  </table>
- </div>
-
- {/* Footer Paginasi */}
- <div className="border-t border-emerald-200/80 dark:border-emerald-800/60 p-4 dark:border-emerald-800/60 bg-emerald-50/20 dark:bg-slate-900/30 flex flex-col sm:flex-row items-center justify-between gap-3">
- <div className="text-xs text-slate-500 font-medium">
- Menampilkan data target kurikulum tahfizh terkonfigurasi.
- </div>
- {totalPages > 1 && (
- <Pagination
- currentPage={currentPage}
- totalPages={totalPages}
- onPageChange={setCurrentPage}
- sideLayout="full"
- variant="compact"
- />
- )}
- </div>
- </div>
+      </AppDataTable>
 
  {/* 4. MODAL TAMBAH / UBAH TARGET (AppModal - Harmonized HeroUI/HeroUI) */}
  <AppModal
@@ -945,7 +910,7 @@ export default function TahfizhTargetSettingPage() {
  value={formData.target_name}
  onChange={(e) => setFormData({ ...formData, target_name: e.target.value })}
  placeholder="Contoh: Target Tahfizh Kelas 1 (Juz 30 Penuh)"
- className="w-full rounded-xl border border-emerald-200/80 bg-white text-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white transition-all"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white text-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white transition-all"
  />
  </div>
 
@@ -1000,7 +965,7 @@ export default function TahfizhTargetSettingPage() {
  value={formData.target_juz}
  onChange={(e) => setFormData({ ...formData, target_juz: e.target.value })}
  placeholder="Contoh: Juz 30, Juz 29-30"
- className="w-full rounded-xl border border-emerald-200/80 bg-white text-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white transition-all"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white text-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white transition-all"
  />
  </div>
 
@@ -1050,7 +1015,7 @@ export default function TahfizhTargetSettingPage() {
  value={formData.minimum_kkm_ayats}
  onChange={(e) => setFormData({ ...formData, minimum_kkm_ayats: e.target.value })}
  placeholder="Opsional, misal 350 ayat"
- className="w-full rounded-xl border border-emerald-200/80 bg-white text-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white transition-all"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white text-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white transition-all"
  />
  </div>
 
@@ -1077,7 +1042,7 @@ export default function TahfizhTargetSettingPage() {
  value={formData.description}
  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
  placeholder="Penjelasan standar kompetensi hafalan..."
- className="w-full rounded-xl border border-emerald-200/80 bg-white text-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white transition-all"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white text-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white transition-all"
  />
  </div>
  </form>

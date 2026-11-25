@@ -1592,7 +1592,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
  placeholder="Kode unik modul semester"
  value={formData.kode_modul}
  onChange={(e) => setFormData({ ...formData, kode_modul: e.target.value })}
- className="w-full p-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-mono font-bold"
+ className="w-full p-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-mono font-bold"
  />
  <button
  type="button"
@@ -1629,7 +1629,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
  placeholder="Contoh: Modul Semester 1 Matematika Terpadu Kelas VII"
  value={formData.nama_modul}
  onChange={(e) => setFormData({ ...formData, nama_modul: e.target.value })}
- className="w-full p-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-bold"
+ className="w-full p-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-bold"
  />
  {formErrors.nama_modul && (
  <p className="text-xs text-rose-500 mt-1">{formErrors.nama_modul[0]}</p>
@@ -1651,7 +1651,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
  placeholder="Tuliskan alur tujuan pembelajaran..."
  value={formData.atp}
  onChange={(e) => setFormData({ ...formData, atp: e.target.value })}
- className="w-full p-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+ className="w-full p-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
  ></textarea>
  </div>
 
@@ -1664,7 +1664,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
  placeholder="Tuliskan capaian pembelajaran semester..."
  value={formData.cp}
  onChange={(e) => setFormData({ ...formData, cp: e.target.value })}
- className="w-full p-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+ className="w-full p-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
  ></textarea>
  </div>
  </div>
@@ -1678,7 +1678,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
  placeholder="Detail tujuan spesifik yang ingin dicapai..."
  value={formData.tujuan_pembelajaran}
  onChange={(e) => setFormData({ ...formData, tujuan_pembelajaran: e.target.value })}
- className="w-full p-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+ className="w-full p-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
  ></textarea>
  </div>
 
@@ -1692,7 +1692,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
  min={1}
  value={formData.alokasi_jam}
  onChange={(e) => setFormData({ ...formData, alokasi_jam: parseInt(e.target.value) || 0 })}
- className="w-full p-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+ className="w-full p-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
  />
  </div>
 
@@ -1705,7 +1705,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
  min={1}
  value={formData.jumlah_pertemuan}
  onChange={(e) => setFormData({ ...formData, jumlah_pertemuan: parseInt(e.target.value) || 0 })}
- className="w-full p-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+ className="w-full p-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
  />
  </div>
  </div>
@@ -1720,7 +1720,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
  placeholder="Contoh: Problem Based Learning, Ceramah, Diskusi"
  value={formData.metode_pembelajaran}
  onChange={(e) => setFormData({ ...formData, metode_pembelajaran: e.target.value })}
- className="w-full p-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+ className="w-full p-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
  />
  </div>
 
@@ -1760,7 +1760,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
  onChange={(e) =>
  setFormData({ ...formData, target_nilai_minimum: parseFloat(e.target.value) || 0 })
  }
- className="w-full p-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+ className="w-full p-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
  />
  </div>
 
@@ -1776,7 +1776,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
  onChange={(e) =>
  setFormData({ ...formData, target_kehadiran: parseFloat(e.target.value) || 0 })
  }
- className="w-full p-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+ className="w-full p-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
  />
  </div>
  </div>
@@ -1791,7 +1791,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
  placeholder="Contoh: Surah Al-Mulk ayat 1-30..."
  value={formData.target_hafalan}
  onChange={(e) => setFormData({ ...formData, target_hafalan: e.target.value })}
- className="w-full p-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+ className="w-full p-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
  ></textarea>
  </div>
 
@@ -1804,7 +1804,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
  placeholder="Contoh: Pembuatan Miniatur Rumah Ramah Lingkungan..."
  value={formData.target_proyek}
  onChange={(e) => setFormData({ ...formData, target_proyek: e.target.value })}
- className="w-full p-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+ className="w-full p-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
  ></textarea>
  </div>
  </div>
@@ -1897,7 +1897,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                           min={1}
                           value={detail.minggu}
                           onChange={(e) => handleUbahDetailMateri(idx, 'minggu', parseInt(e.target.value) || 1)}
-                          className="w-12 text-center p-1 rounded border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 font-bold"
+                          className="w-12 text-center p-1 rounded border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 font-bold"
                         />
                       </td>
                       <td className="p-2">
@@ -1906,7 +1906,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                           placeholder="Nama Materi minggu ini..."
                           value={detail.materi}
                           onChange={(e) => handleUbahDetailMateri(idx, 'materi', e.target.value)}
-                          className="w-full p-1.5 rounded border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 font-medium"
+                          className="w-full p-1.5 rounded border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 font-medium"
                         />
                       </td>
                       <td className="p-2">
@@ -1915,7 +1915,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                           placeholder="Target ATP minggu ini..."
                           value={detail.atp}
                           onChange={(e) => handleUbahDetailMateri(idx, 'atp', e.target.value)}
-                          className="w-full p-1.5 rounded border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900"
+                          className="w-full p-1.5 rounded border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900"
                         />
                       </td>
                       <td className="p-2">
@@ -1926,14 +1926,14 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
                             placeholder="JP"
                             value={detail.jp}
                             onChange={(e) => handleUbahDetailMateri(idx, 'jp', parseInt(e.target.value) || 2)}
-                            className="w-14 text-center p-1 rounded border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 font-bold"
+                            className="w-14 text-center p-1 rounded border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 font-bold"
                           />
                           <input
                             type="text"
                             placeholder="Ket / Kuis"
                             value={detail.keterangan}
                             onChange={(e) => handleUbahDetailMateri(idx, 'keterangan', e.target.value)}
-                            className="w-full p-1.5 rounded border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900"
+                            className="w-full p-1.5 rounded border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900"
                           />
                         </div>
                       </td>
@@ -1997,7 +1997,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
  max={100}
  value={formData.bobot_tugas}
  onChange={(e) => setFormData({ ...formData, bobot_tugas: parseFloat(e.target.value) || 0 })}
- className="w-full p-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-bold"
+ className="w-full p-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-bold"
  />
  </div>
 
@@ -2011,7 +2011,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
  max={100}
  value={formData.bobot_quiz}
  onChange={(e) => setFormData({ ...formData, bobot_quiz: parseFloat(e.target.value) || 0 })}
- className="w-full p-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-bold"
+ className="w-full p-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-bold"
  />
  </div>
 
@@ -2025,7 +2025,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
  max={100}
  value={formData.bobot_projek}
  onChange={(e) => setFormData({ ...formData, bobot_projek: parseFloat(e.target.value) || 0 })}
- className="w-full p-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-bold"
+ className="w-full p-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-bold"
  />
  </div>
 
@@ -2039,7 +2039,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
  max={100}
  value={formData.bobot_uts}
  onChange={(e) => setFormData({ ...formData, bobot_uts: parseFloat(e.target.value) || 0 })}
- className="w-full p-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-bold"
+ className="w-full p-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-bold"
  />
  </div>
 
@@ -2053,7 +2053,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
  max={100}
  value={formData.bobot_uas}
  onChange={(e) => setFormData({ ...formData, bobot_uas: parseFloat(e.target.value) || 0 })}
- className="w-full p-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-bold"
+ className="w-full p-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-bold"
  />
  </div>
  </div>
@@ -2171,7 +2171,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
  placeholder="Cari nama kelas, kode kelas, jenjang..."
  value={kelasSearchModal}
  onChange={(e) => setKelasSearchModal(e.target.value)}
- className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-medium focus:outline-none focus:ring-2 focus:ring-amber-500"
+ className="w-full pl-9 pr-4 py-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-medium focus:outline-none focus:ring-2 focus:ring-amber-500"
  />
  </div>
 
@@ -2280,7 +2280,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
  placeholder="Cari nama mapel, kode mapel, kelompok..."
  value={subjectSearchModal}
  onChange={(e) => setSubjectSearchModal(e.target.value)}
- className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500"
+ className="w-full pl-9 pr-4 py-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500"
  />
  </div>
 
@@ -2394,7 +2394,7 @@ export default function MasterModulSemesterPage({ embedded = false, hidePageHead
  placeholder="Cari nama lengkap, NIY, NIK, email, jabatan..."
  value={guruSearchModal}
  onChange={(e) => setGuruSearchModal(e.target.value)}
- className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#0E5C44]"
+ className="w-full pl-9 pr-4 py-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#0E5C44]"
  />
  </div>
  <div>

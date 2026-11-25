@@ -25,6 +25,8 @@ import {
 } from '../services/reportService'
 import PageContainer from '../components/app/PageContainer'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
+import AppDataTable from '../components/app/AppDataTable'
+import { PageToolbarActions } from '../components/app/PageToolbarActions'
 import {
   useDebounce
 } from '../hooks/useDebounce'
@@ -301,63 +303,36 @@ export default function LaporanLmsPage() {
  </div>
 
  {/* HEROUI EMERALD DATATABLE CONTAINER */}
- <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
- {/* Toolbar Header Terstruktur 3-Baris */}
- <div className="p-4 sm:p-6 space-y-4 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent border-b border-emerald-200/90 dark:border-emerald-800/60">
- <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
- <div>
- <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Status Pengumpulan Tugas LMS</h2>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Daftar log pengumpulan tugas siswa beserta waktu pengiriman, status koreksi, dan perolehan nilai.
- </p>
- </div>
-
- <div className="flex items-center gap-2 flex-nowrap shrink-0 py-1">
- <SquircleActionButton
- variant="export"
- label="Export CSV"
- onClick={() => exportCsv('rekap-lms.csv', columns, filteredRows)}
+ <AppDataTable
+ title="Status Pengumpulan Tugas LMS"
+ description="Daftar log pengumpulan tugas siswa beserta waktu pengiriman, status koreksi, dan perolehan nilai."
+ icon={BookOpen}
+ countLabel={`${filteredRows.length} Log`}
+ actions={
+ <PageToolbarActions
+ onExport={() => exportCsv('rekap-lms.csv', columns, filteredRows)}
+ onPrint={() => setIsPrintModalOpen(true)}
  />
- <SquircleActionButton
- variant="view"
- icon={Printer}
- label="Cetak Data"
- onClick={() => setIsPrintModalOpen(true)}
- />
- </div>
- </div>
-
- {/* Search Baris 2 */}
- <div className="relative w-full max-w-md pt-1">
- <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-emerald-600 dark:text-emerald-400" />
- <Input
- type="text"
- placeholder="Cari nama siswa, judul tugas, atau status..."
- value={search}
- onChange={(e) => {
- setSearch(e.target.value)
+ }
+ search={search}
+ onSearchChange={(val) => {
+ setSearch(val)
  setCurrentPage(1)
  }}
- className="pl-9 h-9 text-xs"
- />
- </div>
- </div>
-
- {/* Content Table */}
- <div className="px-4 sm:px-6 md:px-8 overflow-x-auto">
- {loading ? (
- <div className="py-12">
- <MasterEmptyState loading message="Memuat aktivitas LMS..." />
- </div>
- ) : error ? (
- <div className="py-12">
- <MasterErrorState message={error} onRetry={load} />
- </div>
- ) : paginatedRows.length === 0 ? (
- <div className="py-12">
- <MasterEmptyState message="Tidak ada pengumpulan tugas yang cocok dengan pencarian Anda." />
- </div>
- ) : (
+ searchPlaceholder="Cari nama siswa, judul tugas, atau status..."
+ isLoading={loading}
+ isError={Boolean(error)}
+ errorMessage={error}
+ onRetry={load}
+ isEmpty={!loading && !error && paginatedRows.length === 0}
+ emptyTitle="Tidak Ada Data Pengumpulan"
+ emptyDescription="Tidak ada pengumpulan tugas yang cocok dengan pencarian Anda."
+ showPagination={filteredRows.length > 0 && totalPages > 1}
+ page={currentPage}
+ totalPages={totalPages}
+ totalItems={filteredRows.length}
+ onPageChange={setCurrentPage}
+ >
               <TableRoot fullBleed={false}>
                 <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 text-emerald-950 dark:text-emerald-200 font-extrabold uppercase tracking-wider text-xs">
                   <TableRow>
@@ -419,21 +394,7 @@ export default function LaporanLmsPage() {
                   ))}
                 </TableBody>
               </TableRoot>
- )}
- </div>
-
- {/* Footer Pagination Baris 3 */}
- {filteredRows.length > 0 && (
- <div className="p-4 border-t border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50 dark:from-emerald-950/30 dark:via-teal-950/20 dark:to-emerald-950/30">
- <Pagination
- currentPage={currentPage}
- totalPages={totalPages}
- onPageChange={setCurrentPage}
- sideLayout="full"
- />
- </div>
- )}
- </div>
+ </AppDataTable>
  </PageContainer>
  )
 }

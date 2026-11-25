@@ -17,21 +17,32 @@ export default function KurikulumTable({
   onDelete,
   onRestore,
 }) {
-  const getJenisBadgeColor = (jenis) => {
-    switch (jenis) {
-      case 'SIT':
-        return 'bg-emerald-50 text-emerald-700 border-emerald-200/80'
-      case 'Merdeka':
-        return 'bg-blue-50 text-blue-700 border-emerald-200/80'
-      case 'Nasional':
-        return 'bg-indigo-50 text-indigo-700 border-emerald-200/80'
-      case 'Pesantren':
-        return 'bg-amber-50 text-amber-700 border-emerald-200/80'
-      case 'Lokal':
-        return 'bg-purple-50 text-purple-700 border-emerald-200/80'
-      default:
-        return 'bg-slate-50 text-slate-700 border-emerald-200/80'
+  const getJenisBadgeColor = (jenis, nama = '') => {
+    const val = `${jenis || ''} ${nama || ''}`.toLowerCase()
+    if (val.includes('pesantren') || val.includes('ponpes') || val.includes('mahad')) {
+      return 'bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-700/80'
     }
+    if (val.includes('merdeka')) {
+      return 'bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-700/80'
+    }
+    if (val.includes('nasional') || val.includes('k13')) {
+      return 'bg-cyan-100 text-cyan-800 border-cyan-300 dark:bg-cyan-950/60 dark:text-cyan-300 dark:border-cyan-700/80'
+    }
+    if (val.includes('lokal') || val.includes('tahfizh')) {
+      return 'bg-violet-100 text-violet-800 border-violet-300 dark:bg-violet-950/60 dark:text-violet-300 dark:border-violet-700/80'
+    }
+    return 'bg-sky-100 text-sky-800 border-sky-300 dark:bg-sky-950/60 dark:text-sky-300 dark:border-sky-700/80'
+  }
+
+  const getJenjangBadgeColor = (jenjang, nama = '') => {
+    const val = `${jenjang || ''} ${nama || ''}`.toLowerCase()
+    if (val.includes('mi')) return 'bg-teal-100 text-teal-800 border-teal-300 dark:bg-teal-950/60 dark:text-teal-300 dark:border-teal-700/80'
+    if (val.includes('sd')) return 'bg-sky-100 text-sky-800 border-sky-300 dark:bg-sky-950/60 dark:text-sky-300 dark:border-sky-700/80'
+    if (val.includes('smp') || val.includes('mts')) return 'bg-indigo-100 text-indigo-800 border-indigo-300 dark:bg-indigo-950/60 dark:text-indigo-300 dark:border-indigo-700/80'
+    if (val.includes('sma') || val.includes('ma') || val.includes('smk')) return 'bg-purple-100 text-purple-800 border-purple-300 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-700/80'
+    if (val.includes('tk') || val.includes('paud') || val.includes('ra')) return 'bg-pink-100 text-pink-800 border-pink-300 dark:bg-pink-950/60 dark:text-pink-300 dark:border-pink-700/80'
+    if (val.includes('pesantren') || val.includes('ponpes')) return 'bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-700/80'
+    return 'bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-700/80'
   }
 
   return (
@@ -42,7 +53,7 @@ export default function KurikulumTable({
           <th className="py-3.5 px-4 font-extrabold text-xs uppercase tracking-wider bg-transparent">JENIS KURIKULUM</th>
           <th className="py-3.5 px-4 font-extrabold text-xs uppercase tracking-wider bg-transparent">UNIT &amp; TAHUN AJARAN</th>
           <th className="py-3.5 px-4 text-center font-extrabold text-xs uppercase tracking-wider bg-transparent">STATUS</th>
-          <th className="py-3.5 px-4 text-right w-16 sm:w-20 select-none bg-transparent"></th>
+          <th className="py-3.5 px-4 text-right w-16 sm:w-20 select-none bg-transparent">Aksi</th>
         </tr>
       </thead>
       <tbody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40 text-xs font-medium">
@@ -78,15 +89,18 @@ export default function KurikulumTable({
               {/* Jenis Kurikulum */}
               <td className="py-3.5 px-4">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span
-                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold border ${getJenisBadgeColor(
-                      item.jenis_kurikulum
-                    )}`}
-                  >
-                    <Tag className="w-3 h-3" />
-                    {item.jenis_kurikulum}
-                  </span>
-                  <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 uppercase border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80">
+                  {item.jenis_kurikulum && String(item.jenis_kurikulum).toUpperCase() !== 'SIT' && (
+                    <span
+                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold border ${getJenisBadgeColor(
+                        item.jenis_kurikulum,
+                        item.nama_kurikulum
+                      )}`}
+                    >
+                      <Tag className="w-3 h-3" />
+                      {item.jenis_kurikulum}
+                    </span>
+                  )}
+                  <span className={`inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-extrabold uppercase border ${getJenjangBadgeColor(item.jenjang, item.nama_kurikulum)}`}>
                     {item.jenjang}
                   </span>
                 </div>

@@ -243,7 +243,7 @@ function HeroUiModalSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Ketik untuk mencari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-slate-50 dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-200/80 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-slate-50 dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-200/80 focus:outline-none focus:ring-1 focus:ring-emerald-500"
  autoFocus
  />
  </div>
@@ -396,7 +396,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-slate-50 dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-200/80 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-slate-50 dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-200/80 focus:outline-none focus:ring-1 focus:ring-emerald-500"
  autoFocus
  />
  </div>
@@ -1179,7 +1179,7 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  return list
  }, [dataList, cardModal.isOpen, cardModal.statusKey, cardModal.searchQuery])
 
- const MODAL_PAGE_SIZE = 5
+ const MODAL_PAGE_SIZE = 10
  const modalTotalPages = Math.max(1, Math.ceil(modalRows.length / MODAL_PAGE_SIZE))
  const paginatedModalRows = useMemo(() => {
  return modalRows.slice((cardModal.page - 1) * MODAL_PAGE_SIZE, cardModal.page * MODAL_PAGE_SIZE)
@@ -1702,7 +1702,7 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  max="100"
  value={weights.bobot_tugas}
  onChange={(e) => setWeights((prev) => ({ ...prev, bobot_tugas: parseFloat(e.target.value) || 0 }))}
- className="w-full px-3 py-2 text-xs font-semibold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20"
+ className="w-full px-3 py-2 text-xs font-semibold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
  <div>
@@ -1713,7 +1713,7 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  max="100"
  value={weights.bobot_uh}
  onChange={(e) => setWeights((prev) => ({ ...prev, bobot_uh: parseFloat(e.target.value) || 0 }))}
- className="w-full px-3 py-2 text-xs font-semibold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20"
+ className="w-full px-3 py-2 text-xs font-semibold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
  <div>
@@ -1724,7 +1724,7 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  max="100"
  value={weights.bobot_uts}
  onChange={(e) => setWeights((prev) => ({ ...prev, bobot_uts: parseFloat(e.target.value) || 0 }))}
- className="w-full px-3 py-2 text-xs font-semibold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20"
+ className="w-full px-3 py-2 text-xs font-semibold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
  <div>
@@ -1735,7 +1735,7 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  max="100"
  value={weights.bobot_uas}
  onChange={(e) => setWeights((prev) => ({ ...prev, bobot_uas: parseFloat(e.target.value) || 0 }))}
- className="w-full px-3 py-2 text-xs font-semibold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20"
+ className="w-full px-3 py-2 text-xs font-semibold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
  <div>
@@ -1745,7 +1745,7 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  step="0.5"
  value={weights.nilai_kkm}
  onChange={(e) => setWeights((prev) => ({ ...prev, nilai_kkm: parseFloat(e.target.value) || 75.0 }))}
- className="w-full px-3 py-2 text-xs font-semibold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20"
+ className="w-full px-3 py-2 text-xs font-semibold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
  </div>
@@ -1772,14 +1772,14 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  {/* ── 2-Column Equal Grid Visual Analytics Section (Identical with EducationUnitsPage) ── */}
  <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
  {/* Grafik 1: Analisis Skor Rata-rata Komponen */}
- <article className="relative overflow-hidden rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 dark:border-emerald-800/60 bg-white p-5 sm:p-6 shadow-sm dark:bg-[#1B2433] flex flex-col justify-between h-full">
+ <article className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-sm dark:bg-[#1B2433] flex flex-col justify-between h-full">
  <div>
- <div className="flex items-center justify-between mb-4 pb-3.5 border-b border-emerald-200/80 dark:border-emerald-800/60">
- <div className="flex items-center gap-3">
- <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm shrink-0">
- <BarChart2 className="size-5 text-white" />
+ <div className="flex items-center justify-between gap-3 mb-4 pb-3.5 border-b border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="flex items-center gap-3 min-w-0">
+ <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm shrink-0">
+ <BarChart2 className="size-5" />
  </div>
- <div>
+ <div className="min-w-0">
  <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
  Analisis Skor Rata-rata
  </h3>
@@ -1788,14 +1788,14 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  </p>
  </div>
  </div>
- <Badge color="success" size="sm">
+ <Badge color="success" size="sm" className="shrink-0">
  Rata-rata: {stats.rata_nilai_akhir || 0}
  </Badge>
  </div>
 
  <div className="h-64 w-full pt-2">
  <ResponsiveContainer width="100%" height="100%">
- <BarChart data={trendChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+ <BarChart data={trendChartData} margin={{ top: 10, right: 12, left: -10, bottom: 0 }}>
  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" opacity={0.6} />
  <XAxis dataKey="name" tick={{ fontSize: 11, fontWeight: 700 }} stroke="#94A3B8" />
  <YAxis domain={[0, 100]} tick={{ fontSize: 11, fontWeight: 700 }} stroke="#94A3B8" />
@@ -1822,21 +1822,21 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  </ResponsiveContainer>
  </div>
  </div>
- <div className="pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between text-xs font-semibold text-slate-500">
+ <div className="pt-3 mt-2 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between text-xs font-semibold text-slate-500">
  <span>Distribusi skor per instrumen penilaian</span>
  <span className="text-emerald-600 dark:text-emerald-400 font-bold">Terupdate Otomatis</span>
  </div>
  </article>
 
  {/* Grafik 2: Distribusi Predikat Nilai Siswa */}
- <article className="relative overflow-hidden rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 dark:border-emerald-800/60 bg-white p-5 sm:p-6 shadow-sm dark:bg-[#1B2433] flex flex-col justify-between h-full">
+ <article className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-sm dark:bg-[#1B2433] flex flex-col justify-between h-full">
  <div>
- <div className="flex items-center justify-between mb-4 pb-3.5 border-b border-emerald-200/80 dark:border-emerald-800/60">
- <div className="flex items-center gap-3">
- <div className="flex size-10 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-sm shrink-0">
- <Award className="size-5 text-slate-600" />
+ <div className="flex items-center justify-between gap-3 mb-4 pb-3.5 border-b border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="flex items-center gap-3 min-w-0">
+ <div className="flex size-10 items-center justify-center rounded-xl bg-sky-50 border-2 border-sky-300 text-sky-600 dark:bg-sky-950/60 dark:border-sky-800/60 dark:text-sky-300 shadow-sm shrink-0">
+ <Award className="size-5" />
  </div>
- <div>
+ <div className="min-w-0">
  <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
  Distribusi Predikat &amp; KKM
  </h3>
@@ -1845,7 +1845,7 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  </p>
  </div>
  </div>
- <Badge color="blue" size="sm">
+ <Badge color="blue" size="sm" className="shrink-0">
  {pagination.total || dataList.length} Rekap Siswa
  </Badge>
  </div>
@@ -1858,9 +1858,9 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  dataKey="value"
  nameKey="name"
  cx="50%"
- cy="50%"
- innerRadius={55}
- outerRadius={85}
+ cy="46%"
+ innerRadius={52}
+ outerRadius={82}
  paddingAngle={3}
  >
  {pieChartData.map((entry, index) => (
@@ -1882,8 +1882,10 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  }}
  />
  <Legend
+ iconType="circle"
+ wrapperStyle={{ paddingTop: '8px' }}
  formatter={(value, entry) => (
- <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
+ <span className="text-xs font-bold text-slate-700 dark:text-slate-300 mr-3">
  {value} ({entry.payload.value})
  </span>
  )}
@@ -1892,7 +1894,7 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  </ResponsiveContainer>
  </div>
  </div>
- <div className="pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between text-xs font-semibold text-slate-500">
+ <div className="pt-3 mt-2 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between text-xs font-semibold text-slate-500">
  <span>Status KKM &amp; Grade Terstandar</span>
  <span className="text-emerald-600 dark:text-emerald-400 font-bold">100% Terverifikasi</span>
  </div>
@@ -1908,10 +1910,10 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  {/* Datatable 3-Row Toolbar */}
  <div className="flex flex-col gap-3.5 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/50 dark:bg-emerald-950/20 px-5 py-4 sm:px-6 md:px-8 dark:border-emerald-800/60 print:hidden">
  {/* Row 1: Title di kiri, action buttons di kanan — responsive stack mobile */}
- <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 pb-3">
+ <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-3">
  <div className="flex items-center gap-3 min-w-0">
- <div className="flex size-10 sm:size-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-md shadow-xs">
- <Award className="size-5 text-slate-600" strokeWidth={2.2} />
+ <div className="flex size-10 sm:size-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-xs">
+ <Award className="size-5" strokeWidth={2.2} />
  </div>
  <div className="min-w-0">
  <div className="flex items-center gap-2 flex-wrap">
@@ -1962,7 +1964,7 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  placeholder="Cari nama siswa, NIS, mata pelajaran, atau kelas..."
  value={search}
  onChange={(e) => setSearch(e.target.value)}
- className="w-full rounded-xl sm:rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-10 pr-10 py-2.5 sm:py-3 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-2xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+ className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white pl-10 pr-10 text-xs font-bold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-500 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:bg-slate-900 dark:text-slate-100 dark:placeholder-slate-500 transition-all"
  />
  {search && (
  <button
@@ -1976,8 +1978,8 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  </div>
  </div>
 
- {/* Row 3: Horizontal Filters */}
- <div className="flex flex-wrap items-center gap-2.5 pt-0.5">
+ {/* Row 3: Responsive Filter Grid */}
+ <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 pt-0.5">
  {/* Unit Dropdown (Divisi Pendidikan / Global) atau Locked Unit Badge */}
  {canSelectUnit ? (
  <HeroUiFilterSelect
@@ -2070,8 +2072,10 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  </div>
  ) : dataList.length === 0 ? (
  <div className="p-12 text-center space-y-3">
- <Award className="w-12 h-9 text-slate-300 dark:text-slate-600 mx-auto" />
- <h3 className="text-base font-bold text-slate-800 dark:text-slate-200">Belum Ada Data Penilaian</h3>
+ <div className="size-14 rounded-2xl bg-emerald-50 border-2 border-emerald-200 dark:bg-emerald-950/40 dark:border-emerald-800/60 flex items-center justify-center mx-auto text-emerald-500">
+ <Award className="size-7" />
+ </div>
+ <h3 className="text-base font-extrabold text-slate-800 dark:text-slate-200">Belum Ada Data Penilaian</h3>
  <p className="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto">
  {hasActiveFilters
  ? 'Tidak ada data rekap yang sesuai dengan filter atau kata kunci pencarian aktif.'
@@ -2443,7 +2447,7 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  onChange={(e) => setFormData((prev) => ({ ...prev, student_id: e.target.value }))}
  placeholder="Masukkan NIS atau ID siswa..."
  required
- className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-slate-900 focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20"
+ className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-slate-900 focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
  </div>
@@ -2467,7 +2471,7 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  max="100"
  value={formData.score_assignment}
  onChange={(e) => setFormData((prev) => ({ ...prev, score_assignment: parseFloat(e.target.value) || 0 }))}
- className="w-full px-3 py-2.5 text-xs font-semibold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20"
+ className="w-full px-3 py-2.5 text-xs font-semibold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
  </div>
@@ -2481,7 +2485,7 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  max="100"
  value={formData.score_quiz}
  onChange={(e) => setFormData((prev) => ({ ...prev, score_quiz: parseFloat(e.target.value) || 0 }))}
- className="w-full px-3 py-2.5 text-xs font-semibold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20"
+ className="w-full px-3 py-2.5 text-xs font-semibold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
  </div>
@@ -2495,7 +2499,7 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  max="100"
  value={formData.score_midterm}
  onChange={(e) => setFormData((prev) => ({ ...prev, score_midterm: parseFloat(e.target.value) || 0 }))}
- className="w-full px-3 py-2.5 text-xs font-semibold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20"
+ className="w-full px-3 py-2.5 text-xs font-semibold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
  </div>
@@ -2509,7 +2513,7 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  max="100"
  value={formData.score_final}
  onChange={(e) => setFormData((prev) => ({ ...prev, score_final: parseFloat(e.target.value) || 0 }))}
- className="w-full px-3 py-2.5 text-xs font-semibold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20"
+ className="w-full px-3 py-2.5 text-xs font-semibold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
  </div>
@@ -2539,7 +2543,7 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  rows={2}
  value={formData.notes}
  onChange={(e) => setFormData((prev) => ({ ...prev, notes: e.target.value }))}
- className="w-full px-3.5 py-2.5 text-xs font-medium rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 resize-none"
+ className="w-full px-3.5 py-2.5 text-xs font-medium rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 resize-none"
  placeholder="Catatan kemajuan akademik siswa atau catatan remedial..."
  />
  </div>
@@ -2702,102 +2706,125 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  </Dialog>
  )}
 
- {/* ── KPI Card Drill-Down Detail Modal ── */}
- {cardModal.isOpen && (
- <Dialog
+ {/* ── KPI Card Drill-Down Detail Modal (HeroUI AppModal Standard) ── */}
+ <AppModal
  isOpen={cardModal.isOpen}
  onClose={closeCardModal}
- modalClassName="z-[70] bg-slate-950/70 backdrop-blur-md"
- className="max-w-xl w-full rounded-xl bg-white dark:bg-[#1B2433] shadow-2xl overflow-hidden p-0 border border-emerald-200/80 dark:border-emerald-800/60"
+ maxWidth="max-w-4xl"
+ icon={Award}
+ title={cardModal.title || 'Rincian Data Nilai Siswa'}
+ subtitle="Rincian komponen nilai Tugas LMS, CBT UH, UTS, UAS, nilai akhir, dan status KKM siswa."
+ badge={`${modalRows.length} Siswa`}
+ footer={
+ <button
+ type="button"
+ onClick={closeCardModal}
+ className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
  >
- <div className="p-5 sm:p-6">
- <DialogHeader className="border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4 dark:border-emerald-800/60">
- <div className="flex items-center justify-between w-full">
- <div className="flex items-center gap-3">
- <div className="flex h-9 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm">
- <Award className="w-5 h-5" />
- </div>
- <div>
- <DialogTitle className="text-base font-black text-slate-900 dark:text-emerald-600">
- {cardModal.title}
- </DialogTitle>
- <DialogDescription className="text-xs text-slate-400">
- Rincian nilai dan status KKM siswa untuk kategori ini.
- </DialogDescription>
+ <X className="size-4" /><span>Tutup</span>
+ </button>
+ }
+ >
+ <div className="space-y-4">
+ {/* Ringkasan Statistik Kategori */}
+ <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+ <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/70 dark:bg-emerald-950/30 p-3">
+ <div className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">Rata-rata Akhir</div>
+ <div className="text-lg font-black text-emerald-900 dark:text-white mt-0.5">
+ {modalRows.length > 0 ? (modalRows.reduce((s, r) => s + Number(r.final_score || 0), 0) / modalRows.length).toFixed(1) : (stats.rata_nilai_akhir || 0)}
  </div>
  </div>
- <Badge color={cardModal.tone === 'rose' ? 'error' : cardModal.tone === 'sky' ? 'blue' : 'success'} size="sm">
- {modalRows.length} Siswa
- </Badge>
+ <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-sky-50/70 dark:bg-sky-950/30 p-3">
+ <div className="text-[10px] font-extrabold uppercase tracking-wider text-sky-700 dark:text-sky-300">Rata-rata CBT</div>
+ <div className="text-lg font-black text-sky-900 dark:text-white mt-0.5">{stats.rata_cbt || 0}</div>
  </div>
- </DialogHeader>
+ <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-amber-50/70 dark:bg-amber-950/30 p-3">
+ <div className="text-[10px] font-extrabold uppercase tracking-wider text-amber-700 dark:text-amber-300">Rata-rata Tugas</div>
+ <div className="text-lg font-black text-amber-900 dark:text-white mt-0.5">{stats.rata_assignment || 0}</div>
+ </div>
+ <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-purple-50/70 dark:bg-purple-950/30 p-3">
+ <div className="text-[10px] font-extrabold uppercase tracking-wider text-purple-700 dark:text-purple-300">Tuntas / Remedial</div>
+ <div className="text-lg font-black text-purple-900 dark:text-white mt-0.5">
+ {modalRows.filter((r) => r.is_passed).length} / {modalRows.filter((r) => !r.is_passed).length}
+ </div>
+ </div>
+ </div>
 
- <DialogBody className="space-y-4 py-4">
  {/* Modal Search Input */}
  <div className="relative">
  <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-emerald-600 dark:text-emerald-400" />
  <input
  type="text"
- placeholder="Cari nama, NIS, mapel..."
+ placeholder="Cari nama siswa, NIS, mata pelajaran, atau kelas..."
  value={cardModal.searchQuery}
  onChange={(e) => setCardModal((prev) => ({ ...prev, searchQuery: e.target.value, page: 1 }))}
- className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-emerald-500"
+ className="w-full h-10 pl-10 pr-3 text-xs font-bold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:border-emerald-500 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
 
  {/* Modal Table */}
- <div className="overflow-x-auto border border-emerald-200/80 dark:border-emerald-800/60 rounded-xl">
- <TableRoot className="w-full text-left text-xs border-collapse">
- <TableHeader>
- <TableRow className="bg-slate-50/80 dark:bg-slate-900/80 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:text-emerald-200 font-extrabold border-b border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 uppercase tracking-wider text-[10px]">
- <TableHead className="py-2.5 px-3">Siswa &amp; NIS</TableHead>
- <TableHead className="py-2.5 px-3">Mapel &amp; Kelas</TableHead>
- <TableHead className="py-2.5 px-3 text-center">N. Akhir</TableHead>
- <TableHead className="py-2.5 px-3 text-center">Grade</TableHead>
- <TableHead className="py-2.5 px-3 text-center">Status</TableHead>
- </TableRow>
- </TableHeader>
- <TableBody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40">
+ <div className="rounded-2xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 overflow-hidden bg-white dark:bg-[#1B2433]">
+ <div className="overflow-x-auto max-h-[42vh]">
+ <table className="w-full text-left text-xs border-collapse">
+ <thead className="sticky top-0 z-10 bg-gradient-to-r from-emerald-100/95 via-teal-50/90 to-emerald-100/95 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950 dark:via-teal-950 dark:to-emerald-950 dark:border-emerald-800/80 dark:text-emerald-200 font-bold uppercase tracking-wider text-[10px]">
+ <tr>
+ <th className="py-2.5 px-3">Siswa &amp; NIS</th>
+ <th className="py-2.5 px-3">Mapel &amp; Kelas</th>
+ <th className="py-2.5 px-2 text-center">Tugas</th>
+ <th className="py-2.5 px-2 text-center">CBT UH</th>
+ <th className="py-2.5 px-2 text-center">UTS</th>
+ <th className="py-2.5 px-2 text-center">UAS</th>
+ <th className="py-2.5 px-3 text-center">N. Akhir</th>
+ <th className="py-2.5 px-2 text-center">Grade</th>
+ <th className="py-2.5 px-3 text-center">Status</th>
+ </tr>
+ </thead>
+ <tbody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40">
  {paginatedModalRows.length === 0 ? (
- <TableRow>
- <TableCell colSpan={5} className="py-8 text-center text-slate-400">
- Belum ada data siswa untuk kategori ini.
- </TableCell>
- </TableRow>
+ <tr>
+ <td colSpan={9} className="py-8 text-center text-xs font-semibold text-slate-500">
+ Belum ada data siswa untuk kategori ini. Silakan pilih filter Kelas &amp; Mapel atau lakukan kalkulasi nilai terlebih dahulu.
+ </td>
+ </tr>
  ) : (
  paginatedModalRows.map((row) => (
- <TableRow key={row.id} className="hover:bg-emerald-50/40 dark:hover:bg-emerald-950/30">
- <TableCell className="py-2.5 px-3">
- <div className="font-bold text-slate-900 dark:text-white">{row.student?.full_name || 'Siswa'}</div>
- <div className="text-[10px] text-slate-400 font-mono">NIS: {row.student?.nis || '-'}</div>
- </TableCell>
- <TableCell className="py-2.5 px-3">
- <div className="font-medium text-slate-800 dark:text-slate-200">{row.subject?.name || '-'}</div>
- <div className="text-[10px] text-slate-400">{row.kelas?.nama_kelas || '-'}</div>
- </TableCell>
- <TableCell className="py-2.5 px-3 text-center font-bold text-[#059669] dark:text-emerald-400">
- {row.final_score}
- </TableCell>
- <TableCell className="py-2.5 px-3 text-center">
+ <tr key={row.id} className="hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition">
+ <td className="py-2.5 px-3">
+ <div className="font-extrabold text-slate-900 dark:text-white">{row.student?.full_name || 'Siswa'}</div>
+ <div className="text-[10px] text-slate-500 font-mono">NIS: {row.student?.nis || '-'}</div>
+ </td>
+ <td className="py-2.5 px-3">
+ <div className="font-semibold text-indigo-700 dark:text-indigo-300">{row.subject?.name || '-'}</div>
+ <div className="text-[10px] text-slate-500">{row.kelas?.nama_kelas || '-'}</div>
+ </td>
+ <td className="py-2.5 px-2 text-center font-semibold text-slate-700 dark:text-slate-300">{row.score_assignment ?? 0}</td>
+ <td className="py-2.5 px-2 text-center font-semibold text-slate-700 dark:text-slate-300">{row.score_quiz ?? row.score_cbt ?? 0}</td>
+ <td className="py-2.5 px-2 text-center font-semibold text-slate-700 dark:text-slate-300">{row.score_midterm ?? 0}</td>
+ <td className="py-2.5 px-2 text-center font-semibold text-slate-700 dark:text-slate-300">{row.score_final_exam ?? 0}</td>
+ <td className="py-2.5 px-3 text-center font-black text-emerald-700 dark:text-emerald-400">
+ {row.final_score ?? 0}
+ </td>
+ <td className="py-2.5 px-2 text-center">
  {getGradeBadge(row.grade_letter)}
- </TableCell>
- <TableCell className="py-2.5 px-3 text-center">
+ </td>
+ <td className="py-2.5 px-3 text-center">
  {row.is_passed ? (
  <Badge color="success" size="sm">TUNTAS</Badge>
  ) : (
  <Badge color="error" size="sm">REMEDIAL</Badge>
  )}
- </TableCell>
- </TableRow>
+ </td>
+ </tr>
  ))
  )}
- </TableBody>
- </TableRoot>
+ </tbody>
+ </table>
+ </div>
  </div>
 
  {/* Modal Pagination */}
  {modalTotalPages > 1 && (
- <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+ <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-1">
  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
  Menampilkan <span className="font-bold text-slate-700 dark:text-slate-200">{(cardModal.page - 1) * MODAL_PAGE_SIZE + 1}</span>–<span className="font-bold text-slate-700 dark:text-slate-200">{Math.min(cardModal.page * MODAL_PAGE_SIZE, modalRows.length)}</span> dari <span className="font-bold text-slate-900 dark:text-white">{modalRows.length}</span> siswa
  </span>
@@ -2810,16 +2837,8 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  />
  </div>
  )}
- </DialogBody>
-
- <DialogFooter className="flex justify-end border-t border-emerald-200/80 pt-4 dark:border-emerald-800/60">
- <Button variant="ghost" appearance="outline" size="sm" onClick={closeCardModal}>
- Tutup
- </Button>
- </DialogFooter>
  </div>
- </Dialog>
- )}
+ </AppModal>
 
  {/* ── Print Filter & Student Selection Modal ── */}
  {isPrintFilterModalOpen && (
@@ -2957,7 +2976,7 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  placeholder="Cari siswa untuk dicetak..."
  value={printSearchQuery}
  onChange={(e) => setPrintSearchQuery(e.target.value)}
- className="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-emerald-500"
+ className="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-emerald-500"
  />
  </div>
 

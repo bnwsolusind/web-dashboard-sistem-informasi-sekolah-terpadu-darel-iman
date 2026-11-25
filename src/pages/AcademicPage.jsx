@@ -164,7 +164,7 @@ export default function AcademicPage() {
  max="12"
  placeholder="Bulan (1-12)"
  {...formLaporan.register('bulan', { required: true })}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3.5 py-2 text-xs font-medium text-slate-800 transition focus:border-[#059669] focus:outline-none focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3.5 py-2 text-xs font-medium text-slate-800 transition focus:border-[#059669] focus:outline-none focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
  <div>
@@ -177,7 +177,7 @@ export default function AcademicPage() {
  max="2100"
  placeholder="Tahun (2026)"
  {...formLaporan.register('tahun', { required: true })}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3.5 py-2 text-xs font-medium text-slate-800 transition focus:border-[#059669] focus:outline-none focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3.5 py-2 text-xs font-medium text-slate-800 transition focus:border-[#059669] focus:outline-none focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
  </div>
@@ -191,7 +191,7 @@ export default function AcademicPage() {
  type="text"
  placeholder="Contoh: Laporan Capaian Kurikulum Agustus"
  {...formLaporan.register('judul_laporan', { required: true })}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3.5 py-2 text-xs font-medium text-slate-800 transition focus:border-[#059669] focus:outline-none focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3.5 py-2 text-xs font-medium text-slate-800 transition focus:border-[#059669] focus:outline-none focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
 
@@ -204,7 +204,7 @@ export default function AcademicPage() {
  rows={3}
  placeholder="Ringkasan poin utama perkembangan akademik..."
  {...formLaporan.register('ringkasan_laporan', { required: true })}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3.5 py-2 text-xs font-medium text-slate-800 transition focus:border-[#059669] focus:outline-none focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3.5 py-2 text-xs font-medium text-slate-800 transition focus:border-[#059669] focus:outline-none focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
 
@@ -217,7 +217,7 @@ export default function AcademicPage() {
  type="text"
  placeholder="Rencana aksi atau perbaikan berikutnya..."
  {...formLaporan.register('tindak_lanjut')}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3.5 py-2 text-xs font-medium text-slate-800 transition focus:border-[#059669] focus:outline-none focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3.5 py-2 text-xs font-medium text-slate-800 transition focus:border-[#059669] focus:outline-none focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
 

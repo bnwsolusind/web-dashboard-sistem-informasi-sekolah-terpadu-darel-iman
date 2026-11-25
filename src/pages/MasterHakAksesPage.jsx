@@ -896,6 +896,7 @@ export default function MasterHakAksesPage() {
  tag="RBAC"
  variant="emerald"
  icon={Shield}
+ onClick={() => setActiveTab('roles')}
  />
  <ModernKpiCard
  label="Izin Akses (Permissions)"
@@ -904,6 +905,7 @@ export default function MasterHakAksesPage() {
  tag="Aksi"
  variant="teal"
  icon={Key}
+ onClick={() => setActiveTab('permissions')}
  />
  <ModernKpiCard
  label="Pegawai Tercover"
@@ -912,6 +914,7 @@ export default function MasterHakAksesPage() {
  tag="Civitas"
  variant="blue"
  icon={Users}
+ onClick={() => setActiveTab('pegawai')}
  />
  <ModernKpiCard
  label="Role Belum Digunakan"
@@ -920,6 +923,7 @@ export default function MasterHakAksesPage() {
  tag="Arsip"
  variant="amber"
  icon={ShieldAlert}
+ onClick={() => setActiveTab('roles')}
  />
  </div>
 

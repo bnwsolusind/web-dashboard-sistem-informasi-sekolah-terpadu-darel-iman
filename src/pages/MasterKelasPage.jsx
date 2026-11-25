@@ -519,7 +519,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
  autoFocus
  />
  </div>
@@ -1154,6 +1154,8 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
  const [isImporting, setIsImporting] = useState(false)
  const [overwriteExisting, setOverwriteExisting] = useState(false)
  const [duplicateModalData, setDuplicateModalData] = useState(null)
+ const [kpiModalKey, setKpiModalKey] = useState(null)
+ const [kpiModalSearch, setKpiModalSearch] = useState('')
 
  // ── Print Payload Builder ────────────────────────────────────────────────
  const getPrintPayload = (mode = 'all') => {
@@ -1535,7 +1537,7 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
               </button>
               <button
                 type="button"
-                onClick={handleExportConfirm}
+                onClick={handleProcessExport}
                 className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
               >
                 <Download className="size-4" strokeWidth={2} />
@@ -2146,6 +2148,8 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
  tag={isLoading ? '...' : `${stats.total_kelas ?? 0} Kelas`}
  tone="emerald"
  subtext="Rombongan belajar terdaftar"
+ ctaText="Detail"
+ onClick={() => { setKpiModalSearch(''); setKpiModalKey('total_kelas') }}
  />
  <ModernKpiCard
  icon={CheckCircle2}
@@ -2154,6 +2158,8 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
  tag={isLoading ? '...' : `${stats.total_aktif ?? 0} Aktif`}
  tone="teal"
  subtext="Status operasional aktif"
+ ctaText="Detail"
+ onClick={() => { setKpiModalSearch(''); setKpiModalKey('kelas_aktif') }}
  />
  <ModernKpiCard
  icon={UserCheck}
@@ -2162,6 +2168,8 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
  tag={isLoading ? '...' : `${stats.wali_terisi ?? 0} Guru`}
  tone="amber"
  subtext="Memiliki wali kelas"
+ ctaText="Detail"
+ onClick={() => { setKpiModalSearch(''); setKpiModalKey('wali_terisi') }}
  />
  <ModernKpiCard
  icon={Users}
@@ -2170,6 +2178,8 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
  tag={isLoading ? '...' : `${stats.total_kapasitas ?? 0} Kuota`}
  tone="indigo"
  subtext="Total kuota tempat duduk"
+ ctaText="Detail"
+ onClick={() => { setKpiModalSearch(''); setKpiModalKey('total_kapasitas') }}
  />
  </div>
  </motion.div>
@@ -2606,7 +2616,7 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
  value={formData.kapasitas}
  onChange={(e) => setFormData((prev) => ({ ...prev, kapasitas: e.target.value }))}
  placeholder="30"
- className="h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-10 pr-3.5 text-xs font-medium outline-none transition-all focus:border-[#059669] focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700/80 dark:bg-[#111827] dark:text-white"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white pl-10 pr-3.5 text-xs font-medium outline-none transition-all focus:border-[#059669] focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700/80 dark:bg-[#111827] dark:text-white"
  />
  </div>
  </div>
@@ -2654,7 +2664,7 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
  value={formData.ruangan}
  onChange={(e) => setFormData((prev) => ({ ...prev, ruangan: e.target.value }))}
  placeholder="Contoh: Gedung Al-Farabi Lt. 2 (R-204)"
- className="h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-10 pr-3.5 text-xs font-medium outline-none transition-all focus:border-[#059669] focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700/80 dark:bg-[#111827] dark:text-white"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white pl-10 pr-3.5 text-xs font-medium outline-none transition-all focus:border-[#059669] focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700/80 dark:bg-[#111827] dark:text-white"
  />
  </div>
  </div>
@@ -2868,7 +2878,7 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
  placeholder="Cari nama siswa, NIS, atau NISN..."
  value={siswaSearch}
  onChange={(e) => { setSiswaSearch(e.target.value); setSiswaModalPage(1) }}
- className="w-full pl-10 pr-8 py-2 text-xs bg-white dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full pl-10 pr-8 py-2 text-xs bg-white dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500"
  />
  {siswaSearch && (
  <button
@@ -3050,7 +3060,7 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
               <button
                 type="button"
                 disabled={movingLoading || !targetKelasId}
-                onClick={handleExecuteMove}
+                onClick={executePindahKelas}
                 className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
               >
                 {movingLoading ? (
@@ -3277,6 +3287,142 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
             </>
           )}
         </AppModal>
+
+        {/* ── KPI Quick View Pop-up Modal ── */}
+        {(() => {
+          const allRows = Array.isArray(rawList) ? rawList : []
+          const metaMap = {
+            total_kelas: {
+              title: 'Rincian Total Kelas',
+              badge: `${Number(stats.total_kelas ?? allRows.length).toLocaleString('id-ID')} Kelas`,
+              description: 'Daftar seluruh rombongan belajar terdaftar pada filter aktif.',
+              rows: allRows,
+            },
+            kelas_aktif: {
+              title: 'Rincian Kelas Aktif',
+              badge: `${Number(stats.total_aktif ?? 0).toLocaleString('id-ID')} Aktif`,
+              description: 'Daftar kelas dengan status operasional aktif.',
+              rows: allRows.filter((k) => String(k.status || '').toLowerCase() === 'aktif' || k.is_active === true),
+            },
+            wali_terisi: {
+              title: 'Rincian Wali Kelas Terisi',
+              badge: `${Number(stats.wali_terisi ?? 0).toLocaleString('id-ID')} Guru`,
+              description: 'Daftar kelas yang sudah memiliki wali kelas.',
+              rows: allRows.filter((k) => Boolean(k.wali_kelas_id || k.wali_kelas || k.homeroom_teacher || k.wali_name)),
+            },
+            total_kapasitas: {
+              title: 'Rincian Kapasitas & Kuota Kelas',
+              badge: `${Number(stats.total_kapasitas ?? 0).toLocaleString('id-ID')} Kuota`,
+              description: 'Daftar alokasi kapasitas tempat duduk per kelas.',
+              rows: [...allRows].sort((a, b) => Number(b.kapasitas || b.capacity || 0) - Number(a.kapasitas || a.capacity || 0)),
+            },
+          }
+          const activeMeta = kpiModalKey ? metaMap[kpiModalKey] : null
+          const q = kpiModalSearch.trim().toLowerCase()
+          const modalRows = activeMeta
+            ? activeMeta.rows.filter((k) => {
+                if (!q) return true
+                const nama = String(k.nama_kelas || k.name || '').toLowerCase()
+                const kode = String(k.kode_kelas || k.code || '').toLowerCase()
+                const unit = String(k.unit_name || k.education_unit?.name || '').toLowerCase()
+                const wali = String(k.wali_name || k.wali_kelas?.nama_lengkap || k.wali_kelas?.name || '').toLowerCase()
+                return nama.includes(q) || kode.includes(q) || unit.includes(q) || wali.includes(q)
+              })
+            : []
+
+          return (
+            <AppModal
+              isOpen={Boolean(kpiModalKey && activeMeta)}
+              onClose={() => setKpiModalKey(null)}
+              maxWidth="max-w-3xl"
+              icon={School}
+              title={activeMeta?.title || 'Rincian KPI Kelas'}
+              badge={activeMeta?.badge}
+              description={activeMeta?.description}
+              footer={
+                <div className="flex items-center justify-between w-full gap-3">
+                  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                    Menampilkan <strong className="text-emerald-700 dark:text-emerald-400">{modalRows.length}</strong> kelas pada halaman data aktif
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setKpiModalKey(null)}
+                    className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+                  >
+                    <X className="size-4" />
+                    <span>Tutup</span>
+                  </button>
+                </div>
+              }
+            >
+              <div className="space-y-4">
+                <div className="relative">
+                  <Search className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-emerald-600 dark:text-emerald-400 pointer-events-none" />
+                  <input
+                    type="text"
+                    value={kpiModalSearch}
+                    onChange={(e) => setKpiModalSearch(e.target.value)}
+                    placeholder="Cari nama kelas, kode, unit, atau wali kelas..."
+                    className="w-full h-10 pl-9 pr-3 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none shadow-xs transition-all"
+                  />
+                </div>
+
+                <div className="rounded-2xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 overflow-hidden bg-white dark:bg-[#1B2433]">
+                  <div className="max-h-[46vh] overflow-y-auto overflow-x-auto">
+                    <table className="w-full text-left text-xs border-collapse">
+                      <thead className="sticky top-0 z-10 bg-gradient-to-r from-emerald-100/95 via-teal-50/90 to-emerald-100/95 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950 dark:via-teal-950 dark:to-emerald-950 dark:border-emerald-800/80 dark:text-emerald-200 font-bold uppercase tracking-wider text-[11px]">
+                        <tr>
+                          <th className="p-3">Kelas &amp; Kode</th>
+                          <th className="p-3">Unit Pendidikan</th>
+                          <th className="p-3">Wali Kelas</th>
+                          <th className="p-3 text-center">Kapasitas / Siswa</th>
+                          <th className="p-3 text-center">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40">
+                        {modalRows.length === 0 ? (
+                          <tr>
+                            <td colSpan={5} className="p-6 text-center text-xs font-semibold text-slate-500 dark:text-slate-400">
+                              Tidak ada data kelas yang sesuai kriteria.
+                            </td>
+                          </tr>
+                        ) : (
+                          modalRows.map((k, idx) => {
+                            const nama = k.nama_kelas || k.name || '-'
+                            const kode = k.kode_kelas || k.code || '-'
+                            const unit = k.unit_name || k.education_unit?.name || '-'
+                            const wali = k.wali_name || k.wali_kelas?.nama_lengkap || k.wali_kelas?.name || '-'
+                            const cap = Number(k.kapasitas || k.capacity || 0)
+                            const jml = Number(k.jumlah_siswa || k.students_count || 0)
+                            const aktif = String(k.status || '').toLowerCase() === 'aktif' || k.is_active === true
+                            return (
+                              <tr key={k.id || idx} className="hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition">
+                                <td className="p-3">
+                                  <div className="font-extrabold text-slate-900 dark:text-white">{nama}</div>
+                                  <div className="text-[10px] font-mono text-slate-500">{kode}</div>
+                                </td>
+                                <td className="p-3 font-semibold text-slate-700 dark:text-slate-300">{unit}</td>
+                                <td className="p-3 font-semibold text-slate-700 dark:text-slate-300">{wali}</td>
+                                <td className="p-3 text-center font-black text-emerald-700 dark:text-emerald-400 tabular-nums">
+                                  {jml} / {cap}
+                                </td>
+                                <td className="p-3 text-center">
+                                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${aktif ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'}`}>
+                                    {aktif ? 'Aktif' : 'Non-Aktif'}
+                                  </span>
+                                </td>
+                              </tr>
+                            )
+                          })
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </AppModal>
+          )
+        })()}
 
  </PageContainer>
  )

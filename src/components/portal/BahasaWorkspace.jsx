@@ -29,6 +29,7 @@ import {
  Chip as HeroChip,
  Button as HeroButton,
 } from '@heroui/react'
+import { KpiStatCard } from '../app'
 import api from '../../services/api'
 import { cn } from '../../lib/utils'
 
@@ -125,11 +126,11 @@ export default function BahasaWorkspace({ student, loading: parentLoading }) {
  return (
  <div className="space-y-6">
  {/* ── 1. HERO HEADER BANNER (HERO UI / HEROUI BENCHMARK) ── */}
- <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:border-emerald-800/60 dark:bg-[#1B2433] p-5 sm:p-6 shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-gradient-to-br from-[#E6F8F3] via-white to-[#F0FDF9] dark:from-emerald-950/40 dark:via-[#1B2433] dark:to-teal-950/30 p-5 sm:p-6 shadow-md shadow-emerald-500/10">
 
  <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
  <div className="flex items-start gap-4">
- <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-lg shadow-sm ring-4 ring-emerald-500/20">
+ <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-md shadow-emerald-600/20 border border-emerald-500/30">
  <Languages className="h-7 w-7" />
  </div>
  <div>
@@ -167,65 +168,34 @@ export default function BahasaWorkspace({ student, loading: parentLoading }) {
 
  {/* ── 2. KPI STATS CARDS ── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="rounded-xl border border-emerald-200/80 !bg-emerald-100/90 hover:!bg-emerald-200/70 dark:border-emerald-800/60 dark:!bg-emerald-950/50 dark:hover:!bg-emerald-950/70 hover:border-emerald-300 dark:hover:border-emerald-700 p-4 shadow-xs transition-all duration-200">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300">Total Setoran</span>
-            <div className="p-2 rounded-xl !bg-emerald-600 !text-white shadow-sm dark:!bg-emerald-600 dark:!text-white">
-              <BookOpen className="h-4 w-4 text-white" />
-            </div>
-          </div>
-          <div className="mt-2 text-2xl font-black text-emerald-800 dark:text-emerald-200">
-            {stats.total} <span className="text-xs font-medium text-emerald-700/80 dark:text-emerald-300/80">kali</span>
-          </div>
-          <p className="mt-1 text-xs text-emerald-700/90 dark:text-emerald-300/90">
-            Riwayat setoran hafalan kosakata
-          </p>
-        </div>
-
-        <div className="rounded-xl border border-emerald-200/80 !bg-teal-100/90 hover:!bg-teal-200/70 dark:border-emerald-800/60 dark:!bg-teal-950/50 dark:hover:!bg-teal-950/70 hover:border-emerald-300 dark:hover:border-emerald-700 p-4 shadow-xs transition-all duration-200">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-teal-800 dark:text-teal-300">Predikat Mutqin</span>
-            <div className="p-2 rounded-xl !bg-teal-600 !text-white shadow-sm dark:!bg-teal-600 dark:!text-white">
-              <Award className="h-4 w-4 text-white" />
-            </div>
-          </div>
-          <div className="mt-2 text-2xl font-black text-teal-800 dark:text-teal-200">
-            {stats.mutqinCount} <span className="text-xs font-medium text-teal-700/80 dark:text-teal-300/80">kosakata</span>
-          </div>
-          <p className="mt-1 text-xs text-teal-700/90 dark:text-teal-300/90">
-            Hafal fasih & tepat dalam kalimat
-          </p>
-        </div>
-
-        <div className="rounded-xl border border-emerald-200/80 !bg-amber-100/90 hover:!bg-amber-200/70 dark:border-emerald-800/60 dark:!bg-amber-950/50 dark:hover:!bg-amber-950/70 hover:border-emerald-300 dark:hover:border-emerald-700 p-4 shadow-xs transition-all duration-200">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-amber-800 dark:text-amber-300">Rata-rata Nilai</span>
-            <div className="p-2 rounded-xl !bg-amber-600 !text-white shadow-sm dark:!bg-amber-600 dark:!text-white">
-              <TrendingUp className="h-4 w-4 text-white" />
-            </div>
-          </div>
-          <div className="mt-2 text-2xl font-black text-amber-800 dark:text-amber-200">
-            {stats.avgScore > 0 ? stats.avgScore : '-'} <span className="text-xs font-medium text-amber-700/80 dark:text-amber-300/80">/ 100</span>
-          </div>
-          <p className="mt-1 text-xs text-amber-700/90 dark:text-amber-300/90">
-            Skor akumulasi kelancaran
-          </p>
-        </div>
-
-        <div className="rounded-xl border border-emerald-200/80 !bg-sky-100/90 hover:!bg-sky-200/70 dark:border-emerald-800/60 dark:!bg-sky-950/50 dark:hover:!bg-sky-950/70 hover:border-emerald-300 dark:hover:border-emerald-700 p-4 shadow-xs transition-all duration-200">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-sky-800 dark:text-sky-300">Bank Kosakata Aktif</span>
-            <div className="p-2 rounded-xl !bg-emerald-600 !text-white shadow-sm dark:!bg-sky-600 dark:!text-white">
-              <Languages className="h-4 w-4 text-white" />
-            </div>
-          </div>
-          <div className="mt-2 text-2xl font-black text-sky-800 dark:text-sky-200">
-            {stats.activeVocabTotal} <span className="text-xs font-medium text-sky-700/80 dark:text-sky-300/80">materi</span>
-          </div>
-          <p className="mt-1 text-xs text-sky-700/90 dark:text-sky-300/90">
-            Disahkan Kepsek & Yayasan
-          </p>
-        </div>
+        <KpiStatCard
+          icon={BookOpen}
+          title="Total Setoran"
+          value={`${stats.total} kali`}
+          description="Riwayat setoran hafalan kosakata"
+          tone="emerald"
+        />
+        <KpiStatCard
+          icon={Award}
+          title="Predikat Mutqin"
+          value={`${stats.mutqinCount} kosakata`}
+          description="Hafal fasih & tepat dalam kalimat"
+          tone="teal"
+        />
+        <KpiStatCard
+          icon={TrendingUp}
+          title="Rata-rata Nilai"
+          value={`${stats.avgScore > 0 ? stats.avgScore : '-'} / 100`}
+          description="Skor akumulasi kelancaran"
+          tone="amber"
+        />
+        <KpiStatCard
+          icon={Languages}
+          title="Bank Kosakata Aktif"
+          value={`${stats.activeVocabTotal} materi`}
+          description="Disahkan Kepsek & Yayasan"
+          tone="sky"
+        />
       </div>
 
       {/* ── 3. SUB-TABS NAVIGATOR ── */}
@@ -424,7 +394,7 @@ export default function BahasaWorkspace({ student, loading: parentLoading }) {
  placeholder="Cari kata atau arti..."
  value={searchWord}
  onChange={(e) => setSearchWord(e.target.value)}
- className="w-full sm:w-60 pl-8 pr-3 py-1.5 text-xs rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full sm:w-60 pl-8 pr-3 py-1.5 text-xs rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
  </div>

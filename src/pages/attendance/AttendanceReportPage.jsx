@@ -1336,7 +1336,7 @@ export default function AttendanceReportPage() {
               placeholder="Cari nama siswa, NIS, atau kelas..."
               value={cardModal.searchQuery}
               onChange={(e) => setCardModal((prev) => ({ ...prev, searchQuery: e.target.value, page: 1 }))}
-              className="w-full pl-9 pr-8 py-2 text-xs bg-white dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full pl-9 pr-8 py-2 text-xs bg-white dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500"
             />
             {cardModal.searchQuery && (
               <button

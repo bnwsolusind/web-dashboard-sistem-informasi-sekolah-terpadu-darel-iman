@@ -29,6 +29,7 @@ import {
  Tooltip,
  Legend,
 } from 'recharts'
+import { KpiStatCard } from '../app'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../ui/card'
 import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar'
 import { Badge } from '../ui/badge'
@@ -347,16 +348,14 @@ export default function StudentLeaderAnalyticsSection({
  {/* Grid Row 1: Graphic Analysis of Siswa Baru, Siswa Keluar, Siswa Berhenti */}
  <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
  {/* Left / Top: Modern Emerald Chart Card */}
- <div className="lg:col-span-12 relative overflow-visible z-20 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]">
- {/* Top Emerald Gradient Accent Bar */}
-
+ <div className="lg:col-span-12 relative overflow-visible z-20 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433]">
  {/* Card Header & Controls */}
- <div className="p-5 sm:p-6 border-b border-emerald-200/80 dark:border-emerald-800/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] space-y-4">
+ <div className="p-4 sm:p-5 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-500/10 rounded-t-[20px]">
  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
  {/* Title & Badge */}
  <div className="flex items-center gap-3">
- <div className="flex size-11 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm shrink-0 border border-emerald-200/80 dark:border-emerald-800/60">
- <TrendingUp className="size-5.5 text-slate-600" strokeWidth={2.2} />
+ <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm shrink-0">
+ <TrendingUp className="size-5" strokeWidth={2.2} />
  </div>
  <div>
  <div className="flex flex-wrap items-center gap-2">
@@ -400,82 +399,44 @@ export default function StudentLeaderAnalyticsSection({
  </div>
  )}
  </div>
+ </div>
 
  {/* Structured 3-Column Equal KPI Cards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-emerald-200/80 dark:border-emerald-800/80 dark:border-emerald-800/60">
-              {/* KPI 1: Siswa Baru */}
-              <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 !bg-emerald-100/90 hover:!bg-emerald-200/70 p-3.5 shadow-sm transition-all duration-300 dark:border-emerald-800/60 dark:!bg-emerald-950/50">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-black uppercase tracking-wider text-emerald-800 dark:text-emerald-300">
-                    Siswa Baru
-                  </span>
-                  <div className="flex size-7 items-center justify-center rounded-xl !bg-emerald-600 !text-white shadow-sm dark:!bg-emerald-600 dark:!text-white">
-                    <UserPlus className="size-3.5 text-white" />
-                  </div>
-                </div>
-                <div className="mt-2 flex items-baseline gap-2">
-                  <span className="text-2xl font-black text-emerald-800 dark:text-emerald-200">
-                    {movementTotals.baru.toLocaleString('id-ID')}
-                  </span>
-                  <span className="text-xs font-bold text-emerald-700/80 dark:text-emerald-400/80">
-                    {selectedKelas ? `di ${selectedKelas}` : 'siswa'}
-                  </span>
-                </div>
-                <p className="mt-1 text-[10px] text-emerald-700/80 dark:text-emerald-400/80 font-medium">
-                  Pendaftaran baru & mutasi masuk
-                </p>
-              </div>
-
-              {/* KPI 2: Siswa Keluar (Mutasi) */}
-              <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 !bg-amber-100/90 hover:!bg-amber-200/70 p-3.5 shadow-sm transition-all duration-300 dark:border-emerald-800/60 dark:!bg-amber-950/50">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-black uppercase tracking-wider text-amber-800 dark:text-amber-300">
-                    Siswa Keluar (Mutasi)
-                  </span>
-                  <div className="flex size-7 items-center justify-center rounded-xl !bg-amber-600 !text-white shadow-sm dark:!bg-amber-600 dark:!text-white">
-                    <UserMinus className="size-3.5 text-white" />
-                  </div>
-                </div>
-                <div className="mt-2 flex items-baseline gap-2">
-                  <span className="text-2xl font-black text-amber-800 dark:text-amber-200">
-                    {movementTotals.keluar.toLocaleString('id-ID')}
-                  </span>
-                  <span className="text-xs font-bold text-amber-700/80 dark:text-amber-400/80">
-                    {selectedKelas ? `di ${selectedKelas}` : 'siswa'}
-                  </span>
-                </div>
-                <p className="mt-1 text-[10px] text-amber-700/80 dark:text-amber-400/80 font-medium">
-                  Pindah sekolah & mutasi keluar
-                </p>
-              </div>
-
-              {/* KPI 3: Siswa Berhenti */}
-              <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 !bg-rose-100/90 hover:!bg-rose-200/70 p-3.5 shadow-sm transition-all duration-300 dark:border-emerald-800/60 dark:!bg-rose-950/50">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-black uppercase tracking-wider text-rose-800 dark:text-rose-300">
-                    Siswa Berhenti
-                  </span>
-                  <div className="flex size-7 items-center justify-center rounded-xl !bg-rose-600 !text-white shadow-sm dark:!bg-rose-600 dark:!text-white">
-                    <UserX className="size-3.5 text-white" />
-                  </div>
-                </div>
-                <div className="mt-2 flex items-baseline gap-2">
-                  <span className="text-2xl font-black text-rose-800 dark:text-rose-200">
-                    {movementTotals.berhenti.toLocaleString('id-ID')}
-                  </span>
-                  <span className="text-xs font-bold text-rose-700/80 dark:text-rose-400/80">
-                    {selectedKelas ? `di ${selectedKelas}` : 'siswa'}
-                  </span>
-                </div>
-                <p className="mt-1 text-[10px] text-rose-700/80 dark:text-rose-400/80 font-medium">
-                  Status non-aktif, cuti & drop out
-                </p>
-              </div>
-            </div>
-          </div>
+ <div className="p-4 sm:p-5 pb-0 grid grid-cols-1 sm:grid-cols-3 gap-4">
+ <KpiStatCard
+ title="Siswa Baru"
+ value={movementTotals.baru.toLocaleString('id-ID')}
+ description="Pendaftaran baru & mutasi masuk"
+ badge={selectedKelas || 'Masuk'}
+ icon={UserPlus}
+ tone="emerald"
+ leftFooterText={selectedKelas ? `Kelas ${selectedKelas}` : 'Semua Kelas'}
+ ctaText="Tren"
+ />
+ <KpiStatCard
+ title="Siswa Keluar (Mutasi)"
+ value={movementTotals.keluar.toLocaleString('id-ID')}
+ description="Pindah sekolah & mutasi keluar"
+ badge={selectedKelas || 'Mutasi'}
+ icon={UserMinus}
+ tone="amber"
+ leftFooterText={selectedKelas ? `Kelas ${selectedKelas}` : 'Semua Kelas'}
+ ctaText="Tren"
+ />
+ <KpiStatCard
+ title="Siswa Berhenti"
+ value={movementTotals.berhenti.toLocaleString('id-ID')}
+ description="Status non-aktif, cuti & drop out"
+ badge={selectedKelas || 'Non-Aktif'}
+ icon={UserX}
+ tone="rose"
+ leftFooterText={selectedKelas ? `Kelas ${selectedKelas}` : 'Semua Kelas'}
+ ctaText="Tren"
+ />
+ </div>
 
           {/* Chart Content Area */}
- <div className="p-5 sm:p-6 bg-white dark:bg-[#1B2433]">
+ <div className="p-5 sm:p-6 bg-white dark:bg-[#1B2433] rounded-b-[20px]">
  <div className="h-72 w-full">
  <ChartContainer className="h-full w-full">
  <BarChart data={chartMovementData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
@@ -510,38 +471,38 @@ export default function StudentLeaderAnalyticsSection({
  </div>
 
  {/* Grid Row 2: Capaian Prestasi & Hafalan Tahfizh Siswa */}
- <Card className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]">
- <CardHeader className="border-b border-emerald-200/80 dark:border-emerald-800/80 bg-slate-50/50 dark:bg-slate-900/50 px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#1B2433]">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433]">
+ <div className="border-b border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-500/10 px-5 py-4">
  <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
  <div className="flex items-center gap-3.5">
- <div className="flex size-11 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
- <Award className="size-6 text-white" />
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
+ <Award className="size-5 text-white" />
  </div>
  <div>
- <CardTitle className="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
- Capaian Prestasi & Hafalan Tahfizh Siswa
- </CardTitle>
- <CardDescription className="text-xs font-medium text-slate-700 dark:text-slate-300 mt-0.5">
+ <h3 className="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+ Capaian Prestasi &amp; Hafalan Tahfizh Siswa
+ </h3>
+ <p className="text-xs font-medium text-slate-600 dark:text-slate-300 mt-0.5">
  Peringkat hafalan Tahfizh per kelas dan 3 Terbaik Prestasi Akademik Sekolah. Klik kartu untuk melihat profil siswa.
- </CardDescription>
+ </p>
  </div>
  </div>
 
  {/* Category Tabs Filter */}
- <div className="flex flex-wrap items-center gap-1.5 bg-emerald-900/10 dark:bg-emerald-950/60 p-1.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/80">
+ <div className="flex flex-nowrap items-center gap-1.5 bg-emerald-50/90 dark:bg-emerald-950/60 p-1 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 shrink-0 overflow-x-auto">
  {[
- { id: 'tahfizh', label: '📖 Prestasi Tahfizh per Kelas (Unit)' },
- { id: 'akademik', label: '🎓 3 Terbaik Prestasi Akademik Sekolah' },
- { id: 'semua', label: '🏆 Semua Capaian Prestasi' },
+ { id: 'tahfizh', label: '📖 Tahfizh per Kelas' },
+ { id: 'akademik', label: '🎓 3 Terbaik Akademik' },
+ { id: 'semua', label: '🏆 Semua Prestasi' },
  ].map((tab) => (
  <button
  key={tab.id}
  type="button"
  onClick={() => setActiveTab(tab.id)}
- className={`px-3.5 py-2 text-xs font-extrabold rounded-xl transition-all duration-200 cursor-pointer ${
+ className={`px-3 py-1.5 text-xs font-black rounded-lg transition-all duration-200 cursor-pointer whitespace-nowrap ${
  activeTab === tab.id
- ? 'bg-emerald-600 hover:bg-emerald-700 text-white dark:bg-emerald-600 dark:text-white shadow-sm scale-[1.02]'
- : 'text-slate-700 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-emerald-400'
+ ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs'
+ : 'text-slate-600 dark:text-slate-300 hover:text-emerald-700 hover:bg-emerald-100/60 dark:hover:bg-slate-800'
  }`}
  >
  {tab.label}
@@ -549,9 +510,9 @@ export default function StudentLeaderAnalyticsSection({
  ))}
  </div>
  </div>
- </CardHeader>
+ </div>
 
- <CardContent className="p-6 space-y-8">
+ <div className="p-5 sm:p-6 space-y-8">
  {/* SECTION A: PERINGKAT 1 - 3 (TOP 3 PROFILE CARDS PODIUM - INTERACTIVE) */}
  <div>
  <div className="flex items-center justify-between mb-4">
@@ -571,7 +532,7 @@ export default function StudentLeaderAnalyticsSection({
  </div>
 
  {top3Rankings.length === 0 ? (
- <div className="text-center py-10 px-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-dashed border-emerald-200/80 dark:border-emerald-800/60 text-xs text-slate-400">
+ <div className="text-center py-10 px-4 bg-emerald-50/40 dark:bg-slate-900/50 rounded-2xl border-2 border-dashed border-emerald-300/80 dark:border-emerald-800/60 text-xs font-semibold text-slate-600 dark:text-slate-400">
  Belum ada data prestasi {activeTab === 'tahfizh' ? 'tahfizh' : activeTab === 'akademik' ? 'akademik' : ''} siswa yang tercatat pada filter ini.
  </div>
  ) : (
@@ -674,20 +635,25 @@ export default function StudentLeaderAnalyticsSection({
  {/* Table Search Input */}
  <div className="flex items-center gap-2">
  <div className="relative">
- <Input
+ <input
+ type="text"
  placeholder="Cari nama, NIS, kelas..."
  value={tableSearch}
  onChange={(e) => setTableSearch(e.target.value)}
- className="pl-8 pr-3 py-1.5 text-xs w-52 sm:w-64 rounded-xl"
+ className="h-10 pl-8 pr-3 text-xs font-bold w-56 sm:w-64 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none shadow-xs transition-all"
  aria-label="Cari siswa berprestasi"
  />
- <Search1 className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+ <Search1 className="absolute left-2.5 top-3 h-4 w-4 text-emerald-600 dark:text-emerald-400 pointer-events-none" />
  </div>
  </div>
  </div>
 
  {/* HeroUI Datatable Structure */}
-          <TableRoot className="mb-1 relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-card-dark">
+ <TableRoot
+ fullBleed={true}
+ containerClassName="rounded-2xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] overflow-hidden shadow-xs"
+ className="border-y-0"
+ >
             <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
               <TableRow className="hover:bg-transparent border-b border-emerald-200/80 dark:border-emerald-800/60 bg-transparent text-emerald-950 dark:text-emerald-200 font-bold tracking-wider uppercase text-xs">
                 <TableHead className="w-16 text-center py-3.5 px-4 bg-transparent">Rank</TableHead>
@@ -701,7 +667,7 @@ export default function StudentLeaderAnalyticsSection({
             <TableBody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40 font-medium">
               {filteredTableRows.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-8 text-xs text-slate-400">
+                  <TableCell colSpan={5} className="text-center py-8 text-xs font-semibold text-slate-600 dark:text-slate-400">
                     Tidak ada data siswa berprestasi yang cocok dengan kriteria pencarian.
                   </TableCell>
                 </TableRow>
@@ -792,8 +758,8 @@ export default function StudentLeaderAnalyticsSection({
             </TableBody>
  </TableRoot>
  </div>
- </CardContent>
- </Card>
+ </div>
+ </div>
 
  {/* POP-UP MODAL: DATATABLE DATA SISWA DENGAN FILTER KELAS */}
       <AppModal
@@ -854,9 +820,9 @@ export default function StudentLeaderAnalyticsSection({
  </div>
 
  {/* HeroUI Datatable inside Modal */}
- <TableRoot className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 shadow-2xs">
- <TableHeader>
- <TableRow className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-emerald-200/80 dark:border-emerald-700/80">
+ <TableRoot className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
+ <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
+ <TableRow>
  <TableHead className="w-12 text-center text-xs font-extrabold text-slate-600 dark:text-slate-300">No</TableHead>
  <TableHead className="text-xs font-extrabold text-slate-600 dark:text-slate-300">Identitas Siswa</TableHead>
  <TableHead className="text-xs font-extrabold text-slate-600 dark:text-slate-300">Kelas & Unit</TableHead>

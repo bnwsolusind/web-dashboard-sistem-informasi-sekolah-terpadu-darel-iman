@@ -58,6 +58,7 @@ import {
   AppButton,
   SummaryCard,
   HeroUiHeader,
+  KpiStatCard,
 } from '../components/app'
 import { Tooltip as UiTooltip } from '../components/ui/tooltip'
 
@@ -100,7 +101,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 // HeroUI Multi-Tone System for Master KPI Cards
 const MODERN_CARD_TONES = {
  emerald: {
- card: 'border-emerald-300 bg-white dark:bg-card-dark hover:border-emerald-500 dark:border-emerald-700/60 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-slate-900',
+ card: 'border-emerald-300 bg-white dark:bg-[#1B2433] hover:border-emerald-500 dark:border-emerald-700/60 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-slate-900',
  glow: 'bg-emerald-400/20 group-hover:bg-emerald-400/30',
  iconBox: 'bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-700/80 dark:text-slate-300 shadow-md shadow-sm',
  tag: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300 border border-emerald-200/80',
@@ -109,27 +110,27 @@ const MODERN_CARD_TONES = {
  sub: 'text-emerald-700/80 dark:text-emerald-400/80',
  },
  blue: {
- card: 'border-sky-300/80 bg-white dark:bg-card-dark hover:border-sky-500 dark:border-sky-700/60 dark:from-sky-950/40 dark:via-blue-950/20 dark:to-slate-900',
+ card: 'border-sky-300/80 bg-white dark:bg-[#1B2433] hover:border-sky-500 dark:border-sky-700/60 dark:from-sky-950/40 dark:via-blue-950/20 dark:to-slate-900',
  glow: 'bg-sky-400/20 group-hover:bg-sky-400/30',
- iconBox: 'bg-white dark:bg-card-dark shadow-md shadow-sky-500/30',
+ iconBox: 'bg-white dark:bg-[#1B2433] shadow-md shadow-sky-500/30',
  tag: 'bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 border border-sky-200/80',
  title: 'text-sky-800 dark:text-sky-300',
  val: 'text-sky-900 dark:text-sky-200',
  sub: 'text-sky-700/80 dark:text-sky-400/80',
  },
  purple: {
- card: 'border-purple-300/80 bg-white dark:bg-card-dark hover:border-purple-500 dark:border-purple-700/60 dark:from-purple-950/40 dark:via-indigo-950/20 dark:to-slate-900',
+ card: 'border-purple-300/80 bg-white dark:bg-[#1B2433] hover:border-purple-500 dark:border-purple-700/60 dark:from-purple-950/40 dark:via-indigo-950/20 dark:to-slate-900',
  glow: 'bg-purple-400/20 group-hover:bg-purple-400/30',
- iconBox: 'bg-white dark:bg-card-dark shadow-md shadow-sm',
+ iconBox: 'bg-white dark:bg-[#1B2433] shadow-md shadow-sm',
  tag: 'bg-purple-100 text-purple-800 dark:bg-purple-900/60 dark:text-purple-300 border border-purple-200/80',
  title: 'text-purple-800 dark:text-purple-300',
  val: 'text-purple-900 dark:text-purple-200',
  sub: 'text-purple-700/80 dark:text-purple-400/80',
  },
  amber: {
- card: 'border-amber-300/80 bg-white dark:bg-card-dark hover:border-amber-500 dark:border-amber-700/60 dark:from-amber-950/40 dark:via-orange-950/20 dark:to-slate-900',
+ card: 'border-amber-300/80 bg-white dark:bg-[#1B2433] hover:border-amber-500 dark:border-amber-700/60 dark:from-amber-950/40 dark:via-orange-950/20 dark:to-slate-900',
  glow: 'bg-amber-400/20 group-hover:bg-amber-400/30',
- iconBox: 'bg-white dark:bg-card-dark shadow-md shadow-sm',
+ iconBox: 'bg-white dark:bg-[#1B2433] shadow-md shadow-sm',
  tag: 'bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-300 border border-amber-200/80',
  title: 'text-amber-800 dark:text-amber-300',
  val: 'text-amber-900 dark:text-amber-200',
@@ -1258,9 +1259,9 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  icon: Activity,
  badge: 'Utama',
  badgeColor: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200/70',
- iconBox: 'bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-700/80 dark:text-slate-300 shadow-md shadow-sm border-2 border-emerald-300',
- cardClass: 'border-emerald-200/90 bg-white dark:bg-card-dark dark:from-emerald-950/40 dark:to-slate-900 dark:border-emerald-800/60 hover:border-emerald-400 hover:shadow-md',
- activeBorder: 'border-emerald-600 dark:border-emerald-500 bg-white dark:bg-card-dark dark:from-emerald-950/80 dark:to-teal-950/60 shadow-md ring-2 ring-emerald-600/30',
+ iconBox: 'bg-emerald-600 text-white shadow-sm',
+ cardClass: 'border-emerald-200/90 bg-white dark:bg-[#1B2433] dark:border-emerald-800/60 hover:border-emerald-400 hover:shadow-md',
+ activeBorder: 'border-emerald-600 dark:border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/40 shadow-md ring-2 ring-emerald-600/30',
  },
  {
  id: 'tasmi',
@@ -1268,9 +1269,9 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  icon: Award,
  badge: 'Tahfizh',
  badgeColor: 'bg-violet-100 text-violet-800 dark:bg-violet-950 dark:text-violet-300 border border-violet-200/70',
- iconBox: 'bg-white dark:bg-card-dark shadow-md shadow-sm border border-purple-300/40',
- cardClass: 'border-purple-200/90 bg-white dark:bg-card-dark dark:from-purple-950/40 dark:to-slate-900 dark:border-purple-800/60 hover:border-purple-400 hover:shadow-md',
- activeBorder: 'border-purple-600 dark:border-purple-500 bg-white dark:bg-card-dark dark:from-purple-950/80 dark:to-indigo-950/60 shadow-md ring-2 ring-purple-600/30',
+ iconBox: 'bg-purple-600 text-white shadow-sm',
+ cardClass: 'border-purple-200/90 bg-white dark:bg-[#1B2433] dark:border-purple-800/60 hover:border-purple-400 hover:shadow-md',
+ activeBorder: 'border-purple-600 dark:border-purple-500 bg-purple-50/50 dark:bg-purple-950/40 shadow-md ring-2 ring-purple-600/30',
  },
  {
  id: 'poin',
@@ -1278,9 +1279,9 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  icon: ShieldAlert,
  badge: 'Sanksi/Prestasi',
  badgeColor: 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border border-amber-200/70',
- iconBox: 'bg-white dark:bg-card-dark shadow-md shadow-sm border border-amber-300/40',
- cardClass: 'border-amber-200/90 bg-white dark:bg-card-dark dark:from-amber-950/40 dark:to-slate-900 dark:border-amber-800/60 hover:border-amber-400 hover:shadow-md',
- activeBorder: 'border-amber-600 dark:border-amber-500 bg-white dark:bg-card-dark dark:from-amber-950/80 dark:to-orange-950/60 shadow-md ring-2 ring-amber-600/30',
+ iconBox: 'bg-amber-500 text-white shadow-sm',
+ cardClass: 'border-amber-200/90 bg-white dark:bg-[#1B2433] dark:border-amber-800/60 hover:border-amber-400 hover:shadow-md',
+ activeBorder: 'border-amber-600 dark:border-amber-500 bg-amber-50/50 dark:bg-amber-950/40 shadow-md ring-2 ring-amber-600/30',
  },
  {
  id: 'klinik',
@@ -1288,9 +1289,9 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  icon: HeartPulse,
  badge: 'Log Sakit',
  badgeColor: 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 border border-rose-200/70',
- iconBox: 'bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:border-rose-800/60 dark:text-rose-400 shadow-md shadow-sm border border-rose-300/40',
- cardClass: 'border-rose-200/90 bg-white dark:bg-card-dark dark:from-rose-950/40 dark:to-slate-900 dark:border-rose-800/60 hover:border-rose-400 hover:shadow-md',
- activeBorder: 'border-rose-600 dark:border-rose-500 bg-white dark:bg-card-dark dark:from-rose-950/80 dark:to-red-950/60 shadow-md ring-2 ring-rose-600/30',
+ iconBox: 'bg-rose-600 text-white shadow-sm',
+ cardClass: 'border-rose-200/90 bg-white dark:bg-[#1B2433] dark:border-rose-800/60 hover:border-rose-400 hover:shadow-md',
+ activeBorder: 'border-rose-600 dark:border-rose-500 bg-rose-50/50 dark:bg-rose-950/40 shadow-md ring-2 ring-rose-600/30',
  },
  {
  id: 'titipan',
@@ -1298,9 +1299,9 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  icon: Smartphone,
  badge: 'Logistik',
  badgeColor: 'bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300 border border-sky-200/70',
- iconBox: 'bg-white dark:bg-card-dark shadow-md shadow-sm border border-sky-300/40',
- cardClass: 'border-sky-200/90 bg-white dark:bg-card-dark dark:from-sky-950/40 dark:to-slate-900 dark:border-sky-800/60 hover:border-sky-400 hover:shadow-md',
- activeBorder: 'border-sky-600 dark:border-sky-500 bg-white dark:bg-card-dark dark:from-sky-950/80 dark:to-indigo-950/60 shadow-md ring-2 ring-sky-600/30',
+ iconBox: 'bg-sky-600 text-white shadow-sm',
+ cardClass: 'border-sky-200/90 bg-white dark:bg-[#1B2433] dark:border-sky-800/60 hover:border-sky-400 hover:shadow-md',
+ activeBorder: 'border-sky-600 dark:border-sky-500 bg-sky-50/50 dark:bg-sky-950/40 shadow-md ring-2 ring-sky-600/30',
  },
  {
  id: 'perizinan',
@@ -1308,9 +1309,9 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  icon: CalendarCheck,
  badge: 'Boarding Pass',
  badgeColor: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 border border-indigo-200/70',
- iconBox: 'bg-white dark:bg-card-dark shadow-md shadow-sm border border-indigo-300/40',
- cardClass: 'border-indigo-200/90 bg-white dark:bg-card-dark dark:from-indigo-950/40 dark:to-slate-900 dark:border-indigo-800/60 hover:border-indigo-400 hover:shadow-md',
- activeBorder: 'border-indigo-600 dark:border-indigo-500 bg-white dark:bg-card-dark dark:from-indigo-950/80 dark:to-teal-950/60 shadow-md ring-2 ring-indigo-600/30',
+ iconBox: 'bg-indigo-600 text-white shadow-sm',
+ cardClass: 'border-indigo-200/90 bg-white dark:bg-[#1B2433] dark:border-indigo-800/60 hover:border-indigo-400 hover:shadow-md',
+ activeBorder: 'border-indigo-600 dark:border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/40 shadow-md ring-2 ring-indigo-600/30',
  },
  ]
 
@@ -1507,51 +1508,60 @@ export default function MusyrifDashboardPage({ defaultTab }) {
           />
         </motion.div>
 
- {/* Master Stats Grid matching Teacher Workspace Pastel Cards */}
+ {/* Master Stats Grid matching Gold Standard KpiStatCard */}
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
- <ModernKpiCard
- label="Santri Binaan Asrama"
+ <KpiStatCard
+ title="Santri Binaan Asrama"
  value={formatNumber(kpis.santri_binaan?.total ?? kpis.total_siswa_binaan?.total ?? 0)}
  description="Santri terdaftar di asrama"
- tag="Aktif"
+ badge="Aktif"
  icon={Users}
  tone="emerald"
+ leftFooterText="Data Asrama"
+ ctaText="Detail"
  onClick={() => setActiveModal('santri_binaan')}
  />
- <ModernKpiCard
- label="Presensi Shalat Berjamaah"
+ <KpiStatCard
+ title="Presensi Shalat Berjamaah"
  value={formatNumber(kpis.ibadah_lengkap?.total ?? 0)}
  description="Kehadiran shalat 5 waktu"
- tag="Presensi"
+ badge="Presensi"
  icon={CalendarCheck}
- tone="blue"
+ tone="sky"
+ leftFooterText="Ibadah Harian"
+ ctaText="Lihat"
+ onClick={() => setActiveTab('aktivitas')}
  />
- <ModernKpiCard
- label="Setoran Hafalan Hari Ini"
+ <KpiStatCard
+ title="Setoran Hafalan Hari Ini"
  value={formatNumber(kpis.setoran_tahfizh?.total ?? kpis.setoran_hari_ini?.total ?? 0)}
  description="Setoran ziyadah & murajaah"
- tag="Tahfizh"
+ badge="Tahfizh"
  icon={BookOpen}
  tone="purple"
+ leftFooterText="Program Tahfizh"
+ ctaText="Lihat"
+ onClick={() => setActiveTab('tasmi')}
  />
- <ModernKpiCard
- label="Mutaba'ah Terisi"
+ <KpiStatCard
+ title="Mutaba'ah Terisi"
  value={formatNumber(kpis.mutabaah_terisi?.total ?? 0)}
  description="Checklist amalan harian"
- tag="Target"
+ badge="Target"
  icon={CheckCircle2}
  tone="amber"
+ leftFooterText="Amalan Yaumiyyah"
+ ctaText="Lihat"
+ onClick={() => setActiveTab('aktivitas')}
  />
  </div>
 
  {/* Workspace Card Navigation Tabs matching Teacher Workspace Style */}
- <section className="relative overflow-hidden rounded-container border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-card-dark" aria-label="Modul Layanan Keasramaan">
- {/* Ambient Glows */}
-
+ <section className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433]" aria-label="Modul Layanan Keasramaan">
  {/* Header Bar */}
- <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/90 bg-slate-50/50 dark:bg-slate-900/50 p-4 sm:p-5 dark:border-emerald-800/60">
+ <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 bg-emerald-500/10 p-4 sm:p-5 dark:border-emerald-800/60">
  <div className="flex items-center gap-3">
- <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/70 text-emerald-700 dark:bg-emerald-950/40 dark:border-emerald-700/80 dark:text-emerald-300 shadow-md shadow-sm border-2 border-emerald-300">
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
  <Sparkles className="size-5" />
  </div>
  <div>
@@ -1591,12 +1601,12 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  aria-selected={isActive}
  className={`flex flex-col items-center justify-between min-h-[142px] p-3.5 rounded-xl border-2 transition-all text-center group cursor-pointer relative overflow-hidden ${
  isActive
- ? (mod.activeBorder || 'border-emerald-600 bg-white dark:bg-card-dark shadow-md ring-2 ring-emerald-600/30')
+ ? (mod.activeBorder || 'border-emerald-600 bg-white dark:bg-[#1B2433] shadow-md ring-2 ring-emerald-600/30')
  : (mod.cardClass || 'border-emerald-200/80 bg-white dark:bg-slate-900/60 hover:shadow-md')
  }`}
  >
  <div className={`p-2.5 rounded-xl ${mod.iconBox} mb-2 shrink-0 group-hover:scale-110 transition ${isActive ? 'ring-2 ring-emerald-500/40 shadow-xs' : ''}`}>
- <Icon className="w-5 h-5 text-slate-600" />
+ <Icon className="w-5 h-5 text-white" />
  </div>
  <span className={`font-bold text-xs leading-tight transition-colors ${
  isActive ? 'text-slate-900 dark:text-white font-black' : 'text-slate-800 dark:text-slate-200 group-hover:text-emerald-700 dark:group-hover:text-emerald-400'
@@ -1615,12 +1625,10 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  </section>
 
  {/* Quick Action Navigation Bar */}
- <section className="relative overflow-hidden rounded-2xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-md shadow-sm dark:bg-card-dark">
- {/* Ambient Glows */}
-
- <div className="relative z-10 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+ <section className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-sm dark:bg-[#1B2433]">
+ <div className="relative z-10 flex flex-col gap-4">
  <div className="flex items-center gap-3">
- <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/70 text-emerald-700 dark:bg-emerald-950/40 dark:border-emerald-700/80 dark:text-emerald-300 shadow-md shadow-sm border-2 border-emerald-300">
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
  <Sparkles className="size-5" />
  </div>
  <div>
@@ -1630,47 +1638,54 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Pencatatan langsung presensi sholat, ujian tasmi', poin kedisiplinan santri, log klinik, dan barang titipan</p>
  </div>
  </div>
- <div className="flex items-center gap-2.5 flex-wrap">
+ <div className="flex items-center gap-2 overflow-x-auto pb-0.5 flex-nowrap">
  <SquircleActionButton
  variant="primary"
  icon={CalendarCheck}
- label="Presensi Sholat Berjamaah (5 Waktu)"
+ label="Presensi Sholat"
+ showLabel
  onClick={() => setQuickActionModal('sholat')}
  />
  <SquircleActionButton
  variant="primary"
  icon={BookOpen}
- label="Input Setoran Hafalan (Ziyadah & Murajaah)"
+ label="Setoran Hafalan"
+ showLabel
  onClick={() => setQuickActionModal('setoran')}
  />
  <SquircleActionButton
- variant="primary"
+ variant="print"
  icon={Award}
- label="Log Ujian Tasmi' (Sekali Duduk)"
+ label="Ujian Tasmi'"
+ showLabel
  onClick={() => setQuickActionModal('tasmi')}
  />
  <SquircleActionButton
- variant="edit"
+ variant="export"
  icon={ShieldAlert}
- label="Poin Kedisiplinan & Sanksi (+/-)"
+ label="Poin Disiplin"
+ showLabel
  onClick={() => setQuickActionModal('poin')}
  />
  <SquircleActionButton
- variant="import"
+ variant="danger"
  icon={HeartPulse}
- label="Log Klinik & Kesehatan Santri"
+ label="Log Klinik"
+ showLabel
  onClick={() => setQuickActionModal('klinik')}
  />
  <SquircleActionButton
- variant="setActive"
+ variant="view"
  icon={Smartphone}
- label="Log Penitipan Barang (HP/Laptop)"
+ label="Penitipan Barang"
+ showLabel
  onClick={() => setQuickActionModal('titipan')}
  />
  <SquircleActionButton
- variant="secondary"
+ variant="import"
  icon={MessageSquare}
- label="Chat Pegawai & Orang Tua"
+ label="Chat Pegawai & Wali"
+ showLabel
  onClick={() => navigate('/dashboard/chat-pegawai')}
  />
  </div>
@@ -1678,10 +1693,10 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  </section>
 
  {/* Datatable Processing Actions (Import, Export, Cetak) */}
- <section className="relative overflow-hidden rounded-2xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-4 sm:p-5 shadow-md shadow-sm dark:bg-card-dark flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+ <section className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-4 sm:p-5 shadow-sm dark:bg-[#1B2433] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
  <div className="flex items-center gap-3">
- <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/70 text-emerald-700 dark:bg-emerald-950/40 dark:border-emerald-700/80 dark:text-emerald-300 shadow-md shadow-sm border-2 border-emerald-300">
- <Printer className="size-5 text-slate-600" />
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
+ <Printer className="size-5" />
  </div>
  <div>
  <h4 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">Pemrosesan Datatable Active Workspace</h4>
@@ -1689,23 +1704,26 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  </div>
  </div>
 
- <div className="flex items-center gap-2.5 flex-wrap">
+ <div className="flex items-center gap-2 flex-wrap">
  <SquircleActionButton
  variant="import"
  icon={Upload1}
  label="Import Data CSV"
+ showLabel
  onClick={handleImportClick}
  />
  <SquircleActionButton
  variant="export"
  icon={Download1}
  label="Export CSV"
+ showLabel
  onClick={handleExportCSV}
  />
  <SquircleActionButton
- variant="view"
+ variant="print"
  icon={Printer}
  label="Cetak / PDF"
+ showLabel
  onClick={() => setIsPrintModalOpen(true)}
  />
  </div>
@@ -1726,11 +1744,11 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  {activeTab === 'aktivitas' && (
  <section className="space-y-6">
  {/* CARD 1: KEDISIPLINAN SHALAT (HORIZONTAL WIDE CARD) */}
- <div className="relative overflow-hidden rounded-container border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-card-dark">
- <div className="bg-slate-50/50 dark:bg-slate-900/50 border-b border-emerald-200/90 dark:border-emerald-800/60 p-4 sm:p-5 flex flex-wrap items-center justify-between gap-3">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433]">
+ <div className="bg-emerald-500/10 border-b border-emerald-200/80 dark:border-emerald-800/60 p-4 sm:p-5 flex flex-wrap items-center justify-between gap-3">
  <div className="flex items-center gap-3">
- <div className="w-10 h-9 rounded-xl bg-emerald-50 border border-emerald-200/70 text-emerald-700 dark:bg-emerald-950/40 dark:border-emerald-700/80 dark:text-emerald-300 flex items-center justify-center shadow-md shadow-sm shrink-0">
- <CalendarCheck className="w-5 h-5 text-slate-600" />
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
+ <CalendarCheck className="w-5 h-5" />
  </div>
  <div>
  <div className="flex items-center gap-2 flex-wrap">
@@ -1753,18 +1771,18 @@ export default function MusyrifDashboardPage({ defaultTab }) {
 
  <div className="flex items-center gap-2.5 flex-wrap">
  {/* FILTER BUTTONS: SEMUA | WAJIB | SUNNAH */}
- <div className="flex items-center p-1 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-bold">
+ <div className="flex items-center gap-1 p-1 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-bold">
  <button
  type="button"
  onClick={() => setWorshipFilter('all')}
- className={`px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 ${
+ className={`px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 cursor-pointer ${
  worshipFilter === 'all'
- ? 'bg-white dark:bg-slate-800 text-emerald-700 dark:text-emerald-300 shadow-xs'
- : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+ ? 'bg-emerald-600 text-white font-black shadow-xs'
+ : 'text-slate-600 dark:text-slate-300 hover:text-emerald-700 hover:bg-emerald-100/60 dark:hover:bg-slate-800'
  }`}
  >
  <span>Semua</span>
- <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300">
+ <span className={`text-[10px] px-1.5 py-0.2 rounded-md font-black ${worshipFilter === 'all' ? 'bg-white text-emerald-800' : 'bg-emerald-200/80 text-emerald-900 dark:bg-emerald-900/80 dark:text-emerald-200'}`}>
  {worshipPrayers.length}
  </span>
  </button>
@@ -1807,13 +1825,13 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  </div>
 
  {/* 3 MINI KPI STAT CARDS */}
- <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 sm:p-5 pb-0 bg-slate-50/50 dark:bg-slate-900/30 border-b border-emerald-100/80 dark:border-emerald-900/40">
+ <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 sm:p-5 bg-white dark:bg-[#1B2433] border-b border-emerald-100/80 dark:border-emerald-900/40">
  {/* KPI 1: WAJIB */}
  <div
  onClick={() => setWorshipFilter('wajib')}
- className={`p-3.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
+ className={`p-3.5 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between ${
  worshipFilter === 'wajib'
- ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-400 shadow-sm ring-2 ring-emerald-500/20'
+ ? 'bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-400 shadow-sm ring-2 ring-emerald-500/20'
  : 'bg-white dark:bg-slate-800/80 border-emerald-200/80 dark:border-emerald-800/60 hover:border-emerald-300'
  }`}
  >
@@ -1830,17 +1848,17 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  Total {worshipKpis.totalWajib.toLocaleString('id-ID')} kehadiran jamaah
  </div>
  </div>
- <div className="w-10 h-9 rounded-xl bg-emerald-50 border border-emerald-200/70 text-emerald-700 dark:bg-emerald-950/40 dark:border-emerald-700/80 dark:text-emerald-300 flex items-center justify-center shrink-0 shadow-xs">
- <Sun className="w-5 h-5 text-emerald-600" />
+ <div className="size-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+ <Sun className="w-5 h-5" />
  </div>
  </div>
 
  {/* KPI 2: SUNNAH */}
  <div
  onClick={() => setWorshipFilter('sunnah')}
- className={`p-3.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
+ className={`p-3.5 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between ${
  worshipFilter === 'sunnah'
- ? 'bg-purple-50 dark:bg-purple-950/40 border-purple-400 shadow-sm ring-2 ring-purple-500/20'
+ ? 'bg-purple-50/70 dark:bg-purple-950/40 border-purple-400 shadow-sm ring-2 ring-purple-500/20'
  : 'bg-white dark:bg-slate-800/80 border-emerald-200/80 dark:border-emerald-800/60 hover:border-purple-300'
  }`}
  >
@@ -1857,17 +1875,17 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  Tahajud &amp; Dhuha ({worshipKpis.totalSunnah.toLocaleString('id-ID')} kehadiran)
  </div>
  </div>
- <div className="w-10 h-9 rounded-xl bg-white dark:bg-card-dark flex items-center justify-center shrink-0 shadow-xs border border-emerald-200/80 dark:border-emerald-800/60">
- <Moon className="w-5 h-5 text-slate-600" />
+ <div className="size-10 rounded-xl bg-purple-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+ <Moon className="w-5 h-5" />
  </div>
  </div>
 
  {/* KPI 3: TOTAL GABUNGAN */}
  <div
  onClick={() => setWorshipFilter('all')}
- className={`p-3.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
+ className={`p-3.5 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between ${
  worshipFilter === 'all'
- ? 'bg-teal-50 dark:bg-teal-950/40 border-teal-400 shadow-sm ring-2 ring-teal-500/20'
+ ? 'bg-teal-50/70 dark:bg-teal-950/40 border-teal-400 shadow-sm ring-2 ring-teal-500/20'
  : 'bg-white dark:bg-slate-800/80 border-emerald-200/80 dark:border-emerald-800/60 hover:border-teal-300'
  }`}
  >
@@ -1884,8 +1902,8 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  Rata-rata {worshipKpis.avgAllPerDay} santri per hari
  </div>
  </div>
- <div className="w-10 h-9 rounded-xl bg-white dark:bg-card-dark flex items-center justify-center shrink-0 shadow-xs border border-emerald-200/80 dark:border-emerald-800/60">
- <Activity className="w-5 h-5 text-white" />
+ <div className="size-10 rounded-xl bg-teal-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+ <Activity className="w-5 h-5" />
  </div>
  </div>
  </div>
@@ -1948,11 +1966,11 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  </div>
 
  {/* CARD 2: MUTABA'AH & PRESENSI KEASRAMAAN DATATABLE (HORIZONTAL FULL WIDTH) */}
- <div className="relative overflow-hidden rounded-container border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-card-dark">
- <div className="bg-slate-50/50 dark:bg-slate-900/50 border-b border-emerald-200/90 dark:border-emerald-800/60 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433]">
+ <div className="bg-emerald-500/10 border-b border-emerald-200/80 dark:border-emerald-800/60 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
  <div className="flex items-center gap-3">
- <div className="w-10 h-9 rounded-xl bg-emerald-50 border border-emerald-200/70 text-emerald-700 dark:bg-emerald-950/40 dark:border-emerald-700/80 dark:text-emerald-300 flex items-center justify-center shadow-md shadow-sm shrink-0">
- <Activity className="w-5 h-5 text-slate-600" />
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
+ <Activity className="w-5 h-5" />
  </div>
  <div>
  <div className="flex items-center gap-2 flex-wrap">
@@ -1969,9 +1987,11 @@ export default function MusyrifDashboardPage({ defaultTab }) {
 
  {/* TOMBOL AKSI: CETAK JURNAL & EXPORT CSV */}
  <div className="flex items-center gap-2 flex-wrap">
- <MasterActionButton
- variant="secondary"
+ <SquircleActionButton
+ variant="print"
  icon={Printer}
+ label="Cetak Jurnal"
+ showLabel
  onClick={() => {
  const printData = filteredMutabaahLogs || []
  printCleanTable({
@@ -2000,13 +2020,13 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  data: printData,
  })
  }}
- >
- Cetak Jurnal
- </MasterActionButton>
+ />
 
- <MasterActionButton
- variant="secondary"
+ <SquircleActionButton
+ variant="export"
  icon={Download1}
+ label="Export CSV"
+ showLabel
  onClick={() => {
  const exportData = filteredMutabaahLogs || []
  if (!exportData.length) {
@@ -2041,14 +2061,12 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  link.click()
  document.body.removeChild(link)
  }}
- >
- Export CSV
- </MasterActionButton>
+ />
  </div>
  </div>
 
  {/* FILTER PERIODE TAB BAR (HARI INI, MINGGUAN, BULANAN, SEMESTER) */}
- <div className="bg-white dark:bg-card-dark border-b border-emerald-200/80 dark:border-emerald-800/60 px-4 sm:px-6 py-2.5 flex items-center justify-between gap-3 flex-wrap">
+ <div className="bg-white dark:bg-[#1B2433] border-b border-emerald-200/80 dark:border-emerald-800/60 px-4 sm:px-6 py-2.5 flex items-center justify-between gap-3 flex-wrap">
  <div className="flex items-center gap-2 flex-wrap">
  <span className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
  <Filter className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
@@ -2085,8 +2103,8 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  </div>
  </div>
 
- <div className="p-4 sm:p-6 pt-2">
  <AppDataTable
+ embedded={true}
  title=""
  data={filteredMutabaahLogs}
  columns={mutabaahColumns}
@@ -2095,18 +2113,17 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  emptyMessage="Belum ada data mutaba'ah untuk periode ini."
  />
  </div>
- </div>
  </section>
  )}
 
  {/* TAB 2: LOG UJIAN TASMI' */}
  {activeTab === 'tasmi' && (
  <section className="space-y-4">
- <div className="relative overflow-hidden rounded-container border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-card-dark space-y-4">
- <div className="bg-slate-50/50 dark:bg-slate-900/50 border-b border-emerald-200/90 dark:border-emerald-800/60 p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433] space-y-4">
+ <div className="bg-emerald-500/10 border-b border-emerald-200/80 dark:border-emerald-800/60 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
  <div className="flex items-center gap-3">
- <div className="w-10 h-9 rounded-xl bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-700/80 dark:text-slate-300 flex items-center justify-center shadow-md shadow-sm shrink-0">
- <Award className="w-5 h-5 text-emerald-600" />
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-purple-600 text-white shadow-sm">
+ <Award className="w-5 h-5" />
  </div>
  <div>
  <h3 className="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
@@ -2119,9 +2136,9 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  Catat Ujian Tasmi'
  </MasterActionButton>
  </div>
- <div className="p-4 sm:p-6 pt-0">
  <AppDataTable
- title="Riwayat Ujian Tasmi'"
+ embedded={true}
+ title=""
  data={tables.tasmi_logs || []}
  columns={[
  { key: 'santri', label: 'Nama Santri' },
@@ -2132,18 +2149,17 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  emptyMessage="Belum ada catatan ujian tasmi' bulan ini."
  />
  </div>
- </div>
  </section>
  )}
 
  {/* TAB 3: KEDISIPLINAN & POIN */}
  {activeTab === 'poin' && (
  <section className="space-y-4">
- <div className="relative overflow-hidden rounded-container border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-card-dark space-y-4">
- <div className="bg-slate-50/50 dark:bg-slate-900/50 border-b border-emerald-200/90 dark:border-emerald-800/60 p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433] space-y-4">
+ <div className="bg-emerald-500/10 border-b border-emerald-200/80 dark:border-emerald-800/60 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
  <div className="flex items-center gap-3">
- <div className="w-10 h-9 rounded-xl bg-white dark:bg-card-dark flex items-center justify-center shadow-md shadow-sm shrink-0 border border-emerald-200/80 dark:border-emerald-800/60">
- <ShieldAlert className="w-5 h-5 text-slate-600" />
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-amber-500 text-white shadow-sm">
+ <ShieldAlert className="w-5 h-5" />
  </div>
  <div>
  <h3 className="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
@@ -2156,9 +2172,9 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  Input Poin Pelanggaran
  </MasterActionButton>
  </div>
- <div className="p-4 sm:p-6 pt-0">
  <AppDataTable
- title="Buku Catatan Kedisiplinan"
+ embedded={true}
+ title=""
  data={tables.poin_logs || []}
  columns={[
  { key: 'santri', label: 'Santri' },
@@ -2169,18 +2185,17 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  emptyMessage="Belum ada catatan poin kedisiplinan."
  />
  </div>
- </div>
  </section>
  )}
 
  {/* TAB 4: KLINIK KESEHATAN */}
  {activeTab === 'klinik' && (
  <section className="space-y-4">
- <div className="relative overflow-hidden rounded-container border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-card-dark space-y-4">
- <div className="bg-slate-50/50 dark:bg-slate-900/50 border-b border-emerald-200/90 dark:border-emerald-800/60 p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433] space-y-4">
+ <div className="bg-emerald-500/10 border-b border-emerald-200/80 dark:border-emerald-800/60 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
  <div className="flex items-center gap-3">
- <div className="w-10 h-9 rounded-xl bg-white dark:bg-card-dark flex items-center justify-center shadow-md shadow-sm shrink-0 border border-emerald-200/80 dark:border-emerald-800/60">
- <HeartPulse className="w-5 h-5 text-white" />
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-rose-600 text-white shadow-sm">
+ <HeartPulse className="w-5 h-5" />
  </div>
  <div>
  <h3 className="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
@@ -2193,9 +2208,9 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  Catat Log Klinik
  </MasterActionButton>
  </div>
- <div className="p-4 sm:p-6 pt-0">
  <AppDataTable
- title="Catatan Pasien UKS Asrama"
+ embedded={true}
+ title=""
  data={tables.klinik_logs || []}
  columns={[
  { key: 'santri', label: 'Santri' },
@@ -2206,18 +2221,17 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  emptyMessage="Tidak ada santri yang tercatat sakit hari ini."
  />
  </div>
- </div>
  </section>
  )}
 
  {/* TAB 5: PENITIPAN HP/LAPTOP */}
  {activeTab === 'titipan' && (
  <section className="space-y-4">
- <div className="relative overflow-hidden rounded-container border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-card-dark space-y-4">
- <div className="bg-slate-50/50 dark:bg-slate-900/50 border-b border-emerald-200/90 dark:border-emerald-800/60 p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433] space-y-4">
+ <div className="bg-emerald-500/10 border-b border-emerald-200/80 dark:border-emerald-800/60 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
  <div className="flex items-center gap-3">
- <div className="w-10 h-9 rounded-xl bg-white dark:bg-card-dark flex items-center justify-center shadow-md shadow-sky-600/30 shrink-0 border border-emerald-200/80 dark:border-emerald-800/60">
- <Smartphone className="w-5 h-5 text-white" />
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-sky-600 text-white shadow-sm">
+ <Smartphone className="w-5 h-5" />
  </div>
  <div>
  <h3 className="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
@@ -2226,12 +2240,10 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  <p className="text-xs text-slate-500 dark:text-slate-400">Pencatatan penitipan barang elektronik santri asrama yang hanya boleh diambil pada waktu tertentu.</p>
  </div>
  </div>
- <MasterActionButton variant="secondary" icon={Plus} onClick={() => setQuickActionModal('titipan')}>
- Catat Barang Titipan
- </MasterActionButton>
+ <SquircleActionButton variant="view" icon={Plus} label="Catat Barang Titipan" showLabel onClick={() => setQuickActionModal('titipan')} />
  </div>
  <div className="p-4 sm:p-6 pt-0">
- <div className="rounded-xl border-2 border-emerald-200/70 bg-white dark:bg-card-dark p-4 dark:border-emerald-800/60 dark:bg-slate-900/60 text-xs text-emerald-950 dark:text-emerald-200">
+ <div className="rounded-xl border-2 border-[#b6f6d9] bg-emerald-50/40 dark:bg-slate-900/60 p-4 dark:border-emerald-800/60 text-xs text-emerald-950 dark:text-emerald-200">
  📱 <strong>Logistik Asrama:</strong> Melacak status barang (`deposited` / `retrieved`) lengkap dengan serial number dan waktu penyerahan.
  </div>
  </div>
@@ -2243,91 +2255,80 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  <section className="space-y-5">
  {/* Master Stats Grid - 6 Key Boarding KPIs */}
  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
- <div className="rounded-2xl border border-emerald-100/80 bg-white dark:bg-card-dark p-3.5 shadow-sm dark:border-emerald-900/40 dark:bg-slate-900">
- <div className="flex items-center justify-between">
- <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">Di Pondok</span>
- <div className="p-1.5 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400">
- <CheckCircle2 className="w-3.5 h-3.5" />
- </div>
- </div>
- <div className="mt-1.5 text-xl font-black text-emerald-700 dark:text-emerald-400">
- {dormitoryPermitsStatistik?.in_dormitory ?? 0}
- </div>
- <p className="text-[9px] text-slate-500 mt-0.5">Berada di lingkungan asrama</p>
- </div>
-
- <div className="rounded-2xl border border-amber-100/80 bg-white dark:bg-card-dark p-3.5 shadow-sm dark:border-amber-900/40 dark:bg-slate-900">
- <div className="flex items-center justify-between">
- <span className="text-[10px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">Sedang di Luar</span>
- <div className="p-1.5 rounded-lg bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400">
- <Clock className="w-3.5 h-3.5" />
- </div>
- </div>
- <div className="mt-1.5 text-xl font-black text-amber-600 dark:text-amber-400">
- {dormitoryPermitsStatistik?.currently_out ?? 0}
- </div>
- <p className="text-[9px] text-slate-500 mt-0.5">Izin aktif / belum kembali</p>
- </div>
-
- <div className="rounded-2xl border border-rose-100/80 bg-white dark:bg-card-dark p-3.5 shadow-sm dark:border-rose-900/40 dark:bg-slate-900">
- <div className="flex items-center justify-between">
- <span className="text-[10px] font-bold text-rose-700 dark:text-rose-400 uppercase tracking-wider">Izin Sakit / Rujuk</span>
- <div className="p-1.5 rounded-lg bg-rose-100 dark:bg-rose-950 text-rose-600 dark:text-rose-400">
- <CalendarCheck className="w-3.5 h-3.5" />
- </div>
- </div>
- <div className="mt-1.5 text-xl font-black text-rose-600 dark:text-rose-400">
- {dormitoryPermitsStatistik?.medical_permits ?? 0}
- </div>
- <p className="text-[9px] text-slate-500 mt-0.5">Klinik / RS / Rawat jalan</p>
- </div>
-
- <div className="rounded-2xl border border-red-200 bg-white dark:bg-card-dark p-3.5 shadow-sm dark:border-red-900/50 dark:bg-slate-900">
- <div className="flex items-center justify-between">
- <span className="text-[10px] font-bold text-red-700 dark:text-red-400 uppercase tracking-wider">Terlambat Kembali</span>
- <div className="p-1.5 rounded-lg bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400">
- <ShieldAlert className="w-3.5 h-3.5" />
- </div>
- </div>
- <div className="mt-1.5 text-xl font-black text-red-600 dark:text-red-400">
- {dormitoryPermitsStatistik?.returned_late ?? 0}
- </div>
- <p className="text-[9px] text-slate-500 mt-0.5">Perlu tindak lanjut / sanksi</p>
- </div>
-
- <div className="rounded-2xl border border-blue-100/80 bg-white dark:bg-card-dark p-3.5 shadow-sm dark:border-blue-900/40 dark:bg-slate-900">
- <div className="flex items-center justify-between">
- <span className="text-[10px] font-bold text-blue-700 dark:text-blue-400 uppercase tracking-wider">Perlu Approval</span>
- <div className="p-1.5 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400">
- <Clock className="w-3.5 h-3.5" />
- </div>
- </div>
- <div className="mt-1.5 text-xl font-black text-blue-600 dark:text-blue-400">
- {dormitoryPermitsStatistik?.pending_approval ?? 0}
- </div>
- <p className="text-[9px] text-slate-500 mt-0.5">Izin baru & perpanjangan</p>
- </div>
-
- <div className="rounded-2xl border border-indigo-100/80 bg-white dark:bg-card-dark p-3.5 shadow-sm dark:border-indigo-900/40 dark:bg-slate-900">
- <div className="flex items-center justify-between">
- <span className="text-[10px] font-bold text-indigo-700 dark:text-indigo-400 uppercase tracking-wider">Total Riwayat</span>
- <div className="p-1.5 rounded-lg bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">
- <CalendarCheck className="w-3.5 h-3.5" />
- </div>
- </div>
- <div className="mt-1.5 text-xl font-black text-slate-800 dark:text-white">
- {dormitoryPermitsStatistik?.total_permits ?? dormitoryPermits.length}
- </div>
- <p className="text-[9px] text-slate-500 mt-0.5">Semua data perizinan</p>
- </div>
+ <KpiStatCard
+ title="Di Pondok"
+ value={dormitoryPermitsStatistik?.in_dormitory ?? 0}
+ description="Berada di asrama"
+ badge="Aktif"
+ icon={CheckCircle2}
+ tone="emerald"
+ leftFooterText="Status Pondok"
+ ctaText="Filter"
+ onClick={() => setPermitFilterStatus('returned')}
+ />
+ <KpiStatCard
+ title="Sedang di Luar"
+ value={dormitoryPermitsStatistik?.currently_out ?? 0}
+ description="Izin aktif / belum kembali"
+ badge="Keluar"
+ icon={Clock}
+ tone="amber"
+ leftFooterText="Monitoring"
+ ctaText="Filter"
+ onClick={() => setPermitFilterStatus('active')}
+ />
+ <KpiStatCard
+ title="Izin Sakit / Rujuk"
+ value={dormitoryPermitsStatistik?.medical_permits ?? 0}
+ description="Klinik / RS / Rawat jalan"
+ badge="Medis"
+ icon={HeartPulse}
+ tone="rose"
+ leftFooterText="Kesehatan"
+ ctaText="Filter"
+ onClick={() => setPermitFilterStatus('medical')}
+ />
+ <KpiStatCard
+ title="Terlambat Kembali"
+ value={dormitoryPermitsStatistik?.returned_late ?? 0}
+ description="Perlu tindak lanjut"
+ badge="Evaluasi"
+ icon={ShieldAlert}
+ tone="rose"
+ leftFooterText="Kedisiplinan"
+ ctaText="Filter"
+ onClick={() => setPermitFilterStatus('late')}
+ />
+ <KpiStatCard
+ title="Perlu Approval"
+ value={dormitoryPermitsStatistik?.pending_approval ?? 0}
+ description="Izin baru & perpanjangan"
+ badge="Pending"
+ icon={Clock}
+ tone="sky"
+ leftFooterText="Persetujuan"
+ ctaText="Filter"
+ onClick={() => setPermitFilterStatus('approval')}
+ />
+ <KpiStatCard
+ title="Total Riwayat"
+ value={dormitoryPermitsStatistik?.total_permits ?? dormitoryPermits.length}
+ description="Semua data perizinan"
+ badge="Arsip"
+ icon={CalendarCheck}
+ tone="indigo"
+ leftFooterText="Keseluruhan"
+ ctaText="Semua"
+ onClick={() => setPermitFilterStatus('all')}
+ />
  </div>
 
  {/* Main Table Card */}
- <div className="relative overflow-hidden rounded-container border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-card-dark space-y-0">
- <div className="bg-slate-50/50 dark:bg-slate-900/50 border-b border-emerald-200/90 dark:border-emerald-800/60 p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433] space-y-0">
+ <div className="bg-emerald-500/10 border-b border-emerald-200/80 dark:border-emerald-800/60 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
  <div className="flex items-center gap-3">
- <div className="w-10 h-9 rounded-xl bg-white dark:bg-card-dark flex items-center justify-center shadow-md shadow-sm shrink-0 border border-emerald-200/80 dark:border-emerald-800/60">
- <CalendarCheck className="w-5 h-5 text-white" />
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
+ <CalendarCheck className="w-5 h-5" />
  </div>
  <div>
  <h3 className="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
@@ -2338,33 +2339,40 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  </p>
  </div>
  </div>
- <div className="flex items-center gap-2 flex-wrap">
- <button
- type="button"
+ <div className="flex items-center gap-2 flex-nowrap shrink-0 overflow-x-auto">
+ <SquircleActionButton
+ variant="refresh"
+ icon={RefreshCw}
+ label="Refresh Data"
+ loading={loadingPermits}
  onClick={() => fetchDormitoryPermits()}
- disabled={loadingPermits}
- className="p-2 rounded-xl border-2 border-emerald-200/80 text-slate-600 hover:bg-slate-100 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-slate-800 transition text-xs font-bold flex items-center gap-1.5 cursor-pointer"
- >
- <RefreshCw className={`w-3.5 h-3.5 ${loadingPermits ? 'animate-spin' : ''}`} /> Refresh
- </button>
- <button
- type="button"
+ />
+ <SquircleActionButton
+ variant="danger"
+ icon={ShieldAlert}
+ label="Fast-Track Darurat"
+ showLabel
  onClick={() => setQuickActionModal('perizinan_darurat')}
- className="px-3.5 py-2 rounded-xl bg-white dark:bg-card-dark hover:from-rose-700 hover:to-red-700 font-extrabold text-xs shadow-md shadow-sm flex items-center gap-1.5 transition active:scale-95 cursor-pointer border border-emerald-200/80 dark:border-emerald-800/60"
- >
- <ShieldAlert className="w-3.5 h-3.5" /> 🚨 Fast-Track Darurat
- </button>
- <MasterActionButton variant="import" icon={Calendar} onClick={() => setQuickActionModal('kepulangan_massal')}>
- Jadwalkan Kepulangan Massal
- </MasterActionButton>
- <MasterActionButton variant="emerald" icon={Plus} onClick={() => setQuickActionModal('perizinan_baru')}>
- Terbitkan Surat Izin Santri
- </MasterActionButton>
+ />
+ <SquircleActionButton
+ variant="import"
+ icon={Calendar}
+ label="Kepulangan Massal"
+ showLabel
+ onClick={() => setQuickActionModal('kepulangan_massal')}
+ />
+ <SquircleActionButton
+ variant="primary"
+ icon={Plus}
+ label="Terbitkan Izin"
+ showLabel
+ onClick={() => setQuickActionModal('perizinan_baru')}
+ />
  </div>
  </div>
 
  {/* Filter & Search Bar */}
- <div className="px-5 sm:px-6 py-3.5 bg-slate-50/50 dark:bg-slate-900/50 border-b border-emerald-200/80 dark:border-emerald-800/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+ <div className="px-5 sm:px-6 py-3.5 bg-white dark:bg-[#1B2433] border-b border-emerald-200/80 dark:border-emerald-800/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
  <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
  {[
  { id: 'all', label: 'Semua Status' },
@@ -2380,8 +2388,8 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  onClick={() => setPermitFilterStatus(btn.id)}
  className={`px-3 py-1.5 rounded-xl font-black transition whitespace-nowrap cursor-pointer text-xs ${
  permitFilterStatus === btn.id
- ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/20'
- : 'bg-white/90 text-slate-600 hover:bg-emerald-50/80 hover:text-emerald-900 border border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-700/80'
+ ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs'
+ : 'bg-emerald-50/70 text-slate-600 hover:bg-emerald-100/80 hover:text-emerald-900 border border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-700/80'
  }`}
  >
  {btn.label}
@@ -2397,25 +2405,24 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  onChange={(e) => setPermitSearch(e.target.value)}
  onKeyDown={(e) => { if (e.key === 'Enter') fetchDormitoryPermits() }}
  placeholder="Cari santri, no izin, tujuan..."
- className="w-full pl-8 pr-3 py-2 rounded-xl border-2 border-emerald-300 bg-white dark:border-emerald-700/60 dark:bg-slate-900 text-xs font-semibold focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition"
+ className="w-full h-10 pl-8 pr-3 rounded-xl border-2 border-[#b6f6d9] bg-white dark:border-emerald-700/80 dark:bg-slate-900 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none shadow-xs transition-all"
  />
  </div>
  </div>
 
  {/* Table Container */}
- <div className="overflow-x-auto p-4 sm:p-6 pt-3">
- <div className="rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 overflow-hidden">
+ <div className="overflow-x-auto">
  <table className="w-full text-left text-xs border-collapse">
                   <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-xs font-bold uppercase tracking-wider text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/80 dark:text-emerald-300">
                     <tr className="text-emerald-950 dark:text-emerald-200 font-bold uppercase tracking-wider text-[11px]">
-                      <th className="p-3">Santri & Perizinan</th>
+                      <th className="p-3">Santri &amp; Perizinan</th>
                       <th className="p-3">Jadwal Keberangkatan</th>
-                      <th className="p-3">Realisasi & Penjemput</th>
+                      <th className="p-3">Realisasi &amp; Penjemput</th>
                       <th className="p-3">Status Kehadiran</th>
-                      <th className="p-3 text-right select-none w-28"></th>
+                      <th className="p-3 text-right select-none w-28">Aksi</th>
                     </tr>
                   </thead>
- <tbody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40 font-medium bg-white dark:bg-card-dark">
+ <tbody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40 font-medium bg-white dark:bg-[#1B2433]">
  {loadingPermits ? (
  <tr>
  <td colSpan={5} className="p-8 text-center text-slate-500">
@@ -2592,7 +2599,6 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  </table>
  </div>
  </div>
- </div>
  </section>
  )}
  </motion.main>
@@ -2611,15 +2617,16 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  >
  <Dialog
  showCloseButton={false}
- className="w-full max-w-xl flex flex-col rounded-2xl border-2 border-emerald-500/30 bg-white p-0 shadow-2xl shadow-sm overflow-hidden dark:border-emerald-700/50 dark:bg-card-dark"
+ className="w-full max-w-xl flex flex-col rounded-3xl border-2 border-emerald-300 bg-white p-0 shadow-2xl shadow-emerald-950/20 overflow-hidden dark:border-emerald-700/80 dark:bg-[#1B2433]"
  >
- <DialogHeader className="bg-white dark:bg-card-dark px-6 py-4 flex items-center justify-between shrink-0 border-b border-emerald-800/80">
+ <div className="h-1.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
+ <DialogHeader className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white px-6 py-4 flex flex-row items-center justify-between space-y-0 gap-3 shrink-0 border-b border-emerald-500/30">
  <div className="flex items-center gap-3">
  <div className="w-10 h-9 rounded-xl bg-emerald-700/80 flex items-center justify-center border border-emerald-500/50 shadow-inner shrink-0">
  <CheckCircle2 className="w-5 h-5 text-emerald-200" />
  </div>
  <div>
- <DialogTitle className="text-base font-extrabold text-emerald-600 text-left">
+ <DialogTitle className="text-base font-extrabold text-white text-left">
  Absensi Kembali ke Pondok
  </DialogTitle>
  <DialogDescription className="text-xs text-emerald-200/90 font-medium text-left">
@@ -2627,7 +2634,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  </DialogDescription>
  </div>
  </div>
- <DialogClose onClick={() => setSelectedPermitForReturn(null)} />
+ <DialogClose onClick={() => setSelectedPermitForReturn(null)} className="bg-white/20 hover:bg-rose-500 text-white hover:text-white border-white/25 shrink-0" />
  </DialogHeader>
 
  <form onSubmit={handleReturnCheckin} className="flex flex-col flex-1 overflow-hidden">
@@ -2657,7 +2664,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  required
  value={returnForm.actual_return_time}
  onChange={(e) => setReturnForm({ ...returnForm, actual_return_time: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition"
  />
  </div>
 
@@ -2683,15 +2690,19 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  value={returnForm.notes}
  onChange={(e) => setReturnForm({ ...returnForm, notes: e.target.value })}
  placeholder="Catatan barang bawaan, alasan keterlambatan, dsb..."
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs focus:border-indigo-600 outline-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs focus:border-indigo-600 outline-none"
  />
  </div>
  </DialogBody>
 
- <DialogFooter className="px-6 py-4 bg-slate-50 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
- <MasterActionButton variant="secondary" icon={X} onClick={() => setSelectedPermitForReturn(null)}>
- Batal
- </MasterActionButton>
+ <DialogFooter className="px-6 py-4 bg-slate-100/90 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
+ <button
+ type="button"
+ onClick={() => setSelectedPermitForReturn(null)}
+ className="h-9.5 px-4 bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 rounded-xl font-black transition active:scale-95 text-xs inline-flex items-center gap-1.5 cursor-pointer"
+>
+ <X className="w-4 h-4" /> Batal
+</button>
  <MasterActionButton variant="emerald" icon={CheckCircle2} type="submit" disabled={submittingReturn}>
  {submittingReturn ? 'Menyimpan...' : 'Simpan Absensi Kembali'}
  </MasterActionButton>
@@ -2715,15 +2726,16 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  >
  <Dialog
  showCloseButton={false}
- className="w-full max-w-xl flex flex-col rounded-2xl border-2 border-emerald-500/30 bg-white p-0 shadow-2xl shadow-sm overflow-hidden dark:border-emerald-700/50 dark:bg-card-dark"
+ className="w-full max-w-xl flex flex-col rounded-3xl border-2 border-emerald-300 bg-white p-0 shadow-2xl shadow-emerald-950/20 overflow-hidden dark:border-emerald-700/80 dark:bg-[#1B2433]"
  >
- <DialogHeader className="bg-white dark:bg-card-dark px-6 py-4 flex items-center justify-between shrink-0 border-b border-emerald-800/80">
+ <div className="h-1.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
+ <DialogHeader className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white px-6 py-4 flex flex-row items-center justify-between space-y-0 gap-3 shrink-0 border-b border-emerald-500/30">
  <div className="flex items-center gap-3">
  <div className="w-10 h-9 rounded-xl bg-emerald-700/80 flex items-center justify-center border border-emerald-500/50 shadow-inner shrink-0">
  <CalendarCheck className="w-5 h-5 text-emerald-200" />
  </div>
  <div>
- <DialogTitle className="text-base font-extrabold text-emerald-600 text-left">
+ <DialogTitle className="text-base font-extrabold text-white text-left">
  Terbitkan Surat Izin Santri
  </DialogTitle>
  <DialogDescription className="text-xs text-emerald-200/90 font-medium text-left">
@@ -2731,7 +2743,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  </DialogDescription>
  </div>
  </div>
- <DialogClose onClick={() => setQuickActionModal(null)} />
+ <DialogClose onClick={() => setQuickActionModal(null)} className="bg-white/20 hover:bg-rose-500 text-white hover:text-white border-white/25 shrink-0" />
  </DialogHeader>
 
  <form onSubmit={handleCreatePermit} className="flex flex-col flex-1 overflow-hidden">
@@ -2776,7 +2788,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  placeholder="Contoh: Rumah Orang Tua di Padang"
  value={newPermitForm.destination}
  onChange={(e) => setNewPermitForm({ ...newPermitForm, destination: e.target.value })}
- className="w-full h-9 rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 px-3 py-2 dark:bg-slate-800 text-xs font-semibold focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition"
+ className="w-full h-9 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 px-3 py-2 dark:bg-slate-800 text-xs font-semibold focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition"
  />
  </div>
  </div>
@@ -2789,7 +2801,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  required
  value={newPermitForm.scheduled_departure_at}
  onChange={(e) => setNewPermitForm({ ...newPermitForm, scheduled_departure_at: e.target.value })}
- className="w-full h-10 rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 px-3 py-2 dark:bg-slate-800 text-xs font-semibold focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition"
+ className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 px-3 py-2 dark:bg-slate-800 text-xs font-semibold focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition"
  />
  </div>
 
@@ -2800,7 +2812,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  required
  value={newPermitForm.scheduled_return_at}
  onChange={(e) => setNewPermitForm({ ...newPermitForm, scheduled_return_at: e.target.value })}
- className="w-full h-10 rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 px-3 py-2 dark:bg-slate-800 text-xs font-semibold focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition"
+ className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 px-3 py-2 dark:bg-slate-800 text-xs font-semibold focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition"
  />
  </div>
  </div>
@@ -2813,7 +2825,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  placeholder="Nama Ayah/Ibu/Wali"
  value={newPermitForm.pickup_person_name}
  onChange={(e) => setNewPermitForm({ ...newPermitForm, pickup_person_name: e.target.value })}
- className="w-full h-10 rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 px-3 py-2 dark:bg-slate-800 text-xs font-semibold focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition"
+ className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 px-3 py-2 dark:bg-slate-800 text-xs font-semibold focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition"
  />
  </div>
 
@@ -2824,7 +2836,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  placeholder="08xxxxxxxxxx"
  value={newPermitForm.pickup_person_phone}
  onChange={(e) => setNewPermitForm({ ...newPermitForm, pickup_person_phone: e.target.value })}
- className="w-full h-10 rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 px-3 py-2 dark:bg-slate-800 text-xs font-semibold focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition"
+ className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 px-3 py-2 dark:bg-slate-800 text-xs font-semibold focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 outline-none transition"
  />
  </div>
  </div>
@@ -2836,15 +2848,19 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  placeholder="Alasan izin kepulangan..."
  value={newPermitForm.purpose_notes}
  onChange={(e) => setNewPermitForm({ ...newPermitForm, purpose_notes: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs focus:border-emerald-600 outline-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs focus:border-emerald-600 outline-none"
  />
  </div>
  </DialogBody>
 
- <DialogFooter className="px-6 py-4 bg-slate-50 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
- <MasterActionButton variant="secondary" icon={X} onClick={() => setQuickActionModal(null)}>
- Batal
- </MasterActionButton>
+ <DialogFooter className="px-6 py-4 bg-slate-100/90 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
+ <button
+ type="button"
+ onClick={() => setQuickActionModal(null)}
+ className="h-9.5 px-4 bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 rounded-xl font-black transition active:scale-95 text-xs inline-flex items-center gap-1.5 cursor-pointer"
+>
+ <X className="w-4 h-4" /> Batal
+</button>
  <MasterActionButton variant="emerald" icon={CalendarCheck} type="submit">
  Terbitkan Boarding Pass
  </MasterActionButton>
@@ -2879,15 +2895,16 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  : quickActionModal === 'perizinan_darurat'
  ? 'max-w-xl max-h-[88vh]'
  : 'max-w-xl max-h-[88vh]'
- } flex flex-col rounded-2xl border-2 border-emerald-500/30 bg-white p-0 shadow-2xl shadow-sm overflow-hidden dark:border-emerald-700/50 dark:bg-card-dark`}
+ } flex flex-col rounded-3xl border-2 border-emerald-300 bg-white p-0 shadow-2xl shadow-emerald-950/20 overflow-hidden dark:border-emerald-700/80 dark:bg-[#1B2433]`}
  >
  {/* 1. PRESENSI SHOLAT BERJAMAAH MODAL */}
  {quickActionModal === 'sholat' && (
  <>
- <DialogHeader className="bg-white dark:bg-card-dark px-6 py-4 flex items-center justify-between shrink-0 border-b border-emerald-800/80">
+ <div className="h-1.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
+ <DialogHeader className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white px-6 py-4 flex flex-row items-center justify-between space-y-0 gap-3 shrink-0 border-b border-emerald-500/30">
  <div className="flex items-center gap-3">
- <div className="w-10 h-9 rounded-xl bg-emerald-700/80 text-emerald-200 flex items-center justify-center border border-emerald-600/60 shadow-inner shrink-0">
- <CalendarCheck className="w-5 h-5 text-slate-600" />
+ <div className="w-10 h-9 rounded-xl bg-white/20 text-white flex items-center justify-center border border-white/30 shadow-sm shrink-0">
+ <CalendarCheck className="w-5 h-5 text-white" />
  </div>
  <div>
  <DialogTitle className="text-base font-extrabold text-white text-left">
@@ -2898,7 +2915,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  </DialogDescription>
  </div>
  </div>
- <DialogClose onClick={() => setQuickActionModal(null)} />
+ <DialogClose onClick={() => setQuickActionModal(null)} className="bg-white/20 hover:bg-rose-500 text-white hover:text-white border-white/25 shrink-0" />
  </DialogHeader>
 
  <DialogBody className="p-4 sm:p-6 flex-1 overflow-y-auto min-h-0 space-y-4">
@@ -3060,7 +3077,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  value={sholatForm.notes}
  onChange={(e) => setSholatForm({ ...sholatForm, notes: e.target.value })}
  placeholder="Catatan shalat harian..."
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 p-2 dark:bg-slate-800 text-xs font-medium outline-none transition"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 p-2 dark:bg-slate-800 text-xs font-medium outline-none transition"
  />
  </div>
  </div>
@@ -3152,7 +3169,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  value={qrInput}
  onChange={(e) => setQrInput(e.target.value)}
  placeholder="Masukkan / Scan Token QR Kartu Santri..."
- className="flex-1 rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold focus:ring-2 focus:ring-sky-600/15 outline-none"
+ className="flex-1 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold focus:ring-2 focus:ring-sky-600/15 outline-none"
  />
  <button
  type="button"
@@ -3198,7 +3215,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  value={rfidInput}
  onChange={(e) => setRfidInput(e.target.value)}
  placeholder="Tempelkan Kartu / Ketik UID RFID (Contoh: RFID-90218)..."
- className="flex-1 rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold focus:ring-2 focus:ring-violet-600/15 outline-none"
+ className="flex-1 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold focus:ring-2 focus:ring-violet-600/15 outline-none"
  />
  <button
  onClick={async () => {
@@ -3230,10 +3247,14 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  )}
  </DialogBody>
 
- <DialogFooter className="px-6 py-4 bg-slate-50 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
- <MasterActionButton variant="secondary" icon={X} onClick={() => setQuickActionModal(null)}>
- Batal
- </MasterActionButton>
+ <DialogFooter className="px-6 py-4 bg-slate-100/90 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
+ <button
+ type="button"
+ onClick={() => setQuickActionModal(null)}
+ className="h-9.5 px-4 bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 rounded-xl font-black transition active:scale-95 text-xs inline-flex items-center gap-1.5 cursor-pointer"
+>
+ <X className="w-4 h-4" /> Batal
+</button>
  <MasterActionButton variant="primary" icon={Check} disabled={savingQuickAction} onClick={() => handleSimpanFiturAksi('Presensi Sholat Berjamaah', 'sholat')}>
  Simpan Presensi Sholat
  </MasterActionButton>
@@ -3244,24 +3265,25 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  {/* 2. SETORAN TAHFIZH MODAL */}
  {quickActionModal === 'setoran' && (
  <>
- <DialogHeader className="flex items-center justify-between border-b border-emerald-500/20 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-slate-950 shrink-0">
+ <div className="h-1.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
+ <DialogHeader className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white px-6 py-4 flex flex-row items-center justify-between space-y-0 gap-3 shrink-0 border-b border-emerald-500/30">
  <div className="flex items-center gap-3">
- <div className="flex h-9 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 border-2 border-emerald-300 dark:bg-emerald-950/60 dark:border-emerald-700/80 dark:text-emerald-300 shadow-sm shrink-0">
- <BookOpen className="h-6 w-6" />
+ <div className="flex size-10 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 text-white shadow-sm shrink-0">
+ <BookOpen className="h-5 w-5" />
  </div>
  <div className="min-w-0 flex-1">
- <DialogTitle className="text-base sm:text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+ <DialogTitle className="text-base font-extrabold text-white flex items-center gap-2 flex-wrap">
  <span>Pencatatan Setoran Tahfizh Al-Qur'an</span>
- <span className="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-black text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border-2 border-emerald-300">
+ <span className="inline-flex items-center rounded-full bg-white/20 px-2.5 py-0.5 text-[10px] font-black text-white border border-white/30">
  Ziyadah &amp; Murajaah
  </span>
  </DialogTitle>
- <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium text-left">
+ <DialogDescription className="text-xs text-emerald-100/90 mt-0.5 font-medium text-left">
  Bimbingan dan evaluasi capaian hafalan santri binaan asrama sesuai target kurikulum
  </DialogDescription>
  </div>
  </div>
- <DialogClose onClick={() => setQuickActionModal(null)} />
+ <DialogClose onClick={() => setQuickActionModal(null)} className="bg-white/20 hover:bg-rose-500 text-white hover:text-white border-white/25 shrink-0" />
  </DialogHeader>
 
  <DialogBody className="p-4 sm:p-5 pb-24 flex-1 overflow-y-auto min-h-0 space-y-4">
@@ -3336,7 +3358,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  ⏳ Memuat rekomendasi hafalan terakhir santri...
  </div>
  ) : lastStudentLog ? (
- <div className="rounded-xl border border-emerald-200 bg-white dark:bg-card-dark p-3 dark:border-emerald-800 dark:from-emerald-950/40 dark:to-teal-950/30 text-xs space-y-1.5">
+ <div className="rounded-xl border border-emerald-200 bg-white dark:bg-[#1B2433] p-3 dark:border-emerald-800 dark:from-emerald-950/40 dark:to-teal-950/30 text-xs space-y-1.5">
  <div className="flex items-center justify-between gap-2">
  <div className="flex items-center gap-1.5 font-black text-emerald-900 dark:text-emerald-200">
  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
@@ -3470,7 +3492,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  value={quranSearch}
  onChange={(e) => setQuranSearch(e.target.value)}
  placeholder="Cari Surah (misal: An-Naba, Yasin, 78)..."
- className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-emerald-200/80 rounded-xl font-semibold focus:ring-2 focus:ring-emerald-500 outline-none dark:bg-slate-900 dark:text-slate-200 dark:border-emerald-700/80"
+ className="w-full pl-9 pr-4 py-2 bg-slate-50 border-2 border-[#b6f6d9] rounded-xl font-semibold focus:ring-2 focus:ring-emerald-500 outline-none dark:bg-slate-900 dark:text-slate-200 dark:border-emerald-700/80"
  />
  </div>
  {quranInputMode === 'interactive' ? (
@@ -3590,7 +3612,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  min="1"
  value={setoranForm.baris}
  onChange={(e) => setSetoranForm({ ...setoranForm, baris: Number(e.target.value) })}
- className="w-full h-9 rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 px-3 py-1.5 dark:bg-slate-800 font-black text-emerald-600 outline-none transition text-xs shadow-xs focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+ className="w-full h-9 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 px-3 py-1.5 dark:bg-slate-800 font-black text-emerald-600 outline-none transition text-xs shadow-xs focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
  </div>
@@ -3702,46 +3724,46 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  Number(a.nomorAyat || a.nomor_ayat || a.ayat) <= setoranForm.ayat_end
  )
  return (
- <div className="flex flex-col h-full bg-white dark:bg-card-dark rounded-xl border border-emerald-800/50 shadow-xl overflow-hidden">
+ <div className="flex flex-col h-full bg-white dark:bg-[#1B2433] rounded-2xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-sm overflow-hidden">
  {/* Surah Header */}
- <div className="px-4 py-3 bg-white dark:bg-card-dark border-b border-emerald-800/60 text-center shrink-0">
+ <div className="px-4 py-3 bg-emerald-50/80 dark:bg-emerald-950/40 border-b border-emerald-200/80 dark:border-emerald-800/60 text-center shrink-0">
  {currentSurah ? (
  <>
- <div className="text-2xl font-extrabold text-emerald-200 leading-none" style={{ fontFamily: "'Amiri','Scheherazade New',serif", direction: 'rtl' }}>
+ <div className="text-2xl font-extrabold text-emerald-800 dark:text-emerald-200 leading-none" style={{ fontFamily: "'Amiri','Scheherazade New',serif", direction: 'rtl' }}>
  {currentSurah.nama}
  </div>
- <div className="text-xs text-emerald-400 font-bold mt-1">{currentSurah.nama_latin} · سورة</div>
+ <div className="text-xs text-emerald-700 dark:text-emerald-400 font-bold mt-1">{currentSurah.nama_latin} · سورة</div>
  <div className="flex items-center justify-center gap-2 mt-1.5 flex-wrap">
- <span className="px-2 py-0.5 rounded-full bg-emerald-800 text-emerald-300 text-[10px] font-extrabold">Juz {getJuzFromSurah(setoranForm.surah_number)}</span>
- <span className="px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 text-[10px] font-extrabold">{currentSurah.jumlah_ayat} Ayat</span>
- <span className="px-2 py-0.5 rounded-full bg-teal-900 text-teal-300 text-[10px] font-extrabold">Ayat {setoranForm.ayat_start}–{setoranForm.ayat_end}</span>
+ <span className="px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-extrabold">Juz {getJuzFromSurah(setoranForm.surah_number)}</span>
+ <span className="px-2 py-0.5 rounded-full bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text-slate-200 text-[10px] font-extrabold">{currentSurah.jumlah_ayat} Ayat</span>
+ <span className="px-2 py-0.5 rounded-full bg-teal-600 text-white text-[10px] font-extrabold">Ayat {setoranForm.ayat_start}–{setoranForm.ayat_end}</span>
  </div>
  </>
  ) : (
- <div className="text-emerald-400 text-xs font-semibold py-1">Pilih surah untuk preview</div>
+ <div className="text-emerald-700 dark:text-emerald-400 text-xs font-semibold py-1">Pilih surah untuk preview</div>
  )}
  </div>
 
  {/* Bismillah */}
  {setoranForm.surah_number !== 9 && setoranForm.ayat_start === 1 && (
- <div className="text-center py-2 px-4 border-b border-emerald-900/50 shrink-0">
- <span className="text-lg font-extrabold text-amber-300" style={{ fontFamily: "'Amiri','Scheherazade New',serif", direction: 'rtl' }}>
+ <div className="text-center py-2.5 px-4 bg-emerald-50/40 dark:bg-emerald-950/20 border-b border-emerald-200/80 dark:border-emerald-900/50 shrink-0">
+ <span className="text-lg font-extrabold text-emerald-900 dark:text-amber-300" style={{ fontFamily: "'Amiri','Scheherazade New',serif", direction: 'rtl' }}>
  بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
  </span>
  </div>
  )}
 
  {/* Ayat List */}
- <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3" style={{ minHeight: '220px', maxHeight: '340px' }}>
+ <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3 bg-white dark:bg-[#1B2433]" style={{ minHeight: '220px', maxHeight: '340px' }}>
  {loadingModalAyats ? (
  <div className="flex flex-col items-center justify-center py-10 gap-3">
- <div className="w-8 h-8 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin" />
- <p className="text-emerald-400 text-xs font-semibold animate-pulse">Memuat teks Al-Qur&apos;an...</p>
+ <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+ <p className="text-emerald-700 dark:text-emerald-400 text-xs font-semibold animate-pulse">Memuat teks Al-Qur&apos;an...</p>
  </div>
  ) : ayatsToShow.length === 0 ? (
  <div className="flex flex-col items-center justify-center py-10 gap-2 text-center">
  <span className="text-3xl">📖</span>
- <p className="text-slate-400 text-xs font-medium">Klik surah untuk menampilkan teks ayat Al-Qur&apos;an</p>
+ <p className="text-slate-500 dark:text-slate-400 text-xs font-medium">Klik surah untuk menampilkan teks ayat Al-Qur&apos;an</p>
  </div>
  ) : (
  ayatsToShow.map((a) => {
@@ -3749,16 +3771,16 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  const arabicText = a.teksArab || a.teks_arab || a.ar
  return (
  <motion.div key={ayatNum} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }} className="text-right" style={{ direction: 'rtl' }}>
- <div className="flex items-start gap-2 justify-end">
- <div className="shrink-0 w-7 h-7 rounded-full bg-emerald-900/80 border border-emerald-700/60 text-emerald-300 text-[10px] font-extrabold flex items-center justify-center mt-1" style={{ direction: 'ltr' }}>{ayatNum}</div>
- <p className="flex-1 font-extrabold text-slate-100" style={{ fontFamily: "'Amiri','Scheherazade New','Noto Naskh Arabic',serif", direction: 'rtl', fontSize: '1.15rem', lineHeight: '2.4' }}>
+ <div className="flex items-start gap-2.5 justify-end">
+ <div className="shrink-0 w-7 h-7 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 dark:bg-emerald-900/80 dark:border-emerald-700/60 dark:text-emerald-300 text-[10px] font-extrabold flex items-center justify-center mt-1" style={{ direction: 'ltr' }}>{ayatNum}</div>
+ <p className="flex-1 font-extrabold text-slate-900 dark:text-slate-100" style={{ fontFamily: "'Amiri','Scheherazade New','Noto Naskh Arabic',serif", direction: 'rtl', fontSize: '1.25rem', lineHeight: '2.4' }}>
  {arabicText}
  </p>
  </div>
  {(a.teksLatin || a.teks_latin) && (
- <p className="text-[10px] text-slate-400 font-medium mt-0.5 text-left" style={{ direction: 'ltr' }}>{a.teksLatin || a.teks_latin}</p>
+ <p className="text-[11px] text-slate-600 dark:text-slate-400 font-medium mt-1 text-left" style={{ direction: 'ltr' }}>{a.teksLatin || a.teks_latin}</p>
  )}
- <div className="border-b border-emerald-800/60 mt-2" />
+ <div className="border-b border-emerald-200/70 dark:border-emerald-800/60 mt-2.5" />
  </motion.div>
  )
  })
@@ -3783,11 +3805,11 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  })()}
  </DialogBody>
 
- <DialogFooter className="px-6 py-4 bg-slate-50 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
+ <DialogFooter className="px-6 py-4 bg-slate-100/90 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
  <button
  type="button"
  onClick={() => setQuickActionModal(null)}
- className="h-9 px-5 border border-emerald-200/80 dark:border-emerald-700/80 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold transition text-xs flex items-center gap-1.5 cursor-pointer"
+ className="h-9.5 px-4 bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 rounded-xl font-black transition active:scale-95 text-xs flex items-center gap-1.5 cursor-pointer"
  >
  <X className="w-4 h-4" /> Batal
  </button>
@@ -3795,7 +3817,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  type="button"
  disabled={savingQuickAction}
  onClick={() => handleSimpanFiturAksi('Setoran Hafalan Tahfizh', 'setoran')}
- className="h-9 inline-flex items-center justify-center gap-2 px-6 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-black shadow-lg shadow-sm hover:brightness-110 active:scale-95 disabled:opacity-50 transition text-xs cursor-pointer"
+ className="h-9.5 inline-flex items-center justify-center gap-2 px-5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 active:scale-95 disabled:opacity-50 transition text-xs cursor-pointer"
  >
  <Check className="w-4 h-4" /> Simpan Setoran Hafalan
  </button>
@@ -3806,24 +3828,25 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  {/* 3. LOG UJIAN TASMI' MODAL */}
  {quickActionModal === 'tasmi' && (
  <>
- <DialogHeader className="flex items-center justify-between border-b border-emerald-500/20 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-slate-950 shrink-0">
+ <div className="h-1.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
+ <DialogHeader className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white px-6 py-4 flex flex-row items-center justify-between space-y-0 gap-3 shrink-0 border-b border-emerald-500/30">
  <div className="flex items-center gap-3">
- <div className="flex h-9 w-11 items-center justify-center rounded-xl bg-amber-50 text-amber-700 border-2 border-amber-300 dark:bg-amber-950/60 dark:border-amber-700/80 dark:text-amber-300 shadow-sm shrink-0">
- <Award className="h-6 w-6" />
+ <div className="flex size-10 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 text-white shadow-sm shrink-0">
+ <Award className="h-5 w-5" />
  </div>
  <div className="min-w-0 flex-1">
- <DialogTitle className="text-base sm:text-lg font-black text-slate-900 dark:text-emerald-600 flex items-center gap-2">
+ <DialogTitle className="text-base font-extrabold text-white flex items-center gap-2 flex-wrap">
  <span>Log Ujian Tasmi' Al-Qur'an (Sekali Duduk)</span>
- <span className="inline-flex items-center rounded-full bg-amber-100 px-2.5 py-0.5 text-[10px] font-black text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-300/40">
+ <span className="inline-flex items-center rounded-full bg-white/20 px-2.5 py-0.5 text-[10px] font-black text-white border border-white/30">
  Ujian Marhalah
  </span>
  </DialogTitle>
- <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium text-left">
+ <DialogDescription className="text-xs text-emerald-100/90 mt-0.5 font-medium text-left">
  Pencatatan resmi ujian hafalan 1 Juz, 5 Juz, 10 Juz, &amp; 30 Juz sekali duduk beserta Tajwid &amp; Makhraj
  </DialogDescription>
  </div>
  </div>
- <DialogClose onClick={() => setQuickActionModal(null)} />
+ <DialogClose onClick={() => setQuickActionModal(null)} className="bg-white/20 hover:bg-rose-500 text-white hover:text-white border-white/25 shrink-0" />
  </DialogHeader>
 
  <DialogBody className="p-4 sm:p-6 pb-36 flex-1 overflow-y-auto min-h-0 space-y-4 text-xs">
@@ -3883,7 +3906,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  {selectedStudent && (
  <div className="rounded-2xl border border-emerald-200/90 bg-white p-3.5 sm:p-4 shadow-sm dark:border-emerald-800/60 dark:bg-slate-900/60 flex items-center justify-between gap-3">
  <div className="flex items-center gap-3 min-w-0">
- <div className="w-11 h-9 rounded-xl bg-white dark:bg-card-dark font-extrabold flex items-center justify-center text-sm shadow-md shadow-sm shrink-0 overflow-hidden border border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="w-11 h-9 rounded-xl bg-white dark:bg-[#1B2433] font-extrabold flex items-center justify-center text-sm shadow-md shadow-sm shrink-0 overflow-hidden border border-emerald-200/80 dark:border-emerald-800/60">
  {studentName.slice(0, 2).toUpperCase()}
  </div>
  <div className="min-w-0 flex-1">
@@ -4106,7 +4129,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  max="100"
  value={tasmiForm.score ?? 90}
  onChange={(e) => setTasmiForm({ ...tasmiForm, score: Number(e.target.value) })}
- className="w-full h-9 rounded-xl border border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-800 px-3 text-xs font-black text-amber-600 dark:text-amber-400 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 shadow-xs"
+ className="w-full h-9 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-800 px-3 text-xs font-black text-amber-600 dark:text-amber-400 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 shadow-xs"
  placeholder="90"
  />
  </div>
@@ -4132,11 +4155,11 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  })()}
  </DialogBody>
 
- <DialogFooter className="px-6 py-4 bg-slate-50 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
+ <DialogFooter className="px-6 py-4 bg-slate-100/90 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
  <button
  type="button"
  onClick={() => setQuickActionModal(null)}
- className="h-9 px-5 border border-emerald-200/80 dark:border-emerald-700/80 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold transition text-xs flex items-center gap-1.5 cursor-pointer"
+ className="h-9.5 px-4 bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 rounded-xl font-black transition active:scale-95 text-xs flex items-center gap-1.5 cursor-pointer"
  >
  <X className="w-4 h-4" /> Batal
  </button>
@@ -4144,7 +4167,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  type="button"
  disabled={savingQuickAction}
  onClick={() => handleSimpanFiturAksi('Ujian Tasmi', 'tasmi')}
- className="h-9 inline-flex items-center justify-center gap-2 px-6 bg-white dark:bg-card-dark rounded-xl font-black shadow-lg shadow-sm hover:brightness-110 active:scale-95 disabled:opacity-50 transition text-xs cursor-pointer"
+ className="h-9.5 inline-flex items-center justify-center gap-2 px-5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 active:scale-95 disabled:opacity-50 transition text-xs cursor-pointer"
  >
  <Award className="w-4 h-4" /> Simpan Ujian Tasmi'
  </button>
@@ -4155,21 +4178,22 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  {/* 4. POIN KEDISIPLINAN MODAL */}
  {quickActionModal === 'poin' && (
  <>
- <DialogHeader className="bg-white dark:bg-card-dark px-6 py-4 flex items-center justify-between shrink-0 border-b border-amber-800/80">
+ <div className="h-1.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
+ <DialogHeader className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white px-6 py-4 flex flex-row items-center justify-between space-y-0 gap-3 shrink-0 border-b border-emerald-500/30">
  <div className="flex items-center gap-3">
- <div className="w-10 h-9 rounded-xl bg-amber-700/80 text-amber-200 flex items-center justify-center border border-amber-600/60 shadow-inner shrink-0">
- <ShieldAlert className="w-5 h-5 text-amber-200" />
+ <div className="size-10 rounded-2xl bg-white/20 backdrop-blur-md text-white flex items-center justify-center border border-white/30 shadow-sm shrink-0">
+ <ShieldAlert className="w-5 h-5" />
  </div>
  <div>
- <DialogTitle className="text-base font-extrabold text-emerald-600 text-left">
+ <DialogTitle className="text-base font-extrabold text-white text-left">
  Transaksi Poin Kedisiplinan (+/-)
  </DialogTitle>
- <DialogDescription className="text-xs text-amber-200/90 mt-0.5 font-medium text-left">
+ <DialogDescription className="text-xs text-emerald-100/90 mt-0.5 font-medium text-left">
  Pencatatan sanksi pelanggaran (poin minus) dan prestasi kebaikan (poin plus)
  </DialogDescription>
  </div>
  </div>
- <DialogClose onClick={() => setQuickActionModal(null)} />
+ <DialogClose onClick={() => setQuickActionModal(null)} className="bg-white/20 hover:bg-rose-500 text-white hover:text-white border-white/25 shrink-0" />
  </DialogHeader>
 
  <DialogBody className="p-4 sm:p-5 pb-6 flex-1 overflow-y-auto min-h-0 space-y-3.5 text-xs">
@@ -4254,7 +4278,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  type="number"
  value={poinForm.points}
  onChange={(e) => setPoinForm({ ...poinForm, points: e.target.value })}
- className={`w-full h-10 rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 px-3 py-2 bg-white dark:bg-[#111827] text-xs font-black outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 shadow-2xs ${
+ className={`w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 px-3 py-2 bg-white dark:bg-[#111827] text-xs font-black outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 shadow-2xs ${
  poinForm.type === 'violation' ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'
  }`}
  />
@@ -4286,15 +4310,19 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  value={poinForm.notes}
  onChange={(e) => setPoinForm({ ...poinForm, notes: e.target.value })}
  placeholder="Detail catatan kedisiplinan atau kronologi..."
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 p-2.5 bg-white dark:bg-[#111827] text-xs font-medium text-slate-800 dark:text-slate-200 outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 shadow-2xs"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 p-2.5 bg-white dark:bg-[#111827] text-xs font-medium text-slate-800 dark:text-slate-200 outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 shadow-2xs"
  />
  </div>
  </DialogBody>
 
- <DialogFooter className="px-6 py-3.5 bg-slate-50 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
- <MasterActionButton variant="secondary" icon={X} onClick={() => setQuickActionModal(null)}>
- Batal
- </MasterActionButton>
+ <DialogFooter className="px-6 py-3.5 bg-slate-100/90 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
+ <button
+ type="button"
+ onClick={() => setQuickActionModal(null)}
+ className="h-9.5 px-4 bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 rounded-xl font-black transition active:scale-95 text-xs inline-flex items-center gap-1.5 cursor-pointer"
+>
+ <X className="w-4 h-4" /> Batal
+</button>
  <MasterActionButton variant="export" icon={Check} disabled={savingQuickAction} onClick={() => handleSimpanFiturAksi('Poin Kedisiplinan', 'poin')}>
  Simpan Catatan Poin
  </MasterActionButton>
@@ -4305,13 +4333,14 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  {/* 5. LOG KLINIK MODAL */}
  {quickActionModal === 'klinik' && (
  <>
- <DialogHeader className="bg-white dark:bg-card-dark px-6 py-4 flex items-center justify-between shrink-0 border-b border-rose-800/80">
+ <div className="h-1.5 bg-gradient-to-r from-rose-500 via-rose-600 to-red-700 shrink-0" />
+ <DialogHeader className="bg-gradient-to-r from-rose-600 via-rose-700 to-red-700 text-white px-6 py-4 flex flex-row items-center justify-between space-y-0 gap-3 shrink-0 border-b border-rose-500/30">
  <div className="flex items-center gap-3">
  <div className="w-9 h-9 rounded-xl bg-rose-700/80 text-rose-200 flex items-center justify-center border border-rose-600/60 shadow-inner shrink-0">
  <HeartPulse className="w-5 h-5" />
  </div>
  <div>
- <DialogTitle className="text-base font-extrabold text-emerald-600 text-left">
+ <DialogTitle className="text-base font-extrabold text-white text-left">
  Log Klinik & Kesehatan Santri
  </DialogTitle>
  <DialogDescription className="text-xs text-rose-200/90 mt-0.5 font-medium text-left">
@@ -4319,7 +4348,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  </DialogDescription>
  </div>
  </div>
- <DialogClose onClick={() => setQuickActionModal(null)} />
+ <DialogClose onClick={() => setQuickActionModal(null)} className="bg-white/20 hover:bg-rose-500 text-white hover:text-white border-white/25 shrink-0" />
  </DialogHeader>
 
  <DialogBody className="p-4 sm:p-6 pb-28 flex-1 overflow-y-auto min-h-0 space-y-4 text-xs">
@@ -4331,7 +4360,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  value={klinikForm.symptoms}
  onChange={(e) => setKlinikForm({ ...klinikForm, symptoms: e.target.value })}
  placeholder="Demam, pusing, batuk..."
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold focus:border-rose-600 focus:ring-2 focus:ring-rose-600/15 outline-none transition"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold focus:border-rose-600 focus:ring-2 focus:ring-rose-600/15 outline-none transition"
  />
  </div>
  <div className="grid grid-cols-2 gap-3">
@@ -4342,7 +4371,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  value={klinikForm.medicine}
  onChange={(e) => setKlinikForm({ ...klinikForm, medicine: e.target.value })}
  placeholder="Paracetamol, vitamin..."
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold outline-none transition"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold outline-none transition"
  />
  </div>
  <div>
@@ -4362,10 +4391,14 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  </div>
  </DialogBody>
 
- <DialogFooter className="px-6 py-4 bg-slate-50 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
- <MasterActionButton variant="secondary" icon={X} onClick={() => setQuickActionModal(null)}>
- Batal
- </MasterActionButton>
+ <DialogFooter className="px-6 py-4 bg-slate-100/90 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
+ <button
+ type="button"
+ onClick={() => setQuickActionModal(null)}
+ className="h-9.5 px-4 bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 rounded-xl font-black transition active:scale-95 text-xs inline-flex items-center gap-1.5 cursor-pointer"
+>
+ <X className="w-4 h-4" /> Batal
+</button>
  <MasterActionButton variant="import" icon={Check} disabled={savingQuickAction} onClick={() => handleSimpanFiturAksi('Klinik Kesehatan', 'klinik')}>
  {savingQuickAction ? 'Menyimpan...' : 'Simpan Log Klinik'}
  </MasterActionButton>
@@ -4376,21 +4409,22 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  {/* 6. LOG PENITIPAN HP/LAPTOP MODAL */}
  {quickActionModal === 'titipan' && (
  <>
- <DialogHeader className="bg-white dark:bg-card-dark px-6 py-4 flex items-center justify-between shrink-0 border-b border-sky-800/80">
+ <div className="h-1.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
+ <DialogHeader className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white px-6 py-4 flex flex-row items-center justify-between space-y-0 gap-3 shrink-0 border-b border-emerald-500/30">
  <div className="flex items-center gap-3">
- <div className="w-9 h-9 rounded-xl bg-sky-700/80 text-sky-200 flex items-center justify-center border border-sky-600/60 shadow-inner shrink-0">
+ <div className="size-10 rounded-2xl bg-white/20 backdrop-blur-md text-white flex items-center justify-center border border-white/30 shadow-sm shrink-0">
  <Smartphone className="w-5 h-5" />
  </div>
  <div>
- <DialogTitle className="text-base font-extrabold text-slate-600 text-left">
+ <DialogTitle className="text-base font-extrabold text-white text-left">
  Log Penitipan Barang Berharga (HP/Laptop)
  </DialogTitle>
- <DialogDescription className="text-xs text-sky-200/90 mt-0.5 font-medium text-left">
+ <DialogDescription className="text-xs text-emerald-100/90 mt-0.5 font-medium text-left">
  Pencatatan barang elektronik santri yang diserahkan/diambil dari Musyrif
  </DialogDescription>
  </div>
  </div>
- <DialogClose onClick={() => setQuickActionModal(null)} />
+ <DialogClose onClick={() => setQuickActionModal(null)} className="bg-white/20 hover:bg-rose-500 text-white hover:text-white border-white/25 shrink-0" />
  </DialogHeader>
 
  <DialogBody className="p-4 sm:p-6 pb-28 flex-1 overflow-y-auto min-h-0 space-y-4 text-xs">
@@ -4417,16 +4451,20 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  value={titipanForm.serial_number}
  onChange={(e) => setTitipanForm({ ...titipanForm, serial_number: e.target.value })}
  placeholder="Samsung A54 / SN123"
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold outline-none transition"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold outline-none transition"
  />
  </div>
  </div>
  </DialogBody>
 
- <DialogFooter className="px-6 py-4 bg-slate-50 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
- <MasterActionButton variant="secondary" icon={X} onClick={() => setQuickActionModal(null)}>
- Batal
- </MasterActionButton>
+ <DialogFooter className="px-6 py-4 bg-slate-100/90 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
+ <button
+ type="button"
+ onClick={() => setQuickActionModal(null)}
+ className="h-9.5 px-4 bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 rounded-xl font-black transition active:scale-95 text-xs inline-flex items-center gap-1.5 cursor-pointer"
+>
+ <X className="w-4 h-4" /> Batal
+</button>
  <MasterActionButton variant="primary" icon={Check} disabled={savingQuickAction} onClick={() => handleSimpanFiturAksi('Penitipan Barang', 'titipan')}>
  Catat Penitipan
  </MasterActionButton>
@@ -4437,13 +4475,14 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  {/* 7. MODAL PERIZINAN DARURAT (SANTRI MENDADAK PULANG / SAKIT / RUJUKAN) */}
  {quickActionModal === 'perizinan_darurat' && (
  <>
- <DialogHeader className="bg-white dark:bg-card-dark px-6 py-4 flex items-center justify-between shrink-0 border-b border-rose-800/80">
+ <div className="h-1.5 bg-gradient-to-r from-rose-500 via-rose-600 to-red-700 shrink-0" />
+ <DialogHeader className="bg-gradient-to-r from-rose-600 via-rose-700 to-red-700 text-white px-6 py-4 flex flex-row items-center justify-between space-y-0 gap-3 shrink-0 border-b border-rose-500/30">
  <div className="flex items-center gap-3">
  <div className="w-9 h-9 rounded-xl bg-rose-700/80 text-rose-200 flex items-center justify-center border border-rose-600/60 shadow-inner shrink-0">
  <AlertTriangle className="w-5 h-5 text-amber-300" />
  </div>
  <div>
- <DialogTitle className="text-base font-extrabold text-amber-600 text-left">
+ <DialogTitle className="text-base font-extrabold text-white text-left">
  🚨 Fast-Track Perizinan Darurat / Santri Sakit
  </DialogTitle>
  <DialogDescription className="text-xs text-rose-200/90 mt-0.5 font-medium text-left">
@@ -4451,7 +4490,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  </DialogDescription>
  </div>
  </div>
- <DialogClose onClick={() => setQuickActionModal(null)} />
+ <DialogClose onClick={() => setQuickActionModal(null)} className="bg-white/20 hover:bg-rose-500 text-white hover:text-white border-white/25 shrink-0" />
  </DialogHeader>
 
  <DialogBody className="p-4 sm:p-6 pb-28 flex-1 overflow-y-auto min-h-0 space-y-4 text-xs">
@@ -4490,7 +4529,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  value={emergencyPermitForm.medical_complaint}
  onChange={(e) => setEmergencyPermitForm({ ...emergencyPermitForm, medical_complaint: e.target.value })}
  placeholder="Contoh: Demam tinggi 39°C memerlukan penanganan dokter / Orang tua sakit keras / Takziyah keluarga..."
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold focus:border-rose-600 focus:ring-2 focus:ring-rose-600/15 outline-none transition"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold focus:border-rose-600 focus:ring-2 focus:ring-rose-600/15 outline-none transition"
  />
  </div>
 
@@ -4502,7 +4541,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  value={emergencyPermitForm.medical_destination}
  onChange={(e) => setEmergencyPermitForm({ ...emergencyPermitForm, medical_destination: e.target.value })}
  placeholder="Klinik / RS Terdekat / Rumah Santri"
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold outline-none transition"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold outline-none transition"
  />
  </div>
  <div>
@@ -4512,7 +4551,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  value={emergencyPermitForm.medical_escort_name}
  onChange={(e) => setEmergencyPermitForm({ ...emergencyPermitForm, medical_escort_name: e.target.value })}
  placeholder="Nama Musyrif / Orang Tua yang menjemput"
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold outline-none transition"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold outline-none transition"
  />
  </div>
  </div>
@@ -4525,7 +4564,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  value={emergencyPermitForm.guardian_phone}
  onChange={(e) => setEmergencyPermitForm({ ...emergencyPermitForm, guardian_phone: e.target.value })}
  placeholder="0812xxxxxxxx"
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold outline-none transition"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold outline-none transition"
  />
  </div>
  <div>
@@ -4537,17 +4576,21 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  value={emergencyPermitForm.estimated_hours}
  onChange={(e) => setEmergencyPermitForm({ ...emergencyPermitForm, estimated_hours: Number(e.target.value) })}
  placeholder="6"
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold outline-none transition"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold outline-none transition"
  />
  <span className="text-[10px] text-slate-500 mt-1 block">Sistem akan menghitung otomatis jadwal kembali ananda berdasarkan estimasi jam ini</span>
  </div>
  </div>
  </DialogBody>
 
- <DialogFooter className="px-6 py-4 bg-slate-50 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
- <MasterActionButton variant="secondary" icon={X} onClick={() => setQuickActionModal(null)}>
- Batal
- </MasterActionButton>
+ <DialogFooter className="px-6 py-4 bg-slate-100/90 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
+ <button
+ type="button"
+ onClick={() => setQuickActionModal(null)}
+ className="h-9.5 px-4 bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 rounded-xl font-black transition active:scale-95 text-xs inline-flex items-center gap-1.5 cursor-pointer"
+>
+ <X className="w-4 h-4" /> Batal
+</button>
  <MasterActionButton variant="danger" icon={Check} onClick={handleEmergencyExit}>
  Terbitkan Izin Darurat Sekarang
  </MasterActionButton>
@@ -4558,7 +4601,8 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  {/* 8. MODAL PENJADWALAN KEPULANGAN MASSAL (TATA USAHA & MUSYRIF) */}
  {quickActionModal === 'kepulangan_massal' && (
  <>
- <DialogHeader className="bg-white dark:bg-card-dark px-6 py-4 flex items-center justify-between shrink-0 border-b border-emerald-800/80">
+ <div className="h-1.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
+ <DialogHeader className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white px-6 py-4 flex flex-row items-center justify-between space-y-0 gap-3 shrink-0 border-b border-emerald-500/30">
  <div className="flex items-center gap-3">
  <div className="w-9 h-9 rounded-xl bg-emerald-700/80 text-emerald-200 flex items-center justify-center border border-emerald-600/60 shadow-inner shrink-0">
  <Calendar className="w-5 h-5 text-teal-200" />
@@ -4572,7 +4616,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  </DialogDescription>
  </div>
  </div>
- <DialogClose onClick={() => setQuickActionModal(null)} />
+ <DialogClose onClick={() => setQuickActionModal(null)} className="bg-white/20 hover:bg-rose-500 text-white hover:text-white border-white/25 shrink-0" />
  </DialogHeader>
 
  <DialogBody className="p-4 sm:p-6 pb-28 flex-1 overflow-y-auto min-h-0 space-y-4 text-xs">
@@ -4621,7 +4665,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  type="datetime-local"
  value={batchScheduleForm.scheduled_departure_at}
  onChange={(e) => setBatchScheduleForm({ ...batchScheduleForm, scheduled_departure_at: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold outline-none transition"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold outline-none transition"
  />
  </div>
  <div>
@@ -4632,7 +4676,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  type="datetime-local"
  value={batchScheduleForm.scheduled_return_at}
  onChange={(e) => setBatchScheduleForm({ ...batchScheduleForm, scheduled_return_at: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold outline-none transition"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold outline-none transition"
  />
  </div>
  </div>
@@ -4644,7 +4688,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  value={batchScheduleForm.destination}
  onChange={(e) => setBatchScheduleForm({ ...batchScheduleForm, destination: e.target.value })}
  placeholder="Rumah Orang Tua / Wali Santri"
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold outline-none transition"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold outline-none transition"
  />
  </div>
 
@@ -4655,15 +4699,19 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  value={batchScheduleForm.notes}
  onChange={(e) => setBatchScheduleForm({ ...batchScheduleForm, notes: e.target.value })}
  placeholder="Santri wajib diantar kembali tepat waktu sebelum pukul 17:00 WIB dan orang tua wajib melakukan absensi drop-off di gerbang asrama..."
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold outline-none transition"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold outline-none transition"
  />
  </div>
  </DialogBody>
 
- <DialogFooter className="px-6 py-4 bg-slate-50 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
- <MasterActionButton variant="secondary" icon={X} onClick={() => setQuickActionModal(null)}>
- Batal
- </MasterActionButton>
+ <DialogFooter className="px-6 py-4 bg-slate-100/90 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
+ <button
+ type="button"
+ onClick={() => setQuickActionModal(null)}
+ className="h-9.5 px-4 bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 rounded-xl font-black transition active:scale-95 text-xs inline-flex items-center gap-1.5 cursor-pointer"
+>
+ <X className="w-4 h-4" /> Batal
+</button>
  <MasterActionButton variant="emerald" icon={Check} onClick={handleBatchSchedule}>
  Terbitkan Jadwal Kepulangan Massal
  </MasterActionButton>
@@ -4689,15 +4737,16 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  >
  <Dialog
  showCloseButton={false}
- className="w-full max-w-xl flex flex-col rounded-2xl border-2 border-indigo-500/30 bg-white p-0 shadow-2xl shadow-sm overflow-hidden dark:border-indigo-700/50 dark:bg-card-dark"
+ className="w-full max-w-xl flex flex-col rounded-3xl border-2 border-emerald-300 bg-white p-0 shadow-2xl shadow-emerald-950/20 overflow-hidden dark:border-emerald-700/80 dark:bg-[#1B2433]"
  >
- <DialogHeader className="bg-white dark:bg-card-dark px-6 py-4 flex items-center justify-between shrink-0 border-b border-indigo-800/80">
+ <div className="h-1.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
+ <DialogHeader className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white px-6 py-4 flex flex-row items-center justify-between space-y-0 gap-3 shrink-0 border-b border-emerald-500/30">
  <div className="flex items-center gap-3">
  <div className="w-9 h-9 rounded-xl bg-indigo-700/80 text-indigo-200 flex items-center justify-center border border-indigo-600/60 shadow-inner shrink-0">
  <Clock className="w-5 h-5 text-indigo-300" />
  </div>
  <div>
- <DialogTitle className="text-base font-extrabold text-emerald-600 text-left">
+ <DialogTitle className="text-base font-extrabold text-white text-left">
  Tinjau Permohonan Perpanjangan Izin
  </DialogTitle>
  <DialogDescription className="text-xs text-indigo-200/90 mt-0.5 font-medium text-left">
@@ -4705,7 +4754,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  </DialogDescription>
  </div>
  </div>
- <DialogClose onClick={() => setSelectedPermitForReview(null)} />
+ <DialogClose onClick={() => setSelectedPermitForReview(null)} className="bg-white/20 hover:bg-rose-500 text-white hover:text-white border-white/25 shrink-0" />
  </DialogHeader>
 
  <DialogBody className="p-5 pb-28 space-y-4 text-xs overflow-y-auto">
@@ -4761,7 +4810,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  type="datetime-local"
  value={reviewExtensionForm.new_scheduled_return_at}
  onChange={(e) => setReviewExtensionForm({ ...reviewExtensionForm, new_scheduled_return_at: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/15 outline-none transition"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/15 outline-none transition"
  />
  </div>
  )}
@@ -4773,15 +4822,19 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  value={reviewExtensionForm.admin_notes}
  onChange={(e) => setReviewExtensionForm({ ...reviewExtensionForm, admin_notes: e.target.value })}
  placeholder="Contoh: Disetujui perpanjangan hingga pukul 20:00 WIB / Ditolak karena persiapan halaqah subuh..."
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold outline-none transition"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 p-2.5 dark:bg-slate-800 text-xs font-semibold outline-none transition"
  />
  </div>
  </DialogBody>
 
- <DialogFooter className="px-6 py-4 bg-slate-50 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
- <MasterActionButton variant="secondary" icon={X} onClick={() => setSelectedPermitForReview(null)}>
- Batal
- </MasterActionButton>
+ <DialogFooter className="px-6 py-4 bg-slate-100/90 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
+ <button
+ type="button"
+ onClick={() => setSelectedPermitForReview(null)}
+ className="h-9.5 px-4 bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 rounded-xl font-black transition active:scale-95 text-xs inline-flex items-center gap-1.5 cursor-pointer"
+>
+ <X className="w-4 h-4" /> Batal
+</button>
  <MasterActionButton variant="primary" icon={Check} onClick={handleReviewExtensionSubmit}>
  Simpan Keputusan
  </MasterActionButton>
@@ -4808,16 +4861,17 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  >
  <Dialog
  showCloseButton={false}
- className="w-full max-w-xl flex flex-col rounded-2xl border-2 border-emerald-500/30 bg-white p-0 shadow-2xl shadow-sm overflow-hidden dark:border-emerald-700/50 dark:bg-card-dark"
+ className="w-full max-w-xl flex flex-col rounded-3xl border-2 border-emerald-300 bg-white p-0 shadow-2xl shadow-emerald-950/20 overflow-hidden dark:border-emerald-700/80 dark:bg-[#1B2433]"
  >
  {/* MODAL HEADER */}
- <DialogHeader className="bg-white dark:bg-card-dark px-6 py-4 flex items-center justify-between shrink-0 border-b border-emerald-700/80">
+ <div className="h-1.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
+ <DialogHeader className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white px-6 py-4 flex flex-row items-center justify-between space-y-0 gap-3 shrink-0 border-b border-emerald-500/30">
  <div className="flex items-center gap-3">
  <div className="w-10 h-9 rounded-xl bg-white/10 text-emerald-200 flex items-center justify-center border border-white/20 shadow-inner shrink-0">
  <Activity className="w-5 h-5 text-emerald-300" />
  </div>
  <div>
- <DialogTitle className="text-base font-extrabold text-slate-600 text-left">
+ <DialogTitle className="text-base font-extrabold text-white text-left">
  Detail Presensi &amp; Mutaba'ah Sholat Santri
  </DialogTitle>
  <DialogDescription className="text-xs text-emerald-200/90 mt-0.5 font-medium text-left">
@@ -4825,15 +4879,15 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  </DialogDescription>
  </div>
  </div>
- <DialogClose onClick={() => setSelectedMutabaahDetail(null)} />
+ <DialogClose onClick={() => setSelectedMutabaahDetail(null)} className="bg-white/20 hover:bg-rose-500 text-white hover:text-white border-white/25 shrink-0" />
  </DialogHeader>
 
  {/* MODAL BODY */}
  <DialogBody className="p-5 sm:p-6 space-y-4 text-xs overflow-y-auto max-h-[75vh]">
  {/* SANTRI PROFILE HERO BANNER */}
- <div className="p-4 rounded-xl bg-white dark:bg-card-dark dark:from-emerald-950/40 dark:via-teal-950/30 dark:to-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between gap-3.5 flex-wrap">
+ <div className="p-4 rounded-xl bg-white dark:bg-[#1B2433] dark:from-emerald-950/40 dark:via-teal-950/30 dark:to-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between gap-3.5 flex-wrap">
  <div className="flex items-center gap-3.5 min-w-0">
- <div className="w-12 h-9 rounded-xl bg-white dark:bg-card-dark font-black text-base flex items-center justify-center shadow-md shadow-sm shrink-0 border border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="w-12 h-9 rounded-xl bg-white dark:bg-[#1B2433] font-black text-base flex items-center justify-center shadow-md shadow-sm shrink-0 border border-emerald-200/80 dark:border-emerald-800/60">
  {(String(selectedMutabaahDetail?.santri || selectedMutabaahDetail?.name || 'S')).charAt(0).toUpperCase()}
  </div>
  <div className="space-y-0.5 min-w-0">
@@ -5112,7 +5166,7 @@ export default function MusyrifDashboardPage({ defaultTab }) {
  </DialogBody>
 
  {/* MODAL FOOTER */}
- <DialogFooter className="px-6 py-4 bg-slate-50 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between gap-3 shrink-0">
+ <DialogFooter className="px-6 py-4 bg-slate-100/90 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between gap-3 shrink-0">
  <MasterActionButton
  variant="secondary"
  icon={Printer}

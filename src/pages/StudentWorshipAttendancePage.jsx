@@ -38,6 +38,14 @@ import {
   Pagination
 } from '@/components/ui/pagination'
 import {
+  TableRoot,
+  TableHeader,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell
+} from '@/components/ui/table'
+import {
   DatePicker
 } from '@/components/ui/date-picker'
 import {
@@ -228,7 +236,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border border-emerald-200/80 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#0E5C44] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#0E5C44] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -381,7 +389,7 @@ function HeroUiModalSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Ketik untuk mencari..."
- className="w-full rounded-lg border border-emerald-200/80 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#0E5C44] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#0E5C44] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -1471,7 +1479,7 @@ export default function StudentWorshipAttendancePage() {
  onChange={(e) => setScanInput(e.target.value)}
  onKeyDown={(e) => e.key === 'Enter' && handleProcessScan(scanInput)}
  placeholder="Tap Kartu RFID..."
- className="w-full rounded-xl border-2 border-emerald-300 bg-white py-1.5 pl-8 pr-3 text-xs font-mono font-bold text-emerald-800 focus:border-emerald-500 focus:outline-none dark:border-emerald-700 dark:bg-slate-800 dark:text-emerald-300 shadow-2xs"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white py-1.5 pl-8 pr-3 text-xs font-mono font-bold text-emerald-800 focus:border-emerald-500 focus:outline-none dark:border-emerald-700 dark:bg-slate-800 dark:text-emerald-300 shadow-2xs"
  />
  <Radio className="absolute left-2.5 top-2 h-3.5 w-3.5 text-emerald-500 animate-bounce" />
  </div>
@@ -1482,26 +1490,29 @@ export default function StudentWorshipAttendancePage() {
  </motion.div>
 
  {/* CARD 3: DAFTAR SESI SHALAT BERJALAN HARI INI */}
- <div className="space-y-3">
- <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+ <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] shadow-md shadow-emerald-500/10 overflow-hidden">
+ <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between px-4 py-3.5 sm:px-6 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent border-b border-emerald-200/90 dark:border-emerald-800/60">
+ <div className="flex items-center gap-3">
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-xs">
+ <CalendarDays className="h-5 w-5" />
+ </div>
  <div>
- <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
- <CalendarDays className="h-4 w-4 text-emerald-600" />
- Daftar Sesi Shalat & Ibadah Hari Ini
+ <h3 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white">
+ Daftar Sesi Shalat &amp; Ibadah Hari Ini
  </h3>
  <p className="text-xs text-slate-500 dark:text-slate-400">
  Pilih sesi ibadah aktif untuk melakukan verifikasi absensi atau input data santri/siswa
  </p>
  </div>
- <div className="flex items-center gap-2">
- <span className="text-xs font-bold text-slate-400">
- Total: <strong className="text-emerald-700 dark:text-emerald-400">{sessions.length} Sesi</strong>
- </span>
+ </div>
+ <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100/90 dark:bg-emerald-950/80 border border-emerald-200/80 dark:border-emerald-800/80 px-3 py-1 text-xs font-extrabold text-emerald-800 dark:text-emerald-300 self-start sm:self-auto shrink-0">
+ <span>Total:</span>
+ <span>{sessions.length} Sesi</span>
  </div>
  </div>
 
- {/* SESSIONS HORIZONTAL SCROLL / GRID */}
- <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+ {/* SESSIONS GRID */}
+ <div className="p-4 sm:p-5 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
  {sessions.map((sess) => {
  const isSelected = selectedSession?.id === sess.id
  const isWajib = sess.template?.obligation_type === 'wajib'
@@ -1509,30 +1520,30 @@ export default function StudentWorshipAttendancePage() {
  <div
  key={sess.id}
  onClick={() => setSelectedSession(sess)}
- className={`relative cursor-pointer rounded-xl border-2 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${
+ className={`relative cursor-pointer rounded-2xl border-2 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${
  isSelected
- ? 'border-emerald-500 bg-emerald-50/40 shadow-sm dark:border-emerald-500/70 dark:bg-emerald-950/20'
- : 'border-emerald-200/80 bg-white hover:border-emerald-300 dark:border-emerald-800/60 dark:bg-[#111827]'
+ ? 'border-emerald-500 bg-gradient-to-br from-emerald-50 via-teal-50/40 to-white shadow-md shadow-emerald-500/10 dark:border-emerald-500/80 dark:from-emerald-950/40 dark:to-slate-900'
+ : 'border-emerald-200/80 bg-white hover:border-emerald-300 dark:border-emerald-800/60 dark:bg-slate-900/50'
  }`}
  >
  <div className="flex items-start justify-between gap-2">
  <div className="flex items-center gap-2.5 min-w-0">
  <div
- className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl font-bold text-sm shadow-xs ${
+ className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl font-black text-sm shadow-xs transition-colors ${
  isSelected
- ? 'bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-700/80 dark:text-slate-300'
- : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200'
+ ? 'bg-emerald-600 text-white border border-emerald-500'
+ : 'bg-emerald-50 text-emerald-700 border border-emerald-200/80 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300'
  }`}
  >
  {sess.template?.nama?.charAt(0) || 'S'}
  </div>
  <div className="min-w-0">
  <div className="flex items-center gap-1.5 flex-wrap">
- <h4 className="font-bold text-xs text-slate-900 dark:text-white truncate">
+ <h4 className="font-extrabold text-xs text-slate-900 dark:text-white truncate">
  {sess.template?.nama}
  </h4>
  <span
- className={`rounded-full px-1.5 py-0.2 text-[9px] font-black ${
+ className={`rounded-full px-2 py-0.5 text-[9px] font-black ${
  isWajib
  ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
  : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
@@ -1541,8 +1552,8 @@ export default function StudentWorshipAttendancePage() {
  {isWajib ? 'Wajib' : 'Sunnah'}
  </span>
  </div>
- <div className="flex items-center gap-1 text-[10px] text-slate-400 mt-0.5 font-medium">
- <Clock className="size-3 shrink-0" />
+ <div className="flex items-center gap-1 text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 font-semibold">
+ <Clock className="size-3 shrink-0 text-emerald-600 dark:text-emerald-400" />
  <span>{sess.scheduled_start_at} - {sess.scheduled_end_at} WIB</span>
  </div>
  </div>
@@ -1555,16 +1566,16 @@ export default function StudentWorshipAttendancePage() {
  handleOpenEditSessionModal(sess)
  }}
  title="Ubah Jam Sesi Manual"
- className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 transition-colors shrink-0"
+ className="rounded-xl p-1.5 bg-slate-100 text-slate-500 hover:bg-emerald-100 hover:text-emerald-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-emerald-950 transition-colors shrink-0 cursor-pointer"
  >
  <Edit className="h-3.5 w-3.5" />
  </button>
  </div>
 
- <div className="mt-3 space-y-1.5 border-t border-emerald-200/80 pt-2.5 dark:border-emerald-800/80 text-xs">
+ <div className="mt-3 space-y-1.5 border-t border-emerald-200/80 pt-2.5 dark:border-emerald-800/60 text-xs">
  <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
  <span className="flex items-center gap-1 truncate font-semibold">
- <MapPin className="size-3 text-slate-400 shrink-0" />
+ <MapPin className="size-3 text-emerald-600 dark:text-emerald-400 shrink-0" />
  <span className="truncate">{sess.location_name}</span>
  </span>
  </div>
@@ -1577,7 +1588,7 @@ export default function StudentWorshipAttendancePage() {
  setSelectedSession(sess)
  handleOpenAttendingModal('hadir')
  }}
- className={`rounded-full px-2.5 py-0.5 text-[10px] font-black transition-all hover:scale-105 active:scale-95 ${
+ className={`rounded-full px-2.5 py-0.5 text-[10px] font-black transition-all hover:scale-105 active:scale-95 cursor-pointer ${
  isSelected ? 'bg-emerald-600 text-white shadow-xs' : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
  }`}
  >
@@ -1598,10 +1609,10 @@ export default function StudentWorshipAttendancePage() {
  <div className="space-y-4">
  
  {/* Toolbar Outer Container */}
- <div className="relative overflow-hidden rounded-2xl border-2 border-emerald-500/25 bg-white shadow-md shadow-sm dark:border-emerald-600/35 dark:bg-[#111827]">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  
  {/* Row 1: Section Title + Subtext + Action Buttons */}
- <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between bg-slate-50/50 dark:bg-slate-900/50 border-b border-emerald-500/20 p-4 sm:p-6">
+ <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent border-b border-emerald-200/90 dark:border-emerald-800/60 p-4 sm:p-6">
  <div className="space-y-1">
  <div className="flex flex-wrap items-center gap-2">
  <h3 className="text-base font-bold text-slate-900 dark:text-white">
@@ -1678,7 +1689,7 @@ export default function StudentWorshipAttendancePage() {
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
  placeholder="Cari Nama Siswa / NISN..."
- className="w-full rounded-xl border border-emerald-200/80 bg-white py-2 pl-9 pr-3 text-xs focus:border-sky-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white py-2 pl-9 pr-3 text-xs focus:border-sky-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800"
  />
  </div>
 
@@ -1728,57 +1739,65 @@ export default function StudentWorshipAttendancePage() {
  />
  </div>
 
- {/* Data Table */}
+ {/* Data Table (Full-Bleed HeroUI Standard) */}
  <div className="overflow-x-auto">
- <table className="w-full text-left text-xs">
- <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-xs font-bold uppercase tracking-wider text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/80 dark:text-emerald-300">
- <tr>
+ <TableRoot fullBleed={true} className="text-xs">
+ <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-xs font-black uppercase tracking-wider text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/80 dark:text-emerald-200">
+ <TableRow className="bg-transparent hover:bg-transparent">
  {worshipMethod === 'MANUAL' && (
- <th className="w-10 px-4 py-3.5 text-center bg-transparent">
+ <TableHead className="w-10 px-4 py-3.5 text-center">
  <input
  type="checkbox"
  checked={filteredStudents.length > 0 && filteredStudents.every((s) => s.selected)}
  onChange={toggleSelectAllFiltered}
- className="h-4 w-4 rounded border-emerald-300 text-emerald-600 focus:ring-emerald-500"
+ className="h-4 w-4 rounded border-emerald-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer"
  />
- </th>
+ </TableHead>
  )}
- <th className="px-4 sm:px-6 py-3.5 bg-transparent">Siswa</th>
- <th className="hidden sm:table-cell px-4 py-3.5 bg-transparent">NISN</th>
- <th className="hidden md:table-cell px-4 py-3.5 bg-transparent">Kelas / Rombel</th>
- <th className="px-4 py-3.5 bg-transparent">Status Ibadah</th>
- <th className="hidden lg:table-cell px-4 py-3.5 bg-transparent">Metode & Waktu</th>
- <th className="px-4 sm:px-6 py-3.5 text-right bg-transparent"></th>
- </tr>
- </thead>
- <tbody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40">
+ <TableHead className="px-4 sm:px-6 py-3.5">Siswa</TableHead>
+ <TableHead className="hidden sm:table-cell px-4 py-3.5">NISN</TableHead>
+ <TableHead className="hidden md:table-cell px-4 py-3.5">Kelas / Rombel</TableHead>
+ <TableHead className="px-4 py-3.5">Status Ibadah</TableHead>
+ <TableHead className="hidden lg:table-cell px-4 py-3.5">Metode &amp; Waktu</TableHead>
+ </TableRow>
+ </TableHeader>
+ <TableBody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40">
  {filteredStudents.length === 0 ? (
- <tr>
- <td colSpan={worshipMethod === 'MANUAL' ? 7 : 6} className="px-4 py-12 text-center text-slate-400">
+ <TableRow>
+ <TableCell colSpan={worshipMethod === 'MANUAL' ? 6 : 5} className="px-4 py-12 text-center text-slate-400">
  Tidak ada data siswa yang sesuai dengan filter kelas/unit.
- </td>
- </tr>
+ </TableCell>
+ </TableRow>
  ) : (
  paginatedStudents.map((student) => {
  return (
- <tr key={student.id} className={`transition-all hover:bg-emerald-50/40 dark:hover:bg-emerald-950/20 ${student.selected ? 'bg-emerald-50/60 dark:bg-emerald-950/30' : ''}`}>
+ <TableRow
+ key={student.id}
+ onClick={() => {
+ setSelectedStudentForVerify(student)
+ setVerifyStatus(student.status)
+ setVerifyNotes(student.notes || '')
+ setShowVerifyModal(true)
+ }}
+ className={`transition-all hover:bg-emerald-50/40 dark:hover:bg-emerald-950/20 cursor-pointer ${student.selected ? 'bg-emerald-50/60 dark:bg-emerald-950/30' : ''}`}
+ >
  {worshipMethod === 'MANUAL' && (
- <td className="px-4 py-3.5 text-center">
+ <TableCell className="px-4 py-3.5 text-center" onClick={(e) => e.stopPropagation()}>
  <input
  type="checkbox"
  checked={student.selected || false}
  onChange={() => toggleSelectStudent(student.id)}
- className="h-4 w-4 rounded border-emerald-300 text-emerald-600 focus:ring-emerald-500"
+ className="h-4 w-4 rounded border-emerald-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer"
  />
- </td>
+ </TableCell>
  )}
- <td className="px-4 sm:px-6 py-3.5 font-semibold text-slate-900 dark:text-white">
+ <TableCell className="px-4 sm:px-6 py-3.5 font-semibold text-slate-900 dark:text-white">
  <div className="flex items-center gap-2.5">
- <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 font-bold text-xs dark:bg-emerald-950 dark:text-emerald-300">
+ <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 font-bold text-xs dark:bg-emerald-950 dark:text-emerald-300 shrink-0">
  {student.name.charAt(0)}
  </div>
  <div>
- <p className="font-bold">{student.name}</p>
+ <p className="font-extrabold">{student.name}</p>
  <p className="text-[10px] text-slate-400">{student.unit_name}</p>
  </div>
  </div>
@@ -1794,14 +1813,14 @@ export default function StudentWorshipAttendancePage() {
  </>
  )}
  </div>
- </td>
- <td className="hidden sm:table-cell px-4 py-3.5 text-slate-600 dark:text-slate-300 font-mono">{student.nisn}</td>
- <td className="hidden md:table-cell px-4 py-3.5">
- <span className="rounded-lg bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 text-[10px] font-semibold text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300">
+ </TableCell>
+ <TableCell className="hidden sm:table-cell px-4 py-3.5 text-slate-600 dark:text-slate-300 font-mono">{student.nisn}</TableCell>
+ <TableCell className="hidden md:table-cell px-4 py-3.5">
+ <span className="rounded-lg bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 text-[10px] font-semibold text-emerald-700 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300">
  {student.class_name}
  </span>
- </td>
- <td className="px-4 py-3.5">
+ </TableCell>
+ <TableCell className="px-4 py-3.5">
  <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
  student.status === 'hadir_berjamaah'
  ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
@@ -1822,34 +1841,21 @@ export default function StudentWorshipAttendancePage() {
  {student.status === 'alpa' && 'Alpa'}
  {student.status === 'belum_verifikasi' && 'Belum Verifikasi'}
  </span>
- </td>
- <td className="hidden lg:table-cell px-4 py-3.5 text-slate-500">
+ </TableCell>
+ <TableCell className="hidden lg:table-cell px-4 py-3.5 text-slate-500">
  <p className="font-semibold text-slate-700 dark:text-slate-300">{student.time}</p>
  <p className="text-[10px] text-slate-400">{student.method}</p>
- </td>
- <td className="px-4 sm:px-6 py-3.5 text-right">
- <button
- onClick={() => {
- setSelectedStudentForVerify(student)
- setVerifyStatus(student.status)
- setVerifyNotes(student.notes || '')
- setShowVerifyModal(true)
- }}
- className="rounded-xl bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700 transition hover:bg-emerald-100 hover:scale-105 active:scale-95 dark:bg-emerald-950/60 dark:text-emerald-300 cursor-pointer"
- >
- Edit Status
- </button>
- </td>
- </tr>
+ </TableCell>
+ </TableRow>
  )
  })
  )}
- </tbody>
- </table>
+ </TableBody>
+ </TableRoot>
  </div>
 
  {/* HeroUI Standard Pagination Row */}
- <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-xs text-slate-500 border-t border-emerald-100 px-4 py-3.5 sm:px-6 dark:border-emerald-900/50">
+ <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-xs text-slate-500 dark:text-slate-400 border-t border-emerald-200/80 bg-white dark:bg-[#1B2433] px-4 py-3.5 sm:px-6 dark:border-emerald-800/60">
  <p>
  Menampilkan {filteredStudents.length > 0 ? (currentPage - 1) * perPage + 1 : 0}-{Math.min(currentPage * perPage, filteredStudents.length)} dari {filteredStudents.length} Siswa
  </p>
@@ -1932,7 +1938,7 @@ export default function StudentWorshipAttendancePage() {
  required
  value={editSessionForm.location_name}
  onChange={(e) => setEditSessionForm({ ...editSessionForm, location_name: e.target.value })}
- className="w-full rounded-xl border border-emerald-300 bg-white p-2.5 font-semibold focus:border-emerald-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white p-2.5 font-semibold focus:border-emerald-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800"
  />
  </div>
 
@@ -2034,7 +2040,7 @@ export default function StudentWorshipAttendancePage() {
  onChange={(e) => setScanInput(e.target.value)}
  onKeyDown={(e) => e.key === 'Enter' && handleProcessScan(scanInput)}
  placeholder="Atau masukkan NISN hasil scan..."
- className="flex-1 rounded-xl border border-emerald-200/80 bg-slate-50 px-3 py-2 text-xs focus:border-indigo-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800"
+ className="flex-1 rounded-xl border-2 border-[#b6f6d9] bg-slate-50 px-3 py-2 text-xs focus:border-indigo-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800"
  />
  <button
  onClick={() => handleProcessScan(scanInput)}
@@ -2103,7 +2109,7 @@ export default function StudentWorshipAttendancePage() {
  value={verifyNotes}
  onChange={(e) => setVerifyNotes(e.target.value)}
  placeholder="Catatan tambahan (misal: Masbuk 1 rakaat, izin UKS...)"
- className="w-full rounded-xl border border-emerald-300 bg-white p-2.5 text-xs focus:border-emerald-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white p-2.5 text-xs focus:border-emerald-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800"
  />
  </div>
  </div>
@@ -2151,7 +2157,7 @@ export default function StudentWorshipAttendancePage() {
  placeholder="Misal: Shalat Zhuhur Berjamaah Siswa"
  value={templateForm.nama}
  onChange={(e) => setTemplateForm({ ...templateForm, nama: e.target.value })}
- className="w-full rounded-xl border border-emerald-300 bg-white p-2.5 text-xs focus:border-emerald-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white p-2.5 text-xs focus:border-emerald-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800"
  />
  </div>
 
@@ -2202,7 +2208,7 @@ export default function StudentWorshipAttendancePage() {
  placeholder="Misal: Musholla Utama Sekolah / Hall Serbaguna"
  value={templateForm.location_name}
  onChange={(e) => setTemplateForm({ ...templateForm, location_name: e.target.value })}
- className="w-full rounded-xl border border-emerald-300 bg-white p-2.5 text-xs focus:border-emerald-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white p-2.5 text-xs focus:border-emerald-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800"
  />
  </div>
  </div>
@@ -2267,7 +2273,7 @@ export default function StudentWorshipAttendancePage() {
  value={modalSearchQuery}
  onChange={(e) => setModalSearchQuery(e.target.value)}
  placeholder="Cari nama/kelas..."
- className="w-full rounded-xl border border-emerald-200/80 bg-white py-1.5 pl-8 pr-3 text-xs font-medium text-slate-800 focus:border-emerald-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white py-1.5 pl-8 pr-3 text-xs font-medium text-slate-800 focus:border-emerald-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
  <button
@@ -2295,7 +2301,7 @@ export default function StudentWorshipAttendancePage() {
  <p className="font-semibold text-xs">Tidak ada data siswa ditemukan untuk status ini.</p>
  </div>
  ) : (
- <div className="overflow-x-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="overflow-x-auto rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  <table className="w-full text-left text-xs">
  <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-xs font-bold uppercase tracking-wider text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/80 dark:text-emerald-300">
  <tr>

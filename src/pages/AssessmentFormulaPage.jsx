@@ -655,7 +655,7 @@ export default function AssessmentFormulaPage({
  emptyDescription="Tidak ada rumus yang sesuai dengan kriteria filter. Tambahkan draft rumus baru untuk memulai."
  ariaLabel="Tabel Rumus Penilaian"
  >
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
           <table className="w-full text-left text-xs">
             <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 text-emerald-950 dark:text-emerald-200 font-extrabold uppercase tracking-wider text-xs">
               <tr>
@@ -851,7 +851,7 @@ export default function AssessmentFormulaPage({
  placeholder="Contoh: Standar Nilai Akhir Semester SDIT"
  value={form.name}
  onChange={(e) => setForm({ ...form, name: e.target.value })}
- className="mt-1 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-2.5 text-xs font-medium text-slate-900 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+ className="mt-1 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-2.5 text-xs font-medium text-slate-900 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
  />
  </div>
 
@@ -989,7 +989,7 @@ export default function AssessmentFormulaPage({
  onChange={(e) =>
  setForm({ ...form, minimum_score: Number(e.target.value) })
  }
- className="mt-1 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-2.5 text-xs font-bold text-slate-900 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+ className="mt-1 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-2.5 text-xs font-bold text-slate-900 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
  />
  </div>
  </div>
@@ -1053,7 +1053,7 @@ export default function AssessmentFormulaPage({
  components[index] = { ...item, weight: Number(e.target.value) }
  setForm({ ...form, components })
  }}
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 p-1.5 text-xs font-black text-emerald-700 dark:border-slate-600 dark:bg-slate-900 dark:text-emerald-300 focus:border-emerald-500 focus:outline-none"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 p-1.5 text-xs font-black text-emerald-700 dark:border-slate-600 dark:bg-slate-900 dark:text-emerald-300 focus:border-emerald-500 focus:outline-none"
  />
  <span className="text-xs font-bold text-slate-400">%</span>
  </div>

@@ -57,7 +57,7 @@ export function PageToolbarActions({
             disabled={refreshing}
             size={isIconOnly ? "icon" : "default"}
             className={cn(
-              "h-9 rounded-xl transition-all cursor-pointer inline-flex items-center justify-center border-2 border-emerald-300 dark:border-emerald-700/80 bg-white hover:bg-emerald-50 text-emerald-700 dark:text-emerald-300 shadow-xs",
+              "h-9 rounded-xl transition-all cursor-pointer inline-flex items-center justify-center border-2 border-emerald-300 dark:border-emerald-700/80 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/80 dark:text-emerald-200 shadow-xs active:scale-95",
               isIconOnly ? "w-9 p-0 shrink-0" : "px-3.5 gap-2 text-sm font-medium"
             )}
           >
@@ -127,7 +127,7 @@ export function PageToolbarActions({
       {/* Custom Secondary Actions */}
       {secondaryActions.map((sec, idx) => {
         const SecIcon = sec.icon
-        const secVariant = sec.variant || 'outline'
+        const secVariant = sec.variant || (sec.className ? 'primary' : 'secondary')
         const secLabel = sec.label || 'Aksi'
         return (
           <Tooltip key={sec.key || secLabel || idx} content={secLabel}>
@@ -138,7 +138,7 @@ export function PageToolbarActions({
               disabled={sec.disabled || sec.loading}
               size={isIconOnly ? "icon" : "default"}
               className={cn(
-                'h-9 rounded-xl text-xs font-bold transition-all cursor-pointer inline-flex items-center justify-center shadow-xs border-2 border-emerald-300 dark:border-emerald-700/80',
+                'h-9 rounded-xl text-xs font-bold transition-all cursor-pointer inline-flex items-center justify-center shadow-xs',
                 isIconOnly ? 'w-9 p-0 shrink-0' : 'px-3.5 gap-2',
                 sec.className
               )}

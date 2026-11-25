@@ -315,7 +315,7 @@ export default function AlumniPortalPage() {
  type="text"
  value={formData.phone}
  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
- className="w-full h-9.5 rounded-xl border border-emerald-200/80 px-3.5 bg-white text-slate-900 outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-800/60 dark:bg-[#111827] dark:text-white dark:focus:border-[#10B981]"
+ className="w-full h-9.5 rounded-xl border-2 border-[#b6f6d9] px-3.5 bg-white text-slate-900 outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-800/60 dark:bg-[#111827] dark:text-white dark:focus:border-[#10B981]"
  placeholder="08xxxxxxxxxx"
  />
  </div>
@@ -328,7 +328,7 @@ export default function AlumniPortalPage() {
  type="email"
  value={formData.email}
  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
- className="w-full h-9.5 rounded-xl border border-emerald-200/80 px-3.5 bg-white text-slate-900 outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-800/60 dark:bg-[#111827] dark:text-white dark:focus:border-[#10B981]"
+ className="w-full h-9.5 rounded-xl border-2 border-[#b6f6d9] px-3.5 bg-white text-slate-900 outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-800/60 dark:bg-[#111827] dark:text-white dark:focus:border-[#10B981]"
  placeholder="email@domain.com"
  />
  </div>
@@ -341,7 +341,7 @@ export default function AlumniPortalPage() {
  rows={2}
  value={formData.address}
  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 p-3 bg-white text-slate-900 outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-800/60 dark:bg-[#111827] dark:text-white dark:focus:border-[#10B981]"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] p-3 bg-white text-slate-900 outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-800/60 dark:bg-[#111827] dark:text-white dark:focus:border-[#10B981]"
  placeholder="Alamat domisili saat ini..."
  />
  </div>
@@ -372,7 +372,7 @@ export default function AlumniPortalPage() {
  type="text"
  value={formData.perguruan_tinggi}
  onChange={(e) => setFormData({ ...formData, perguruan_tinggi: e.target.value })}
- className="w-full h-9.5 rounded-xl border border-emerald-200/80 px-3.5 bg-white text-slate-900 outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-800/60 dark:bg-[#111827] dark:text-white dark:focus:border-[#10B981]"
+ className="w-full h-9.5 rounded-xl border-2 border-[#b6f6d9] px-3.5 bg-white text-slate-900 outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-800/60 dark:bg-[#111827] dark:text-white dark:focus:border-[#10B981]"
  placeholder="Nama universitas / kampus..."
  />
  </div>
@@ -385,7 +385,7 @@ export default function AlumniPortalPage() {
  type="text"
  value={formData.pekerjaan}
  onChange={(e) => setFormData({ ...formData, pekerjaan: e.target.value })}
- className="w-full h-9.5 rounded-xl border border-emerald-200/80 px-3.5 bg-white text-slate-900 outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-800/60 dark:bg-[#111827] dark:text-white dark:focus:border-[#10B981]"
+ className="w-full h-9.5 rounded-xl border-2 border-[#b6f6d9] px-3.5 bg-white text-slate-900 outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-800/60 dark:bg-[#111827] dark:text-white dark:focus:border-[#10B981]"
  placeholder="Pekerjaan / posisi saat ini..."
  />
  </div>
@@ -398,7 +398,7 @@ export default function AlumniPortalPage() {
  type="text"
  value={formData.instansi}
  onChange={(e) => setFormData({ ...formData, instansi: e.target.value })}
- className="w-full h-9.5 rounded-xl border border-emerald-200/80 px-3.5 bg-white text-slate-900 outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-800/60 dark:bg-[#111827] dark:text-white dark:focus:border-[#10B981]"
+ className="w-full h-9.5 rounded-xl border-2 border-[#b6f6d9] px-3.5 bg-white text-slate-900 outline-none focus:border-[#059669] focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-800/60 dark:bg-[#111827] dark:text-white dark:focus:border-[#10B981]"
  placeholder="Nama tempat bekerja / wirausaha..."
  />
  </div>

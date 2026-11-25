@@ -1,5 +1,6 @@
 import { HeroUiHeader } from "../components/ui/HeroUiHeader"
 import AppModal from "../components/app/AppModal"
+import LmsKpiDetailModal from "../components/lms/LmsKpiDetailModal"
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import {
   DatePicker
@@ -420,7 +421,7 @@ function HeroUiModalSelect({
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Ketik untuk mencari..."
  aria-label={label ? `Cari pilihan ${label}` : placeholder ? `Cari pilihan ${placeholder}` : 'Cari pilihan'}
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -571,7 +572,7 @@ function HeroUiFilterSelect({
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
  aria-label={ariaLabel ? `Cari ${ariaLabel}` : placeholder ? `Cari ${placeholder}` : 'Cari pilihan'}
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -1555,7 +1556,7 @@ function TeacherWorkspace({ activeScheduleId = '', activeDate = '', requestedSes
  required
  value={substituteReason}
  onChange={(event) => setSubstituteReason(event.target.value)}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-amber-50/60 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 dark:hover:border-emerald-200/80 focus:border-amber-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-amber-500/15 dark:border-emerald-800/60 dark:bg-amber-950/20 dark:text-slate-100 resize-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-amber-50/60 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 dark:hover:border-emerald-200/80 focus:border-amber-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-amber-500/15 dark:border-emerald-800/60 dark:bg-amber-950/20 dark:text-slate-100 resize-none"
  rows="2"
  placeholder="Contoh: Guru mata pelajaran sedang menghadiri dinas luar / sakit."
  />
@@ -1576,7 +1577,7 @@ function TeacherWorkspace({ activeScheduleId = '', activeDate = '', requestedSes
  min="1"
  value={meeting}
  onChange={(event) => setMeeting(event.target.value)}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20 disabled:opacity-50"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20 disabled:opacity-50"
  />
  </div>
  </div>
@@ -1592,7 +1593,7 @@ function TeacherWorkspace({ activeScheduleId = '', activeDate = '', requestedSes
  disabled={isLockedForTeacher}
  value={topic}
  onChange={(event) => setTopic(event.target.value)}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20 disabled:opacity-50"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20 disabled:opacity-50"
  placeholder="Contoh: Bab 3 - Persamaan Kuadrat dan Aplikasinya"
  />
  </div>
@@ -1609,7 +1610,7 @@ function TeacherWorkspace({ activeScheduleId = '', activeDate = '', requestedSes
  disabled={isLockedForTeacher}
  value={notes}
  onChange={(event) => setNotes(event.target.value)}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20 disabled:opacity-50 resize-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20 disabled:opacity-50 resize-none"
  rows="2"
  placeholder="Catatan pelaksanaan KBM, ringkasan capaian materi, tugas, atau tindak lanjut..."
  />
@@ -1834,7 +1835,7 @@ function TeacherWorkspace({ activeScheduleId = '', activeDate = '', requestedSes
  }}
  placeholder="Cari siswa berdasarkan nama atau NIS/NISN..."
  aria-label="Cari siswa berdasarkan nama atau NIS/NISN"
- className="h-9 w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#151D2A] pl-10 pr-10 text-xs font-semibold text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-[#059669]/12 focus:border-[#059669] transition-all shadow-xs"
+ className="h-9 w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-[#151D2A] pl-10 pr-10 text-xs font-semibold text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-[#059669]/12 focus:border-[#059669] transition-all shadow-xs"
  />
  {studentSearch && (
  <button
@@ -2320,7 +2321,7 @@ function TeacherWorkspace({ activeScheduleId = '', activeDate = '', requestedSes
  value={lateReason}
  onChange={(e) => setLateReason(e.target.value)}
  placeholder="Tuliskan catatan detail alasan kenapa santri terlambat mengikuti jam pelajaran..."
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 p-3 text-xs font-medium text-slate-900 outline-none focus:border-amber-500 focus:bg-white focus:ring-4 focus:ring-amber-500/10 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white resize-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 p-3 text-xs font-medium text-slate-900 outline-none focus:border-amber-500 focus:bg-white focus:ring-4 focus:ring-amber-500/10 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white resize-none"
  />
  </div>
 
@@ -2408,7 +2409,7 @@ function TeacherWorkspace({ activeScheduleId = '', activeDate = '', requestedSes
  disabled={violationSaving}
  value={violationPointDeduction}
  onChange={(e) => setViolationPointDeduction(Math.max(1, parseInt(e.target.value || '1', 10)))}
- className="w-full pl-7 rounded-xl border border-emerald-200/80 bg-slate-50/50 p-2.5 text-xs font-black text-slate-900 outline-none focus:border-rose-500 focus:bg-white focus:ring-4 focus:ring-rose-500/10 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white"
+ className="w-full pl-7 rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 p-2.5 text-xs font-black text-slate-900 outline-none focus:border-rose-500 focus:bg-white focus:ring-4 focus:ring-rose-500/10 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white"
  />
  </div>
  </div>
@@ -2426,7 +2427,7 @@ function TeacherWorkspace({ activeScheduleId = '', activeDate = '', requestedSes
  value={violationDescription}
  onChange={(e) => setViolationDescription(e.target.value)}
  placeholder="Tuliskan catatan kejadian pelanggaran saat jam pelajaran berlangsung secara jelas..."
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 p-3 text-xs font-medium text-slate-900 outline-none focus:border-rose-500 focus:bg-white focus:ring-4 focus:ring-rose-500/10 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white resize-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 p-3 text-xs font-medium text-slate-900 outline-none focus:border-rose-500 focus:bg-white focus:ring-4 focus:ring-rose-500/10 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white resize-none"
  />
  </div>
 
@@ -2462,7 +2463,9 @@ export default function AttendanceWorkspacePage() {
  const [params] = useSearchParams()
  const { id: routeSessionId = '' } = useParams()
  const authUser = useAuthStore((state) => state.user)
- const [counts, setCounts] = useState({ permissions: 0, corrections: 0, followUps: 0 })
+ const [counts, setCounts] = useState({ permissions: 0, corrections: 0, followUps: 0, schedules: 0 })
+ const [kpiLists, setKpiLists] = useState({ permissions: [], corrections: [], followUps: [], schedules: [] })
+ const [kpiModalKey, setKpiModalKey] = useState(null)
  const activeScheduleId = params.get('schedule_id') || params.get('active_schedule') || ''
  const activeDate = params.get('date') || params.get('attendance_date') || ''
 
@@ -2475,15 +2478,27 @@ export default function AttendanceWorkspacePage() {
 
  Promise.all([
  isStudent || isHomeroomReviewer
- ? (isHomeroomReviewer ? lmsPresensiService.getHomeroomPermissions({ status: 'pending' }) : lmsPresensiService.getPermissions({ status: 'pending' })).catch(() => null)
+ ? (isHomeroomReviewer ? lmsPresensiService.getHomeroomPermissions({ status: 'pending', per_page: 200 }) : lmsPresensiService.getPermissions({ status: 'pending', per_page: 200 })).catch(() => null)
  : Promise.resolve(null),
- canReviewCorrections ? lmsPresensiService.getCorrections({ status: 'submitted' }).catch(() => null) : Promise.resolve(null),
- canReviewFollowUps ? lmsPresensiService.getFollowUps({ status: 'new' }).catch(() => null) : Promise.resolve(null),
- ]).then(([permissions, corrections, followUps]) => {
+ canReviewCorrections ? lmsPresensiService.getCorrections({ status: 'submitted', per_page: 200 }).catch(() => null) : Promise.resolve(null),
+ canReviewFollowUps ? lmsPresensiService.getFollowUps({ status: 'new', per_page: 200 }).catch(() => null) : Promise.resolve(null),
+ (isStudent ? Promise.resolve([]) : lmsPresensiService.getActiveSchedules()).catch(() => []),
+ ]).then(([permissions, corrections, followUps, schedules]) => {
+ const permList = unwrapPage(permissions)
+ const corrList = unwrapPage(corrections)
+ const fuList = unwrapPage(followUps)
+ const schedList = Array.isArray(schedules?.data) ? schedules.data : (Array.isArray(schedules) ? schedules : [])
+ setKpiLists({
+ permissions: permList,
+ corrections: corrList,
+ followUps: fuList,
+ schedules: schedList,
+ })
  setCounts({
- permissions: unwrapPage(permissions).length,
- corrections: unwrapPage(corrections).length,
- followUps: unwrapPage(followUps).length,
+ permissions: permList.length,
+ corrections: corrList.length,
+ followUps: fuList.length,
+ schedules: schedList.length,
  })
  })
  }, [authUser])
@@ -2518,15 +2533,169 @@ export default function AttendanceWorkspacePage() {
       />
 
  <motion.div variants={itemVariants} className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
- <Metric icon={FilePlus2} label="Izin Membutuhkan Verifikasi" subtext="Pengajuan izin/sakit siswa" value={counts.permissions} tag="Verifikasi" tone="blue" />
- <Metric icon={AlertCircle} label="Pengajuan Koreksi" subtext="Permohonan koreksi presensi" value={counts.corrections} tag="Koreksi" tone="amber" />
- <Metric icon={HeartPulse} label="Tindak Lanjut Siswa" subtext="Catatan BK / Musyrif" value={counts.followUps} tag="Tindak Lanjut" tone="violet" />
- <Metric icon={BookOpenCheck} label="Status Jadwal Harian" subtext="Jadwal mengajar aktif" value="Aktif" tag="Sesi Aktif" tone="emerald" />
+ <Metric icon={FilePlus2} label="Izin Membutuhkan Verifikasi" subtext="Pengajuan izin/sakit siswa" value={counts.permissions} tag="Verifikasi" tone="blue" onClick={() => setKpiModalKey('permissions')} />
+ <Metric icon={AlertCircle} label="Pengajuan Koreksi" subtext="Permohonan koreksi presensi" value={counts.corrections} tag="Koreksi" tone="amber" onClick={() => setKpiModalKey('corrections')} />
+ <Metric icon={HeartPulse} label="Tindak Lanjut Siswa" subtext="Catatan BK / Musyrif" value={counts.followUps} tag="Tindak Lanjut" tone="violet" onClick={() => setKpiModalKey('followUps')} />
+ <Metric icon={BookOpenCheck} label="Status Jadwal Harian" subtext="Jadwal mengajar aktif" value={counts.schedules > 0 ? `${counts.schedules} Jadwal` : 'Aktif'} tag="Sesi Aktif" tone="emerald" onClick={() => setKpiModalKey('schedules')} />
  </motion.div>
 
  <motion.div variants={itemVariants}>
  <TeacherWorkspace activeScheduleId={activeScheduleId} activeDate={activeDate} requestedSessionId={routeSessionId} />
  </motion.div>
+
+ {/* ── KPI Quick View Pop-up Modal (10/page + Pagination) ── */}
+ {(() => {
+   const kpiConfigs = {
+     permissions: {
+       title: 'Rincian Izin Membutuhkan Verifikasi',
+       icon: FilePlus2,
+       badge: `${kpiLists.permissions.length} Pengajuan`,
+       rows: kpiLists.permissions,
+       emptyText: 'Tidak ada pengajuan izin yang menunggu verifikasi.',
+       columns: [
+         {
+           header: 'Siswa & Kelas',
+           render: (r) => (
+             <div>
+               <div className="font-extrabold text-slate-900 dark:text-white">{r.student?.full_name || r.student?.nama_lengkap || r.student_name || '-'}</div>
+               <div className="text-[10px] text-slate-500">{r.kelas?.nama_kelas || r.class_name || '-'}</div>
+             </div>
+           ),
+         },
+         {
+           header: 'Jenis & Tanggal',
+           render: (r) => (
+             <div>
+               <div className="font-semibold capitalize text-indigo-700 dark:text-indigo-300">{r.type || r.jenis_izin || 'Izin'}</div>
+               <div className="text-[10px] text-slate-500">{r.date || r.tanggal || r.start_date || '-'}</div>
+             </div>
+           ),
+         },
+         {
+           header: 'Keterangan',
+           render: (r) => <div className="text-slate-700 dark:text-slate-300 line-clamp-2">{r.reason || r.alasan || r.notes || '-'}</div>,
+         },
+         {
+           header: 'Status',
+           align: 'center',
+           render: (r) => <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-100 text-sky-800 capitalize">{r.status || 'pending'}</span>,
+         },
+       ],
+     },
+     corrections: {
+       title: 'Rincian Pengajuan Koreksi Presensi',
+       icon: AlertCircle,
+       badge: `${kpiLists.corrections.length} Koreksi`,
+       rows: kpiLists.corrections,
+       emptyText: 'Tidak ada permohonan koreksi presensi.',
+       columns: [
+         {
+           header: 'Siswa & Mapel',
+           render: (r) => (
+             <div>
+               <div className="font-extrabold text-slate-900 dark:text-white">{r.student?.full_name || r.student?.nama_lengkap || r.student_name || '-'}</div>
+               <div className="text-[10px] text-slate-500">{r.subject?.name || r.subject?.nama_mapel || r.kelas?.nama_kelas || '-'}</div>
+             </div>
+           ),
+         },
+         {
+           header: 'Perubahan Status',
+           render: (r) => (
+             <div className="font-semibold text-amber-700 dark:text-amber-300">
+               {r.old_status || '-'} → {r.requested_status || r.new_status || '-'}
+             </div>
+           ),
+         },
+         {
+           header: 'Alasan Koreksi',
+           render: (r) => <div className="text-slate-700 dark:text-slate-300 line-clamp-2">{r.reason || r.alasan || '-'}</div>,
+         },
+         {
+           header: 'Status',
+           align: 'center',
+           render: (r) => <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800 capitalize">{r.status || 'submitted'}</span>,
+         },
+       ],
+     },
+     followUps: {
+       title: 'Rincian Tindak Lanjut Siswa',
+       icon: HeartPulse,
+       badge: `${kpiLists.followUps.length} Catatan`,
+       rows: kpiLists.followUps,
+       emptyText: 'Belum ada catatan tindak lanjut siswa.',
+       columns: [
+         {
+           header: 'Siswa & Kelas',
+           render: (r) => (
+             <div>
+               <div className="font-extrabold text-slate-900 dark:text-white">{r.student?.full_name || r.student?.nama_lengkap || r.student_name || '-'}</div>
+               <div className="text-[10px] text-slate-500">{r.kelas?.nama_kelas || r.class_name || '-'}</div>
+             </div>
+           ),
+         },
+         {
+           header: 'Kategori / Catatan',
+           render: (r) => <div className="text-slate-700 dark:text-slate-300 line-clamp-2">{r.notes || r.catatan || r.reason || '-'}</div>,
+         },
+         {
+           header: 'Tanggal',
+           render: (r) => <span className="text-slate-500">{r.date || String(r.created_at || '').slice(0, 10) || '-'}</span>,
+         },
+         {
+           header: 'Status',
+           align: 'center',
+           render: (r) => <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-purple-100 text-purple-800 capitalize">{r.status || 'new'}</span>,
+         },
+       ],
+     },
+     schedules: {
+       title: 'Rincian Jadwal Mengajar Harian Aktif',
+       icon: BookOpenCheck,
+       badge: `${kpiLists.schedules.length} Jadwal`,
+       rows: kpiLists.schedules,
+       emptyText: 'Tidak ada jadwal mengajar aktif hari ini.',
+       columns: [
+         {
+           header: 'Mata Pelajaran',
+           render: (r) => (
+             <div>
+               <div className="font-extrabold text-slate-900 dark:text-white">{r.subject?.name || r.subject?.nama_mapel || r.subject_name || '-'}</div>
+               <div className="text-[10px] text-slate-500">{r.teacher?.full_name || r.guru?.nama_lengkap || r.teacher_name || '-'}</div>
+             </div>
+           ),
+         },
+         {
+           header: 'Kelas / Rombel',
+           render: (r) => <div className="font-semibold text-indigo-700 dark:text-indigo-300">{r.school_class?.name || r.kelas?.nama_kelas || r.class_name || '-'}</div>,
+         },
+         {
+           header: 'Jam Pelajaran',
+           align: 'center',
+           render: (r) => <span className="font-bold tabular-nums text-emerald-700 dark:text-emerald-300">{r.start_time ? `${String(r.start_time).slice(0, 5)} – ${String(r.end_time || '').slice(0, 5)}` : (r.jam_pelajaran || '-')}</span>,
+         },
+         {
+           header: 'Status',
+           align: 'center',
+           render: () => <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">Aktif</span>,
+         },
+       ],
+     },
+   }
+   const cfg = kpiModalKey ? kpiConfigs[kpiModalKey] : null
+   return (
+     <LmsKpiDetailModal
+       isOpen={Boolean(kpiModalKey && cfg)}
+       onClose={() => setKpiModalKey(null)}
+       icon={cfg?.icon || BookOpenCheck}
+       title={cfg?.title || 'Rincian Presensi Pembelajaran'}
+       badge={cfg?.badge}
+       rows={cfg?.rows || []}
+       columns={cfg?.columns || []}
+       emptyText={cfg?.emptyText}
+       searchPlaceholder="Cari nama siswa, kelas, mapel, atau keterangan..."
+     />
+   )
+ })()}
  </motion.div>
  </PageContainer>
  )

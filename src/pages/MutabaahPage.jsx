@@ -572,7 +572,7 @@ function MutabaahOverviewPage({ view }) {
  placeholder="Cari siswa atau kelas..."
  value={search}
  onChange={(e) => setSearch(e.target.value)}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 p-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50 p-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  </div>
  </div>

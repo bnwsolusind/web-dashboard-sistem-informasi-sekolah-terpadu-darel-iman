@@ -22,6 +22,7 @@ import {
  Printer,
 } from 'lucide-react'
 import { Card, CardHeader, CardContent } from '../ui/card'
+import { KpiStatCard } from '../app'
 import { DatePicker } from '@/components/ui/date-picker'
 import { Button as HeroButton, Chip as HeroChip } from '@heroui/react'
 import api from '../../services/api'
@@ -426,26 +427,23 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  {/* ─────────────────────────────────────────────────────────────────────────────
  1. HEADER WORKSPACE DENGAN TABS HEROUI STYLE (HARIAN vs SEMUA JADWAL vs UJIAN vs REKAP)
  ───────────────────────────────────────────────────────────────────────────── */}
- <Card className="border border-emerald-200/80 dark:border-emerald-800/60 bg-white/95 dark:bg-[#1B2433] shadow-sm rounded-xl overflow-hidden">
- <CardContent className="p-4 sm:p-5">
+ <div className="border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] shadow-md shadow-emerald-500/10 rounded-[22px] overflow-hidden">
+ <div className="p-4 sm:p-5">
  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
  <div className="flex items-center gap-3">
- <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm">
- <CalendarDays className="h-5 w-5" />
+ <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-md shadow-emerald-600/20 border border-emerald-500/30">
+ <CalendarDays className="h-6 w-6" />
  </div>
  <div>
  <div className="flex items-center gap-2">
  <h2 className="text-base sm:text-lg font-black text-slate-900 dark:text-white">
  Pusat Jadwal Pelajaran & KBM
  </h2>
- <HeroChip
- size="sm"
- color="success"
- variant="flat"
- className="font-extrabold text-[10px]"
+ <span
+ className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 bg-emerald-100/90 text-emerald-800 border border-emerald-300/80 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700/80 font-extrabold text-[10px]"
  >
  {activeChild?.academic_year?.name || activeChild?.tahun_ajaran || 'Tahun Ajaran Aktif'}
- </HeroChip>
+ </span>
  </div>
  <p className="text-xs text-slate-500 dark:text-slate-400">
  {activeChild
@@ -483,90 +481,45 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  })}
  </div>
  </div>
- </CardContent>
- </Card>
+ </div>
+ </div>
 
  {/* ─────────────────────────────────────────────────────────────────────────────
  2. KPI SUMMARY CARDS (HEROUI CARDS)
   ───────────────────────────────────────────────────────────────────────────── */}
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 !bg-emerald-100/90 hover:!bg-emerald-200/70 p-4 shadow-sm transition-all duration-300 dark:border-emerald-800/60 dark:!bg-emerald-950/50">
-          <div className="flex items-center justify-between">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl !bg-emerald-600 !text-white shadow-sm dark:!bg-emerald-600 dark:!text-white">
-              <CalendarCheck className="h-5 w-5 text-white" />
-            </span>
-            <span className="inline-flex items-center rounded-lg bg-emerald-200/80 px-2 py-0.5 text-[10px] font-black text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-200">
-              Hari Ini
-            </span>
-          </div>
-          <div className="mt-3">
-            <span className="text-2xl font-black text-emerald-800 dark:text-emerald-200">
-              {todaySchedules.length}
-            </span>
-            <span className="text-xs font-bold text-emerald-700/80 dark:text-emerald-400/80 ml-1.5">Sesi</span>
-          </div>
-          <p className="mt-1 text-xs font-bold text-emerald-800 dark:text-emerald-300">Pelajaran Hari Ini</p>
-          <p className="text-xs text-emerald-700/80 dark:text-emerald-400/80">{formattedSelectedDateText}</p>
-        </div>
-
-        <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 !bg-sky-100/90 hover:!bg-sky-200/70 p-4 shadow-sm transition-all duration-300 dark:border-emerald-800/60 dark:!bg-sky-950/50">
-          <div className="flex items-center justify-between">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl !bg-emerald-600 !text-white shadow-sm dark:!bg-sky-600 dark:!text-white">
-              <Clock className="h-5 w-5 text-white" />
-            </span>
-            <span className="inline-flex items-center rounded-lg bg-sky-200/80 px-2 py-0.5 text-[10px] font-black text-sky-800 dark:bg-sky-900/60 dark:text-sky-200">
-              Pekanan
-            </span>
-          </div>
-          <div className="mt-3">
-            <span className="text-2xl font-black text-sky-800 dark:text-sky-200">
-              {serverKpi?.weekly_count ?? safeSchedules.length}
-            </span>
-            <span className="text-xs font-bold text-sky-700/80 dark:text-sky-400/80 ml-1.5">JP / Pekan</span>
-          </div>
-          <p className="mt-1 text-xs font-bold text-sky-800 dark:text-sky-300">Total Sesi Mingguan</p>
-          <p className="text-xs text-sky-700/80 dark:text-sky-400/80">Alokasi jam pelajaran</p>
-        </div>
-
-        <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 !bg-amber-100/90 hover:!bg-amber-200/70 p-4 shadow-sm transition-all duration-300 dark:border-emerald-800/60 dark:!bg-amber-950/50">
-          <div className="flex items-center justify-between">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl !bg-amber-600 !text-white shadow-sm dark:!bg-amber-600 dark:!text-white">
-              <BookOpen className="h-5 w-5 text-white" />
-            </span>
-            <span className="inline-flex items-center rounded-lg bg-amber-200/80 px-2 py-0.5 text-[10px] font-black text-amber-800 dark:bg-amber-900/60 dark:text-amber-200">
-              {semesterLabel}
-            </span>
-          </div>
-          <div className="mt-3">
-            <span className="text-2xl font-black text-amber-800 dark:text-amber-200">
-              {serverKpi?.subject_count ?? uniqueSubjects.length}
-            </span>
-            <span className="text-xs font-bold text-amber-700/80 dark:text-amber-400/80 ml-1.5">Mapel</span>
-          </div>
-          <p className="mt-1 text-xs font-bold text-amber-800 dark:text-amber-300">Mata Pelajaran Aktif</p>
-          <p className="text-xs text-amber-700/80 dark:text-amber-400/80">Kurikulum terintegrasi</p>
-        </div>
-
-        <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 !bg-purple-100/90 hover:!bg-purple-200/70 p-4 shadow-sm transition-all duration-300 dark:border-emerald-800/60 dark:!bg-purple-950/50">
-          <div className="flex items-center justify-between">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl !bg-purple-600 !text-white shadow-sm dark:!bg-purple-600 dark:!text-white">
-              <User className="h-5 w-5 text-white" />
-            </span>
-            <span className="inline-flex items-center rounded-lg bg-purple-200/80 px-2 py-0.5 text-[10px] font-black text-purple-800 dark:bg-purple-900/60 dark:text-purple-200">
-              Pengajar
-            </span>
-          </div>
-          <div className="mt-3">
-            <span className="text-2xl font-black text-purple-800 dark:text-purple-200">
-              {serverKpi?.teacher_count ?? uniqueTeachers.length}
-            </span>
-            <span className="text-xs font-bold text-purple-700/80 dark:text-purple-400/80 ml-1.5">Ustadz/ah</span>
-          </div>
-          <p className="mt-1 text-xs font-bold text-purple-800 dark:text-purple-300">Guru Pengampu</p>
-          <p className="text-xs text-purple-700/80 dark:text-purple-400/80">
-            {activeChild?.kelas?.nama_kelas || activeChild?.class_name ? `Kelas ${activeChild?.kelas?.nama_kelas || activeChild?.class_name}` : 'Pengajar aktif'}
-          </p>
-        </div>
+        <KpiStatCard
+          icon={CalendarCheck}
+          title="Pelajaran Hari Ini"
+          value={`${todaySchedules.length} Sesi`}
+          badge="Hari Ini"
+          description={formattedSelectedDateText}
+          tone="emerald"
+        />
+        <KpiStatCard
+          icon={Clock}
+          title="Total Sesi Mingguan"
+          value={`${serverKpi?.weekly_count ?? safeSchedules.length} JP`}
+          badge="Pekanan"
+          description="Alokasi jam pelajaran"
+          tone="sky"
+        />
+        <KpiStatCard
+          icon={BookOpen}
+          title="Mata Pelajaran Aktif"
+          value={`${serverKpi?.subject_count ?? uniqueSubjects.length} Mapel`}
+          badge={semesterLabel}
+          description="Kurikulum terintegrasi"
+          tone="amber"
+        />
+        <KpiStatCard
+          icon={User}
+          title="Guru Pengampu"
+          value={`${serverKpi?.teacher_count ?? uniqueTeachers.length} Ustadz/ah`}
+          badge="Pengajar"
+          description={activeChild?.kelas?.nama_kelas || activeChild?.class_name ? `Kelas ${activeChild?.kelas?.nama_kelas || activeChild?.class_name}` : 'Pengajar aktif'}
+          tone="purple"
+        />
       </div>
 
       {/* ─────────────────────────────────────────────────────────────────────────────
@@ -575,8 +528,8 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  {activeWorkspaceMode === 'kbm' && (
  <div className="space-y-5 animate-[fadeIn_0.2s_ease-out]">
  {/* CONTROL BAR: PEMILIH HARI 7-DAY STRIP & FILTER MATA PELAJARAN */}
- <Card className="border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] rounded-xl shadow-xs overflow-hidden">
- <CardContent className="p-5 space-y-4">
+ <div className="border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] rounded-[22px] shadow-md shadow-emerald-500/10 overflow-hidden">
+ <div className="p-5 space-y-4">
  {/* Row 1: Sub-mode (Hari Ini vs Mingguan) + Quick Today Button */}
  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4">
  <div className="flex items-center gap-2">
@@ -698,30 +651,32 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  <span>Mapel:</span>
  </span>
 
- <HeroChip
- size="sm"
- variant={selectedSubject === 'all' ? 'solid' : 'flat'}
- color="success"
- className="cursor-pointer font-bold"
+ <span
+ className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs transition-all border cursor-pointer font-bold ${
+ selectedSubject === 'all'
+ ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
+ : 'bg-emerald-50 text-emerald-800 border-emerald-200/80 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-700/80'
+ }`}
  onClick={() => setSelectedSubject('all')}
  >
  Semua ({uniqueSubjects.length})
- </HeroChip>
+ </span>
 
  {uniqueSubjects.slice(0, 8).map((sub, idx) => {
  const isSel = selectedSubject === sub
  const styleMeta = getSubjectStyleMeta(sub, idx)
  return (
- <HeroChip
+ <span
  key={sub}
- size="sm"
- variant={isSel ? 'solid' : 'flat'}
- color={styleMeta.color}
- className="cursor-pointer font-bold"
+ className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs transition-all border cursor-pointer font-bold ${
+ isSel
+ ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
+ : 'bg-emerald-50 text-emerald-800 border-emerald-200/80 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-700/80'
+ }`}
  onClick={() => setSelectedSubject(sub)}
  >
  {sub}
- </HeroChip>
+ </span>
  )
  })}
 
@@ -745,7 +700,7 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari pelajaran, guru, atau ruang..."
- className="h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 pl-8 pr-3 text-xs outline-none focus:border-emerald-500 focus:bg-white dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50 pl-8 pr-3 text-xs outline-none focus:border-emerald-500 focus:bg-white dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200"
  />
  {search && (
  <button
@@ -758,14 +713,14 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  )}
  </div>
  </div>
- </CardContent>
- </Card>
+ </div>
+ </div>
 
  {/* ─────────────────────────────────────────────────────────────────────────────
  MILESTONE TIMELINE KBM (JALUR PEMBELAJARAN SESI)
  ───────────────────────────────────────────────────────────────────────────── */}
- <Card className="border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] rounded-xl shadow-sm overflow-hidden">
- <CardHeader className="bg-white dark:bg-[#1B2433] border-b border-emerald-200/80 dark:border-emerald-800/60 p-5 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-teal-950/20">
+ <div className="border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] rounded-[22px] shadow-md shadow-emerald-500/10 overflow-hidden">
+ <div className="bg-emerald-500/10 border-b border-emerald-500/20 p-5 dark:border-emerald-800/60">
  <div className="flex items-center justify-between w-full">
  <div className="flex items-center gap-2.5">
  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-xs">
@@ -782,14 +737,14 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  </div>
 
  <div className="flex items-center gap-2">
- <HeroChip size="sm" color="success" variant="dot" className="font-black text-xs">
+ <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 bg-emerald-100/90 text-emerald-800 border border-emerald-300/80 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700/80 font-black text-xs">
  Realtime Monitoring
- </HeroChip>
+ </span>
  </div>
  </div>
- </CardHeader>
+ </div>
 
- <CardContent className="p-5 sm:p-6">
+ <div className="p-5 sm:p-6">
  {loading ? (
  <div className="py-16 text-center space-y-3">
  <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-slate-500 border-r-transparent" />
@@ -829,7 +784,7 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  />
 
  {/* Kartu Sesi HeroUI Style */}
- <Card
+ <div
  isPressable
  onPress={() => openSessionDetail(item)}
  className={`w-full border-2 transition-all duration-200 rounded-xl overflow-hidden text-left ${
@@ -840,7 +795,7 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  : 'border-emerald-200/80 bg-white hover:border-emerald-300 dark:hover:border-emerald-700 dark:border-emerald-800/60 dark:bg-slate-900 shadow-2xs'
  }`}
  >
- <CardContent className="p-4 sm:p-5">
+ <div className="p-4 sm:p-5">
  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
  <div className="min-w-0 space-y-1">
  {/* Waktu & Status Badge */}
@@ -851,22 +806,22 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  </span>
 
  {isCurrent && (
- <HeroChip size="sm" color="success" variant="solid" className="font-black text-[10px] animate-pulse">
+ <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 bg-emerald-100/90 text-emerald-800 border border-emerald-300/80 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700/80 font-black text-[10px] animate-pulse">
  <span className="flex items-center gap-1">
  <Radio className="h-3 w-3" />
  <span>SEDANG BERLANGSUNG (LIVE)</span>
  </span>
- </HeroChip>
+ </span>
  )}
  {isPast && (
- <HeroChip size="sm" color="default" variant="flat" className="font-bold text-[10px]">
+ <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 bg-emerald-100/90 text-emerald-800 border border-emerald-300/80 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700/80 font-bold text-[10px]">
  Selesai
- </HeroChip>
+ </span>
  )}
  {!isCurrent && !isPast && (
- <HeroChip size="sm" color="primary" variant="flat" className="font-bold text-[10px]">
+ <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 bg-emerald-100/90 text-emerald-800 border border-emerald-300/80 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700/80 font-bold text-[10px]">
  Akan Datang
- </HeroChip>
+ </span>
  )}
 
  <span className={`px-2 py-0.5 rounded-md text-[10px] font-extrabold border ${styleMeta.badgeBg}`}>
@@ -957,8 +912,8 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  )}
  </div>
  )}
- </CardContent>
- </Card>
+ </div>
+ </div>
  </div>
  )
  })}
@@ -1039,8 +994,8 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  )}
  </div>
  )}
- </CardContent>
- </Card>
+ </div>
+ </div>
  </div>
  )}
 
@@ -1049,12 +1004,12 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  ───────────────────────────────────────────────────────────────────────────── */}
  {activeWorkspaceMode === 'semua' && (
  <div className="space-y-5 animate-[fadeIn_0.2s_ease-out]">
- <Card className="border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] rounded-xl shadow-sm overflow-hidden">
+ <div className="border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] rounded-[22px] shadow-md shadow-emerald-500/10 overflow-hidden">
  {/* Card Header Toolbar Matriks */}
- <CardHeader className="bg-white dark:bg-[#1B2433] border-b border-emerald-200/80 dark:border-emerald-800/60 p-5 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-teal-950/20">
+ <div className="bg-emerald-500/10 border-b border-emerald-500/20 p-5 dark:border-emerald-800/60">
  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 w-full">
  <div className="flex items-center gap-3">
- <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-xs">
+ <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
  <LayoutGrid className="h-5 w-5" />
  </div>
  <div>
@@ -1062,9 +1017,9 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
  Matriks Semua Jadwal Pelajaran
  </h3>
- <HeroChip size="sm" color="success" variant="flat" className="font-extrabold text-[10px]">
+ <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 bg-emerald-100/90 text-emerald-800 border border-emerald-300/80 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700/80 font-extrabold text-[10px]">
  Senin – Ahad
- </HeroChip>
+ </span>
  </div>
  <p className="text-xs text-emerald-800 dark:text-emerald-400 font-medium">
  Tabel terpadu seluruh sesi pembelajaran kelas {activeChild?.kelas?.nama_kelas || activeChild?.class_name || 'ananda'}
@@ -1080,7 +1035,7 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  placeholder="Cari mapel / guru..."
  value={matrixSearch}
  onChange={(e) => setMatrixSearch(e.target.value)}
- className="w-full pl-8 pr-7 py-1.5 text-xs rounded-xl bg-white dark:bg-slate-800 border border-emerald-200/80 dark:border-emerald-800/80 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-slate-800 dark:text-slate-100 placeholder:text-slate-400"
+ className="w-full pl-8 pr-7 py-1.5 text-xs rounded-xl bg-white dark:bg-slate-800 border-2 border-[#b6f6d9] dark:border-emerald-800/80 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-slate-800 dark:text-slate-100 placeholder:text-slate-400"
  />
  {matrixSearch && (
  <button
@@ -1105,10 +1060,10 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  </HeroButton>
  </div>
  </div>
- </CardHeader>
+ </div>
 
  {/* Table Container dengan Horizontal Scroll */}
- <CardContent className="p-4 sm:p-5">
+ <div className="p-4 sm:p-5">
  <div className="relative overflow-x-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/80 shadow-xs bg-slate-50/30 dark:bg-slate-900/40">
  <table className="w-full text-left border-collapse min-w-[950px]">
  {/* Table Header */}
@@ -1281,8 +1236,8 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  <span>Klik pada kartu sesi di tabel untuk melihat presensi santri & materi jurnal</span>
  </div>
  </div>
- </CardContent>
- </Card>
+ </div>
+ </div>
  </div>
  )}
 
@@ -1291,8 +1246,8 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  ───────────────────────────────────────────────────────────────────────────── */}
  {activeWorkspaceMode === 'exam' && (
  <div className="space-y-5 animate-[fadeIn_0.2s_ease-out]">
- <Card className="border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] rounded-xl shadow-xs overflow-hidden">
- <CardContent className="p-5 space-y-4">
+ <div className="border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] rounded-[22px] shadow-md shadow-emerald-500/10 overflow-hidden">
+ <div className="p-5 space-y-4">
  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4">
  <div>
  <h3 className="text-sm font-black text-slate-900 dark:text-white flex items-center gap-2">
@@ -1305,26 +1260,20 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  </div>
 
  <div className="flex items-center gap-1.5">
- <HeroChip
- size="sm"
- variant={selectedExamCategory === 'all' ? 'solid' : 'flat'}
- color="success"
- className="cursor-pointer font-bold"
+ <span
+ className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs transition-all border cursor-pointer font-bold"
  onClick={() => setSelectedExamCategory('all')}
  >
  Semua Kategori
- </HeroChip>
+ </span>
  {examCategories.map((cat) => (
- <HeroChip
+ <span
  key={cat}
- size="sm"
- variant={selectedExamCategory === cat ? 'solid' : 'flat'}
- color="primary"
- className="cursor-pointer font-bold"
+ className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs transition-all border cursor-pointer font-bold"
  onClick={() => setSelectedExamCategory(cat)}
  >
  {cat}
- </HeroChip>
+ </span>
  ))}
  </div>
  </div>
@@ -1337,7 +1286,7 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  ) : filteredExamSchedules.length > 0 ? (
  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
  {filteredExamSchedules.map((exam, idx) => (
- <Card
+ <div
  key={exam.id || idx}
  className="border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-800/40 rounded-xl p-4 shadow-2xs hover:border-emerald-300 dark:hover:border-emerald-700 transition-all"
  >
@@ -1366,7 +1315,7 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  <span>Pengawas: <b>{exam.proctor_name || exam.pengawas || '-'}</b></span>
  </p>
  </div>
- </Card>
+ </div>
  ))}
  </div>
  ) : (
@@ -1380,8 +1329,8 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  </p>
  </div>
  )}
- </CardContent>
- </Card>
+ </div>
+ </div>
  </div>
  )}
 
@@ -1390,8 +1339,8 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  ───────────────────────────────────────────────────────────────────────────── */}
  {activeWorkspaceMode === 'rekap' && (
  <div className="space-y-5 animate-[fadeIn_0.2s_ease-out]">
- <Card className="border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] rounded-xl shadow-xs overflow-hidden">
- <CardContent className="p-5 space-y-4">
+ <div className="border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] rounded-[22px] shadow-md shadow-emerald-500/10 overflow-hidden">
+ <div className="p-5 space-y-4">
  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4">
  <div className="flex items-center gap-2">
  <span className="p-1 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 inline-flex">
@@ -1441,17 +1390,17 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  <td className="py-3 px-4 text-center font-bold text-slate-700 dark:text-slate-300">{item.monthly} JP</td>
  <td className="py-3 px-4 text-center font-black text-emerald-600 dark:text-emerald-400">{item.semester} JP</td>
  <td className="py-3 px-4 text-center">
- <HeroChip size="sm" color="success" variant="flat" className="font-extrabold text-[10px]">
+ <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 bg-emerald-100/90 text-emerald-800 border border-emerald-300/80 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700/80 font-extrabold text-[10px]">
  Aktif
- </HeroChip>
+ </span>
  </td>
  </tr>
  ))}
  </tbody>
  </table>
  </div>
- </CardContent>
- </Card>
+ </div>
+ </div>
  </div>
  )}
 

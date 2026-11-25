@@ -137,14 +137,14 @@ export default function ParentWorshipInputWorkspace({ studentId }) {
  return (
  <div className="space-y-5">
  {/* HERO HEADER */}
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-5 sm:p-6 shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-gradient-to-br from-[#E6F8F3] via-white to-[#F0FDF9] dark:from-emerald-950/40 dark:via-[#1B2433] dark:to-teal-950/30 p-5 sm:p-6 shadow-md shadow-emerald-500/10">
  <div
  aria-hidden="true"
- className="pointer-events-none absolute -left-16 -top-16 h-52 w-52 rounded-full bg-white dark:bg-[#1B2433] blur-3xl"
+ className="pointer-events-none absolute -left-16 -top-16 h-52 w-52 rounded-full bg-emerald-400/20 dark:bg-emerald-500/15 blur-3xl"
  />
  <div
  aria-hidden="true"
- className="pointer-events-none absolute -right-16 -bottom-16 h-52 w-52 rounded-full bg-white dark:bg-[#1B2433] blur-3xl"
+ className="pointer-events-none absolute -right-16 -bottom-16 h-52 w-52 rounded-full bg-emerald-400/20 dark:bg-emerald-500/15 blur-3xl"
  />
  <div
  aria-hidden="true"
@@ -153,36 +153,30 @@ export default function ParentWorshipInputWorkspace({ studentId }) {
 
  <div className="relative flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
  <div className="flex items-center gap-3.5">
- <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-xl shadow-sm">
+ <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-md shadow-emerald-600/20 border border-emerald-500/30">
  <Home className="h-6 w-6" />
  </div>
  <div>
  <div className="flex flex-wrap items-center gap-2">
- <HeroChip
- size="sm"
- variant="flat"
- className="font-extrabold text-[10.5px] bg-purple-500/20 border border-emerald-200/80 dark:border-emerald-800/60 text-purple-800 dark:text-purple-300"
+ <span
+ className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-extrabold text-[10.5px] bg-purple-500/20 border border-emerald-200/80 dark:border-emerald-800/60 text-purple-800 dark:text-purple-300"
  >
  <Sparkles className="h-3 w-3 text-purple-600 mr-1 inline" />
  Ibadah Rumah
- </HeroChip>
+ </span>
  {periodLabel && (
- <HeroChip
- size="sm"
- variant="flat"
- className="font-black text-[10px] bg-white/70 text-slate-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 dark:border-emerald-700/80"
+ <span
+ className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-black text-[10px] bg-white/70 text-slate-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 dark:border-emerald-700/80"
  >
  {periodLabel}
- </HeroChip>
+ </span>
  )}
  {programLabel && (
- <HeroChip
- size="sm"
- variant="flat"
- className="font-black text-[10px] bg-violet-100 text-violet-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-violet-950 dark:text-violet-300 dark:border-emerald-800/60"
+ <span
+ className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-black text-[10px] bg-violet-100 text-violet-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-violet-950 dark:text-violet-300 dark:border-emerald-800/60"
  >
  {programLabel}
- </HeroChip>
+ </span>
  )}
  </div>
  <h3 className="mt-1 text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight">
@@ -204,7 +198,7 @@ export default function ParentWorshipInputWorkspace({ studentId }) {
  <p className="relative mt-3 text-xs font-medium text-purple-700/70 dark:text-purple-400/70">
  {formatDisplayDate(date)}
  </p>
- </HeroCard>
+ </div>
 
  {/* Feedback Alert Banner */}
  <AnimatePresence>
@@ -254,7 +248,7 @@ export default function ParentWorshipInputWorkspace({ studentId }) {
  )}
 
  {/* MAIN CARD - ACTIVITY LIST */}
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 sm:p-6 shadow-xs dark:border-emerald-800/60 dark:bg-slate-900">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  <div className="grid gap-3 md:grid-cols-2">
  {(context?.items || []).map((item) => {
  const currentVal = values[item.agenda_item_id]
@@ -281,9 +275,7 @@ export default function ParentWorshipInputWorkspace({ studentId }) {
  </p>
  </div>
  {item.verification_status && (
- <HeroChip
- size="sm"
- variant="flat"
+ <span
  className={cn(
  'shrink-0 font-extrabold text-[9px]',
  item.verification_status === 'verified'
@@ -294,7 +286,7 @@ export default function ParentWorshipInputWorkspace({ studentId }) {
  {item.verification_status === 'verified'
  ? 'Terverifikasi'
  : 'Menunggu'}
- </HeroChip>
+ </span>
  )}
  </div>
  <div className="mt-3 flex flex-wrap gap-1.5">
@@ -365,7 +357,7 @@ export default function ParentWorshipInputWorkspace({ studentId }) {
  </HeroButton>
  </div>
  )}
- </HeroCard>
+ </div>
  </div>
  )
 }

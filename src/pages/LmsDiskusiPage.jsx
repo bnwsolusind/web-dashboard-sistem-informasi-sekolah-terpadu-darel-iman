@@ -433,7 +433,7 @@ function HeroUiModalSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Ketik untuk mencari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -581,7 +581,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -804,9 +804,9 @@ function HarmonizedBatchImportModal({ isOpen, onClose, onImportSuccess, notify }
  <p className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
  Pratinjau Data (5 Baris Pertama)
  </p>
- <div className="overflow-x-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/80">
+ <div className="overflow-x-auto rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  <TableRoot className="w-full text-left text-xs">
- <TableHeader className="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 font-bold border-b border-emerald-200/80 dark:border-emerald-800/80">
+ <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
  <TableRow>
  <TableHead className="py-2 px-3">No</TableHead>
  <TableHead className="py-2 px-3">Judul Topik</TableHead>
@@ -1983,10 +1983,10 @@ export default function LmsDiskusiPage({ embedded = false, hideBreadcrumb = fals
  <p className="font-bold text-sm text-slate-700 dark:text-slate-300">Tidak ada data diskusi dalam kategori ini.</p>
  </div>
  ) : (
- <div className="overflow-x-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="overflow-x-auto rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  <TableRoot className="w-full text-left border-collapse text-xs">
- <TableHeader>
- <TableRow className="bg-emerald-50 dark:bg-emerald-950/40 border-b border-emerald-200/80 dark:border-emerald-800/80 text-xs font-black text-emerald-900 dark:text-emerald-200 uppercase tracking-wider">
+ <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
+ <TableRow>
  <TableHead className="py-3 px-4">Judul Diskusi</TableHead>
  <TableHead className="py-3 px-4">Kategori</TableHead>
  <TableHead className="py-3 px-4">Modul Ajar</TableHead>
@@ -2092,7 +2092,7 @@ export default function LmsDiskusiPage({ embedded = false, hideBreadcrumb = fals
  placeholder="Contoh: Pemahaman Kasus Hukum Newton II Pada Kehidupan..."
  value={formData.judul}
  onChange={(e) => setFormData({ ...formData, judul: e.target.value })}
- className="w-full px-3.5 py-2.5 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-xs font-semibold focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 outline-none"
+ className="w-full px-3.5 py-2.5 rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-xs font-semibold focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 outline-none"
  />
  </div>
 
@@ -2118,7 +2118,7 @@ export default function LmsDiskusiPage({ embedded = false, hideBreadcrumb = fals
  placeholder="Tuliskan petunjuk diskusi, topik pemantik, atau studi kasus bagi santri/siswa..."
  value={formData.deskripsi}
  onChange={(e) => setFormData({ ...formData, deskripsi: e.target.value })}
- className="w-full px-3.5 py-2.5 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-xs font-semibold focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 outline-none leading-relaxed"
+ className="w-full px-3.5 py-2.5 rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-xs font-semibold focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 outline-none leading-relaxed"
  />
  </div>
 
@@ -2132,7 +2132,7 @@ export default function LmsDiskusiPage({ embedded = false, hideBreadcrumb = fals
  type="datetime-local"
  value={formData.tanggal_mulai}
  onChange={(e) => setFormData({ ...formData, tanggal_mulai: e.target.value })}
- className="w-full px-3.5 py-2.5 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-xs font-semibold focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 outline-none"
+ className="w-full px-3.5 py-2.5 rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-xs font-semibold focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 outline-none"
  />
  </div>
  <div>
@@ -2143,7 +2143,7 @@ export default function LmsDiskusiPage({ embedded = false, hideBreadcrumb = fals
  type="datetime-local"
  value={formData.tanggal_tutup}
  onChange={(e) => setFormData({ ...formData, tanggal_tutup: e.target.value })}
- className="w-full px-3.5 py-2.5 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-xs font-semibold focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 outline-none"
+ className="w-full px-3.5 py-2.5 rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-xs font-semibold focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 outline-none"
  />
  </div>
  </div>
@@ -2232,7 +2232,7 @@ export default function LmsDiskusiPage({ embedded = false, hideBreadcrumb = fals
  onChange={(e) =>
  setKomentarForm({ ...komentarForm, konten: e.target.value })
  }
- className="flex-1 px-4 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-800 text-xs font-medium focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 outline-none"
+ className="flex-1 px-4 py-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-800 text-xs font-medium focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 outline-none"
  />
  <button
  type="submit"

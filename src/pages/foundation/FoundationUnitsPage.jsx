@@ -647,35 +647,40 @@ export function FoundationUnitsPage() {
                 {/* Jenjang Filter */}
                 <div className="flex items-center gap-1.5">
                   <span className="text-xs font-bold text-slate-600 dark:text-slate-400">Jenjang:</span>
-                  <select
+                  <HeroUiFilterSelect
                     value={selectedLevel}
-                    onChange={(e) => setSelectedLevel(e.target.value)}
-                    aria-label="Filter jenjang"
-                    className="h-8 rounded-xl border border-emerald-200/80 bg-white px-2.5 py-1 text-xs font-bold text-slate-700 shadow-2xs hover:border-emerald-400 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-200 cursor-pointer focus:border-emerald-500 focus:outline-none"
-                  >
-                    <option value="all">Semua Jenjang</option>
-                    {(levelOptions.length ? levelOptions : LEVEL_OPTIONS).map((lvl) => (
-                      <option key={lvl} value={lvl}>{lvl}</option>
-                    ))}
-                  </select>
+                    onChange={setSelectedLevel}
+                    ariaLabel="Filter jenjang"
+                    size="sm"
+                    className="min-w-[140px]"
+                    options={[
+                      { value: 'all', label: 'Semua Jenjang' },
+                      ...(levelOptions.length ? levelOptions : LEVEL_OPTIONS).map((lvl) => ({
+                        value: lvl,
+                        label: lvl,
+                      })),
+                    ]}
+                  />
                 </div>
 
                 {/* Baris per Halaman */}
                 <div className="flex items-center gap-1.5">
                   <span className="text-xs font-bold text-slate-600 dark:text-slate-400">Baris:</span>
-                  <select
+                  <HeroUiFilterSelect
                     value={perPage}
-                    onChange={(e) => setPerPage(Number(e.target.value))}
-                    aria-label="Tampilkan per halaman"
-                    className="h-8 rounded-xl border border-emerald-200/80 bg-white px-2.5 py-1 text-xs font-bold text-slate-700 shadow-2xs hover:border-emerald-400 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-200 cursor-pointer focus:border-emerald-500 focus:outline-none"
-                  >
-                    <option value={5}>5</option>
-                    <option value={10}>10</option>
-                    <option value={15}>15</option>
-                    <option value={25}>25</option>
-                    <option value={50}>50</option>
-                    <option value={100}>100</option>
-                  </select>
+                    onChange={(v) => setPerPage(Number(v))}
+                    ariaLabel="Tampilkan per halaman"
+                    size="sm"
+                    className="min-w-[85px]"
+                    options={[
+                      { value: 5, label: '5' },
+                      { value: 10, label: '10' },
+                      { value: 15, label: '15' },
+                      { value: 25, label: '25' },
+                      { value: 50, label: '50' },
+                      { value: 100, label: '100' },
+                    ]}
+                  />
                 </div>
 
                 {/* Reset Filter Button if active */}

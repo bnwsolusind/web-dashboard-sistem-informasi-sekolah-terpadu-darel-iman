@@ -1,4 +1,5 @@
 import CustomSelect from "../components/ui/CustomSelect"
+import AppDataTable from "../components/app/AppDataTable"
 import {
   useToast
 } from '../components/app/ToastProvider'
@@ -864,16 +865,17 @@ export default function DashboardPage() {
  </div>
 
  {/* 6. ROW 5: DATA UNIT PENDIDIKAN TABLE */}
- <Card className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] shadow-md shadow-emerald-500/10 shadow-sm">
- <CardHeader className="flex flex-row items-center justify-between p-4 sm:p-5 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent dark:from-emerald-950/50 dark:via-teal-950/20 dark:to-transparent">
- <CardTitle className="text-sm font-extrabold text-slate-900 dark:text-white">
- Data Unit Pendidikan
- </CardTitle>
+ <AppDataTable
+ title="Data Unit Pendidikan"
+ description="Ringkasan statistik siswa, guru, pegawai, kelas, presensi, dan tahfizh per unit."
+ icon={Building2}
+ countLabel={`${dataUnitPendidikan.length} Unit`}
+ actions={
  <SquircleActionButton variant="view" label="Lihat Semua" onClick={() => navigate('/dashboard/students/unit-pendidikan')} showLabel />
- </CardHeader>
-
- <CardContent className="pt-0">
- <div className="overflow-x-auto rounded-xl border border-emerald-200/60 dark:border-emerald-800/60">
+ }
+ showToolbar={false}
+ showPagination={false}
+ >
  <table className="w-full text-left text-xs border-collapse">
  <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-xs font-bold uppercase tracking-wider text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/80 dark:text-emerald-300">
  <tr>
@@ -914,9 +916,7 @@ export default function DashboardPage() {
  ))}
  </tbody>
  </table>
- </div>
- </CardContent>
- </Card>
+ </AppDataTable>
 
  {/* IMPORT EXCEL MODAL */}
  <Modal

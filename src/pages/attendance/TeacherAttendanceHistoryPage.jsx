@@ -200,7 +200,7 @@ export default function TeacherAttendanceHistoryPage() {
  ) : (
  <>
  <TableRoot fullBleed={false}>
- <TableHeader>
+ <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
  <TableRow>
  <TableHead className="w-12">#</TableHead>
  <TableHead>Tanggal & Pertemuan</TableHead>

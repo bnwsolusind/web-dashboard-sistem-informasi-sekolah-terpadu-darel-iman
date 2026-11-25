@@ -65,6 +65,7 @@ import {
   TableCell,
 } from '../components/ui/table'
 import { useDebounce } from '../hooks/useDebounce'
+import LmsKpiDetailModal from '../components/lms/LmsKpiDetailModal'
 import { downloadSpreadsheetTemplate } from '../utils/spreadsheetParser'
 
 // ── 1. PALET WARNA RESMI MODERN KPI CARDS ──
@@ -256,7 +257,7 @@ function HeroUiModalSelect({
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Ketik untuk mencari..."
-                    className="w-full rounded-lg border border-emerald-200/80 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#0E5C44] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+                    className="w-full rounded-lg border-2 border-[#b6f6d9] bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#0E5C44] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
                     autoFocus
                   />
                 </div>
@@ -401,7 +402,7 @@ function HeroUiFilterSelect({
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Cari..."
-                    className="w-full rounded-lg border border-emerald-200/80 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#0E5C44] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+                    className="w-full rounded-lg border-2 border-[#b6f6d9] bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#0E5C44] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
                     autoFocus
                   />
                 </div>
@@ -942,6 +943,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
 
   // Export Modal State
   const [isExportModalOpen, setIsExportModalOpen] = useState(false)
+  const [kpiModalKey, setKpiModalKey] = useState(null)
   const [isExporting, setIsExporting] = useState(false)
 
   // Layout View Mode State: 'grouped' (per Kisi-kisi & Mapel) | 'flat' (Semua Soal)
@@ -1842,7 +1844,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
             subtext={`${stats.total_aktif} Butir Aktif`}
             tone="emerald"
             active={filters.tipe_soal === ''}
-            onClick={() => setFilters((prev) => ({ ...prev, tipe_soal: '' }))}
+            onClick={() => setKpiModalKey('all')}
           />
           <ModernKpiCard
             icon={CheckSquare}
@@ -1852,7 +1854,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
             subtext="Opsi A s.d. E"
             tone="sky"
             active={filters.tipe_soal === 'pg'}
-            onClick={() => setFilters((prev) => ({ ...prev, tipe_soal: 'pg' }))}
+            onClick={() => setKpiModalKey('pg')}
           />
           <ModernKpiCard
             icon={FileText}
@@ -1862,7 +1864,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
             subtext="Rubrik & Penskoran"
             tone="purple"
             active={filters.tipe_soal === 'esai'}
-            onClick={() => setFilters((prev) => ({ ...prev, tipe_soal: 'esai' }))}
+            onClick={() => setKpiModalKey('esai')}
           />
           <ModernKpiCard
             icon={ToggleLeft}
@@ -1872,7 +1874,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
             subtext="Pernyataan B/S"
             tone="blue"
             active={filters.tipe_soal === 'benar_salah'}
-            onClick={() => setFilters((prev) => ({ ...prev, tipe_soal: 'benar_salah' }))}
+            onClick={() => setKpiModalKey('benar_salah')}
           />
           <ModernKpiCard
             icon={GitCommit}
@@ -1882,7 +1884,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
             subtext="Pasangan Item"
             tone="amber"
             active={filters.tipe_soal === 'menjodohkan'}
-            onClick={() => setFilters((prev) => ({ ...prev, tipe_soal: 'menjodohkan' }))}
+            onClick={() => setKpiModalKey('menjodohkan')}
           />
         </div>
 
@@ -2738,7 +2740,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                       placeholder="Contoh: PPKN-001 / SOAL-01"
                       value={formData.kode_soal}
                       onChange={(e) => setFormData((prev) => ({ ...prev, kode_soal: e.target.value }))}
-                      className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 focus:border-[#0E5C44] focus:ring-4 focus:ring-[#0E5C44]/12 outline-none"
+                      className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-900 focus:border-[#0E5C44] focus:ring-4 focus:ring-[#0E5C44]/12 outline-none"
                     />
                   </div>
                 </div>
@@ -2785,7 +2787,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                     placeholder="Tuliskan butir soal atau instruksi pertanyaan di sini..."
                     value={formData.pertanyaan}
                     onChange={(e) => setFormData((prev) => ({ ...prev, pertanyaan: e.target.value }))}
-                    className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 focus:border-[#0E5C44] focus:ring-4 focus:ring-[#0E5C44]/12 outline-none leading-relaxed"
+                    className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-900 focus:border-[#0E5C44] focus:ring-4 focus:ring-[#0E5C44]/12 outline-none leading-relaxed"
                     required
                   />
                 </div>
@@ -2825,7 +2827,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                             placeholder={`Teks Pilihan ${optKey.toUpperCase()}`}
                             value={formData[fieldKey]}
                             onChange={(e) => setFormData((prev) => ({ ...prev, [fieldKey]: e.target.value }))}
-                            className="w-full px-3 py-2 text-xs font-semibold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 outline-none focus:border-[#0E5C44]"
+                            className="w-full px-3 py-2 text-xs font-semibold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-900 outline-none focus:border-[#0E5C44]"
                           />
                         </div>
                       )
@@ -2847,7 +2849,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                       placeholder="Tuliskan kata kunci acuan, poin penting, atau kriteria penilaian..."
                       value={formData.kunci_jawaban}
                       onChange={(e) => setFormData((prev) => ({ ...prev, kunci_jawaban: e.target.value }))}
-                      className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 outline-none focus:border-purple-500 leading-relaxed"
+                      className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-900 outline-none focus:border-purple-500 leading-relaxed"
                     />
                   </div>
                 )}
@@ -2906,7 +2908,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                           placeholder="Pernyataan / Item Kiri"
                           value={pair.kiri}
                           onChange={(e) => handlePairChange(idx, 'kiri', e.target.value)}
-                          className="w-1/2 px-3 py-1.5 text-xs font-semibold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 outline-none"
+                          className="w-1/2 px-3 py-1.5 text-xs font-semibold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 outline-none"
                         />
                         <ArrowRight className="w-4 h-4 text-amber-500 shrink-0" />
                         <input
@@ -2914,7 +2916,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                           placeholder="Pasangan / Item Kanan"
                           value={pair.kanan}
                           onChange={(e) => handlePairChange(idx, 'kanan', e.target.value)}
-                          className="w-1/2 px-3 py-1.5 text-xs font-semibold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 outline-none"
+                          className="w-1/2 px-3 py-1.5 text-xs font-semibold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 outline-none"
                         />
                         {matchingPairs.length > 1 && (
                           <button
@@ -2943,7 +2945,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                       max="100"
                       value={formData.poin}
                       onChange={(e) => setFormData((prev) => ({ ...prev, poin: parseFloat(e.target.value) || 0 }))}
-                      className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 outline-none focus:border-[#0E5C44]"
+                      className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-900 outline-none focus:border-[#0E5C44]"
                     />
                   </div>
 
@@ -2971,7 +2973,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                     placeholder="Contoh: Peserta didik mampu menganalisis Pancasila Sila I..."
                     value={formData.indikator}
                     onChange={(e) => setFormData((prev) => ({ ...prev, indikator: e.target.value }))}
-                    className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 outline-none focus:border-[#0E5C44]"
+                    className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-900 outline-none focus:border-[#0E5C44]"
                   />
                 </div>
 
@@ -2984,7 +2986,7 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                     placeholder="Tuliskan pembahasan singkat atau alasan kunci jawaban..."
                     value={formData.pembahasan}
                     onChange={(e) => setFormData((prev) => ({ ...prev, pembahasan: e.target.value }))}
-                    className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 outline-none focus:border-[#0E5C44] leading-relaxed"
+                    className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-slate-900 outline-none focus:border-[#0E5C44] leading-relaxed"
                   />
                 </div>
 
@@ -3305,6 +3307,78 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
           totalCount={pagination.total || dataList.length}
           moduleTitle="Bank Soal"
         />
+
+        {/* ── KPI Quick View Pop-up Modal (10/page + Pagination) ── */}
+        {(() => {
+          const allRows = Array.isArray(dataList) ? dataList : []
+          const filterByKpi = (list) => {
+            if (kpiModalKey && kpiModalKey !== 'all') return list.filter((s) => s.tipe_soal === kpiModalKey)
+            return list
+          }
+          const metaMap = {
+            all: { title: 'Rincian Total Butir Soal', badge: `${stats.total_soal || allRows.length} Soal` },
+            pg: { title: 'Rincian Soal Pilihan Ganda', badge: `${stats.total_pg || 0} Soal` },
+            esai: { title: 'Rincian Soal Essay / Esai', badge: `${stats.total_esai || 0} Soal` },
+            benar_salah: { title: 'Rincian Soal Benar / Salah', badge: `${stats.total_benar_salah || 0} Soal` },
+            menjodohkan: { title: 'Rincian Soal Menjodohkan', badge: `${stats.total_menjodohkan || 0} Soal` },
+          }
+          const meta = kpiModalKey ? metaMap[kpiModalKey] : null
+          return (
+            <LmsKpiDetailModal
+              isOpen={Boolean(kpiModalKey && meta)}
+              onClose={() => setKpiModalKey(null)}
+              icon={Layers}
+              title={meta?.title || 'Rincian Bank Soal'}
+              badge={meta?.badge}
+              rows={filterByKpi(allRows)}
+              fetchRows={async () => {
+                const res = await lmsBankSoalService.getDaftar({
+                  per_page: 200,
+                  ...(kpiModalKey && kpiModalKey !== 'all' ? { tipe_soal: kpiModalKey } : {}),
+                })
+                const raw = Array.isArray(res?.data) ? res.data : res?.data?.data || []
+                return filterByKpi(raw)
+              }}
+              searchPlaceholder="Cari kode soal, isi pertanyaan, atau tipe soal..."
+              searchFilter={(s, q) =>
+                [s.kode_soal, String(s.pertanyaan || s.soal || '').replace(/<[^>]+>/g, ''), s.tipe_soal]
+                  .filter(Boolean)
+                  .join(' ')
+                  .toLowerCase()
+                  .includes(q)
+              }
+              emptyText="Tidak ada butir soal pada kategori ini."
+              columns={[
+                {
+                  header: 'Kode',
+                  render: (s) => <span className="font-mono font-bold text-indigo-700 dark:text-indigo-300">{s.kode_soal || '-'}</span>,
+                },
+                {
+                  header: 'Pertanyaan',
+                  render: (s) => (
+                    <div className="font-semibold text-slate-900 dark:text-white max-w-md truncate">
+                      {String(s.pertanyaan || s.soal || '-').replace(/<[^>]+>/g, '')}
+                    </div>
+                  ),
+                },
+                {
+                  header: 'Tipe',
+                  align: 'center',
+                  render: (s) => <span className="px-2 py-0.5 rounded-md bg-sky-100 text-sky-800 text-[10px] font-extrabold uppercase">{s.tipe_soal || '-'}</span>,
+                },
+                {
+                  header: 'Status',
+                  align: 'center',
+                  render: (s) => (
+                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold ${s.is_active !== false ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}`}>
+                      {s.is_active !== false ? 'Aktif' : 'Nonaktif'}
+                    </span>
+                  ),
+                },
+              ]}
+            />
+          )
+        })()}
       </div>
     </PageContainer>
   )

@@ -537,19 +537,22 @@ export default function KpiQuickViewModal({ type, isOpen, onClose, initialUnitId
                   </span>
                   <span>data</span>
                   <span className="text-slate-300 dark:text-slate-700 mx-1">•</span>
-                  <select
+                  <HeroUiFilterSelect
                     value={perPage}
-                    onChange={(e) => {
-                      setPerPage(Number(e.target.value))
+                    onChange={(v) => {
+                      setPerPage(Number(v))
                       setPage(1)
                     }}
-                    className="h-9 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-xs font-bold text-slate-800 dark:text-slate-100 px-2.5 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 cursor-pointer"
-                  >
-                    <option value={10}>10 / hal</option>
-                    <option value={25}>25 / hal</option>
-                    <option value={50}>50 / hal</option>
-                    <option value={100}>100 / hal</option>
-                  </select>
+                    ariaLabel="Data per halaman"
+                    size="sm"
+                    className="min-w-[105px]"
+                    options={[
+                      { value: 10, label: '10 / hal' },
+                      { value: 25, label: '25 / hal' },
+                      { value: 50, label: '50 / hal' },
+                      { value: 100, label: '100 / hal' },
+                    ]}
+                  />
                 </div>
 
                 <Pagination

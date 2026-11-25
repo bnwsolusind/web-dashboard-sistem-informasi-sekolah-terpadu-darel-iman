@@ -165,7 +165,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -570,6 +570,7 @@ export default function MasterDoaPage() {
  const [showRemoteCatalog, setShowRemoteCatalog] = useState(false)
  const [loadingRemote, setLoadingRemote] = useState(false)
  const [importingId, setImportingId] = useState(null)
+ const [syncingAll, setSyncingAll] = useState(false)
 
  // Filters for Master Data
  const [search, setSearch] = useState('')
@@ -670,6 +671,20 @@ export default function MasterDoaPage() {
  pushToast(e.response?.data?.message || 'Gagal mengimpor data dari EQuran.id.', 'error')
  } finally {
  setImportingId(null)
+ }
+ }
+
+ const handleSyncAllFromCatalog = async () => {
+ setSyncingAll(true)
+ try {
+ const res = await equranService.syncDoas()
+ await fetchDoas()
+ pushToast(res?.message || 'Seluruh koleksi doa berhasil disinkronkan.', 'success')
+ setShowRemoteCatalog(false)
+ } catch (e) {
+ pushToast(e.response?.data?.message || 'Gagal menyinkronkan seluruh koleksi doa.', 'error')
+ } finally {
+ setSyncingAll(false)
  }
  }
 
@@ -1006,7 +1021,7 @@ export default function MasterDoaPage() {
         />
         {canManageMaster && (
           <SquircleActionButton
-            variant="restore"
+            variant="primary"
             icon={Plus}
             label="Tambah Doa"
             onClick={handleOpenAdd}
@@ -1014,7 +1029,7 @@ export default function MasterDoaPage() {
         )}
         {canManageMaster && doas.length > 0 && (
           <SquircleActionButton
-            variant="delete"
+            variant="danger"
             icon={Trash2}
             label="Kosongkan Data"
             onClick={handleDeleteAll}
@@ -1371,7 +1386,7 @@ export default function MasterDoaPage() {
  min="1"
  value={formData.id}
  onChange={(e) => setFormData({ ...formData, id: e.target.value })}
- className="w-full px-3 py-2 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+ className="w-full px-3 py-2 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
  />
  </div>
 
@@ -1383,7 +1398,7 @@ export default function MasterDoaPage() {
  value={formData.grup}
  onChange={(e) => setFormData({ ...formData, grup: e.target.value })}
  placeholder="Contoh: Doa Sebelum dan Sesudah Tidur"
- className="w-full px-3 py-2 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+ className="w-full px-3 py-2 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
  />
  </div>
  </div>
@@ -1396,7 +1411,7 @@ export default function MasterDoaPage() {
  value={formData.nama}
  onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
  placeholder="Contoh: Doa Sebelum Tidur"
- className="w-full px-3 py-2 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+ className="w-full px-3 py-2 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
  />
  </div>
 
@@ -1408,7 +1423,7 @@ export default function MasterDoaPage() {
  value={formData.ar}
  onChange={(e) => setFormData({ ...formData, ar: e.target.value })}
  placeholder="بِسْمِكَ اللَّهُمَّ..."
- className="w-full px-3 py-2 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-serif font-bold text-right text-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+ className="w-full px-3 py-2 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-serif font-bold text-right text-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"
  />
  </div>
 
@@ -1419,7 +1434,7 @@ export default function MasterDoaPage() {
  value={formData.tr}
  onChange={(e) => setFormData({ ...formData, tr: e.target.value })}
  placeholder="Bismikallāhumma aḥyā..."
- className="w-full px-3 py-2 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+ className="w-full px-3 py-2 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
  />
  </div>
 
@@ -1430,7 +1445,7 @@ export default function MasterDoaPage() {
  value={formData.idn}
  onChange={(e) => setFormData({ ...formData, idn: e.target.value })}
  placeholder="Dengan nama-Mu ya Allah..."
- className="w-full px-3 py-2 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+ className="w-full px-3 py-2 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
  />
  </div>
 
@@ -1441,7 +1456,7 @@ export default function MasterDoaPage() {
  value={formData.tentang}
  onChange={(e) => setFormData({ ...formData, tentang: e.target.value })}
  placeholder="Contoh: HR. Bukhari no. 6312"
- className="w-full px-3 py-2 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+ className="w-full px-3 py-2 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
  />
  </div>
 
@@ -1452,7 +1467,7 @@ export default function MasterDoaPage() {
  value={formData.tagInput}
  onChange={(e) => setFormData({ ...formData, tagInput: e.target.value })}
  placeholder="Contoh: tidur, malam, sebelum tidur"
- className="w-full px-3 py-2 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+ className="w-full px-3 py-2 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
  />
  </div>
 

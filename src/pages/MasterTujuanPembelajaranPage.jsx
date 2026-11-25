@@ -1277,7 +1277,7 @@ export default function MasterTujuanPembelajaranPage({ embedded = false, hideBre
  type="text"
  readOnly
  value={formData.kode_tp}
- className="w-full px-4 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-emerald-50 dark:bg-emerald-950/40 text-sm font-mono font-bold text-[#059669] dark:text-[#10B981] cursor-not-allowed"
+ className="w-full px-4 py-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-emerald-50 dark:bg-emerald-950/40 text-sm font-mono font-bold text-[#059669] dark:text-[#10B981] cursor-not-allowed"
  />
  </div>
 
@@ -1291,7 +1291,7 @@ export default function MasterTujuanPembelajaranPage({ embedded = false, hideBre
  min={1}
  value={formData.alokasi_waktu_jp}
  onChange={(e) => setFormData({ ...formData, alokasi_waktu_jp: parseInt(e.target.value) || 1 })}
- className="w-full px-4 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669] dark:text-slate-100"
+ className="w-full px-4 py-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669] dark:text-slate-100"
  />
  </div>
 
@@ -1305,7 +1305,7 @@ export default function MasterTujuanPembelajaranPage({ embedded = false, hideBre
  placeholder="Masukkan uraian spesifik indikator Tujuan Pembelajaran..."
  value={formData.deskripsi_tp}
  onChange={(e) => setFormData({ ...formData, deskripsi_tp: e.target.value })}
- className="w-full px-4 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669] dark:text-slate-100"
+ className="w-full px-4 py-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669] dark:text-slate-100"
  required
  />
  </div>
@@ -1321,7 +1321,7 @@ export default function MasterTujuanPembelajaranPage({ embedded = false, hideBre
  min={1}
  value={formData.urutan}
  onChange={(e) => setFormData({ ...formData, urutan: parseInt(e.target.value) || 1 })}
- className="w-full px-4 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669] dark:text-slate-100"
+ className="w-full px-4 py-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669] dark:text-slate-100"
  />
  </div>
 

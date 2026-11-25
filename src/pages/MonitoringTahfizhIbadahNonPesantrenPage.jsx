@@ -1,4 +1,5 @@
 import { HeroUiHeader } from '../components/ui/HeroUiHeader'
+import HeroUiFilterSelect from '../components/ui/HeroUiFilterSelect'
 import {
   KpiStatCard
 } from '../components/app'
@@ -76,6 +77,7 @@ import ActionDropdown from '../components/app/ActionDropdown'
 import AppSkeleton from '../components/app/AppSkeleton'
 import AppEmptyState from '../components/app/AppEmptyState'
 import AppErrorState from '../components/app/AppErrorState'
+import { PageToolbarActions } from '../components/app/PageToolbarActions'
 import TahfizhSubNav from '../components/tahfizh/TahfizhSubNav'
 import {
   MasterEmptyState,
@@ -645,76 +647,6 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
  }, [baseStudents])
 
  // Dynamic Chart Data: Perbandingan Tahfizh Antar Kelas / Rombel
- const classTahfizhChartData = useMemo(() => {
- const classMap = new Map()
- baseStudents.forEach((st) => {
- const className = st.class_name || 'Umum'
- if (!classMap.has(className)) {
- classMap.set(className, {
- className,
- totalBaris: 0,
- juzSum: 0,
- studentCount: 0,
- verifiedCount: 0,
- })
- }
- const item = classMap.get(className)
- item.totalBaris += st.tahfizh?.total_baris || 0
- item.juzSum += st.tahfizh?.juz_completed || 0
- item.studentCount += 1
- if (st.verification_status === 'verified_teacher') {
- item.verifiedCount += 1
- }
- })
-
- return Array.from(classMap.values())
- .map((item) => ({
- className: item.className,
- totalBaris: item.totalBaris,
- avgJuz: Number((item.juzSum / (item.studentCount || 1)).toFixed(1)),
- avgBaris: Math.round(item.totalBaris / (item.studentCount || 1)),
- studentCount: item.studentCount,
- verifiedPct: Math.round((item.verifiedCount / (item.studentCount || 1)) * 100),
- }))
- .sort((a, b) => b.totalBaris - a.totalBaris)
- }, [baseStudents])
-
- // Dynamic Chart Data: Analisis Kedisiplinan Sholat Wajib & Sunnah Non-Pesantren (Excluding Night Sunnah/Tahajud)
- const worshipDisciplineChartData = useMemo(() => {
- const classMap = new Map()
- baseStudents.forEach((st) => {
- const className = st.class_name || 'Umum'
- if (!classMap.has(className)) {
- classMap.set(className, {
- className,
- sholat5WaktuSum: 0,
- sholatDhuhaSum: 0,
- rawatibDzikirSum: 0,
- studentCount: 0,
- })
- }
- const item = classMap.get(className)
- item.sholat5WaktuSum += st.ibadah?.sholat_5_waktu || 0
- item.sholatDhuhaSum += st.ibadah?.sholat_dhuha || 0
- item.rawatibDzikirSum += st.ibadah?.dzikir_pagi_petang || 0
- item.studentCount += 1
- })
-
- return Array.from(classMap.values()).map((item) => {
- const count = item.studentCount || 1
- const sholatWajib = Math.round(item.sholat5WaktuSum / count)
- const sholatDhuha = Math.round(item.sholatDhuhaSum / count)
- const sunnahRawatib = Math.round(item.rawatibDzikirSum / count)
- return {
- className: item.className,
- sholatWajib,
- sholatDhuha,
- sunnahRawatib,
- studentCount: item.studentCount,
- }
- })
- }, [baseStudents])
-
  // Dynamic Chart Data: Tren Setoran & Kedisiplinan Mingguan
  const weeklyProgressChartData = useMemo(() => {
  const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Ahad']
@@ -743,6 +675,8 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
 
  return {
  unit: u.code || u.name || 'Unit',
+ fullName: u.name || u.code || 'Unit',
+ studentCount: unitStudents.length,
  tahfizh_avg_juz: avgJuz,
  ibadah_pct: ibadahPct,
  }
@@ -786,6 +720,76 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
  return true
  })
  }, [baseStudents, search, filterUnit, filterKelas, filterStatus])
+
+ const classTahfizhChartData = useMemo(() => {
+ const classMap = new Map()
+ filteredStudents.forEach((st) => {
+ const className = st.class_name || 'Umum'
+ if (!classMap.has(className)) {
+ classMap.set(className, {
+ className,
+ totalBaris: 0,
+ juzSum: 0,
+ studentCount: 0,
+ verifiedCount: 0,
+ })
+ }
+ const item = classMap.get(className)
+ item.totalBaris += st.tahfizh?.total_baris || 0
+ item.juzSum += st.tahfizh?.juz_completed || 0
+ item.studentCount += 1
+ if (st.verification_status === 'verified_teacher') {
+ item.verifiedCount += 1
+ }
+ })
+
+ return Array.from(classMap.values())
+ .map((item) => ({
+ className: item.className,
+ totalBaris: item.totalBaris,
+ avgJuz: Number((item.juzSum / (item.studentCount || 1)).toFixed(1)),
+ avgBaris: Math.round(item.totalBaris / (item.studentCount || 1)),
+ studentCount: item.studentCount,
+ verifiedPct: Math.round((item.verifiedCount / (item.studentCount || 1)) * 100),
+ }))
+ .sort((a, b) => b.totalBaris - a.totalBaris)
+ }, [filteredStudents])
+
+ // Dynamic Chart Data: Analisis Kedisiplinan Sholat Wajib & Sunnah Non-Pesantren (Excluding Night Sunnah/Tahajud)
+ const worshipDisciplineChartData = useMemo(() => {
+ const classMap = new Map()
+ filteredStudents.forEach((st) => {
+ const className = st.class_name || 'Umum'
+ if (!classMap.has(className)) {
+ classMap.set(className, {
+ className,
+ sholat5WaktuSum: 0,
+ sholatDhuhaSum: 0,
+ rawatibDzikirSum: 0,
+ studentCount: 0,
+ })
+ }
+ const item = classMap.get(className)
+ item.sholat5WaktuSum += st.ibadah?.sholat_5_waktu || 0
+ item.sholatDhuhaSum += st.ibadah?.sholat_dhuha || 0
+ item.rawatibDzikirSum += st.ibadah?.dzikir_pagi_petang || 0
+ item.studentCount += 1
+ })
+
+ return Array.from(classMap.values()).map((item) => {
+ const count = item.studentCount || 1
+ const sholatWajib = Math.round(item.sholat5WaktuSum / count)
+ const sholatDhuha = Math.round(item.sholatDhuhaSum / count)
+ const sunnahRawatib = Math.round(item.rawatibDzikirSum / count)
+ return {
+ className: item.className,
+ sholatWajib,
+ sholatDhuha,
+ sunnahRawatib,
+ studentCount: item.studentCount,
+ }
+ })
+ }, [filteredStudents])
 
  // Pagination logic
  const totalPages = Math.ceil(filteredStudents.length / perPage) || 1
@@ -907,7 +911,7 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
  </div>
 
  {/* ── CARD PERINGKAT TOP 10 TAHFIZH TERBANYAK & FILTER PER KELAS ── */}
- <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 sm:p-6 shadow-sm space-y-5 dark:border-emerald-800/60 dark:bg-[#1B2433]">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-800/60 bg-white p-5 sm:p-6 shadow-sm space-y-5 dark:border-emerald-800/60 dark:bg-[#1B2433]">
  {/* Header Card Top 10 & Filter Controls */}
  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4 dark:border-emerald-800/60">
  {/* Title & Subtitle */}
@@ -995,7 +999,7 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
  {rank1Winner ? (
  <div
  onClick={() => { setSelectedStudent(rank1Winner); setIsDetailOpen(true) }}
- className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-4.5 shadow-xs transition-all hover:shadow-md hover:scale-[1.01] cursor-pointer group"
+ className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-4.5 shadow-xs transition-all hover:shadow-md hover:scale-[1.01] cursor-pointer group"
  >
  <div className="absolute top-3 right-3">
  <span className="inline-flex items-center gap-1 rounded-full bg-amber-500 text-white px-2.5 py-0.5 text-xs font-bold shadow-xs">
@@ -1031,7 +1035,7 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
  {rank2Winner ? (
  <div
  onClick={() => { setSelectedStudent(rank2Winner); setIsDetailOpen(true) }}
- className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-4.5 shadow-xs transition-all hover:shadow-md hover:scale-[1.01] cursor-pointer group"
+ className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-4.5 shadow-xs transition-all hover:shadow-md hover:scale-[1.01] cursor-pointer group"
  >
  <div className="absolute top-3 right-3">
  <span className="inline-flex items-center gap-1 rounded-full bg-slate-600 text-white px-2.5 py-0.5 text-xs font-bold shadow-xs">
@@ -1067,7 +1071,7 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
  {rank3Winner ? (
  <div
  onClick={() => { setSelectedStudent(rank3Winner); setIsDetailOpen(true) }}
- className="relative overflow-hidden rounded-xl border border-emerald-200/80 bg-white dark:bg-[#1B2433] p-4.5 shadow-xs transition-all hover:shadow-md hover:scale-[1.01] cursor-pointer group"
+ className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 bg-white dark:bg-[#1B2433] p-4.5 shadow-xs transition-all hover:shadow-md hover:scale-[1.01] cursor-pointer group"
  >
  <div className="absolute top-3 right-3">
  <span className="inline-flex items-center gap-1 rounded-full bg-orange-600 text-white px-2.5 py-0.5 text-xs font-bold shadow-xs">
@@ -1177,14 +1181,10 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
  ariaLabel="Mode monitoring"
  />
 
- {/* Action Buttons Icon-Only Squircle (§H.5) */}
- <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0 self-start xl:self-auto flex-wrap">
- {/* Import / Sinkron Button */}
- <SquircleActionButton
- variant="import"
- icon={Upload}
- label="Sinkron Data"
- onClick={() => {
+ {/* Action Buttons Standard PageToolbarActions */}
+ <div className="flex items-center gap-2 shrink-0 self-start xl:self-auto flex-wrap">
+ <PageToolbarActions
+ onImport={() => {
  setAlertFeedback({
  type: 'info',
  title: 'Sinkronisasi Log Data',
@@ -1192,38 +1192,24 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
  })
  setTimeout(() => setAlertFeedback(null), 3000)
  }}
- />
-
- {/* Export Button */}
- <SquircleActionButton
- variant="export"
- icon={Download}
- label="Ekspor Excel"
- onClick={handleExportExcel}
- />
-
- {/* Input Catatan Button */}
- <SquircleActionButton
- variant="primary"
- icon={Plus}
- label="Input Catatan Monitoring"
- onClick={() => {
+ importLabel="Sinkron Data"
+ onExport={handleExportExcel}
+ exportLabel="Ekspor Excel"
+ onAdd={() => {
  if (filteredStudents.length > 0) {
  handleVerifyStudent(filteredStudents[0])
  }
  }}
+ addLabel="Input Catatan Monitoring"
  />
  </div>
  </div>
 
  {/* Baris 2: Search Input + Filters + perPage Selector (§7.9 + §J.3) */}
- <div className="px-4 py-3 sm:px-6 md:px-8 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:border-emerald-800/60 dark:bg-[#1B2433]">
- <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2 sm:gap-2.5 w-full">
- <span className="text-xs font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 shrink-0">
- Filter:
- </span>
+ <div className="-mx-4 -mb-4 sm:-mx-5 sm:-mb-5 px-4 py-3.5 sm:px-5 border-t border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/40 dark:bg-emerald-950/20">
+ <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-2.5 items-center w-full">
  {/* Search Input */}
- <div className="w-full sm:w-auto sm:flex-1 sm:min-w-[160px]">
+ <div className="sm:col-span-2 lg:col-span-4">
  <label htmlFor="mon-search" className="sr-only">Cari siswa, NIS, atau surah</label>
  <div className="relative flex items-center">
  <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
@@ -1234,124 +1220,116 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
  type="text"
  placeholder="Cari siswa, NIS, atau surah..."
  value={search}
- onChange={(e) => setSearch(e.target.value)}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-4 py-2 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20"
+ onChange={(e) => { setSearch(e.target.value); setPage(1) }}
+ className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white pl-10 pr-4 text-xs font-bold text-slate-800 placeholder:text-slate-400 transition-all focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
  </div>
 
  {/* Filter Unit Sekolah */}
- <div className="w-full sm:w-auto min-w-[140px]">
- <label htmlFor="mon-unit" className="sr-only">Unit sekolah</label>
- <div className="relative flex items-center">
- <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
- <Building2 className="size-4" />
- </div>
- <CustomSelect
- id="mon-unit"
+ <div className="lg:col-span-2">
+ <HeroUiFilterSelect
  value={isScopedToLedUnit ? principalUnitCode : filterUnit}
  disabled={isScopedToLedUnit}
- onChange={(e) => setFilterUnit(e.target.value)}
- className="w-full sm:w-auto min-w-[140px] appearance-none rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-8 py-2 text-xs font-semibold text-slate-800 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20 cursor-pointer disabled:opacity-50"
- >
- {isScopedToLedUnit ? (
- <option value={principalUnitCode}>{principalUnitName} (Unit Dipimpin)</option>
- ) : (
- <>
- <option value="">Semua Unit Non-Pesantren</option>
- {nonPesantrenUnits.map((u) => (
- <option key={u.id} value={u.code || u.name}>
- {u.name} ({u.unit_type || 'Sekolah'})
- </option>
- ))}
- </>
- )}
- </CustomSelect>
- <ChevronDown className="pointer-events-none absolute right-2.5 h-3.5 w-3.5 text-slate-400" />
- </div>
+ onChange={(val) => { setFilterUnit(val); setPage(1) }}
+ options={
+ isScopedToLedUnit
+ ? [{ value: principalUnitCode, label: `${principalUnitName} (Unit Dipimpin)` }]
+ : [
+ { value: '', label: 'Semua Unit Non-Pesantren' },
+ ...nonPesantrenUnits.map((u) => ({
+ value: u.code || u.name,
+ label: `${u.name} (${u.unit_type || 'Sekolah'})`,
+ })),
+ ]
+ }
+ placeholder="Semua Unit Non-Pesantren"
+ icon={Building2}
+ searchable={nonPesantrenUnits.length > 5}
+ ariaLabel="Unit sekolah"
+ size="lg"
+ className="!w-full !block"
+ popoverWidth="min-w-[220px]"
+ />
  </div>
 
  {/* Filter Kelas */}
- <div className="w-full sm:w-auto min-w-[140px]">
- <label htmlFor="mon-kelas" className="sr-only">Kelas</label>
- <div className="relative flex items-center">
- <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
- <BookOpen className="size-4" />
- </div>
- <CustomSelect
- id="mon-kelas"
+ <div className="lg:col-span-2">
+ <HeroUiFilterSelect
  value={filterKelas}
- onChange={(e) => setFilterKelas(e.target.value)}
- className="w-full sm:w-auto min-w-[140px] appearance-none rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-8 py-2 text-xs font-semibold text-slate-800 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20 cursor-pointer"
- >
- <option value="">Semua Kelas / Rombel</option>
- {uniqueClassesWithUnit.map((item) => (
- <option key={item.className} value={item.className}>
- {item.className} ({item.unitCode})
- </option>
- ))}
- </CustomSelect>
- <ChevronDown className="pointer-events-none absolute right-2.5 h-3.5 w-3.5 text-slate-400" />
- </div>
+ onChange={(val) => { setFilterKelas(val); setPage(1) }}
+ options={[
+ { value: '', label: 'Semua Kelas / Rombel' },
+ ...uniqueClassesWithUnit.map((item) => ({
+ value: item.className,
+ label: `${item.className} (${item.unitCode})`,
+ })),
+ ]}
+ placeholder="Semua Kelas / Rombel"
+ icon={BookOpen}
+ searchable={uniqueClassesWithUnit.length > 5}
+ ariaLabel="Kelas atau rombel"
+ size="lg"
+ className="!w-full !block"
+ popoverWidth="min-w-[200px]"
+ />
  </div>
 
  {/* Filter Status Verifikasi */}
- <div className="w-full sm:w-auto min-w-[140px]">
- <label htmlFor="mon-status" className="sr-only">Status verifikasi</label>
- <div className="relative flex items-center">
- <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
- <ShieldCheck className="size-4" />
- </div>
- <CustomSelect
- id="mon-status"
+ <div className="lg:col-span-2">
+ <HeroUiFilterSelect
  value={filterStatus}
- onChange={(e) => setFilterStatus(e.target.value)}
- className="w-full sm:w-auto min-w-[140px] appearance-none rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-8 py-2 text-xs font-semibold text-slate-800 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20 cursor-pointer"
- >
- <option value="">Semua Status Verifikasi</option>
- <option value="verified_teacher">Terverifikasi Guru/Wali Kelas</option>
- <option value="verified_parent">Terverifikasi Orang Tua</option>
- <option value="pending">Menunggu Verifikasi</option>
- </CustomSelect>
- <ChevronDown className="pointer-events-none absolute right-2.5 h-3.5 w-3.5 text-slate-400" />
- </div>
+ onChange={(val) => { setFilterStatus(val); setPage(1) }}
+ options={[
+ { value: '', label: 'Semua Status Verifikasi' },
+ { value: 'verified_teacher', label: 'Terverifikasi Guru/Wali Kelas' },
+ { value: 'verified_parent', label: 'Terverifikasi Orang Tua' },
+ { value: 'pending', label: 'Menunggu Verifikasi' },
+ ]}
+ placeholder="Semua Status Verifikasi"
+ icon={ShieldCheck}
+ ariaLabel="Status verifikasi"
+ size="lg"
+ className="!w-full !block"
+ popoverWidth="min-w-[230px]"
+ />
  </div>
 
- {/* Select perPage */}
- <div className="w-full sm:w-auto min-w-[140px]">
- <label htmlFor="mon-perpage" className="sr-only">Tampilkan per halaman</label>
- <div className="relative flex items-center">
- <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
- <ListChecks className="size-4" />
- </div>
- <CustomSelect
- id="mon-perpage"
+ {/* Select perPage + Reset */}
+ <div className={`${(search || filterUnit || filterKelas || filterStatus) ? 'lg:col-span-1' : 'lg:col-span-2'}`}>
+ <HeroUiFilterSelect
  value={perPage}
- onChange={(e) => {
- setPerPage(Number(e.target.value))
+ onChange={(val) => {
+ setPerPage(Number(val))
  setPage(1)
  }}
- className="w-full sm:w-auto min-w-[140px] appearance-none rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-8 py-2 text-xs font-semibold text-slate-800 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20 cursor-pointer"
- >
- <option value={5}>5 per halaman</option>
- <option value={10}>10 per halaman</option>
- <option value={15}>15 per halaman</option>
- <option value={25}>25 per halaman</option>
- <option value={50}>50 per halaman</option>
- </CustomSelect>
- <ChevronDown className="pointer-events-none absolute right-2.5 h-3.5 w-3.5 text-slate-400" />
- </div>
+ options={[
+ { value: 5, label: '5 / hal' },
+ { value: 10, label: '10 / hal' },
+ { value: 15, label: '15 / hal' },
+ { value: 25, label: '25 / hal' },
+ { value: 50, label: '50 / hal' },
+ ]}
+ placeholder="10 / hal"
+ icon={ListChecks}
+ ariaLabel="Tampilkan per halaman"
+ size="lg"
+ className="!w-full !block"
+ popoverWidth="min-w-[140px]"
+ />
  </div>
 
  {(search || filterUnit || filterKelas || filterStatus) && (
+ <div className="lg:col-span-1">
  <button
  type="button"
  onClick={() => { setSearch(''); setFilterUnit(''); setFilterKelas(''); setFilterStatus(''); setPage(1) }}
- className="w-full sm:w-auto sm:ml-auto inline-flex items-center justify-center gap-1.5 h-9 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-slate-900 px-3 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-emerald-50/40 dark:hover:bg-emerald-950/30 transition-all cursor-pointer"
+ className="w-full inline-flex items-center justify-center gap-1.5 h-10 rounded-xl border-2 border-emerald-300 bg-emerald-100 hover:bg-emerald-200 px-3 text-xs font-extrabold text-emerald-900 dark:border-emerald-700/80 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/80 dark:text-emerald-200 transition-all active:scale-95 cursor-pointer shadow-xs"
  >
- <RotateCcw className="h-3.5 w-3.5" />
+ <RotateCcw className="h-3.5 w-3.5 shrink-0" />
  <span>Reset</span>
  </button>
+ </div>
  )}
  </div>
  </div>
@@ -1359,33 +1337,32 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
 
  {/* TAB CONTENT 1: Rekap Datatable Siswa */}
  {activeTab === 'rekap' && (
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-sm overflow-hidden dark:border-emerald-800/60 dark:bg-[#1B2433]">
+ <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-800/60 bg-white shadow-sm overflow-hidden dark:border-emerald-800/60 dark:bg-[#1B2433]">
  <div className="overflow-x-auto">
- <TableRoot fullBleed={false}>
-          <TableHeader>
-            <TableRow className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 text-emerald-950 dark:text-emerald-200">
-              <TableHead className="py-2.5 px-4 font-black text-xs uppercase tracking-wider">
+ <TableRoot fullBleed={true}>
+          <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 text-emerald-950 dark:text-emerald-200">
+            <TableRow className="bg-transparent hover:bg-transparent">
+              <TableHead className="py-3 px-4 font-black text-xs uppercase tracking-wider">
                 <div className="flex items-center gap-1.5">
                   Siswa / Rombel
                   <ArrowUpDown className="w-3.5 h-3.5" />
                 </div>
               </TableHead>
-              <TableHead className="hidden sm:table-cell py-2.5 px-4 font-black text-xs uppercase tracking-wider">
+              <TableHead className="hidden sm:table-cell py-3 px-4 font-black text-xs uppercase tracking-wider">
                 Unit Sekolah
               </TableHead>
-              <TableHead className="py-2.5 px-4 font-black text-xs uppercase tracking-wider">
+              <TableHead className="py-3 px-4 font-black text-xs uppercase tracking-wider">
                 Tahfizh & Mutaba'ah
               </TableHead>
-              <TableHead className="py-2.5 px-4 font-black text-xs uppercase tracking-wider">
+              <TableHead className="py-3 px-4 font-black text-xs uppercase tracking-wider">
                 Status Verifikasi
               </TableHead>
-              <TableHead className="py-2.5 px-4 text-right select-none w-20" />
             </TableRow>
           </TableHeader>
  <TableBody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40">
  {paginatedStudents.length === 0 ? (
  <TableRow>
- <TableCell colSpan={5} className="py-8">
+ <TableCell colSpan={4} className="py-8">
  <MasterEmptyState
  title="Tidak Ada Data Monitoring Siswa"
  description="Siswa tidak ditemukan sesuai filter pencarian atau unit yang dipilih."
@@ -1394,27 +1371,34 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
  </TableRow>
  ) : (
  paginatedStudents.map((siswa) => (
- <TableRow key={siswa.id} className="hover:bg-emerald-50/40 dark:hover:bg-emerald-950/20 transition-colors">
+ <TableRow
+ key={siswa.id}
+ onClick={() => {
+ setSelectedStudent(siswa)
+ setIsDetailOpen(true)
+ }}
+ className="hover:bg-emerald-50/40 dark:hover:bg-emerald-950/20 transition-colors cursor-pointer"
+ >
  {/* Siswa & Rombel */}
  <TableCell className="py-3.5 px-4 align-top sm:align-middle">
  <div className="flex items-center gap-3">
- <Avatar size="md" className="bg-emerald-100 text-emerald-800 font-bold shrink-0">
+ <Avatar size="md" className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-200 font-bold shrink-0">
  <AvatarFallback>{siswa.student_name.slice(0, 2).toUpperCase()}</AvatarFallback>
  </Avatar>
  <div className="min-w-0">
- <p className="font-bold text-slate-900 text-sm hover:text-emerald-600 transition-colors cursor-pointer line-clamp-2" onClick={() => { setSelectedStudent(siswa); setIsDetailOpen(true) }}>
+ <p className="font-bold text-slate-900 dark:text-slate-100 text-sm hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors cursor-pointer line-clamp-2" onClick={() => { setSelectedStudent(siswa); setIsDetailOpen(true) }}>
  {siswa.student_name}
  </p>
- <p className="text-xs text-slate-500 font-mono line-clamp-1 mt-0.5">
- NIS: {siswa.nis} • <span className="font-medium text-slate-700">{siswa.class_name}</span>
+ <p className="text-xs text-slate-500 dark:text-slate-400 font-mono line-clamp-1 mt-0.5">
+ NIS: {siswa.nis} • <span className="font-medium text-slate-700 dark:text-slate-300">{siswa.class_name}</span>
  </p>
  </div>
  </div>
- <div className="sm:hidden mt-2 flex flex-wrap items-center gap-1.5 pt-1.5 border-t border-emerald-200/80 dark:border-emerald-800/80 dark:border-emerald-800/60">
+ <div className="sm:hidden mt-2 flex flex-wrap items-center gap-1.5 pt-1.5 border-t border-emerald-200/80 dark:border-emerald-800/60">
  <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300">
  {siswa.unit_name}
  </span>
- <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/10 text-emerald-600 tabular-nums">
+ <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 tabular-nums">
  {siswa.tahfizh.total_baris} baris
  </span>
  </div>
@@ -1434,11 +1418,11 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
                     <span className="font-bold text-slate-900 dark:text-white text-xs sm:text-sm">
                       {siswa.tahfizh.current_surah} ({siswa.tahfizh.current_ayat})
                     </span>
-                    <Badge color="emerald" size="sm">
+                    <Badge color="primary" size="sm">
                       Juz {siswa.tahfizh.juz_completed} / {siswa.tahfizh.target_juz}
                     </Badge>
                   </div>
-                  <div className="flex items-center gap-2 mt-1 text-xs text-slate-500">
+                  <div className="flex items-center gap-2 mt-1 text-xs text-slate-500 dark:text-slate-400">
                     <span>Total: {siswa.tahfizh.total_baris} baris</span>
                     <span>•</span>
                     <span className="font-semibold text-indigo-700 dark:text-indigo-400">Sholat 5 Waktu: {siswa.ibadah.sholat_5_waktu}%</span>
@@ -1460,32 +1444,6 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
  Menunggu Verifikasi
  </Badge>
  )}
- </TableCell>
-
- {/* Action Dropdown */}
- <TableCell className="py-3.5 px-4 text-right align-middle">
- <ActionDropdown
- actions={[
- {
- label: 'Lihat Rincian Harian',
- icon: Eye,
- onClick: () => {
- setSelectedStudent(siswa)
- setIsDetailOpen(true)
- },
- },
- {
- label: 'Verifikasi & Beri Catatan',
- icon: MessageSquare,
- onClick: () => handleVerifyStudent(siswa),
- },
- {
- label: 'Cetak Laporan Rapor Mutabaah',
- icon: FileText,
- onClick: () => handlePrintStudentReport(siswa),
- },
- ]}
- />
  </TableCell>
  </TableRow>
  ))
@@ -1512,81 +1470,147 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
  )}
 
  {/* TAB CONTENT 2: Grafik & Analisis Capaian */}
- {activeTab === 'chart' && (
+ {activeTab === 'chart' && (() => {
+ const totalBarisAll = classTahfizhChartData.reduce((acc, c) => acc + c.totalBaris, 0)
+ const totalStudentsAll = classTahfizhChartData.reduce((acc, c) => acc + c.studentCount, 0)
+ const avgJuzAll = classTahfizhChartData.length
+ ? (classTahfizhChartData.reduce((acc, c) => acc + c.avgJuz, 0) / classTahfizhChartData.length).toFixed(1)
+ : '0.0'
+ const activeRombelCount = classTahfizhChartData.filter((c) => c.totalBaris > 0).length
+
+ const avgSholatWajib = worshipDisciplineChartData.length
+ ? Math.round(worshipDisciplineChartData.reduce((acc, c) => acc + c.sholatWajib, 0) / worshipDisciplineChartData.length)
+ : 0
+ const avgSholatDhuha = worshipDisciplineChartData.length
+ ? Math.round(worshipDisciplineChartData.reduce((acc, c) => acc + c.sholatDhuha, 0) / worshipDisciplineChartData.length)
+ : 0
+ const avgRawatib = worshipDisciplineChartData.length
+ ? Math.round(worshipDisciplineChartData.reduce((acc, c) => acc + c.sunnahRawatib, 0) / worshipDisciplineChartData.length)
+ : 0
+
+ const tahfizhChartMinWidth = Math.max(640, classTahfizhChartData.length * 62)
+ const worshipChartMinWidth = Math.max(640, worshipDisciplineChartData.length * 66)
+
+ return (
  <div className="space-y-6">
- {/* Card Grafik Perbandingan Tahfizh Antar Kelas / Rombel (Dynamic BarChart) */}
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 shadow-sm space-y-4">
+ {/* Card 1: Grafik Perbandingan Tahfizh Antar Kelas / Rombel */}
+ <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-5 sm:p-6 shadow-sm space-y-5">
  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4">
  <div className="flex items-center gap-3">
- <div className="flex h-9 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200/80 dark:border-emerald-800/60 shadow-xs shrink-0">
- <BarChart3 className="w-6 h-6 text-emerald-600" />
+ <div className="flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-md shadow-emerald-600/20 border border-white/20 shrink-0">
+ <BarChart3 className="w-5 h-5" />
  </div>
  <div>
- <div className="flex items-center gap-2">
- <h3 className="text-base sm:text-lg font-bold text-slate-900">
+ <div className="flex flex-wrap items-center gap-2">
+ <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
  Grafik Perbandingan Tahfizh Antar Kelas
  </h3>
- <Badge color="emerald" size="sm" className="font-semibold">Rombel Kelas</Badge>
+ <Badge color="emerald" size="sm" className="font-bold">Rombel Kelas</Badge>
  </div>
- <p className="text-xs text-slate-500 mt-0.5">
+ <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
  Perbandingan total baris hafalan, rata-rata Juz Al-Qur’an, dan partisipasi per kelas di {principalUnitName}
  </p>
  </div>
  </div>
 
- <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 bg-slate-50 border border-emerald-200/80 px-3 py-1.5 rounded-xl self-start sm:self-auto">
- <span className="text-emerald-700 font-bold">{classTahfizhChartData.length} Rombel</span> Terdaftar
+ <div className="inline-flex items-center gap-2 text-xs font-bold text-emerald-800 dark:text-emerald-200 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200/80 dark:border-emerald-800/60 px-3.5 py-1.5 rounded-xl self-start sm:self-auto shrink-0">
+ <span className="font-black">{classTahfizhChartData.length} Rombel</span>
+ <span className="text-emerald-600 dark:text-emerald-400">Terdaftar</span>
  </div>
  </div>
 
- {/* Chart Visual Container */}
- <div className="h-80 w-full pt-2">
+ {/* Rincian Warna Ringkasan KPI */}
+ <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+ <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-gradient-to-br from-emerald-50 to-white dark:from-emerald-950/40 dark:to-slate-900/60 p-3 flex items-center gap-3">
+ <span className="size-3 rounded-full bg-emerald-500 shrink-0 ring-4 ring-emerald-100 dark:ring-emerald-900/50" />
+ <div className="min-w-0">
+ <p className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">Total Baris Hafalan</p>
+ <p className="text-sm sm:text-base font-black text-slate-900 dark:text-white tabular-nums">{totalBarisAll.toLocaleString('id-ID')} Baris</p>
+ </div>
+ </div>
+ <div className="rounded-xl border border-sky-200/80 dark:border-sky-800/60 bg-gradient-to-br from-sky-50 to-white dark:from-sky-950/40 dark:to-slate-900/60 p-3 flex items-center gap-3">
+ <span className="size-3 rounded-full bg-sky-500 shrink-0 ring-4 ring-sky-100 dark:ring-sky-900/50" />
+ <div className="min-w-0">
+ <p className="text-[10px] font-extrabold uppercase tracking-wider text-sky-700 dark:text-sky-300">Rata-rata Capaian</p>
+ <p className="text-sm sm:text-base font-black text-slate-900 dark:text-white tabular-nums">{avgJuzAll} Juz</p>
+ </div>
+ </div>
+ <div className="rounded-xl border border-teal-200/80 dark:border-teal-800/60 bg-gradient-to-br from-teal-50 to-white dark:from-teal-950/40 dark:to-slate-900/60 p-3 flex items-center gap-3">
+ <span className="size-3 rounded-full bg-teal-500 shrink-0 ring-4 ring-teal-100 dark:ring-teal-900/50" />
+ <div className="min-w-0">
+ <p className="text-[10px] font-extrabold uppercase tracking-wider text-teal-700 dark:text-teal-300">Rombel Aktif Setoran</p>
+ <p className="text-sm sm:text-base font-black text-slate-900 dark:text-white tabular-nums">{activeRombelCount} / {classTahfizhChartData.length}</p>
+ </div>
+ </div>
+ <div className="rounded-xl border border-violet-200/80 dark:border-violet-800/60 bg-gradient-to-br from-violet-50 to-white dark:from-violet-950/40 dark:to-slate-900/60 p-3 flex items-center gap-3">
+ <span className="size-3 rounded-full bg-violet-500 shrink-0 ring-4 ring-violet-100 dark:ring-violet-900/50" />
+ <div className="min-w-0">
+ <p className="text-[10px] font-extrabold uppercase tracking-wider text-violet-700 dark:text-violet-300">Total Santri Terdata</p>
+ <p className="text-sm sm:text-base font-black text-slate-900 dark:text-white tabular-nums">{totalStudentsAll} Siswa</p>
+ </div>
+ </div>
+ </div>
+
+ {/* Chart Visual Container (Horizontal Scroll for 48+ Rombels) */}
+ <div className="rounded-2xl border border-emerald-100 dark:border-emerald-900/50 bg-slate-50/40 dark:bg-slate-900/30 p-3 overflow-x-auto">
+ <div style={{ minWidth: `${tahfizhChartMinWidth}px` }} className="h-80 w-full">
  <ResponsiveContainer width="100%" height="100%">
- <BarChart data={classTahfizhChartData} margin={{ top: 10, right: 10, left: -10, bottom: 25 }}>
- <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+ <BarChart data={classTahfizhChartData} margin={{ top: 12, right: 16, left: -8, bottom: 28 }}>
+ <defs>
+ <linearGradient id="tahfizhBarisGrad" x1="0" y1="0" x2="0" y2="1">
+ <stop offset="0%" stopColor="#10b981" stopOpacity={0.95} />
+ <stop offset="100%" stopColor="#059669" stopOpacity={0.75} />
+ </linearGradient>
+ <linearGradient id="tahfizhJuzGrad" x1="0" y1="0" x2="0" y2="1">
+ <stop offset="0%" stopColor="#0ea5e9" stopOpacity={0.95} />
+ <stop offset="100%" stopColor="#0284c7" stopOpacity={0.75} />
+ </linearGradient>
+ </defs>
+ <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
  <XAxis
  dataKey="className"
- tick={{ fontSize: 11, fill: '#475569', fontWeight: 600 }}
+ tick={{ fontSize: 10, fill: '#475569', fontWeight: 700 }}
  interval={0}
- angle={-15}
+ angle={-22}
  textAnchor="end"
+ height={52}
  />
  <YAxis
  yAxisId="left"
  orientation="left"
- tick={{ fontSize: 11, fill: '#059669' }}
+ tick={{ fontSize: 11, fill: '#059669', fontWeight: 600 }}
  />
  <YAxis
  yAxisId="right"
  orientation="right"
  domain={[0, 30]}
- tick={{ fontSize: 11, fill: '#0284c7' }}
+ tick={{ fontSize: 11, fill: '#0284c7', fontWeight: 600 }}
  />
  <Tooltip
  content={({ active, payload, label }) => {
  if (active && payload && payload.length) {
  const data = payload[0].payload
  return (
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white/95 p-3 shadow-xl backdrop-blur-xs text-xs space-y-1.5">
- <p className="font-bold text-slate-900 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-1 flex items-center gap-1.5">
+ <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white/95 dark:bg-slate-900/95 p-3 shadow-xl backdrop-blur-xs text-xs space-y-1.5">
+ <p className="font-bold text-slate-900 dark:text-white border-b border-emerald-200/80 dark:border-emerald-800/60 pb-1 flex items-center gap-1.5">
  <BookOpen className="w-4 h-4 text-emerald-600" /> {label}
  </p>
- <div className="space-y-1 text-slate-700">
+ <div className="space-y-1 text-slate-700 dark:text-slate-300">
  <p className="flex justify-between gap-4">
  <span className="text-slate-500">Total Baris Hafalan:</span>
- <span className="font-bold text-emerald-700">{data.totalBaris?.toLocaleString('id-ID')} Baris</span>
+ <span className="font-bold text-emerald-700 dark:text-emerald-400">{data.totalBaris?.toLocaleString('id-ID')} Baris</span>
  </p>
  <p className="flex justify-between gap-4">
  <span className="text-slate-500">Rata-rata Juz / Siswa:</span>
- <span className="font-bold text-sky-700">{data.avgJuz} Juz</span>
+ <span className="font-bold text-sky-700 dark:text-sky-400">{data.avgJuz} Juz</span>
  </p>
  <p className="flex justify-between gap-4">
  <span className="text-slate-500">Rata-rata Baris / Siswa:</span>
- <span className="font-bold text-slate-800">{data.avgBaris} Baris</span>
+ <span className="font-bold text-slate-800 dark:text-slate-200">{data.avgBaris} Baris</span>
  </p>
  <p className="flex justify-between gap-4">
  <span className="text-slate-500">Jumlah Siswa:</span>
- <span className="font-medium text-slate-800">{data.studentCount} Siswa</span>
+ <span className="font-medium text-slate-800 dark:text-slate-200">{data.studentCount} Siswa</span>
  </p>
  </div>
  </div>
@@ -1595,33 +1619,45 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
  return null
  }}
  />
- <Legend wrapperStyle={{ paddingTop: '10px', fontSize: '12px' }} />
+ <Legend wrapperStyle={{ paddingTop: '8px', fontSize: '12px', fontWeight: 600 }} />
  <Bar
  yAxisId="left"
  dataKey="totalBaris"
  name="Total Baris Hafalan (Baris)"
- fill="#10b981"
+ fill="url(#tahfizhBarisGrad)"
  radius={[6, 6, 0, 0]}
- maxBarSize={45}
+ maxBarSize={36}
  />
  <Bar
  yAxisId="right"
  dataKey="avgJuz"
  name="Rata-rata Juz per Siswa (Juz)"
- fill="#0284c7"
+ fill="url(#tahfizhJuzGrad)"
  radius={[6, 6, 0, 0]}
- maxBarSize={45}
+ maxBarSize={36}
  />
  </BarChart>
  </ResponsiveContainer>
  </div>
+ </div>
 
- {/* Dynamic Summary Badges Per Class */}
- <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5 pt-2 border-t border-emerald-200/80">
- {classTahfizhChartData.map((item) => (
+ {/* Dynamic Summary Badges Per Class (Scrollable, Color-Toned) */}
+ <div className="pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60 space-y-2.5">
+ <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 dark:text-slate-400">
+ <span>Rincian Capaian Per Rombel (Klik untuk filter tabel):</span>
+ <span>Menampilkan {classTahfizhChartData.length} rombel</span>
+ </div>
+ <div className="max-h-60 overflow-y-auto pr-1 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5">
+ {classTahfizhChartData.map((item) => {
+ const hasProgress = item.totalBaris > 0
+ return (
  <div
  key={item.className}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/70 p-2.5 hover:bg-emerald-50 hover:text-emerald-700 transition-colors text-center cursor-pointer"
+ className={`rounded-xl border p-2.5 transition-all text-left cursor-pointer ${
+ hasProgress
+ ? 'border-emerald-300 bg-gradient-to-br from-emerald-50/90 to-teal-50/40 hover:border-emerald-500 dark:border-emerald-700/80 dark:from-emerald-950/50 dark:to-slate-900/60'
+ : 'border-emerald-200/70 bg-slate-50/80 hover:bg-emerald-50/60 dark:border-emerald-800/50 dark:bg-slate-900/40'
+ }`}
  onClick={() => {
  setTop10ClassFilter(item.className)
  setFilterKelas(item.className)
@@ -1629,55 +1665,112 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
  }}
  title={`Klik untuk memfilter data kelas ${item.className}`}
  >
- <span className="text-xs font-bold text-slate-800 block truncate">{item.className}</span>
- <span className="text-xs font-extrabold text-emerald-700 block mt-0.5">{item.totalBaris} Baris</span>
- <span className="text-[10px] text-slate-500 block font-medium">Avg {item.avgJuz} Juz ({item.studentCount} siswa)</span>
+ <div className="flex items-center justify-between gap-1">
+ <span className="text-xs font-extrabold text-slate-900 dark:text-white truncate">{item.className}</span>
+ <span className={`px-1.5 py-0.5 rounded-md text-[9px] font-black shrink-0 ${
+ hasProgress
+ ? 'bg-emerald-600 text-white'
+ : 'bg-slate-200/80 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
+ }`}>
+ {item.studentCount}
+ </span>
  </div>
- ))}
+ <span className={`text-xs font-black block mt-1 ${hasProgress ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-500 dark:text-slate-400'}`}>
+ {item.totalBaris.toLocaleString('id-ID')} Baris
+ </span>
+ <span className="text-[10px] text-sky-700 dark:text-sky-400 block font-semibold">
+ Avg {item.avgJuz} Juz
+ </span>
+ </div>
+ )
+ })}
+ </div>
  </div>
  </div>
 
- {/* Card Grafik Analisis Kedisiplinan Sholat Wajib & Sunnah Non-Pesantren (Tanpa Sholat Malam / Tahajud) */}
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 shadow-sm space-y-4">
+ {/* Card 2: Analisis Kedisiplinan Sholat Wajib & Sunnah Harian */}
+ <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-5 sm:p-6 shadow-sm space-y-5">
  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4">
  <div className="flex items-center gap-3">
- <div className="flex h-9 w-11 items-center justify-center rounded-xl bg-sky-50 text-sky-600 border border-emerald-200/80 dark:border-emerald-800/60 shadow-xs shrink-0">
- <CheckCircle2 className="w-6 h-6 text-sky-600" />
+ <div className="flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 text-white shadow-md shadow-sky-600/20 border border-white/20 shrink-0">
+ <CheckCircle2 className="w-5 h-5" />
  </div>
  <div>
  <div className="flex flex-wrap items-center gap-2">
- <h3 className="text-base sm:text-lg font-bold text-slate-900">
- Analisis Kedisiplinan Sholat Wajib & Sunnah Harian
+ <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
+ Analisis Kedisiplinan Sholat Wajib &amp; Sunnah Harian
  </h3>
- <Badge color="sky" size="sm" className="font-semibold">Regular Non-Pesantren</Badge>
- <Badge color="purple" size="sm" className="font-semibold">Tanpa Sholat Malam</Badge>
+ <Badge color="sky" size="sm" className="font-bold">Regular Non-Pesantren</Badge>
+ <Badge color="purple" size="sm" className="font-bold">Tanpa Sholat Malam</Badge>
  </div>
- <p className="text-xs text-slate-500 mt-0.5">
- Tingkat kepatuhan Sholat Wajib 5 Waktu & Sholat Sunnah Harian (Dhuha, Rawatib, Dzikir) per rombel kelas di {principalUnitName}
+ <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+ Tingkat kepatuhan Sholat Wajib 5 Waktu &amp; Sholat Sunnah Harian (Dhuha, Rawatib, Dzikir) per rombel kelas di {principalUnitName}
  </p>
  </div>
  </div>
 
- <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 bg-slate-50 border border-emerald-200/80 px-3 py-1.5 rounded-xl self-start sm:self-auto">
- <span className="text-sky-700 font-bold">{worshipDisciplineChartData.length} Rombel</span> Non-Pesantren
+ <div className="inline-flex items-center gap-2 text-xs font-bold text-sky-800 dark:text-sky-200 bg-sky-50 dark:bg-sky-950/60 border border-sky-200/80 dark:border-sky-800/60 px-3.5 py-1.5 rounded-xl self-start sm:self-auto shrink-0">
+ <span className="font-black">{worshipDisciplineChartData.length} Rombel</span>
+ <span className="text-sky-600 dark:text-sky-400">Non-Pesantren</span>
+ </div>
+ </div>
+
+ {/* Rincian Warna Kedisiplinan Ibadah */}
+ <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+ <div className="rounded-xl border border-sky-200/80 dark:border-sky-800/60 bg-gradient-to-br from-sky-50 to-white dark:from-sky-950/40 dark:to-slate-900/60 p-3 flex items-center justify-between">
+ <div className="flex items-center gap-2.5">
+ <span className="size-3 rounded-full bg-sky-500 ring-4 ring-sky-100 dark:ring-sky-900/50" />
+ <span className="text-xs font-bold text-slate-700 dark:text-slate-200">Sholat Wajib 5 Waktu</span>
+ </div>
+ <span className="text-sm font-black text-sky-700 dark:text-sky-400 tabular-nums">{avgSholatWajib}%</span>
+ </div>
+ <div className="rounded-xl border border-violet-200/80 dark:border-violet-800/60 bg-gradient-to-br from-violet-50 to-white dark:from-violet-950/40 dark:to-slate-900/60 p-3 flex items-center justify-between">
+ <div className="flex items-center gap-2.5">
+ <span className="size-3 rounded-full bg-violet-500 ring-4 ring-violet-100 dark:ring-violet-900/50" />
+ <span className="text-xs font-bold text-slate-700 dark:text-slate-200">Sholat Sunnah Dhuha</span>
+ </div>
+ <span className="text-sm font-black text-violet-700 dark:text-violet-400 tabular-nums">{avgSholatDhuha}%</span>
+ </div>
+ <div className="rounded-xl border border-amber-200/80 dark:border-amber-800/60 bg-gradient-to-br from-amber-50 to-white dark:from-amber-950/40 dark:to-slate-900/60 p-3 flex items-center justify-between">
+ <div className="flex items-center gap-2.5">
+ <span className="size-3 rounded-full bg-amber-500 ring-4 ring-amber-100 dark:ring-amber-900/50" />
+ <span className="text-xs font-bold text-slate-700 dark:text-slate-200">Rawatib &amp; Dzikir</span>
+ </div>
+ <span className="text-sm font-black text-amber-700 dark:text-amber-400 tabular-nums">{avgRawatib}%</span>
  </div>
  </div>
 
  {/* Chart Visual Container */}
- <div className="h-80 w-full pt-2">
+ <div className="rounded-2xl border border-sky-100 dark:border-sky-900/50 bg-slate-50/40 dark:bg-slate-900/30 p-3 overflow-x-auto">
+ <div style={{ minWidth: `${worshipChartMinWidth}px` }} className="h-80 w-full">
  <ResponsiveContainer width="100%" height="100%">
- <BarChart data={worshipDisciplineChartData} margin={{ top: 10, right: 10, left: -10, bottom: 25 }}>
- <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+ <BarChart data={worshipDisciplineChartData} margin={{ top: 12, right: 16, left: -8, bottom: 28 }}>
+ <defs>
+ <linearGradient id="sholatWajibGrad" x1="0" y1="0" x2="0" y2="1">
+ <stop offset="0%" stopColor="#0ea5e9" stopOpacity={0.95} />
+ <stop offset="100%" stopColor="#0284c7" stopOpacity={0.75} />
+ </linearGradient>
+ <linearGradient id="sholatDhuhaGrad" x1="0" y1="0" x2="0" y2="1">
+ <stop offset="0%" stopColor="#a78bfa" stopOpacity={0.95} />
+ <stop offset="100%" stopColor="#7c3aed" stopOpacity={0.75} />
+ </linearGradient>
+ <linearGradient id="sunnahRawatibGrad" x1="0" y1="0" x2="0" y2="1">
+ <stop offset="0%" stopColor="#fbbf24" stopOpacity={0.95} />
+ <stop offset="100%" stopColor="#d97706" stopOpacity={0.75} />
+ </linearGradient>
+ </defs>
+ <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
  <XAxis
  dataKey="className"
- tick={{ fontSize: 11, fill: '#475569', fontWeight: 600 }}
+ tick={{ fontSize: 10, fill: '#475569', fontWeight: 700 }}
  interval={0}
- angle={-15}
+ angle={-22}
  textAnchor="end"
+ height={52}
  />
  <YAxis
  domain={[0, 100]}
- tick={{ fontSize: 11, fill: '#0284c7' }}
+ tick={{ fontSize: 11, fill: '#0284c7', fontWeight: 600 }}
  unit="%"
  />
  <Tooltip
@@ -1685,28 +1778,28 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
  if (active && payload && payload.length) {
  const data = payload[0].payload
  return (
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white/95 p-3.5 shadow-xl backdrop-blur-xs text-xs space-y-2 max-w-md">
- <div className="border-b border-emerald-200/80 dark:border-emerald-800/60 pb-1.5 flex items-center justify-between">
- <p className="font-bold text-slate-900 flex items-center gap-1.5">
+ <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white/95 dark:bg-slate-900/95 p-3.5 shadow-xl backdrop-blur-xs text-xs space-y-2 max-w-md">
+ <div className="border-b border-emerald-200/80 dark:border-emerald-800/60 pb-1.5 flex items-center justify-between gap-3">
+ <p className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
  <CheckCircle2 className="w-4 h-4 text-sky-600" /> {label}
  </p>
- <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">{data.studentCount} Siswa</span>
+ <span className="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full">{data.studentCount} Siswa</span>
  </div>
- <div className="space-y-1.5 text-slate-700">
+ <div className="space-y-1.5 text-slate-700 dark:text-slate-300">
  <p className="flex justify-between gap-4">
- <span className="text-slate-600 font-medium">Sholat 5 Waktu (Wajib):</span>
- <span className="font-bold text-sky-700">{data.sholatWajib}%</span>
+ <span className="text-slate-600 dark:text-slate-400 font-medium">Sholat 5 Waktu (Wajib):</span>
+ <span className="font-bold text-sky-700 dark:text-sky-400">{data.sholatWajib}%</span>
  </p>
  <p className="flex justify-between gap-4">
- <span className="text-slate-600 font-medium">Sholat Dhuha (Sunnah):</span>
- <span className="font-bold text-violet-700">{data.sholatDhuha}%</span>
+ <span className="text-slate-600 dark:text-slate-400 font-medium">Sholat Dhuha (Sunnah):</span>
+ <span className="font-bold text-violet-700 dark:text-violet-400">{data.sholatDhuha}%</span>
  </p>
  <p className="flex justify-between gap-4">
- <span className="text-slate-600 font-medium">Rawatib & Dzikir Harian:</span>
- <span className="font-bold text-amber-700">{data.sunnahRawatib}%</span>
+ <span className="text-slate-600 dark:text-slate-400 font-medium">Rawatib &amp; Dzikir Harian:</span>
+ <span className="font-bold text-amber-700 dark:text-amber-400">{data.sunnahRawatib}%</span>
  </p>
  </div>
- <div className="pt-1.5 border-t border-emerald-200/80 text-[10px] text-slate-400 italic">
+ <div className="pt-1.5 border-t border-emerald-200/80 dark:border-emerald-800/60 text-[10px] text-slate-400 italic">
  * Khusus siswa harian non-pesantren (dikecualikan dari Tahajud / Sholat Malam)
  </div>
  </div>
@@ -1715,91 +1808,189 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
  return null
  }}
  />
- <Legend wrapperStyle={{ paddingTop: '10px', fontSize: '12px' }} />
+ <Legend wrapperStyle={{ paddingTop: '8px', fontSize: '12px', fontWeight: 600 }} />
  <Bar
  dataKey="sholatWajib"
  name="Sholat Wajib 5 Waktu (%)"
- fill="#0284c7"
+ fill="url(#sholatWajibGrad)"
  radius={[6, 6, 0, 0]}
- maxBarSize={35}
+ maxBarSize={26}
  />
  <Bar
  dataKey="sholatDhuha"
  name="Sholat Sunnah Dhuha (%)"
- fill="#8b5cf6"
+ fill="url(#sholatDhuhaGrad)"
  radius={[6, 6, 0, 0]}
- maxBarSize={35}
+ maxBarSize={26}
  />
  <Bar
  dataKey="sunnahRawatib"
  name="Rawatib & Dzikir Pagi/Petang (%)"
- fill="#f59e0b"
+ fill="url(#sunnahRawatibGrad)"
  radius={[6, 6, 0, 0]}
- maxBarSize={35}
+ maxBarSize={26}
  />
  </BarChart>
  </ResponsiveContainer>
  </div>
+ </div>
 
  {/* Dynamic Summary Note */}
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-sky-50/60 p-3 text-xs text-sky-900 flex items-start gap-2.5">
- <Info className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
+ <div className="rounded-xl border border-sky-200/80 dark:border-sky-800/60 bg-sky-50/70 dark:bg-sky-950/30 p-3.5 text-xs text-sky-900 dark:text-sky-200 flex items-start gap-2.5">
+ <Info className="w-4 h-4 text-sky-600 dark:text-sky-400 shrink-0 mt-0.5" />
  <div>
- <span className="font-bold block mb-0.5">ℹ️ Catatan Lingkup Ibadah Siswa Non-Pesantren:</span>
- Evaluasi ibadah mencakup Sholat Fardhu 5 Waktu dan Sholat Sunnah Harian (Dhuha & Rawatib). Sholat Sunnah Malam (Tahajud) dikecualikan karena siswa non-pesantren tinggal di rumah bersama orang tua/wali murid (bukan di dalam asrama pondok pesantren).
+ <span className="font-bold block mb-0.5">Catatan Lingkup Ibadah Siswa Non-Pesantren:</span>
+ Evaluasi ibadah mencakup Sholat Fardhu 5 Waktu dan Sholat Sunnah Harian (Dhuha &amp; Rawatib). Sholat Sunnah Malam (Tahajud) dikecualikan karena siswa non-pesantren tinggal di rumah bersama orang tua/wali murid (bukan di dalam asrama pondok pesantren).
  </div>
  </div>
  </div>
 
  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
- {/* Tren Setoran & Kedisiplinan Mingguan */}
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 shadow-sm space-y-4">
- <div>
- <h3 className="text-base font-semibold text-slate-900">Tren Setoran & Kedisiplinan Ibadah (7 Hari Terakhir)</h3>
- <p className="text-xs text-slate-500">Perkembangan total setoran hafalan & tingkat pemenuhan mutaba'ah harian</p>
+ {/* Card 3: Tren Setoran & Kedisiplinan Mingguan */}
+ <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-5 sm:p-6 shadow-sm space-y-4">
+ <div className="flex items-start justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4">
+ <div className="flex items-center gap-3">
+ <div className="flex size-10 items-center justify-center rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 text-white shadow-md shadow-teal-600/20 border border-white/20 shrink-0">
+ <TrendingUp className="w-5 h-5" />
  </div>
- <div className="h-72 w-full">
+ <div>
+ <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
+ Tren Setoran &amp; Kedisiplinan Ibadah (7 Hari Terakhir)
+ </h3>
+ <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+ Perkembangan total setoran hafalan &amp; tingkat pemenuhan mutaba'ah harian
+ </p>
+ </div>
+ </div>
+ </div>
+
+ <div className="grid grid-cols-2 gap-2.5">
+ <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/60 dark:bg-emerald-950/40 px-3 py-2 flex items-center gap-2">
+ <span className="size-2.5 rounded-full bg-emerald-500 shrink-0" />
+ <span className="text-[11px] font-bold text-emerald-900 dark:text-emerald-200">Setoran Tahfizh</span>
+ </div>
+ <div className="rounded-xl border border-sky-200/80 dark:border-sky-800/60 bg-sky-50/60 dark:bg-sky-950/40 px-3 py-2 flex items-center gap-2">
+ <span className="size-2.5 rounded-full bg-sky-500 shrink-0" />
+ <span className="text-[11px] font-bold text-sky-900 dark:text-sky-200">Kedisiplinan Ibadah (%)</span>
+ </div>
+ </div>
+
+ <div className="h-72 w-full rounded-2xl border border-emerald-100 dark:border-emerald-900/50 bg-slate-50/40 dark:bg-slate-900/30 p-3">
  <ResponsiveContainer width="100%" height="100%">
- <AreaChart data={weeklyProgressChartData}>
- <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
- <XAxis dataKey="day" tick={{ fontSize: 12 }} />
- <YAxis tick={{ fontSize: 12 }} />
- <Tooltip />
- <Legend />
- <Area type="monotone" dataKey="tahfizh_setoran" name="Setoran Tahfizh" stroke="#10b981" fill="#d1fae5" />
- <Area type="monotone" dataKey="ibadah_compliance" name="Kedisiplinan Ibadah (%)" stroke="#0284c7" fill="#e0f2fe" />
+ <AreaChart data={weeklyProgressChartData} margin={{ top: 10, right: 12, left: -12, bottom: 0 }}>
+ <defs>
+ <linearGradient id="trendTahfizhArea" x1="0" y1="0" x2="0" y2="1">
+ <stop offset="5%" stopColor="#10b981" stopOpacity={0.35} />
+ <stop offset="95%" stopColor="#10b981" stopOpacity={0.02} />
+ </linearGradient>
+ <linearGradient id="trendIbadahArea" x1="0" y1="0" x2="0" y2="1">
+ <stop offset="5%" stopColor="#0284c7" stopOpacity={0.35} />
+ <stop offset="95%" stopColor="#0284c7" stopOpacity={0.02} />
+ </linearGradient>
+ </defs>
+ <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
+ <XAxis dataKey="day" tick={{ fontSize: 11, fill: '#475569', fontWeight: 600 }} />
+ <YAxis tick={{ fontSize: 11, fill: '#64748b' }} />
+ <Tooltip
+ contentStyle={{
+ borderRadius: '12px',
+ border: '1px solid #a7f3d0',
+ fontSize: '12px',
+ fontWeight: 600,
+ }}
+ />
+ <Legend wrapperStyle={{ fontSize: '12px', fontWeight: 600 }} />
+ <Area
+ type="monotone"
+ dataKey="tahfizh_setoran"
+ name="Setoran Tahfizh"
+ stroke="#10b981"
+ strokeWidth={2.5}
+ fill="url(#trendTahfizhArea)"
+ />
+ <Area
+ type="monotone"
+ dataKey="ibadah_compliance"
+ name="Kedisiplinan Ibadah (%)"
+ stroke="#0284c7"
+ strokeWidth={2.5}
+ fill="url(#trendIbadahArea)"
+ />
  </AreaChart>
  </ResponsiveContainer>
  </div>
  </div>
 
- {/* Perbandingan Rata-Rata Capaian Per Unit Non-Pesantren */}
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 shadow-sm space-y-4">
- <div>
- <h3 className="text-base font-semibold text-slate-900">Perbandingan Capaian Antar Unit Non-Pesantren</h3>
- <p className="text-xs text-slate-500">Rata-rata Juz Al-Qur'an & Persentase Mutaba'ah di TKIT, SDIT, SMPIT, SMAIT</p>
+ {/* Card 4: Perbandingan Capaian Antar Unit Non-Pesantren */}
+ <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-5 sm:p-6 shadow-sm space-y-4">
+ <div className="flex items-start justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4">
+ <div className="flex items-center gap-3">
+ <div className="flex size-10 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 text-white shadow-md shadow-violet-600/20 border border-white/20 shrink-0">
+ <Building2 className="w-5 h-5" />
  </div>
- <div className="h-72 w-full">
+ <div>
+ <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
+ Perbandingan Capaian Antar Unit Non-Pesantren
+ </h3>
+ <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+ Rata-rata Juz Al-Qur'an &amp; Persentase Mutaba'ah di TKIT, SDIT, SMPIT, SMAIT
+ </p>
+ </div>
+ </div>
+ </div>
+
+ <div className="h-72 w-full rounded-2xl border border-violet-100 dark:border-violet-900/50 bg-slate-50/40 dark:bg-slate-900/30 p-3">
  <ResponsiveContainer width="100%" height="100%">
- <BarChart data={unitComparisonChartData}>
- <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
- <XAxis dataKey="unit" tick={{ fontSize: 12 }} />
- <YAxis tick={{ fontSize: 12 }} />
- <Tooltip />
- <Legend />
- <Bar dataKey="tahfizh_avg_juz" name="Rata-rata Juz Dihafal" fill="#059669" radius={[4, 4, 0, 0]} />
- <Bar dataKey="ibadah_pct" name="Mutaba'ah Ibadah (%)" fill="#0284c7" radius={[4, 4, 0, 0]} />
+ <BarChart data={unitComparisonChartData} margin={{ top: 10, right: 12, left: -12, bottom: 0 }}>
+ <defs>
+ <linearGradient id="unitJuzGrad" x1="0" y1="0" x2="0" y2="1">
+ <stop offset="0%" stopColor="#10b981" stopOpacity={0.95} />
+ <stop offset="100%" stopColor="#059669" stopOpacity={0.75} />
+ </linearGradient>
+ <linearGradient id="unitIbadahGrad" x1="0" y1="0" x2="0" y2="1">
+ <stop offset="0%" stopColor="#0ea5e9" stopOpacity={0.95} />
+ <stop offset="100%" stopColor="#0284c7" stopOpacity={0.75} />
+ </linearGradient>
+ </defs>
+ <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
+ <XAxis dataKey="unit" tick={{ fontSize: 11, fill: '#475569', fontWeight: 700 }} />
+ <YAxis tick={{ fontSize: 11, fill: '#64748b' }} />
+ <Tooltip
+ contentStyle={{
+ borderRadius: '12px',
+ border: '1px solid #a7f3d0',
+ fontSize: '12px',
+ fontWeight: 600,
+ }}
+ />
+ <Legend wrapperStyle={{ fontSize: '12px', fontWeight: 600 }} />
+ <Bar dataKey="tahfizh_avg_juz" name="Rata-rata Juz Dihafal" fill="url(#unitJuzGrad)" radius={[6, 6, 0, 0]} maxBarSize={36} />
+ <Bar dataKey="ibadah_pct" name="Mutaba'ah Ibadah (%)" fill="url(#unitIbadahGrad)" radius={[6, 6, 0, 0]} maxBarSize={36} />
  </BarChart>
  </ResponsiveContainer>
  </div>
+
+ {/* Rincian Warna Per Unit */}
+ {unitComparisonChartData.length > 0 && (
+ <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+ {unitComparisonChartData.map((u) => (
+ <div key={u.unit} className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/40 dark:bg-slate-900/50 p-2.5">
+ <p className="text-[11px] font-black text-slate-900 dark:text-white truncate">{u.unit}</p>
+ <p className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 mt-0.5">{u.tahfizh_avg_juz} Juz Avg</p>
+ <p className="text-[10px] font-bold text-sky-700 dark:text-sky-400">{u.ibadah_pct}% Ibadah ({u.studentCount})</p>
  </div>
- </div>
+ ))}
  </div>
  )}
+ </div>
+ </div>
+ </div>
+ )
+ })()}
 
  {/* TAB CONTENT 3: Verifikasi Log Harian Guru */}
  {activeTab === 'verification' && (
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 shadow-sm space-y-4">
+ <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-800/60 bg-white p-5 shadow-sm space-y-4">
  <div>
  <h3 className="text-base font-semibold text-slate-900">Portal Verifikasi & Catatan Pembimbing Guru</h3>
  <p className="text-xs text-slate-500">Daftar entri mutaba'ah & setoran siswa yang membutuhkan respon / masukan guru</p>
@@ -1962,7 +2153,7 @@ export default function MonitoringTahfizhIbadahNonPesantrenPage() {
  value={teacherNoteInput}
  onChange={(e) => setTeacherNoteInput(e.target.value)}
  placeholder="Tuliskan catatan apresiasi, masukan tajwid, makhraj, atau motivasi ibadah harian..."
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 text-xs sm:text-sm text-slate-800 focus:border-emerald-200/80 focus:outline-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-3 text-xs sm:text-sm text-slate-800 focus:border-emerald-200/80 focus:outline-none"
  />
  </div>
  </DialogBody>

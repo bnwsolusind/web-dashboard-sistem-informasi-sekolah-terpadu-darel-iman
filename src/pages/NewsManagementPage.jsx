@@ -854,7 +854,7 @@ export default function NewsManagementPage() {
  value={filters.search}
  onChange={(e) => setFilters({ ...filters, search: e.target.value, page: 1 })}
  placeholder="Cari judul, ringkasan, atau isi berita..."
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-9 pr-3.5 py-2 text-xs font-semibold focus:border-emerald-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white pl-9 pr-3.5 py-2 text-xs font-semibold focus:border-emerald-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white"
  />
  </div>
 
@@ -1093,7 +1093,7 @@ export default function NewsManagementPage() {
  onChange={(e) => setForm({ ...form, judul: e.target.value })}
  required
  placeholder="Contoh: Penerimaan Siswa Baru T.A. 2026/2027 Resmi Dibuka"
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-3.5 py-2 text-xs font-semibold focus:border-emerald-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 px-3.5 py-2 text-xs font-semibold focus:border-emerald-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  </div>
 
@@ -1143,7 +1143,7 @@ export default function NewsManagementPage() {
  type="text"
  disabled
  value={roleAnalysis.assignedUnitName}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50 px-3.5 py-2 text-xs font-bold text-emerald-700 dark:border-emerald-700/80 dark:bg-emerald-950/40 dark:text-emerald-300"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-emerald-50 px-3.5 py-2 text-xs font-bold text-emerald-700 dark:border-emerald-700/80 dark:bg-emerald-950/40 dark:text-emerald-300"
  />
  )}
  </div>
@@ -1187,7 +1187,7 @@ export default function NewsManagementPage() {
  onChange={(e) => setForm({ ...form, ringkasan: e.target.value })}
  required
  placeholder="Ringkasan 1-2 kalimat yang akan tampil di kartu preview berita..."
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-3.5 py-2 text-xs font-medium focus:border-emerald-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 px-3.5 py-2 text-xs font-medium focus:border-emerald-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  </div>
 
@@ -1201,7 +1201,7 @@ export default function NewsManagementPage() {
  onChange={(e) => setForm({ ...form, isi: e.target.value })}
  required
  placeholder="Tuliskan isi berita, ketentuan, pengumuman lengkap untuk wali murid & siswa..."
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-3.5 py-2 text-xs font-medium focus:border-emerald-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 px-3.5 py-2 text-xs font-medium focus:border-emerald-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  </div>
 
@@ -1214,7 +1214,7 @@ export default function NewsManagementPage() {
  value={form.gambar_url}
  onChange={(e) => setForm({ ...form, gambar_url: e.target.value })}
  placeholder="https://images.unsplash.com/..."
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-3.5 py-2 text-xs font-semibold focus:border-emerald-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 px-3.5 py-2 text-xs font-semibold focus:border-emerald-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  </div>
  </DialogBody>

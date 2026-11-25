@@ -31,6 +31,7 @@ import {
   ArrowUpDown
 } from 'lucide-react'
 import AppBreadcrumb from '../../components/app/AppBreadcrumb'
+import AppDataTable from '../../components/app/AppDataTable'
 import ActionDropdown from '../../components/app/ActionDropdown'
 import AppModal from '../../components/app/AppModal'
 import api from '../../services/api'
@@ -556,88 +557,80 @@ export default function StudentBillsManagementPage() {
             </KpiStatGrid>
 
             {/* 4. EMERALD DATATABLE CONTAINER */}
-            <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-sm dark:bg-[#1B2433]">
-                {/* Toolbar Header */}
-                <div className="border-b border-emerald-200/80 dark:border-emerald-800/80 bg-slate-50/50 dark:bg-slate-900/50 p-4 sm:p-5 dark:border-emerald-800/60 dark:from-emerald-950/50 dark:via-teal-950/30">
-                    <div className="flex flex-wrap items-center justify-between gap-3">
-                        <div>
-                            <h2 className="text-base font-black text-slate-900 dark:text-white">Daftar Tagihan Siswa</h2>
-                            <p className="text-xs text-slate-500 dark:text-slate-400">
-                                Menampilkan total {meta.total} baris tagihan siswa aktif
-                            </p>
-                        </div>
-
-                        {/* Filter Group */}
-                        <div className="flex flex-wrap items-center gap-2.5">
-                            {/* Unit Filter */}
-                            <CustomSelect
-                                value={selectedUnit}
-                                disabled={!isGlobalUser && Boolean(userUnitId)}
-                                onChange={(e) => {
-                                    setSelectedUnit(e.target.value)
-                                    setSelectedClass('')
-                                    setPage(1)
-                                }}
-                                className={`h-9 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-sm text-slate-700 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-200 ${!isGlobalUser && Boolean(userUnitId) ? 'cursor-not-allowed opacity-80' : ''}`}
-                            >
-                                {isGlobalUser && <option value="">Semua Unit Pendidikan</option>}
-                                {units
-                                    .filter((u) => isGlobalUser || String(u.id) === String(userUnitId))
-                                    .map((u) => (
-                                        <option key={u.id} value={u.id}>
-                                            {u.name}
-                                        </option>
-                                    ))}
-                            </CustomSelect>
-
-                            {/* Class Filter */}
-                            <CustomSelect
-                                value={selectedClass}
-                                onChange={(e) => {
-                                    setSelectedClass(e.target.value)
-                                    setPage(1)
-                                }}
-                                className="h-9 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-sm text-slate-700 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-200"
-                            >
-                                <option value="">Semua Rombel / Kelas</option>
-                                {classes.map((c) => (
-                                    <option key={c.id} value={c.id}>
-                                        {c.nama_kelas || c.name}
+            <AppDataTable
+                title="Daftar Tagihan Siswa"
+                description={`Menampilkan total ${meta.total} baris tagihan siswa aktif`}
+                icon={Receipt}
+                countLabel={`${meta.total} Tagihan`}
+                search={search}
+                onSearchChange={(val) => {
+                    setSearch(val)
+                    setPage(1)
+                }}
+                searchPlaceholder="Cari siswa atau NIS..."
+                filters={
+                    <div className="flex flex-wrap items-center gap-2.5 w-full">
+                        {/* Unit Filter */}
+                        <CustomSelect
+                            value={selectedUnit}
+                            disabled={!isGlobalUser && Boolean(userUnitId)}
+                            onChange={(e) => {
+                                setSelectedUnit(e.target.value)
+                                setSelectedClass('')
+                                setPage(1)
+                            }}
+                            className={`h-9 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-sm text-slate-700 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-200 ${!isGlobalUser && Boolean(userUnitId) ? 'cursor-not-allowed opacity-80' : ''}`}
+                        >
+                            {isGlobalUser && <option value="">Semua Unit Pendidikan</option>}
+                            {units
+                                .filter((u) => isGlobalUser || String(u.id) === String(userUnitId))
+                                .map((u) => (
+                                    <option key={u.id} value={u.id}>
+                                        {u.name}
                                     </option>
                                 ))}
-                            </CustomSelect>
+                        </CustomSelect>
 
-                            {/* Status Filter */}
-                            <CustomSelect
-                                value={selectedStatus}
-                                onChange={(e) => {
-                                    setSelectedStatus(e.target.value)
-                                    setPage(1)
-                                }}
-                                className="h-9 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-sm text-slate-700 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-200"
-                            >
-                                <option value="">Semua Status</option>
-                                <option value="unpaid">Belum Lunas</option>
-                                <option value="paid">Lunas</option>
-                                <option value="overdue">Jatuh Tempo</option>
-                            </CustomSelect>
+                        {/* Class Filter */}
+                        <CustomSelect
+                            value={selectedClass}
+                            onChange={(e) => {
+                                setSelectedClass(e.target.value)
+                                setPage(1)
+                            }}
+                            className="h-9 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-sm text-slate-700 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-200"
+                        >
+                            <option value="">Semua Rombel / Kelas</option>
+                            {classes.map((c) => (
+                                <option key={c.id} value={c.id}>
+                                    {c.nama_kelas || c.name}
+                                </option>
+                            ))}
+                        </CustomSelect>
 
-                            {/* Search Box */}
-                            <StandardSearchInput
-                                value={search}
-                                onChange={(e) => {
-                                    setSearch(e.target.value)
-                                    setPage(1)
-                                }}
-                                placeholder="Cari siswa atau NIS..."
-                            />
-                        </div>
+                        {/* Status Filter */}
+                        <CustomSelect
+                            value={selectedStatus}
+                            onChange={(e) => {
+                                setSelectedStatus(e.target.value)
+                                setPage(1)
+                            }}
+                            className="h-9 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-sm text-slate-700 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-200"
+                        >
+                            <option value="">Semua Status</option>
+                            <option value="unpaid">Belum Lunas</option>
+                            <option value="paid">Lunas</option>
+                            <option value="overdue">Jatuh Tempo</option>
+                        </CustomSelect>
                     </div>
-                </div>
-
-                {/* Datatable Table */}
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left text-xs">
+                }
+                showPagination={meta.last_page > 1}
+                page={meta.current_page}
+                totalPages={meta.last_page}
+                totalItems={meta.total}
+                onPageChange={(p) => setPage(p)}
+            >
+                <table className="w-full text-left text-xs">
                         <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 text-emerald-950 dark:text-emerald-200 font-extrabold uppercase tracking-wider text-xs">
                             <tr>
                                 <th className="px-4 py-3.5">SISWA &amp; IDENTITAS</th>
@@ -762,18 +755,7 @@ export default function StudentBillsManagementPage() {
                             })}
                         </tbody>
                     </table>
-                </div>
-
-                {/* Footer Pagination */}
-                <div className="border-t border-emerald-200/80 dark:border-emerald-800/80 bg-emerald-50/30 p-4 dark:border-emerald-800/60 dark:bg-emerald-950/20">
-                    <Pagination
-                        currentPage={meta.current_page}
-                        totalPages={meta.last_page}
-                        onPageChange={(p) => setPage(p)}
-                        sideLayout="full"
-                    />
-                </div>
-            </div>
+            </AppDataTable>
 
             {/* 5. MODAL TERBITKAN TAGIHAN (SINGLE & BULK) */}
             <AppModal
@@ -913,7 +895,7 @@ export default function StudentBillsManagementPage() {
                             onChange={(e) => setCreateForm((prev) => ({ ...prev, title: e.target.value }))}
                             required
                             placeholder="Contoh: SPP Bulan September 2026"
-                            className="mt-1 h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
+                            className="mt-1 h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
                         />
                     </div>
 
@@ -929,7 +911,7 @@ export default function StudentBillsManagementPage() {
                                 onChange={(e) => setCreateForm((prev) => ({ ...prev, amount: e.target.value }))}
                                 required
                                 min="1"
-                                className="mt-1 h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
+                                className="mt-1 h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
                             />
                         </div>
                         <div>
@@ -1005,7 +987,7 @@ export default function StudentBillsManagementPage() {
                                     onChange={(e) => setPayForm((prev) => ({ ...prev, paid_amount: e.target.value }))}
                                     required
                                     min="1"
-                                    className="mt-1 h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
+                                    className="mt-1 h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
                                 />
                             </div>
 
@@ -1047,7 +1029,7 @@ export default function StudentBillsManagementPage() {
                                     onChange={(e) => setPayForm((prev) => ({ ...prev, notes: e.target.value }))}
                                     rows={2}
                                     placeholder="Contoh: Diterima langsung oleh kasir TU"
-                                    className="mt-1 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-2.5 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
+                                    className="mt-1 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-2.5 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
                                 />
                             </div>
                         </form>

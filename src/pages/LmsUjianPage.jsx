@@ -60,6 +60,7 @@ import {
 import useDebounce from '../hooks/useDebounce'
 import ActionDropdown from '../components/app/ActionDropdown'
 import AppModal from '../components/app/AppModal'
+import LmsKpiDetailModal from '../components/lms/LmsKpiDetailModal'
 import PageContainer from '../components/app/PageContainer'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
 import {
@@ -428,7 +429,7 @@ function HeroUiModalSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Ketik untuk mencari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -576,7 +577,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -797,9 +798,9 @@ function HarmonizedBatchImportModal({ isOpen, onClose, onImportSuccess, notify }
  <p className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
  Pratinjau Data Ujian (5 Baris Pertama)
  </p>
- <div className="overflow-x-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/80">
+ <div className="overflow-x-auto rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  <TableRoot className="w-full text-left text-xs">
- <TableHeader className="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 font-bold border-b border-emerald-200/80 dark:border-emerald-800/60">
+ <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
  <TableRow>
  <TableHead className="py-2 px-3">No</TableHead>
  <TableHead className="py-2 px-3">Judul Ujian</TableHead>
@@ -1062,6 +1063,7 @@ export default function LmsUjianPage({
  // Data & State
  const [dataList, setDataList] = useState([])
  const [loading, setLoading] = useState(true)
+ const [kpiModalKey, setKpiModalKey] = useState(null)
  const [pagination, setPagination] = useState({ currentPage: 1, lastPage: 1, total: 0, perPage: 10 })
  const [stats, setStats] = useState({
  total_ujian: 0,
@@ -1680,8 +1682,9 @@ export default function LmsUjianPage({
  subtext={`${stats.total_published || 0} Dipublikasikan`}
  tag="Semua"
  tone="emerald"
+ ctaText="Lihat Rincian"
  active={filters.status === ''}
- onClick={() => setFilters((prev) => ({ ...prev, status: '' }))}
+ onClick={() => setKpiModalKey('total')}
  />
  <ModernKpiCard
  icon={Play}
@@ -1690,8 +1693,9 @@ export default function LmsUjianPage({
  subtext="Sesi Ujian Aktif"
  tag="Live"
  tone="amber"
+ ctaText="Lihat Rincian"
  active={filters.status === 'berlangsung'}
- onClick={() => setFilters((prev) => ({ ...prev, status: 'berlangsung' }))}
+ onClick={() => setKpiModalKey('berlangsung')}
  />
  <ModernKpiCard
  icon={Users}
@@ -1700,8 +1704,9 @@ export default function LmsUjianPage({
  subtext="Siswa Mengikuti"
  tag="Peserta"
  tone="purple"
+ ctaText="Lihat Rincian"
  active={filters.status === 'published'}
- onClick={() => setFilters((prev) => ({ ...prev, status: 'published' }))}
+ onClick={() => setKpiModalKey('peserta')}
  />
  <ModernKpiCard
  icon={Award}
@@ -1710,8 +1715,9 @@ export default function LmsUjianPage({
  subtext="Skor Auto Scoring"
  tag="Selesai"
  tone="blue"
+ ctaText="Lihat Rincian"
  active={filters.status === 'selesai'}
- onClick={() => setFilters((prev) => ({ ...prev, status: 'selesai' }))}
+ onClick={() => setKpiModalKey('rata_nilai')}
  />
  </div>
 
@@ -2012,7 +2018,7 @@ export default function LmsUjianPage({
  placeholder="Contoh: Penilaian Akhir Semester (PAS) CBT Matematika Kelas X"
  value={formData.judul_ujian}
  onChange={(e) => setFormData((prev) => ({ ...prev, judul_ujian: e.target.value }))}
- className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+ className="w-full px-3.5 py-2.5 text-xs font-semibold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
  required
  />
  </div>
@@ -2063,7 +2069,7 @@ export default function LmsUjianPage({
  max="360"
  value={formData.durasi_menit}
  onChange={(e) => setFormData((prev) => ({ ...prev, durasi_menit: parseInt(e.target.value) || 60 }))}
- className="w-full px-3.5 py-2 text-xs font-semibold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+ className="w-full px-3.5 py-2 text-xs font-semibold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
  required
  />
  </div>
@@ -2077,7 +2083,7 @@ export default function LmsUjianPage({
  step="0.5"
  value={formData.nilai_kkm}
  onChange={(e) => setFormData((prev) => ({ ...prev, nilai_kkm: parseFloat(e.target.value) || 75.0 }))}
- className="w-full px-3.5 py-2 text-xs font-semibold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+ className="w-full px-3.5 py-2 text-xs font-semibold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
  />
  </div>
 
@@ -2145,7 +2151,7 @@ export default function LmsUjianPage({
  rows={3}
  value={formData.instruksi}
  onChange={(e) => setFormData((prev) => ({ ...prev, instruksi: e.target.value }))}
- className="w-full px-3.5 py-2.5 text-xs font-medium rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all leading-relaxed"
+ className="w-full px-3.5 py-2.5 text-xs font-medium rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#111827] focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all leading-relaxed"
  />
  </div>
 
@@ -2325,7 +2331,7 @@ export default function LmsUjianPage({
  placeholder="Ketikkan jawaban uraian/esai lengkap Anda pada kolom ini..."
  value={userAnswers[cbtSession.soal[currentQuestionIdx].id]?.jawaban_esai || ''}
  onChange={(e) => handleSelectAnswer(cbtSession.soal[currentQuestionIdx].id, e.target.value, 'esai')}
- className="w-full p-4 rounded-xl border border-emerald-200/80 bg-[#1E293B] text-white text-sm focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 outline-none leading-relaxed font-medium"
+ className="w-full p-4 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-[#1E293B] text-white text-sm focus:border-emerald-200/80 focus:ring-2 focus:ring-emerald-500/20 outline-none leading-relaxed font-medium"
  />
  </div>
  )}
@@ -2524,9 +2530,9 @@ export default function LmsUjianPage({
  </div>
 
  {/* Student Score Table */}
- <div className="border border-emerald-200/80 dark:border-emerald-800/80 rounded-xl overflow-hidden">
+ <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433] overflow-hidden">
  <TableRoot className="w-full text-left text-xs">
- <TableHeader className="bg-emerald-50/80 dark:bg-emerald-950/50 text-emerald-950 dark:text-emerald-100 font-bold border-b border-emerald-200/80 dark:border-emerald-800/60">
+ <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
  <TableRow>
  <TableHead className="p-3.5">Nama Siswa</TableHead>
  <TableHead className="p-3.5 text-center">Durasi (m)</TableHead>
@@ -2644,6 +2650,101 @@ export default function LmsUjianPage({
  totalCount={pagination.total || dataList.length}
  moduleTitle="CBT Ujian"
  />
+
+ {/* ── KPI Quick View Pop-up Modal (10/page + Pagination) ── */}
+ {(() => {
+   const allRows = Array.isArray(dataList) ? dataList : []
+   const filterByKpi = (list) => {
+     if (kpiModalKey === 'berlangsung') return list.filter((u) => String(u.status || '').toLowerCase() === 'berlangsung')
+     if (kpiModalKey === 'peserta') return [...list].sort((a, b) => Number(b.peserta_count || b.total_peserta || 0) - Number(a.peserta_count || a.total_peserta || 0))
+     if (kpiModalKey === 'rata_nilai') return list.filter((u) => String(u.status || '').toLowerCase() === 'selesai' || Number(u.rata_nilai || 0) > 0)
+     return list
+   }
+   const metaMap = {
+     total: { title: 'Rincian Total Ujian CBT', badge: `${stats.total_ujian || allRows.length} Ujian` },
+     berlangsung: { title: 'Ujian Sedang Berlangsung (Live)', badge: `${stats.total_berlangsung || 0} Sesi Aktif` },
+     peserta: { title: 'Rincian Peserta Ujian CBT', badge: `${stats.total_peserta || 0} Peserta` },
+     rata_nilai: { title: 'Rekap Rata-rata Nilai Ujian CBT', badge: `Rata-rata: ${stats.rata_nilai || 0}` },
+   }
+   const meta = kpiModalKey ? metaMap[kpiModalKey] : null
+   return (
+     <LmsKpiDetailModal
+       isOpen={Boolean(kpiModalKey && meta)}
+       onClose={() => setKpiModalKey(null)}
+       icon={Play}
+       title={meta?.title || 'Rincian Ujian CBT'}
+       badge={meta?.badge}
+       rows={filterByKpi(allRows)}
+       fetchRows={async () => {
+         const effectiveUnit = canSelectUnit ? (selectedUnit || undefined) : (userUnitId || undefined)
+         const res = await lmsUjianService.getDaftar({ per_page: 200, ...(effectiveUnit ? { unit_pendidikan_id: effectiveUnit } : {}) })
+         const raw = Array.isArray(res?.data) ? res.data : res?.data?.data || []
+         return filterByKpi(raw)
+       }}
+       searchPlaceholder="Cari judul ujian, token, mapel, atau kelas..."
+       searchFilter={(u, q) =>
+         [u.judul_ujian, u.token_ujian, u.kisi_kisi?.judul_kisi, u.kisi_kisi?.mata_pelajaran?.nama_mapel, u.kelas?.nama_kelas]
+           .filter(Boolean)
+           .join(' ')
+           .toLowerCase()
+           .includes(q)
+       }
+       emptyText="Belum ada data ujian pada kategori ini."
+       columns={[
+         {
+           header: 'Judul & Token Ujian',
+           render: (u) => (
+             <div>
+               <div className="font-extrabold text-slate-900 dark:text-white">{u.judul_ujian || '-'}</div>
+               <div className="text-[10px] font-mono text-indigo-700 dark:text-indigo-300">Token: {u.token_ujian || '-'}</div>
+             </div>
+           ),
+         },
+         {
+           header: 'Kisi-kisi & Mapel',
+           render: (u) => (
+             <div>
+               <div className="font-semibold text-slate-700 dark:text-slate-300">{u.kisi_kisi?.judul_kisi || '-'}</div>
+               <div className="text-[10px] text-slate-500">{u.kisi_kisi?.mata_pelajaran?.nama_mapel || u.kisi_kisi?.mata_pelajaran?.name || '-'}</div>
+             </div>
+           ),
+         },
+         {
+           header: 'Kelas & Durasi',
+           render: (u) => (
+             <div>
+               <div className="font-semibold text-slate-700 dark:text-slate-300">{u.kelas?.nama_kelas || 'Semua Kelas'}</div>
+               <div className="text-[10px] text-slate-500">{u.durasi_menit || 60} Menit</div>
+             </div>
+           ),
+         },
+         {
+           header: 'Peserta & Rata-rata',
+           align: 'center',
+           render: (u) => (
+             <div className="font-bold text-emerald-700 dark:text-emerald-300 tabular-nums">
+               {u.peserta_count ?? u.total_peserta ?? 0} siswa • {u.rata_nilai ?? 0}
+             </div>
+           ),
+         },
+         {
+           header: 'Status',
+           align: 'center',
+           render: (u) => (
+             <span className={`inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-extrabold capitalize ${
+               u.status === 'berlangsung' ? 'bg-amber-100 text-amber-800'
+                 : u.status === 'published' ? 'bg-sky-100 text-sky-800'
+                   : u.status === 'selesai' ? 'bg-emerald-100 text-emerald-800'
+                     : 'bg-slate-100 text-slate-700'
+             }`}>
+               {u.status || 'draft'}
+             </span>
+           ),
+         },
+       ]}
+     />
+   )
+ })()}
  </div>
  )
 

@@ -988,7 +988,7 @@ export default function SystemMaintenanceDataHubPage() {
  placeholder="RESET DATABASE"
  value={resetModal.confirmText}
  onChange={(e) => setResetModal((p) => ({ ...p, confirmText: e.target.value }))}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-3 py-2 text-xs font-mono font-bold text-slate-900 focus:border-rose-600 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-800 dark:text-white"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 px-3 py-2 text-xs font-mono font-bold text-slate-900 focus:border-rose-600 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-800 dark:text-white"
  />
  </div>
  </div>

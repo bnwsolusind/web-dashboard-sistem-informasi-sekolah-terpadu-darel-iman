@@ -1,5 +1,7 @@
 import { HeroUiHeader } from "../components/ui/HeroUiHeader"
 import AppModal from '../components/app/AppModal'
+import { PageToolbarActions } from '../components/app/PageToolbarActions'
+import LmsKpiDetailModal from '../components/lms/LmsKpiDetailModal'
 import ActionDropdown from '../components/app/ActionDropdown'
 import {
   KpiStatCard
@@ -65,6 +67,9 @@ import {
   mutabaahService
 } from '../services/mutabaahService'
 import {
+  studentService
+} from '../services/studentService'
+import {
   useAuthStore
 } from '../stores/authStore'
 import {
@@ -90,6 +95,14 @@ import {
 import {
   Pagination
 } from '@/components/ui/pagination'
+import {
+  TableRoot,
+  TableHeader,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell
+} from '@/components/ui/table'
 import {
   downloadPdfTable,
   printCleanTable,
@@ -436,7 +449,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -513,6 +526,11 @@ export default function MutabaahAnalyticsPage({ view }) {
  // Fast Batch Matrix State
  const [showMatrixModal, setShowMatrixModal] = useState(false)
  const [matrixValues, setMatrixValues] = useState({})
+ const [agendaCellOverrides, setAgendaCellOverrides] = useState({})
+ const [editAgendaDraft, setEditAgendaDraft] = useState({})
+ const [addAgendaDraft, setAddAgendaDraft] = useState({})
+ const [addUnitId, setAddUnitId] = useState('')
+ const [addSelectedStudentId, setAddSelectedStudentId] = useState('')
 
  const openMatrixModal = () => {
  setMatrixValues((prev) => {
@@ -539,6 +557,41 @@ export default function MutabaahAnalyticsPage({ view }) {
  // HeroUI Dialog States for Tambah & Edit
  const [showAddModal, setShowAddModal] = useState(false)
  const [showEditModal, setShowEditModal] = useState(false)
+
+ const addStudentsQuery = useQuery({
+ queryKey: ['mutabaah-add-students', addUnitId],
+ enabled: Boolean(showAddModal),
+ queryFn: async () => {
+ const res = await studentService.getDaftar({
+ per_page: 200,
+ ...(addUnitId ? { education_unit_id: addUnitId } : {}),
+ })
+ return Array.isArray(res?.data) ? res.data : (Array.isArray(res?.data?.data) ? res.data.data : (Array.isArray(res) ? res : []))
+ },
+ })
+
+ const addStudentOptions = useMemo(() => {
+ const list = Array.isArray(addStudentsQuery.data) ? addStudentsQuery.data : []
+ return list.map((s) => {
+ const sName = s.full_name || s.nama_lengkap || s.name || '-'
+ const sNis = s.nis || s.nisn || '-'
+ const sClass = s.school_class?.name || s.school_class?.nama_kelas || s.kelas?.nama_kelas || s.class_name || '-'
+ const sDorm = s.dormitory?.name || s.dorm?.name || s.asrama || '-'
+ const sUnit = s.education_unit?.name || s.unit?.name || s.unit_name || '-'
+ return {
+ value: String(s.id),
+ label: `${sName} (${sNis} • ${sClass})`,
+ raw: {
+ id: String(s.id),
+ name: sName,
+ nis: sNis,
+ class: sClass,
+ dorm: sDorm,
+ unitName: sUnit,
+ },
+ }
+ })
+ }, [addStudentsQuery.data])
  const [editStudent, setEditStudent] = useState(null)
  const [studentForm, setStudentForm] = useState({
  name: '',
@@ -572,6 +625,16 @@ export default function MutabaahAnalyticsPage({ view }) {
  return getMutabaahAgendas(isSelectedBoarding, options.data?.agendas)
  }, [isSelectedBoarding, options.data?.agendas])
 
+ const isEditBoarding = useMemo(() => {
+ if (!editStudent) return false
+ const studentUnitObj = activeSelectedUnit || (editStudent.unitName ? { name: editStudent.unitName } : null)
+ return isBoardingStudent(editStudent, studentUnitObj)
+ }, [editStudent, activeSelectedUnit])
+
+ const { sholat: editSholat, yaumiyyah: editYaumiyyah } = useMemo(() => {
+ return getMutabaahAgendas(isEditBoarding, options.data?.agendas)
+ }, [isEditBoarding, options.data?.agendas])
+
  const detailSigners = useMemo(() => {
  return getMutabaahSigners(isSelectedBoarding)
  }, [isSelectedBoarding])
@@ -585,7 +648,19 @@ export default function MutabaahAnalyticsPage({ view }) {
  return { checked: false, isFuture: true, isNA: false, label: '—' }
  }
 
- // 2. Santri belum memiliki rekapan pengisian (progress 0 atau status belum diisi)
+ // 2. Cek override manual dari modal Edit sebelum fallback deterministik
+ const overrideKey = `${student.id}:${agendaItem.code || agendaItem.no}:${dayObj.fullDate}`
+ if (Object.prototype.hasOwnProperty.call(agendaCellOverrides, overrideKey)) {
+ const isPuasaSunnah = agendaItem.code === 'PUASA-SUNNAH' || /puasa\s*sunnah|shaum/i.test(agendaItem.name || agendaItem.displayName || '')
+ const isAlKahfi = agendaItem.code === 'BACA-SURAT-ALKAHFI' || /al-?kahfi/i.test(agendaItem.name || agendaItem.displayName || '')
+ const isNA = (isPuasaSunnah && dayObj.dayName !== 'Senin' && dayObj.dayName !== 'Kamis') || (isAlKahfi && dayObj.dayName !== 'Jumat')
+ if (!isNA) {
+ const val = Boolean(agendaCellOverrides[overrideKey])
+ return { checked: val, isFuture: false, isNA: false, label: val ? '✓' : '✕' }
+ }
+ }
+
+ // 3. Santri belum memiliki rekapan pengisian (progress 0 atau status belum diisi)
  const progress = Number(student.progressWeek ?? student.progressToday ?? 0)
  if (progress === 0 || student.status === 'Belum Diisi') {
  return { checked: false, isFuture: false, isNA: false, label: '—' }
@@ -857,40 +932,72 @@ export default function MutabaahAnalyticsPage({ view }) {
  }
 
  const handleAddNewMutabaah = () => {
+ setAddUnitId(filters.education_unit_id || '')
+ setAddSelectedStudentId('')
  setStudentForm({
  name: '',
  nis: '',
  class: '',
  dorm: '',
  })
+ setAddAgendaDraft({})
  setShowAddModal(true)
  }
 
  const handleSaveNewStudent = (e) => {
  e.preventDefault()
- if (!studentForm.name || !studentForm.nis) {
- Swal.fire({ icon: 'warning', title: 'Perhatian', text: 'Nama dan NIS wajib diisi!' })
+ if (!addSelectedStudentId || !studentForm.name) {
+ Swal.fire({ icon: 'warning', title: 'Perhatian', text: 'Silakan pilih Unit dan Santri terlebih dahulu!' })
  return
  }
+ const newId = String(addSelectedStudentId)
+ const chosenUnitObj = (options.data?.units || []).find((u) => String(u.id) === String(addUnitId))
+ const addBoarding = isBoardingStudent({ dorm: studentForm.dorm, unitName: chosenUnitObj?.name || studentForm.unitName }, chosenUnitObj)
+ const { sholat: sList, yaumiyyah: yList } = getMutabaahAgendas(addBoarding, options.data?.agendas)
+ const editableKeys = []
+ const newOverrides = {}
+ ;[...sList, ...yList].forEach((ag) => {
+ detailWeekDays.forEach((d) => {
+ const isFuture = d.fullDate > today
+ const isPuasa = ag.code === 'PUASA-SUNNAH' || /puasa\s*sunnah|shaum/i.test(ag.name || ag.displayName || '')
+ const isKahfi = ag.code === 'BACA-SURAT-ALKAHFI' || /al-?kahfi/i.test(ag.name || ag.displayName || '')
+ const isNA = (isPuasa && d.dayName !== 'Senin' && d.dayName !== 'Kamis') || (isKahfi && d.dayName !== 'Jumat')
+ if (!isFuture && !isNA) {
+ const draftKey = `new:${ag.code || ag.no}:${d.fullDate}`
+ const val = Boolean(addAgendaDraft[draftKey])
+ editableKeys.push(val)
+ newOverrides[`${newId}:${ag.code || ag.no}:${d.fullDate}`] = val
+ }
+ })
+ })
+ const checkedTotal = editableKeys.filter(Boolean).length
+ const nextProgress = editableKeys.length > 0 ? Number(((checkedTotal / editableKeys.length) * 100).toFixed(2)) : 0
+ if (Object.keys(newOverrides).length > 0) {
+ setAgendaCellOverrides((prev) => ({ ...prev, ...newOverrides }))
+ }
  const newStudent = {
- id: String(Date.now()),
+ id: newId,
  name: studentForm.name,
- nis: studentForm.nis,
+ nis: studentForm.nis || '-',
  class: studentForm.class || '-',
  dorm: studentForm.dorm || '-',
+ unitName: chosenUnitObj?.name || studentForm.unitName || '-',
  group: '',
  supervisor: user?.name || '-',
- progressToday: 0,
- progressWeek: 0,
- status: 'Belum Diisi',
+ progressToday: nextProgress,
+ progressWeek: nextProgress,
+ status: nextProgress > 0 ? 'Draft' : 'Belum Diisi',
  photo: '',
  }
- setStudents((prev) => [newStudent, ...prev])
+ setStudents((prev) => {
+ const exists = prev.some((s) => String(s.id) === newId)
+ return exists ? prev.map((s) => (String(s.id) === newId ? { ...s, ...newStudent } : s)) : [newStudent, ...prev]
+ })
  setShowAddModal(false)
  Swal.fire({
  icon: 'success',
  title: 'Berhasil Ditambahkan',
- text: `Data Mutabaah untuk ${studentForm.name} berhasil disimpan.`,
+ text: `Agenda Mutabaah untuk ${studentForm.name} berhasil disimpan.`,
  timer: 1800,
  showConfirmButton: false,
  })
@@ -898,14 +1005,26 @@ export default function MutabaahAnalyticsPage({ view }) {
 
  const handleSaveEditStudent = (e) => {
  e.preventDefault()
- if (!studentForm.name || !studentForm.nis) {
- Swal.fire({ icon: 'warning', title: 'Perhatian', text: 'Nama dan NIS wajib diisi!' })
- return
+ const draftEntries = Object.entries(editAgendaDraft)
+ let nextProgress = null
+ if (draftEntries.length > 0) {
+ const checkedTotal = draftEntries.filter(([, v]) => Boolean(v)).length
+ nextProgress = Number(((checkedTotal / draftEntries.length) * 100).toFixed(2))
+ setAgendaCellOverrides((prev) => ({ ...prev, ...editAgendaDraft }))
  }
  setStudents((prev) =>
  prev.map((st) =>
  st.id === editStudent?.id
- ? { ...st, name: studentForm.name, nis: studentForm.nis, class: studentForm.class, dorm: studentForm.dorm }
+ ? {
+ ...st,
+ ...(nextProgress !== null
+ ? {
+ progressToday: nextProgress,
+ progressWeek: nextProgress,
+ status: nextProgress > 0 ? (st.status === 'Finalized' ? 'Finalized' : 'Draft') : 'Belum Diisi',
+ }
+ : {}),
+ }
  : st
  )
  )
@@ -913,7 +1032,7 @@ export default function MutabaahAnalyticsPage({ view }) {
  Swal.fire({
  icon: 'success',
  title: 'Perubahan Disimpan',
- text: `Data Mutabaah untuk ${studentForm.name} berhasil diperbarui.`,
+ text: `Jadwal Mutabaah untuk ${editStudent?.name || 'santri'} berhasil diperbarui.`,
  timer: 1800,
  showConfirmButton: false,
  })
@@ -1034,6 +1153,7 @@ export default function MutabaahAnalyticsPage({ view }) {
  const recapData = view === 'rekap' ? analytics.data?.rows : recapQuery.data?.rows
  const recapRows = useMemo(() => (Array.isArray(recapData?.data) ? recapData.data : []), [recapData?.data])
  const isTableFetching = analytics.isFetching || (view !== 'rekap' && recapQuery.isFetching)
+ const [kpiModalKey, setKpiModalKey] = useState(null)
 
  useEffect(() => {
  if (recapRows.length > 0) {
@@ -1229,6 +1349,8 @@ export default function MutabaahAnalyticsPage({ view }) {
  subtext="Sesuai data master siswa"
  tag="Santri Aktif"
  tone="blue"
+ ctaText="Lihat Rincian"
+ onClick={() => setKpiModalKey('total')}
  />
  <ModernKpiCard
  icon={CheckCircle2}
@@ -1237,6 +1359,8 @@ export default function MutabaahAnalyticsPage({ view }) {
  subtext="Memiliki data Mutabaah"
  tag="Tercatat"
  tone="emerald"
+ ctaText="Lihat Rincian"
+ onClick={() => setKpiModalKey('filled')}
  />
  <ModernKpiCard
  icon={ShieldCheck}
@@ -1245,6 +1369,8 @@ export default function MutabaahAnalyticsPage({ view }) {
  subtext="Telah dikunci pembimbing"
  tag="Terkunci"
  tone="indigo"
+ ctaText="Lihat Rincian"
+ onClick={() => setKpiModalKey('finalized')}
  />
  <ModernKpiCard
  icon={AlertTriangle}
@@ -1253,6 +1379,8 @@ export default function MutabaahAnalyticsPage({ view }) {
  subtext="Perlu ditindaklanjuti"
  tag="Perhatian"
  tone="rose"
+ ctaText="Lihat Rincian"
+ onClick={() => setKpiModalKey('not_filled')}
  />
  </motion.div>
 
@@ -1378,6 +1506,8 @@ export default function MutabaahAnalyticsPage({ view }) {
  subtext="Amalan terlaksana dengan baik"
  tag="Baik"
  tone="emerald"
+ ctaText="Lihat Rincian"
+ onClick={() => setKpiModalKey('good')}
  />
  <ModernKpiCard
  icon={AlertTriangle}
@@ -1386,6 +1516,8 @@ export default function MutabaahAnalyticsPage({ view }) {
  subtext="Perlu peningkatan bimbingan"
  tag="Kurang"
  tone="amber"
+ ctaText="Lihat Rincian"
+ onClick={() => setKpiModalKey('less')}
  />
  <ModernKpiCard
  icon={XCircle}
@@ -1394,6 +1526,8 @@ export default function MutabaahAnalyticsPage({ view }) {
  subtext="Tidak terlaksana"
  tag="Kritis"
  tone="rose"
+ ctaText="Lihat Rincian"
+ onClick={() => setKpiModalKey('not_done')}
  />
  <ModernKpiCard
  icon={ShieldCheck}
@@ -1402,6 +1536,8 @@ export default function MutabaahAnalyticsPage({ view }) {
  subtext="Telah diverifikasi orang tua"
  tag="Terverifikasi"
  tone="indigo"
+ ctaText="Lihat Rincian"
+ onClick={() => setKpiModalKey('parent_signature')}
  />
  </motion.div>
  )}
@@ -1521,39 +1657,71 @@ export default function MutabaahAnalyticsPage({ view }) {
 
  {/* 🟢 MAIN TABLE & FILTER CARD (Data Mutabaah Santri) */}
  <motion.section variants={itemVariants} initial="hidden" animate="visible" className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
- {/* Header Baris 1: Title & Vivid Gradient Squircle Action Buttons (§H.5) */}
+ {/* Header Baris 1: Title & Standard PageToolbarActions */}
  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-4 py-3.5 sm:px-6 md:px-8 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent border-b border-emerald-200/90 dark:border-emerald-800/60">
  <div className="flex min-w-0 flex-1 items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-lg bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/50 dark:border-emerald-800/60 dark:text-emerald-400 shrink-0 shadow-xs">
+            <div className="flex size-10 sm:size-11 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 text-emerald-600 dark:bg-emerald-950/50 dark:border-emerald-800/60 dark:text-emerald-400 shrink-0 shadow-xs">
               <BookMarked className="size-5" />
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2 flex-wrap">
-                <h3 className="text-base font-semibold text-slate-900 dark:text-white ">
+                <h3 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white">
                   {view === 'evaluasi' ? 'Target & Evaluasi Mutabaah' : 'Data Mutabaah Santri'}
                 </h3>
-                <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/80">
+                <span className="inline-flex items-center rounded-full bg-emerald-100/90 px-2.5 py-0.5 text-xs font-extrabold text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/80">
                   {displayedStudents.length} Santri
                 </span>
               </div>
-              <p className="text-xs font-normal text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+              <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">
                 {view === 'evaluasi' ? 'Monitoring pencapaian target dan evaluasi pembiasaan ibadah santri per periode' : 'Daftar pencapaian pembiasaan ibadah santri per periode'}
               </p>
             </div>
           </div>
 
-          <div className="flex shrink-0 flex-wrap items-center gap-2 self-start sm:self-auto">
- <SquircleActionButton variant="import" icon={Upload} label="Import Data (Excel/CSV)" onClick={handleImportData} />
- <SquircleActionButton variant="export" icon={Download} label="Export Data (Excel/CSV)" onClick={handleExportCsv} />
- <SquircleActionButton variant="print" icon={Printer} label="Cetak Laporan" onClick={() => setPrintOptionModalOpen(true)} />
- <SquircleActionButton variant="primary" icon={UserPlus} label="Tambah Mutabaah Santri" onClick={handleAddNewMutabaah} />
- {selectedStudentIds.length > 0 && (
- <SquircleActionButton variant="teal" icon={Check} label={`Tandai ${selectedStudentIds.length} Terpilih 100%`} onClick={handleBatchMarkSelected} />
- )}
- <SquircleActionButton variant="edit" icon={Zap} label="Input Massal Matrix" onClick={openMatrixModal} />
- <SquircleActionButton variant="cyan" icon={CheckCircle2} label="Tandai Semua Baik" onClick={handleBatchMarkAllBaik} />
- <SquircleActionButton variant="import" icon={Copy} label="Salin Kemarin" onClick={handleCopyYesterday} />
- </div>
+          <div className="flex shrink-0 items-center gap-2 self-start sm:self-auto">
+            <PageToolbarActions
+              onPrint={() => setPrintOptionModalOpen(true)}
+              printLabel="Cetak Laporan"
+              onImport={handleImportData}
+              importLabel="Import Data (Excel/CSV)"
+              onExport={handleExportCsv}
+              exportLabel="Export Data (Excel/CSV)"
+              onAdd={handleAddNewMutabaah}
+              addLabel="Tambah Mutabaah Santri"
+              secondaryActions={[
+                ...(selectedStudentIds.length > 0
+                  ? [{
+                      label: `Tandai ${selectedStudentIds.length} Terpilih 100%`,
+                      icon: Check,
+                      variant: 'primary',
+                      onClick: handleBatchMarkSelected,
+                      className: '!bg-emerald-600 hover:!bg-emerald-700 !text-white !border-emerald-600',
+                    }]
+                  : []),
+                {
+                  label: 'Input Massal Matrix',
+                  icon: Zap,
+                  variant: 'export',
+                  onClick: openMatrixModal,
+                  className: '!bg-amber-500 hover:!bg-amber-600 !text-white !border-amber-500',
+                },
+                {
+                  label: 'Tandai Semua Baik',
+                  icon: CheckCircle2,
+                  variant: 'primary',
+                  onClick: handleBatchMarkAllBaik,
+                  className: '!bg-teal-600 hover:!bg-teal-700 !text-white !border-teal-600',
+                },
+                {
+                  label: 'Salin Kemarin',
+                  icon: Copy,
+                  variant: 'print',
+                  onClick: handleCopyYesterday,
+                  className: '!bg-sky-600 hover:!bg-sky-700 !text-white !border-sky-600',
+                },
+              ]}
+            />
+          </div>
  </div>
 
  {/* Filter Baris 2: Filter Global Mutabaah (§7.9 flex-wrap + field §J.3) */}
@@ -1570,7 +1738,7 @@ export default function MutabaahAnalyticsPage({ view }) {
  value={filters.date_from}
  onChange={(e) => update('date_from', e.target.value)}
  className="w-full sm:w-auto min-w-[140px]"
- inputClassName="py-2 text-xs font-semibold"
+ inputClassName="h-10 text-xs font-bold"
  placeholder="Dari tanggal..."
  />
  </div>
@@ -1581,7 +1749,7 @@ export default function MutabaahAnalyticsPage({ view }) {
  value={filters.date_to}
  onChange={(e) => update('date_to', e.target.value)}
  className="w-full sm:w-auto min-w-[140px]"
- inputClassName="py-2 text-xs font-semibold"
+ inputClassName="h-10 text-xs font-bold"
  placeholder="Sampai tanggal..."
  />
  </div>
@@ -1662,7 +1830,7 @@ export default function MutabaahAnalyticsPage({ view }) {
  placeholder="Cari santri/NIS..."
  value={filters.search || ''}
  onChange={(e) => update('search', e.target.value)}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-4 py-2 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20"
+ className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white pl-10 pr-4 text-xs font-bold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
  </div>
@@ -1678,7 +1846,7 @@ export default function MutabaahAnalyticsPage({ view }) {
  <button
  type="button"
  onClick={handleResetFilters}
- className="w-full sm:w-auto sm:ml-auto inline-flex items-center justify-center gap-1.5 h-9 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-emerald-600 px-3 text-xs font-semibold text-slate-600 dark:text-slate-300 dark: transition-all cursor-pointer font-medium"
+ className="w-full sm:w-auto sm:ml-auto inline-flex items-center justify-center gap-1.5 h-10 rounded-xl border-2 border-emerald-300 bg-emerald-100/90 hover:bg-emerald-200 px-3.5 text-xs font-extrabold text-emerald-900 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300 dark:hover:bg-emerald-900/60 transition-all cursor-pointer"
  >
  <RotateCcw className="h-3.5 w-3.5" />
  <span>Reset</span>
@@ -1686,116 +1854,94 @@ export default function MutabaahAnalyticsPage({ view }) {
  </div>
  </div>
 
- <div className="overflow-x-auto px-4 sm:px-6 md:px-8 py-4">
- <div className="overflow-x-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/80">
- <table className="w-full text-left text-xs">
-          <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-xs font-bold uppercase tracking-wider text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/80 dark:text-emerald-300">
-            <tr className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 text-emerald-950 dark:text-emerald-200 text-xs font-black uppercase tracking-wider">
-              <th className="px-3 py-2.5">Santri & Asrama</th>
-              <th className="px-3 py-2.5">Musyrif / Pembimbing</th>
-              <th className="px-3 py-2.5">Progress Ibadah</th>
-              <th className="px-3 py-2.5">Status</th>
-              <th className="px-3 py-2.5 text-right select-none w-20" />
-            </tr>
-          </thead>
- <tbody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40">
+ <div className="overflow-x-auto">
+ <TableRoot fullBleed={true} className="text-xs">
+ <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 text-emerald-950 dark:text-emerald-200">
+ <TableRow className="bg-transparent hover:bg-transparent">
+ <TableHead className="px-4 py-3 font-black text-xs uppercase tracking-wider">Santri &amp; Asrama</TableHead>
+ <TableHead className="px-4 py-3 font-black text-xs uppercase tracking-wider">Musyrif / Pembimbing</TableHead>
+ <TableHead className="px-4 py-3 font-black text-xs uppercase tracking-wider">Progress Ibadah</TableHead>
+ <TableHead className="px-4 py-3 font-black text-xs uppercase tracking-wider text-center">Status</TableHead>
+ </TableRow>
+ </TableHeader>
+ <TableBody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40">
  {isTableFetching && displayedStudents.length === 0 ? (
- <tr>
-                  <td colSpan={5} className="px-4 py-6">
+ <TableRow>
+ <TableCell colSpan={4} className="px-4 py-6">
  <AppSkeleton variant="table" rows={4} cols={4} />
- </td>
- </tr>
+ </TableCell>
+ </TableRow>
  ) : displayedStudents.length === 0 ? (
- <tr>
-                  <td colSpan={5} className="px-4 py-6">
+ <TableRow>
+ <TableCell colSpan={4} className="px-4 py-8">
  <AppEmptyState
  title="Tidak ada data Mutabaah Santri"
  description="Coba ubah filter atau kata kunci pencarian Anda."
  actionLabel="Reset Filter"
  onAction={handleResetFilters}
  />
- </td>
- </tr>
+ </TableCell>
+ </TableRow>
  ) : (
  displayedStudents.map((st) => (
- <tr key={st.id} className="hover:bg-emerald-50/40 dark:hover:bg-emerald-950/20 transition-colors">
-                <td className="px-3 py-3 align-top sm:align-middle">
-                  <div className="flex items-center gap-2.5">
-                    {view !== 'rekap' && (
-                      <input
-                        type="checkbox"
-                        checked={selectedStudentIds.includes(st.id)}
-                        onChange={() => toggleSelectStudent(st.id)}
-                        aria-label={`Pilih ${st.name}`}
-                        className="size-4 rounded border-emerald-300 accent-[#059669] cursor-pointer shrink-0"
-                      />
-                    )}
-                    {st.photo ? (
-                      <img src={st.photo} alt={st.name} className="h-8 w-8 rounded-full object-cover border border-emerald-200/80 dark:border-emerald-800/60 shrink-0" />
-                    ) : (
-                      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-emerald-100 text-[10px] font-black text-emerald-700">
-                        {st.name.split(' ').map((part) => part[0]).slice(0, 2).join('')}
-                      </span>
-                    )}
-                    <div className="min-w-0">
-                      <p className="font-bold text-slate-900 dark:text-white line-clamp-2">{st.name}</p>
-                      <p className="text-[10px] text-slate-400 font-mono line-clamp-1 mt-0.5">
-                        NIS: {st.nis} • <span className="font-medium text-slate-700 dark:text-slate-300">{st.class}</span> {!isTeacher && st.dorm ? `(${st.dorm})` : ''}
-                      </p>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-3 py-3 align-middle font-semibold text-slate-700 dark:text-slate-300">
-                  {st.supervisor || '-'}
-                </td>
-                <td className="px-3 py-3 align-middle">
-                  <div className="flex flex-col gap-1">
-                    <div className="flex items-center gap-2">
-                      <div className="h-2 w-20 rounded-full bg-emerald-50 dark:bg-slate-700">
-                        <div className="h-2 rounded-full bg-emerald-500 transition-all" style={{ width: `${st.progressToday}%` }} />
-                      </div>
-                      <span className="font-bold text-emerald-600 text-xs tabular-nums">{st.progressToday}% (Hari Ini)</span>
-                    </div>
-                    <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 tabular-nums">
-                      Pekan Ini: {st.progressWeek}%
-                    </div>
-                  </div>
-                </td>
-                <td className="px-3 py-3 align-middle">
-                  <AppBadge variant={st.status === 'Finalized' ? 'success' : st.status === 'Draft' ? 'warning' : 'danger'}>
-                    {st.status}
-                  </AppBadge>
-                </td>
-                <td className="px-3 py-3 text-center align-middle">
-                  <ActionDropdown
-                    rowId={st.id}
-                    onView={() => { setSelectedStudent(st); setShowDetailDrawer(true) }}
-                    onEdit={() => {
-                      setEditStudent(st)
-                      setStudentForm({
-                        name: st.name || '',
-                        nis: st.nis || '',
-                        class: st.class || '',
-                        dorm: st.dorm || '',
-                      })
-                      setShowEditModal(true)
-                    }}
-                    extraActions={[
-                      {
-                        key: 'print',
-                        label: 'Cetak Evaluasi Pekanan',
-                        icon: Printer,
-                        onClick: () => handlePrintWeeklyStudent(st),
-                      }
-                    ]}
-                  />
-                </td>
- </tr>
+ <TableRow
+ key={st.id}
+ onClick={() => { setSelectedStudent(st); setShowDetailDrawer(true) }}
+ className="hover:bg-emerald-50/40 dark:hover:bg-emerald-950/20 transition-colors cursor-pointer"
+ >
+ <TableCell className="px-4 py-3 align-top sm:align-middle">
+ <div className="flex items-center gap-2.5">
+ {view !== 'rekap' && (
+ <input
+ type="checkbox"
+ checked={selectedStudentIds.includes(st.id)}
+ onChange={() => toggleSelectStudent(st.id)}
+ onClick={(e) => e.stopPropagation()}
+ aria-label={`Pilih ${st.name}`}
+ className="size-4 rounded border-emerald-300 accent-[#059669] cursor-pointer shrink-0"
+ />
+ )}
+ {st.photo ? (
+ <img src={st.photo} alt={st.name} className="h-8 w-8 rounded-full object-cover border border-emerald-200/80 dark:border-emerald-800/60 shrink-0" />
+ ) : (
+ <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-emerald-100 text-[10px] font-black text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+ {st.name.split(' ').map((part) => part[0]).slice(0, 2).join('')}
+ </span>
+ )}
+ <div className="min-w-0">
+ <p className="font-extrabold text-slate-900 dark:text-white line-clamp-2">{st.name}</p>
+ <p className="text-[11px] text-slate-400 font-mono line-clamp-1 mt-0.5">
+ NIS: {st.nis} • <span className="font-medium text-slate-700 dark:text-slate-300">{st.class}</span> {!isTeacher && st.dorm ? `(${st.dorm})` : ''}
+ </p>
+ </div>
+ </div>
+ </TableCell>
+ <TableCell className="px-4 py-3 align-middle font-semibold text-slate-700 dark:text-slate-300">
+ {st.supervisor || '-'}
+ </TableCell>
+ <TableCell className="px-4 py-3 align-middle">
+ <div className="flex flex-col gap-1">
+ <div className="flex items-center gap-2">
+ <div className="h-2 w-24 rounded-full bg-emerald-100 dark:bg-slate-700 overflow-hidden">
+ <div className="h-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all" style={{ width: `${st.progressToday}%` }} />
+ </div>
+ <span className="font-bold text-emerald-600 dark:text-emerald-400 text-xs tabular-nums">{st.progressToday}% (Hari Ini)</span>
+ </div>
+ <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 tabular-nums">
+ Pekan Ini: {st.progressWeek}%
+ </div>
+ </div>
+ </TableCell>
+ <TableCell className="px-4 py-3 text-center align-middle">
+ <AppBadge variant={st.status === 'Finalized' ? 'success' : st.status === 'Draft' ? 'warning' : 'danger'}>
+ {st.status}
+ </AppBadge>
+ </TableCell>
+ </TableRow>
  ))
  )}
- </tbody>
- </table>
- </div>
+ </TableBody>
+ </TableRoot>
  </div>
 
  {/* Pagination Controls (§7.6) */}
@@ -1913,15 +2059,15 @@ export default function MutabaahAnalyticsPage({ view }) {
  </AppModal>
  )}
 
- {/* 🟢 HEROUI DIALOG: MODAL TAMBAH DATA SANTRI */}
+ {/* 🟢 HEROUI DIALOG: MODAL TAMBAH DATA SANTRI & AGENDA PEKANAN */}
  <AppModal
  isOpen={showAddModal}
  onClose={() => setShowAddModal(false)}
  icon={UserPlus}
- title="Tambah Data Mutabaah"
+ title="Tambah Data & Agenda Mutabaah"
  badge="Data Baru"
- description="Isi informasi santri untuk menambahkan data mutabaah baru"
- maxWidth="max-w-md"
+ description="Isi identitas santri dan checklist Agenda & Rincian Agenda pekanan"
+ maxWidth="max-w-4xl"
  zIndex={70}
  footer={
  <>
@@ -1945,98 +2091,170 @@ export default function MutabaahAnalyticsPage({ view }) {
  }
  >
  <form id="mutabaah-add-student-form" onSubmit={handleSaveNewStudent} className="space-y-4">
- <div>
- <label htmlFor="mutabaah-add-name" className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
- Nama Lengkap Santri <span className="text-rose-500">*</span>
+ {/* Pilih Unit & Santri dari Master Data */}
+ <div className="rounded-2xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/40 dark:bg-emerald-950/20 p-4">
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+ <div className="w-full min-w-0">
+ <label className="block text-xs font-extrabold text-slate-700 dark:text-slate-200 mb-1.5">
+ Pilih Unit Pendidikan
  </label>
- <div className="relative flex items-center">
- <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
- <User className="size-4" />
- </div>
- <input
- id="mutabaah-add-name"
- type="text"
- required
- placeholder="Masukkan nama santri"
- value={studentForm.name}
- onChange={(e) => setStudentForm({ ...studentForm, name: e.target.value })}
- className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
+ <HeroUiFilterSelect
+ value={addUnitId}
+ onChange={(val) => {
+ setAddUnitId(val)
+ setAddSelectedStudentId('')
+ setStudentForm({ name: '', nis: '', class: '', dorm: '', unitName: '' })
+ }}
+ options={unitFilterOptions}
+ placeholder="Semua Unit Pendidikan"
+ icon={Building2}
+ searchable={true}
+ size="lg"
+ popoverWidth="w-full min-w-[260px]"
+ className="!w-full !block"
  />
+ </div>
+
+ <div className="w-full min-w-0">
+ <label className="block text-xs font-extrabold text-slate-700 dark:text-slate-200 mb-1.5">
+ Pilih Santri / Siswa <span className="text-rose-500">*</span>
+ </label>
+ <HeroUiFilterSelect
+ value={addSelectedStudentId}
+ onChange={(val) => {
+ setAddSelectedStudentId(val)
+ const found = addStudentOptions.find((o) => o.value === val)?.raw
+ if (found) {
+ setStudentForm({
+ name: found.name,
+ nis: found.nis,
+ class: found.class,
+ dorm: found.dorm,
+ unitName: found.unitName,
+ })
+ }
+ }}
+ options={addStudentOptions}
+ placeholder={addStudentsQuery.isLoading ? 'Memuat daftar santri...' : '-- Pilih Santri --'}
+ icon={User}
+ searchable={true}
+ size="lg"
+ popoverWidth="w-full min-w-[280px]"
+ className="!w-full !block"
+ />
+ </div>
  </div>
  </div>
 
+ {/* Info Bawaan Santri Terpilih (Read-Only) */}
+ {addSelectedStudentId && (
+ <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/50 dark:bg-emerald-950/30 p-3 text-xs">
  <div>
- <label htmlFor="mutabaah-add-nis" className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
- NIS (Nomor Induk Siswa) <span className="text-rose-500">*</span>
- </label>
- <div className="relative flex items-center">
- <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
- <Hash className="size-4" />
+ <span className="text-[10px] font-bold uppercase text-slate-400 block">Nama Santri</span>
+ <span className="font-extrabold text-slate-900 dark:text-white">{studentForm.name || '-'}</span>
  </div>
- <input
- id="mutabaah-add-nis"
- type="text"
- required
- placeholder="Masukkan NIS santri"
- value={studentForm.nis}
- onChange={(e) => setStudentForm({ ...studentForm, nis: e.target.value })}
- className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
- />
+ <div>
+ <span className="text-[10px] font-bold uppercase text-slate-400 block">NIS</span>
+ <span className="font-mono font-bold text-indigo-700 dark:text-indigo-300">{studentForm.nis || '-'}</span>
+ </div>
+ <div>
+ <span className="text-[10px] font-bold uppercase text-slate-400 block">Kelas</span>
+ <span className="font-bold text-slate-800 dark:text-slate-200">{studentForm.class || '-'}</span>
+ </div>
+ <div>
+ <span className="text-[10px] font-bold uppercase text-slate-400 block">Asrama</span>
+ <span className="font-bold text-slate-800 dark:text-slate-200">{studentForm.dorm || '-'}</span>
  </div>
  </div>
+ )}
 
- <div className="grid grid-cols-2 gap-3">
- <div>
- <label htmlFor="mutabaah-add-class" className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
- Kelas
- </label>
- <div className="relative flex items-center">
- <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
- <BookOpen className="size-4" />
+ {/* Pengisian Agenda & Rincian Agenda Pekanan (Sesuai Modal Lihat) */}
+ {(() => {
+ const chosenUnitObj = (options.data?.units || []).find((u) => String(u.id) === String(addUnitId))
+ const addBoarding = isBoardingStudent({ dorm: studentForm.dorm, unitName: chosenUnitObj?.name || studentForm.unitName }, chosenUnitObj)
+ const { sholat: addSholat, yaumiyyah: addYaumiyyah } = getMutabaahAgendas(addBoarding, options.data?.agendas)
+ return (
+ <div className="pt-2 space-y-2.5">
+ <div className="flex items-center justify-between">
+ <span className="text-xs font-black uppercase tracking-wider text-emerald-800 dark:text-emerald-300">
+ Isi Agenda &amp; Rincian Agenda Pekanan ({addSholat.length + addYaumiyyah.length} Butir)
+ </span>
+ <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+ Klik ✓ / ✕ untuk mengisi capaian harian
+ </span>
  </div>
- <input
- id="mutabaah-add-class"
- type="text"
- placeholder="Contoh: VII-A"
- value={studentForm.class}
- onChange={(e) => setStudentForm({ ...studentForm, class: e.target.value })}
- className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
- />
+ <div className="overflow-x-auto max-h-[38vh] overflow-y-auto rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80">
+ <table className="w-full text-left border-collapse text-xs">
+ <thead className="sticky top-0 z-10 bg-gradient-to-r from-emerald-100/95 via-teal-50/90 to-emerald-100/95 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950 dark:via-teal-950 dark:to-emerald-950 dark:text-emerald-200 font-extrabold uppercase text-[10px] tracking-wider">
+ <tr>
+ <th className="py-2 px-2 w-10 text-center">No</th>
+ <th className="py-2 px-3 w-28">Agenda</th>
+ <th className="py-2 px-3 min-w-[180px]">Rincian Agenda</th>
+ {detailWeekDays.map((d, i) => (
+ <th key={i} className="py-2 px-1 w-12 text-center">
+ <div className="leading-tight font-black">{d.dayName.slice(0, 3)}</div>
+ <div className="text-[9px] font-medium opacity-80">{d.dateShort}</div>
+ </th>
+ ))}
+ </tr>
+ </thead>
+ <tbody className="divide-y divide-emerald-100/80 dark:divide-slate-800/80 bg-white dark:bg-slate-900/60">
+ {[
+ ...addSholat.map((it) => ({ ...it, groupLabel: 'Sholat' })),
+ ...addYaumiyyah.map((it) => ({ ...it, groupLabel: 'Yaumiyyah' })),
+ ].map((item) => (
+ <tr key={`add-${item.groupLabel}-${item.no}`} className="hover:bg-emerald-50/40 dark:hover:bg-emerald-950/30 transition-colors">
+ <td className="py-1.5 px-2 text-center font-bold text-slate-500">{item.no}</td>
+ <td className="py-1.5 px-3 font-extrabold text-[10px] uppercase text-emerald-700 dark:text-emerald-300">{item.groupLabel}</td>
+ <td className="py-1.5 px-3 font-semibold text-slate-800 dark:text-slate-200">{item.displayName}</td>
+ {detailWeekDays.map((d, dayIdx) => {
+ const isFuture = d.fullDate > today
+ const isPuasa = item.code === 'PUASA-SUNNAH' || /puasa\s*sunnah|shaum/i.test(item.name || item.displayName || '')
+ const isKahfi = item.code === 'BACA-SURAT-ALKAHFI' || /al-?kahfi/i.test(item.name || item.displayName || '')
+ const isNA = (isPuasa && d.dayName !== 'Senin' && d.dayName !== 'Kamis') || (isKahfi && d.dayName !== 'Jumat')
+ const key = `new:${item.code || item.no}:${d.fullDate}`
+ const isChecked = Boolean(addAgendaDraft[key])
+ return (
+ <td key={dayIdx} className="py-1 px-1 text-center">
+ {isFuture || isNA ? (
+ <span className="text-xs font-mono text-slate-300 dark:text-slate-600 select-none">—</span>
+ ) : (
+ <button
+ type="button"
+ onClick={() => setAddAgendaDraft((prev) => ({ ...prev, [key]: !isChecked }))}
+ className={`inline-flex items-center justify-center size-6 rounded-lg font-black text-xs transition-all active:scale-90 cursor-pointer ${
+ isChecked
+ ? 'bg-emerald-600 text-white shadow-xs hover:bg-emerald-700'
+ : 'bg-rose-100 text-rose-700 hover:bg-rose-200 dark:bg-rose-950/60 dark:text-rose-300'
+ }`}
+ >
+ {isChecked ? '✓' : '✕'}
+ </button>
+ )}
+ </td>
+ )
+ })}
+ </tr>
+ ))}
+ </tbody>
+ </table>
  </div>
  </div>
-
- <div>
- <label htmlFor="mutabaah-add-dorm" className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
- Asrama
- </label>
- <div className="relative flex items-center">
- <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
- <Building2 className="size-4" />
- </div>
- <input
- id="mutabaah-add-dorm"
- type="text"
- placeholder="Contoh: Asrama Al-Ghazali"
- value={studentForm.dorm}
- onChange={(e) => setStudentForm({ ...studentForm, dorm: e.target.value })}
- className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
- />
- </div>
- </div>
- </div>
+ )
+ })()}
  </form>
  </AppModal>
 
- {/* 🟢 HEROUI DIALOG: MODAL EDIT DATA SANTRI */}
+ {/* 🟢 HEROUI DIALOG: MODAL EDIT DATA SANTRI & JADWAL AGENDA PEKANAN */}
  <AppModal
  isOpen={showEditModal}
  onClose={() => setShowEditModal(false)}
  icon={Pencil}
- title="Edit Data Mutabaah"
+ title="Edit Data & Jadwal Mutabaah"
  badge="Update Data"
- description="Ubah informasi santri yang dipilih"
+ description="Ubah identitas santri dan checklist agenda Mutaba'ah pekanan"
  variant="warning"
- maxWidth="max-w-md"
+ maxWidth="max-w-4xl"
  zIndex={70}
  footer={
  <>
@@ -2060,81 +2278,92 @@ export default function MutabaahAnalyticsPage({ view }) {
  }
  >
  <form id="mutabaah-edit-student-form" onSubmit={handleSaveEditStudent} className="space-y-4">
+ {/* Identitas Bawaan Santri (Read-Only) */}
+ <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/50 dark:bg-emerald-950/30 p-3.5 text-xs">
  <div>
- <label htmlFor="mutabaah-edit-name" className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
- Nama Lengkap Santri <span className="text-rose-500">*</span>
- </label>
- <div className="relative flex items-center">
- <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
- <User className="size-4" />
+ <span className="text-[10px] font-bold uppercase text-slate-400 block">Nama Santri</span>
+ <span className="font-extrabold text-slate-900 dark:text-white">{editStudent?.name || '-'}</span>
  </div>
- <input
- id="mutabaah-edit-name"
- type="text"
- required
- value={studentForm.name}
- onChange={(e) => setStudentForm({ ...studentForm, name: e.target.value })}
- className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
- />
+ <div>
+ <span className="text-[10px] font-bold uppercase text-slate-400 block">NIS</span>
+ <span className="font-mono font-bold text-indigo-700 dark:text-indigo-300">{editStudent?.nis || '-'}</span>
+ </div>
+ <div>
+ <span className="text-[10px] font-bold uppercase text-slate-400 block">Kelas</span>
+ <span className="font-bold text-slate-800 dark:text-slate-200">{editStudent?.class || '-'}</span>
+ </div>
+ <div>
+ <span className="text-[10px] font-bold uppercase text-slate-400 block">Asrama</span>
+ <span className="font-bold text-slate-800 dark:text-slate-200">{editStudent?.dorm || '-'}</span>
  </div>
  </div>
 
- <div>
- <label htmlFor="mutabaah-edit-nis" className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
- NIS (Nomor Induk Siswa) <span className="text-rose-500">*</span>
- </label>
- <div className="relative flex items-center">
- <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
- <Hash className="size-4" />
+ {/* Jadwal & Checklist Agenda Pekanan (Sinkron dengan Modal Lihat) */}
+ {editStudent && (
+ <div className="pt-2 space-y-2.5">
+ <div className="flex items-center justify-between">
+ <span className="text-xs font-black uppercase tracking-wider text-emerald-800 dark:text-emerald-300">
+ Edit Jadwal Agenda Mutaba&apos;ah Pekanan ({editSholat.length + editYaumiyyah.length} Butir)
+ </span>
+ <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+ Klik ✓ / ✕ untuk mengubah capaian harian
+ </span>
  </div>
- <input
- id="mutabaah-edit-nis"
- type="text"
- required
- value={studentForm.nis}
- onChange={(e) => setStudentForm({ ...studentForm, nis: e.target.value })}
- className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
- />
+ <div className="overflow-x-auto max-h-[38vh] overflow-y-auto rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80">
+ <table className="w-full text-left border-collapse text-xs">
+ <thead className="sticky top-0 z-10 bg-gradient-to-r from-emerald-100/95 via-teal-50/90 to-emerald-100/95 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950 dark:via-teal-950 dark:to-emerald-950 dark:text-emerald-200 font-extrabold uppercase text-[10px] tracking-wider">
+ <tr>
+ <th className="py-2 px-2 w-10 text-center">No</th>
+ <th className="py-2 px-3 w-28">Agenda</th>
+ <th className="py-2 px-3 min-w-[180px]">Rincian Agenda</th>
+ {detailWeekDays.map((d, i) => (
+ <th key={i} className="py-2 px-1 w-12 text-center">
+ <div className="leading-tight font-black">{d.dayName.slice(0, 3)}</div>
+ <div className="text-[9px] font-medium opacity-80">{d.dateShort}</div>
+ </th>
+ ))}
+ </tr>
+ </thead>
+ <tbody className="divide-y divide-emerald-100/80 dark:divide-slate-800/80 bg-white dark:bg-slate-900/60">
+ {[
+ ...editSholat.map((it) => ({ ...it, groupLabel: 'Sholat' })),
+ ...editYaumiyyah.map((it) => ({ ...it, groupLabel: 'Yaumiyyah' })),
+ ].map((item) => (
+ <tr key={`${item.groupLabel}-${item.no}`} className="hover:bg-emerald-50/40 dark:hover:bg-emerald-950/30 transition-colors">
+ <td className="py-1.5 px-2 text-center font-bold text-slate-500">{item.no}</td>
+ <td className="py-1.5 px-3 font-extrabold text-[10px] uppercase text-emerald-700 dark:text-emerald-300">{item.groupLabel}</td>
+ <td className="py-1.5 px-3 font-semibold text-slate-800 dark:text-slate-200">{item.displayName}</td>
+ {detailWeekDays.map((d, dayIdx) => {
+ const baseCell = getAgendaCellStatus(item, d, editStudent)
+ const key = `${editStudent.id}:${item.code || item.no}:${d.fullDate}`
+ const isChecked = Object.prototype.hasOwnProperty.call(editAgendaDraft, key) ? Boolean(editAgendaDraft[key]) : baseCell.checked
+ return (
+ <td key={dayIdx} className="py-1 px-1 text-center">
+ {baseCell.isFuture || baseCell.isNA ? (
+ <span className="text-xs font-mono text-slate-300 dark:text-slate-600 select-none">—</span>
+ ) : (
+ <button
+ type="button"
+ onClick={() => setEditAgendaDraft((prev) => ({ ...prev, [key]: !isChecked }))}
+ className={`inline-flex items-center justify-center size-6 rounded-lg font-black text-xs transition-all active:scale-90 cursor-pointer ${
+ isChecked
+ ? 'bg-emerald-600 text-white shadow-xs hover:bg-emerald-700'
+ : 'bg-rose-100 text-rose-700 hover:bg-rose-200 dark:bg-rose-950/60 dark:text-rose-300'
+ }`}
+ >
+ {isChecked ? '✓' : '✕'}
+ </button>
+ )}
+ </td>
+ )
+ })}
+ </tr>
+ ))}
+ </tbody>
+ </table>
  </div>
  </div>
-
- <div className="grid grid-cols-2 gap-3">
- <div>
- <label htmlFor="mutabaah-edit-class" className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
- Kelas
- </label>
- <div className="relative flex items-center">
- <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
- <BookOpen className="size-4" />
- </div>
- <input
- id="mutabaah-edit-class"
- type="text"
- value={studentForm.class}
- onChange={(e) => setStudentForm({ ...studentForm, class: e.target.value })}
- className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
- />
- </div>
- </div>
-
- <div>
- <label htmlFor="mutabaah-edit-dorm" className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
- Asrama
- </label>
- <div className="relative flex items-center">
- <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
- <Building2 className="size-4" />
- </div>
- <input
- id="mutabaah-edit-dorm"
- type="text"
- value={studentForm.dorm}
- onChange={(e) => setStudentForm({ ...studentForm, dorm: e.target.value })}
- className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
- />
- </div>
- </div>
- </div>
+ )}
  </form>
  </AppModal>
 
@@ -2441,6 +2670,103 @@ export default function MutabaahAnalyticsPage({ view }) {
  : [st.name, st.nis, st.class, `${st.progressToday}%`, `${st.progressWeek}%`, st.status]
  )}
  />
+
+ {/* ── KPI Quick View Pop-up Modal (10/page + Pagination) ── */}
+ {(() => {
+   const filterByKpi = (list) => {
+     if (kpiModalKey === 'filled' || kpiModalKey === 'good') return list.filter((s) => Number(s.progressToday || 0) >= (kpiModalKey === 'good' ? 75 : 1))
+     if (kpiModalKey === 'finalized' || kpiModalKey === 'parent_signature') return list.filter((s) => s.status === 'Finalized')
+     if (kpiModalKey === 'not_filled' || kpiModalKey === 'not_done') return list.filter((s) => s.status === 'Belum Diisi' || Number(s.progressToday || 0) === 0)
+     if (kpiModalKey === 'less') return list.filter((s) => Number(s.progressToday || 0) > 0 && Number(s.progressToday || 0) < 75)
+     return list
+   }
+   const metaMap = {
+     total: { title: 'Rincian Total Santri Aktif Mutabaah', icon: Users },
+     filled: { title: 'Rincian Santri Sudah Mengisi Mutabaah', icon: CheckCircle2 },
+     finalized: { title: 'Rincian Mutabaah Sudah Final (Terkunci)', icon: ShieldCheck },
+     not_filled: { title: 'Rincian Santri Belum Mengisi Mutabaah', icon: AlertTriangle },
+     good: { title: 'Rincian Santri Capaian Baik (≥ 75%)', icon: CheckCircle2 },
+     less: { title: 'Rincian Santri Capaian Kurang (< 75%)', icon: AlertTriangle },
+     not_done: { title: 'Rincian Santri Belum Dikerjakan (0%)', icon: XCircle },
+     parent_signature: { title: 'Rincian Mutabaah Terverifikasi / Final', icon: ShieldCheck },
+   }
+   const meta = kpiModalKey ? metaMap[kpiModalKey] : null
+   return (
+     <LmsKpiDetailModal
+       isOpen={Boolean(kpiModalKey && meta)}
+       onClose={() => setKpiModalKey(null)}
+       icon={meta?.icon || Users}
+       title={meta?.title || 'Rincian Data Mutabaah Santri'}
+       rows={filterByKpi(students)}
+       fetchRows={async () => {
+         const res = await mutabaahService.recapAnalytics({ ...activeFilters, per_page: 200, page: 1 })
+         const raw = Array.isArray(res?.rows?.data) ? res.rows.data : (Array.isArray(res?.data?.rows?.data) ? res.data.rows.data : [])
+         const mapped = raw.map((row) => ({
+           id: String(row.id),
+           name: row.full_name || '-',
+           nis: row.nis || '-',
+           class: row.class_name || '-',
+           unitName: row.unit_name || '-',
+           supervisor: row.supervisor || '-',
+           progressToday: Number(row.progress || 0),
+           status: row.finalized ? 'Finalized' : Number(row.progress || 0) > 0 ? 'Draft' : 'Belum Diisi',
+         }))
+         return filterByKpi(mapped)
+       }}
+       searchPlaceholder="Cari nama santri, NIS, kelas, unit, atau pembimbing..."
+       searchFilter={(s, q) =>
+         [s.name, s.nis, s.class, s.unitName, s.supervisor, s.status]
+           .filter(Boolean)
+           .join(' ')
+           .toLowerCase()
+           .includes(q)
+       }
+       emptyText="Belum ada data santri pada kategori mutabaah ini."
+       columns={[
+         {
+           header: 'Santri & NIS',
+           render: (s) => (
+             <div>
+               <div className="font-extrabold text-slate-900 dark:text-white">{s.name || '-'}</div>
+               <div className="text-[10px] font-mono text-indigo-700 dark:text-indigo-300">NIS: {s.nis || '-'}</div>
+             </div>
+           ),
+         },
+         {
+           header: 'Kelas & Unit',
+           render: (s) => (
+             <div>
+               <div className="font-semibold text-slate-700 dark:text-slate-300">{s.class || '-'}</div>
+               <div className="text-[10px] text-slate-500">{s.unitName || '-'}</div>
+             </div>
+           ),
+         },
+         {
+           header: 'Pembimbing / Musyrif',
+           render: (s) => <div className="font-medium text-slate-700 dark:text-slate-300">{s.supervisor || '-'}</div>,
+         },
+         {
+           header: 'Capaian',
+           align: 'center',
+           render: (s) => <span className="font-black text-emerald-700 dark:text-emerald-300 tabular-nums">{s.progressToday ?? 0}%</span>,
+         },
+         {
+           header: 'Status',
+           align: 'center',
+           render: (s) => (
+             <span className={`inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${
+               s.status === 'Finalized' ? 'bg-emerald-100 text-emerald-800'
+                 : s.status === 'Draft' ? 'bg-amber-100 text-amber-800'
+                   : 'bg-rose-100 text-rose-800'
+             }`}>
+               {s.status || 'Belum Diisi'}
+             </span>
+           ),
+         },
+       ]}
+     />
+   )
+ })()}
  </PageContainer>
   )
 }

@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect } from 'react'
 import AppModal from '@/components/app/AppModal'
+import KpiStatCard from '@/components/app/KpiStatCard'
 import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -442,10 +443,10 @@ export default function AssignmentsWorkspace({
  return (
  <div className="space-y-5">
  {/* 1. HEROUI MODERN HERO HEADER CARD */}
- <header className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:border-emerald-800/60 dark:bg-[#1B2433] p-5 sm:p-6 shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]">
+ <header className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-gradient-to-br from-[#E6F8F3] via-white to-[#F0FDF9] dark:from-emerald-950/40 dark:via-[#1B2433] dark:to-teal-950/30 p-5 sm:p-6 shadow-md shadow-emerald-500/10">
  <div className="relative flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
  <div className="flex items-center gap-3.5">
- <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-sm ring-4 ring-white/60 dark:ring-slate-800/80">
+ <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-md shadow-emerald-600/20 border border-emerald-500/30">
  <ClipboardList className="h-6 w-6" />
  </span>
  <div>
@@ -504,69 +505,36 @@ export default function AssignmentsWorkspace({
  </div>
  </header>
 
- {/* 2. MASTER KPI STATS GRID (4 COLORFUL CARDS) */}
+ {/* 2. MASTER KPI STATS GRID (4 KpiStatCard) */}
  <div className="grid grid-cols-2 gap-3.5 lg:grid-cols-4">
- {/* Card 1: Total Tugas Diterbitkan */}
- <motion.div
- whileHover={{ y: -3 }}
- className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-4 sm:p-5 shadow-sm transition-all hover:shadow-md dark:border-emerald-800/60 dark:bg-slate-900"
- >
- <div className="flex items-center justify-between">
- <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] text-emerald-700 dark:from-emerald-950 dark:to-teal-950 dark:text-emerald-300 ring-1 ring-emerald-500/30">
- <ClipboardList className="h-5 w-5" />
- </span>
- <span className="text-2xl font-black text-slate-900 dark:text-white">{stats.total}</span>
- </div>
- <p className="mt-3 text-xs font-bold text-slate-700 dark:text-slate-200">Tugas Diterbitkan</p>
- <p className="mt-0.5 text-xs text-slate-400">Total penugasan kurikulum</p>
- </motion.div>
-
- {/* Card 2: Menunggu Dikerjakan */}
- <motion.div
- whileHover={{ y: -3 }}
- className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-4 sm:p-5 shadow-sm transition-all hover:shadow-md dark:border-emerald-800/60 dark:bg-slate-900"
- >
- <div className="flex items-center justify-between">
- <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] text-blue-700 dark:from-blue-950 dark:to-sky-950 dark:text-blue-300 ring-1 ring-blue-500/30">
- <Clock className="h-5 w-5" />
- </span>
- <span className="text-2xl font-black text-slate-900 dark:text-white">{stats.pendingCount}</span>
- </div>
- <p className="mt-3 text-xs font-bold text-slate-700 dark:text-slate-200">Belum Dikerjakan</p>
- <p className="mt-0.5 text-xs text-slate-400">Menunggu pengerjaan siswa</p>
- </motion.div>
-
- {/* Card 3: Terlambat / Lewat Waktu */}
- <motion.div
- whileHover={{ y: -3 }}
- className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-4 sm:p-5 shadow-sm transition-all hover:shadow-md dark:border-emerald-800/60 dark:bg-slate-900"
- >
- <div className="flex items-center justify-between">
- <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] text-rose-700 dark:from-rose-950 dark:to-red-950 dark:text-rose-300 ring-1 ring-rose-500/30">
- <AlertTriangle className="h-5 w-5" />
- </span>
- <span className="text-2xl font-black text-slate-900 dark:text-white">{stats.lateCount}</span>
- </div>
- <p className="mt-3 text-xs font-bold text-slate-700 dark:text-slate-200">Melewati Tenggat</p>
- <p className="mt-0.5 text-xs text-slate-400">Melebihi batas deadline</p>
- </motion.div>
-
- {/* Card 4: Sudah Dinilai Guru */}
- <motion.div
- whileHover={{ y: -3 }}
- className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-4 sm:p-5 shadow-sm transition-all hover:shadow-md dark:border-emerald-800/60 dark:bg-slate-900"
- >
- <div className="flex items-center justify-between">
- <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] text-teal-700 dark:from-teal-950 dark:to-emerald-950 dark:text-teal-300 ring-1 ring-teal-500/30">
- <CheckCircle2 className="h-5 w-5" />
- </span>
- <span className="text-2xl font-black text-slate-900 dark:text-white">{stats.gradedCount}</span>
- </div>
- <p className="mt-3 text-xs font-bold text-slate-700 dark:text-slate-200">Sudah Dinilai Guru</p>
- <p className="mt-0.5 text-xs text-slate-400">
- {stats.averageGrade ? `Rata-rata: ${stats.averageGrade}` : 'Dilengkapi umpan balik guru'}
- </p>
- </motion.div>
+ <KpiStatCard
+ icon={ClipboardList}
+ title="Tugas Diterbitkan"
+ value={stats.total}
+ description="Total penugasan kurikulum"
+ tone="emerald"
+ />
+ <KpiStatCard
+ icon={Clock}
+ title="Belum Dikerjakan"
+ value={stats.pendingCount}
+ description="Menunggu pengerjaan siswa"
+ tone="blue"
+ />
+ <KpiStatCard
+ icon={AlertTriangle}
+ title="Melewati Tenggat"
+ value={stats.lateCount}
+ description="Melebihi batas deadline"
+ tone="rose"
+ />
+ <KpiStatCard
+ icon={CheckCircle2}
+ title="Sudah Dinilai Guru"
+ value={stats.gradedCount}
+ description={stats.averageGrade ? `Rata-rata: ${stats.averageGrade}` : 'Dilengkapi umpan balik guru'}
+ tone="teal"
+ />
  </div>
 
  {/* 3. FILTER, SEARCH & STATUS TABS CONTAINER */}
@@ -581,7 +549,7 @@ export default function AssignmentsWorkspace({
  value={draftSearch}
  onChange={(e) => setDraftSearch(e.target.value)}
  placeholder="Cari judul tugas, instruksi guru, mata pelajaran, atau materi..."
- className="h-11 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/70 pl-11 pr-4 text-xs font-medium outline-none transition-all focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/15 dark:border-emerald-800/60 dark:bg-slate-800 dark:focus:bg-slate-900"
+ className="h-11 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/70 pl-11 pr-4 text-xs font-medium outline-none transition-all focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/15 dark:border-emerald-800/60 dark:bg-slate-800 dark:focus:bg-slate-900"
  />
  </label>
 
@@ -874,7 +842,7 @@ export default function AssignmentsWorkspace({
 
  {/* Empty State when no assignments match filter */}
  {!filteredAssignments.length && (
- <div className="col-span-full py-16 text-center rounded-xl border-2 border-dashed border-emerald-300 dark:border-emerald-700 bg-emerald-50/30 p-8 dark:border-emerald-800/60 dark:bg-slate-900/40">
+ <div className="col-span-full py-16 text-center rounded-[22px] border-2 border-dashed border-emerald-300 dark:border-emerald-700/80 bg-emerald-50/30 p-8 dark:bg-slate-900/40">
  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
  <ClipboardList className="h-7 w-7" />
  </div>
@@ -1228,7 +1196,7 @@ export default function AssignmentsWorkspace({
  value={submissionGroupMembers}
  onChange={(e) => setSubmissionGroupMembers(e.target.value)}
  placeholder="Contoh: Ahmad Fauzan (Ketua), Budi, Citra..."
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 p-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50 p-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
  />
  </div>
  )}
@@ -1254,7 +1222,7 @@ export default function AssignmentsWorkspace({
  ? 'Tuliskan esai lengkap Anda di sini...'
  : 'Tuliskan jawaban atau keterangan pengerjaan tugas Anda...'
  }
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 p-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50 p-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
  />
  </div>
 
@@ -1283,7 +1251,7 @@ export default function AssignmentsWorkspace({
  value={submissionLink}
  onChange={(e) => setSubmissionLink(e.target.value)}
  placeholder="https://drive.google.com/... atau https://youtu.be/..."
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-9 pr-3 py-2 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-900"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white pl-9 pr-3 py-2 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-900"
  />
  </div>
  {submissionLink.trim() && (

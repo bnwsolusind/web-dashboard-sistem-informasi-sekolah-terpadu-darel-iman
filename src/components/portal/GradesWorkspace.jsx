@@ -20,6 +20,7 @@ import {
  MessageSquare,
 } from 'lucide-react'
 import { Button } from '../ui/button'
+import { KpiStatCard } from '../app'
 
 const getSubjectColor = (subjectName = '', subjectCode = '') => {
  const s = `${subjectName} ${subjectCode}`.toLowerCase()
@@ -318,10 +319,10 @@ export default function GradesWorkspace({
  return (
  <div className="space-y-5">
  {/* 1. HEROUI MODERN HERO HEADER CARD */}
- <header className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:border-emerald-800/60 dark:bg-[#1B2433] p-5 sm:p-6 shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]">
+ <header className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-gradient-to-br from-[#E6F8F3] via-white to-[#F0FDF9] dark:from-emerald-950/40 dark:via-[#1B2433] dark:to-teal-950/30 p-5 sm:p-6 shadow-md shadow-emerald-500/10">
  <div className="relative flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
  <div className="flex items-center gap-3.5">
- <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-sm ring-4 ring-white/60 dark:ring-slate-800/80">
+ <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-md shadow-emerald-600/20 border border-emerald-500/30">
  <Award className="h-6 w-6" />
  </span>
  <div>
@@ -390,65 +391,34 @@ export default function GradesWorkspace({
 
  {/* 2. MASTER KPI STATS GRID (4 VIBRANT CARDS) */}
       <div className="grid grid-cols-2 gap-3.5 lg:grid-cols-4">
-        {/* Card 1: Rata-rata Nilai */}
-        <motion.div
-          whileHover={{ y: -3 }}
-          className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 !bg-emerald-100/90 hover:!bg-emerald-200/70 p-4 sm:p-5 shadow-sm transition-all duration-300 dark:border-emerald-800/60 dark:!bg-emerald-950/50"
-        >
-          <div className="flex items-center justify-between">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl !bg-emerald-600 !text-white shadow-sm dark:!bg-emerald-600 dark:!text-white">
-              <Award className="h-5 w-5 text-white" />
-            </span>
-            <span className="text-2xl font-black text-emerald-800 dark:text-emerald-200">{stats.avg}</span>
-          </div>
-          <p className="mt-3 text-xs font-black text-emerald-800 dark:text-emerald-300">Rata-rata Nilai</p>
-          <p className="mt-0.5 text-xs font-medium text-emerald-700/80 dark:text-emerald-400/80">Rata-rata seluruh capaian mapel</p>
-        </motion.div>
-
-        {/* Card 2: Nilai Tertinggi */}
-        <motion.div
-          whileHover={{ y: -3 }}
-          className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 !bg-blue-100/90 hover:!bg-blue-200/70 p-4 sm:p-5 shadow-sm transition-all duration-300 dark:border-emerald-800/60 dark:!bg-blue-950/50"
-        >
-          <div className="flex items-center justify-between">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl !bg-blue-600 !text-white shadow-sm dark:!bg-blue-600 dark:!text-white">
-              <TrendingUp className="h-5 w-5 text-white" />
-            </span>
-            <span className="text-2xl font-black text-blue-800 dark:text-blue-200">{stats.max}</span>
-          </div>
-          <p className="mt-3 text-xs font-black text-blue-800 dark:text-blue-300">Nilai Tertinggi</p>
-          <p className="mt-0.5 text-xs font-medium text-blue-700/80 dark:text-blue-400/80">Capaian skor tertinggi ananda</p>
-        </motion.div>
-
-        {/* Card 3: Mapel Tuntas KKM */}
-        <motion.div
-          whileHover={{ y: -3 }}
-          className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 !bg-teal-100/90 hover:!bg-teal-200/70 p-4 sm:p-5 shadow-sm transition-all duration-300 dark:border-emerald-800/60 dark:!bg-teal-950/50"
-        >
-          <div className="flex items-center justify-between">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl !bg-teal-600 !text-white shadow-sm dark:!bg-teal-600 dark:!text-white">
-              <CheckCircle2 className="h-5 w-5 text-white" />
-            </span>
-            <span className="text-2xl font-black text-teal-800 dark:text-teal-200">{stats.tuntas}</span>
-          </div>
-          <p className="mt-3 text-xs font-black text-teal-800 dark:text-teal-300">Mapel Tuntas</p>
-          <p className="mt-0.5 text-xs font-medium text-teal-700/80 dark:text-teal-400/80">Memenuhi standar KKM mapel</p>
-        </motion.div>
-
-        {/* Card 4: Perlu Penguatan / Remedial */}
-        <motion.div
-          whileHover={{ y: -3 }}
-          className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 !bg-rose-100/90 hover:!bg-rose-200/70 p-4 sm:p-5 shadow-sm transition-all duration-300 dark:border-emerald-800/60 dark:!bg-rose-950/50"
-        >
-          <div className="flex items-center justify-between">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl !bg-rose-600 !text-white shadow-sm dark:!bg-rose-600 dark:!text-white">
-              <AlertTriangle className="h-5 w-5 text-white" />
-            </span>
-            <span className="text-2xl font-black text-rose-800 dark:text-rose-200">{stats.belumTuntas}</span>
-          </div>
-          <p className="mt-3 text-xs font-black text-rose-800 dark:text-rose-300">Perlu Penguatan</p>
-          <p className="mt-0.5 text-xs font-medium text-rose-700/80 dark:text-rose-400/80">Di bawah KKM perlu remedial</p>
-        </motion.div>
+        <KpiStatCard
+          icon={Award}
+          title="Rata-rata Nilai"
+          value={stats.avg}
+          description="Rata-rata seluruh capaian mapel"
+          tone="emerald"
+        />
+        <KpiStatCard
+          icon={TrendingUp}
+          title="Nilai Tertinggi"
+          value={stats.max}
+          description="Capaian skor tertinggi ananda"
+          tone="blue"
+        />
+        <KpiStatCard
+          icon={CheckCircle2}
+          title="Mapel Tuntas"
+          value={stats.tuntas}
+          description="Memenuhi standar KKM mapel"
+          tone="teal"
+        />
+        <KpiStatCard
+          icon={AlertTriangle}
+          title="Perlu Penguatan"
+          value={stats.belumTuntas}
+          description="Di bawah KKM perlu remedial"
+          tone="rose"
+        />
       </div>
 
       {/* 3. FILTER & PENCARIAN NILAI */}
@@ -463,7 +433,7 @@ export default function GradesWorkspace({
  value={draftSearch}
  onChange={(e) => setDraftSearch(e.target.value)}
  placeholder="Cari nama mata pelajaran, kode mapel, atau predikat nilai..."
- className="h-11 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/70 pl-11 pr-4 text-xs font-medium outline-none transition-all focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/15 dark:border-emerald-800/60 dark:bg-slate-800 dark:focus:bg-slate-900"
+ className="h-11 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/70 pl-11 pr-4 text-xs font-medium outline-none transition-all focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/15 dark:border-emerald-800/60 dark:bg-slate-800 dark:focus:bg-slate-900"
  />
  </label>
 
@@ -675,7 +645,7 @@ export default function GradesWorkspace({
 
  {/* Empty State when no grades found */}
  {!filteredGrades.length && (
- <div className="col-span-full py-16 text-center rounded-xl border-2 border-dashed border-emerald-300 dark:border-emerald-700 bg-emerald-50/30 p-8 dark:border-emerald-800/60 dark:bg-slate-900/40">
+ <div className="col-span-full py-16 text-center rounded-[22px] border-2 border-dashed border-emerald-300 dark:border-emerald-700/80 bg-emerald-50/30 p-8 dark:bg-slate-900/40">
  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
  <Award className="h-7 w-7" />
  </div>

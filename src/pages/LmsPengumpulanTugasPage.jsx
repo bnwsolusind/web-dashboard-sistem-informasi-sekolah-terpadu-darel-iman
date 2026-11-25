@@ -1318,7 +1318,7 @@ export default function LmsPengumpulanTugasPage({ embedded = false, hideBreadcru
  placeholder="Contoh: 90"
  value={formData.nilai}
  onChange={(e) => setFormData({ ...formData, nilai: e.target.value })}
- className="w-full px-3.5 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 focus:ring-2 focus:ring-[#059669]/20 focus:border-[#059669] dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white"
+ className="w-full px-3.5 py-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 focus:ring-2 focus:ring-[#059669]/20 focus:border-[#059669] dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white"
  />
  </div>
  </div>
@@ -1332,7 +1332,7 @@ export default function LmsPengumpulanTugasPage({ embedded = false, hideBreadcru
  placeholder="https://drive.google.com/... atau /storage/tugas/file.pdf"
  value={formData.file}
  onChange={(e) => setFormData({ ...formData, file: e.target.value })}
- className="w-full px-3.5 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 focus:ring-2 focus:ring-[#059669]/20 focus:border-[#059669] dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white"
+ className="w-full px-3.5 py-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 focus:ring-2 focus:ring-[#059669]/20 focus:border-[#059669] dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white"
  />
  </div>
 
@@ -1345,7 +1345,7 @@ export default function LmsPengumpulanTugasPage({ embedded = false, hideBreadcru
  placeholder="https://github.com/... atau https://docs.google.com/..."
  value={formData.link}
  onChange={(e) => setFormData({ ...formData, link: e.target.value })}
- className="w-full px-3.5 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 focus:ring-2 focus:ring-[#059669]/20 focus:border-[#059669] dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white"
+ className="w-full px-3.5 py-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 focus:ring-2 focus:ring-[#059669]/20 focus:border-[#059669] dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white"
  />
  </div>
 
@@ -1358,7 +1358,7 @@ export default function LmsPengumpulanTugasPage({ embedded = false, hideBreadcru
  placeholder="Tuliskan catatan apresiasi, saran perbaikan, atau rangkuman jawaban siswa..."
  value={formData.catatan}
  onChange={(e) => setFormData({ ...formData, catatan: e.target.value })}
- className="w-full px-3.5 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 focus:ring-2 focus:ring-[#059669]/20 focus:border-[#059669] dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white"
+ className="w-full px-3.5 py-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 focus:ring-2 focus:ring-[#059669]/20 focus:border-[#059669] dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white"
  ></textarea>
  </div>
  </form>

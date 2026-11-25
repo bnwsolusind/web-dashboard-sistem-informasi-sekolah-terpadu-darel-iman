@@ -1152,7 +1152,7 @@ export default function KepalaSekolahDashboardPage() {
  ? 'Cari nama staf, jabatan, bagian...'
  : 'Cari nama siswa, NISN, rombel/kelas...'
  }
- className="h-9 w-full rounded-xl border-2 border-emerald-200/80 bg-emerald-50/30 pl-9.5 pr-4 text-xs font-bold text-slate-800 outline-none focus:border-emerald-500 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-card-dark dark:text-slate-100 transition-all"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] bg-emerald-50/30 pl-9.5 pr-4 text-xs font-bold text-slate-800 outline-none focus:border-emerald-500 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-card-dark dark:text-slate-100 transition-all"
  />
  {monitoringSearch && (
  <button
@@ -1877,20 +1877,24 @@ export default function KepalaSekolahDashboardPage() {
  <Calendar className="size-3.5 text-emerald-600 dark:text-emerald-400" />
  Filter Hari:
  </span>
- <select
+ <HeroUiFilterSelect
  value={kbmDayFilter}
- onChange={(e) => setKbmDayFilter(e.target.value)}
- className="rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 px-2.5 py-1 text-xs font-bold text-slate-800 dark:text-slate-100 shadow-xs focus:ring-2 focus:ring-emerald-500 cursor-pointer"
- >
- <option value="today">Hari Ini ({todayDayName})</option>
- <option value="all">Semua Hari</option>
- <option value="1">Senin</option>
- <option value="2">Selasa</option>
- <option value="3">Rabu</option>
- <option value="4">Kamis</option>
- <option value="5">Jumat</option>
- <option value="6">Sabtu</option>
- </select>
+ onChange={setKbmDayFilter}
+ options={[
+ { value: 'today', label: `Hari Ini (${todayDayName})` },
+ { value: 'all', label: 'Semua Hari' },
+ { value: '1', label: 'Senin' },
+ { value: '2', label: 'Selasa' },
+ { value: '3', label: 'Rabu' },
+ { value: '4', label: 'Kamis' },
+ { value: '5', label: 'Jumat' },
+ { value: '6', label: 'Sabtu' },
+ ]}
+ icon={Calendar}
+ ariaLabel="Filter Hari KBM"
+ size="sm"
+ className="min-w-[160px]"
+ />
  </div>
  </div>
 
@@ -2674,7 +2678,7 @@ export default function KepalaSekolahDashboardPage() {
  value={attendanceSearchTerm}
  onChange={(e) => setAttendanceSearchTerm(e.target.value)}
  placeholder="Cari nama siswa, NISN, atau kelas..."
- className="w-full h-9.5 rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-3 pr-8 text-xs font-bold text-slate-700 outline-none focus:border-emerald-500 focus:bg-white dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-emerald-500"
+ className="w-full h-9.5 rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 pl-3 pr-8 text-xs font-bold text-slate-700 outline-none focus:border-emerald-500 focus:bg-white dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-200 dark:focus:border-emerald-500"
  />
  </div>
 
@@ -3085,7 +3089,7 @@ export default function KepalaSekolahDashboardPage() {
  value={chatInputText}
  onChange={(e) => setChatInputText(e.target.value)}
  placeholder={`Ketik pesan ke ${activeChatUser?.nama || 'rekan kerja'}...`}
- className="flex-1 h-9 rounded-xl border border-emerald-200/80 bg-slate-50/70 px-3.5 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-500 focus:bg-white dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100 transition-all"
+ className="flex-1 h-9 rounded-xl border-2 border-[#b6f6d9] bg-slate-50/70 px-3.5 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-500 focus:bg-white dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100 transition-all"
  autoFocus
  />
  <button

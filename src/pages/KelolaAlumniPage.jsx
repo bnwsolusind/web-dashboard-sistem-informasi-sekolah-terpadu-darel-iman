@@ -3654,7 +3654,7 @@ export default function KelolaAlumniPage() {
  placeholder="Catatan prestasi, beasiswa, atau keterangan tambahan..."
  value={tujuanForm.catatan}
  onChange={(e) => setTujuanForm({ ...tujuanForm, catatan: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 text-xs dark:border-emerald-700/80 dark:bg-slate-900 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-3 text-xs dark:border-emerald-700/80 dark:bg-slate-900 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
  </form>

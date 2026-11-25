@@ -202,21 +202,21 @@ export function MasterActionButton({ variant = 'primary', icon: CustomIcon, chil
 const squircleVariants = {
 	import: {
 		icon: Upload,
-		iconColor: 'text-sky-600 dark:text-sky-400',
+		iconColor: 'text-white',
 		classes:
-			'border border-sky-300 dark:border-sky-800 bg-sky-50 text-sky-700 hover:bg-sky-100/90 dark:bg-sky-950/60 dark:text-sky-300 shadow-2xs',
+			'bg-violet-600 hover:bg-violet-700 dark:bg-violet-600 dark:hover:bg-violet-700 text-white font-semibold shadow-xs',
 	},
 	export: {
 		icon: Download,
-		iconColor: 'text-amber-600 dark:text-amber-400',
+		iconColor: 'text-white',
 		classes:
-			'border border-amber-300 dark:border-amber-800 bg-amber-50 text-amber-800 hover:bg-amber-100/90 dark:bg-amber-950/60 dark:text-amber-300 shadow-2xs',
+			'bg-amber-500 hover:bg-amber-600 dark:bg-amber-500 dark:hover:bg-amber-600 text-white font-semibold shadow-xs',
 	},
 	print: {
 		icon: Printer,
-		iconColor: 'text-indigo-600 dark:text-indigo-400',
+		iconColor: 'text-white',
 		classes:
-			'border border-indigo-300 dark:border-indigo-800 bg-indigo-50 text-indigo-700 hover:bg-indigo-100/90 dark:bg-indigo-950/60 dark:text-indigo-300 shadow-2xs',
+			'bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-semibold shadow-xs',
 	},
 	primary: {
 		icon: Plus,
@@ -241,9 +241,9 @@ const squircleVariants = {
 	},
 	view: {
 		icon: Eye,
-		iconColor: 'text-sky-600 dark:text-sky-400',
+		iconColor: 'text-white',
 		classes:
-			'border border-sky-200 dark:border-sky-800 bg-sky-50 text-sky-700 hover:bg-sky-100/80 dark:bg-sky-950/60 dark:text-sky-300 shadow-2xs',
+			'bg-sky-600 hover:bg-sky-700 dark:bg-sky-600 dark:hover:bg-sky-700 text-white font-semibold shadow-xs',
 	},
 	edit: {
 		icon: Pencil,
@@ -256,6 +256,12 @@ const squircleVariants = {
 		iconColor: 'text-rose-600 dark:text-rose-400',
 		classes:
 			'border border-rose-300 dark:border-rose-700 bg-rose-50 text-rose-700 hover:bg-rose-100/80 dark:bg-rose-950/60 dark:text-rose-300 shadow-2xs',
+	},
+	danger: {
+		icon: Trash2,
+		iconColor: 'text-white',
+		classes:
+			'bg-rose-600 hover:bg-rose-700 dark:bg-rose-600 dark:hover:bg-rose-700 text-white font-semibold shadow-xs',
 	},
 	restore: {
 		icon: RotateCcw,
@@ -274,14 +280,15 @@ const squircleVariants = {
 	},
 	secondary: {
 		icon: Database,
-		iconColor: 'text-purple-600 dark:text-purple-400',
+		iconColor: 'text-white',
 		classes:
-			'border border-purple-200/90 dark:border-purple-800/80 bg-purple-50/70 text-purple-800 hover:bg-purple-100/90 dark:bg-purple-950/60 dark:text-purple-300 shadow-2xs',
+			'bg-purple-600 hover:bg-purple-700 dark:bg-purple-600 dark:hover:bg-purple-700 text-white font-semibold shadow-xs',
 	},
 	sync: {
 		icon: RotateCcw,
+		iconColor: 'text-white',
 		classes:
-			'border-2 border-emerald-300 bg-white text-emerald-700 hover:bg-emerald-50 dark:bg-slate-900 dark:border-emerald-700 dark:text-emerald-400',
+			'bg-teal-600 hover:bg-teal-700 dark:bg-teal-600 dark:hover:bg-teal-700 text-white font-semibold shadow-xs',
 	},
 	ghost: {
 		icon: Database,

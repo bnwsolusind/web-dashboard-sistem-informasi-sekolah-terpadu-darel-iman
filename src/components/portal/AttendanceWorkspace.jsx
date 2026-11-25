@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect, useRef } from 'react'
 import AppModal from '@/components/app/AppModal'
+import KpiStatCard from '@/components/app/KpiStatCard'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
  CalendarCheck,
@@ -239,7 +240,7 @@ function HeroUiModalSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Ketik untuk mencari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -389,7 +390,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -867,14 +868,14 @@ export default function AttendanceWorkspace({
  return (
  <div className="space-y-6">
  {/* 1. HERO HEADER CONTAINER TERPADU (HERO UI CARD) */}
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-5 sm:p-7 shadow-lg shadow-sky-500/10 dark:border-emerald-800/60 dark:bg-[#1B2433]">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-gradient-to-br from-[#E6F8F3] via-white to-[#F0FDF9] dark:from-emerald-950/40 dark:via-[#1B2433] dark:to-teal-950/30 p-5 sm:p-7 shadow-md shadow-emerald-500/10">
  <div
  aria-hidden="true"
- className="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-white dark:bg-[#1B2433] blur-3xl"
+ className="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-emerald-400/20 dark:bg-emerald-500/15 blur-3xl"
  />
  <div
  aria-hidden="true"
- className="pointer-events-none absolute -right-20 -bottom-20 h-72 w-72 rounded-full bg-white dark:bg-[#1B2433] blur-3xl"
+ className="pointer-events-none absolute -right-20 -bottom-20 h-72 w-72 rounded-full bg-emerald-400/20 dark:bg-emerald-500/15 blur-3xl"
  />
  <div
  aria-hidden="true"
@@ -883,23 +884,19 @@ export default function AttendanceWorkspace({
 
  <div className="relative flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
  <div className="flex items-start gap-4">
- <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-xl shadow-sky-600/20">
+ <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-md shadow-emerald-600/20 border border-emerald-500/30">
  <CalendarCheck className="h-7 w-7" />
  </div>
  <div>
  <div className="flex flex-wrap items-center gap-2">
- <HeroChip
- size="sm"
- variant="flat"
- className="font-extrabold text-[10.5px] bg-sky-500/20 border border-emerald-200/80 dark:border-emerald-800/60 text-sky-900 dark:text-sky-300"
+ <span
+ className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-extrabold text-[10.5px] bg-sky-500/20 border border-emerald-200/80 dark:border-emerald-800/60 text-sky-900 dark:text-sky-300"
  >
  <Sparkles className="h-3 w-3 text-sky-600 mr-1 inline" />
  Presensi KBM & Perizinan
- </HeroChip>
+ </span>
 
- <HeroChip
- size="sm"
- variant="flat"
+ <span
  className={cn(
  'font-black text-[10px]',
  isBoarding
@@ -908,13 +905,11 @@ export default function AttendanceWorkspace({
  )}
  >
  {isBoarding ? 'Boarding / Pesantren' : 'Full Day'}
- </HeroChip>
+ </span>
 
  {stats.total > 0 && (
- <HeroChip
- size="sm"
- variant="flat"
- className="font-black text-[10px] bg-white/80 text-sky-900 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-sky-300 dark:border-emerald-700/80"
+ <span
+ className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-black text-[10px] bg-white/80 text-sky-900 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-sky-300 dark:border-emerald-700/80"
  >
  Tingkat Kehadiran: {stats.rate}%
  {selectedPeriod !== 'all' && (
@@ -922,7 +917,7 @@ export default function AttendanceWorkspace({
  ({ATTENDANCE_PERIOD_OPTIONS.find((p) => p.id === selectedPeriod)?.shortLabel})
  </span>
  )}
- </HeroChip>
+ </span>
  )}
  </div>
 
@@ -953,135 +948,51 @@ export default function AttendanceWorkspace({
  </div>
  )}
  </div>
- </HeroCard>
+ </div>
 
- {/* 2. DYNAMIC 5 KPI CARDS (HERO UI CARDS) */}
+ {/* 2. DYNAMIC 5 KPI CARDS */}
  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
- {/* Card 1: Hadir */}
- <motion.div whileHover={{ y: -2 }} transition={{ duration: 0.18 }}>
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-4.5 shadow-xs transition-all hover:shadow-md dark:border-emerald-800/60 dark:bg-slate-900">
- <div
- aria-hidden="true"
- className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white dark:bg-[#1B2433] blur-xl"
+ <KpiStatCard
+ icon={CheckCircle2}
+ title="Hadir Tepat Waktu"
+ value={stats.hadir}
+ description={stats.total > 0 ? `${Math.round((stats.hadir / stats.total) * 100)}% dari sesi KBM` : 'Pertemuan KBM'}
+ tone="emerald"
  />
- <div className="relative flex items-center justify-between gap-2">
- <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm">
- <CheckCircle2 className="h-5 w-5" />
- </div>
- <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
- {stats.hadir}
- </span>
- </div>
- <p className="relative mt-3 text-xs font-bold text-slate-700 dark:text-slate-200">
- Hadir Tepat Waktu
- </p>
- <p className="relative mt-0.5 text-xs font-medium text-slate-400 dark:text-slate-500">
- {stats.total > 0
- ? `${Math.round((stats.hadir / stats.total) * 100)}% dari sesi KBM`
- : 'Pertemuan KBM'}
- </p>
- </HeroCard>
- </motion.div>
-
- {/* Card 2: Terlambat */}
- <motion.div whileHover={{ y: -2 }} transition={{ duration: 0.18 }}>
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-4.5 shadow-xs transition-all hover:shadow-md dark:border-emerald-800/60 dark:bg-slate-900">
- <div
- aria-hidden="true"
- className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white dark:bg-[#1B2433] blur-xl"
+ <KpiStatCard
+ icon={Clock}
+ title="Terlambat Masuk"
+ value={stats.terlambat}
+ description="Sesi dengan toleransi"
+ tone="amber"
  />
- <div className="relative flex items-center justify-between gap-2">
- <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-sm">
- <Clock className="h-5 w-5" />
- </div>
- <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
- {stats.terlambat}
- </span>
- </div>
- <p className="relative mt-3 text-xs font-bold text-slate-700 dark:text-slate-200">
- Terlambat Masuk
- </p>
- <p className="relative mt-0.5 text-xs font-medium text-slate-400 dark:text-slate-500">
- Sesi dengan toleransi
- </p>
- </HeroCard>
- </motion.div>
-
- {/* Card 3: Izin */}
- <motion.div whileHover={{ y: -2 }} transition={{ duration: 0.18 }}>
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-4.5 shadow-xs transition-all hover:shadow-md dark:border-emerald-800/60 dark:bg-slate-900">
- <div
- aria-hidden="true"
- className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white dark:bg-[#1B2433] blur-xl"
+ <KpiStatCard
+ icon={FileText}
+ title="Izin Terkonfirmasi"
+ value={stats.izin}
+ description="Disetujui sekolah"
+ tone="sky"
  />
- <div className="relative flex items-center justify-between gap-2">
- <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-md shadow-sky-500/20">
- <FileText className="h-5 w-5" />
- </div>
- <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
- {stats.izin}
- </span>
- </div>
- <p className="relative mt-3 text-xs font-bold text-slate-700 dark:text-slate-200">
- Izin Terkonfirmasi
- </p>
- <p className="relative mt-0.5 text-xs font-medium text-slate-400 dark:text-slate-500">
- Disetujui sekolah
- </p>
- </HeroCard>
- </motion.div>
-
- {/* Card 4: Sakit */}
- <motion.div whileHover={{ y: -2 }} transition={{ duration: 0.18 }}>
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-4.5 shadow-xs transition-all hover:shadow-md dark:border-emerald-800/60 dark:bg-slate-900">
- <div
- aria-hidden="true"
- className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white dark:bg-[#1B2433] blur-xl"
+ <KpiStatCard
+ icon={HeartPulse}
+ title="Sakit"
+ value={stats.sakit}
+ description="Keterangan medis/ortu"
+ tone="violet"
  />
- <div className="relative flex items-center justify-between gap-2">
- <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-md shadow-violet-500/20">
- <HeartPulse className="h-5 w-5" />
- </div>
- <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
- {stats.sakit}
- </span>
- </div>
- <p className="relative mt-3 text-xs font-bold text-slate-700 dark:text-slate-200">
- Sakit
- </p>
- <p className="relative mt-0.5 text-xs font-medium text-slate-400 dark:text-slate-500">
- Keterangan medis/ortu
- </p>
- </HeroCard>
- </motion.div>
-
- {/* Card 5: Alpa */}
- <motion.div whileHover={{ y: -2 }} transition={{ duration: 0.18 }} className="col-span-2 sm:col-span-1">
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-4.5 shadow-xs transition-all hover:shadow-md dark:border-emerald-800/60 dark:bg-slate-900">
- <div
- aria-hidden="true"
- className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white dark:bg-[#1B2433] blur-xl"
+ <div className="col-span-2 sm:col-span-1">
+ <KpiStatCard
+ icon={XCircle}
+ title="Alpa / Tanpa Kabar"
+ value={stats.alpha}
+ description="Perlu perhatian ortu"
+ tone="rose"
  />
- <div className="relative flex items-center justify-between gap-2">
- <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-sm">
- <XCircle className="h-5 w-5" />
  </div>
- <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
- {stats.alpha}
- </span>
- </div>
- <p className="relative mt-3 text-xs font-bold text-slate-700 dark:text-slate-200">
- Alpa / Tanpa Kabar
- </p>
- <p className="relative mt-0.5 text-xs font-medium text-slate-400 dark:text-slate-500">
- Perlu perhatian ortu
- </p>
- </HeroCard>
- </motion.div>
  </div>
 
  {/* 3. WORKSPACE CONTAINER (HERO UI CARD) */}
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 sm:p-6 shadow-xs dark:border-emerald-800/60 dark:bg-slate-900">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  {/* Navigation Tabs & Header Toolbar */}
  <div className="flex flex-col gap-4 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-5 dark:border-emerald-800/60 lg:flex-row lg:items-center lg:justify-between">
  {/* Segmented Tab Buttons */}
@@ -1092,8 +1003,8 @@ export default function AttendanceWorkspace({
  className={cn(
  'inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-extrabold transition-all cursor-pointer',
  activeTab === 'school'
- ? 'bg-white dark:bg-[#1B2433] shadow-sm'
- : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200'
+ ? 'bg-emerald-600 text-white shadow-xs'
+ : 'text-slate-600 hover:text-emerald-700 hover:bg-emerald-100/60 dark:text-slate-400 dark:hover:text-slate-200'
  )}
  >
  <CalendarCheck className="h-4 w-4" />
@@ -1106,8 +1017,8 @@ export default function AttendanceWorkspace({
  className={cn(
  'inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-extrabold transition-all cursor-pointer',
  activeTab === 'permissions'
- ? 'bg-white dark:bg-[#1B2433] shadow-sm'
- : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200'
+ ? 'bg-emerald-600 text-white shadow-xs'
+ : 'text-slate-600 hover:text-emerald-700 hover:bg-emerald-100/60 dark:text-slate-400 dark:hover:text-slate-200'
  )}
  >
  <FileText className="h-4 w-4" />
@@ -1117,14 +1028,12 @@ export default function AttendanceWorkspace({
 
  {/* Quick status indicator on the right */}
  <div className="flex items-center gap-2">
- <HeroChip
- size="sm"
- variant="flat"
- className="font-bold text-xs bg-slate-100 text-slate-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-700/80"
+ <span
+ className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-bold text-xs bg-slate-100 text-slate-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-700/80"
  >
  <Sparkles className="h-3 w-3 mr-1 inline text-sky-600" />
  {activeTab === 'school' ? `Tahun Ajaran ${currentAcademicYear}` : 'Verifikasi Wali Kelas & Admin'}
- </HeroChip>
+ </span>
  </div>
  </div>
 
@@ -1184,8 +1093,8 @@ export default function AttendanceWorkspace({
  className={cn(
  'inline-flex items-center justify-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 xl:flex-1 text-center select-none',
  isActive
- ? 'bg-white dark:bg-[#1B2433] shadow-xs font-extrabold ring-1 ring-sky-500/30'
- : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-emerald-50/40 dark:hover:bg-emerald-950/30'
+ ? 'bg-emerald-600 text-white shadow-xs font-extrabold'
+ : 'text-slate-600 hover:text-emerald-700 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-emerald-50/60 dark:hover:bg-emerald-950/30'
  )}
  >
  <Icon className="h-3.5 w-3.5 shrink-0" />
@@ -1206,7 +1115,7 @@ export default function AttendanceWorkspace({
  placeholder="Cari mapel, materi, guru, catatan..."
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
- className="w-full rounded-xl border border-emerald-200/80 bg-white py-2 pl-9 pr-8 text-xs font-medium text-slate-800 placeholder-slate-400 focus:border-sky-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-200 dark:placeholder-slate-500"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white py-2 pl-9 pr-8 text-xs font-medium text-slate-800 placeholder-slate-400 focus:border-sky-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-200 dark:placeholder-slate-500"
  />
  {searchQuery && (
  <button
@@ -1289,7 +1198,7 @@ export default function AttendanceWorkspace({
  <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60">
  <div className="flex flex-wrap items-center gap-1.5">
  {[
- { id: 'all', label: 'Semua Status', count: periodAttendanceLogs.length, activeClass: 'bg-slate-900 dark:bg-white dark:text-slate-900' },
+ { id: 'all', label: 'Semua Status', count: periodAttendanceLogs.length, activeClass: 'bg-emerald-600 text-white shadow-xs' },
  { id: 'hadir', label: 'Hadir', count: stats.hadir, activeClass: 'bg-emerald-600 text-white shadow-xs' },
  { id: 'terlambat', label: 'Terlambat', count: stats.terlambat, activeClass: 'bg-amber-600 text-white shadow-xs' },
  { id: 'sakit', label: 'Sakit', count: stats.sakit, activeClass: 'bg-violet-600 text-white shadow-xs' },
@@ -1314,8 +1223,8 @@ export default function AttendanceWorkspace({
  className={cn(
  'rounded-full px-1.5 py-0.2 text-[10px] font-extrabold',
  isActive
- ? 'bg-white/20 dark:bg-slate-900/30'
- : 'bg-slate-100 text-slate-600 dark:bg-sky-950/60 dark:text-sky-300'
+ ? 'bg-white/25 text-white'
+ : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
  )}
  >
  {item.count}
@@ -1383,8 +1292,8 @@ export default function AttendanceWorkspace({
  className={cn(
  'inline-flex items-center justify-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 xl:flex-1 text-center select-none',
  isActive
- ? 'bg-white dark:bg-[#1B2433] shadow-xs font-extrabold ring-1 ring-sky-500/30'
- : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-emerald-50/40 dark:hover:bg-emerald-950/30'
+ ? 'bg-emerald-600 text-white shadow-xs font-extrabold'
+ : 'text-slate-600 hover:text-emerald-700 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-emerald-50/60 dark:hover:bg-emerald-950/30'
  )}
  >
  <Icon className="h-3.5 w-3.5 shrink-0" />
@@ -1404,7 +1313,7 @@ export default function AttendanceWorkspace({
  placeholder="Cari alasan izin / surat sakit..."
  value={permissionSearchQuery}
  onChange={(e) => setPermissionSearchQuery(e.target.value)}
- className="w-full rounded-xl border border-emerald-200/80 bg-white py-2 pl-9 pr-8 text-xs font-medium text-slate-800 placeholder-slate-400 focus:border-sky-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-200 dark:placeholder-slate-500"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white py-2 pl-9 pr-8 text-xs font-medium text-slate-800 placeholder-slate-400 focus:border-sky-500 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-200 dark:placeholder-slate-500"
  />
  {permissionSearchQuery && (
  <button
@@ -1538,9 +1447,7 @@ export default function AttendanceWorkspace({
 
  {/* Status Badge */}
  <div className="shrink-0">
- <HeroChip
- size="sm"
- variant="flat"
+ <span
  className={cn(
  'font-extrabold text-[10px] border px-2.5 py-1',
  isHadir
@@ -1575,7 +1482,7 @@ export default function AttendanceWorkspace({
  <XCircle className="h-3 w-3 mr-1 inline text-rose-600" /> Alpa
  </>
  )}
- </HeroChip>
+ </span>
  </div>
  </div>
 
@@ -1680,9 +1587,7 @@ export default function AttendanceWorkspace({
 
  {/* Status Chip */}
  <div className="shrink-0">
- <HeroChip
- size="sm"
- variant="flat"
+ <span
  className={cn(
  'font-extrabold text-[10px] border px-2.5 py-1',
  isApproved
@@ -1705,7 +1610,7 @@ export default function AttendanceWorkspace({
  <Clock className="h-3 w-3 mr-1 inline text-amber-600" /> Menunggu Verifikasi
  </>
  )}
- </HeroChip>
+ </span>
  </div>
  </div>
  </motion.div>
@@ -1729,7 +1634,7 @@ export default function AttendanceWorkspace({
  )}
  </div>
  )}
- </HeroCard>
+ </div>
 
  {/* 4. HERO UI MODAL PENGAJUAN IZIN / SAKIT */}
  <AppModal

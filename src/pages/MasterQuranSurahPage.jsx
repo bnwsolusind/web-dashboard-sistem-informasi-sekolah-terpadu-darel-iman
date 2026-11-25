@@ -145,7 +145,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border border-emerald-200/80 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#0E5C44] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#0E5C44] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -295,7 +295,7 @@ function HeroUiModalSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Ketik untuk mencari..."
- className="w-full rounded-lg border border-emerald-200/80 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#0E5C44] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#0E5C44] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -1220,7 +1220,7 @@ export default function MasterQuranSurahPage() {
  min="1"
  value={formData.nomor}
  onChange={(e) => setFormData({ ...formData, nomor: e.target.value })}
- className="w-full px-3 py-2 border border-emerald-200/80 dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+ className="w-full px-3 py-2 border-2 border-[#b6f6d9] dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
  />
  </div>
  <div>
@@ -1231,7 +1231,7 @@ export default function MasterQuranSurahPage() {
  min="1"
  value={formData.jumlah_ayat}
  onChange={(e) => setFormData({ ...formData, jumlah_ayat: e.target.value })}
- className="w-full px-3 py-2 border border-emerald-200/80 dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+ className="w-full px-3 py-2 border-2 border-[#b6f6d9] dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
  />
  </div>
  </div>
@@ -1244,7 +1244,7 @@ export default function MasterQuranSurahPage() {
  required
  value={formData.nama_latin}
  onChange={(e) => setFormData({ ...formData, nama_latin: e.target.value })}
- className="w-full px-3 py-2 border border-emerald-200/80 dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+ className="w-full px-3 py-2 border-2 border-[#b6f6d9] dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
  />
  </div>
  <div>
@@ -1255,7 +1255,7 @@ export default function MasterQuranSurahPage() {
  dir="rtl"
  value={formData.nama}
  onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
- className="w-full px-3 py-2 border border-emerald-200/80 dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-serif font-bold text-right focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+ className="w-full px-3 py-2 border-2 border-[#b6f6d9] dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-serif font-bold text-right focus:ring-2 focus:ring-emerald-500 focus:outline-none"
  />
  </div>
  </div>
@@ -1268,7 +1268,7 @@ export default function MasterQuranSurahPage() {
  required
  value={formData.arti}
  onChange={(e) => setFormData({ ...formData, arti: e.target.value })}
- className="w-full px-3 py-2 border border-emerald-200/80 dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+ className="w-full px-3 py-2 border-2 border-[#b6f6d9] dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
  />
  </div>
  <div>
@@ -1289,7 +1289,7 @@ export default function MasterQuranSurahPage() {
  value={formData.audio_full}
  onChange={(e) => setFormData({ ...formData, audio_full: e.target.value })}
  placeholder="https://..."
- className="w-full px-3 py-2 border border-emerald-200/80 dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+ className="w-full px-3 py-2 border-2 border-[#b6f6d9] dark:border-emerald-700/80 dark:bg-slate-900 rounded-xl text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none"
  />
  </div>
 

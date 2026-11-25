@@ -654,7 +654,7 @@ export default function LmsReferensiPage({ embedded = false, hideBreadcrumb = fa
  setSearch(e.target.value)
  setPage(1)
  }}
- className="h-9 w-full rounded-xl border border-emerald-200/80 bg-white pl-10 pr-4 text-xs font-medium text-slate-700 shadow-inner outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-200"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] bg-white pl-10 pr-4 text-xs font-medium text-slate-700 shadow-inner outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-200"
  />
  </div>
  </div>
@@ -712,7 +712,7 @@ export default function LmsReferensiPage({ embedded = false, hideBreadcrumb = fa
  </button>
  </div>
 
- <MasterDataTable className="!rounded-none !border-0 !shadow-none">
+ <MasterDataTable className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
                       <TableRoot className="w-full text-left border-collapse">
                         <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 text-emerald-950 dark:text-emerald-200 font-extrabold uppercase tracking-wider text-xs">
                           <TableRow>
@@ -808,10 +808,10 @@ export default function LmsReferensiPage({ embedded = false, hideBreadcrumb = fa
  <p className="font-semibold text-sm">Tidak ada data referensi dalam kategori ini.</p>
  </div>
  ) : (
- <div className="overflow-x-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="overflow-x-auto rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  <TableRoot className="w-full text-left border-collapse">
- <TableHeader>
- <TableRow className="bg-slate-50 dark:bg-slate-800/50 border-b border-emerald-200/80 dark:border-emerald-800/60 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+ <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 text-emerald-950 dark:text-emerald-200 font-extrabold uppercase tracking-wider text-xs">
+ <TableRow>
  <TableHead className="py-3 px-4 text-center w-12">No</TableHead>
  <TableHead className="py-3 px-4">Judul Referensi</TableHead>
  <TableHead className="py-3 px-4">Penulis &amp; Penerbit</TableHead>
@@ -939,7 +939,7 @@ export default function LmsReferensiPage({ embedded = false, hideBreadcrumb = fa
  value={formData.judul}
  onChange={handleFormChange}
  required
- className="w-full px-4 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-700/80 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-[#0E5C44] focus:outline-none transition-all"
+ className="w-full px-4 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-700/80 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-[#0E5C44] focus:outline-none transition-all"
  />
  </div>
 
@@ -955,7 +955,7 @@ export default function LmsReferensiPage({ embedded = false, hideBreadcrumb = fa
  placeholder="Contoh: Dr. Ahmad Dahlan"
  value={formData.penulis}
  onChange={handleFormChange}
- className="w-full px-4 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-700/80 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-[#0E5C44] focus:outline-none transition-all"
+ className="w-full px-4 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-700/80 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-[#0E5C44] focus:outline-none transition-all"
  />
  </div>
 
@@ -969,7 +969,7 @@ export default function LmsReferensiPage({ embedded = false, hideBreadcrumb = fa
  placeholder="Contoh: Kemendikbudristek / Erlangga"
  value={formData.penerbit}
  onChange={handleFormChange}
- className="w-full px-4 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-700/80 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-[#0E5C44] focus:outline-none transition-all"
+ className="w-full px-4 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-700/80 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-[#0E5C44] focus:outline-none transition-all"
  />
  </div>
  </div>
@@ -988,7 +988,7 @@ export default function LmsReferensiPage({ embedded = false, hideBreadcrumb = fa
  placeholder="2024"
  value={formData.tahun}
  onChange={handleFormChange}
- className="w-full px-4 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-700/80 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-[#0E5C44] focus:outline-none transition-all"
+ className="w-full px-4 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-700/80 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-[#0E5C44] focus:outline-none transition-all"
  />
  </div>
 
@@ -1019,7 +1019,7 @@ export default function LmsReferensiPage({ embedded = false, hideBreadcrumb = fa
  placeholder="https://..."
  value={formData.url}
  onChange={handleFormChange}
- className="w-full px-4 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-700/80 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-[#0E5C44] focus:outline-none transition-all"
+ className="w-full px-4 py-2.5 text-sm rounded-xl bg-slate-50 dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-700/80 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-[#0E5C44] focus:outline-none transition-all"
  />
  </div>
 

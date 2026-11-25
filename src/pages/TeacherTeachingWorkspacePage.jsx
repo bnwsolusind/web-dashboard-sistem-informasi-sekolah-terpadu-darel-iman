@@ -311,7 +311,7 @@ function HeroUiWorkspaceSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Ketik untuk mencari..."
- className="w-full rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-700/80 bg-slate-50/80 dark:bg-slate-900/80 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600 shadow-2xs"
+ className="w-full rounded-3xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-700/80 bg-slate-50/80 dark:bg-slate-900/80 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600 shadow-2xs"
  autoFocus
  />
  </div>
@@ -6101,7 +6101,7 @@ export default function TeacherTeachingWorkspacePage() {
  key={sess.id}
  type="button"
  onClick={() => handleOpenPendingJournalModal(sess)}
- className="group flex items-center gap-2 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white/90 dark:bg-slate-800/90 px-3 py-1.5 text-xs font-extrabold text-slate-800 dark:text-slate-100 shadow-xs hover:border-emerald-300 dark:hover:border-emerald-700/80 hover:bg-amber-50/80 dark:hover:bg-amber-950/40 transition-all cursor-pointer"
+ className="group flex items-center gap-2 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-white/90 dark:bg-slate-800/90 px-3 py-1.5 text-xs font-extrabold text-slate-800 dark:text-slate-100 shadow-xs hover:border-emerald-300 dark:hover:border-emerald-700/80 hover:bg-amber-50/80 dark:hover:bg-amber-950/40 transition-all cursor-pointer"
  >
  <BookOpen className="size-3.5 text-amber-600 dark:text-amber-400 group-hover:scale-110 transition-transform" />
  <span className="truncate max-w-[130px]">
@@ -6122,7 +6122,7 @@ export default function TeacherTeachingWorkspacePage() {
  <button
  type="button"
  onClick={() => handleOpenPendingJournalModal(pendingJournals[0])}
- className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-white dark:bg-card-dark px-4 py-2 text-xs font-extrabold shadow-sm hover:from-amber-500 hover:to-rose-600 transition-all cursor-pointer shrink-0 border border-emerald-200/80 dark:border-emerald-800/60"
+ className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-white dark:bg-[#1B2433] px-4 py-2 text-xs font-extrabold shadow-sm hover:from-amber-500 hover:to-rose-600 transition-all cursor-pointer shrink-0 border border-emerald-200/80 dark:border-emerald-800/60"
  >
  <Edit3 className="size-3.5 text-amber-600" />
  <span>Isi Rangkuman Sekarang</span>
@@ -6138,7 +6138,7 @@ export default function TeacherTeachingWorkspacePage() {
  initial={{ opacity: 0, y: 8 }}
  animate={{ opacity: 1, y: 0 }}
  transition={{ duration: 0.25 }}
- className="relative overflow-hidden rounded-xl border border-emerald-200/80 bg-white p-4 sm:p-5 shadow-sm dark:border-emerald-800/60 dark:bg-card-dark z-20"
+ className="relative overflow-hidden rounded-xl border border-emerald-200/80 bg-white p-4 sm:p-5 shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433] z-20"
  >
 
  <div className="relative z-10 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -6221,7 +6221,7 @@ export default function TeacherTeachingWorkspacePage() {
  handleWorkspaceClassChange('all')
  handleWorkspaceMapelChange('all')
  }}
- className="inline-flex items-center gap-1.5 h-9 px-3 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-rose-50/80 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-900/60 text-xs font-bold transition-all cursor-pointer shadow-2xs"
+ className="inline-flex items-center gap-1.5 h-9 px-3 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-rose-50/80 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-900/60 text-xs font-bold transition-all cursor-pointer shadow-2xs"
  title="Reset filter ke Semua Rombel & Semua Mapel"
  >
  <RefreshCw className="size-3.5" />
@@ -6230,7 +6230,7 @@ export default function TeacherTeachingWorkspacePage() {
  )}
 
  {/* Pill Siswa Terdaftar */}
- <div className="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-xl bg-white dark:bg-card-dark dark:from-emerald-950/50 dark:to-teal-950/40 border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-black text-emerald-900 dark:text-emerald-200 shadow-2xs">
+ <div className="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-xl bg-white dark:bg-[#1B2433] dark:from-emerald-950/50 dark:to-teal-950/40 border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-black text-emerald-900 dark:text-emerald-200 shadow-2xs">
  <Sparkles className="size-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
  <span>{students.length} Siswa</span>
  </div>
@@ -6272,7 +6272,7 @@ export default function TeacherTeachingWorkspacePage() {
 
 
 
- {/* ── 5 MODERN COLOR-TINTED KPI CARDS ────────────────────────────────────────── */}
+ {/* ── 5 HEROUI STANDARD KPI CARDS ────────────────────────────────────────── */}
  <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4" aria-label="Metrik Utama Guru">
  {[
  {
@@ -6282,17 +6282,9 @@ export default function TeacherTeachingWorkspacePage() {
  description: `${new Set(schedules.map(getScheduleSubject)).size} mata pelajaran`,
  badge: `${schedules.length} Sesi Terjadwal`,
  icon: CalendarDays,
+ tone: 'emerald',
  isActive: activeTab === 'jadwal' || activeTab === 'jadwal-lengkap',
  onClick: () => changeTab(activeTab === 'jadwal-lengkap' ? 'jadwal' : 'jadwal-lengkap'),
- card: 'border-emerald-300 !bg-emerald-100/90 hover:!bg-emerald-200/70 dark:border-emerald-700/80 dark:!bg-emerald-950/50 dark:hover:!bg-emerald-950/70 hover:border-emerald-400',
- glow: 'bg-emerald-400/20 group-hover:bg-emerald-400/30',
- iconBox: '!bg-emerald-600 !text-white shadow-sm dark:!bg-emerald-600 dark:!text-white',
- tag: 'bg-emerald-100/90 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/80',
- title: 'text-emerald-800 dark:text-emerald-300',
- val: 'text-emerald-800 dark:text-emerald-200',
- sub: 'text-emerald-700/90 dark:text-emerald-300/90',
- cta: 'text-emerald-700 dark:text-emerald-400',
- activeRing: 'ring-2 ring-emerald-500 shadow-md border-slate-500',
  },
  {
  key: 'siswa',
@@ -6301,17 +6293,9 @@ export default function TeacherTeachingWorkspacePage() {
  description: `Rombel ${selectedClassName}`,
  badge: `${students.length} Siswa`,
  icon: Users,
+ tone: 'sky',
  isActive: activeTab === 'presensi',
  onClick: () => changeTab('presensi'),
- card: 'border-sky-300 !bg-sky-100/90 hover:!bg-sky-200/70 dark:border-sky-700/80 dark:!bg-sky-950/50 dark:hover:!bg-sky-950/70 hover:border-sky-400',
- glow: 'bg-sky-400/20 group-hover:bg-sky-400/30',
- iconBox: 'bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-md shadow-emerald-600/20 rounded-2xl',
- tag: 'bg-sky-100/90 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 border border-emerald-200/80 dark:border-emerald-800/60',
- title: 'text-sky-800 dark:text-sky-300',
- val: 'text-sky-800 dark:text-sky-200',
- sub: 'text-sky-700/90 dark:text-sky-300/90',
- cta: 'text-sky-700 dark:text-sky-400',
- activeRing: 'ring-2 ring-sky-500 shadow-md border-sky-500',
  },
  {
  key: 'materi',
@@ -6320,17 +6304,9 @@ export default function TeacherTeachingWorkspacePage() {
  description: `${materials.length} total materi`,
  badge: `${publishedMaterials} Terbit`,
  icon: BookOpen,
+ tone: 'amber',
  isActive: activeTab === 'materi',
  onClick: () => changeTab('materi'),
- card: 'border-amber-300 !bg-amber-100/90 hover:!bg-amber-200/70 dark:border-amber-700/80 dark:!bg-amber-950/50 dark:hover:!bg-amber-950/70 hover:border-amber-400',
- glow: 'bg-amber-400/20 group-hover:bg-amber-400/30',
- iconBox: '!bg-amber-600 !text-white shadow-sm dark:!bg-amber-600 dark:!text-white',
- tag: 'bg-amber-100/90 text-amber-800 dark:bg-amber-900/60 dark:text-amber-300 border border-emerald-200/80 dark:border-emerald-800/60',
- title: 'text-amber-800 dark:text-amber-300',
- val: 'text-amber-800 dark:text-amber-200',
- sub: 'text-amber-700/90 dark:text-amber-300/90',
- cta: 'text-amber-700 dark:text-amber-400',
- activeRing: 'ring-2 ring-amber-500 shadow-md border-amber-500',
  },
  {
  key: 'penugasan',
@@ -6339,17 +6315,9 @@ export default function TeacherTeachingWorkspacePage() {
  description: `${assignments.length} total penugasan`,
  badge: `${activeAssignments} Aktif`,
  icon: FileText,
+ tone: 'indigo',
  isActive: activeTab === 'penugasan',
  onClick: () => changeTab('penugasan'),
- card: 'border-indigo-300 !bg-indigo-100/90 hover:!bg-indigo-200/70 dark:border-indigo-700/80 dark:!bg-indigo-950/50 dark:hover:!bg-indigo-950/70 hover:border-indigo-400',
- glow: 'bg-indigo-400/20 group-hover:bg-indigo-400/30',
- iconBox: '!bg-indigo-600 !text-white shadow-sm dark:!bg-indigo-600 dark:!text-white',
- tag: 'bg-indigo-100/90 text-indigo-800 dark:bg-indigo-900/60 dark:text-indigo-300 border border-emerald-200/80 dark:border-emerald-800/60',
- title: 'text-indigo-800 dark:text-indigo-300',
- val: 'text-indigo-800 dark:text-indigo-200',
- sub: 'text-indigo-700/90 dark:text-indigo-300/90',
- cta: 'text-indigo-700 dark:text-indigo-400',
- activeRing: 'ring-2 ring-indigo-500 shadow-md border-indigo-500',
  },
  {
  key: 'catatan',
@@ -6358,72 +6326,31 @@ export default function TeacherTeachingWorkspacePage() {
  description: 'Total pendampingan',
  badge: `${canAccessTahfizh ? tahfizhLogs.length + studentNotes.length : studentNotes.length} Log`,
  icon: GraduationCap,
+ tone: 'rose',
  isActive: (canAccessTahfizh && (activeTab === 'tahfizh' || activeTab === 'rekapan-tahfizh')) || activeTab === 'catatan',
  onClick: () => changeTab(canAccessTahfizh ? 'tahfizh' : 'catatan'),
- card: 'border-rose-300 !bg-rose-100/90 hover:!bg-rose-200/70 dark:border-rose-700/80 dark:!bg-rose-950/50 dark:hover:!bg-rose-950/70 hover:border-rose-400',
- glow: 'bg-rose-400/20 group-hover:bg-rose-400/30',
- iconBox: '!bg-rose-600 !text-white shadow-sm dark:!bg-rose-600 dark:!text-white',
- tag: 'bg-rose-100/90 text-rose-800 dark:bg-rose-900/60 dark:text-rose-300 border border-emerald-200/80 dark:border-emerald-800/60',
- title: 'text-rose-800 dark:text-rose-300',
- val: 'text-rose-800 dark:text-rose-200',
- sub: 'text-rose-700/90 dark:text-rose-300/90',
- cta: 'text-rose-700 dark:text-rose-400',
- activeRing: 'ring-2 ring-rose-500 shadow-md border-rose-500',
  },
- ].map((kpi) => {
- const Icon = kpi.icon
- return (
- <motion.article
- key={kpi.label}
- whileHover={{ scale: 1.025, y: -2 }}
- whileTap={{ scale: 0.98 }}
- transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+ ].map((kpi) => (
+ <KpiStatCard
+ key={kpi.key}
+ title={kpi.label}
+ value={kpi.value}
+ description={kpi.description}
+ badge={kpi.badge}
+ icon={kpi.icon}
+ tone={kpi.tone}
+ leftFooterText={kpi.isActive ? '● Sedang Aktif' : 'Buka Modul'}
+ ctaText="Lihat"
  onClick={kpi.onClick}
- role="button"
- tabIndex={0}
- onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && kpi.onClick()}
- className={`group relative overflow-hidden rounded-xl p-4 sm:p-4.5 shadow-xs transition-all duration-200 cursor-pointer flex flex-col justify-between ${kpi.card} ${kpi.isActive ? kpi.activeRing : ''}`}
- >
-
- <div>
- {/* Header with 3D Gradient Icon Box & Pill Tag */}
- <div className="flex items-center justify-between gap-2 mb-3">
- <div className={`size-10 sm:size-10.5 rounded-xl flex items-center justify-center shrink-0 ${kpi.iconBox}`}>
- <Icon className="size-5" />
- </div>
- <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${kpi.tag}`}>
- {kpi.badge}
- </span>
- </div>
-
- {/* Metric Label & Value */}
- <span className={`text-xs font-extrabold uppercase tracking-wider block mb-1 ${kpi.title}`}>{kpi.label}</span>
- <strong className={`text-2xl sm:text-3xl font-black tracking-tight tabular-nums block ${kpi.val}`}>
- {kpi.value}
- </strong>
- <p className={`text-xs font-semibold mt-1 line-clamp-1 ${kpi.sub}`}>
- {kpi.description}
- </p>
- </div>
-
- {/* Click Affordance Footer */}
- <div className="flex items-center justify-between text-xs font-bold pt-3 mt-3 border-t border-emerald-200/80 dark:border-emerald-800/80">
- <span className={`inline-flex items-center gap-1 text-[10px] ${kpi.isActive ? 'font-black underline' : 'font-medium opacity-80'}`}>
- {kpi.isActive ? '● Sedang Aktif' : 'Buka Modul'}
- </span>
- <span className={`inline-flex items-center gap-0.5 font-extrabold group-hover:translate-x-0.5 transition-transform ${kpi.cta}`}>
- Lihat <ChevronRight className="h-3 w-3" />
- </span>
- </div>
- </motion.article>
- )
- })}
+ className={kpi.isActive ? 'ring-2 ring-emerald-500/50 shadow-md' : ''}
+ />
+ ))}
  </section>
 
 
 
  {/* ── CARD AKSI CEPAT & NAVIGASI MODUL ────────────────────────────────────────── */}
- <section className="relative overflow-hidden rounded-container border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-card-dark" aria-label="Aksi Cepat Workspace Guru">
+ <section className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]" aria-label="Aksi Cepat Workspace Guru">
  {/* Dual multi-tone ambient glow */}
 
  <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-transparent p-4 sm:p-5">
@@ -6463,7 +6390,7 @@ export default function TeacherTeachingWorkspacePage() {
  aria-selected={isActive}
  className={`flex flex-col items-center justify-center p-3.5 rounded-xl border transition-all text-center group cursor-pointer ${isActive
  ? 'border-emerald-600 dark:border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/40 shadow-md ring-2 ring-emerald-600/30'
- : (mod.cardClass || 'border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-card-dark hover:border-emerald-300 dark:hover:border-emerald-700/80 hover:bg-emerald-50/60 dark:hover:bg-emerald-950/40 hover:shadow-md')
+ : (mod.cardClass || 'border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] hover:border-emerald-300 dark:hover:border-emerald-700/80 hover:bg-emerald-50/60 dark:hover:bg-emerald-950/40 hover:shadow-md')
  }`}
  >
  <div className={`p-2.5 rounded-xl ${mod.iconBox || 'bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm'} mb-2 shrink-0 group-hover:scale-110 transition ${isActive ? 'ring-2 ring-emerald-500/40 shadow-xs' : ''}`}>
@@ -6532,7 +6459,7 @@ export default function TeacherTeachingWorkspacePage() {
  ].map((summary) => (
                       <div
                         key={summary.label}
-                        className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 !bg-emerald-100/90 dark:border-emerald-800/60 dark:!bg-emerald-950/60 p-3 text-center shadow-xs transition hover:border-emerald-300 dark:hover:border-emerald-700/80"
+                        className="rounded-2xl border-2 border-emerald-300/80 dark:border-emerald-700/80 !bg-emerald-100/90 dark:!bg-emerald-950/60 p-3 text-center shadow-xs transition hover:border-emerald-400 dark:hover:border-emerald-600"
                       >
                         <strong className="block text-xl font-black text-emerald-800 dark:text-emerald-200">
                           {summary.value}
@@ -6550,12 +6477,12 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
 
  <div className="grid grid-cols-1 gap-5 xl:grid-cols-12 xl:items-stretch">
- <section className="relative flex h-full flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-sm dark:bg-slate-900 xl:col-span-7">
+ <section className="relative flex h-full flex-col overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433] xl:col-span-7">
  {/* Header toolbar */}
- <div className="bg-slate-50/50 dark:bg-slate-900/50 border-b border-emerald-200/80 dark:border-emerald-800/80 p-4 sm:p-5">
+ <div className="bg-emerald-500/10 border-b border-emerald-200/80 dark:border-emerald-800/60 px-5 py-4">
  <div className="flex flex-wrap items-center justify-between gap-3">
  <div className="flex items-center gap-3">
- <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-xs">
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
  <Clock className="h-5 w-5" />
  </div>
  <div>
@@ -6647,7 +6574,7 @@ export default function TeacherTeachingWorkspacePage() {
  <div className="p-4 sm:p-5">
  {/* Banner if no schedule TODAY for selected class */}
  {selectedDaySchedules.length === 0 && sortedSchedules.length > 0 && timelineFilter === 'hari_ini' && (
- <div className="mb-4 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white dark:bg-card-dark p-4 dark:border-emerald-800/60 dark:bg-card-dark text-amber-900 dark:text-amber-200 shadow-xs">
+ <div className="mb-4 rounded-2xl border-2 border-amber-300/80 dark:border-amber-700/80 bg-amber-50/70 dark:bg-amber-950/30 p-4 text-amber-900 dark:text-amber-200 shadow-xs">
  <div className="flex items-start gap-3">
  <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-amber-500 text-white shadow-xs mt-0.5">
  <AlertCircle className="size-5" />
@@ -6681,8 +6608,8 @@ export default function TeacherTeachingWorkspacePage() {
  ))}
  </div>
  ) : timelineSchedules.length === 0 ? (
- <div className="flex min-h-60 flex-col items-center justify-center rounded-xl border-2 border-dashed border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-card-dark px-6 py-10 text-center dark:border-emerald-800/60 dark:bg-slate-900/50">
- <div className="flex size-14 items-center justify-center rounded-xl bg-white dark:bg-card-dark text-emerald-600 shadow-sm dark:from-emerald-950 dark:to-teal-950 dark:text-emerald-400 mb-3.5 border border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="flex min-h-60 flex-col items-center justify-center rounded-xl border-2 border-dashed border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] px-6 py-10 text-center dark:border-emerald-800/60 dark:bg-slate-900/50">
+ <div className="flex size-14 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] text-emerald-600 shadow-sm dark:from-emerald-950 dark:to-teal-950 dark:text-emerald-400 mb-3.5 border border-emerald-200/80 dark:border-emerald-800/60">
  <Calendar className="h-7 w-7" />
  </div>
  <h4 className="text-base font-extrabold text-slate-900 dark:text-white">Belum Ada Jadwal Mengajar</h4>
@@ -6709,11 +6636,11 @@ export default function TeacherTeachingWorkspacePage() {
  <article
  key={schedule.id || index}
  className={`group relative overflow-hidden rounded-xl border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${status.isActive
- ? 'border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-card-dark shadow-sm dark:border-emerald-800/60 dark:bg-card-dark'
+ ? 'border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]'
  : 'border-emerald-200/80 bg-white hover:border-emerald-300 dark:hover:border-emerald-700/80 hover:bg-emerald-50/30 dark:border-emerald-800/60 dark:bg-slate-900/60 dark:hover:border-emerald-700/80 dark:hover:bg-slate-900'
  } p-4`}
  >
- <div className={`absolute inset-y-0 left-0 ${status.isActive ? 'w-1.5 bg-white dark:bg-card-dark' : 'w-1 bg-emerald-600/70'}`} />
+ <div className={`absolute inset-y-0 left-0 ${status.isActive ? 'w-1.5 bg-white dark:bg-[#1B2433]' : 'w-1 bg-emerald-600/70'}`} />
  <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
  <div
  onClick={() => openScheduleDetail(schedule)}
@@ -6753,7 +6680,7 @@ export default function TeacherTeachingWorkspacePage() {
  <button
  type="button"
  onClick={() => openScheduleDetail(schedule)}
- className="flex flex-1 items-center justify-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3.5 py-2 text-xs font-bold text-emerald-800 transition hover:bg-emerald-50 hover:border-emerald-300 dark:hover:border-emerald-700/80 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-emerald-200 dark:hover:bg-slate-700/80 sm:flex-none cursor-pointer"
+ className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white px-3.5 py-2 text-xs font-bold text-emerald-800 shadow-xs transition hover:bg-emerald-50 dark:bg-slate-800 dark:text-emerald-200 dark:hover:bg-slate-700/80 sm:flex-none cursor-pointer"
  title="Lihat data siswa & presensi jadwal ini"
  >
  <Eye className="h-3.5 w-3.5" /> Detail
@@ -6768,11 +6695,11 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
  </section>
 
- <section className="relative flex h-full flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-sm dark:bg-slate-900 xl:col-span-5">
+ <section className="relative flex h-full flex-col overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433] xl:col-span-5">
  {/* Header toolbar */}
- <div className="bg-slate-50/50 dark:bg-slate-900/50 border-b border-emerald-200/80 dark:border-emerald-800/80 p-4 sm:p-5">
+ <div className="bg-emerald-500/10 border-b border-emerald-200/80 dark:border-emerald-800/60 px-5 py-4">
  <div className="flex items-center gap-3">
- <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-xs">
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
  <CalendarRange className="h-5 w-5" />
  </div>
  <div>
@@ -6783,7 +6710,7 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
 
  <div className="p-4 sm:p-5 space-y-4">
- <div className="grid grid-cols-5 gap-1.5 rounded-xl bg-emerald-50/70 p-1.5 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-800/80 dark:border-emerald-700/80/80" role="tablist" aria-label="Hari jadwal mingguan">
+ <div className="grid grid-cols-5 gap-1.5 rounded-xl bg-emerald-50/70 p-1.5 border border-emerald-200/80 dark:bg-slate-800/80 dark:border-emerald-700/80" role="tablist" aria-label="Hari jadwal mingguan">
  {scheduleDays.map((day) => {
  const dayCount = sortedSchedules.filter((s) => getScheduleDay(s).toLowerCase() === day.name.toLowerCase()).length
  return (
@@ -6812,7 +6739,7 @@ export default function TeacherTeachingWorkspacePage() {
  })}
  </div>
 
- <div className="flex items-center justify-between rounded-xl bg-white dark:bg-card-dark dark:from-emerald-950/40 dark:via-slate-900 dark:to-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 px-3.5 py-2.5">
+ <div className="flex items-center justify-between rounded-xl bg-white dark:bg-[#1B2433] dark:from-emerald-950/40 dark:via-slate-900 dark:to-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 px-3.5 py-2.5">
  <div>
  <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700/80 dark:text-emerald-400">Hari Terpilih</p>
  <h4 className="font-extrabold text-slate-900 dark:text-white">{visibleWeeklyDay}</h4>
@@ -6824,7 +6751,7 @@ export default function TeacherTeachingWorkspacePage() {
 
  <div className="space-y-2.5">
  {weeklySchedules.length === 0 ? (
- <div className="rounded-xl border-2 border-dashed border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-card-dark px-4 py-8 text-center dark:border-emerald-800/60 dark:bg-slate-900/40">
+ <div className="rounded-xl border-2 border-dashed border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] px-4 py-8 text-center dark:border-emerald-800/60 dark:bg-slate-900/40">
  <div className="mx-auto mb-2.5 flex size-12 items-center justify-center rounded-xl bg-emerald-100/90 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-400">
  <CheckCircle2 className="h-6 w-6" />
  </div>
@@ -6864,7 +6791,7 @@ export default function TeacherTeachingWorkspacePage() {
  className="group flex w-full items-center gap-3 rounded-xl border border-emerald-200/80 bg-white p-3 text-left transition-all duration-150 hover:-translate-y-0.5 hover:border-emerald-300 dark:hover:border-emerald-700/80 hover:bg-emerald-50/40 hover:shadow-xs dark:border-emerald-800/60 dark:bg-slate-900/60 dark:hover:border-emerald-700/80 dark:hover:bg-slate-900 cursor-pointer"
  title="Klik untuk melihat detail jadwal & presensi siswa"
  >
- <div className="flex size-11 flex-col items-center justify-center rounded-xl bg-white dark:bg-card-dark text-emerald-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:from-emerald-950 dark:to-teal-950 dark:text-emerald-300 dark:border-emerald-800/60">
+ <div className="flex size-11 flex-col items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] text-emerald-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:from-emerald-950 dark:to-teal-950 dark:text-emerald-300 dark:border-emerald-800/60">
  <Clock className="h-3.5 w-3.5" />
  <span className="mt-0.5 block text-[10px] font-black">{(schedule.start_time || schedule.time_start || '00:00').slice(0, 5)}</span>
  </div>
@@ -6891,7 +6818,7 @@ export default function TeacherTeachingWorkspacePage() {
 
  {/* TAB 2: PRESENSI SISWA */}
  {activeTab === 'presensi' && (
- <div className="space-y-5 rounded-xl border border-emerald-200/80 bg-white p-5 shadow-[var(--shadow-soft-xl)] dark:border-emerald-700/80/80 dark:bg-card-dark">
+ <div className="space-y-5 rounded-xl border border-emerald-200/80 bg-white p-5 shadow-[var(--shadow-soft-xl)] dark:border-emerald-700/80/80 dark:bg-[#1B2433]">
  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4">
  <div>
  <h3 className="font-extrabold text-lg text-slate-900 dark:text-white">Presensi Pembelajaran Siswa</h3>
@@ -6911,7 +6838,7 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
  </div>
  <div className="flex flex-wrap items-center gap-2">
- <div className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3 py-1.5 text-xs font-bold text-emerald-800 shadow-xs dark:border-emerald-800/60 dark:bg-slate-800 dark:text-emerald-200">
+ <div className="inline-flex items-center gap-1.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-white px-3 py-1.5 text-xs font-bold text-emerald-800 shadow-xs dark:border-emerald-800/60 dark:bg-slate-800 dark:text-emerald-200">
  <Filter className="h-3.5 w-3.5 text-emerald-600" />
  <span className="text-xs text-slate-400 font-medium">Rombel:</span>
  <CustomSelect
@@ -6935,7 +6862,7 @@ export default function TeacherTeachingWorkspacePage() {
  <button
  type="button"
  onClick={markAllStudentsPresent}
- className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-emerald-50/80 px-3 py-1.5 text-xs font-bold text-emerald-800 transition hover:bg-emerald-100 dark:border-emerald-800/60 dark:bg-emerald-950/50 dark:text-emerald-300"
+ className="inline-flex items-center gap-1.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-emerald-50/80 px-3 py-1.5 text-xs font-bold text-emerald-800 transition hover:bg-emerald-100 dark:border-emerald-800/60 dark:bg-emerald-950/50 dark:text-emerald-300"
  >
  <CheckSquare className="h-3.5 w-3.5" /> Tandai Semua Hadir
  </button>
@@ -6943,7 +6870,7 @@ export default function TeacherTeachingWorkspacePage() {
  type="button"
  onClick={handlePrintAttendanceRoster}
  disabled={!students || students.length === 0}
- className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-xs transition hover:bg-slate-50 disabled:opacity-50 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200"
+ className="inline-flex items-center gap-1.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-xs transition hover:bg-slate-50 disabled:opacity-50 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200"
  title="Cetak Presensi Pembelajaran"
  >
  <Printer className="h-3.5 w-3.5 text-slate-500" /> Cetak
@@ -6952,7 +6879,7 @@ export default function TeacherTeachingWorkspacePage() {
  type="button"
  onClick={handleDownloadAttendancePdf}
  disabled={!students || students.length === 0}
- className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-xs transition hover:bg-slate-50 disabled:opacity-50 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200"
+ className="inline-flex items-center gap-1.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-xs transition hover:bg-slate-50 disabled:opacity-50 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200"
  title="Unduh PDF Presensi"
  >
  <Download className="h-3.5 w-3.5 text-slate-500" /> Unduh PDF
@@ -6986,13 +6913,13 @@ export default function TeacherTeachingWorkspacePage() {
  <div className="flex items-center gap-2">{selectedMethod === 'qr' ? <QrCode className="h-4 w-4 text-emerald-600" /> : <Wifi className="h-4 w-4 animate-pulse text-sky-600" />}<span className="text-xs font-bold text-slate-900 dark:text-white">{selectedMethod === 'qr' ? 'Pemindai QR Code Kartu Siswa' : 'Pembaca RFID Reader Standby'}</span></div>
  {selectedMethod === 'qr' ? <button type="button" onClick={openQrCamera} className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white border border-emerald-200/80 dark:border-emerald-800/60 h-9 text-sm font-medium"><Camera className="h-3.5 w-3.5" /> Live Kamera</button> : <span className="rounded-full bg-sky-100 px-2 py-0.5 text-[10px] font-bold text-sky-700 dark:bg-sky-900 dark:text-sky-300">● Ready to Tap</span>}
  </div>
- <form onSubmit={handleCardScan} className="flex gap-2"><input ref={scanInputRef} value={scanInput} onChange={(event) => setScanInput(event.target.value)} autoFocus autoComplete="off" placeholder={selectedMethod === 'qr' ? 'Scan QR code via scanner USB atau ketik NISN...' : 'Tap kartu RFID siswa pada reader...'} className="h-9 min-w-0 flex-1 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs font-semibold outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white" /><button type="submit" disabled={!scanInput.trim() || scanProcessing} className="min-w-20 rounded-lg bg-emerald-600 px-4 text-xs font-bold text-white disabled:opacity-50 border border-emerald-200/80 dark:border-emerald-800/60 h-9 text-sm font-medium">{scanProcessing ? <RefreshCw className="mx-auto h-3.5 w-3.5 animate-spin" /> : selectedMethod === 'qr' ? 'Absen' : 'Tap RFID'}</button></form>
+ <form onSubmit={handleCardScan} className="flex gap-2"><input ref={scanInputRef} value={scanInput} onChange={(event) => setScanInput(event.target.value)} autoFocus autoComplete="off" placeholder={selectedMethod === 'qr' ? 'Scan QR code via scanner USB atau ketik NISN...' : 'Tap kartu RFID siswa pada reader...'} className="h-9 min-w-0 flex-1 rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3 text-xs font-semibold outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white" /><button type="submit" disabled={!scanInput.trim() || scanProcessing} className="min-w-20 rounded-lg bg-emerald-600 px-4 text-xs font-bold text-white disabled:opacity-50 border border-emerald-200/80 dark:border-emerald-800/60 h-9 text-sm font-medium">{scanProcessing ? <RefreshCw className="mx-auto h-3.5 w-3.5 animate-spin" /> : selectedMethod === 'qr' ? 'Absen' : 'Tap RFID'}</button></form>
  {lastScannedResult && <div className={`rounded-lg px-3 py-2 text-xs font-semibold ${lastScannedResult.error ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}`}>{lastScannedResult.error ? lastScannedResult.message : `${lastScannedResult.student?.nama_lengkap || lastScannedResult.student?.full_name} berhasil dicatat.`}</div>}
  </div>}
  </section>
 
  {/* Filter Periode Presensi: Harian, Mingguan, Bulanan, Semester */}
- <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20/80 bg-emerald-50/40 p-3.5 dark:border-emerald-800/60 dark:bg-emerald-950/20">
+ <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm/80 bg-emerald-50/40 p-3.5 dark:border-emerald-800/60 dark:bg-emerald-950/20">
  <div className="flex flex-wrap items-center justify-between gap-2.5 pb-2.5 border-b border-emerald-200/80 dark:border-emerald-800/80 dark:border-emerald-800/60">
  <div className="flex items-center gap-2">
  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-600 text-white shadow-xs">
@@ -7107,7 +7034,7 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
 
  {/* HeroUI KBM Session & Journal Input Card */}
- <div className="mb-4 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white dark:bg-card-dark p-4 shadow-sm dark:border-emerald-800/60 dark:bg-slate-900/60">
+ <div className="mb-4 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-white dark:bg-[#1B2433] p-4 shadow-sm dark:border-emerald-800/60 dark:bg-slate-900/60">
  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/80 pb-2.5">
  <div className="flex items-center gap-2">
  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-600 text-white shadow-sm">
@@ -7128,7 +7055,7 @@ export default function TeacherTeachingWorkspacePage() {
  max="36"
  value={meetingNumber}
  onChange={(e) => setMeetingNumber(Number(e.target.value) || 1)}
- className="h-9 w-full rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3 text-xs font-bold text-slate-800 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-xs bg-white px-3 text-xs font-bold text-slate-800 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  </div>
  <div className="md:col-span-4">
@@ -7138,7 +7065,7 @@ export default function TeacherTeachingWorkspacePage() {
  value={attendanceTopic}
  onChange={(e) => setAttendanceTopic(e.target.value)}
  placeholder="Contoh: Bab 3 - Operasi Aljabar"
- className="h-9 w-full rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-xs bg-white px-3 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  </div>
  <div className="md:col-span-6">
@@ -7148,16 +7075,16 @@ export default function TeacherTeachingWorkspacePage() {
  value={attendanceMeetingNotes}
  onChange={(e) => setAttendanceMeetingNotes(e.target.value)}
  placeholder="Ringkasan pemahaman siswa, evaluasi singkat, atau kendala..."
- className="h-9 w-full rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-xs bg-white px-3 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  </div>
  </div>
  </div>
 
  {/* HeroUI Emerald Datatable Container */}
- <div className="relative overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-sm dark:border-emerald-800/60 dark:bg-card-dark">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-white shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]">
  {/* Toolbar Header */}
- <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/80 bg-slate-50/50 dark:bg-slate-900/50 px-4 py-3 sm:px-5">
+ <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/80 bg-emerald-500/10 px-4 py-3 sm:px-5">
  <div className="flex items-center gap-2.5">
  <div className="flex size-10 sm:size-11 shrink-0 items-center justify-center rounded-xl !bg-emerald-600 !text-white shadow-md border border-emerald-200/80 dark:border-emerald-800/60">
  <UserCheck className="h-5 w-5" />
@@ -7209,7 +7136,7 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
 
  {/* Filter Bar */}
- <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/80 bg-slate-50/50 dark:bg-slate-900/50 px-4 py-2.5 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-emerald-950/40 sm:px-5">
+ <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/80 bg-emerald-500/10 px-4 py-2.5 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-emerald-950/40 sm:px-5">
  <div className="flex flex-wrap items-center gap-2 flex-1 min-w-[240px]">
  {/* Search Bar with Debounce */}
  <div className="relative flex-1 min-w-[180px] max-w-sm">
@@ -7219,7 +7146,7 @@ export default function TeacherTeachingWorkspacePage() {
  value={attendanceSearch}
  onChange={(e) => setAttendanceSearch(e.target.value)}
  placeholder="Cari nama siswa atau NIS/NISN..."
- className="h-9 w-full rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white pl-8.5 pr-3 text-xs outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-xs bg-white pl-8.5 pr-3 text-xs outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  </div>
 
@@ -7227,7 +7154,7 @@ export default function TeacherTeachingWorkspacePage() {
  <CustomSelect
  value={attendanceStatusFilter}
  onChange={(e) => setAttendanceStatusFilter(e.target.value)}
- className="h-9 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3 text-xs font-semibold text-slate-700 outline-none transition focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200"
+ className="h-9 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-white px-3 text-xs font-semibold text-slate-700 outline-none transition focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200"
  >
  <option value="">Semua Status Presensi</option>
  {['Belum Dicatat', 'Hadir', 'Terlambat', 'Izin', 'Sakit', 'Alpha'].map((status) => (
@@ -7342,7 +7269,7 @@ export default function TeacherTeachingWorkspacePage() {
  <button
  type="button"
  onClick={() => handleOpenStudentAttendanceDetail(student, attendancePeriodFilter)}
- className="inline-flex h-8 items-center justify-center gap-1 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-sky-50 px-2.5 text-[10px] font-bold text-sky-700 hover:bg-sky-100 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300"
+ className="inline-flex h-8 items-center justify-center gap-1 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-sky-50 px-2.5 text-[10px] font-bold text-sky-700 hover:bg-sky-100 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300"
  >
  <Eye className="h-3 w-3" />
  Detail
@@ -7521,7 +7448,7 @@ export default function TeacherTeachingWorkspacePage() {
  type="button"
  disabled={isApprovingThis}
  onClick={() => handleApprovePermission(perm.id, student.id, perm.type)}
- className="inline-flex h-8 items-center justify-center gap-1 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-amber-50 px-2.5 text-[10px] font-bold text-amber-800 transition hover:bg-amber-100 disabled:opacity-60 dark:border-emerald-800/60 dark:bg-amber-900/60 dark:text-amber-300 cursor-pointer"
+ className="inline-flex h-8 items-center justify-center gap-1 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-amber-50 px-2.5 text-[10px] font-bold text-amber-800 transition hover:bg-amber-100 disabled:opacity-60 dark:border-emerald-800/60 dark:bg-amber-900/60 dark:text-amber-300 cursor-pointer"
  title={`Setujui izin ${perm.type} orang tua untuk ${student.nama_lengkap || student.full_name}`}
  >
  {isApprovingThis
@@ -7546,7 +7473,7 @@ export default function TeacherTeachingWorkspacePage() {
  <button
  type="button"
  onClick={() => handleOpenStudentAttendanceDetail(student, attendancePeriodFilter)}
- className="inline-flex h-8 items-center justify-center gap-1 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-sky-50 px-2.5 text-[10px] font-bold text-sky-700 transition hover:bg-sky-100 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300 cursor-pointer"
+ className="inline-flex h-8 items-center justify-center gap-1 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-sky-50 px-2.5 text-[10px] font-bold text-sky-700 transition hover:bg-sky-100 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300 cursor-pointer"
  title={`Lihat detail data presensi ${student.nama_lengkap || student.full_name}`}
  >
  <Eye className="h-3 w-3" />
@@ -7626,7 +7553,7 @@ export default function TeacherTeachingWorkspacePage() {
 
  {attendanceCenterTab === 'verifikasi' && (
  <div className="space-y-4">
- <div className="flex items-center gap-3.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-emerald-50/70 p-4.5 dark:border-emerald-800/60 dark:bg-emerald-950/40">
+ <div className="flex items-center gap-3.5 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-emerald-50/70 p-4.5 dark:border-emerald-800/60 dark:bg-emerald-950/40">
  <div className="flex h-9 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
  <CheckCircle2 className="h-6 w-6" />
  </div>
@@ -7639,33 +7566,33 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
 
  <div className="grid gap-3 sm:grid-cols-5">
- <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white p-4 dark:border-emerald-800/60 dark:bg-slate-900/60">
+ <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-white p-4 dark:border-emerald-800/60 dark:bg-slate-900/60">
  <p className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">Total Siswa</p>
  <p className="mt-1 text-2xl font-black text-slate-900 dark:text-white">{students.length}</p>
  <p className="mt-0.5 text-[10px] text-slate-400">Terdaftar di kelas</p>
  </div>
- <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white p-4 dark:border-emerald-800/60 dark:bg-slate-900/60">
+ <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-white p-4 dark:border-emerald-800/60 dark:bg-slate-900/60">
  <p className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">Hadir</p>
  <p className="mt-1 text-2xl font-black text-emerald-600 dark:text-emerald-400">
  {students.filter((st) => (attendanceData[st.id]?.status || 'Belum Dicatat') === 'Hadir').length}
  </p>
  <p className="mt-0.5 text-[10px] text-slate-400">Tercatat di kelas</p>
  </div>
- <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white p-4 dark:border-emerald-800/60 dark:bg-slate-900/60">
+ <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-white p-4 dark:border-emerald-800/60 dark:bg-slate-900/60">
  <p className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">Izin / Sakit</p>
  <p className="mt-1 text-2xl font-black text-amber-600 dark:text-amber-400">
  {students.filter((st) => ['Izin', 'Sakit'].includes(attendanceData[st.id]?.status)).length}
  </p>
  <p className="mt-0.5 text-[10px] text-slate-400">Dengan keterangan</p>
  </div>
- <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white p-4 dark:border-emerald-800/60 dark:bg-slate-900/60">
+ <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-white p-4 dark:border-emerald-800/60 dark:bg-slate-900/60">
  <p className="text-xs font-bold uppercase tracking-wider text-rose-700 dark:text-rose-400">Alpha</p>
  <p className="mt-1 text-2xl font-black text-rose-600 dark:text-rose-400">
  {students.filter((st) => attendanceData[st.id]?.status === 'Alpha').length}
  </p>
  <p className="mt-0.5 text-[10px] text-slate-400">Tanpa keterangan</p>
  </div>
- <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white p-4 dark:border-emerald-800/60 dark:bg-slate-900/60">
+ <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-white p-4 dark:border-emerald-800/60 dark:bg-slate-900/60">
  <p className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">Belum Dicatat</p>
  <p className="mt-1 text-2xl font-black text-slate-700 dark:text-slate-300">
  {students.filter((st) => (attendanceData[st.id]?.status || 'Belum Dicatat') === 'Belum Dicatat').length}
@@ -7674,7 +7601,7 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
  </div>
 
- <div className="flex items-center justify-between rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-slate-50/70 p-3.5 text-xs text-slate-600 dark:border-emerald-800/60 dark:bg-slate-900/40 dark:text-slate-300">
+ <div className="flex items-center justify-between rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-slate-50/70 p-3.5 text-xs text-slate-600 dark:border-emerald-800/60 dark:bg-slate-900/40 dark:text-slate-300">
  <span>Setelah presensi disimpan, data disinkronkan otomatis ke buku jurnal harian guru & laporan kurikulum.</span>
  <button
  type="button"
@@ -7695,7 +7622,7 @@ export default function TeacherTeachingWorkspacePage() {
  <h4 className="text-xs font-bold text-slate-800 dark:text-white">Catatan Siswa pada Sesi Ini (Izin, Sakit, atau Catatan Khusus)</h4>
  <span className="text-xs text-slate-400">Total {students.filter((s) => attendanceData[s.id]?.notes).length} catatan</span>
  </div>
- <div className="divide-y divide-emerald-100/80 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white dark:divide-emerald-900/40 dark:border-emerald-800/60 dark:bg-slate-900/50">
+ <div className="divide-y divide-emerald-100/80 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-white dark:divide-emerald-900/40 dark:border-emerald-800/60 dark:bg-slate-900/50">
  {students.map((student) => {
  const record = attendanceData[student.id] || { status: 'Belum Dicatat', notes: '' }
  return (
@@ -7718,7 +7645,7 @@ export default function TeacherTeachingWorkspacePage() {
  }))
  }}
  placeholder="Tulis catatan (misal: Sakit flu, Izin keperluan keluarga, dll)..."
- className="h-9 flex-1 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-slate-50/50 px-3 text-xs outline-none focus:border-emerald-600 focus:bg-white dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="h-10 flex-1 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white px-3 text-xs font-bold text-slate-800 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
  )
@@ -7774,9 +7701,9 @@ export default function TeacherTeachingWorkspacePage() {
  />
  </div>
 
- <div className="relative z-20 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-sm dark:border-emerald-800/60 dark:bg-card-dark">
+ <div className="relative z-20 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-white shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]">
  {/* Toolbar Header */}
- <div className="flex flex-wrap items-center justify-between gap-3 rounded-t-[20px] border-b border-emerald-200/80 dark:border-emerald-800/80 bg-slate-50/50 dark:bg-slate-900/50 px-4 py-3 sm:px-5">
+ <div className="flex flex-wrap items-center justify-between gap-3 rounded-t-[20px] border-b border-emerald-200/80 dark:border-emerald-800/80 bg-emerald-500/10 px-4 py-3 sm:px-5">
  <div className="flex items-center gap-2.5">
  <div className="flex size-10 sm:size-11 shrink-0 items-center justify-center rounded-xl !bg-emerald-600 !text-white shadow-md border border-emerald-200/80 dark:border-emerald-800/60">
  <BookOpen className="h-5 w-5" />
@@ -7803,7 +7730,7 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
 
  {/* Filter Bar */}
- <div className="rounded-b-[20px] bg-slate-50/50 dark:bg-slate-900/50 p-4 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-emerald-950/40 sm:p-5">
+ <div className="rounded-b-[20px] bg-emerald-500/10 p-4 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-emerald-950/40 sm:p-5">
 
  {/* Baris 1: Search + Filter Utama */}
  <div className="mt-1 flex flex-col gap-3 lg:flex-row lg:items-center">
@@ -7815,7 +7742,7 @@ export default function TeacherTeachingWorkspacePage() {
  value={materialSearch}
  onChange={(event) => setMaterialSearch(event.target.value)}
  placeholder="Cari judul, ringkasan, mapel..."
- className="h-9 w-full rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white pl-10 pr-4 text-xs font-semibold outline-none focus:border-emerald-700/80 focus:ring-3 focus:ring-emerald-700/15 dark:border-emerald-700/80 dark:bg-[#111827] dark:text-white"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-xs bg-white pl-10 pr-4 text-xs font-semibold outline-none focus:border-emerald-700/80 focus:ring-3 focus:ring-emerald-700/15 dark:border-emerald-700/80 dark:bg-[#111827] dark:text-white"
  />
  </label>
 
@@ -7880,7 +7807,7 @@ export default function TeacherTeachingWorkspacePage() {
  onClick={fetchMaterials}
  aria-label="Muat ulang materi"
  title="Muat ulang materi"
- className="inline-flex h-9.5 items-center justify-center gap-2 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 px-3 text-xs font-bold text-slate-600 transition hover:bg-slate-50 focus-visible:ring-3 focus-visible:ring-emerald-700/20 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-slate-800 cursor-pointer active:scale-95"
+ className="inline-flex h-9.5 items-center justify-center gap-2 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs px-3 text-xs font-bold text-slate-600 transition hover:bg-slate-50 focus-visible:ring-3 focus-visible:ring-emerald-700/20 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-slate-800 cursor-pointer active:scale-95"
  >
  <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
  </button>
@@ -7929,7 +7856,7 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
 
  {materialError ? (
- <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-rose-50 p-8 text-center dark:border-emerald-800/60 dark:bg-rose-950/20">
+ <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-rose-50 p-8 text-center dark:border-emerald-800/60 dark:bg-rose-950/20">
  <AlertTriangle className="mx-auto h-8 w-8 text-rose-500" />
  <h4 className="mt-3 text-sm font-bold text-slate-900 dark:text-white">Materi gagal dimuat</h4>
  <p className="mt-1 text-xs text-slate-500">{materialError}</p>
@@ -7943,7 +7870,7 @@ export default function TeacherTeachingWorkspacePage() {
  {[1, 2, 3, 4].map((item) => (
  <div
  key={item}
- className="group relative flex min-h-52 flex-col justify-between overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white p-5 shadow-xs dark:border-emerald-800/60 dark:bg-card-dark animate-pulse"
+ className="group relative flex min-h-52 flex-col justify-between overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-white p-5 shadow-xs dark:border-emerald-800/60 dark:bg-[#1B2433] animate-pulse"
  >
  <div>
  <div className="flex items-start justify-between gap-3 mb-4">
@@ -7967,8 +7894,8 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
  ) : filteredMaterials.length === 0 ? (
  /* ── EMPTY STATE BERGAYA HERO UI ── */
- <div className="relative overflow-hidden rounded-xl border-2 border-dashed border-emerald-200/80 dark:border-emerald-800/60 bg-white p-10 text-center dark:bg-card-dark shadow-sm">
- <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm">
+ <div className="relative overflow-hidden rounded-xl border-2 border-dashed border-emerald-200/80 dark:border-emerald-800/60 bg-white p-10 text-center dark:bg-[#1B2433] shadow-sm">
+ <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
  <BookOpen className="h-7 w-7 text-white" />
  </div>
  <h4 className="mt-4 text-sm font-black text-slate-900 dark:text-white">
@@ -7995,7 +7922,7 @@ export default function TeacherTeachingWorkspacePage() {
  return (
  <article
  key={mat.id}
- className="group relative flex min-h-52 flex-col justify-between overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-300 dark:hover:border-emerald-700/80 hover:shadow-xl dark:border-emerald-800/60 dark:bg-card-dark"
+ className="group relative flex min-h-52 flex-col justify-between overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-300 dark:hover:border-emerald-700/80 hover:shadow-xl dark:border-emerald-800/60 dark:bg-[#1B2433]"
  >
  {/* Top Accent Gradient Stripe */}
 
@@ -8117,7 +8044,7 @@ export default function TeacherTeachingWorkspacePage() {
  })}
  </div>
  {materialMeta.last_page > 1 && (
- <div className="flex flex-col items-center justify-between gap-3 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-4 py-3 sm:flex-row dark:border-emerald-700/80 dark:bg-card-dark">
+ <div className="flex flex-col items-center justify-between gap-3 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-white px-4 py-3 sm:flex-row dark:border-emerald-700/80 dark:bg-[#1B2433]">
  <p className="text-xs text-slate-500">Menampilkan {materialMeta.from || 0}–{materialMeta.to || 0} dari {materialMeta.total} materi.</p>
  <div className="flex items-center gap-1.5">
  <button
@@ -8153,9 +8080,9 @@ export default function TeacherTeachingWorkspacePage() {
 
  {/* TAB 4: PENUGASAN */}
  {activeTab === 'penugasan' && (
- <div className="relative overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-sm dark:border-emerald-800/60 dark:bg-card-dark">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-white shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]">
  {/* Toolbar Header */}
- <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/80 bg-slate-50/50 dark:bg-slate-900/50 px-4 py-3 sm:px-5">
+ <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/80 bg-emerald-500/10 px-4 py-3 sm:px-5">
  <div className="flex items-center gap-2.5">
  <div className="flex size-10 sm:size-11 shrink-0 items-center justify-center rounded-xl !bg-emerald-600 !text-white shadow-md border border-emerald-200/80 dark:border-emerald-800/60">
  <FileText className="h-5 w-5" />
@@ -8193,7 +8120,7 @@ export default function TeacherTeachingWorkspacePage() {
  })
  addToast('info', 'Dokumen Siap Dicetak', 'Pratinjau cetak daftar penugasan siswa berhasil dibuka.')
  }}
- className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-emerald-50/80 px-3 py-1.5 text-xs font-bold text-emerald-700 transition hover:bg-emerald-100 dark:border-emerald-800/60 dark:bg-emerald-950/50 dark:text-emerald-300 cursor-pointer shadow-xs active:scale-95"
+ className="inline-flex items-center gap-1.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-emerald-50/80 px-3 py-1.5 text-xs font-bold text-emerald-700 transition hover:bg-emerald-100 dark:border-emerald-800/60 dark:bg-emerald-950/50 dark:text-emerald-300 cursor-pointer shadow-xs active:scale-95"
  title="Cetak daftar penugasan & evaluasi siswa"
  >
  <Printer className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" /> Cetak Tugas
@@ -8201,7 +8128,7 @@ export default function TeacherTeachingWorkspacePage() {
  <button
  type="button"
  onClick={handleOpenCreateQuiz}
- className="inline-flex items-center gap-1.5 rounded-xl bg-white dark:bg-card-dark px-3.5 py-1.5 text-xs font-bold shadow-sm transition hover:from-violet-700 hover:to-indigo-700 cursor-pointer active:scale-95 border border-emerald-200/80 dark:border-emerald-800/60"
+ className="inline-flex items-center gap-1.5 rounded-xl bg-white dark:bg-[#1B2433] px-3.5 py-1.5 text-xs font-bold shadow-sm transition hover:from-violet-700 hover:to-indigo-700 cursor-pointer active:scale-95 border border-emerald-200/80 dark:border-emerald-800/60"
  title="Buat kuis interaktif baru dengan format soal ujian CBT"
  >
  <Zap className="h-3.5 w-3.5" /> Buat Kuis CBT
@@ -8244,7 +8171,7 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
 
  {/* Filter Bar */}
- <div className="border-b border-emerald-200/80 dark:border-emerald-800/80 bg-slate-50/50 dark:bg-slate-900/50 px-4 py-2.5 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-emerald-950/40 sm:px-5">
+ <div className="border-b border-emerald-200/80 dark:border-emerald-800/80 bg-emerald-500/10 px-4 py-2.5 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-emerald-950/40 sm:px-5">
  <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto_auto_auto_auto]">
  {/* Search */}
  <label className="relative min-w-[200px]">
@@ -8255,7 +8182,7 @@ export default function TeacherTeachingWorkspacePage() {
  value={assignmentSearch}
  onChange={(e) => setAssignmentSearch(e.target.value)}
  placeholder="Cari judul tugas, instruksi, mapel..."
- className="h-9 w-full rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white pl-8.5 pr-3 text-xs outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-xs bg-white pl-8.5 pr-3 text-xs outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  </label>
 
@@ -8267,7 +8194,7 @@ export default function TeacherTeachingWorkspacePage() {
  setSelectedClass(val)
  fetchStudentsForClass(val)
  }}
- className="h-9 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3 text-xs font-semibold text-slate-700 outline-none transition focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200"
+ className="h-9 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-white px-3 text-xs font-semibold text-slate-700 outline-none transition focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200"
  >
  {classes.map((c) => (
  <option key={c.id} value={c.id}>
@@ -8281,7 +8208,7 @@ export default function TeacherTeachingWorkspacePage() {
  <CustomSelect
  value={assignmentJenisFilter}
  onChange={(e) => setAssignmentJenisFilter(e.target.value)}
- className="h-9 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3 text-xs font-semibold text-slate-700 outline-none transition focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200"
+ className="h-9 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-white px-3 text-xs font-semibold text-slate-700 outline-none transition focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200"
  >
  <option value="all">Semua Format & Tipe</option>
  <option value="quiz">⚡ Kuis Interaktif CBT</option>
@@ -8295,7 +8222,7 @@ export default function TeacherTeachingWorkspacePage() {
  <CustomSelect
  value={assignmentStatusFilter}
  onChange={(e) => setAssignmentStatusFilter(e.target.value)}
- className="h-9 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3 text-xs font-semibold text-slate-700 outline-none transition focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200"
+ className="h-9 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-white px-3 text-xs font-semibold text-slate-700 outline-none transition focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200"
  >
  <option value="all">Semua Deadline</option>
  <option value="active">🟢 Deadline Aktif</option>
@@ -8308,7 +8235,7 @@ export default function TeacherTeachingWorkspacePage() {
  onClick={fetchAssignments}
  aria-label="Muat ulang penugasan"
  title="Muat ulang penugasan"
- className="inline-flex h-9 items-center justify-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3 text-xs font-bold text-slate-600 transition hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-emerald-700/20 dark:border-emerald-700/80 dark:bg-emerald-950/60 dark:text-emerald-300 dark:hover:bg-slate-700"
+ className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-white px-3 text-xs font-bold text-slate-600 transition hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-emerald-700/20 dark:border-emerald-700/80 dark:bg-emerald-950/60 dark:text-emerald-300 dark:hover:bg-slate-700"
  >
  <RefreshCw className={`h-3.5 w-3.5 ${loading ? 'animate-spin' : ''}`} />
  <span className="hidden sm:inline">Refresh</span>
@@ -8329,7 +8256,7 @@ export default function TeacherTeachingWorkspacePage() {
  const kelasName = asg.kelas?.nama_kelas || asg.kelas?.name || classes.find((c) => c.id === (asg.class_id || asg.kelas_id))?.nama_kelas || classes.find((c) => c.id === (asg.class_id || asg.kelas_id))?.name
  const subjectName = asg.subject?.name || asg.subject?.nama_pelajaran
  return (
- <div key={asg.id} className="p-4 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-slate-50/50 dark:bg-slate-900/50 space-y-2.5 hover:shadow-md transition">
+ <div key={asg.id} className="p-4 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-emerald-500/10 space-y-2.5 hover:shadow-md transition">
  <div className="flex justify-between items-start flex-wrap gap-1.5">
  <div className="flex flex-wrap items-center gap-1.5">
  {kelasName && (
@@ -8343,7 +8270,7 @@ export default function TeacherTeachingWorkspacePage() {
  </span>
  )}
  {asg.jenis_tugas === 'quiz' ? (
- <span className="px-2.5 py-0.5 text-[10px] font-extrabold rounded-full uppercase bg-white dark:bg-card-dark shadow-xs flex items-center gap-1">
+ <span className="px-2.5 py-0.5 text-[10px] font-extrabold rounded-full uppercase bg-white dark:bg-[#1B2433] shadow-xs flex items-center gap-1">
  <Zap className="w-2.5 h-2.5" /> Kuis CBT
  </span>
  ) : (
@@ -8500,15 +8427,15 @@ export default function TeacherTeachingWorkspacePage() {
 
  {/* TAB 5: PENILAIAN */}
  {activeTab === 'penilaian' && (
- <div className="relative overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-sm dark:border-emerald-800/60 dark:bg-card-dark">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] shadow-sm">
  {/* Toolbar Header */}
- <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/80 bg-slate-50/50 dark:bg-slate-900/50 px-4 py-3 sm:px-5">
- <div className="flex items-center gap-2.5">
- <div className="flex size-10 sm:size-11 shrink-0 items-center justify-center rounded-xl !bg-emerald-600 !text-white shadow-md border border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="flex flex-wrap items-center justify-between gap-3 bg-emerald-500/10 border-b border-emerald-200/80 dark:border-emerald-800/60 px-5 py-4">
+ <div className="flex items-center gap-3">
+ <div className="flex size-10 sm:size-11 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
  <GraduationCap className="h-5 w-5" />
  </div>
  <div>
- <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">
+ <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
  Form Input Nilai Rapor & Harian
  </h3>
  <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -8569,10 +8496,10 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
 
  {/* Subbar Info & Filter */}
- <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/80 bg-slate-50/50 dark:bg-slate-900/50 px-4 py-2.5 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-emerald-950/40 sm:px-5">
+ <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 dark:bg-slate-900/40 px-5 py-2.5">
  <div className="flex items-center gap-2">
  <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Batas Baris:</span>
- <span className="inline-flex items-center rounded-lg bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 px-2.5 py-1 text-xs font-black text-emerald-800 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300">
+ <span className="inline-flex items-center rounded-lg bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 px-2.5 py-1 text-xs font-black text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
  {penilaianPerPage} data / halaman
  </span>
  </div>
@@ -8746,7 +8673,7 @@ export default function TeacherTeachingWorkspacePage() {
  const newAkhir = calcAkhir(val, grade.nilai_kuis, grade.nilai_uts, grade.nilai_uas)
  setGradesData({ ...gradesData, [st.id]: { ...grade, nilai_tugas: val, nilai_akhir: newAkhir } })
  }}
- className="w-16 p-1 text-center border rounded-lg dark:bg-slate-800 border-emerald-200/80 dark:border-emerald-700/80 font-bold"
+ className="w-16 h-9 px-2 text-center border-2 border-[#b6f6d9] dark:border-emerald-700/80 rounded-xl bg-white dark:bg-slate-900 text-xs font-bold text-slate-800 dark:text-slate-100 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
  placeholder="-"
  />
  </td>
@@ -8759,7 +8686,7 @@ export default function TeacherTeachingWorkspacePage() {
  const newAkhir = calcAkhir(grade.nilai_tugas, val, grade.nilai_uts, grade.nilai_uas)
  setGradesData({ ...gradesData, [st.id]: { ...grade, nilai_kuis: val, nilai_akhir: newAkhir } })
  }}
- className="w-16 p-1 text-center border rounded-lg bg-violet-50/50 dark:bg-slate-800 border-emerald-200/80 dark:border-emerald-800/60 font-extrabold text-violet-900 dark:text-violet-200"
+ className="w-16 h-9 px-2 text-center border-2 border-[#b6f6d9] dark:border-emerald-700/80 rounded-xl bg-violet-50/50 dark:bg-slate-900 text-xs font-extrabold text-violet-900 dark:text-violet-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
  placeholder="-"
  />
  </td>
@@ -8772,7 +8699,7 @@ export default function TeacherTeachingWorkspacePage() {
  const newAkhir = calcAkhir(grade.nilai_tugas, grade.nilai_kuis, val, grade.nilai_uas)
  setGradesData({ ...gradesData, [st.id]: { ...grade, nilai_uts: val, nilai_akhir: newAkhir } })
  }}
- className="w-16 p-1 text-center border rounded-lg dark:bg-slate-800 border-emerald-200/80 dark:border-emerald-700/80 font-bold"
+ className="w-16 h-9 px-2 text-center border-2 border-[#b6f6d9] dark:border-emerald-700/80 rounded-xl bg-white dark:bg-slate-900 text-xs font-bold text-slate-800 dark:text-slate-100 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
  placeholder="-"
  />
  </td>
@@ -8785,11 +8712,11 @@ export default function TeacherTeachingWorkspacePage() {
  const newAkhir = calcAkhir(grade.nilai_tugas, grade.nilai_kuis, grade.nilai_uts, val)
  setGradesData({ ...gradesData, [st.id]: { ...grade, nilai_uas: val, nilai_akhir: newAkhir } })
  }}
- className="w-16 p-1 text-center border rounded-lg dark:bg-slate-800 border-emerald-200/80 dark:border-emerald-700/80 font-bold"
+ className="w-16 h-9 px-2 text-center border-2 border-[#b6f6d9] dark:border-emerald-700/80 rounded-xl bg-white dark:bg-slate-900 text-xs font-bold text-slate-800 dark:text-slate-100 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
  placeholder="-"
  />
  </td>
- <td className="p-3 text-center font-extrabold text-emerald-700 dark:text-emerald-400 text-sm">
+ <td className="p-3 text-center font-extrabold text-emerald-700 dark:text-emerald-400 text-sm tabular-nums">
  {grade.nilai_akhir !== '' && grade.nilai_akhir !== undefined && grade.nilai_akhir !== null ? grade.nilai_akhir : '-'}
  </td>
  <td className="p-3">
@@ -8803,7 +8730,7 @@ export default function TeacherTeachingWorkspacePage() {
  [st.id]: { ...grade, catatan: val, notes: val },
  })
  }}
- className="w-full min-w-[200px] px-2.5 py-1 text-xs border rounded-lg bg-white dark:bg-slate-800 border-emerald-200/80 dark:border-emerald-700/80 text-slate-800 dark:text-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 placeholder:text-slate-400"
+ className="w-full min-w-[200px] h-9 px-3 text-xs font-bold border-2 border-[#b6f6d9] dark:border-emerald-700/80 rounded-xl bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 placeholder:text-slate-400 transition-all"
  placeholder="Catatan capaian / evaluasi siswa..."
  />
  </td>
@@ -8816,7 +8743,7 @@ export default function TeacherTeachingWorkspacePage() {
 
  {/* Pagination Kontrol Penilaian (Maksimal 10 Baris) */}
  {students.length > penilaianPerPage && (
- <div className="flex flex-wrap items-center justify-between gap-3 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-slate-50/80 p-3.5 dark:border-emerald-800/60 dark:bg-card-dark">
+ <div className="flex flex-wrap items-center justify-between gap-3 border-t border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] px-5 py-3.5">
  <div className="text-xs font-medium text-slate-500 dark:text-slate-400">
  Menampilkan{' '}
  <strong className="text-emerald-700 dark:text-emerald-300">
@@ -8899,7 +8826,7 @@ export default function TeacherTeachingWorkspacePage() {
  <button
  type="button"
  onClick={() => changeTab('rekapan-tahfizh')}
- className="inline-flex items-center gap-2 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white/90 dark:bg-emerald-950/70 hover:bg-emerald-50 dark:hover:bg-emerald-900 px-4 py-2.5 text-xs font-bold text-emerald-800 dark:text-emerald-200 shadow-sm transition-all cursor-pointer hover:scale-102 active:scale-98"
+ className="inline-flex items-center gap-2 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white/90 dark:bg-emerald-950/70 hover:bg-emerald-50 dark:hover:bg-emerald-900 px-4 py-2.5 text-xs font-bold text-emerald-800 dark:text-emerald-200 shadow-xs transition-all cursor-pointer active:scale-95"
  title="Buka Halaman Laporan Rekapan & Cetak Tahfizh"
  >
  <FileSpreadsheet className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
@@ -8908,9 +8835,9 @@ export default function TeacherTeachingWorkspacePage() {
  <button
  type="button"
  onClick={() => openTahfizhForm()}
- className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-card-dark hover:from-emerald-700 hover:to-teal-800 px-4 py-2.5 text-xs font-bold shadow-sm transition-all cursor-pointer hover:scale-102 active:scale-98 border border-emerald-200/80 dark:border-emerald-800/60"
+ className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 text-xs font-bold shadow-sm transition-all cursor-pointer active:scale-95"
  >
- <Plus className="h-4 w-4 text-emerald-600" />
+ <Plus className="h-4 w-4 text-white" />
  <span>Input Setoran Baru</span>
  </button>
  </div>
@@ -8920,10 +8847,10 @@ export default function TeacherTeachingWorkspacePage() {
  {/* 2. TOP 5 CARDS SECTION */}
  {top5TahfizhStudents.length > 0 ? (
  <div className="space-y-3.5">
- <div className="flex items-center justify-between">
- <div className="flex items-center gap-2.5">
- <span className="flex size-9 items-center justify-center rounded-xl bg-white dark:bg-card-dark shadow-md shadow-xs border border-emerald-200/80 dark:border-emerald-800/60">
- <Trophy className="size-4.5 text-slate-600" />
+ <div className="flex flex-wrap items-center justify-between gap-3">
+ <div className="flex items-center gap-3">
+ <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
+ <Trophy className="size-5 text-white" />
  </span>
  <div>
  <h4 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
@@ -8934,7 +8861,7 @@ export default function TeacherTeachingWorkspacePage() {
  </p>
  </div>
  </div>
- <span className="rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300 border border-emerald-200/80 dark:border-emerald-800/60 px-3 py-1 text-xs font-black shadow-xs">
+ <span className="rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300 border border-amber-300/80 dark:border-amber-700/80 px-3 py-1 text-xs font-black shadow-xs whitespace-nowrap">
  🏆 Top 5 Leaderboard
  </span>
  </div>
@@ -8949,22 +8876,22 @@ export default function TeacherTeachingWorkspacePage() {
 
  const rankStyle = index === 0
  ? {
- card: 'border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-card-dark dark:border-emerald-800/60 dark:from-amber-950/40 dark:via-orange-950/15 dark:to-[#1B2433] shadow-sm',
- badge: 'bg-white dark:bg-card-dark shadow-sm',
+ card: 'border-2 border-amber-300 dark:border-amber-700/80 bg-gradient-to-b from-amber-50/60 via-white to-white dark:from-amber-950/30 dark:via-[#1B2433] dark:to-[#1B2433] shadow-sm',
+ badge: 'bg-amber-500 text-white shadow-xs',
  }
  : index === 1
  ? {
- card: 'border-2 border-emerald-300 bg-white dark:bg-card-dark dark:border-slate-600/80 dark:from-slate-900/50 dark:via-slate-900/20 dark:to-[#1B2433] shadow-md shadow-slate-500/10',
- badge: 'bg-white dark:bg-card-dark shadow-sm shadow-slate-600/30',
+ card: 'border-2 border-emerald-300 dark:border-emerald-700/80 bg-gradient-to-b from-slate-50 via-white to-white dark:from-slate-900/50 dark:via-[#1B2433] dark:to-[#1B2433] shadow-sm',
+ badge: 'bg-slate-600 text-white shadow-xs',
  }
  : index === 2
  ? {
- card: 'border-2 border-emerald-200/80 bg-white dark:bg-card-dark dark:border-emerald-800/60 dark:from-orange-950/40 dark:via-amber-950/15 dark:to-[#1B2433] shadow-md shadow-orange-500/10',
- badge: 'bg-white dark:bg-card-dark shadow-sm shadow-orange-600/30',
+ card: 'border-2 border-emerald-300 dark:border-emerald-700/80 bg-gradient-to-b from-orange-50/60 via-white to-white dark:from-orange-950/30 dark:via-[#1B2433] dark:to-[#1B2433] shadow-sm',
+ badge: 'bg-orange-500 text-white shadow-xs',
  }
  : {
- card: 'border border-emerald-200/80 dark:border-emerald-800/80 bg-white dark:bg-card-dark dark:border-emerald-800/60 dark:from-emerald-950/30 dark:via-teal-950/10 dark:to-[#1B2433] shadow-sm',
- badge: 'bg-[#059669] hover:bg-[#047857] text-white dark:bg-[#18A972] dark:hover:bg-[#059669] dark:text-white shadow-sm',
+ card: 'border-2 border-emerald-300 dark:border-emerald-700/80 bg-gradient-to-b from-emerald-50/50 via-white to-white dark:from-emerald-950/30 dark:via-[#1B2433] dark:to-[#1B2433] shadow-sm',
+ badge: 'bg-emerald-600 text-white shadow-xs',
  }
 
  const surahName = latest?.hafalan_surah_name || 'Belum setoran'
@@ -8974,14 +8901,15 @@ export default function TeacherTeachingWorkspacePage() {
  return (
  <article
  key={student.id || index}
- className={`group relative flex flex-col justify-between rounded-xl p-4 transition-all duration-200 hover:-translate-y-1 hover:shadow-xl ${rankStyle.card}`}
+ className={`group relative flex flex-col justify-between h-full rounded-[22px] p-4 transition-all duration-200 hover:-translate-y-1 hover:shadow-md ${rankStyle.card}`}
  >
+ <div>
  {/* Rank Badge & Unit Label */}
- <div className="flex items-center justify-between gap-1.5 mb-2.5">
- <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-black ${rankStyle.badge}`}>
+ <div className="flex items-center justify-between gap-1.5 mb-3">
+ <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-black whitespace-nowrap shrink-0 ${rankStyle.badge}`}>
  {rankLabel}
  </span>
- <span className="truncate rounded-md bg-white/90 dark:bg-slate-800/90 border border-emerald-200/80 dark:border-emerald-700/80/80 px-2 py-0.5 text-[9.5px] font-bold text-slate-700 dark:text-slate-300 max-w-[100px]" title={unitName}>
+ <span className="truncate rounded-md bg-white/90 dark:bg-slate-800/90 border border-emerald-200/80 dark:border-emerald-700/80 px-2 py-0.5 text-[9.5px] font-bold text-slate-700 dark:text-slate-300 min-w-0" title={unitName}>
  {unitName}
  </span>
  </div>
@@ -8990,27 +8918,29 @@ export default function TeacherTeachingWorkspacePage() {
  <div className="flex items-center gap-3">
  <Avatar size="lg" className="shrink-0 ring-2 ring-emerald-500/25">
  {avatarUrl && <AvatarImage src={avatarUrl} alt={student.nama_lengkap} />}
- <AvatarFallback className="bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 font-black text-xs">
+ <AvatarFallback className="bg-emerald-100 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 font-black text-xs">
  {getInitials(student.nama_lengkap)}
  </AvatarFallback>
  </Avatar>
  <div className="min-w-0 flex-1">
- <h5 className=" text-xs font-black text-slate-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors" title={student.nama_lengkap}>
+ <h5 className="text-xs font-black text-slate-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors line-clamp-2 min-h-[2rem] leading-4" title={student.nama_lengkap}>
  {student.nama_lengkap}
  </h5>
- <p className="mt-0.5 text-[10px] font-medium text-slate-400">
+ <p className="mt-0.5 text-[10px] font-medium text-slate-400 truncate">
  NIS: {student.nis || student.nisn || '—'}
  </p>
- <span className="mt-1 inline-block rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 px-2 py-0.5 text-[9px] font-extrabold">
+ <span className="mt-1 inline-block rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 px-2 py-0.5 text-[9px] font-extrabold truncate max-w-full">
  {className}
  </span>
  </div>
  </div>
+ </div>
 
+ <div className="mt-3.5 space-y-3">
  {/* Detail Hafalan Tahfizh (Nama Surah, Ayat, Juz, Total Surah & Total Ayat) */}
- <div className="mt-3.5 space-y-2 rounded-xl bg-white/80 dark:bg-slate-800/80 p-3 text-xs border border-emerald-200/80 dark:border-emerald-700/80/70">
+ <div className="space-y-2 rounded-xl bg-white/90 dark:bg-slate-800/80 p-3 text-xs border border-emerald-200/80 dark:border-emerald-700/80">
  {/* Nama Surah */}
- <div className="flex items-center justify-between gap-1 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-1.5 dark:border-emerald-700/80/60">
+ <div className="flex items-center justify-between gap-1 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-1.5">
  <span className="text-[10px] font-bold text-slate-400 shrink-0">Nama Surah:</span>
  <span className="truncate font-black text-[#059669] dark:text-[#10B981] text-right" title={surahName}>
  {surahName}
@@ -9032,34 +8962,35 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
 
  {/* Total Surah & Total Ayat Footer Summary */}
- <div className="mt-2 border-t border-emerald-200/80 pt-2 grid grid-cols-2 gap-1.5 text-center dark:border-emerald-700/80/80">
+ <div className="mt-2 border-t border-emerald-200/80 pt-2 grid grid-cols-2 gap-1.5 text-center dark:border-emerald-700/80">
  <div className="rounded-lg bg-slate-50 dark:bg-slate-900/60 p-1.5 border border-emerald-200/80 dark:border-emerald-800/60">
  <p className="text-[9px] font-bold uppercase tracking-wider text-slate-400">Total Surah</p>
- <p className="text-xs font-black text-slate-800 dark:text-slate-100">{completedSurahs} Surah</p>
+ <p className="text-xs font-black text-slate-800 dark:text-slate-100 tabular-nums">{completedSurahs} Surah</p>
  </div>
  <div className="rounded-lg bg-emerald-50 dark:bg-emerald-950/60 p-1.5 border border-emerald-200/80 dark:border-emerald-800/60">
  <p className="text-[9px] font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300">Total Ayat</p>
- <p className="text-xs font-black text-emerald-800 dark:text-emerald-200">{totalAyat} Ayat</p>
+ <p className="text-xs font-black text-emerald-800 dark:text-emerald-200 tabular-nums">{totalAyat} Ayat</p>
  </div>
  </div>
  </div>
 
  {/* Action Buttons */}
- <div className="mt-3.5 grid grid-cols-2 gap-2">
+ <div className="grid grid-cols-2 gap-2">
  <button
  type="button"
  onClick={() => openTahfizhDetail(student)}
- className="inline-flex h-8.5 items-center justify-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-sky-50 dark:bg-sky-950/60 hover:bg-sky-100 dark:hover:bg-sky-900 text-xs font-bold text-sky-700 dark:text-sky-300 transition-all cursor-pointer shadow-xs active:scale-95"
+ className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border-2 border-sky-200 dark:border-sky-800/60 bg-sky-50 dark:bg-sky-950/60 hover:bg-sky-100 dark:hover:bg-sky-900 text-xs font-bold text-sky-700 dark:text-sky-300 transition-all cursor-pointer shadow-xs active:scale-95"
  >
  <Eye className="size-3.5" /> Detail
  </button>
  <button
  type="button"
  onClick={() => openTahfizhForm(student)}
- className="inline-flex h-8.5 items-center justify-center gap-1.5 rounded-xl bg-[#059669] hover:bg-[#047857] text-white dark:bg-[#18A972] dark:hover:bg-[#059669] dark:text-white hover:from-emerald-700 hover:to-teal-700 text-xs font-bold transition-all cursor-pointer shadow-xs shadow-sm active:scale-95"
+ className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all cursor-pointer shadow-xs active:scale-95"
  >
- <Plus className="size-3.5 text-emerald-600" /> Setor
+ <Plus className="size-3.5 text-white" /> Setor
  </button>
+ </div>
  </div>
  </article>
  )
@@ -9067,7 +8998,7 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
  </div>
  ) : (
- <div className="rounded-xl border-2 border-dashed border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/30 p-8 text-center dark:border-emerald-800/60 dark:bg-emerald-950/10">
+ <div className="rounded-[22px] border-2 border-dashed border-emerald-300/80 dark:border-emerald-800/60 bg-emerald-50/30 p-8 text-center dark:bg-emerald-950/10">
  <div className="mx-auto flex size-12 items-center justify-center rounded-xl bg-amber-100 text-amber-700 dark:bg-amber-950/80 dark:text-amber-300 shadow-xs">
  <Trophy className="size-6 text-amber-600 dark:text-amber-400" />
  </div>
@@ -9080,9 +9011,9 @@ export default function TeacherTeachingWorkspacePage() {
  <button
  type="button"
  onClick={() => openTahfizhForm()}
- className="mt-4 inline-flex items-center gap-2 rounded-xl bg-white dark:bg-card-dark hover:from-emerald-700 hover:to-teal-800 px-4 py-2 text-xs font-bold shadow-sm transition-all cursor-pointer border border-emerald-200/80 dark:border-emerald-800/60"
+ className="mt-4 inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 text-xs font-bold shadow-sm transition-all cursor-pointer active:scale-95"
  >
- <Plus className="size-4" />
+ <Plus className="size-4 text-white" />
  Input Setoran Tahfizh Pertama
  </button>
  </div>
@@ -9094,7 +9025,7 @@ export default function TeacherTeachingWorkspacePage() {
  {unitStatsSummary.map((unitStat) => (
  <div
  key={unitStat.unitName}
- className="relative overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20/70 bg-white dark:bg-card-dark dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-slate-900 p-4.5 shadow-sm transition-all hover:shadow-md"
+ className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] p-4.5 shadow-sm transition-all hover:shadow-md"
  >
  <div className="flex items-center justify-between">
  <span className="inline-flex size-9 items-center justify-center rounded-xl bg-slate-100 border border-emerald-200/80 text-slate-700 shadow-xs dark:bg-slate-800 dark:border-emerald-700/80 dark:text-slate-300 shadow-sm">
@@ -9127,11 +9058,11 @@ export default function TeacherTeachingWorkspacePage() {
  )}
 
  {/* 4. HEROUI EMERALD DATATABLE CONTAINER (Leaderboard Table) */}
- <div className="relative overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-sm dark:bg-card-dark">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433]">
  {/* Toolbar Header */}
- <div className="bg-slate-50/50 dark:bg-slate-900/50 border-b border-emerald-200/80 dark:border-emerald-800/80 p-4 sm:p-5 flex flex-wrap items-center justify-between gap-3">
+ <div className="bg-emerald-500/10 border-b border-emerald-200/80 dark:border-emerald-800/60 px-5 py-4 flex flex-wrap items-center justify-between gap-3">
  <div className="flex items-center gap-3">
- <div className="flex size-10 shrink-0 items-center justify-center rounded-xl !bg-emerald-600 !text-white shadow-md border border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
  <Layers className="size-5 text-white" />
  </div>
  <div>
@@ -9159,7 +9090,7 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
 
  {/* ── TOOLBAR BARIS 2: Full-Width Search Input ── */}
- <div className="bg-white dark:bg-card-dark dark:from-emerald-950/20 dark:via-teal-950/10 dark:to-emerald-950/20 border-b border-emerald-200/80 dark:border-emerald-800/80 p-3 sm:px-5 sm:py-3.5">
+ <div className="bg-white dark:bg-[#1B2433] dark:from-emerald-950/20 dark:via-teal-950/10 dark:to-emerald-950/20 border-b border-emerald-200/80 dark:border-emerald-800/80 p-3 sm:px-5 sm:py-3.5">
  <div className="relative w-full">
  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-emerald-600/70 dark:text-emerald-400/70" />
  <input
@@ -9167,7 +9098,7 @@ export default function TeacherTeachingWorkspacePage() {
  value={tahfizhSearch}
  onChange={(e) => setTahfizhSearch(e.target.value)}
  placeholder="Cari nama santri binaan, NIS, NISN, unit, atau kelas rombel..."
- className="w-full h-9 pl-10 pr-9 rounded-xl text-xs bg-white dark:bg-[#151D2A] border border-emerald-200/80 dark:border-emerald-800/60 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-slate-900 dark:text-white placeholder:text-slate-400 shadow-2xs font-medium"
+ className="w-full h-9 pl-10 pr-9 rounded-xl text-xs bg-white dark:bg-[#151D2A] border-2 border-[#b6f6d9] dark:border-emerald-800/60 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-slate-900 dark:text-white placeholder:text-slate-400 shadow-2xs font-medium"
  />
  {tahfizhSearch && (
  <button
@@ -9183,7 +9114,7 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
 
  {/* ── TOOLBAR BARIS 3: Filter Bar Terstruktur & Rapi (Unit, Rombel, Urutkan, Tampilkan, Reset) ── */}
- <div className="bg-white dark:bg-card-dark dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-emerald-950/40 border-b border-emerald-200/80 dark:border-emerald-800/80 p-3 sm:px-5 sm:py-3">
+ <div className="bg-white dark:bg-[#1B2433] dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-emerald-950/40 border-b border-emerald-200/80 dark:border-emerald-800/80 p-3 sm:px-5 sm:py-3">
  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
  {/* Left: Filter Controls Grid */}
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-wrap items-center gap-2.5 flex-1 min-w-0">
@@ -9215,7 +9146,7 @@ export default function TeacherTeachingWorkspacePage() {
  ) : (
  <div
  title="Unit Terkunci: Menampilkan data khusus unit wewenang Anda"
- className="inline-flex h-9 items-center justify-between gap-2 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white/90 dark:bg-emerald-950/60 dark:border-emerald-800/60 px-3.5 text-xs font-bold text-emerald-800 dark:text-emerald-200 shadow-2xs w-full lg:w-auto shrink-0"
+ className="inline-flex h-9 items-center justify-between gap-2 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-white/90 dark:bg-emerald-950/60 dark:border-emerald-800/60 px-3.5 text-xs font-bold text-emerald-800 dark:text-emerald-200 shadow-2xs w-full lg:w-auto shrink-0"
  >
  <div className="flex items-center gap-2 min-w-0">
  <School className="size-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
@@ -9375,7 +9306,7 @@ export default function TeacherTeachingWorkspacePage() {
  <button
  type="button"
  onClick={() => openTahfizhDetail(student)}
- className="inline-flex h-9 items-center justify-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-sky-50 text-xs font-bold text-sky-700 hover:bg-sky-100 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300 transition-all cursor-pointer"
+ className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-sky-50 text-xs font-bold text-sky-700 hover:bg-sky-100 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300 transition-all cursor-pointer"
  >
  <Eye className="size-3.5" /> Lihat Detail
  </button>
@@ -9393,7 +9324,8 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
 
  {/* Desktop Datatable */}
- <table className="hidden w-full table-fixed text-left text-xs md:table">
+ <div className="hidden md:block overflow-x-auto">
+ <table className="w-full table-fixed text-left text-xs">
  <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-xs font-bold uppercase tracking-wider text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/80 dark:text-emerald-300">
  <tr>
  <th className="w-16 p-3.5 text-center">Rank</th>
@@ -9479,7 +9411,7 @@ export default function TeacherTeachingWorkspacePage() {
  onClick={() => openTahfizhDetail(student)}
  title="Lihat detail jurnal"
  aria-label={`Lihat detail jurnal ${student.nama_lengkap}`}
- className="inline-flex size-8.5 items-center justify-center rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-sky-50 dark:bg-sky-950/60 hover:bg-sky-100 dark:hover:bg-sky-900 text-sky-700 dark:text-sky-300 transition-all cursor-pointer shadow-xs active:scale-95"
+ className="inline-flex size-8.5 items-center justify-center rounded-xl border-2 border-sky-200 dark:border-sky-800/60 shadow-xs bg-sky-50 dark:bg-sky-950/60 hover:bg-sky-100 dark:hover:bg-sky-900 text-sky-700 dark:text-sky-300 transition-all cursor-pointer active:scale-95"
  >
  <Eye className="size-4" />
  </button>
@@ -9488,9 +9420,9 @@ export default function TeacherTeachingWorkspacePage() {
  onClick={() => openTahfizhForm(student)}
  title="Input Tahfizh"
  aria-label={`Input Tahfizh ${student.nama_lengkap}`}
- className="inline-flex size-8.5 items-center justify-center rounded-xl bg-[#059669] hover:bg-[#047857] text-white dark:bg-[#18A972] dark:hover:bg-[#059669] dark:text-white hover:from-emerald-700 hover:to-teal-700 transition-all cursor-pointer shadow-xs shadow-sm active:scale-95"
+ className="inline-flex size-8.5 items-center justify-center rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white transition-all cursor-pointer shadow-xs active:scale-95"
  >
- <Plus className="size-4 text-emerald-600" />
+ <Plus className="size-4 text-white" />
  </button>
  </div>
  </td>
@@ -9499,6 +9431,7 @@ export default function TeacherTeachingWorkspacePage() {
  })}
  </tbody>
  </table>
+ </div>
 
  {!loading && sortedTahfizhLeaderboard.length === 0 && (
  <div className="p-12 text-center">
@@ -9510,7 +9443,7 @@ export default function TeacherTeachingWorkspacePage() {
  )}
 
  {/* Footer Pagination Controls */}
- <div className="w-full border-t border-emerald-200/80 dark:border-emerald-800/80 px-4 py-3.5 sm:px-6 bg-white dark:bg-card-dark flex flex-col sm:flex-row items-center justify-between gap-3">
+ <div className="w-full border-t border-emerald-200/80 dark:border-emerald-800/80 px-4 py-3.5 sm:px-6 bg-white dark:bg-[#1B2433] flex flex-col sm:flex-row items-center justify-between gap-3">
  <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">
  Menampilkan <span className="font-bold text-slate-800 dark:text-slate-200">{sortedTahfizhLeaderboard.length > 0 ? (tahfizhPage - 1) * (tahfizhPerPage === 'all' ? sortedTahfizhLeaderboard.length : Number(tahfizhPerPage)) + 1 : 0}</span> s.d. <span className="font-bold text-slate-800 dark:text-slate-200">{tahfizhPerPage === 'all' ? sortedTahfizhLeaderboard.length : Math.min(tahfizhPage * Number(tahfizhPerPage), sortedTahfizhLeaderboard.length)}</span> dari <span className="font-bold text-slate-800 dark:text-slate-200">{sortedTahfizhLeaderboard.length}</span> santri binaan
  </div>
@@ -9533,7 +9466,7 @@ export default function TeacherTeachingWorkspacePage() {
  {/* TAB 6B: REKAPAN TAHFIZH LENGKAP */}
  {activeTab === 'rekapan-tahfizh' && canAccessTahfizh && (
  <section className="space-y-4" aria-labelledby="rekapan-tahfizh-heading">
- <div className="flex items-center justify-between gap-3 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-slate-50/50 dark:bg-slate-900/50 p-4 dark:border-emerald-800/60 dark:bg-slate-900">
+ <div className="flex items-center justify-between gap-3 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-emerald-500/10 p-4 dark:border-emerald-800/60 dark:bg-slate-900">
  <div className="flex items-center gap-3">
  <div className="flex h-9 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
  <FileSpreadsheet className="h-5 w-5" />
@@ -9550,7 +9483,7 @@ export default function TeacherTeachingWorkspacePage() {
  <button
  type="button"
  onClick={() => changeTab('tahfizh')}
- className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3 py-2 text-xs font-bold text-slate-700 shadow-xs transition hover:bg-slate-50 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200 cursor-pointer"
+ className="inline-flex items-center gap-1.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-white px-3 py-2 text-xs font-bold text-slate-700 shadow-xs transition hover:bg-slate-50 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200 cursor-pointer"
  >
  <ArrowRight className="h-3.5 w-3.5 rotate-180" /> Kembali ke Jurnal
  </button>
@@ -9571,11 +9504,11 @@ export default function TeacherTeachingWorkspacePage() {
 
  {/* TAB 8: CATATAN SISWA */}
  {activeTab === 'catatan' && (
- <div className="relative overflow-visible z-10 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-sm dark:border-emerald-800/60 dark:bg-card-dark">
+ <div className="relative overflow-hidden z-10 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433]">
  {/* Toolbar Header */}
- <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/80 bg-slate-50/50 dark:bg-slate-900/50 px-4 py-3 sm:px-5">
- <div className="flex items-center gap-2.5">
- <div className="flex size-10 sm:size-11 shrink-0 items-center justify-center rounded-xl !bg-emerald-600 !text-white shadow-md border border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-500/10 px-5 py-4">
+ <div className="flex items-center gap-3">
+ <div className="flex size-10 sm:size-11 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
  <BookOpen className="h-5 w-5" />
  </div>
  <div>
@@ -9633,15 +9566,15 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
 
  {/* Filter Bar */}
- <div className="border-b border-emerald-200/80 dark:border-emerald-800/80 bg-slate-50/50 dark:bg-slate-900/50 px-4 py-2.5 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-emerald-950/40 sm:px-5">
+ <div className="border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 dark:bg-slate-900/40 px-5 py-3">
  <div className="grid gap-3 md:grid-cols-[1fr_200px_180px]">
  <div className="relative">
- <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-emerald-600 dark:text-emerald-400" />
+ <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-emerald-600 dark:text-emerald-400" />
  <input
  value={studentNoteSearch}
  onChange={(e) => setStudentNoteSearch(e.target.value)}
  placeholder="Cari siswa, judul, atau isi catatan..."
- className="h-9 w-full rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white pl-8.5 pr-3 text-xs outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white pl-9 pr-3 text-xs font-bold text-slate-800 dark:bg-slate-900 dark:text-slate-100 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
  <div>
@@ -9751,7 +9684,7 @@ export default function TeacherTeachingWorkspacePage() {
  <button
  type="button"
  onClick={() => openStudentDetail(student)}
- className="inline-flex h-8 items-center justify-center gap-1 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-sky-50 px-2.5 text-[10px] font-bold text-sky-700 hover:bg-sky-100 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300"
+ className="inline-flex h-8 items-center justify-center gap-1 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-sky-50 px-2.5 text-[10px] font-bold text-sky-700 hover:bg-sky-100 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300"
  >
  <Eye className="h-3.5 w-3.5" /> Lihat
  </button>
@@ -9773,7 +9706,7 @@ export default function TeacherTeachingWorkspacePage() {
  type="button"
  onClick={() => openPelanggaranModal(student)}
  title="Catat Penilaian Perilaku / Pelanggaran Tata Tertib TU"
- className="inline-flex h-8 items-center justify-center gap-1 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-rose-50 px-2.5 text-[10px] font-bold text-rose-700 hover:bg-rose-100 transition dark:border-emerald-800/60 dark:bg-rose-950/60 dark:text-rose-300"
+ className="inline-flex h-8 items-center justify-center gap-1 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-rose-50 px-2.5 text-[10px] font-bold text-rose-700 hover:bg-rose-100 transition dark:border-emerald-800/60 dark:bg-rose-950/60 dark:text-rose-300"
  >
  <ShieldAlert className="h-3.5 w-3.5 text-rose-600 dark:text-rose-400" /> Perilaku
  </button>
@@ -9896,7 +9829,7 @@ export default function TeacherTeachingWorkspacePage() {
  <button
  type="button"
  onClick={() => openStudentDetail(student)}
- className="inline-flex h-8 shrink-0 items-center justify-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-sky-50 px-2.5 text-[10px] font-bold text-sky-700 transition hover:bg-sky-100 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300"
+ className="inline-flex h-8 shrink-0 items-center justify-center gap-1.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-sky-50 px-2.5 text-[10px] font-bold text-sky-700 transition hover:bg-sky-100 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300"
  >
  <Eye className="h-3.5 w-3.5 shrink-0" /> Lihat ({notes.length})
  </button>
@@ -9919,7 +9852,7 @@ export default function TeacherTeachingWorkspacePage() {
  type="button"
  onClick={() => openPelanggaranModal(student)}
  title="Catat Penilaian Perilaku / Pelanggaran Tata Tertib TU"
- className="inline-flex h-8 shrink-0 items-center justify-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-rose-50 px-2.5 text-[10px] font-bold text-rose-700 hover:bg-rose-100 transition dark:border-emerald-800/60 dark:bg-rose-950/60 dark:text-rose-300"
+ className="inline-flex h-8 shrink-0 items-center justify-center gap-1.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-rose-50 px-2.5 text-[10px] font-bold text-rose-700 hover:bg-rose-100 transition dark:border-emerald-800/60 dark:bg-rose-950/60 dark:text-rose-300"
  >
  <ShieldAlert className="h-3.5 w-3.5 shrink-0 text-rose-600 dark:text-rose-400" /> Perilaku
  </button>
@@ -10002,25 +9935,25 @@ export default function TeacherTeachingWorkspacePage() {
 
  {/* Summary Metric Badges */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:min-w-[420px]">
-              <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 !bg-indigo-100/90 dark:border-emerald-800/60 dark:!bg-indigo-950/60 px-3 py-2 text-center shadow-xs">
+              <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs !bg-indigo-100/90 dark:border-emerald-800/60 dark:!bg-indigo-950/60 px-3 py-2 text-center shadow-xs">
                 <strong className="block text-lg sm:text-xl font-black text-indigo-800 dark:text-indigo-200">
                   {logTotalCount}
                 </strong>
                 <span className="text-[10px] font-bold text-indigo-800 dark:text-indigo-300">Total Hari Kerja</span>
               </div>
-              <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 !bg-emerald-100/90 dark:border-emerald-800/60 dark:!bg-emerald-950/60 px-3 py-2 text-center shadow-xs">
+              <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs !bg-emerald-100/90 dark:border-emerald-800/60 dark:!bg-emerald-950/60 px-3 py-2 text-center shadow-xs">
                 <strong className="block text-lg sm:text-xl font-black text-emerald-800 dark:text-emerald-200">
                   {logHadirCount}
                 </strong>
                 <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-300">Tepat Waktu</span>
               </div>
-              <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 !bg-amber-100/90 dark:border-emerald-800/60 dark:!bg-amber-950/60 px-3 py-2 text-center shadow-xs">
+              <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs !bg-amber-100/90 dark:border-emerald-800/60 dark:!bg-amber-950/60 px-3 py-2 text-center shadow-xs">
                 <strong className="block text-lg sm:text-xl font-black text-amber-800 dark:text-amber-200">
                   {logTerlambatCount}
                 </strong>
                 <span className="text-[10px] font-bold text-amber-800 dark:text-amber-300">Terlambat</span>
               </div>
-              <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 !bg-sky-100/90 dark:border-emerald-800/60 dark:!bg-sky-950/60 px-3 py-2 text-center shadow-xs">
+              <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs !bg-sky-100/90 dark:border-emerald-800/60 dark:!bg-sky-950/60 px-3 py-2 text-center shadow-xs">
                 <strong className="block text-lg sm:text-xl font-black text-sky-800 dark:text-sky-200">
                   {logIzinSakitCount}
                 </strong>
@@ -10030,115 +9963,60 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
  </div>
 
- {/* ── 4 QUICK INTERACTIVE KPI CARDS ──────────────────────────── */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
-              {/* Card 1: Total Presensi (Emerald) */}
-              <div
-                onClick={() => setTeacherLogStatus('semua')}
-                className={`group relative overflow-hidden rounded-xl p-4 text-left transition-all duration-300 cursor-pointer ${teacherLogStatus === 'semua'
-                  ? '!bg-emerald-200/90 dark:!bg-emerald-950/80 border border-emerald-200/80 dark:border-emerald-800/60 ring-2 ring-emerald-500/30 shadow-lg'
-                  : '!bg-emerald-100/90 hover:!bg-emerald-200/70 dark:!bg-emerald-950/50 dark:hover:!bg-emerald-950/70 border border-emerald-200/80 dark:border-emerald-800/60 hover:border-emerald-300 dark:hover:border-emerald-700/80 shadow-sm hover:shadow-md hover:-translate-y-0.5'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-emerald-800 dark:text-emerald-300">Total Riwayat Log</span>
-                  <div className="flex size-9 items-center justify-center rounded-xl !bg-emerald-600 !text-white shadow-sm dark:!bg-emerald-600 dark:!text-white">
-                    <Clock className="size-4.5 text-white" />
-                  </div>
-                </div>
-                <p className="mt-2 text-2xl sm:text-3xl font-black text-emerald-800 dark:text-emerald-200">
-                  {logTotalCount}
-                </p>
-                <div className="mt-2 flex items-center justify-between">
-                  <span className="inline-flex items-center rounded-full bg-white/90 dark:bg-emerald-900/80 px-2 py-0.5 text-[10px] font-bold text-emerald-800 dark:text-emerald-200 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
-                    {teacherLogMonth === 'semua' ? 'Semua Bulan' : teacherLogMonth}
-                  </span>
-                  <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400">Semua Data</span>
-                </div>
-              </div>
-
-              {/* Card 2: Hadir Tepat Waktu (Teal) */}
-              <div
-                onClick={() => setTeacherLogStatus('Hadir')}
-                className={`group relative overflow-hidden rounded-xl p-4 text-left transition-all duration-300 cursor-pointer ${teacherLogStatus === 'Hadir'
-                  ? '!bg-teal-200/90 dark:!bg-teal-950/80 border border-emerald-200/80 dark:border-emerald-800/60 ring-2 ring-teal-500/30 shadow-lg'
-                  : '!bg-teal-100/90 hover:!bg-teal-200/70 dark:!bg-teal-950/50 dark:hover:!bg-teal-950/70 border border-emerald-200/80 dark:border-emerald-800/60 hover:border-emerald-300 dark:hover:border-emerald-700/80 shadow-sm hover:shadow-md hover:-translate-y-0.5'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-teal-800 dark:text-teal-300">Tepat Waktu</span>
-                  <div className="flex size-9 items-center justify-center rounded-xl !bg-teal-600 !text-white shadow-sm dark:!bg-teal-600 dark:!text-white">
-                    <CheckCircle2 className="size-4.5 text-white" />
-                  </div>
-                </div>
-                <p className="mt-2 text-2xl sm:text-3xl font-black text-teal-800 dark:text-teal-200">
-                  {logHadirCount}
-                </p>
-                <div className="mt-2 flex items-center justify-between">
-                  <span className="inline-flex items-center rounded-full bg-white/90 dark:bg-teal-900/80 px-2 py-0.5 text-[10px] font-bold text-teal-800 dark:text-teal-200 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
-                    {logDisiplinRate}% Ketepatan
-                  </span>
-                  <span className="text-[10px] font-bold text-teal-700 dark:text-teal-400">Hadir On-Time</span>
-                </div>
-              </div>
-
-              {/* Card 3: Terlambat (Amber) */}
-              <div
-                onClick={() => setTeacherLogStatus('Terlambat')}
-                className={`group relative overflow-hidden rounded-xl p-4 text-left transition-all duration-300 cursor-pointer ${teacherLogStatus === 'Terlambat'
-                  ? '!bg-amber-200/90 dark:!bg-amber-950/80 border border-emerald-200/80 dark:border-emerald-800/60 ring-2 ring-amber-500/30 shadow-lg'
-                  : '!bg-amber-100/90 hover:!bg-amber-200/70 dark:!bg-amber-950/50 dark:hover:!bg-amber-950/70 border border-emerald-200/80 dark:border-emerald-800/60 hover:border-emerald-300 dark:hover:border-emerald-700/80 shadow-sm hover:shadow-md hover:-translate-y-0.5'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-amber-800 dark:text-amber-300">Terlambat Masuk</span>
-                  <div className="flex size-9 items-center justify-center rounded-xl !bg-amber-600 !text-white shadow-sm dark:!bg-amber-600 dark:!text-white">
-                    <AlertCircle className="size-4.5 text-white" />
-                  </div>
-                </div>
-                <p className="mt-2 text-2xl sm:text-3xl font-black text-amber-800 dark:text-amber-200">
-                  {logTerlambatCount}
-                </p>
-                <div className="mt-2 flex items-center justify-between">
-                  <span className="inline-flex items-center rounded-full bg-white/90 dark:bg-amber-900/80 px-2 py-0.5 text-[10px] font-bold text-amber-800 dark:text-amber-200 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
-                    Perlu Evaluasi
-                  </span>
-                  <span className="text-[10px] font-bold text-amber-700 dark:text-amber-400">Disiplin Jam</span>
-                </div>
-              </div>
-
-              {/* Card 4: Izin & Sakit (Sky) */}
-              <div
-                onClick={() => setTeacherLogStatus(teacherLogStatus === 'Izin' ? 'Sakit' : 'Izin')}
-                className={`group relative overflow-hidden rounded-xl p-4 text-left transition-all duration-300 cursor-pointer ${teacherLogStatus === 'Izin' || teacherLogStatus === 'Sakit'
-                  ? '!bg-sky-200/90 dark:!bg-sky-950/80 border border-emerald-200/80 dark:border-emerald-800/60 ring-2 ring-sky-500/30 shadow-lg'
-                  : '!bg-sky-100/90 hover:!bg-sky-200/70 dark:!bg-sky-950/50 dark:hover:!bg-sky-950/70 border border-emerald-200/80 dark:border-emerald-800/60 hover:border-emerald-300 dark:hover:border-emerald-700/80 shadow-sm hover:shadow-md hover:-translate-y-0.5'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-sky-800 dark:text-sky-300">Izin & Sakit</span>
-                  <div className="flex size-9 items-center justify-center rounded-xl !bg-emerald-600 !text-white shadow-sm dark:!bg-sky-600 dark:!text-white">
-                    <FileText className="size-4.5 text-white" />
-                  </div>
-                </div>
-                <p className="mt-2 text-2xl sm:text-3xl font-black text-sky-800 dark:text-sky-200">
-                  {logIzinSakitCount}
-                </p>
-                <div className="mt-2 flex items-center justify-between">
-                  <span className="inline-flex items-center rounded-full bg-white/90 dark:bg-sky-900/80 px-2 py-0.5 text-[10px] font-bold text-sky-800 dark:text-sky-200 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs">
-                    Keterangan Resmi
-                  </span>
-                  <span className="text-[10px] font-bold text-sky-700 dark:text-sky-400">Tervalidasi</span>
-                </div>
-              </div>
-            </div>
+ {/* ── 4 HEROUI STANDARD KPI CARDS ──────────────────────────── */}
+ <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
+ <KpiStatCard
+ title="Total Riwayat Log"
+ value={logTotalCount}
+ description="Semua Data"
+ badge={teacherLogMonth === 'semua' ? 'Semua Bulan' : teacherLogMonth}
+ icon={Clock}
+ tone="emerald"
+ ctaText="Filter"
+ onClick={() => setTeacherLogStatus('semua')}
+ className={teacherLogStatus === 'semua' ? 'ring-2 ring-emerald-500/50 shadow-md' : ''}
+ />
+ <KpiStatCard
+ title="Tepat Waktu"
+ value={logHadirCount}
+ description="Hadir On-Time"
+ badge={`${logDisiplinRate}% Ketepatan`}
+ icon={CheckCircle2}
+ tone="teal"
+ ctaText="Filter"
+ onClick={() => setTeacherLogStatus('Hadir')}
+ className={teacherLogStatus === 'Hadir' ? 'ring-2 ring-teal-500/50 shadow-md' : ''}
+ />
+ <KpiStatCard
+ title="Terlambat Masuk"
+ value={logTerlambatCount}
+ description="Disiplin Jam"
+ badge="Perlu Evaluasi"
+ icon={AlertCircle}
+ tone="amber"
+ ctaText="Filter"
+ onClick={() => setTeacherLogStatus('Terlambat')}
+ className={teacherLogStatus === 'Terlambat' ? 'ring-2 ring-amber-500/50 shadow-md' : ''}
+ />
+ <KpiStatCard
+ title="Izin & Sakit"
+ value={logIzinSakitCount}
+ description="Tervalidasi"
+ badge="Keterangan Resmi"
+ icon={FileText}
+ tone="sky"
+ ctaText="Filter"
+ onClick={() => setTeacherLogStatus(teacherLogStatus === 'Izin' ? 'Sakit' : 'Izin')}
+ className={teacherLogStatus === 'Izin' || teacherLogStatus === 'Sakit' ? 'ring-2 ring-sky-500/50 shadow-md' : ''}
+ />
+ </div>
 
             {/* ── HEROUI EMERALD DATATABLE CONTAINER ──────────────────── */}
- <div className="relative overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-sm dark:bg-card-dark">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433]">
  {/* Toolbar Header */}
- <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/80 bg-slate-50/50 dark:bg-slate-900/50 px-4 py-3 sm:px-5">
- <div className="flex items-center gap-2.5">
- <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-xs">
+ <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-500/10 px-5 py-4">
+ <div className="flex items-center gap-3">
+ <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
  <Clock className="size-5" />
  </div>
  <div>
@@ -10162,12 +10040,12 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
 
  {/* Filter Bar */}
- <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/80 bg-slate-50/50 dark:bg-slate-900/50 px-4 py-3 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-emerald-950/40 sm:px-5">
+ <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 dark:bg-slate-900/40 px-5 py-3">
  <div className="flex flex-wrap items-center gap-2">
  <CustomSelect
  value={teacherLogMonth}
  onChange={(e) => setTeacherLogMonth(e.target.value)}
- className="h-9.5 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs font-bold text-slate-700 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200"
+ className="h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white px-3 text-xs font-bold text-slate-800 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:bg-slate-900 dark:text-slate-100"
  >
  <option value="semua">Semua Bulan</option>
  {Array.from({ length: 6 }).map((_, i) => {
@@ -10268,7 +10146,7 @@ export default function TeacherTeachingWorkspacePage() {
  })
  setShowDetailModal(true)
  }}
- className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-sky-50 px-3 py-1.5 text-xs font-bold text-sky-700 transition hover:bg-sky-100 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300 shadow-xs cursor-pointer active:scale-95 mx-auto"
+ className="inline-flex items-center gap-1.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-sky-50 px-3 py-1.5 text-xs font-bold text-sky-700 transition hover:bg-sky-100 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300 shadow-xs cursor-pointer active:scale-95 mx-auto"
  >
  <Eye className="size-3.5" /> Detail
  </button>
@@ -10288,7 +10166,7 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
 
  {/* Datatable Footer */}
- <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-emerald-200/80 dark:border-emerald-800/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50 dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-emerald-950/40 px-5 py-3.5">
+ <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-emerald-200/80 dark:border-emerald-800/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-emerald-950/40 px-5 py-3.5">
  <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">
  Total <strong className="text-emerald-700 dark:text-emerald-400">{filteredTeacherLogs.length}</strong> data terekam pada server
  </span>
@@ -10376,19 +10254,19 @@ export default function TeacherTeachingWorkspacePage() {
 
  {/* Summary Metric Badges */}
             <div className="grid grid-cols-3 gap-2.5 sm:min-w-[340px]">
-              <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 !bg-emerald-100/90 dark:border-emerald-800/60 dark:!bg-emerald-950/60 px-3.5 py-2.5 text-center shadow-xs">
+              <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm !bg-emerald-100/90 dark:border-emerald-800/60 dark:!bg-emerald-950/60 px-3.5 py-2.5 text-center shadow-xs">
                 <strong className="block text-xl font-black text-emerald-800 dark:text-emerald-200">
                   {totalSesi}
                 </strong>
                 <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-300">Total Sesi KBM</span>
               </div>
-              <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 !bg-teal-100/90 dark:border-emerald-800/60 dark:!bg-teal-950/60 px-3.5 py-2.5 text-center shadow-xs">
+              <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm !bg-teal-100/90 dark:border-emerald-800/60 dark:!bg-teal-950/60 px-3.5 py-2.5 text-center shadow-xs">
                 <strong className="block text-xl font-black text-teal-800 dark:text-teal-200">
                   {totalMapel}
                 </strong>
                 <span className="text-[10px] font-bold text-teal-800 dark:text-teal-300">Mata Pelajaran</span>
               </div>
-              <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 !bg-indigo-100/90 dark:border-emerald-800/60 dark:!bg-indigo-950/60 px-3.5 py-2.5 text-center shadow-xs">
+              <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm !bg-indigo-100/90 dark:border-emerald-800/60 dark:!bg-indigo-950/60 px-3.5 py-2.5 text-center shadow-xs">
                 <strong className="block text-xl font-black text-indigo-800 dark:text-indigo-200">
                   {totalRombel || (classes.length > 0 ? classes.length : 1)}
                 </strong>
@@ -10399,9 +10277,9 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
 
  {/* ── DATATABLE & MATRIX CONTAINER ──────────────────────────── */}
- <div className="relative overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-sm dark:bg-card-dark">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-white shadow-sm dark:bg-[#1B2433]">
  {/* Toolbar Header */}
- <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/80 bg-slate-50/50 dark:bg-slate-900/50 px-4 py-3 sm:px-5">
+ <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/80 bg-emerald-500/10 px-4 py-3 sm:px-5">
  <div className="flex items-center gap-2.5">
  <div className="flex size-10 sm:size-11 shrink-0 items-center justify-center rounded-xl !bg-emerald-600 !text-white shadow-md border border-emerald-200/80 dark:border-emerald-800/60 shadow-xs">
  <CalendarDays className="h-5 w-5" />
@@ -10459,7 +10337,7 @@ export default function TeacherTeachingWorkspacePage() {
 
  if (filtered.length === 0) {
  return (
- <div className="p-8 text-center bg-slate-50 dark:bg-slate-900/40 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 text-slate-400 text-xs">
+ <div className="p-8 text-center bg-slate-50 dark:bg-slate-900/40 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm text-slate-400 text-xs">
  Tidak ada jadwal mengajar pada hari {selectedHariFilter}.
  </div>
  )
@@ -10468,7 +10346,7 @@ export default function TeacherTeachingWorkspacePage() {
  return (
  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
  {filtered.map((s, i) => (
- <div key={s.id || i} className="p-4 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white dark:bg-slate-900/60 flex justify-between items-center text-xs shadow-xs hover:border-emerald-300 dark:hover:border-emerald-700/80 hover:shadow-md transition">
+ <div key={s.id || i} className="p-4 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-white dark:bg-slate-900/60 flex justify-between items-center text-xs shadow-xs hover:border-emerald-300 dark:hover:border-emerald-700/80 hover:shadow-md transition">
  <div className="space-y-1">
  <div className="flex items-center gap-2">
  <span className="px-2.5 py-0.5 bg-emerald-100 text-[#059669] dark:bg-emerald-950 dark:text-emerald-300 font-extrabold text-[10px] rounded-md">
@@ -10531,7 +10409,7 @@ export default function TeacherTeachingWorkspacePage() {
  return (
  <div
  key={day}
- className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-slate-50/60 dark:bg-slate-900/40 p-3.5 space-y-2.5 shadow-2xs"
+ className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-slate-50/60 dark:bg-slate-900/40 p-3.5 space-y-2.5 shadow-2xs"
  >
  <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/80 dark:border-emerald-800/60 pb-2">
  <div className="flex items-center gap-1.5">
@@ -10587,7 +10465,7 @@ export default function TeacherTeachingWorkspacePage() {
  <div className="space-y-5">
  {/* KPI Cards Beban Bulanan */}
  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
- <div className="p-4 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white dark:bg-slate-900/60 shadow-xs">
+ <div className="p-4 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-white dark:bg-slate-900/60 shadow-xs">
  <span className="text-[10px] uppercase font-bold text-slate-400">Sesi Mengajar / Minggu</span>
  <div className="text-xl font-black text-slate-900 dark:text-white mt-1">
  {sortedPool.length} Sesi
@@ -10595,7 +10473,7 @@ export default function TeacherTeachingWorkspacePage() {
  <span className="text-[10px] text-emerald-600 font-medium">Tatap muka terjadwal</span>
  </div>
 
- <div className="p-4 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white dark:bg-slate-900/60 shadow-xs">
+ <div className="p-4 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-white dark:bg-slate-900/60 shadow-xs">
  <span className="text-[10px] uppercase font-bold text-slate-400">Estimasi Beban / Bulan</span>
  {(() => {
  const _now = new Date()
@@ -10615,7 +10493,7 @@ export default function TeacherTeachingWorkspacePage() {
  })()}
  </div>
 
- <div className="p-4 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white dark:bg-slate-900/60 shadow-xs">
+ <div className="p-4 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-white dark:bg-slate-900/60 shadow-xs">
  <span className="text-[10px] uppercase font-bold text-slate-400">Jumlah Rombel Diampu</span>
  <div className="text-xl font-black text-amber-600 dark:text-amber-400 mt-1">
  {new Set(sortedPool.map((s) => s.kelas?.name || s.kelas_id)).size} Kelas
@@ -10623,7 +10501,7 @@ export default function TeacherTeachingWorkspacePage() {
  <span className="text-[10px] text-slate-400 font-medium">Distribusi mengajar</span>
  </div>
 
- <div className="p-4 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white dark:bg-slate-900/60 shadow-xs">
+ <div className="p-4 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-white dark:bg-slate-900/60 shadow-xs">
  <span className="text-[10px] uppercase font-bold text-slate-400">Mata Pelajaran Aktif</span>
  <div className="text-xl font-black text-emerald-600 dark:text-emerald-400 mt-1">
  {new Set(sortedPool.map((s) => s.subject?.name || s.subject_id)).size} Mapel
@@ -10633,7 +10511,7 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
 
  {/* Kalender Agenda Sekolah PostgreSQL */}
- <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white dark:bg-slate-900/60 p-4 sm:p-5 space-y-3 shadow-xs">
+ <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-white dark:bg-slate-900/60 p-4 sm:p-5 space-y-3 shadow-xs">
  <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-3">
  <div>
  <h4 className="font-extrabold text-sm text-slate-900 dark:text-white flex items-center gap-2">
@@ -10691,7 +10569,7 @@ export default function TeacherTeachingWorkspacePage() {
  </span>
  </div>
 
- <div className="overflow-x-auto rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20/80">
+ <div className="overflow-x-auto">
  <table className="w-full text-left text-xs">
  <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-xs font-bold uppercase tracking-wider text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/80 dark:text-emerald-300">
  <tr>
@@ -10832,7 +10710,7 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
  }
  >
- <div className="relative aspect-video w-full overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-black shadow-inner dark:border-emerald-800/60">
+ <div className="relative aspect-video w-full overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-black shadow-inner dark:border-emerald-800/60">
  <video ref={qrVideoRef} autoPlay muted playsInline className="h-full w-full object-cover" />
  {!qrCameraActive && !qrCameraError && <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-slate-900/80 text-white"><RefreshCw className="h-8 w-8 animate-spin text-emerald-400" /><p className="text-xs font-semibold">Menghubungkan ke kamera...</p></div>}
 
@@ -10846,7 +10724,7 @@ export default function TeacherTeachingWorkspacePage() {
  <div className="absolute -bottom-1.5 -left-1.5 w-6 h-6 border-b-4 border-l-4 border-slate-400 rounded-bl-lg" />
  <div className="absolute -bottom-1.5 -right-1.5 w-6 h-6 border-b-4 border-r-4 border-slate-400 rounded-br-lg" />
  {/* Laser Beam */}
- <div className="w-full h-0.5 bg-white dark:bg-card-dark shadow-[0_0_10px_#10b981] animate-pulse absolute top-1/2 -translate-y-1/2" />
+ <div className="w-full h-0.5 bg-white dark:bg-[#1B2433] shadow-[0_0_10px_#10b981] animate-pulse absolute top-1/2 -translate-y-1/2" />
  </div>
  </div>
  )}
@@ -10892,14 +10770,14 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
  </div>
  ) : qrCameraError ? (
- <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-rose-50 p-3 text-xs font-semibold text-rose-700 dark:border-emerald-800/60 dark:bg-rose-950/30 dark:text-rose-300">
+ <div className="rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-rose-50 p-3 text-xs font-semibold text-rose-700 dark:border-emerald-800/60 dark:bg-rose-950/30 dark:text-rose-300">
  {qrCameraError}
  </div>
  ) : null}
 
  <form onSubmit={handleCardScan} className="space-y-3 pt-2">
  <label className="block text-xs font-semibold uppercase text-slate-500">Input / Hasil Pindai Kode Kartu</label>
- <div className="flex flex-col gap-2 sm:flex-row"><input ref={scanInputRef} value={scanInput} onChange={(event) => setScanInput(event.target.value)} autoFocus autoComplete="off" placeholder="Hasil scan QR / Ketik nomor kartu..." className="w-full rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-900 outline-none focus:border-emerald-500 focus:bg-white dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white" /><button type="submit" disabled={!scanInput.trim() || scanProcessing} className="whitespace-nowrap rounded-lg bg-emerald-600 px-5 py-3 text-sm font-bold text-white shadow disabled:opacity-50 border border-emerald-200/80 dark:border-emerald-800/60 h-9">{scanProcessing ? 'Proses...' : 'Proses Absen'}</button></div>
+ <div className="flex flex-col gap-2 sm:flex-row"><input ref={scanInputRef} value={scanInput} onChange={(event) => setScanInput(event.target.value)} autoFocus autoComplete="off" placeholder="Hasil scan QR / Ketik nomor kartu..." className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-xs bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-900 outline-none focus:border-emerald-500 focus:bg-white dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white" /><button type="submit" disabled={!scanInput.trim() || scanProcessing} className="whitespace-nowrap rounded-lg bg-emerald-600 px-5 py-3 text-sm font-bold text-white shadow disabled:opacity-50 border border-emerald-200/80 dark:border-emerald-800/60 h-9">{scanProcessing ? 'Proses...' : 'Proses Absen'}</button></div>
  </form>
  </AppModal>
 
@@ -10914,20 +10792,20 @@ export default function TeacherTeachingWorkspacePage() {
  bodyClassName="p-4 sm:p-5"
  footer={
  <>
- <button type="button" onClick={() => setShowAttendanceMethodModal(false)} className="h-9 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 px-4 text-xs font-bold text-slate-600 transition hover:bg-slate-50 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-slate-800">Tutup</button>
+ <button type="button" onClick={() => setShowAttendanceMethodModal(false)} className="h-9 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs px-4 text-xs font-bold text-slate-600 transition hover:bg-slate-50 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-slate-800">Tutup</button>
  <button type="button" onClick={handleSaveAttendance} className="flex h-9 items-center justify-center gap-2 rounded-lg bg-emerald-600 px-5 text-xs font-bold text-white transition border border-emerald-200/80 dark:border-emerald-800/60 text-sm font-medium"><Save className="h-4 w-4" /> Simpan Presensi</button>
  </>
  }
  >
  {selectedMethod === 'rollcall' ? (
  <div className="space-y-4">
- <div className="flex flex-wrap items-center justify-between gap-3 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-emerald-50/60 p-3 dark:border-emerald-800/60 dark:bg-emerald-950/20">
+ <div className="flex flex-wrap items-center justify-between gap-3 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm bg-emerald-50/60 p-3 dark:border-emerald-800/60 dark:bg-emerald-950/20">
  <div>
  <p className="text-xs font-bold text-emerald-800 dark:text-emerald-300">{students.filter((student) => attendanceData[student.id]?.status === 'Hadir').length} dari {students.length} siswa hadir</p>
  <p className="mt-0.5 text-xs text-slate-500">Rombel: <strong>{selectedClassName}</strong> • {getScheduleSubject(getCurrentSchedule() || {})}</p>
  </div>
  <div className="flex items-center gap-2 flex-wrap">
- <div className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3 py-2 text-xs font-bold text-emerald-800 shadow-xs dark:border-emerald-800/60 dark:bg-slate-800 dark:text-emerald-200">
+ <div className="inline-flex items-center gap-1.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xs bg-white px-3 py-2 text-xs font-bold text-emerald-800 shadow-xs dark:border-emerald-800/60 dark:bg-slate-800 dark:text-emerald-200">
  <Filter className="h-3.5 w-3.5 text-emerald-600" />
  <span className="text-xs text-slate-400 font-medium">Rombel:</span>
  <CustomSelect
@@ -10954,7 +10832,7 @@ export default function TeacherTeachingWorkspacePage() {
  <div className="space-y-2">
  {students.map((student, index) => {
  const status = attendanceData[student.id]?.status || 'Belum Dicatat'
- return <article key={student.id} className="flex flex-col gap-3 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 p-3 transition hover:border-emerald-300 dark:hover:border-emerald-700/80 dark:border-emerald-800/60 sm:flex-row sm:items-center">
+ return <article key={student.id} className="flex flex-col gap-3 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-sm p-3 transition hover:border-emerald-300 dark:hover:border-emerald-700/80 dark:border-emerald-800/60 sm:flex-row sm:items-center">
  <div className="flex min-w-0 flex-1 items-center gap-3">
  <input type="checkbox" checked={status === 'Hadir'} onChange={(event) => toggleStudentChecklist(student, event.target.checked)} aria-label={`Tandai ${student.nama_lengkap} hadir`} className="h-5 w-5 shrink-0 cursor-pointer accent-emerald-700" />
  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-extrabold text-slate-500 dark:bg-slate-800">{index + 1}</span>
@@ -10973,7 +10851,7 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
  <div className="text-center"><h3 className="text-base font-extrabold text-slate-900 dark:text-white">{selectedMethod === 'qr' ? 'Arahkan QR kartu ke scanner' : 'Tempelkan kartu pada reader RFID'}</h3><p className="mt-1 text-xs leading-5 text-slate-500">Kode akan diproses otomatis saat reader mengirimkan tombol Enter.</p></div>
  <form onSubmit={handleCardScan} className="space-y-3">
- <label className="block"><span className="mb-1.5 block text-xs font-bold text-slate-700 dark:text-slate-200">Kode kartu siswa</span><div className="flex gap-2"><div className="relative min-w-0 flex-1">{selectedMethod === 'qr' ? <QrCode className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" /> : <Wifi className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />}<input ref={scanInputRef} value={scanInput} onChange={(event) => setScanInput(event.target.value)} disabled={scanProcessing} autoFocus autoComplete="off" placeholder={`Menunggu ${selectedMethod === 'qr' ? 'QR scanner' : 'RFID reader'}...`} className="h-9 w-full rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white pl-10 pr-4 text-sm font-semibold outline-none transition focus:border-emerald-700/80 focus:ring-3 focus:ring-emerald-700/15 disabled:cursor-wait disabled:opacity-60 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white" /></div><button type="submit" disabled={!scanInput.trim() || scanProcessing} className="h-9 min-w-24 rounded-lg bg-emerald-600 px-4 text-xs font-bold text-white transition disabled:cursor-not-allowed disabled:opacity-50 border border-emerald-200/80 dark:border-emerald-800/60 text-sm font-medium">{scanProcessing ? 'Memproses...' : 'Identifikasi'}</button></div></label>
+ <label className="block"><span className="mb-1.5 block text-xs font-bold text-slate-700 dark:text-slate-200">Kode kartu siswa</span><div className="flex gap-2"><div className="relative min-w-0 flex-1">{selectedMethod === 'qr' ? <QrCode className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" /> : <Wifi className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />}<input ref={scanInputRef} value={scanInput} onChange={(event) => setScanInput(event.target.value)} disabled={scanProcessing} autoFocus autoComplete="off" placeholder={`Menunggu ${selectedMethod === 'qr' ? 'QR scanner' : 'RFID reader'}...`} className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-xs bg-white pl-10 pr-4 text-sm font-semibold outline-none transition focus:border-emerald-700/80 focus:ring-3 focus:ring-emerald-700/15 disabled:cursor-wait disabled:opacity-60 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white" /></div><button type="submit" disabled={!scanInput.trim() || scanProcessing} className="h-9 min-w-24 rounded-lg bg-emerald-600 px-4 text-xs font-bold text-white transition disabled:cursor-not-allowed disabled:opacity-50 border border-emerald-200/80 dark:border-emerald-800/60 text-sm font-medium">{scanProcessing ? 'Memproses...' : 'Identifikasi'}</button></div></label>
  </form>
  {lastScannedResult && <div className={`flex items-center gap-3 rounded-xl border p-4 ${lastScannedResult.error ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50 dark:border-emerald-800/60 dark:bg-rose-950/30' : 'border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50 dark:border-emerald-800/60 dark:bg-emerald-950/30'}`} role="status">{lastScannedResult.error ? <AlertCircle className="h-6 w-6 shrink-0 text-rose-600" /> : <CheckCircle2 className="h-6 w-6 shrink-0 text-emerald-600" />}<div className="min-w-0"><p className="truncate text-sm font-bold text-slate-900 dark:text-white">{lastScannedResult.error ? 'Kartu tidak dikenali' : (lastScannedResult.student?.nama_lengkap || lastScannedResult.student?.full_name)}</p><p className="mt-0.5 text-xs text-slate-500">{lastScannedResult.error ? lastScannedResult.message : `${lastScannedResult.method}${lastScannedResult.time ? ` • ${lastScannedResult.time} WIB` : ''}`}</p></div></div>}
  </div>
@@ -11522,7 +11400,7 @@ export default function TeacherTeachingWorkspacePage() {
  value={historySessionStudentSearch}
  onChange={(e) => setHistorySessionStudentSearch(e.target.value)}
  placeholder="Cari nama / NISN siswa..."
- className="h-8 w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-8 pr-3 text-xs outline-none focus:border-emerald-500 dark:bg-slate-800 dark:text-white"
+ className="h-8 w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white pl-8 pr-3 text-xs outline-none focus:border-emerald-500 dark:bg-slate-800 dark:text-white"
  />
  </div>
  </div>
@@ -11680,7 +11558,7 @@ export default function TeacherTeachingWorkspacePage() {
  }))
  }}
  placeholder="Catatan koreksi / alasan..."
- className="h-7 w-full min-w-[150px] rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-2 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="h-7 w-full min-w-[150px] rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-2 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  ) : (
  item.keterangan || '-'
@@ -12146,7 +12024,7 @@ export default function TeacherTeachingWorkspacePage() {
  autoFocus
  autoComplete="off"
  placeholder={selectedMethod === 'qr' ? 'Arahkan QR kartu siswa ke scanner / USB scanner (Otomatis Hadir)...' : 'Tap kartu RFID siswa pada reader (Otomatis Hadir)...'}
- className="h-9 min-w-0 flex-1 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3.5 text-xs font-semibold outline-none focus:border-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white"
+ className="h-9 min-w-0 flex-1 rounded-3xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3.5 text-xs font-semibold outline-none focus:border-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white"
  />
  {scanProcessing && (
  <div className="flex items-center gap-1.5 px-3 py-2 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-xl animate-pulse">
@@ -12218,7 +12096,7 @@ export default function TeacherTeachingWorkspacePage() {
  value={attendanceSearch}
  onChange={(e) => setAttendanceSearch(e.target.value)}
  placeholder="Cari nama siswa / NIS..."
- className="h-9 w-full rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white pl-8 pr-3 text-xs outline-none focus:border-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white"
+ className="h-9 w-full rounded-3xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white pl-8 pr-3 text-xs outline-none focus:border-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white"
  />
  </div>
  </div>
@@ -12598,7 +12476,7 @@ export default function TeacherTeachingWorkspacePage() {
  max="180"
  value={tugasForm.durasi_menit || 30}
  onChange={(e) => setTugasForm({ ...tugasForm, durasi_menit: Number(e.target.value) })}
- className="h-9 w-full rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3 text-xs font-bold text-violet-900 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-violet-200 outline-none focus:ring-2 focus:ring-violet-500"
+ className="h-9 w-full rounded-3xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3 text-xs font-bold text-violet-900 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-violet-200 outline-none focus:ring-2 focus:ring-violet-500"
  placeholder="30"
  />
  </div>
@@ -12612,7 +12490,7 @@ export default function TeacherTeachingWorkspacePage() {
  max="100"
  value={tugasForm.nilai_kkm || 75}
  onChange={(e) => setTugasForm({ ...tugasForm, nilai_kkm: Number(e.target.value) })}
- className="h-9 w-full rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3 text-xs font-bold text-violet-900 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-violet-200 outline-none focus:ring-2 focus:ring-violet-500"
+ className="h-9 w-full rounded-3xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3 text-xs font-bold text-violet-900 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-violet-200 outline-none focus:ring-2 focus:ring-violet-500"
  placeholder="75"
  />
  </div>
@@ -12958,7 +12836,7 @@ export default function TeacherTeachingWorkspacePage() {
  placeholder={`Teks Opsi ${opt.toUpperCase()}`}
  value={soalForm[`opsi_${opt}`]}
  onChange={(e) => setSoalForm((p) => ({ ...p, [`opsi_${opt}`]: e.target.value }))}
- className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-800"
+ className="w-full px-2.5 py-1.5 text-xs rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-800"
  />
  </div>
  )
@@ -12976,7 +12854,7 @@ export default function TeacherTeachingWorkspacePage() {
  placeholder="Tuliskan kunci acuan, poin penting, atau kata kunci jawaban siswa..."
  value={soalForm.kunci_jawaban}
  onChange={(e) => setSoalForm((p) => ({ ...p, kunci_jawaban: e.target.value }))}
- className="w-full px-2.5 py-2 text-xs rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-700/80 bg-white dark:bg-slate-800"
+ className="w-full px-2.5 py-2 text-xs rounded-3xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-700/80 bg-white dark:bg-slate-800"
  />
  </div>
  )}
@@ -13017,11 +12895,11 @@ export default function TeacherTeachingWorkspacePage() {
  <span className="text-[10px] font-bold text-amber-600 w-4 text-center">{idx + 1}.</span>
  <input type="text" placeholder="Item Kiri" value={pair.kiri}
  onChange={(e) => setSoalForm((p) => ({ ...p, matchingPairs: p.matchingPairs.map((mp, i) => i === idx ? { ...mp, kiri: e.target.value } : mp) }))}
- className="w-1/2 px-2 py-1.5 text-xs rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-800" />
+ className="w-1/2 px-2 py-1.5 text-xs rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-800" />
  <span className="text-slate-400 text-xs">→</span>
  <input type="text" placeholder="Item Kanan" value={pair.kanan}
  onChange={(e) => setSoalForm((p) => ({ ...p, matchingPairs: p.matchingPairs.map((mp, i) => i === idx ? { ...mp, kanan: e.target.value } : mp) }))}
- className="w-1/2 px-2 py-1.5 text-xs rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-800" />
+ className="w-1/2 px-2 py-1.5 text-xs rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-800" />
  {soalForm.matchingPairs.length > 1 && (
  <button type="button" onClick={() => setSoalForm((p) => ({ ...p, matchingPairs: p.matchingPairs.filter((_, i) => i !== idx) }))}
  className="text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 p-1 rounded-lg">✕</button>
@@ -13037,7 +12915,7 @@ export default function TeacherTeachingWorkspacePage() {
  <label className="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Poin Soal</label>
  <input type="number" step="0.5" min="0" max="100" value={soalForm.poin}
  onChange={(e) => setSoalForm((p) => ({ ...p, poin: parseFloat(e.target.value) || 0 }))}
- className="w-full px-2.5 py-2 text-xs rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-700/80 bg-white dark:bg-slate-800" />
+ className="w-full px-2.5 py-2 text-xs rounded-3xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-700/80 bg-white dark:bg-slate-800" />
  </div>
  <div>
  <label className="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Tingkat Kesulitan</label>
@@ -13054,13 +12932,13 @@ export default function TeacherTeachingWorkspacePage() {
  <label className="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Indikator / Kompetensi (Opsional)</label>
  <input type="text" placeholder="Contoh: Siswa mampu mengidentifikasi tata cara shalat..." value={soalForm.indikator}
  onChange={(e) => setSoalForm((p) => ({ ...p, indikator: e.target.value }))}
- className="w-full px-2.5 py-2 text-xs rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-700/80 bg-white dark:bg-slate-800" />
+ className="w-full px-2.5 py-2 text-xs rounded-3xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-700/80 bg-white dark:bg-slate-800" />
  </div>
  <div>
  <label className="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Pembahasan / Penjelasan (Opsional)</label>
  <textarea rows={2} placeholder="Tuliskan pembahasan singkat atau alasan kunci jawaban..." value={soalForm.pembahasan}
  onChange={(e) => setSoalForm((p) => ({ ...p, pembahasan: e.target.value }))}
- className="w-full px-2.5 py-2 text-xs rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-700/80 bg-white dark:bg-slate-800" />
+ className="w-full px-2.5 py-2 text-xs rounded-3xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-700/80 bg-white dark:bg-slate-800" />
  </div>
 
  {/* Add/Update Soal Button */}
@@ -13647,7 +13525,7 @@ export default function TeacherTeachingWorkspacePage() {
  value={studentModalSearch}
  onChange={(e) => setStudentModalSearch(e.target.value)}
  placeholder="Cari nama santri atau NIS..."
- className="h-9 w-full rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white pl-10 pr-4 text-xs font-semibold outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white"
+ className="h-9 w-full rounded-3xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white pl-10 pr-4 text-xs font-semibold outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white"
  />
  </div>
 
@@ -13802,7 +13680,7 @@ export default function TeacherTeachingWorkspacePage() {
  value={surahModalSearch}
  onChange={(e) => setSurahModalSearch(e.target.value)}
  placeholder="Cari nama surah (contoh: An-Naba, Al-Baqarah, 30)..."
- className="h-9 w-full rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white pl-10 pr-4 text-xs font-semibold outline-none focus:border-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white"
+ className="h-9 w-full rounded-3xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white pl-10 pr-4 text-xs font-semibold outline-none focus:border-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white"
  />
  </div>
 
@@ -13919,7 +13797,7 @@ export default function TeacherTeachingWorkspacePage() {
  placeholder="Perkembangan atau catatan..."
  />
  </div>
- <div><label className="mb-1 block font-semibold text-slate-700 dark:text-slate-200">Tindak Lanjut</label><textarea rows={2} value={catatanForm.follow_up} onChange={(e) => setCatatanForm({ ...catatanForm, follow_up: e.target.value })} className="w-full rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 p-2.5 dark:border-emerald-700/80 dark:bg-slate-800" placeholder="Rencana pendampingan berikutnya (opsional)..." /></div>
+ <div><label className="mb-1 block font-semibold text-slate-700 dark:text-slate-200">Tindak Lanjut</label><textarea rows={2} value={catatanForm.follow_up} onChange={(e) => setCatatanForm({ ...catatanForm, follow_up: e.target.value })} className="w-full rounded-3xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 p-2.5 dark:border-emerald-700/80 dark:bg-slate-800" placeholder="Rencana pendampingan berikutnya (opsional)..." /></div>
  <div className="grid gap-3 sm:grid-cols-2">
  <div>
  <label className="mb-1 block font-semibold text-slate-700 dark:text-slate-200">Prioritas</label>
@@ -14033,7 +13911,7 @@ export default function TeacherTeachingWorkspacePage() {
  value={pelanggaranCategorySearch}
  onChange={(e) => setPelanggaranCategorySearch(e.target.value)}
  placeholder="Cari pasal / nama pelanggaran TU (contoh: seragam, terlambat, adab)..."
- className="h-8 w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 pl-8.5 pr-3 text-xs outline-none transition focus:border-rose-500 focus:bg-white dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white"
+ className="h-8 w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50 pl-8.5 pr-3 text-xs outline-none transition focus:border-rose-500 focus:bg-white dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white"
  />
  </div>
 
@@ -14101,7 +13979,7 @@ export default function TeacherTeachingWorkspacePage() {
  value={pelanggaranForm.description}
  onChange={(e) => setPelanggaranForm({ ...pelanggaranForm, description: e.target.value })}
  placeholder="Tuliskan catatan kejadian perilaku santri di kelas atau lingkungan madrasah..."
- className="w-full rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 p-2.5 text-xs outline-none transition focus:border-rose-500 focus:ring-1 focus:ring-rose-500 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="w-full rounded-3xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 p-2.5 text-xs outline-none transition focus:border-rose-500 focus:ring-1 focus:ring-rose-500 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  </div>
 
@@ -14133,7 +14011,7 @@ export default function TeacherTeachingWorkspacePage() {
  value={pelanggaranForm.follow_up}
  onChange={(e) => setPelanggaranForm({ ...pelanggaranForm, follow_up: e.target.value })}
  placeholder="Contoh: Diberikan nasihat adab, penugasan istighfar 50x..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-2 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-2 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  </div>
  </div>
@@ -14205,7 +14083,7 @@ export default function TeacherTeachingWorkspacePage() {
  value={submissionSearch}
  onChange={(e) => setSubmissionSearch(e.target.value)}
  placeholder="Cari siswa berdasarkan nama atau NIS..."
- className="h-9 w-full rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-700/80 bg-white dark:bg-slate-800 pl-8 pr-3 text-xs outline-none focus:border-emerald-600"
+ className="h-9 w-full rounded-3xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-700/80 bg-white dark:bg-slate-800 pl-8 pr-3 text-xs outline-none focus:border-emerald-600"
  />
  </div>
  <CustomSelect
@@ -14576,7 +14454,7 @@ export default function TeacherTeachingWorkspacePage() {
  value={scheduleDetailSearch}
  onChange={(e) => setScheduleDetailSearch(e.target.value)}
  placeholder="Cari siswa / NISN..."
- className="h-8 w-full rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white pl-8 pr-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="h-8 w-full rounded-3xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white pl-8 pr-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  </div>
  </div>
@@ -15087,7 +14965,7 @@ export default function TeacherTeachingWorkspacePage() {
  value={journalTopicInput}
  onChange={(e) => setJournalTopicInput(e.target.value)}
  placeholder="Contoh: Bab 4 - Persamaan Linier & Soal Cerita"
- className="h-9 w-full rounded-xl border border-emerald-200/80 bg-white px-3.5 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3.5 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white"
  required
  />
  </div>
@@ -15101,7 +14979,7 @@ export default function TeacherTeachingWorkspacePage() {
  value={journalNotesInput}
  onChange={(e) => setJournalNotesInput(e.target.value)}
  placeholder="Tuliskan rangkuman materi yang telah diajarkan, pemahaman siswa, evaluasi singkat, atau tugas yang diberikan..."
- className="w-full rounded-xl border border-emerald-200/80 bg-white p-3.5 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-white p-3.5 text-xs font-semibold text-slate-800 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  required
  />
  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
@@ -15423,7 +15301,7 @@ function CbtQuizRunnerModal({ quiz, onClose }) {
  value={answers[currentIdx] || ''}
  onChange={(e) => handleSelectAnswer(e.target.value)}
  placeholder="Tuliskan uraian atau jawaban lengkap Anda di sini..."
- className="w-full rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-700/80 bg-white dark:bg-slate-900 p-4 text-xs sm:text-sm outline-none focus:border-purple-600 dark:text-white"
+ className="w-full rounded-3xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-700/80 bg-white dark:bg-slate-900 p-4 text-xs sm:text-sm outline-none focus:border-purple-600 dark:text-white"
  />
  </div>
  ) : (

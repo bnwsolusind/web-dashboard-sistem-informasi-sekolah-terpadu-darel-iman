@@ -39,6 +39,8 @@ import {
   ArrowRightLeft as ArrowBothDirectionHorizontal2
 } from 'lucide-react'
 import AppBreadcrumb from '../../components/app/AppBreadcrumb'
+import AppDataTable from '../../components/app/AppDataTable'
+import { PageToolbarActions } from '../../components/app/PageToolbarActions'
 import { AppBadge } from '../../components/app'
 import HeroUiFilterSelect from '../../components/ui/HeroUiFilterSelect'
 import {
@@ -498,7 +500,7 @@ export function FoundationStudentsPage() {
  onChange={(e) => { setSearch(e.target.value); setPage(1) }}
  placeholder="Cari NIS, NISN, atau nama siswa..."
  aria-label="Cari NIS, NISN, atau nama siswa"
- className="w-full h-9 rounded-xl border border-emerald-200/90 dark:border-emerald-800/80 bg-white dark:bg-[#1B2433] pl-10 pr-9 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200 outline-none transition-colors placeholder:text-slate-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 shadow-2xs"
+ className="w-full h-9 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/80 bg-white dark:bg-[#1B2433] pl-10 pr-9 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200 outline-none transition-colors placeholder:text-slate-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 shadow-2xs"
  />
  {search && (
  <button
@@ -593,7 +595,7 @@ export function FoundationStudentsPage() {
  )}
  </div>
 
- <div className="overflow-x-auto rounded-b-[20px]">
+ <div className="overflow-x-auto rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  {error ? (
  <div className="p-5"><MasterErrorState title="Data siswa gagal dimuat" description="Periksa koneksi kemudian coba muat ulang." onRetry={handleRefresh} /></div>
  ) : (

@@ -1,5 +1,7 @@
 import { HeroUiHeader } from "../components/ui/HeroUiHeader"
 import AppModal from "../components/app/AppModal"
+import AppDataTable from "../components/app/AppDataTable"
+import { PageToolbarActions } from "../components/app/PageToolbarActions"
 import {
   KpiStatCard
 } from '../components/app'
@@ -253,7 +255,7 @@ function HeroUiModalSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Ketik untuk mencari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -709,47 +711,25 @@ function EnterpriseWorkspace({ resource }) {
  <MutabaahSubNav />
 
  {/* ── 3. EMERALD DATATABLE CONTAINER ── */}
- <section className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-sm dark:bg-[#1B2433]">
- {/* Header Baris 1: Title & Soft Pastel Squircle Action Buttons */}
- <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4 border-b border-emerald-200/80 dark:border-emerald-800/80 bg-slate-50/50 dark:bg-slate-900/50 px-5 py-4 dark:border-emerald-800/60 dark:from-emerald-950/50 dark:via-teal-950/30">
- <div>
- <h3 className="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
- <BookOpen className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
- {config.title}
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- {config.subtitle}
- </p>
- </div>
-
- <div className="flex flex-wrap items-center gap-2 py-1">
+ <AppDataTable
+ title={config.title}
+ description={config.subtitle}
+ icon={BookOpen}
+ countLabel={`${meta.total || rows.length} Data`}
+ actions={
+ <div className="flex flex-wrap items-center gap-2">
  <input ref={importRef} hidden type="file" accept=".xlsx,.xls,.csv" onChange={(e) => importData(e.target.files?.[0])} />
-
- <SquircleActionButton
- variant="import"
- label="Import Data (Excel/CSV)"
- onClick={() => importRef.current?.click()}
+ <PageToolbarActions
+ onImport={() => importRef.current?.click()}
+ importLabel="Import Data (Excel/CSV)"
+ onExport={() => exportData('xlsx')}
+ exportLabel="Export Data (Excel/CSV)"
+ onPrint={() => setPrintOptionModalOpen(true)}
+ primaryAction={{
+ label: `Tambah ${config.title}`,
+ onClick: () => setDrawer({ mode: 'create' }),
+ }}
  />
-
- <SquircleActionButton
- variant="export"
- label="Export Data (Excel/CSV)"
- onClick={() => exportData('xlsx')}
- />
-
- <SquircleActionButton
- variant="view"
- icon={Printer}
- label="Cetak Data"
- onClick={() => setPrintOptionModalOpen(true)}
- />
-
- <SquircleActionButton
- variant="primary"
- label={`Tambah ${config.title}`}
- onClick={() => setDrawer({ mode: 'create' })}
- />
-
  {selected.length > 0 && (
  <SquircleActionButton
  variant="delete"
@@ -758,25 +738,12 @@ function EnterpriseWorkspace({ resource }) {
  />
  )}
  </div>
- </div>
-
- {/* Filter Baris 2: Filter Toolbar */}
- <div className="px-5 py-3.5 border-b border-emerald-200/80 dark:border-emerald-800/80 bg-slate-50/50 dark:bg-slate-900/50 dark:border-emerald-800/60 dark:from-emerald-950/30 dark:via-teal-950/20">
- <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5 items-end">
- <div>
- <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Pencarian</label>
- <div className="relative">
- <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
- <input
- type="text"
- placeholder={`Cari ${config.title.toLowerCase()}...`}
- value={searchInput}
- onChange={(e) => setSearchInput(e.target.value)}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-9 pr-3 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
- />
- </div>
- </div>
-
+ }
+ search={searchInput}
+ onSearchChange={setSearchInput}
+ searchPlaceholder={`Cari ${config.title.toLowerCase()}...`}
+ filters={
+ <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 items-end w-full">
  {resource === 'agendas' && (
  <div>
  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Kategori Agenda</label>
@@ -820,22 +787,25 @@ function EnterpriseWorkspace({ resource }) {
  <button
  type="button"
  onClick={resetFilters}
- className="w-full flex items-center justify-center gap-1.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-2.5 text-xs font-bold text-slate-700 hover:bg-emerald-50/40 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200 cursor-pointer transition-colors"
+ className="w-full h-10 flex items-center justify-center gap-1.5 rounded-xl border-2 border-emerald-300 bg-emerald-50/80 hover:bg-emerald-100 text-emerald-800 dark:border-emerald-800/60 dark:bg-emerald-950/50 dark:text-emerald-300 dark:hover:bg-emerald-900/60 text-xs font-extrabold cursor-pointer transition-colors"
  >
  <RotateCcw className="h-3.5 w-3.5" /> Reset Filter
  </button>
  </div>
  </div>
- </div>
-
- {/* Tabel Data */}
- <div className="overflow-x-auto">
+ }
+ showPagination={(meta.last_page || 1) > 1}
+ page={page}
+ totalPages={meta.last_page || 1}
+ totalItems={meta.total || rows.length}
+ onPageChange={(p) => setPage(p)}
+ >
  <table className="w-full text-left text-xs">
  <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-xs font-bold uppercase tracking-wider text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/80 dark:text-emerald-300">
- <tr className="border-b border-emerald-200/80 bg-slate-50/80 dark:bg-slate-900/80 text-xs font-extrabold uppercase tracking-wider text-emerald-950 dark:border-emerald-800/60 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:text-emerald-200">
+ <tr className="border-b border-emerald-200/80 text-xs font-extrabold uppercase tracking-wider text-emerald-950 dark:border-emerald-800/60 dark:text-emerald-200">
  {table.getHeaderGroups().map((group) => (
  group.headers.map((header) => (
- <th key={header.id} className="px-4 py-3.5 font-extrabold">
+ <th key={header.id} className="px-3 py-3 font-extrabold whitespace-nowrap">
  {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
  </th>
  ))
@@ -864,7 +834,7 @@ function EnterpriseWorkspace({ resource }) {
  {!listQuery.isLoading && !listQuery.isError && table.getRowModel().rows.map((row) => (
  <tr key={row.id} className={`hover:bg-emerald-50/30 dark:hover:bg-emerald-950/30 transition ${row.original.trashed ? 'opacity-60 bg-rose-50/30' : ''}`}>
  {row.getVisibleCells().map((cell) => (
- <td key={cell.id} className="px-4 py-3">
+ <td key={cell.id} className="px-3 py-3">
  {flexRender(cell.column.columnDef.cell, cell.getContext())}
  </td>
  ))}
@@ -880,25 +850,7 @@ function EnterpriseWorkspace({ resource }) {
  )}
  </tbody>
  </table>
- </div>
-
- {/* Pagination Bar */}
- <div className="w-full border-t border-emerald-200/80 dark:border-emerald-800/80 px-4 py-3.5 sm:px-6 md:px-8 dark:border-emerald-800/60 flex flex-col sm:flex-row items-center justify-between gap-3">
- <div className="text-xs text-slate-500 font-medium">
- Menampilkan <span className="font-bold text-slate-700 dark:text-slate-200">{rows.length > 0 ? (page - 1) * perPage + 1 : 0}</span> s.d. <span className="font-bold text-slate-700 dark:text-slate-200">{Math.min(page * perPage, meta.total || rows.length)}</span> dari <span className="font-bold text-slate-700 dark:text-slate-200">{meta.total || rows.length}</span> data
- </div>
- {(meta.last_page || 1) > 1 && (
- <div className="w-full sm:w-auto">
- <Pagination
- currentPage={page}
- totalPages={meta.last_page || 1}
- onPageChange={(p) => setPage(p)}
- sideLayout="full"
- />
- </div>
- )}
- </div>
- </section>
+ </AppDataTable>
 
  {/* Drawers / Modals */}
  <AnimatePresence>
@@ -993,7 +945,7 @@ function FormField({ field, register, setValue, watch, error, options, disabled 
  return (
  <div>
  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">{field.label}</label>
- <textarea disabled={disabled} rows={3} className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 p-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white" {...register(field.name)} />
+ <textarea disabled={disabled} rows={3} className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50 p-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white" {...register(field.name)} />
  {error && <em className="text-xs text-rose-500 mt-1 block">{error}</em>}
  </div>
  )
@@ -1043,7 +995,7 @@ function FormField({ field, register, setValue, watch, error, options, disabled 
  return (
  <div>
  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">{field.label}{field.required && ' *'}</label>
- <input disabled={disabled} type={field.type} step={field.type === 'number' ? '0.01' : undefined} className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 p-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white" {...register(field.name, { valueAsNumber: field.type === 'number' })} />
+ <input disabled={disabled} type={field.type} step={field.type === 'number' ? '0.01' : undefined} className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50 p-2.5 text-xs font-semibold text-slate-800 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white" {...register(field.name, { valueAsNumber: field.type === 'number' })} />
  {error && <em className="text-xs text-rose-500 mt-1 block">{error}</em>}
  </div>
  )
@@ -1145,11 +1097,11 @@ function TemplateItemsDrawer({ template, options, close, refresh }) {
  <small className="text-[10px] text-slate-400">{item.agenda_item?.category?.name || 'Agenda template'}</small>
  </div>
  <label className="text-xs font-semibold text-slate-600 dark:text-slate-400">Bobot
- <input type="number" defaultValue={item.weight} onBlur={(e) => update(item, { weight: Number(e.target.value) })} className="w-14 ml-1 rounded border border-emerald-200/80 dark:border-emerald-800/60 p-1 text-center font-bold text-slate-800 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white" />
+ <input type="number" defaultValue={item.weight} onBlur={(e) => update(item, { weight: Number(e.target.value) })} className="w-14 ml-1 rounded border-2 border-[#b6f6d9] dark:border-emerald-800/60 p-1 text-center font-bold text-slate-800 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white" />
  </label>
  <div className="flex items-center gap-1">
- <button disabled={!index} onClick={() => move(index, -1)} className="p-1 rounded border border-emerald-200/80 dark:border-emerald-800/60 bg-white hover:bg-slate-100 disabled:opacity-30 dark:border-emerald-700/80 dark:bg-slate-800 cursor-pointer"><ArrowUp className="size-3" /></button>
- <button disabled={index === items.length - 1} onClick={() => move(index, 1)} className="p-1 rounded border border-emerald-200/80 dark:border-emerald-800/60 bg-white hover:bg-slate-100 disabled:opacity-30 dark:border-emerald-700/80 dark:bg-slate-800 cursor-pointer"><ArrowDown className="size-3" /></button>
+ <button disabled={!index} onClick={() => move(index, -1)} className="p-1 rounded border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 disabled:opacity-30 dark:border-emerald-700/80 dark:bg-emerald-950/60 dark:text-emerald-300 cursor-pointer"><ArrowUp className="size-3" /></button>
+ <button disabled={index === items.length - 1} onClick={() => move(index, 1)} className="p-1 rounded border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 disabled:opacity-30 dark:border-emerald-700/80 dark:bg-emerald-950/60 dark:text-emerald-300 cursor-pointer"><ArrowDown className="size-3" /></button>
  <button onClick={async () => { await mutabaahService.templateItemDelete(item.id); setItems(items.filter((x) => x.id !== item.id)) }} className="p-1 rounded border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50 text-rose-600 hover:bg-rose-100 dark:border-emerald-800/60 dark:bg-rose-950/40 cursor-pointer"><Trash2 className="size-3" /></button>
  </div>
  </article>
@@ -1201,7 +1153,7 @@ function ErrorState({ retry }) {
  <X className="size-8 mb-2 text-rose-400" />
  <h3 className="text-xs font-bold">Data gagal dimuat</h3>
  <p className="text-xs text-slate-400 mt-0.5">Periksa koneksi atau permission, kemudian coba kembali.</p>
- <Button appearance="outline" size="sm" className="mt-3 cursor-pointer" onClick={retry}>Coba Lagi</Button>
+ <Button variant="primary" size="sm" className="mt-3 cursor-pointer" onClick={retry}>Coba Lagi</Button>
  </div>
  )
 }

@@ -408,7 +408,7 @@ function HeroUiModalSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Ketik untuk mencari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -556,7 +556,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -1321,10 +1321,10 @@ export default function LmsAktivitasBelajarPage({ embedded = false, hideBreadcru
  <p className="font-semibold text-sm">Tidak ada data aktivitas dalam kategori ini.</p>
  </div>
  ) : (
- <div className="overflow-x-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="overflow-x-auto rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  <TableRoot className="w-full text-left border-collapse">
- <TableHeader>
- <TableRow className="bg-slate-50 dark:bg-slate-800/50 border-b border-emerald-200/80 dark:border-emerald-800/60 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+ <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
+ <TableRow>
  
  <TableHead className="py-3 px-4">Nama Aktivitas</TableHead>
  <TableHead className="py-3 px-4">Jenis</TableHead>
@@ -1423,7 +1423,7 @@ export default function LmsAktivitasBelajarPage({ embedded = false, hideBreadcru
  placeholder="Contoh: Eksplorasi Konsep & Studi Kasus Kelompok"
  value={formData.nama_aktivitas}
  onChange={(e) => setFormData({ ...formData, nama_aktivitas: e.target.value })}
- className="w-full px-3.5 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-[#111827] text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#059669]/20 focus:border-[#059669]"
+ className="w-full px-3.5 py-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-[#111827] text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#059669]/20 focus:border-[#059669]"
  />
  </div>
 
@@ -1467,7 +1467,7 @@ export default function LmsAktivitasBelajarPage({ embedded = false, hideBreadcru
  required
  value={formData.waktu}
  onChange={(e) => setFormData({ ...formData, waktu: parseInt(e.target.value) || 1 })}
- className="w-full pl-3.5 pr-12 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-[#111827] text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#059669]/20 focus:border-[#059669]"
+ className="w-full pl-3.5 pr-12 py-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-[#111827] text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#059669]/20 focus:border-[#059669]"
  />
  <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-medium text-slate-400">menit</span>
  </div>
@@ -1483,7 +1483,7 @@ export default function LmsAktivitasBelajarPage({ embedded = false, hideBreadcru
  required
  value={formData.urutan}
  onChange={(e) => setFormData({ ...formData, urutan: parseInt(e.target.value) || 1 })}
- className="w-full px-3.5 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-[#111827] text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#059669]/20 focus:border-[#059669]"
+ className="w-full px-3.5 py-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-[#111827] text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#059669]/20 focus:border-[#059669]"
  />
  </div>
  </div>
@@ -1498,7 +1498,7 @@ export default function LmsAktivitasBelajarPage({ embedded = false, hideBreadcru
  placeholder="Tuliskan petunjuk teknis atau instruksi detail bagi guru/siswa dalam aktivitas ini..."
  value={formData.instruksi}
  onChange={(e) => setFormData({ ...formData, instruksi: e.target.value })}
- className="w-full px-3.5 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-[#111827] text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#059669]/20 focus:border-[#059669]"
+ className="w-full px-3.5 py-2.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-[#111827] text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#059669]/20 focus:border-[#059669]"
  ></textarea>
  </div>
  </form>

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useMemo } from 'react'
+import KpiStatCard from '@/components/app/KpiStatCard'
 import { motion, AnimatePresence } from 'framer-motion'
 import { QRCodeCanvas } from 'qrcode.react'
 import {
@@ -83,15 +84,21 @@ const asList = (value) => {
  return []
 }
 
-function SectionHeader({ icon: Icon, title, description, badge }) {
+function SectionHeader({ icon: Icon, title, description, badge, standalone = false }) {
  return (
- <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4 dark:border-emerald-800/60">
+ <div
+ className={
+ standalone
+ ? 'flex flex-wrap items-center justify-between gap-3 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-emerald-500/10 px-5 py-4 shadow-xs'
+ : '-mx-5 -mt-5 sm:-mx-6 sm:-mt-6 mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-emerald-500/20 bg-emerald-500/10 px-5 py-4 sm:px-6 dark:border-emerald-800/60'
+ }
+ >
  <div className="flex items-center gap-3">
- <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm">
- <Icon className="h-5 w-5" />
+ <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-xs">
+ <Icon className="h-5 w-5 text-white" />
  </div>
  <div>
- <h3 className="text-base font-extrabold tracking-tight text-slate-900 dark:text-white">
+ <h3 className="text-base font-extrabold tracking-tight text-emerald-900 dark:text-emerald-200">
  {title}
  </h3>
  {description && (
@@ -102,14 +109,9 @@ function SectionHeader({ icon: Icon, title, description, badge }) {
  </div>
  </div>
  {badge && (
- <HeroChip
- size="sm"
- variant="flat"
- color="success"
- className="font-bold text-xs bg-emerald-50 text-emerald-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/60"
- >
+ <span className="inline-flex items-center rounded-full bg-emerald-100/90 px-3 py-1 text-xs font-extrabold text-emerald-800 border border-emerald-300/80 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700/80">
  {badge}
- </HeroChip>
+ </span>
  )}
  </div>
  )
@@ -140,68 +142,15 @@ function InfoTilesGrid({ items }) {
  )
 }
 
-function HeroKpiCard({ icon: Icon, label, value, subtitle, progress = 0, tone = 'emerald' }) {
- const themes = {
- emerald: {
- border: 'border-emerald-200/80 dark:border-emerald-800/60',
- iconBg: 'bg-emerald-500 shadow-sm',
- bar: 'from-emerald-500 to-teal-500',
- glow: 'from-emerald-500/10 via-teal-500/5',
- badge: 'bg-emerald-50 text-emerald-800 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800/60',
- },
- blue: {
- border: 'border-emerald-200/80 dark:border-emerald-800/60',
-    iconBg: 'bg-gradient-to-br from-emerald-500 to-teal-700 text-white shadow-sm shadow-emerald-500/20',
-    bar: 'from-emerald-500 to-teal-600',
-    glow: 'from-emerald-500/10 via-teal-500/5',
-    badge: 'bg-emerald-50 text-emerald-800 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800/60',
- },
- amber: {
- border: 'border-emerald-200/80 dark:border-emerald-800/60',
- iconBg: 'bg-amber-500 text-white shadow-sm',
- bar: 'from-amber-500 to-orange-500',
- glow: 'from-amber-500/10 via-orange-500/5',
- badge: 'bg-amber-50 text-amber-800 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950 dark:text-amber-300 dark:border-emerald-800/60',
- },
- violet: {
- border: 'border-emerald-200/80 dark:border-emerald-800/60',
- iconBg: 'bg-violet-600 text-white shadow-violet-500/20',
- bar: 'from-violet-500 to-purple-600',
- glow: 'from-violet-500/10 via-purple-500/5',
- badge: 'bg-violet-50 text-violet-800 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-violet-950 dark:text-violet-300 dark:border-emerald-800/60',
- },
- }
-
- const t = themes[tone] || themes.emerald
-
+function HeroKpiCard({ icon, label, value, subtitle, tone = 'emerald' }) {
  return (
- <motion.div whileHover={{ y: -2 }} transition={{ duration: 0.18 }}>
- <HeroCard
- className={`relative overflow-hidden rounded-xl border-2 ${t.border} bg-white p-4.5 sm:p-5 shadow-xs transition-all hover:shadow-md dark:bg-slate-900`}
- >
- <div aria-hidden="true" className={`pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white dark:bg-[#1B2433] ${t.glow} to-transparent blur-xl`} />
- <div className="relative flex items-center justify-between gap-3">
- <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${t.iconBg} shadow-md`}>
- <Icon className="h-5 w-5" />
- </div>
- <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
- {value ?? '-'}
- </span>
- </div>
- <p className="relative mt-3.5 text-xs font-bold text-slate-700 dark:text-slate-200">
- {label}
- </p>
- <p className="relative mt-0.5 text-xs font-medium text-slate-400 dark:text-slate-500">
- {subtitle}
- </p>
- <div className="relative mt-3 h-1.5 overflow-hidden rounded-full bg-emerald-50 dark:bg-emerald-950/40">
- <div
- className={`h-full rounded-full bg-white dark:bg-[#1B2433] ${t.bar} transition-all duration-500`}
- style={{ width: `${Math.max(0, Math.min(100, Number(progress) || 0))}%` }}
+ <KpiStatCard
+ icon={icon}
+ title={label}
+ value={value ?? '-'}
+ description={subtitle}
+ tone={tone === 'blue' ? 'sky' : tone}
  />
- </div>
- </HeroCard>
- </motion.div>
  )
 }
 
@@ -458,15 +407,15 @@ export default function StudentProfileWorkspace({
  return (
  <div className="space-y-6">
  {/* 1. HERO PROFILE CARD CONTAINER */}
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:border-emerald-800/60 dark:bg-[#1B2433] p-5 sm:p-7 shadow-lg shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-gradient-to-br from-[#E6F8F3] via-white to-[#F0FDF9] dark:from-emerald-950/40 dark:via-[#1B2433] dark:to-teal-950/30 p-5 sm:p-7 shadow-md shadow-emerald-500/10">
  {/* Dual Multi-tone Ambient Glow */}
  <div
  aria-hidden="true"
- className="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-white dark:bg-[#1B2433] blur-3xl"
+ className="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-emerald-400/20 dark:bg-emerald-500/15 blur-3xl"
  />
  <div
  aria-hidden="true"
- className="pointer-events-none absolute -right-20 -bottom-20 h-72 w-72 rounded-full bg-white dark:bg-[#1B2433] blur-3xl"
+ className="pointer-events-none absolute -right-20 -bottom-20 h-72 w-72 rounded-full bg-teal-400/20 dark:bg-teal-500/15 blur-3xl"
  />
  <div
  aria-hidden="true"
@@ -483,12 +432,12 @@ export default function StudentProfileWorkspace({
  onClick={() => fileInputRef.current?.click()}
  title="Klik untuk mengubah foto siswa"
  >
- <div className="rounded-xl p-1 bg-white dark:bg-[#1B2433] shadow-xl shadow-sm">
+ <div className="rounded-2xl p-1 bg-gradient-to-br from-emerald-500 to-teal-600 shadow-md shadow-emerald-600/20">
  <PersonAvatar
  src={customPhoto || student.photo_url || student.avatar_url || photo}
  name={name}
  size="detail"
- className="h-28 w-28 rounded-xl border-4 border-emerald-200/80 dark:border-slate-900 transition-all duration-300 group-hover:scale-[1.02] group-hover:brightness-95 object-cover"
+ className="h-28 w-28 rounded-xl border-2 border-white/80 dark:border-slate-900 transition-all duration-300 group-hover:scale-[1.02] group-hover:brightness-95 object-cover"
  />
  </div>
  <button
@@ -498,7 +447,7 @@ export default function StudentProfileWorkspace({
  if (!uploadingPhoto) fileInputRef.current?.click()
  }}
  disabled={uploadingPhoto}
- className="absolute bottom-1 right-1 flex h-8 w-8 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-lg ring-2 ring-white dark:ring-slate-900 transition-all hover:scale-110 cursor-pointer disabled:opacity-75"
+ className="absolute bottom-1 right-1 flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg ring-2 ring-white dark:ring-slate-900 transition-all hover:scale-110 cursor-pointer disabled:opacity-75"
  title="Ubah Foto Siswa"
  >
  {uploadingPhoto ? (
@@ -546,23 +495,20 @@ export default function StudentProfileWorkspace({
  <h1 className="text-xl font-semibold text-slate-900 dark:text-white tracking-tight">
  {name}
  </h1>
- <HeroChip
- size="sm"
- variant="solid"
- color={status === 'Aktif' ? 'success' : 'danger'}
- className="font-extrabold text-xs shadow-2xs"
+ <span
+ className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-extrabold shadow-xs ${
+ status === 'Aktif'
+ ? 'bg-emerald-600 text-white border border-emerald-500'
+ : 'bg-rose-600 text-white border border-rose-500'
+ }`}
  >
  <span className="inline-block h-1.5 w-1.5 rounded-full bg-white mr-1.5 animate-pulse" />
  {status}
- </HeroChip>
- <HeroChip
- size="sm"
- variant="flat"
- className="font-extrabold text-xs bg-emerald-500/15 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-800 dark:text-emerald-300"
- >
+ </span>
+ <span className="inline-flex items-center rounded-full px-3 py-1 font-extrabold text-xs bg-emerald-100/80 border border-emerald-300/80 dark:border-emerald-700/80 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300">
  <Sparkles className="h-3 w-3 text-emerald-600 mr-1 inline" />
  Profil Ananda Terverifikasi
- </HeroChip>
+ </span>
  </div>
 
  <p className="mt-2 text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300">
@@ -600,25 +546,24 @@ export default function StudentProfileWorkspace({
 
  {/* Action Buttons: Kartu Siswa & QR Siswa */}
  <div className="flex flex-wrap items-center justify-center gap-3 sm:justify-start lg:justify-end shrink-0">
- <HeroButton
- size="md"
- onPress={() => setShowCardModal(true)}
- className="flex min-h-12 items-center gap-3 rounded-xl bg-white dark:bg-[#1B2433] px-4.5 py-3 text-left shadow-lg shadow-sm transition-all hover:scale-[1.02] hover:shadow-xl cursor-pointer"
+ <button
+ type="button"
+ onClick={() => setShowCardModal(true)}
+ className="flex min-h-12 items-center gap-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white border-2 border-emerald-500 px-4.5 py-2.5 text-left shadow-md shadow-emerald-600/20 transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
  >
- <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/20">
+ <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/20 text-white">
  <IdCard className="h-5 w-5" />
  </div>
  <div className="leading-tight">
- <b className="block text-xs font-black">Kartu Siswa (Pelajar)</b>
+ <b className="block text-xs font-black text-white">Kartu Siswa (Pelajar)</b>
  <small className="text-[10px] text-emerald-100 font-medium">Buka format cetak resmi</small>
  </div>
- </HeroButton>
+ </button>
 
- <HeroButton
- size="md"
- variant="bordered"
- onPress={() => setQrOpen(true)}
- className="flex min-h-12 items-center gap-3 rounded-xl border border-emerald-200/80 bg-white/90 px-4.5 py-3 text-left shadow-sm transition-all hover:scale-[1.02] hover:border-emerald-300 dark:hover:border-emerald-700 hover:bg-emerald-50/50 dark:border-emerald-800/60 dark:bg-slate-800/90 cursor-pointer"
+ <button
+ type="button"
+ onClick={() => setQrOpen(true)}
+ className="flex min-h-12 items-center gap-3 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-emerald-50/90 hover:bg-emerald-100/90 dark:bg-emerald-950/50 px-4.5 py-2.5 text-left shadow-sm transition-all hover:scale-[1.02] hover:border-emerald-400 active:scale-95 cursor-pointer"
  >
  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
  <QrCode className="h-5 w-5" />
@@ -627,7 +572,7 @@ export default function StudentProfileWorkspace({
  <b className="block text-xs font-black text-slate-900 dark:text-white">QR Presensi Siswa</b>
  <small className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Scan gerbang & kartu</small>
  </div>
- </HeroButton>
+ </button>
  </div>
  </div>
 
@@ -642,7 +587,7 @@ export default function StudentProfileWorkspace({
  Dareliman Edu
  </span>
  </div>
- </HeroCard>
+ </div>
 
  {/* 2. RINGKASAN AKADEMIK & CAPAIAN (4 KPI HERO CARDS) */}
  <section className="space-y-3">
@@ -651,6 +596,7 @@ export default function StudentProfileWorkspace({
  title="Ringkasan Capaian Akademik & Ibadah"
  description="Pantauan cepat capaian pembelajaran, kehadiran, dan kedisiplinan terkini ananda."
  badge="Live Status"
+ standalone
  />
  <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
  <HeroKpiCard
@@ -689,14 +635,14 @@ export default function StudentProfileWorkspace({
  </section>
 
  {/* 3. DATA PRIBADI SISWA */}
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 sm:p-6 shadow-xs dark:border-emerald-800/60 dark:bg-slate-900">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  <SectionHeader
  icon={UserRound}
  title="Data Pribadi Siswa"
  description="Informasi identitas lengkap siswa yang tercatat dalam data kependudukan dan Dapodik."
  />
  <InfoTilesGrid items={personal} />
- </HeroCard>
+ </div>
 
  {/* 4. DATA ORANG TUA & WALI */}
  <section className="space-y-3">
@@ -704,6 +650,7 @@ export default function StudentProfileWorkspace({
  icon={UsersRound}
  title="Data Orang Tua & Wali Murid"
  description="Kontak keluarga dan informasi penanggung jawab siswa yang tersimpan resmi di yayasan."
+ standalone
  />
  <div className="grid gap-4 lg:grid-cols-3">
  {[
@@ -711,9 +658,9 @@ export default function StudentProfileWorkspace({
  ['Data Ibu Kandung', mother, 'Ibu'],
  ['Data Wali Siswa (Opsional)', guardian, 'Wali'],
  ].map(([title, data, role]) => (
- <HeroCard
+ <div
  key={title}
- className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 shadow-xs dark:border-emerald-800/60 dark:bg-slate-900 flex flex-col justify-between"
+ className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 shadow-md shadow-emerald-500/10 dark:bg-[#1B2433] flex flex-col justify-between"
  >
  <div>
  <div className="flex items-center justify-between mb-4 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-3 dark:border-emerald-800/60">
@@ -721,9 +668,9 @@ export default function StudentProfileWorkspace({
  <User className="h-4 w-4 text-emerald-600" />
  <span>{title}</span>
  </h4>
- <HeroChip size="sm" variant="flat" color="success" className="font-bold text-[10px]">
+ <span className="inline-flex items-center rounded-full bg-emerald-100/90 px-2.5 py-0.5 text-[10px] font-extrabold text-emerald-800 border border-emerald-300/80 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700/80">
  {role}
- </HeroChip>
+ </span>
  </div>
  <div className="space-y-2.5">
  {parentItems(data).map(({ label, value, icon: Icon }) => (
@@ -742,35 +689,35 @@ export default function StudentProfileWorkspace({
  ))}
  </div>
  </div>
- </HeroCard>
+ </div>
  ))}
  </div>
  </section>
 
  {/* 5. DATA AKADEMIK & KELAS */}
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 sm:p-6 shadow-xs dark:border-emerald-800/60 dark:bg-slate-900">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  <SectionHeader
  icon={School}
  title="Data Akademik & Penempatan Kelas"
  description="Informasi jenjang, rombongan belajar, nomor induk nasional, serta asatidz pembimbing."
  />
  <InfoTilesGrid items={academic} />
- </HeroCard>
+ </div>
 
  {/* 6. RIWAYAT PENDIDIKAN & PRESTASI (2 COLUMNS) */}
  <div className="grid gap-6 xl:grid-cols-2">
  {/* Riwayat Pendidikan */}
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 sm:p-6 shadow-xs dark:border-emerald-800/60 dark:bg-slate-900">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  <SectionHeader
  icon={GraduationCap}
  title="Riwayat Pendidikan Sebelumnya"
  description="Jenjang sekolah yang telah diselesaikan ananda."
  />
  <TimelineList items={education} emptyTitle="Riwayat pendidikan belum dicatat" />
- </HeroCard>
+ </div>
 
  {/* Prestasi */}
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 sm:p-6 shadow-xs dark:border-emerald-800/60 dark:bg-slate-900">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  <SectionHeader
  icon={Trophy}
  title="Penghargaan & Prestasi"
@@ -810,13 +757,13 @@ export default function StudentProfileWorkspace({
  description="Catatan prestasi santri akan otomatis muncul setelah divalidasi oleh Bagian Kesiswaan."
  />
  )}
- </HeroCard>
+ </div>
  </div>
 
  {/* 7. KESEHATAN & DOKUMEN (2 COLUMNS) */}
  <div className="grid gap-6 xl:grid-cols-2">
  {/* Rekam Kesehatan */}
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 sm:p-6 shadow-xs dark:border-emerald-800/60 dark:bg-slate-900">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  <SectionHeader
  icon={HeartPulse}
  title="Kondisi & Rekam Kesehatan"
@@ -838,10 +785,10 @@ export default function StudentProfileWorkspace({
  </div>
  ))}
  </div>
- </HeroCard>
+ </div>
 
  {/* Berkas & Dokumen */}
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 sm:p-6 shadow-xs dark:border-emerald-800/60 dark:bg-slate-900">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  <SectionHeader
  icon={FileText}
  title="Berkas & Dokumen Siswa"
@@ -876,21 +823,21 @@ export default function StudentProfileWorkspace({
  description="Belum ada arsip dokumen yang dilampirkan pada sistem administrasi portal."
  />
  )}
- </HeroCard>
+ </div>
  </div>
 
  {/* 8. AKTIVITAS TERBARU & JADWAL HARI INI */}
  <div className="grid gap-6 xl:grid-cols-2">
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 sm:p-6 shadow-xs dark:border-emerald-800/60 dark:bg-slate-900">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  <SectionHeader
  icon={Activity}
  title="Aktivitas & Log Terbaru"
  description="Aktivitas pembelajaran dan riwayat interaksi terkini."
  />
  <TimelineList items={activity} emptyTitle="Belum ada aktivitas terbaru" />
- </HeroCard>
+ </div>
 
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 sm:p-6 shadow-xs dark:border-emerald-800/60 dark:bg-slate-900">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  <SectionHeader
  icon={CalendarDays}
  title="Jadwal Pelajaran Hari Ini"
@@ -916,9 +863,9 @@ export default function StudentProfileWorkspace({
  </p>
  </div>
  </div>
- <HeroChip size="sm" variant="flat" color="success" className="font-bold text-[10px]">
+ <span className="inline-flex items-center rounded-full bg-emerald-100/90 px-2.5 py-0.5 text-[10px] font-extrabold text-emerald-800 border border-emerald-300/80 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700/80">
  KBM Aktif
- </HeroChip>
+ </span>
  </div>
  ))}
  </div>
@@ -929,7 +876,7 @@ export default function StudentProfileWorkspace({
  description="Hari ini tidak terdapat jam KBM tatap muka atau kegiatan terjadwal."
  />
  )}
- </HeroCard>
+ </div>
  </div>
 
  {/* 9. PENGATURAN PASSWORD LOGIN ANAK (JIKA BUKAN READ-ONLY) */}
@@ -1070,7 +1017,7 @@ function ChildPasswordSettingsSection({ student }) {
  }
 
  return (
- <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-5 sm:p-6 dark:from-emerald-950/20 dark:via-slate-900 dark:to-slate-900 shadow-sm">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] p-5 sm:p-6 shadow-md shadow-emerald-500/10">
  <SectionHeader
  icon={LockKeyhole}
  title="Pengaturan Password Login Anak"
@@ -1109,7 +1056,7 @@ function ChildPasswordSettingsSection({ student }) {
  onChange={(e) => setPassword(e.target.value)}
  placeholder="Minimal 6 karakter..."
  required
- className="h-11 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3.5 pr-10 text-xs outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="h-11 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3.5 pr-10 text-xs outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  <button
  type="button"
@@ -1132,7 +1079,7 @@ function ChildPasswordSettingsSection({ student }) {
  onChange={(e) => setConfirmPassword(e.target.value)}
  placeholder="Ulangi password baru..."
  required
- className="h-11 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3.5 text-xs outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="h-11 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3.5 text-xs outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  </div>
  </div>
@@ -1149,6 +1096,6 @@ function ChildPasswordSettingsSection({ student }) {
  {loading ? 'Menyimpan...' : 'Simpan Password Login Anak'}
  </HeroButton>
  </form>
- </HeroCard>
+ </div>
  )
 }

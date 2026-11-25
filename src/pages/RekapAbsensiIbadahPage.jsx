@@ -858,7 +858,7 @@ export default function RekapAbsensiIbadahPage() {
  placeholder="Nama, NIS, atau Sesi Ibadah..."
  value={search}
  onChange={(e) => setSearch(e.target.value)}
- className="w-full h-9 px-3 text-xs rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full h-9 px-3 text-xs rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
  </div>
@@ -1163,6 +1163,7 @@ export default function RekapAbsensiIbadahPage() {
  <Dialog
  isOpen={cardModal.isOpen}
  onOpenChange={(open) => !open && closeCardModal()}
+ showCloseButton={false}
  className="w-full max-w-4xl max-h-[90vh] flex flex-col p-6 rounded-xl bg-white dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xl"
  >
  <DialogHeader className="flex flex-row items-center justify-between pb-4 border-b border-emerald-200/80 dark:border-emerald-800/60">
@@ -1191,7 +1192,7 @@ export default function RekapAbsensiIbadahPage() {
  placeholder="Cari nama santri, NIS, atau ibadah..."
  value={cardModal.searchQuery}
  onChange={(e) => setCardModal((prev) => ({ ...prev, searchQuery: e.target.value, page: 1 }))}
- className="w-full pl-9 pr-8 py-2 text-xs bg-white dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full pl-9 pr-8 py-2 text-xs bg-white dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500"
  />
  {cardModal.searchQuery && (
  <button

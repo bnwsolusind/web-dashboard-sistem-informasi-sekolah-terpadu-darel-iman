@@ -1073,12 +1073,12 @@ export default function ChatGuruWorkspace({
  className={`flex flex-col overflow-hidden ${
  isPopup
  ? 'h-full w-full bg-white dark:bg-slate-900'
- : 'rounded-xl border border-emerald-200/80 dark:border-emerald-800/80 bg-white shadow-xl dark:border-emerald-800/60 dark:bg-slate-900 min-h-[620px] lg:h-[720px]'
+ : 'rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433] min-h-[620px] lg:h-[720px]'
  }`}
  >
  {/* 1. MAIN CONTAINER HEADER WITH GRADIENT (Matching Reference UI) */}
  {!hideHeader && (
- <div className="relative overflow-hidden bg-white dark:bg-[#1B2433] px-5 py-3.5 shadow-md">
+ <div className="relative overflow-hidden bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white px-5 py-3.5 shadow-md">
 
  <div className="relative z-10 flex items-center justify-between">
  <div className="flex items-center gap-3">
@@ -1156,7 +1156,7 @@ export default function ChatGuruWorkspace({
  ? 'Cari Div. Pendidikan...'
  : 'Cari percakapan...'
  }
- className="h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/80 pl-9 pr-3 text-xs font-medium outline-none focus:border-emerald-500 focus:bg-white dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/80 pl-9 pr-3 text-xs font-medium outline-none focus:border-emerald-500 focus:bg-white dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  </div>
 

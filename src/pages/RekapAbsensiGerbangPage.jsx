@@ -142,7 +142,7 @@ import {
 } from '../utils/printHelper'
 
 
-const MODAL_PAGE_SIZE = 6
+const MODAL_PAGE_SIZE = 10
 const today = () => new Date().toISOString().slice(0, 10)
 const formatAngka = (value) => new Intl.NumberFormat('id-ID').format(Number(value || 0))
 
@@ -332,12 +332,12 @@ function HeroUiFilterSelect({
  type="button"
  disabled={disabled}
  onClick={handleToggle}
- className={`w-full flex items-center justify-between gap-2 rounded-lg border px-3 py-2 text-xs font-semibold shadow-xs transition-all duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 ${
+ className={`w-full h-10 flex items-center justify-between gap-2 rounded-xl border-2 px-3 text-xs font-bold shadow-xs transition-all duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 ${
  isOpen
- ? 'border-emerald-200/80 bg-white ring-2 ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:ring-emerald-400/20 text-slate-900 dark:text-white'
+ ? 'border-emerald-500 bg-white ring-2 ring-emerald-500/20 dark:border-emerald-500 dark:bg-slate-900 dark:ring-emerald-400/20 text-slate-900 dark:text-white'
  : hasValue
- ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/80 text-emerald-900 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-200 font-bold'
- : 'border-emerald-300 dark:border-emerald-800/60 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:border-emerald-300 dark:hover:border-emerald-200/80'
+ ? 'border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/70 text-emerald-900 dark:bg-emerald-950/60 dark:text-emerald-200'
+ : 'border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 hover:border-emerald-400'
  }`}
  >
  <span className="flex items-center gap-2 truncate">
@@ -377,7 +377,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-slate-50 dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-200/80 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-800/60 bg-slate-50 dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-200/80 focus:outline-none focus:ring-1 focus:ring-emerald-500"
  autoFocus
  />
  </div>
@@ -446,6 +446,8 @@ export default function RekapAbsensiGerbangPage() {
  // Multi-unit state
  const [units, setUnits] = useState([])
  const [selectedUnit, setSelectedUnit] = useState(userUnitId || '')
+ const [selectedClass, setSelectedClass] = useState('')
+ const [selectedStudentId, setSelectedStudentId] = useState('')
 
  // State filter Periode Waktu (Hari, Minggu, Bulan, Semester, Tahun)
  const [period, setPeriod] = useState('hari')
@@ -1051,6 +1053,43 @@ export default function RekapAbsensiGerbangPage() {
  }, [timeFilteredRows])
 
  // Filtered and sorted rows
+ const classOptions = useMemo(() => {
+ const map = new Map()
+ timeFilteredRows.forEach((r) => {
+ const rUnitId = String(r.education_unit_id || r.education_unit?.id || r.school_class?.education_unit_id || '')
+ if (selectedUnit && rUnitId && rUnitId !== String(selectedUnit)) return
+ const clsId = String(r.school_class_id || r.school_class?.id || r.student?.school_class_id || '')
+ const clsName = r.school_class?.name || r.school_class?.nama_kelas || ''
+ if (clsId && clsName && !map.has(clsId)) {
+ map.set(clsId, { value: clsId, label: clsName })
+ }
+ })
+ return [
+ { value: '', label: selectedUnit ? 'Semua Kelas di Unit' : 'Semua Kelas / Rombel' },
+ ...Array.from(map.values()).sort((a, b) => a.label.localeCompare(b.label)),
+ ]
+ }, [timeFilteredRows, selectedUnit])
+
+ const studentFilterOptions = useMemo(() => {
+ const map = new Map()
+ timeFilteredRows.forEach((r) => {
+ const rUnitId = String(r.education_unit_id || r.education_unit?.id || r.school_class?.education_unit_id || '')
+ if (selectedUnit && rUnitId && rUnitId !== String(selectedUnit)) return
+ const clsId = String(r.school_class_id || r.school_class?.id || r.student?.school_class_id || '')
+ if (selectedClass && clsId !== String(selectedClass)) return
+ const stId = String(r.student_id || r.student?.id || '')
+ const stName = r.student?.nama_lengkap || r.student?.full_name || ''
+ const stNis = r.student?.nis || r.student?.nisn || ''
+ if (stId && stName && !map.has(stId)) {
+ map.set(stId, { value: stId, label: stNis ? `${stName} (${stNis})` : stName })
+ }
+ })
+ return [
+ { value: '', label: selectedClass ? 'Semua Siswa di Kelas' : 'Semua Data Siswa' },
+ ...Array.from(map.values()).sort((a, b) => a.label.localeCompare(b.label)),
+ ]
+ }, [timeFilteredRows, selectedUnit, selectedClass])
+
  const filteredRows = useMemo(() => {
  return timeFilteredRows.filter((r) => {
  const q = search.toLowerCase().trim()
@@ -1058,13 +1097,17 @@ export default function RekapAbsensiGerbangPage() {
  const nis = (r.student?.nis || r.student?.nisn || '').toLowerCase()
  const kelas = (r.school_class?.name || r.school_class?.nama_kelas || '').toLowerCase()
  const unit = (r.education_unit?.name || '').toLowerCase()
+ const rClassId = String(r.school_class_id || r.school_class?.id || r.student?.school_class_id || '')
+ const rStudentId = String(r.student_id || r.student?.id || '')
 
  const matchesSearch = !q || studentName.includes(q) || nis.includes(q) || kelas.includes(q) || unit.includes(q)
  const matchesStatus = !status || String(r.status || '').toUpperCase() === status.toUpperCase()
+ const matchesClass = !selectedClass || rClassId === String(selectedClass)
+ const matchesStudent = !selectedStudentId || rStudentId === String(selectedStudentId)
 
- return matchesSearch && matchesStatus
+ return matchesSearch && matchesStatus && matchesClass && matchesStudent
  })
- }, [timeFilteredRows, search, status])
+ }, [timeFilteredRows, search, status, selectedClass, selectedStudentId])
 
  const sortedRows = useMemo(() => {
  return [...filteredRows].sort((a, b) => {
@@ -1109,6 +1152,9 @@ export default function RekapAbsensiGerbangPage() {
  setDateTo(today())
  setStatus('')
  setSearch('')
+ if (isMultiUnitUser) setSelectedUnit('')
+ setSelectedClass('')
+ setSelectedStudentId('')
  setCurrentPage(1)
  }
 
@@ -1466,7 +1512,7 @@ export default function RekapAbsensiGerbangPage() {
  value={cardInput}
  onChange={(e) => setCardInput(e.target.value)}
  placeholder="Scan QR Code / Barcode kartu siswa via scanner USB..."
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-28 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 pl-10 pr-28 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20"
  />
  <button
  type="submit"
@@ -1526,7 +1572,7 @@ export default function RekapAbsensiGerbangPage() {
  value={cardInput}
  onChange={(e) => setCardInput(e.target.value)}
  placeholder="Tap kartu RFID pada reader atau ketik nomor kartu..."
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-32 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 pl-10 pr-32 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20"
  />
  <button
  type="submit"
@@ -1560,7 +1606,7 @@ export default function RekapAbsensiGerbangPage() {
  value={studentSearch}
  onChange={(e) => setStudentSearch(e.target.value)}
  placeholder="Cari berdasarkan nama siswa, NIS, atau NISN..."
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20"
  />
  </div>
 
@@ -1765,7 +1811,7 @@ export default function RekapAbsensiGerbangPage() {
  {/* 3-Column Equal Grid: Filter Laporan, Grafik Kehadiran, & Distribusi */}
  <motion.div variants={itemVariants} initial="hidden" animate="visible" className="relative z-30 grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
  {/* Col 1: Filter Laporan */}
- <article className="relative z-40 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 sm:p-6 shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433] space-y-4 flex flex-col justify-between h-full">
+ <article className="relative z-40 rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-md shadow-emerald-500/10 dark:bg-[#1B2433] space-y-4 flex flex-col justify-between h-full">
  <div>
                   <div className="flex items-center justify-between gap-2 mb-4 pb-3.5 border-b border-emerald-200/80 dark:border-emerald-800/60">
                     <div className="flex items-center gap-2.5 min-w-0">
@@ -1774,21 +1820,22 @@ export default function RekapAbsensiGerbangPage() {
                       </div>
                       <div className="min-w-0">
                         <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white truncate">Filter Laporan Gerbang</h2>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 truncate">Periode, status &amp; pencarian siswa</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 truncate">Periode, unit, kelas &amp; data siswa</p>
                       </div>
                     </div>
                     <button
                       type="button"
                       onClick={resetFilters}
-                      className="inline-flex items-center gap-1.5 h-7 rounded-lg border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 px-2.5 text-xs font-semibold transition shrink-0 cursor-pointer shadow-2xs"
+                      className="inline-flex items-center gap-1.5 h-8 rounded-lg border-2 border-emerald-300 dark:border-emerald-700/80 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/80 dark:text-emerald-200 px-2.5 text-xs font-extrabold transition active:scale-95 shrink-0 cursor-pointer shadow-xs"
                     >
-                      <RefreshCcw className="size-3 text-emerald-600 dark:text-emerald-400" />
+                      <RefreshCcw className="size-3 text-emerald-700 dark:text-emerald-400" />
                       <span>Reset</span>
                     </button>
                   </div>
 
- <div className="space-y-4">
- {/* Fitur Filter Periode Waktu (Hari, Minggu, Bulan, Semester, Tahun) */}
+ <div className="space-y-3">
+ {/* Baris 1: Periode Waktu & Status Presensi */}
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
  <div>
  <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
  Periode Waktu
@@ -1814,6 +1861,25 @@ export default function RekapAbsensiGerbangPage() {
  />
  </div>
 
+ <div>
+ <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
+ Status Presensi
+ </label>
+ <HeroUiFilterSelect
+ value={status}
+ onChange={(val) => {
+ setStatus(val)
+ setCurrentPage(1)
+ }}
+ options={statusOptions}
+ placeholder="Semua Status"
+ icon={ClipboardCheck}
+ widthClass="w-full"
+ />
+ </div>
+ </div>
+
+ {/* Baris 2: Tanggal Mulai & Tanggal Selesai */}
  <div className="grid grid-cols-2 gap-2.5">
  <div className="relative z-20">
  <label htmlFor="gerbang-from" className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">Tanggal Mulai</label>
@@ -1845,40 +1911,66 @@ export default function RekapAbsensiGerbangPage() {
  </div>
  </div>
 
+ {/* Baris 3: Unit Pendidikan & Kelas / Rombel */}
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
  <div>
  <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
- Status Presensi Gerbang
+ Unit Pendidikan
  </label>
  <HeroUiFilterSelect
- value={status}
+ value={selectedUnit}
+ disabled={!isMultiUnitUser && Boolean(userUnitId)}
  onChange={(val) => {
- setStatus(val)
+ setSelectedUnit(val)
+ setSelectedClass('')
+ setSelectedStudentId('')
  setCurrentPage(1)
  }}
- options={statusOptions}
- placeholder="Semua Status"
- icon={ClipboardCheck}
+ options={unitOptions}
+ placeholder="Semua Unit"
+ icon={Building2}
+ searchable={true}
  widthClass="w-full"
  />
  </div>
 
  <div>
- <label htmlFor="gerbang-search" className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
- Pencarian Siswa
+ <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
+ Kelas / Rombel
  </label>
- <div className="relative flex items-center">
- <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
- <Search className="size-4" />
- </div>
- <input
- id="gerbang-search"
- type="text"
- placeholder="Nama, NIS, atau NISN..."
- value={search}
- onChange={(e) => setSearch(e.target.value)}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20"
+ <HeroUiFilterSelect
+ value={selectedClass}
+ onChange={(val) => {
+ setSelectedClass(val)
+ setSelectedStudentId('')
+ setCurrentPage(1)
+ }}
+ options={classOptions}
+ placeholder="Semua Kelas"
+ icon={Layers}
+ searchable={true}
+ widthClass="w-full"
  />
  </div>
+ </div>
+
+ {/* Baris 4: Filter Data Siswa (Turunan Unit & Kelas) */}
+ <div>
+ <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
+ Data Siswa
+ </label>
+ <HeroUiFilterSelect
+ value={selectedStudentId}
+ onChange={(val) => {
+ setSelectedStudentId(val)
+ setCurrentPage(1)
+ }}
+ options={studentFilterOptions}
+ placeholder="Semua Data Siswa"
+ icon={User}
+ searchable={true}
+ widthClass="w-full"
+ />
  </div>
  </div>
  </div>
@@ -1886,14 +1978,14 @@ export default function RekapAbsensiGerbangPage() {
 
  {/* Col 2: Grafik Trend Masuk Gerbang */}
  <article className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-md shadow-emerald-500/10 dark:bg-[#1B2433] flex flex-col justify-between h-full">
- <div>
+ <div className="flex flex-col flex-1">
                   <div className="flex items-center justify-between gap-2 mb-4 pb-3.5 border-b border-emerald-200/80 dark:border-emerald-800/60">
                     <div className="flex items-center gap-2.5 min-w-0">
                       <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-300 shadow-xs">
                         <TrendingUp className="size-4" />
                       </div>
                       <div className="min-w-0">
-                        <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white truncate">Waktu Masuk Gerbang</h3>
+                        <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white truncate">Waktu Masuk</h3>
                         <p className="text-xs text-slate-500 dark:text-slate-400 truncate">Tren ketepatan per jam</p>
                       </div>
                     </div>
@@ -1901,7 +1993,7 @@ export default function RekapAbsensiGerbangPage() {
                       {loading ? 'Memuat...' : error ? 'Gagal' : 'Jam Masuk'}
                     </AppBadge>
                   </div>
- <div className="h-64 w-full pt-2 text-slate-200 dark:text-slate-800">
+ <div className="flex-1 min-h-[240px] w-full pt-2 text-slate-300 dark:text-slate-700">
  {loading ? (
  <AppSkeleton variant="card" className="h-full" />
  ) : error ? (
@@ -1934,8 +2026,8 @@ export default function RekapAbsensiGerbangPage() {
  </linearGradient>
  </defs>
  <CartesianGrid stroke="currentColor" strokeDasharray="3 3" vertical={false} opacity={0.6} />
- <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: 'currentColor', fontSize: 10 }} className="text-emerald-600 dark:text-slate-500" />
- <YAxis allowDecimals={false} tickLine={false} axisLine={false} tick={{ fill: 'currentColor', fontSize: 10 }} className="text-slate-400 dark:text-slate-500" width={30} />
+ <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: 'currentColor', fontSize: 10 }} className="text-slate-500 dark:text-slate-400" />
+ <YAxis allowDecimals={false} tickLine={false} axisLine={false} tick={{ fill: 'currentColor', fontSize: 10 }} className="text-slate-500 dark:text-slate-400" width={30} />
  <Tooltip
  content={({ active, payload, label }) => {
  if (!active || !payload?.length) return null
@@ -2053,7 +2145,7 @@ export default function RekapAbsensiGerbangPage() {
  </motion.div>
 
  {/* Main Datatable Outer Container */}
- <motion.div variants={itemVariants} initial="hidden" animate="visible" className="relative z-10 overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]">
+ <motion.div variants={itemVariants} initial="hidden" animate="visible" className="relative z-10 overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  {/* Header Baris 1: Title & Action Buttons */}
  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-4 py-3.5 sm:px-6 md:px-8 bg-emerald-50/50 dark:bg-emerald-950/20 border-b border-emerald-200/80 dark:border-emerald-800/80">
  <div className="flex items-center gap-3">
@@ -2098,7 +2190,7 @@ export default function RekapAbsensiGerbangPage() {
  </div>
 
  {/* Toolbar Baris 2: Search Input & Per-Page Controls */}
- <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-4 py-3 sm:px-6 md:px-8 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50 dark:from-emerald-950/20 dark:via-teal-950/10 dark:to-emerald-950/20">
+ <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-4 py-3 sm:px-6 md:px-8 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/40 dark:bg-emerald-950/20">
  <div className="relative w-full sm:max-w-md">
  <Search className="pointer-events-none absolute left-3.5 sm:left-4 top-1/2 -translate-y-1/2 size-4 text-emerald-600/70 dark:text-emerald-400" />
  <input
@@ -2109,7 +2201,7 @@ export default function RekapAbsensiGerbangPage() {
  setSearch(e.target.value)
  setCurrentPage(1)
  }}
- className="h-9 w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-10 sm:pl-11 pr-10 text-xs font-semibold text-slate-800 outline-none transition-all placeholder:text-slate-400 focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white pl-10 sm:pl-11 pr-10 text-xs font-bold text-slate-800 outline-none transition-all placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 shadow-xs dark:bg-slate-900 dark:text-slate-100"
  />
  {search && (
  <button
@@ -2140,30 +2232,30 @@ export default function RekapAbsensiGerbangPage() {
  </div>
  </div>
 
- {/* Viewport Tabel dengan Horizontal Padding */}
- <div className="px-4 sm:px-6 md:px-8 overflow-x-auto">
+ {/* Viewport Tabel Full-Bleed */}
+ <div className="overflow-x-auto">
  {loading ? (
- <div className="py-6">
+ <div className="p-6">
  <AppSkeleton rows={6} />
  </div>
  ) : error ? (
- <div className="py-6">
+ <div className="p-6">
  <AppErrorState title="Rekap absensi gerbang gagal dimuat" description={error} onRetry={load} compact />
  </div>
  ) : paginatedRows.length === 0 ? (
- <div className="py-8">
+ <div className="p-8">
  <AppEmptyState
  title="Tidak ada data scan gerbang"
  description="Belum ada data scan absensi gerbang yang sesuai dengan kriteria pencarian dan filter pilihan Anda."
  />
  </div>
  ) : (
- <TableRoot fullBleed={false}>
-                  <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
-                    <TableRow className="border-none">
-                      <TableHead className="w-12 text-center font-black text-xs uppercase tracking-wider text-emerald-950 dark:text-emerald-200">#</TableHead>
+ <TableRoot fullBleed={true}>
+                  <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-200">
+                    <TableRow className="bg-transparent hover:bg-transparent">
+                      <TableHead className="w-14 py-3 px-4 text-center font-black text-xs uppercase tracking-wider">#</TableHead>
                       <TableHead
-                        className="cursor-pointer select-none hover:text-emerald-800 dark:hover:text-emerald-300 font-black text-xs uppercase tracking-wider text-emerald-950 dark:text-emerald-200 transition-colors"
+                        className="py-3 px-4 cursor-pointer select-none hover:text-emerald-800 dark:hover:text-emerald-300 font-black text-xs uppercase tracking-wider transition-colors"
                         onClick={() => handleSort('student')}
                       >
                         <div className="flex items-center gap-1.5">
@@ -2171,9 +2263,9 @@ export default function RekapAbsensiGerbangPage() {
                           <ArrowUpDown className="size-3.5 text-emerald-700 dark:text-emerald-400" />
                         </div>
                       </TableHead>
-                      <TableHead className="text-center font-black text-xs uppercase tracking-wider text-emerald-950 dark:text-emerald-200">Waktu Scan Gerbang</TableHead>
-                      <TableHead className="text-center font-black text-xs uppercase tracking-wider text-emerald-950 dark:text-emerald-200">Status</TableHead>
-                      <TableHead className="w-16 text-center font-black text-xs uppercase tracking-wider text-emerald-950 dark:text-emerald-200">Aksi</TableHead>
+                      <TableHead className="py-3 px-4 text-center font-black text-xs uppercase tracking-wider">Waktu Scan Gerbang</TableHead>
+                      <TableHead className="py-3 px-4 text-center font-black text-xs uppercase tracking-wider">Status</TableHead>
+                      <TableHead className="w-20 py-3 px-4 text-center font-black text-xs uppercase tracking-wider">Aksi</TableHead>
                     </TableRow>
                   </TableHeader>
 
@@ -2382,7 +2474,7 @@ export default function RekapAbsensiGerbangPage() {
  placeholder="Cari nama siswa, NIS, atau kelas..."
  value={cardModal.searchQuery}
  onChange={(e) => setCardModal((prev) => ({ ...prev, searchQuery: e.target.value, page: 1 }))}
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-10 pr-8 py-2 text-xs font-semibold text-slate-800 outline-none transition-all placeholder:text-slate-400 focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white pl-10 pr-8 py-2 text-xs font-semibold text-slate-800 outline-none transition-all placeholder:text-slate-400 focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  />
  {cardModal.searchQuery && (
  <button
@@ -2710,7 +2802,7 @@ export default function RekapAbsensiGerbangPage() {
  value={modalCardInput}
  onChange={(e) => setModalCardInput(e.target.value)}
  placeholder="Hasil kode QR atau nomor kartu..."
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100"
  />
  </div>
  <button
@@ -2768,7 +2860,7 @@ export default function RekapAbsensiGerbangPage() {
  max="120"
  value={scheduleConfig.toleransi_menit}
  onChange={(e) => setScheduleConfig({ ...scheduleConfig, toleransi_menit: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100"
  />
  </div>
  <div>

@@ -715,7 +715,7 @@ export default function LmsPresensiPage() {
  {/* ── Main Content Areas ── */}
  {activeTab === 'list' ? (
  /* TAB 1: REKAP / LOG LIST VIEW (Integrated Emerald Datatable Container) */
- <div className="relative overflow-hidden rounded-2xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-sm dark:bg-[#1B2433]">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  {/* Toolbar Baris 1: Header Judul & Soft Pastel Squircle Action Buttons */}
  <div className="p-4 sm:p-5 bg-slate-50/50 dark:bg-slate-900/50 border-b border-emerald-200/90 dark:border-emerald-800/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
  <div>
@@ -764,7 +764,7 @@ export default function LmsPresensiPage() {
  placeholder="Cari nama siswa, NIS, mata pelajaran, atau keterangan..."
  value={filters.search}
  onChange={(e) => setFilters((prev) => ({ ...prev, search: e.target.value }))}
- className="h-9 h-9 w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#151D2A] pl-10 pr-10 text-xs font-semibold text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-[#0E5C44]/12 focus:border-[#0E5C44] transition-all shadow-xs"
+ className="h-9 h-9 w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white dark:bg-[#151D2A] pl-10 pr-10 text-xs font-semibold text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-[#0E5C44]/12 focus:border-[#0E5C44] transition-all shadow-xs"
  />
  {filters.search && (
  <button
@@ -836,7 +836,7 @@ export default function LmsPresensiPage() {
  </div>
 
  {/* Table Data */}
- <div className="overflow-x-auto min-h-[340px]">
+ <div className="overflow-x-auto min-h-[340px] rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  <TableRoot className="w-full text-left text-sm">
               <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 text-emerald-950 dark:text-emerald-200 font-extrabold uppercase tracking-wider text-xs">
                 <TableRow>
@@ -1045,7 +1045,7 @@ export default function LmsPresensiPage() {
  min="1"
  value={bulkState.pertemuan_ke}
  onChange={(e) => setBulkState((prev) => ({ ...prev, pertemuan_ke: e.target.value }))}
- className="w-full h-9 px-3.5 rounded-xl text-xs bg-slate-50 dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-700/80 focus:ring-emerald-500 focus:border-emerald-500 font-semibold"
+ className="w-full h-9 px-3.5 rounded-xl text-xs bg-slate-50 dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-700/80 focus:ring-emerald-500 focus:border-emerald-500 font-semibold"
  />
  </div>
  </div>
@@ -1088,7 +1088,7 @@ export default function LmsPresensiPage() {
 
  {/* Student List Grid / Table */}
  {bulkState.students.length > 0 ? (
- <div className="relative overflow-hidden rounded-2xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-sm dark:bg-[#1B2433]">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  <div className="overflow-x-auto">
  <TableRoot className="w-full text-left text-sm">
                   <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 text-emerald-950 dark:text-emerald-200 font-extrabold uppercase tracking-wider text-xs">
@@ -1140,7 +1140,7 @@ export default function LmsPresensiPage() {
                             placeholder="Tambah keterangan..."
                             value={st.keterangan || ''}
                             onChange={(e) => handleUpdateStudentKeterangan(st.siswa_id, e.target.value)}
-                            className="w-full px-3 py-1.5 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-700/80"
+                            className="w-full px-3 py-1.5 rounded-lg text-xs bg-slate-50 dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-700/80"
                           />
                         </TableCell>
                         <TableCell className="px-5 py-4 text-right">
@@ -1252,7 +1252,7 @@ export default function LmsPresensiPage() {
  min="1"
  value={formData.pertemuan_ke}
  onChange={(e) => setFormData((prev) => ({ ...prev, pertemuan_ke: e.target.value }))}
- className="w-full h-9 px-3.5 rounded-xl text-xs bg-slate-50 dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-700/80 font-semibold"
+ className="w-full h-9 px-3.5 rounded-xl text-xs bg-slate-50 dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-700/80 font-semibold"
  />
  </div>
  </div>
@@ -1283,7 +1283,7 @@ export default function LmsPresensiPage() {
  value={formData.keterangan}
  onChange={(e) => setFormData((prev) => ({ ...prev, keterangan: e.target.value }))}
  placeholder="Contoh: Sakit demam berdarah, ada surat dokter..."
- className="w-full p-3 rounded-xl text-xs bg-slate-50 dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-700/80"
+ className="w-full p-3 rounded-xl text-xs bg-slate-50 dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-700/80"
  />
  </div>
  </form>

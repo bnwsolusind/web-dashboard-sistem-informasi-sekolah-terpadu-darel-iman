@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect, useCallback } from 'react'
 import AppModal from '@/components/app/AppModal'
+import { KpiStatCard } from '@/components/app'
 import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -566,14 +567,14 @@ export default function TahfizhWorkspace({
   return (
     <div className="space-y-6">
       {/* 1. HERO HEADER CONTAINER */}
-      <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:border-emerald-800/60 dark:bg-[#1B2433] p-5 sm:p-7 shadow-lg shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]">
+      <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-gradient-to-br from-[#E6F8F3] via-white to-[#F0FDF9] dark:from-emerald-950/40 dark:via-[#1B2433] dark:to-teal-950/30 p-5 sm:p-7 shadow-md shadow-emerald-500/10">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-white dark:bg-[#1B2433] blur-3xl"
+          className="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-emerald-400/20 dark:bg-emerald-500/15 blur-3xl"
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-20 -bottom-20 h-72 w-72 rounded-full bg-white dark:bg-[#1B2433] blur-3xl"
+          className="pointer-events-none absolute -right-20 -bottom-20 h-72 w-72 rounded-full bg-emerald-400/20 dark:bg-emerald-500/15 blur-3xl"
         />
         <div
           aria-hidden="true"
@@ -582,19 +583,17 @@ export default function TahfizhWorkspace({
 
         <div className="relative flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
           <div className="flex items-start gap-4">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-xl shadow-sm">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-md shadow-emerald-600/20 border border-emerald-500/30">
               <BookOpenCheck className="h-7 w-7" />
             </div>
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <HeroChip
-                  size="sm"
-                  variant="flat"
-                  className="font-extrabold text-[10.5px] bg-emerald-500/20 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-800 dark:text-emerald-300"
+                <span
+                  className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-extrabold text-[10.5px] bg-emerald-500/20 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-800 dark:text-emerald-300"
                 >
                   <Sparkles className="h-3 w-3 text-emerald-600 mr-1 inline" />
                   Al-Qur'an & Tahfizh Santri
-                </HeroChip>
+                </span>
                 {student?.unit_name && (
                   <span className="inline-flex items-center gap-1 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white/80 px-2 py-0.5 text-xs font-bold text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200">
                     <School className="h-3 w-3 text-emerald-600" />
@@ -651,7 +650,7 @@ export default function TahfizhWorkspace({
             )}
           </div>
         </div>
-      </HeroCard>
+      </div>
 
       {/* 2. ACTIVE PENDING TASK CARD (Tugas Pengulangan di Rumah dari Ustadz) */}
       {pendingHomeMurajaah && (
@@ -660,12 +659,12 @@ export default function TahfizhWorkspace({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.25 }}
         >
-          <HeroCard
+          <div
             className={cn(
-              'relative overflow-hidden rounded-xl border-2 p-5 sm:p-6 shadow-md transition-all',
+              'relative overflow-hidden rounded-[22px] border-2 p-5 sm:p-6 shadow-md shadow-emerald-500/10 transition-all',
               pendingHomeMurajaah.status === 'submitted_by_parent'
-                ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] dark:border-emerald-800/60 dark:bg-slate-900'
-                : 'border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] dark:border-emerald-800/60 dark:bg-slate-900'
+                ? 'border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433]'
+                : 'border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433]'
             )}
           >
             <div
@@ -686,9 +685,7 @@ export default function TahfizhWorkspace({
                     Tugas Pengulangan di Rumah
                   </span>
 
-                  <HeroChip
-                    size="sm"
-                    variant="flat"
+                  <span
                     className={cn(
                       'font-black text-[10px]',
                       pendingHomeMurajaah.status === 'submitted_by_parent'
@@ -699,7 +696,7 @@ export default function TahfizhWorkspace({
                     {pendingHomeMurajaah.status === 'submitted_by_parent'
                       ? 'Laporan Terkirim (Menunggu Verifikasi)'
                       : 'Wajib Diulang di Rumah'}
-                  </HeroChip>
+                  </span>
                 </div>
 
                 <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white pt-1">
@@ -739,110 +736,56 @@ export default function TahfizhWorkspace({
                 )}
               </div>
             </div>
-          </HeroCard>
+          </div>
         </motion.div>
       )}
 
-      {/* 3. KPI CARDS (4 CARDS) */}
+      {/* 3. KPI CARDS (HeroUI KpiStatCard Standard) */}
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        {/* Card 1: Total Ayat */}
-        <motion.div whileHover={{ y: -2 }} transition={{ duration: 0.18 }}>
-          <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 !bg-emerald-100/90 hover:!bg-emerald-200/70 p-4.5 sm:p-5 shadow-sm transition-all duration-300 dark:border-emerald-800/60 dark:!bg-emerald-950/50">
-            <div className="relative flex items-center justify-between gap-3">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl !bg-emerald-600 !text-white shadow-sm dark:!bg-emerald-600 dark:!text-white">
-                <BookOpenCheck className="h-5 w-5 text-white" />
-              </div>
-              <span className="text-xl sm:text-2xl font-black text-emerald-800 dark:text-emerald-200">
-                {totalAyat}
-              </span>
-            </div>
-            <p className="relative mt-3.5 text-xs font-black text-emerald-800 dark:text-emerald-300">
-              Total Hafalan (Ayat)
-            </p>
-            <p className="relative mt-0.5 text-xs font-medium text-emerald-700/80 dark:text-emerald-400/80">
-              Ayat unik yang telah tervalidasi
-            </p>
-          </div>
-        </motion.div>
-
-        {/* Card 2: Surah Selesai */}
-        <motion.div whileHover={{ y: -2 }} transition={{ duration: 0.18 }}>
-          <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 !bg-teal-100/90 hover:!bg-teal-200/70 p-4.5 sm:p-5 shadow-sm transition-all duration-300 dark:border-emerald-800/60 dark:!bg-teal-950/50">
-            <div className="relative flex items-center justify-between gap-3">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl !bg-teal-600 !text-white shadow-sm dark:!bg-teal-600 dark:!text-white">
-                <Target className="h-5 w-5 text-white" />
-              </div>
-              <span className="text-xl sm:text-2xl font-black text-teal-800 dark:text-teal-200">
-                {achievement?.completed_surah_count ?? 0}
-              </span>
-            </div>
-            <p className="relative mt-3.5 text-xs font-black text-teal-800 dark:text-teal-300">
-              Surah Selesai
-            </p>
-            <p className="relative mt-0.5 text-xs font-medium text-teal-700/80 dark:text-teal-400/80">
-              Seluruh ayat tuntas mutqin
-            </p>
-          </div>
-        </motion.div>
-
-        {/* Card 3: Progress Target */}
-        <motion.div whileHover={{ y: -2 }} transition={{ duration: 0.18 }}>
-          <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 !bg-amber-100/90 hover:!bg-amber-200/70 p-4.5 sm:p-5 shadow-sm transition-all duration-300 dark:border-emerald-800/60 dark:!bg-amber-950/50">
-            <div className="relative flex items-center justify-between gap-3">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl !bg-amber-600 !text-white shadow-sm dark:!bg-amber-600 dark:!text-white">
-                <Award className="h-5 w-5 text-white" />
-              </div>
-              <span className="text-xl sm:text-2xl font-black text-amber-800 dark:text-amber-200">
-                {targetProgress !== null ? `${targetProgress}%` : '-'}
-              </span>
-            </div>
-            <p className="relative mt-3.5 text-xs font-black text-amber-800 dark:text-amber-300">
-              Progress Hafalan
-            </p>
-            <div className="relative mt-2 h-1.5 overflow-hidden rounded-full bg-amber-200/80 dark:bg-amber-900/60">
-              <div
-                className="h-full rounded-full bg-amber-600 dark:bg-amber-500 transition-all duration-500"
-                style={{ width: `${Math.max(0, Math.min(100, Number(targetProgress) || 0))}%` }}
-              />
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Card 4: Juz Selesai */}
-        <motion.div whileHover={{ y: -2 }} transition={{ duration: 0.18 }}>
-          <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 !bg-violet-100/90 hover:!bg-violet-200/70 p-4.5 sm:p-5 shadow-sm transition-all duration-300 dark:border-emerald-800/60 dark:!bg-violet-950/50">
-            <div className="relative flex items-center justify-between gap-3">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl !bg-violet-600 !text-white shadow-sm dark:!bg-violet-600 dark:!text-white">
-                <Calendar className="h-5 w-5 text-white" />
-              </div>
-              <span className="text-xl sm:text-2xl font-black text-violet-800 dark:text-violet-200">
-                {achievement?.completed_juz_count ?? 0}
-              </span>
-            </div>
-            <p className="relative mt-3.5 text-xs font-black text-violet-800 dark:text-violet-300">
-              Juz Selesai
-            </p>
-            <p className="relative mt-0.5 text-xs font-medium text-violet-700/80 dark:text-violet-400/80">
-              Tervalidasi lengkap penguji
-            </p>
-          </div>
-        </motion.div>
+        <KpiStatCard
+          icon={BookOpenCheck}
+          title="Total Hafalan (Ayat)"
+          value={totalAyat}
+          description="Ayat unik yang telah tervalidasi"
+          tone="emerald"
+        />
+        <KpiStatCard
+          icon={Target}
+          title="Surah Selesai"
+          value={achievement?.completed_surah_count ?? 0}
+          description="Seluruh ayat tuntas mutqin"
+          tone="teal"
+        />
+        <KpiStatCard
+          icon={Award}
+          title="Progress Hafalan"
+          value={targetProgress !== null ? `${targetProgress}%` : '-'}
+          description="Capaian target kurikulum"
+          tone="amber"
+        />
+        <KpiStatCard
+          icon={Calendar}
+          title="Juz Selesai"
+          value={achievement?.completed_juz_count ?? 0}
+          description="Tervalidasi lengkap penguji"
+          tone="purple"
+        />
       </div>
 
-      {/* 4. SETORAN TERAKHIR AKTIF (HERO HIGHLIGHT CARD) */}
-      <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-5 sm:p-6 shadow-md dark:border-emerald-800/60">
+      {/* 4. SETORAN TERAKHIR AKTIF (HIGHLIGHT CARD) */}
+      <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-400 dark:border-emerald-700/80 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white p-5 sm:p-6 shadow-md shadow-emerald-600/20">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute right-0 top-0 h-40 w-40 bg-emerald-500/20 blur-3xl"
+          className="pointer-events-none absolute right-0 top-0 h-40 w-40 bg-white/10 blur-3xl"
         />
         <div className="relative flex flex-wrap items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/30 border border-emerald-200/80 dark:border-emerald-800/60 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-emerald-200">
-                <Sparkles className="h-3 w-3 text-emerald-300" /> Setoran Terakhir Aktif
+              <span className="inline-flex items-center gap-1 rounded-full bg-white/20 border border-white/30 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-white">
+                <Sparkles className="h-3 w-3 text-emerald-200" /> Setoran Terakhir Aktif
               </span>
               {latestNilai && (
-                <span className="rounded-full bg-emerald-400/20 px-2.5 py-0.5 text-[10px] font-black text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60">
+                <span className="rounded-full bg-white/20 px-2.5 py-0.5 text-[10px] font-black text-white border border-white/30">
                   Nilai: {latestNilai}
                 </span>
               )}
@@ -885,7 +828,7 @@ export default function TahfizhWorkspace({
             )}
           </div>
         </div>
-      </HeroCard>
+      </div>
 
       {/* 5. TOOLBAR FILTER & PENCARIAN */}
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -922,14 +865,14 @@ export default function TahfizhWorkspace({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Cari surah, ayat, penguji..."
-            className="h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-9 pr-3 text-xs outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+            className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white pl-9 pr-3 text-xs outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
           />
         </div>
       </div>
 
-      {/* 6. RIWAYAT SETORAN TAHFIZH (HERO LIST CONTAINER) */}
-      <HeroCard className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 sm:p-6 shadow-xs dark:border-emerald-800/60 dark:bg-slate-900">
-        <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4 dark:border-emerald-800/60">
+      {/* 6. RIWAYAT SETORAN TAHFIZH (GOLD STANDARD) */}
+      <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-0 shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
+        <div className="flex items-center justify-between border-b border-emerald-500/20 bg-emerald-500/10 px-5 py-4 sm:px-6 dark:border-emerald-800/60">
           <div>
             <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
               Riwayat Setoran Hafalan Santri
@@ -938,12 +881,12 @@ export default function TahfizhWorkspace({
               Daftar seluruh setoran ziyadah harian, tilawah, dan pengulangan muroja'ah santri.
             </p>
           </div>
-          <HeroChip size="sm" variant="flat" color="success" className="font-extrabold text-xs">
+          <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 bg-emerald-100/90 text-emerald-800 border border-emerald-300/80 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700/80 font-extrabold text-xs">
             {filteredLogs.length} Setoran Tercatat
-          </HeroChip>
+          </span>
         </div>
 
-        <div className="mt-4 divide-y divide-emerald-100/80 dark:divide-emerald-900/40">
+        <div className="p-5 sm:p-6 pt-3 divide-y divide-emerald-100/80 dark:divide-emerald-900/40">
           {filteredLogs.map((item, idx) => {
             const parsed = parseLogInfo(item, surahList)
             const isMuraj = isMurajaahRecord(item)
@@ -980,34 +923,27 @@ export default function TahfizhWorkspace({
                       {surahTitle}
                     </span>
                     {aStart ? (
-                      <HeroChip
-                        size="sm"
-                        variant="flat"
-                        color="success"
-                        className="font-extrabold text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800/60"
+                      <span
+                        className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-extrabold text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800/60"
                       >
                         {aEnd && aEnd !== aStart ? `Ayat ${aStart} - ${aEnd}` : `Ayat ${aStart}`}
-                      </HeroChip>
+                      </span>
                     ) : (
-                      <HeroChip
-                        size="sm"
-                        variant="flat"
-                        className="font-extrabold text-[10px] bg-teal-50 text-teal-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-teal-950 dark:text-teal-300 dark:border-emerald-800/60"
+                      <span
+                        className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-extrabold text-[10px] bg-teal-50 text-teal-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-teal-950 dark:text-teal-300 dark:border-emerald-800/60"
                       >
                         {isMuraj ? "Muroja'ah" : item.tilawah_text ? 'Tilawah' : 'Ziyadah'}
-                      </HeroChip>
+                      </span>
                     )}
 
                     {/* Lencana Khusus Pengulangan di Rumah oleh Orang Tua */}
                     {isSubmittedByParent && (
-                      <HeroChip
-                        size="sm"
-                        variant="flat"
-                        className="font-extrabold text-[10px] bg-sky-50 text-sky-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-sky-950 dark:text-sky-300 dark:border-emerald-800/60"
+                      <span
+                        className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-extrabold text-[10px] bg-sky-50 text-sky-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-sky-950 dark:text-sky-300 dark:border-emerald-800/60"
                       >
                         <User className="h-2.5 w-2.5 mr-1 inline text-sky-600" />
                         Muroja'ah di Rumah (Ortu)
-                      </HeroChip>
+                      </span>
                     )}
 
                     {item.jumlah_ayat ? (
@@ -1140,7 +1076,7 @@ export default function TahfizhWorkspace({
             </div>
           )}
         </div>
-      </HeroCard>
+      </div>
 
       {/* 7. HERO UI MODAL: DETAIL RINCIAN SETORAN SISWA */}
       {selectedLogDetail && (() => {
@@ -1498,7 +1434,7 @@ export default function TahfizhWorkspace({
                       disabled={isMurajaahLockedByTeacher || submittingMurajaah}
                       required
                       className={cn(
-                        'h-9.5 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-3 text-xs font-semibold outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-700/80 dark:text-white',
+                        'h-9.5 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 px-3 text-xs font-semibold outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:text-white',
                         isMurajaahLockedByTeacher
                           ? 'bg-slate-100 text-slate-500 dark:bg-slate-800/80 cursor-not-allowed'
                           : 'bg-white dark:bg-slate-800'
@@ -1519,7 +1455,7 @@ export default function TahfizhWorkspace({
                       disabled={isMurajaahLockedByTeacher || submittingMurajaah}
                       required
                       className={cn(
-                        'h-9.5 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-3 text-xs font-semibold outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-700/80 dark:text-white',
+                        'h-9.5 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 px-3 text-xs font-semibold outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:text-white',
                         isMurajaahLockedByTeacher
                           ? 'bg-slate-100 text-slate-500 dark:bg-slate-800/80 cursor-not-allowed'
                           : 'bg-white dark:bg-slate-800'
@@ -1579,7 +1515,7 @@ export default function TahfizhWorkspace({
                     value={murajaahLembar}
                     onChange={(e) => setMurajaahLembar(e.target.value)}
                     disabled={submittingMurajaah}
-                    className="h-9.5 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs font-semibold outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+                    className="h-9.5 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3 text-xs font-semibold outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
                   />
                 </div>
 
@@ -1594,7 +1530,7 @@ export default function TahfizhWorkspace({
                     onChange={(e) => setNotesParent(e.target.value)}
                     disabled={submittingMurajaah}
                     placeholder="Catatan mengenai kelancaran hafalan, tajwid, atau makhraj ananda saat mengulang di rumah..."
-                    className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 text-xs font-medium outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+                    className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-3 text-xs font-medium outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
                   />
                 </div>
 

@@ -132,6 +132,7 @@ export function KpiStatCard({
   tag,
   trend,
   trendText,
+  valueClassName = '',
   footerAction,
   footerLabel,
   ctaText,
@@ -217,7 +218,15 @@ export function KpiStatCard({
             )}
           </div>
         </div>
-        <strong className={cn('text-3xl sm:text-4xl font-black tabular-nums tracking-tight block my-1', currentTone.valueColor)}>
+        <strong
+          className={cn(
+            String(effectiveValue ?? '').length > 8
+              ? 'text-lg sm:text-xl font-black tracking-tight leading-snug block my-1'
+              : 'text-2xl sm:text-3xl font-black tabular-nums tracking-tight block my-1',
+            currentTone.valueColor,
+            valueClassName
+          )}
+        >
           {typeof effectiveValue === 'number' ? effectiveValue.toLocaleString('id-ID') : effectiveValue}
         </strong>
         <p className="text-xs text-slate-600 dark:text-slate-400 font-medium truncate block">

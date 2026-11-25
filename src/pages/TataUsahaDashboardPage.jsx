@@ -762,11 +762,11 @@ export default function TataUsahaDashboardPage() {
         </motion.div>
 
         {/* QUICK ACTION CONTAINER */}
-        <section className="relative overflow-hidden rounded-xl border-2 border-emerald-500/25 bg-white shadow-md shadow-sm dark:border-emerald-600/35 dark:bg-[#1B2433]">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent dark:from-emerald-950/50 dark:via-teal-950/20 dark:to-transparent">
+        <section className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-emerald-500/20 bg-emerald-500/10 dark:border-emerald-800/60">
             <div className="flex items-center gap-3">
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300 shadow-2xs">
-                <ShieldCheck className="size-5 text-emerald-600 dark:text-emerald-400" />
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-xs">
+                <ShieldCheck className="size-5 text-white" />
               </div>
               <div>
                 <h3 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white leading-tight">

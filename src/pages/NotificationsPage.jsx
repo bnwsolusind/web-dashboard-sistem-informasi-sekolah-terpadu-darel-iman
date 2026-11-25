@@ -1,4 +1,5 @@
 import CustomSelect from "../components/ui/CustomSelect"
+import AppDataTable from "../components/app/AppDataTable"
 import {
   useCallback,
   useEffect,
@@ -321,7 +322,7 @@ export default function NotificationsPage() {
  type="text"
  placeholder="Contoh: Jadwal Libur Awal Ramadhan 1448 H"
  {...formPengumuman.register('judul_pengumuman', { required: true })}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-900 px-3.5 py-2 text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-900 px-3.5 py-2 text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
 
@@ -346,7 +347,7 @@ export default function NotificationsPage() {
  rows={3}
  placeholder="Tuliskan isi pengumuman atau instruksi penting secara jelas..."
  {...formPengumuman.register('isi_pengumuman', { required: true })}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-900 px-3.5 py-2 text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-900 px-3.5 py-2 text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
 
@@ -377,7 +378,7 @@ export default function NotificationsPage() {
  min="1"
  max="10"
  {...formPengumuman.register('prioritas')}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-900 px-3.5 py-2 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-slate-900 px-3.5 py-2 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
  />
  </div>
 
@@ -404,20 +405,14 @@ export default function NotificationsPage() {
  </section>
 
  {/* Section 3: Datatable Pengumuman Aktif */}
- <section className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
- <div className="border-b border-emerald-200/80 dark:border-emerald-800/80 bg-slate-50/50 dark:bg-slate-900/50 px-5 py-4 dark:border-emerald-800/60 flex items-center justify-between">
- <div className="flex items-center gap-2.5">
- <div className="flex size-8 items-center justify-center rounded-lg bg-emerald-600 text-white shadow-sm">
- <Megaphone className="size-4" />
- </div>
- <div>
- <h2 className="text-sm font-black text-slate-900 dark:text-white">Daftar Pengumuman Terbit</h2>
- <p className="text-xs text-slate-500 dark:text-slate-400">Total {announcementsList.length} pengumuman terdaftar di sistem</p>
- </div>
- </div>
- </div>
-
- <div className="overflow-x-auto">
+ <AppDataTable
+ title="Daftar Pengumuman Terbit"
+ description={`Total ${announcementsList.length} pengumuman terdaftar di sistem`}
+ icon={Megaphone}
+ countLabel={`${announcementsList.length} Pengumuman`}
+ showToolbar={false}
+ showPagination={false}
+ >
  <table className="w-full border-collapse text-left text-xs">
             <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 text-emerald-950 dark:text-emerald-200 font-extrabold uppercase tracking-wider text-xs">
               <tr>
@@ -476,8 +471,7 @@ export default function NotificationsPage() {
  )}
  </tbody>
  </table>
- </div>
- </section>
+ </AppDataTable>
 
  {/* Konfirmasi Simpan Pengumuman */}
  <ConfirmDialog

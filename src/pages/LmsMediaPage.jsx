@@ -474,7 +474,7 @@ function HeroUiModalSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Ketik untuk mencari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -622,7 +622,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50/60 pl-8 pr-2.5 py-1 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  autoFocus
  />
  </div>
@@ -1430,10 +1430,10 @@ export default function LmsMediaPage({ embedded = false, hideBreadcrumb = false,
  <p className="font-semibold text-sm">Tidak ada data media dalam kategori ini.</p>
  </div>
  ) : (
- <div className="overflow-x-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="overflow-x-auto rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
  <TableRoot className="w-full text-left border-collapse">
- <TableHeader>
- <TableRow className="bg-slate-50 dark:bg-slate-800/50 border-b border-emerald-200/80 dark:border-emerald-800/60 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+ <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
+ <TableRow>
  
  <TableHead className="py-3 px-4">Nama File / Judul</TableHead>
  <TableHead className="py-3 px-4">Tipe File</TableHead>
@@ -1524,7 +1524,7 @@ export default function LmsMediaPage({ embedded = false, hideBreadcrumb = false,
  placeholder="Contoh: Modul Panduan PDF Bab 1"
  value={formData.nama_file}
  onChange={(e) => setFormData({ ...formData, nama_file: e.target.value })}
- className="w-full px-4 py-2.5 rounded-[12px] bg-slate-50 dark:bg-slate-900/60 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669]"
+ className="w-full px-4 py-2.5 rounded-[12px] bg-slate-50 dark:bg-slate-900/60 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669]"
  />
  </div>
 
@@ -1568,7 +1568,7 @@ export default function LmsMediaPage({ embedded = false, hideBreadcrumb = false,
  placeholder="https://..."
  value={formData.url_eksternal}
  onChange={(e) => setFormData({ ...formData, url_eksternal: e.target.value })}
- className="w-full pl-10 pr-4 py-2.5 rounded-[12px] bg-slate-50 dark:bg-slate-900/60 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669]"
+ className="w-full pl-10 pr-4 py-2.5 rounded-[12px] bg-slate-50 dark:bg-slate-900/60 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669]"
  />
  </div>
  </div>
@@ -1584,7 +1584,7 @@ export default function LmsMediaPage({ embedded = false, hideBreadcrumb = false,
  placeholder="Contoh: 300 (5 menit)"
  value={formData.durasi_detik}
  onChange={(e) => setFormData({ ...formData, durasi_detik: e.target.value })}
- className="w-full px-4 py-2.5 rounded-[12px] bg-slate-50 dark:bg-slate-900/60 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669]"
+ className="w-full px-4 py-2.5 rounded-[12px] bg-slate-50 dark:bg-slate-900/60 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669]"
  />
  </div>
 
@@ -1597,7 +1597,7 @@ export default function LmsMediaPage({ embedded = false, hideBreadcrumb = false,
  min="1"
  value={formData.urutan}
  onChange={(e) => setFormData({ ...formData, urutan: e.target.value })}
- className="w-full px-4 py-2.5 rounded-[12px] bg-slate-50 dark:bg-slate-900/60 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669]"
+ className="w-full px-4 py-2.5 rounded-[12px] bg-slate-50 dark:bg-slate-900/60 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669]"
  />
  </div>
  </div>
@@ -1611,7 +1611,7 @@ export default function LmsMediaPage({ embedded = false, hideBreadcrumb = false,
  placeholder="Keterangan isi file media atau instruksi pengajuan..."
  value={formData.deskripsi}
  onChange={(e) => setFormData({ ...formData, deskripsi: e.target.value })}
- className="w-full px-4 py-2.5 rounded-[12px] bg-slate-50 dark:bg-slate-900/60 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669]"
+ className="w-full px-4 py-2.5 rounded-[12px] bg-slate-50 dark:bg-slate-900/60 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669]"
  />
  </div>
  </form>

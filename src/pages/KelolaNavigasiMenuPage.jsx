@@ -285,7 +285,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
  autoFocus
  />
  </div>
@@ -1038,7 +1038,7 @@ export default function KelolaNavigasiMenuPage() {
  placeholder={activePlatformTab === 'modules' ? 'Cari nama / id modul...' : 'Cari nama menu / rute...'}
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
- className="h-9 w-full rounded-xl border border-emerald-200/80 bg-white pl-9 pr-3 text-xs text-slate-800 outline-none transition focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] bg-white pl-9 pr-3 text-xs text-slate-800 outline-none transition focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
  </div>
@@ -1461,7 +1461,7 @@ export default function KelolaNavigasiMenuPage() {
  }))
  }}
  placeholder="Contoh: Jadwal Pelajaran"
- className="h-9 w-full rounded-xl border border-emerald-200/80 bg-white px-3 text-xs text-slate-800 outline-none transition focus:border-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3 text-xs text-slate-800 outline-none transition focus:border-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
  <div>
@@ -1567,7 +1567,7 @@ export default function KelolaNavigasiMenuPage() {
  value={formData.path}
  onChange={(e) => setFormData({ ...formData, path: e.target.value })}
  placeholder="Contoh: /dashboard/master/siswa atau Jadwal"
- className="h-9 w-full rounded-xl border border-emerald-200/80 bg-white px-3 text-xs text-slate-800 outline-none transition focus:border-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100 font-mono"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3 text-xs text-slate-800 outline-none transition focus:border-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100 font-mono"
  />
  {(webRoutes.length > 0 || mobileScreens.length > 0) && (
  <div className="mt-1.5 space-y-1">
@@ -1659,7 +1659,7 @@ export default function KelolaNavigasiMenuPage() {
  })
  }
  placeholder="Contoh: jadwal / pengumuman"
- className="h-9 w-full rounded-xl border border-emerald-200/80 bg-white px-3 text-xs text-slate-800 outline-none transition focus:border-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100 font-mono"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3 text-xs text-slate-800 outline-none transition focus:border-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100 font-mono"
  />
  </div>
  )}
@@ -1762,7 +1762,7 @@ export default function KelolaNavigasiMenuPage() {
  value={permissionSearchQuery}
  onChange={(e) => setPermissionSearchQuery(e.target.value)}
  placeholder="Cari permission (contoh: view_students, manage_attendance)..."
- className="h-8 w-full rounded-xl border border-emerald-200/80 bg-white pl-8 pr-3 text-xs text-slate-800 outline-none focus:border-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="h-8 w-full rounded-xl border-2 border-[#b6f6d9] bg-white pl-8 pr-3 text-xs text-slate-800 outline-none focus:border-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
  <div className="max-h-32 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-1.5 pr-1">
@@ -1993,7 +1993,7 @@ export default function KelolaNavigasiMenuPage() {
  value={iconSearchQuery}
  onChange={(e) => setIconSearchQuery(e.target.value)}
  autoFocus
- className="h-9 w-full rounded-xl border border-emerald-200/80 bg-white pl-9 pr-9 text-xs text-slate-800 outline-none transition focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] bg-white pl-9 pr-9 text-xs text-slate-800 outline-none transition focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  />
  {iconSearchQuery && (
  <button
@@ -2196,7 +2196,7 @@ export default function KelolaNavigasiMenuPage() {
  value={moduleFormData.name}
  onChange={(e) => setModuleFormData({ ...moduleFormData, name: e.target.value })}
  placeholder="Contoh: Akademik & Kurikulum"
- className="h-9 w-full rounded-xl border border-emerald-200/80 bg-white px-3 text-xs text-slate-800 outline-none focus:border-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3 text-xs text-slate-800 outline-none focus:border-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
 
@@ -2216,7 +2216,7 @@ export default function KelolaNavigasiMenuPage() {
  })
  }
  placeholder="contoh: akademik-kurikulum"
- className="h-9 w-full rounded-xl border border-emerald-200/80 bg-white px-3 text-xs font-mono text-slate-800 outline-none focus:border-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] bg-white px-3 text-xs font-mono text-slate-800 outline-none focus:border-emerald-600 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
  )}

@@ -1023,7 +1023,7 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
  type="month"
  value={selectedMonth}
  onChange={(e) => setSelectedMonth(e.target.value)}
- className="w-full sm:w-auto min-w-[140px] rounded-2xl border border-emerald-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-800 shadow-sm dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-200"
+ className="w-full sm:w-auto min-w-[140px] rounded-2xl border-2 border-[#b6f6d9] bg-white px-3 py-1.5 text-xs font-semibold text-slate-800 shadow-sm dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-200"
  />
  </div>
  )}
@@ -1164,8 +1164,8 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
  {/* Tab 1: Rekapitulasi Presensi */}
  {activeTab === 'rekap' && (
  <TableRoot fullBleed={false}>
- <TableHeader>
- <TableRow className="bg-slate-50/80 border-b border-emerald-200/80 dark:bg-slate-900/80 dark:border-emerald-800/60">
+ <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
+ <TableRow>
  <TableHead className="w-12 text-center">#</TableHead>
  <TableHead>
  <div className="flex items-center gap-1">Siswa <ArrowBothDirectionHorizontal2 className="size-3.5" /></div>
@@ -1237,8 +1237,8 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
  {/* Tab 2: Sesi Pelajaran (Presensi Per Matpel & Guru) */}
  {activeTab === 'sesi-pelajaran' && (
  <TableRoot fullBleed={false}>
- <TableHeader>
- <TableRow className="bg-slate-50/80 border-b border-emerald-200/80 dark:bg-slate-900/80 dark:border-emerald-800/60">
+ <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
+ <TableRow>
  <TableHead className="w-12 text-center">#</TableHead>
  <TableHead>Mata Pelajaran</TableHead>
  <TableHead>Guru Pengajar</TableHead>
@@ -1329,8 +1329,8 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
  {/* Tab 3: Verifikasi Izin / Sakit */}
  {activeTab === 'verifikasi' && (
  <TableRoot fullBleed={false}>
- <TableHeader>
- <TableRow className="bg-slate-50/80 border-b border-emerald-200/80 dark:bg-slate-900/80 dark:border-emerald-800/60">
+ <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
+ <TableRow>
  <TableHead className="w-12 text-center">#</TableHead>
  <TableHead>Siswa & Kelas</TableHead>
  <TableHead>Jenis Izin</TableHead>
@@ -1424,8 +1424,8 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
  {/* Tab 4: Koreksi Presensi */}
  {activeTab === 'koreksi' && (
  <TableRoot fullBleed={false}>
- <TableHeader>
- <TableRow className="bg-slate-50/80 border-b border-emerald-200/80 dark:bg-slate-900/80 dark:border-emerald-800/60">
+ <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
+ <TableRow>
  <TableHead className="w-12 text-center">#</TableHead>
  <TableHead>Siswa</TableHead>
  <TableHead>Mata Pelajaran & Tanggal</TableHead>
@@ -1521,8 +1521,8 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
  {/* Tab 5: Tindak Lanjut Siswa */}
  {activeTab === 'tindak-lanjut' && (
  <TableRoot fullBleed={false}>
- <TableHeader>
- <TableRow className="bg-slate-50/80 border-b border-emerald-200/80 dark:bg-slate-900/80 dark:border-emerald-800/60">
+ <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
+ <TableRow>
  <TableHead className="w-12 text-center">#</TableHead>
  <TableHead>Siswa & Rombel</TableHead>
  <TableHead>Bentuk Tindak Lanjut</TableHead>
@@ -1658,7 +1658,7 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
  placeholder="Tuliskan alasan persetujuan atau penolakan..."
  value={reviewNote}
  onChange={(e) => setReviewNote(e.target.value)}
- className="w-full rounded-2xl border border-emerald-300 bg-white p-3 text-xs text-slate-900 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white"
+ className="w-full rounded-2xl border-2 border-[#b6f6d9] bg-white p-3 text-xs text-slate-900 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white"
  />
  </div>
  </DialogBody>
@@ -1720,7 +1720,7 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
  placeholder="Tuliskan catatan verifikasi..."
  value={reviewNote}
  onChange={(e) => setReviewNote(e.target.value)}
- className="w-full rounded-2xl border border-emerald-300 bg-white p-3 text-xs text-slate-900 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white"
+ className="w-full rounded-2xl border-2 border-[#b6f6d9] bg-white p-3 text-xs text-slate-900 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white"
  />
  </div>
  </DialogBody>
@@ -1829,7 +1829,7 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
  placeholder="Detail hasil penanganan atau kesepakatan dengan orang tua..."
  value={followUpForm.notes}
  onChange={(e) => setFollowUpForm({ ...followUpForm, notes: e.target.value })}
- className="w-full rounded-2xl border border-emerald-300 bg-white p-3 text-xs text-slate-900 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white"
+ className="w-full rounded-2xl border-2 border-[#b6f6d9] bg-white p-3 text-xs text-slate-900 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white"
  />
  </div>
  </DialogBody>

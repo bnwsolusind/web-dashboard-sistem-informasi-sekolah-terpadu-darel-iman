@@ -27,7 +27,9 @@ import {
 } from '../lib/utils'
 import EmployeeIdCard from '../components/card-print/EmployeeIdCard'
 import ActionDropdown from '../components/app/ActionDropdown'
+import AppModal from '../components/app/AppModal'
 import AppBadge from '../components/app/AppBadge'
+import { Spinner } from '@/components/ui/spinner'
 import Swal from '@/components/ui/compat/swal-heroui'
 import {
   useMutation,
@@ -2516,15 +2518,15 @@ export default function EmployeesPage() {
  {/* 3. SECTION CARD KPI PEGAWAI & GURU (REAL DATABASE DATA) */}
  <div className="print:hidden grid grid-cols-1 lg:grid-cols-2 gap-4">
  {/* Card KPI Kehadiran Pegawai */}
- <div className="relative overflow-hidden rounded-2xl border-2 border-emerald-200/80 dark:border-emerald-700/80 bg-white p-5 shadow-sm dark:bg-card-dark space-y-4">
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-3.5">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433]">
+ <div className="flex items-center justify-between bg-emerald-500/10 border-b border-emerald-200/80 dark:border-emerald-800/60 px-5 py-4">
  <div className="flex items-center gap-3">
- <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-xs">
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
  <CalendarCheck className="size-5" />
  </div>
  <div>
  <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">
- KPI Kehadiran & Presensi Pegawai
+ KPI Kehadiran &amp; Presensi Pegawai
  </h3>
  <p className="text-xs text-slate-500 dark:text-slate-400">
  Ditarik real-time dari log presensi database
@@ -2533,9 +2535,10 @@ export default function EmployeesPage() {
  </div>
  </div>
 
+ <div className="p-5 space-y-4">
  {/* Metrics Breakdown */}
  <div className="grid grid-cols-3 gap-2.5">
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-card-dark p-3 text-center dark:border-emerald-800/60 dark:from-emerald-950/40 dark:to-emerald-950/20">
+ <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-emerald-50/40 dark:bg-[#1B2433] p-3 text-center">
  <div className="flex items-center justify-center gap-1 text-[10px] font-bold text-emerald-800 dark:text-emerald-300 mb-0.5">
  <UserCheck className="size-3.5 text-emerald-600 dark:text-emerald-400" />
  <span>Kehadiran</span>
@@ -2577,28 +2580,30 @@ export default function EmployeesPage() {
  </div>
  </div>
  </div>
+ </div>
 
  {/* Card KPI Jam Mengajar Guru */}
- <div className="relative overflow-hidden rounded-2xl border-2 border-emerald-200/80 dark:border-emerald-700/80 bg-white p-5 shadow-sm dark:bg-card-dark space-y-4">
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-3.5">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433]">
+ <div className="flex items-center justify-between bg-emerald-500/10 border-b border-emerald-200/80 dark:border-emerald-800/60 px-5 py-4">
  <div className="flex items-center gap-3">
- <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-card-dark shadow-xs border border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-sky-600 text-white shadow-sm">
  <BookOpen className="size-5" />
  </div>
  <div>
  <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">
- KPI Jam Pelajaran & Beban Mengajar Guru
+ KPI Jam Pelajaran &amp; Beban Mengajar Guru
  </h3>
  <p className="text-xs text-slate-500 dark:text-slate-400">
- Ditarik real-time dari database kurikulum & jadwal
+ Ditarik real-time dari database kurikulum &amp; jadwal
  </p>
  </div>
  </div>
  </div>
 
+ <div className="p-5 space-y-4">
  {/* Metrics Breakdown */}
  <div className="grid grid-cols-2 gap-2.5">
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-card-dark p-3 dark:border-emerald-800/60 dark:from-sky-950/40 dark:to-sky-950/20">
+ <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-sky-50/40 dark:bg-[#1B2433] p-3">
  <div className="flex items-center gap-1.5 text-[10px] font-bold text-sky-800 dark:text-sky-300 mb-0.5">
  <BookOpen className="size-3.5 text-sky-600 dark:text-sky-400" />
  <span>Mapel Jam Terbanyak</span>
@@ -2627,9 +2632,10 @@ export default function EmployeesPage() {
  <span className="text-[10px] text-slate-500 dark:text-slate-400">Rata-rata {kpiGuru.rata_jam_per_guru ?? 0} JP per Pendidik</span>
  </div>
  </div>
- <span className="rounded-xl bg-sky-100/90 border border-emerald-200/80 dark:border-emerald-800/60 px-3 py-1.5 text-xs font-black text-sky-800 dark:bg-sky-950 dark:border-emerald-800/60 dark:text-sky-200">
+ <span className="rounded-xl bg-sky-600 px-3 py-1.5 text-xs font-black text-white shadow-xs">
  {totalJamPelajaran} JP
  </span>
+ </div>
  </div>
  </div>
  </div>
@@ -2637,10 +2643,10 @@ export default function EmployeesPage() {
  {/* SECTION 3 PEGAWAI TERBAIK & 3 GURU TERBAIK */}
  <div className="print:hidden grid grid-cols-1 lg:grid-cols-2 gap-4">
  {/* Card Top 3 Pegawai Terbaik */}
- <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 shadow-sm dark:bg-card-dark space-y-3.5">
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-3.5">
- <div className="flex items-center gap-2.5">
- <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-xs">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433]">
+ <div className="flex items-center justify-between bg-emerald-500/10 border-b border-emerald-200/80 dark:border-emerald-800/60 px-5 py-4">
+ <div className="flex items-center gap-3">
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-amber-500 text-white shadow-sm">
  <Trophy className="size-5" />
  </div>
  <div>
@@ -2648,7 +2654,7 @@ export default function EmployeesPage() {
  Top 3 Pegawai Terbaik Bulan Ini
  </h3>
  <p className="text-xs text-slate-500 dark:text-slate-400">
- Berdasarkan indeks presensi & disiplin kerja {selectedUnitName ? `· Unit ${selectedUnitName}` : '· Seluruh Unit'}
+ Berdasarkan indeks presensi &amp; disiplin kerja {selectedUnitName ? `· Unit ${selectedUnitName}` : '· Seluruh Unit'}
  </p>
  </div>
  </div>
@@ -2657,11 +2663,11 @@ export default function EmployeesPage() {
  </Badge>
  </div>
 
- <div className="space-y-2.5">
+ <div className="p-5 space-y-2.5">
  {top3Pegawai.length > 0 ? (
  top3Pegawai.map((emp, index) => {
  const fullName = getEmployeeFullName(emp)
- const rankColor = index === 0 ? 'bg-white dark:bg-card-dark' : index === 1 ? 'bg-white dark:bg-card-dark' : 'bg-white dark:bg-card-dark'
+ const rankColor = index === 0 ? 'bg-amber-500 text-white' : index === 1 ? 'bg-slate-400 text-white' : 'bg-amber-700 text-white'
  const rankLabel = index === 0 ? '#1 Pegawai' : index === 1 ? '#2 Pegawai' : '#3 Pegawai'
  return (
  <EmployeeHoverCard
@@ -2724,18 +2730,18 @@ export default function EmployeesPage() {
  </div>
 
  {/* Card Top 3 Guru Terbaik */}
- <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-5 shadow-sm dark:bg-card-dark space-y-3.5">
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-3.5">
- <div className="flex items-center gap-2.5">
- <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-card-dark shadow-xs border border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-sm dark:bg-[#1B2433]">
+ <div className="flex items-center justify-between bg-emerald-500/10 border-b border-emerald-200/80 dark:border-emerald-800/60 px-5 py-4">
+ <div className="flex items-center gap-3">
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-purple-600 text-white shadow-sm">
  <Award className="size-5" />
  </div>
  <div>
  <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">
- Top 3 Guru & Pendidik Terbaik Bulan Ini
+ Top 3 Guru &amp; Pendidik Terbaik Bulan Ini
  </h3>
  <p className="text-xs text-slate-500 dark:text-slate-400">
- Berdasarkan jam mengajar & keaktifan pembelajaran {selectedUnitName ? `· Unit ${selectedUnitName}` : '· Seluruh Unit'}
+ Berdasarkan jam mengajar &amp; keaktifan pembelajaran {selectedUnitName ? `· Unit ${selectedUnitName}` : '· Seluruh Unit'}
  </p>
  </div>
  </div>
@@ -2744,11 +2750,11 @@ export default function EmployeesPage() {
  </Badge>
  </div>
 
- <div className="space-y-2.5">
+ <div className="p-5 space-y-2.5">
  {top3Guru.length > 0 ? (
  top3Guru.map((emp, index) => {
  const fullName = getEmployeeFullName(emp)
- const rankColor = index === 0 ? 'bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300' : index === 1 ? 'bg-white dark:bg-card-dark' : 'bg-white dark:bg-card-dark'
+ const rankColor = index === 0 ? 'bg-amber-500 text-white' : index === 1 ? 'bg-slate-400 text-white' : 'bg-amber-700 text-white'
  const rankLabel = index === 0 ? '#1 Guru' : index === 1 ? '#2 Guru' : '#3 Guru'
  return (
  <EmployeeHoverCard
@@ -3283,21 +3289,21 @@ onClick={() => handleExportDataFormat('xlsx')}
  placeholder="Mata Pelajaran"
  value={newTeaching.mapel}
  onChange={(e) => setNewTeaching((p) => ({ ...p, mapel: e.target.value }))}
- className="rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 px-3 py-1.5 text-xs"
+ className="rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 px-3 py-1.5 text-xs"
  />
  <input
  type="text"
  placeholder="Kelas / Rombel"
  value={newTeaching.kelas}
  onChange={(e) => setNewTeaching((p) => ({ ...p, kelas: e.target.value }))}
- className="rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 px-3 py-1.5 text-xs"
+ className="rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 px-3 py-1.5 text-xs"
  />
  <input
  type="text"
  placeholder="Tahun Ajaran"
  value={newTeaching.tahun}
  onChange={(e) => setNewTeaching((p) => ({ ...p, tahun: e.target.value }))}
- className="rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 px-3 py-1.5 text-xs"
+ className="rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 px-3 py-1.5 text-xs"
  />
  <button
  onClick={handleAddTeaching}
@@ -3386,21 +3392,21 @@ onClick={() => handleExportDataFormat('xlsx')}
  placeholder="Nama Sertifikat"
  value={newCert.nama}
  onChange={(e) => setNewCert((p) => ({ ...p, nama: e.target.value }))}
- className="rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs text-slate-900 dark:text-slate-100"
+ className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs text-slate-900 dark:text-slate-100"
  />
  <input
  type="text"
  placeholder="Penerbit"
  value={newCert.penerbit}
  onChange={(e) => setNewCert((p) => ({ ...p, penerbit: e.target.value }))}
- className="rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs text-slate-900 dark:text-slate-100"
+ className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs text-slate-900 dark:text-slate-100"
  />
  <input
  type="text"
  placeholder="Tahun"
  value={newCert.tahun}
  onChange={(e) => setNewCert((p) => ({ ...p, tahun: e.target.value }))}
- className="rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs text-slate-900 dark:text-slate-100"
+ className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs text-slate-900 dark:text-slate-100"
  />
  <button
  onClick={handleAddCert}
@@ -3441,14 +3447,14 @@ onClick={() => handleExportDataFormat('xlsx')}
  placeholder="Nama Dokumen (KTP, SK, Ijazah)"
  value={newDoc.nama}
  onChange={(e) => setNewDoc((p) => ({ ...p, nama: e.target.value }))}
- className="rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs text-slate-900 dark:text-slate-100"
+ className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs text-slate-900 dark:text-slate-100"
  />
  <input
  type="text"
  placeholder="Nama File (.pdf / .jpg)"
  value={newDoc.file_name}
  onChange={(e) => setNewDoc((p) => ({ ...p, file_name: e.target.value }))}
- className="rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs text-slate-900 dark:text-slate-100"
+ className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs text-slate-900 dark:text-slate-100"
  />
  <button
  onClick={handleAddDoc}
@@ -3879,7 +3885,7 @@ onClick={() => handleExportDataFormat('xlsx')}
  value={idCardHeaderMotto}
  onChange={(e) => setIdCardHeaderMotto(e.target.value)}
  placeholder="Berilmu, Berakhlak, Beramal"
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 px-2.5 py-1 text-xs focus:border-emerald-200/80 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white font-medium"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 px-2.5 py-1 text-xs focus:border-emerald-200/80 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white font-medium"
  />
  </div>
 
@@ -3890,7 +3896,7 @@ onClick={() => handleExportDataFormat('xlsx')}
  value={idCardFooterMotto}
  onChange={(e) => setIdCardFooterMotto(e.target.value)}
  placeholder="Generasi Beriman, Berilmu, Berakhlak Mulia"
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 px-2.5 py-1 text-xs focus:border-emerald-200/80 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white resize-none font-medium"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 px-2.5 py-1 text-xs focus:border-emerald-200/80 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white resize-none font-medium"
  />
  </div>
  </div>
@@ -3913,7 +3919,7 @@ onClick={() => handleExportDataFormat('xlsx')}
  value={idCardBackTitle}
  onChange={(e) => setIdCardBackTitle(e.target.value)}
  placeholder="KETENTUAN KARTU PEGAWAI"
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 px-2.5 py-1 text-xs focus:border-emerald-200/80 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white font-medium"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 px-2.5 py-1 text-xs focus:border-emerald-200/80 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white font-medium"
  />
  </div>
 
@@ -3924,7 +3930,7 @@ onClick={() => handleExportDataFormat('xlsx')}
  value={idCardBackRules}
  onChange={(e) => setIdCardBackRules(e.target.value)}
  placeholder="1. Kartu ini milik resmi..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 px-2.5 py-1 text-xs focus:border-emerald-200/80 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white font-medium resize-none"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 px-2.5 py-1 text-xs focus:border-emerald-200/80 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white font-medium resize-none"
  />
  </div>
 
@@ -3948,7 +3954,7 @@ onClick={() => handleExportDataFormat('xlsx')}
  value={idCardBackAddress}
  onChange={(e) => setIdCardBackAddress(e.target.value)}
  placeholder="Jl. Gajah Mada No. 28..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 px-2.5 py-1 text-xs focus:border-emerald-200/80 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white font-medium resize-none"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 px-2.5 py-1 text-xs focus:border-emerald-200/80 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-900 dark:text-white font-medium resize-none"
  />
  </div>
 
@@ -4162,7 +4168,7 @@ onClick={() => handleExportDataFormat('xlsx')}
               <button
                 type="button"
                 disabled={isImporting || !importFile}
-                onClick={handleImport}
+                onClick={handleProcessImport}
                 className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
               >
                 {isImporting ? (
@@ -4609,7 +4615,7 @@ onClick={() => handleExportDataFormat('xlsx')}
  }
  footer={
  <div className="flex items-center justify-between w-full print:hidden">
- <AppButton variant="print" size="sm" icon={Printer} onClick={handlePrintStatCardModal}>Cetak Tabel Popup</AppButton>
+ <AppButton variant="print" size="sm" icon={Printer} onClick={handlePrintStatCardModal}>Cetak</AppButton>
  <AppButton variant="danger" size="sm" icon={X} onClick={() => { setStatCardModal({ isOpen: false, type: '', title: '', badge: '' }); setStatCardSearch(''); }}>Tutup</AppButton>
  </div>
  }
@@ -4639,7 +4645,7 @@ onClick={() => handleExportDataFormat('xlsx')}
  value={statCardSearch}
  onChange={(e) => setStatCardSearch(e.target.value)}
  placeholder="Cari nama, NIY, NIK pegawai..."
- className="w-full h-9 pl-10 pr-4 text-xs font-semibold rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+ className="w-full h-9 pl-10 pr-4 text-xs font-semibold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
  </div>

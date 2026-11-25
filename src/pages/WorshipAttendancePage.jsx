@@ -1161,7 +1161,7 @@ export default function WorshipAttendancePage() {
  value={scanInput}
  onChange={(e) => setScanInput(e.target.value)}
  placeholder="Scan QR code via scanner USB atau ketik NISN..."
- className="h-9 flex-1 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs font-semibold text-slate-900 focus:border-emerald-200/80 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-800 dark:text-white"
+ className="h-9 flex-1 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3 text-xs font-semibold text-slate-900 focus:border-emerald-200/80 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-800 dark:text-white"
  />
  <button
  type="submit"
@@ -1195,7 +1195,7 @@ export default function WorshipAttendancePage() {
  value={scanInput}
  onChange={(e) => setScanInput(e.target.value)}
  placeholder="Tap kartu RFID santri pada reader..."
- className="h-9 flex-1 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs font-semibold text-slate-900 focus:border-sky-500 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-800 dark:text-white"
+ className="h-9 flex-1 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white px-3 text-xs font-semibold text-slate-900 focus:border-sky-500 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-800 dark:text-white"
  />
  <button
  type="submit"
@@ -1218,7 +1218,7 @@ export default function WorshipAttendancePage() {
  placeholder="Cari santri..."
  value={searchSantri}
  onChange={(e) => setSearchSantri(e.target.value)}
- className="h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-8 pr-3 text-xs font-medium focus:border-emerald-200/80 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-800 dark:text-white"
+ className="h-9 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white pl-8 pr-3 text-xs font-medium focus:border-emerald-200/80 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-800 dark:text-white"
  />
  </div>
 
@@ -1633,7 +1633,7 @@ export default function WorshipAttendancePage() {
  <textarea
  value={verifyNotes}
  onChange={(e) => setVerifyNotes(e.target.value)}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-2.5 text-xs text-slate-800 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-white"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-2.5 text-xs text-slate-800 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-white"
  rows="2"
  placeholder="Catatan opsional..."
  />
@@ -1714,7 +1714,7 @@ export default function WorshipAttendancePage() {
  value={modalInput}
  onChange={(e) => setModalInput(e.target.value)}
  placeholder="Atau masukkan NISN hasil scan..."
- className="flex-1 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 px-3 py-2 text-xs focus:border-emerald-200/80 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-800"
+ className="flex-1 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50 px-3 py-2 text-xs focus:border-emerald-200/80 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-800"
  />
  <button
  type="submit"
@@ -1792,7 +1792,7 @@ export default function WorshipAttendancePage() {
  required
  value={editSessionForm.location_name}
  onChange={(e) => setEditSessionForm({ ...editSessionForm, location_name: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 p-2.5 font-semibold focus:border-emerald-200/80 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-800"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-slate-50 p-2.5 font-semibold focus:border-emerald-200/80 focus:outline-none dark:border-emerald-800/60 dark:bg-slate-800"
  />
  </div>
 
@@ -1848,7 +1848,7 @@ export default function WorshipAttendancePage() {
  value={templateForm.nama}
  onChange={(e) => setTemplateForm({ ...templateForm, nama: e.target.value })}
  placeholder="Misal: Shalat Subuh Berjamaah"
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-2.5 font-semibold text-slate-800 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-white"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-2.5 font-semibold text-slate-800 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-white"
  />
  </div>
 
@@ -1860,7 +1860,7 @@ export default function WorshipAttendancePage() {
  value={templateForm.code}
  onChange={(e) => setTemplateForm({ ...templateForm, code: e.target.value })}
  placeholder="Misal: SUBUH_BERJAMAAH"
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-2.5 font-semibold text-slate-800 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-white"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-2.5 font-semibold text-slate-800 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-white"
  />
  </div>
 
@@ -1894,7 +1894,7 @@ export default function WorshipAttendancePage() {
  value={templateForm.location_name}
  onChange={(e) => setTemplateForm({ ...templateForm, location_name: e.target.value })}
  placeholder="Misal: Masjid Utama Pesantren"
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-2.5 font-semibold text-slate-800 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-white"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white p-2.5 font-semibold text-slate-800 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-white"
  />
  </div>
 

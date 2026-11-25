@@ -431,7 +431,7 @@ function HeroUiFilterSelect({
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder="Cari..."
- className="w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+ className="w-full rounded-lg border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-slate-900/60 pl-8 pr-2.5 py-1 text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
  autoFocus
  />
  </div>
@@ -1291,7 +1291,7 @@ export function LaporanPrestasiPage() {
  value={searchTerm}
  onChange={(e) => setSearchTerm(e.target.value)}
  placeholder="Cari siswa, NIS, nama prestasi..."
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-9 pr-3 py-1.5 text-xs font-medium focus:border-emerald-600 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800/60 bg-white pl-9 pr-3 py-1.5 text-xs font-medium focus:border-emerald-600 focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
  />
  </div>
  </div>
@@ -1299,7 +1299,7 @@ export function LaporanPrestasiPage() {
  {/* ── SUB-VIEW TAB 1: REKAPITULASI PER UNIT (KHUSUS YAYASAN) ── */}
  {isFoundationRole && activeTab === 'unit' && (
  <div className="overflow-x-auto">
- <TableRoot fullBleed={false}>
+ <TableRoot fullBleed={true}>
  <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
  <TableRow>
  <TableHead className="py-3 px-4">Kode & Nama Unit</TableHead>
@@ -1377,7 +1377,7 @@ export function LaporanPrestasiPage() {
  {/* ── SUB-VIEW TAB 2: REKAPITULASI PER KEPALA SEKOLAH (KHUSUS YAYASAN) ── */}
  {isFoundationRole && activeTab === 'kepsek' && (
  <div className="overflow-x-auto">
- <TableRoot fullBleed={false}>
+ <TableRoot fullBleed={true}>
  <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
  <TableRow>
  <TableHead className="py-3 px-4">Pimpinan / Kepala Sekolah</TableHead>
@@ -1492,7 +1492,7 @@ export function LaporanPrestasiPage() {
  </div>
 
  <div className="overflow-x-auto">
- <TableRoot fullBleed={false}>
+ <TableRoot fullBleed={true}>
               <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
                 <TableRow>
                   <TableHead className="py-3 px-4">PROFIL &amp; NAMA SISWA</TableHead>

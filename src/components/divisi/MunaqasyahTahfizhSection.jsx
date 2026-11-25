@@ -478,8 +478,8 @@ export default function MunaqasyahTahfizhSection({ onDataMutate }) {
  </div>
  ) : (
  <Table aria-label="Tabel Munaqasyah Tahfizh">
- <TableHeader>
- <TableRow className="bg-white dark:bg-[#1B2433] border-b border-emerald-200/80 dark:border-emerald-800/80 dark:from-amber-950/90 dark:via-orange-950/70 dark:to-amber-950/90">
+ <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
+ <TableRow>
  <TableCell className="font-extrabold text-xs text-amber-950 dark:text-amber-200">SANTRI & ASAL UNIT</TableCell>
  <TableCell className="font-extrabold text-xs text-amber-950 dark:text-amber-200">JUZ DIUJI & PREDIKAT</TableCell>
  <TableCell className="font-extrabold text-xs text-amber-950 dark:text-amber-200">DEWAN PENGUJI</TableCell>
