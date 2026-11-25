@@ -60,6 +60,7 @@ import {
 import PageContainer from '../components/app/PageContainer'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
 import ActionDropdown from '../components/app/ActionDropdown'
+import AppModal from '../components/app/AppModal'
 import { PageToolbarActions } from '../components/app'
 import {
   MasterFilterSelect,
@@ -452,55 +453,38 @@ function HarmonizedBatchExportModal({
 }) {
  const [exportFormat, setExportFormat] = useState('xlsx')
 
- if (!isOpen) return null
-
  return (
- <div
- className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md animate-fadeIn"
- role="dialog"
- aria-modal="true"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !isExporting) onClose()
- }}
+ <AppModal
+ isOpen={isOpen}
+ onClose={onClose}
+ title={`Export Data ${moduleTitle}`}
+ badge="Unduh Data"
+ description="Pilih format berkas untuk mengekspor data sesuai filter aktif."
+ icon={Download}
+ maxWidth="max-w-xl"
+ zIndex={70}
+ disableBackdropClose={isExporting}
+ footer={
+ <>
+ <button
+ type="button"
+ onClick={onClose}
+ className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200/80 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs dark:border-emerald-800/60 dark:bg-emerald-600 dark:text-slate-200 transition cursor-pointer text-sm font-medium"
  >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="w-full max-w-xl"
- >
- <div className="flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
-
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232] shrink-0">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 p-2.5 shadow-md shadow-xs shrink-0">
- <Download className="h-5 w-5 text-emerald-600" strokeWidth={2.2} />
- </div>
- <div>
- <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Export Data {moduleTitle}</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/60 dark:text-amber-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" /> Unduh Data
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Pilih format berkas untuk mengekspor data sesuai filter aktif.
- </p>
- </div>
- </div>
+ Batal
+ </button>
  <button
  type="button"
  disabled={isExporting}
- onClick={onClose}
- className="size-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-sky-950/60 dark:text-sky-300 transition-colors cursor-pointer disabled:opacity-50"
+ onClick={() => onExport(exportFormat)}
+ className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-[#1B2433] px-5 py-2.5 text-xs font-extrabold shadow-sm hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200 disabled:opacity-50 cursor-pointer border border-emerald-200/80 dark:border-emerald-800/60"
  >
- <X className="size-4" />
+ <Download className="size-4" />
+ {isExporting ? 'Menyiapkan...' : 'Unduh Berkas'}
  </button>
- </div>
-
- <div className="p-6 space-y-4 overflow-y-auto flex-1">
+ </>
+ }
+ >
  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
  {[
  ['xlsx', 'Excel (.xlsx)', FileSpreadsheet, 'Format spreadsheet modern Microsoft Excel.'],
@@ -539,73 +523,25 @@ function HarmonizedBatchExportModal({
  Data yang diekspor akan mencakup seluruh entitas terfilter ({totalCount} rekap nilai {moduleTitle.toLowerCase()}).
  </p>
  </div>
- </div>
-
- <div className="px-6 py-4 border-t border-emerald-200/80 dark:border-emerald-800/80 flex items-center justify-end gap-2.5 bg-slate-50/50 dark:bg-slate-900/40 shrink-0">
- <button
- type="button"
- onClick={onClose}
- className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200/80 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs dark:border-emerald-800/60 dark:bg-emerald-600 dark:text-slate-200 transition cursor-pointer text-sm font-medium"
- >
- Batal
- </button>
- <button
- type="button"
- disabled={isExporting}
- onClick={() => onExport(exportFormat)}
- className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-[#1B2433] px-5 py-2.5 text-xs font-extrabold shadow-sm hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200 disabled:opacity-50 cursor-pointer border border-emerald-200/80 dark:border-emerald-800/60"
- >
- <Download className="size-4" />
- {isExporting ? 'Menyiapkan...' : 'Unduh Berkas'}
- </button>
- </div>
- </div>
- </motion.div>
- </div>
+ </AppModal>
  )
 }
 
 // ── HARMONIZED DELETE MODAL ──
 function HarmonizedDeleteModal({ isOpen, onClose, onConfirm, item, isSubmitting }) {
- if (!isOpen) return null
-
  return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fadeIn">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex h-9 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 shadow-sm">
- <Trash2 className="h-6 w-6" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-rose-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
- Hapus Permanen
- </span>
- <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
- Konfirmasi Hapus Rekap Nilai
- </h3>
- </div>
- </div>
-
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Apakah Anda yakin ingin menghapus data rekap penilaian siswa ini? Tindakan ini tidak dapat dibatalkan.
- </p>
-
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/50 p-3.5 dark:border-emerald-800/60 dark:bg-rose-950/20 mb-5">
- <p className="text-xs font-black text-rose-950 dark:text-rose-100">
- {item?.student?.full_name || 'Siswa'}
- </p>
- <p className="text-xs text-rose-800/80 dark:text-rose-300/80 mt-0.5">
- NIS: {item?.student?.nis || '-'} • Mapel: {item?.subject?.name || '-'} • Kelas: {item?.kelas?.nama_kelas || '-'}
- </p>
- </div>
-
- <div className="flex items-center justify-end gap-3">
+ <AppModal
+ isOpen={isOpen}
+ onClose={onClose}
+ title="Konfirmasi Hapus Rekap Nilai"
+ badge="Hapus Permanen"
+ icon={Trash2}
+ variant="danger"
+ maxWidth="max-w-md"
+ zIndex={70}
+ disableBackdropClose={isSubmitting}
+ footer={
+ <>
  <button
  type="button"
  onClick={onClose}
@@ -623,10 +559,22 @@ function HarmonizedDeleteModal({ isOpen, onClose, onConfirm, item, isSubmitting 
  {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
  <span>{isSubmitting ? 'Menghapus...' : 'Ya, Hapus Nilai'}</span>
  </button>
+ </>
+ }
+ >
+ <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+ Apakah Anda yakin ingin menghapus data rekap penilaian siswa ini? Tindakan ini tidak dapat dibatalkan.
+ </p>
+
+ <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/50 p-3.5 dark:border-emerald-800/60 dark:bg-rose-950/20">
+ <p className="text-xs font-black text-rose-950 dark:text-rose-100">
+ {item?.student?.full_name || 'Siswa'}
+ </p>
+ <p className="text-xs text-rose-800/80 dark:text-rose-300/80 mt-0.5">
+ NIS: {item?.student?.nis || '-'} • Mapel: {item?.subject?.name || '-'} • Kelas: {item?.kelas?.nama_kelas || '-'}
+ </p>
  </div>
- </div>
- </motion.div>
- </div>
+ </AppModal>
  )
 }
 
@@ -2616,60 +2564,18 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  )}
 
  {/* ── Harmonized Save / Update Confirmation Modal (Elevation z-[80]) ── */}
- {showSaveConfirmDialog && (
- <div
- className="fixed inset-0 z-[80] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fadeIn"
- role="dialog"
- aria-modal="true"
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-white shadow-md ${
- editingItem
- ? 'bg-white dark:bg-[#1B2433] shadow-sm'
- : 'bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm'
- }`}>
- {editingItem ? <Edit3 className="h-6 w-6" /> : <Award className="h-6 w-6" />}
- </div>
- <div>
- <span className={`inline-block rounded-md px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider ${
- editingItem
- ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300'
- : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
- }`}>
- {editingItem ? 'Update Nilai Siswa' : 'Input Nilai Baru'}
- </span>
- <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
- Konfirmasi Simpan Nilai
- </h3>
- </div>
- </div>
-
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Apakah Anda yakin ingin {editingItem ? 'memperbarui' : 'menyimpan'} data rekap penilaian siswa ini ke dalam buku nilai akademik?
- </p>
-
- <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 p-3.5 dark:border-emerald-800/60 dark:bg-emerald-950/20 mb-5">
- <div className="flex items-center justify-between mb-1">
- <span className="text-xs font-black text-emerald-950 dark:text-emerald-100">
- {editingItem?.student?.full_name || 'Data Rekap Siswa'}
- </span>
- <span className="text-xs font-mono font-bold text-emerald-700 dark:text-emerald-400">
- N. Akhir Terkalkulasi
- </span>
- </div>
- <p className="text-xs text-emerald-800/80 dark:text-emerald-300/80">
- Tugas: {formData.score_assignment} • UH: {formData.score_quiz} • UTS: {formData.score_midterm} • UAS: {formData.score_final}
- </p>
- </div>
-
- <div className="flex items-center justify-end gap-3">
+ <AppModal
+ isOpen={showSaveConfirmDialog}
+ onClose={() => setShowSaveConfirmDialog(false)}
+ title="Konfirmasi Simpan Nilai"
+ badge={editingItem ? 'Update Nilai Siswa' : 'Input Nilai Baru'}
+ icon={editingItem ? Edit3 : Award}
+ variant={editingItem ? 'warning' : 'emerald'}
+ maxWidth="max-w-md"
+ zIndex={80}
+ disableBackdropClose={isSaving}
+ footer={
+ <>
  <button
  type="button"
  onClick={() => setShowSaveConfirmDialog(false)}
@@ -2687,11 +2593,27 @@ export default function LmsPenilaianPage({ embedded = false, hideBreadcrumb = fa
  {isSaving && <RefreshCw className="h-4 w-4 animate-spin" />}
  <span>{isSaving ? 'Menyimpan...' : 'Ya, Simpan Nilai'}</span>
  </button>
+ </>
+ }
+ >
+ <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+ Apakah Anda yakin ingin {editingItem ? 'memperbarui' : 'menyimpan'} data rekap penilaian siswa ini ke dalam buku nilai akademik?
+ </p>
+
+ <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 p-3.5 dark:border-emerald-800/60 dark:bg-emerald-950/20">
+ <div className="flex items-center justify-between mb-1">
+ <span className="text-xs font-black text-emerald-950 dark:text-emerald-100">
+ {editingItem?.student?.full_name || 'Data Rekap Siswa'}
+ </span>
+ <span className="text-xs font-mono font-bold text-emerald-700 dark:text-emerald-400">
+ N. Akhir Terkalkulasi
+ </span>
  </div>
+ <p className="text-xs text-emerald-800/80 dark:text-emerald-300/80">
+ Tugas: {formData.score_assignment} • UH: {formData.score_quiz} • UTS: {formData.score_midterm} • UAS: {formData.score_final}
+ </p>
  </div>
- </motion.div>
- </div>
- )}
+ </AppModal>
 
  {/* ── Grade Breakdown Detail Modal ── */}
  {showDetailModal && viewingItem && (

@@ -1,4 +1,5 @@
 import { HeroUiHeader } from "../components/ui/HeroUiHeader"
+import AppModal from '../components/app/AppModal'
 import ActionDropdown from '../components/app/ActionDropdown'
 import {
   KpiStatCard
@@ -86,19 +87,6 @@ import {
 import {
   DatePicker
 } from '@/components/ui/date-picker'
-import {
-  Dialog,
-  DialogBody,
-  DialogClose,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle
-} from '@/components/ui/dialog'
-import {
-  Backdrop,
-  OverlayWrapper
-} from '@/components/ui/dialog'
 import {
   Pagination
 } from '@/components/ui/pagination'
@@ -1830,52 +1818,55 @@ export default function MutabaahAnalyticsPage({ view }) {
 
  {/* MATRIX FAST INPUT MODAL */}
  {view !== 'rekap' && (
- <AnimatePresence>
- {showMatrixModal && (
- <div
- role="dialog"
- aria-modal="true"
- aria-labelledby="matrix-modal-title"
- tabIndex={-1}
- className="overlay modal fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/70 p-3 sm:p-5 backdrop-blur-md"
- onMouseDown={(e) => { if (e.target === e.currentTarget) setShowMatrixModal(false) }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-4xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232] shrink-0">
- <div className="flex items-center gap-3">
- <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
- 
-            <Zap className="size-6 sm:size-7 h-5 w-5 text-white" strokeWidth={2.25} />
- </div>
- <div>
- <h3 id="matrix-modal-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Fast Matrix Input Mutabaah</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/60 dark:text-amber-400 dark:border-emerald-800/60">
- <Zap className="size-3" />
- Massal
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Input cepat centang mutabaah harian santri secara massal</p>
- </div>
- </div>
+ <AppModal
+ isOpen={showMatrixModal}
+ onClose={() => setShowMatrixModal(false)}
+ badge="Massal"
+ title="Fast Matrix Input Mutabaah"
+ description="Input cepat centang mutabaah harian santri secara massal"
+ icon={Zap}
+ maxWidth="max-w-4xl"
+ zIndex="z-[70]"
+ footer={
+ <div className="flex w-full flex-wrap items-center justify-between gap-2.5">
  <button
  type="button"
  onClick={() => setShowMatrixModal(false)}
- aria-label="Tutup modal"
- className="size-9 flex items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer shrink-0"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
+ Tutup
+ </button>
+ <button
+ type="button"
+ onClick={() => {
+ setShowMatrixModal(false)
+ setStudents((prev) =>
+ prev.map((st) => {
+ const checkedCount = worshipItemsList.filter((item) => matrixValues[`${st.id}:${item}`]).length
+ const pct = Math.round((checkedCount / worshipItemsList.length) * 100)
+ return {
+ ...st,
+ progressToday: pct,
+ status: pct > 0 ? 'Finalized' : st.status,
+ }
+ })
+ )
+ Swal.fire({
+ icon: 'success',
+ title: 'Matrix Disimpan',
+ text: `Data Mutabaah untuk ${students.length} santri berhasil diperbarui!`,
+ timer: 1800,
+ showConfirmButton: false,
+ })
+ }}
+ className="inline-flex h-9.5 items-center gap-1.5 rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 active:scale-95 cursor-pointer"
+ >
+ <Check className="size-4" strokeWidth={2.2} />
+ <span>Simpan Matrix</span>
  </button>
  </div>
-
- <div className="modal-body min-h-0 flex-1 overflow-y-auto p-5 sm:p-6">
+ }
+ >
  <div className="overflow-x-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/80">
  <table className="w-full text-xs text-left border-collapse">
  <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-xs font-bold uppercase tracking-wider text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/80 dark:text-emerald-300">
@@ -1919,86 +1910,41 @@ export default function MutabaahAnalyticsPage({ view }) {
  </tbody>
  </table>
  </div>
- </div>
-
- <div className="modal-footer flex flex-wrap items-center justify-between gap-2.5 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900 shrink-0">
- <button
- type="button"
- onClick={() => setShowMatrixModal(false)}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
- >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
- </div>
- <span>Tutup</span>
- </button>
- <button
- type="button"
- onClick={() => {
- setShowMatrixModal(false)
- setStudents((prev) =>
- prev.map((st) => {
- const checkedCount = worshipItemsList.filter((item) => matrixValues[`${st.id}:${item}`]).length
- const pct = Math.round((checkedCount / worshipItemsList.length) * 100)
- return {
- ...st,
- progressToday: pct,
- status: pct > 0 ? 'Finalized' : st.status,
- }
- })
- )
- Swal.fire({
- icon: 'success',
- title: 'Matrix Disimpan',
- text: `Data Mutabaah untuk ${students.length} santri berhasil diperbarui!`,
- timer: 1800,
- showConfirmButton: false,
- })
- }}
- className="inline-flex items-center gap-2 rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 px-5 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-[1.03] transition-all duration-200 active:scale-95 cursor-pointer shadow-sm"
- >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <Check className="size-3.5 text-emerald-600" strokeWidth={2.2} />
- </div>
- <span>Simpan Matrix</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+ </AppModal>
  )}
 
  {/* 🟢 HEROUI DIALOG: MODAL TAMBAH DATA SANTRI */}
- <OverlayWrapper isOpen={showAddModal} onOpenChange={setShowAddModal}>
- <Backdrop isOpen={showAddModal} onOpenChange={setShowAddModal} isDismissable={true} className="z-[70] bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-3 sm:p-5">
- <Dialog isOpen={showAddModal} onClose={() => setShowAddModal(false)} className="max-w-md w-full rounded-xl bg-white dark:bg-[#182232] shadow-2xl shadow-sm dark:shadow-black/60 overflow-hidden p-0 border border-emerald-200/80 dark:border-emerald-800/60">
- <div className="p-5 sm:p-6">
- <DialogHeader className="border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4 dark:border-emerald-800/60 flex flex-row items-center justify-between gap-3">
- <div className="flex items-center gap-3">
- <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
- 
-            <UserPlus className="size-6 sm:size-7 h-5 w-5 text-white" strokeWidth={2.25} />
- </div>
- <div>
- <DialogTitle className="text-sm sm:text-base font-black text-slate-900 dark:text-amber-600 flex items-center gap-2">
- <span>Tambah Data Mutabaah</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- Data Baru
- </span>
- </DialogTitle>
- <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Isi informasi santri untuk menambahkan data mutabaah baru
- </DialogDescription>
- </div>
- </div>
- <DialogClose onClick={() => setShowAddModal(false)} />
- </DialogHeader>
-
- <form onSubmit={handleSaveNewStudent}>
- <DialogBody className="space-y-4 py-4">
+ <AppModal
+ isOpen={showAddModal}
+ onClose={() => setShowAddModal(false)}
+ icon={UserPlus}
+ title="Tambah Data Mutabaah"
+ badge="Data Baru"
+ description="Isi informasi santri untuk menambahkan data mutabaah baru"
+ maxWidth="max-w-md"
+ zIndex={70}
+ footer={
+ <>
+ <button
+ type="button"
+ onClick={() => setShowAddModal(false)}
+ className="inline-flex items-center gap-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 h-9.5 px-4 text-xs font-black border border-slate-300 dark:border-slate-700 transition-all active:scale-95 cursor-pointer"
+ >
+ <X className="size-3.5" strokeWidth={2.2} />
+ <span>Batal</span>
+ </button>
+ <button
+ type="submit"
+ form="mutabaah-add-student-form"
+ className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white h-9.5 px-5 text-xs font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 transition-all active:scale-95 cursor-pointer"
+ >
+ <Check className="size-3.5" strokeWidth={2.2} />
+ <span>Simpan Data</span>
+ </button>
+ </>
+ }
+ >
+ <form id="mutabaah-add-student-form" onSubmit={handleSaveNewStudent} className="space-y-4">
  <div>
  <label htmlFor="mutabaah-add-name" className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
  Nama Lengkap Santri <span className="text-rose-500">*</span>
@@ -2014,7 +1960,7 @@ export default function MutabaahAnalyticsPage({ view }) {
  placeholder="Masukkan nama santri"
  value={studentForm.name}
  onChange={(e) => setStudentForm({ ...studentForm, name: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20"
+ className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  />
  </div>
  </div>
@@ -2034,7 +1980,7 @@ export default function MutabaahAnalyticsPage({ view }) {
  placeholder="Masukkan NIS santri"
  value={studentForm.nis}
  onChange={(e) => setStudentForm({ ...studentForm, nis: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20"
+ className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  />
  </div>
  </div>
@@ -2054,7 +2000,7 @@ export default function MutabaahAnalyticsPage({ view }) {
  placeholder="Contoh: VII-A"
  value={studentForm.class}
  onChange={(e) => setStudentForm({ ...studentForm, class: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20"
+ className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  />
  </div>
  </div>
@@ -2073,69 +2019,47 @@ export default function MutabaahAnalyticsPage({ view }) {
  placeholder="Contoh: Asrama Al-Ghazali"
  value={studentForm.dorm}
  onChange={(e) => setStudentForm({ ...studentForm, dorm: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20"
+ className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  />
  </div>
  </div>
  </div>
- </DialogBody>
+ </form>
+ </AppModal>
 
- <DialogFooter className="flex flex-wrap items-center justify-between gap-2.5 border-t border-emerald-200/80 pt-4 dark:border-emerald-800/60">
+ {/* 🟢 HEROUI DIALOG: MODAL EDIT DATA SANTRI */}
+ <AppModal
+ isOpen={showEditModal}
+ onClose={() => setShowEditModal(false)}
+ icon={Pencil}
+ title="Edit Data Mutabaah"
+ badge="Update Data"
+ description="Ubah informasi santri yang dipilih"
+ variant="warning"
+ maxWidth="max-w-md"
+ zIndex={70}
+ footer={
+ <>
  <button
  type="button"
- onClick={() => setShowAddModal(false)}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
+ onClick={() => setShowEditModal(false)}
+ className="inline-flex items-center gap-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 h-9.5 px-4 text-xs font-black border border-slate-300 dark:border-slate-700 transition-all active:scale-95 cursor-pointer"
  >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
- </div>
+ <X className="size-3.5" strokeWidth={2.2} />
  <span>Batal</span>
  </button>
  <button
  type="submit"
- className="inline-flex items-center gap-2 rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 px-5 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-[1.03] transition-all duration-200 active:scale-95 cursor-pointer shadow-sm"
+ form="mutabaah-edit-student-form"
+ className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white h-9.5 px-5 text-xs font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 transition-all active:scale-95 cursor-pointer"
  >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <Check className="size-3.5 text-emerald-600" strokeWidth={2.2} />
- </div>
- <span>Simpan Data</span>
+ <Pencil className="size-3.5" strokeWidth={2.2} />
+ <span>Simpan Perubahan</span>
  </button>
- </DialogFooter>
- </form>
- </div>
- </Dialog>
- </Backdrop>
- </OverlayWrapper>
-
- {/* 🟢 HEROUI DIALOG: MODAL EDIT DATA SANTRI */}
- <OverlayWrapper isOpen={showEditModal} onOpenChange={setShowEditModal}>
- <Backdrop isOpen={showEditModal} onOpenChange={setShowEditModal} isDismissable={true} className="z-[70] bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-3 sm:p-5">
- <Dialog isOpen={showEditModal} onClose={() => setShowEditModal(false)} className="max-w-md w-full rounded-xl bg-white dark:bg-[#182232] shadow-2xl shadow-sm dark:shadow-black/60 overflow-hidden p-0 border border-emerald-200/80 dark:border-emerald-800/60">
- <div className="p-5 sm:p-6">
- <DialogHeader className="border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4 dark:border-emerald-800/60 flex flex-row items-center justify-between gap-3">
- <div className="flex items-center gap-3">
- <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
- 
-            <Pencil className="size-6 sm:size-7 h-5 w-5 text-white" strokeWidth={2.25} />
- </div>
- <div>
- <DialogTitle className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Edit Data Mutabaah</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/60 dark:text-amber-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- Update Data
- </span>
- </DialogTitle>
- <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Ubah informasi santri yang dipilih
- </DialogDescription>
- </div>
- </div>
- <DialogClose onClick={() => setShowEditModal(false)} />
- </DialogHeader>
-
- <form onSubmit={handleSaveEditStudent}>
- <DialogBody className="space-y-4 py-4">
+ </>
+ }
+ >
+ <form id="mutabaah-edit-student-form" onSubmit={handleSaveEditStudent} className="space-y-4">
  <div>
  <label htmlFor="mutabaah-edit-name" className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
  Nama Lengkap Santri <span className="text-rose-500">*</span>
@@ -2150,7 +2074,7 @@ export default function MutabaahAnalyticsPage({ view }) {
  required
  value={studentForm.name}
  onChange={(e) => setStudentForm({ ...studentForm, name: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20"
+ className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  />
  </div>
  </div>
@@ -2169,7 +2093,7 @@ export default function MutabaahAnalyticsPage({ view }) {
  required
  value={studentForm.nis}
  onChange={(e) => setStudentForm({ ...studentForm, nis: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20"
+ className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  />
  </div>
  </div>
@@ -2188,7 +2112,7 @@ export default function MutabaahAnalyticsPage({ view }) {
  type="text"
  value={studentForm.class}
  onChange={(e) => setStudentForm({ ...studentForm, class: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20"
+ className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  />
  </div>
  </div>
@@ -2206,85 +2130,37 @@ export default function MutabaahAnalyticsPage({ view }) {
  type="text"
  value={studentForm.dorm}
  onChange={(e) => setStudentForm({ ...studentForm, dorm: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-200/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20"
+ className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  />
  </div>
  </div>
  </div>
- </DialogBody>
-
- <DialogFooter className="flex flex-wrap items-center justify-between gap-2.5 border-t border-emerald-200/80 pt-4 dark:border-emerald-800/60">
- <button
- type="button"
- onClick={() => setShowEditModal(false)}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
- >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
- </div>
- <span>Batal</span>
- </button>
- <button
- type="submit"
- className="inline-flex items-center gap-2 rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 px-5 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-[1.03] transition-all duration-200 active:scale-95 cursor-pointer shadow-sm"
- >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <Pencil className="size-3.5 text-slate-600" strokeWidth={2.2} />
- </div>
- <span>Simpan Perubahan</span>
- </button>
- </DialogFooter>
  </form>
- </div>
- </Dialog>
- </Backdrop>
- </OverlayWrapper>
+ </AppModal>
 
  {/* 🟢 HEROUI DIALOG: MODAL LIHAT DETAIL EVALUASI MUTABAAH SANTRI */}
- <OverlayWrapper isOpen={showDetailDrawer} onOpenChange={setShowDetailDrawer}>
- <Backdrop isOpen={showDetailDrawer} onOpenChange={setShowDetailDrawer} isDismissable={true} className="z-[70] bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-2 sm:p-4">
- <Dialog isOpen={showDetailDrawer} onClose={() => setShowDetailDrawer(false)} className="max-w-4xl w-full rounded-xl bg-white dark:bg-[#182232] shadow-2xl shadow-sm dark:shadow-black/60 overflow-hidden p-0 border border-emerald-200/80 dark:border-emerald-800/60 max-h-[94vh] flex flex-col">
-
- {/* Header Dialog */}
- <div className="p-4 sm:p-5 border-b border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
- <DialogHeader className="flex flex-row items-center justify-between gap-3 p-0">
- <div className="flex items-center gap-3 min-w-0">
- {selectedStudent?.photo ? (
- <img src={selectedStudent.photo} alt={selectedStudent.name} className="h-9 w-12 rounded-xl object-cover border border-emerald-200/80 shrink-0" />
- ) : (
- <div className={`flex h-12 w-12 items-center justify-center rounded-xl text-white font-black shadow-md border shrink-0 text-base ${isSelectedBoarding
- ? 'bg-white dark:bg-[#1B2433] border-emerald-200/80 dark:border-emerald-800/60 shadow-sm'
- : 'bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 border-emerald-200/80 dark:border-emerald-800/60 shadow-sm'
- }`}>
- {selectedStudent?.name?.slice(0, 2)?.toUpperCase() || 'ST'}
- </div>
- )}
- <div className="min-w-0">
- <DialogTitle className="text-base sm:text-lg font-black text-slate-900 dark:text-slate-600 flex items-center gap-2 flex-wrap">
- <span className="truncate">{selectedStudent?.name}</span>
- <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold border shrink-0 ${isSelectedBoarding
- ? 'bg-purple-50 text-purple-800 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-purple-950/60 dark:text-purple-300 dark:border-emerald-800/60'
- : 'bg-emerald-50 text-emerald-800 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/60'
- }`}>
- <ShieldCheck className="size-3.5 text-white" />
- {isSelectedBoarding ? 'Lembar Mutabaah Pesantren / Boarding' : 'Lembar Mutabaah Fullday School'}
- </span>
- </DialogTitle>
- <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-mono truncate">
- NIS: {selectedStudent?.nis || '-'} • Kelas: {selectedStudent?.class || '-'} {selectedStudent?.dorm && selectedStudent.dorm !== '-' ? `• Asrama: ${selectedStudent.dorm}` : ''} • Periode: {filters.date_from || firstDay} s.d. {filters.date_to || today}
- </DialogDescription>
- </div>
- </div>
- <DialogClose onClick={() => setShowDetailDrawer(false)} />
- </DialogHeader>
-
- {/* Sub-bar: Format Otomatis Sesuai Jenis Unit Pendidikan */}
- <div className="mt-3.5 flex flex-wrap items-center justify-between gap-2.5 pt-3 border-t border-emerald-200/80 dark:border-emerald-800/80 text-xs">
+ <AppModal
+ isOpen={showDetailDrawer}
+ onClose={() => setShowDetailDrawer(false)}
+ icon={ShieldCheck}
+ title={selectedStudent?.name || 'Detail Evaluasi Mutabaah'}
+ badge={isSelectedBoarding ? 'Lembar Mutabaah Pesantren / Boarding' : 'Lembar Mutabaah Fullday School'}
+ description={
+ selectedStudent
+ ? `NIS: ${selectedStudent.nis || '-'} • Kelas: ${selectedStudent.class || '-'}${selectedStudent.dorm && selectedStudent.dorm !== '-' ? ` • Asrama: ${selectedStudent.dorm}` : ''} • Periode: ${filters.date_from || firstDay} s.d. ${filters.date_to || today}`
+ : ''
+ }
+ maxWidth="max-w-4xl"
+ zIndex={70}
+ bodyClassName="space-y-4 text-xs"
+ subHeader={
+ selectedStudent ? (
+ <div className="bg-emerald-50/90 dark:bg-emerald-950/40 border-b border-emerald-200/80 dark:border-emerald-800/60 px-5 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-2.5 text-xs">
  <div className="flex items-center gap-2 flex-wrap">
  <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Kurikulum Unit:</span>
- <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-black border ${isSelectedBoarding
- ? 'bg-purple-50 text-purple-800 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-purple-950/60 dark:text-purple-300 dark:border-emerald-800/60'
- : 'bg-emerald-50 text-emerald-800 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/60'
+ <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-xl text-xs font-black border ${isSelectedBoarding
+ ? 'bg-purple-50 text-purple-800 border-purple-200/80 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-800/60'
+ : 'bg-white text-emerald-800 border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/60'
  }`}>
  <span className={`size-2 rounded-full ${isSelectedBoarding ? 'bg-purple-600 animate-pulse' : 'bg-emerald-600'}`} />
  <span>{isSelectedBoarding ? 'Pesantren / Boarding (Pengasuhan 24 Jam)' : 'Fullday School (Sekolah & Rumah)'}</span>
@@ -2310,10 +2186,36 @@ export default function MutabaahAnalyticsPage({ view }) {
  </div>
  </div>
  </div>
+ ) : null
+ }
+ footer={
+ <div className="w-full flex flex-wrap items-center justify-between gap-2.5">
+ <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+ Formulir Mutaba&apos;ah Mingguan Dareliman Edu • {isSelectedBoarding ? 'Pesantren / Boarding' : 'Fullday School'}
+ </span>
+ <div className="flex items-center gap-2">
+ <button
+ type="button"
+ onClick={() => setShowDetailDrawer(false)}
+ className="inline-flex items-center gap-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 h-9.5 px-4 text-xs font-black border border-slate-300 dark:border-slate-700 transition-all active:scale-95 cursor-pointer"
+ >
+ <X className="size-3.5" strokeWidth={2.2} />
+ <span>Tutup</span>
+ </button>
+ <button
+ type="button"
+ onClick={() => selectedStudent && handlePrintWeeklyStudent(selectedStudent)}
+ className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white h-9.5 px-5 text-xs font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 transition-all active:scale-95 cursor-pointer"
+ >
+ <Printer className="size-3.5" />
+ <span>Cetak Format {isSelectedBoarding ? 'Boarding' : 'Fullday'}</span>
+ </button>
  </div>
-
- {/* Body Dialog Scrollable */}
- <DialogBody className="overflow-y-auto max-h-[calc(94vh-180px)] p-4 sm:p-5 space-y-4 text-xs text-slate-700 dark:text-slate-300">
+ </div>
+ }
+ >
+ {selectedStudent && (
+ <>
 
  {/* Notifikasi Karakteristik Format */}
  <div className={`p-3 rounded-xl border text-xs flex items-center justify-between gap-3 ${isSelectedBoarding
@@ -2498,38 +2400,9 @@ export default function MutabaahAnalyticsPage({ view }) {
  </p>
  </div>
  </div>
-
- </DialogBody>
-
- {/* Footer Dialog */}
- <div className="p-4 sm:p-5 border-t border-emerald-200/80 dark:border-emerald-800/60 flex flex-wrap items-center justify-between gap-2.5 bg-slate-50/50 dark:bg-slate-900/50 shrink-0">
- <span className="text-xs font-semibold text-slate-400">
- Formulir Mutaba'ah Mingguan Dareliman Edu • {isSelectedBoarding ? 'Pesantren / Boarding' : 'Fullday School'}
- </span>
- <div className="flex items-center gap-2">
- <button
- type="button"
- onClick={() => selectedStudent && handlePrintWeeklyStudent(selectedStudent)}
- className="inline-flex items-center gap-2 rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 px-4 py-2 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer shadow-sm"
- >
- <Printer className="size-3.5 text-emerald-600" />
- <span>Cetak Format {isSelectedBoarding ? 'Boarding' : 'Fullday'}</span>
- </button>
- <button
- type="button"
- onClick={() => setShowDetailDrawer(false)}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 px-4 py-2 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
- >
- <div className="flex size-4.5 items-center justify-center rounded-lg bg-white/20">
- <X className="size-3 text-rose-600" strokeWidth={2.2} />
- </div>
- <span>Tutup</span>
- </button>
- </div>
- </div>
- </Dialog>
- </Backdrop>
- </OverlayWrapper>
+ </>
+ )}
+ </AppModal>
  {/* Modal: HeroUI Opsi Cetak & Unduh PDF / Clean Print */}
  <PrintOptionModal
  isOpen={printOptionModalOpen}

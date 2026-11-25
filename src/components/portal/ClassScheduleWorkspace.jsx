@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect, useCallback } from 'react'
+import AppModal from '@/components/app/AppModal'
 import {
  CalendarDays,
  Clock,
@@ -1457,43 +1458,28 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  {/* ─────────────────────────────────────────────────────────────────────────────
  6. MODAL DETAIL POP-UP SESI JADWAL (HEROUI POP-UP MODAL ALA MOBILE APP)
  ───────────────────────────────────────────────────────────────────────────── */}
- {isDetailModalOpen && selectedSessionDetail && (
- <div
- role="dialog"
- aria-modal="true"
- className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-[fadeIn_0.15s_ease-out]"
- >
- <div className="relative w-full max-w-lg overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-2xl dark:border-emerald-800/60 dark:bg-[#1B2433] max-h-[90vh] flex flex-col">
- {/* Top Accent Gradient Bar */}
-
- {/* Header Dialog */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 p-5 pb-4 shrink-0 bg-white dark:bg-[#1B2433] dark:from-emerald-950/30">
- <div className="flex items-center gap-3">
- <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-xs">
- <CalendarDays className="h-5 w-5" />
- </div>
- <div>
- <h3 className="text-base font-black text-slate-900 dark:text-white leading-tight">
- {selectedSessionDetail.subject?.name || selectedSessionDetail.mata_pelajaran || selectedSessionDetail.activity_name || '-'}
- </h3>
- {selectedSessionDetail.time_start && (
- <p className="text-xs font-bold text-emerald-700 dark:text-emerald-400">
- Pukul {selectedSessionDetail.time_start.slice(0, 5)} - {(selectedSessionDetail.time_end || '').slice(0, 5)} WIB
- </p>
- )}
- </div>
- </div>
+ <AppModal
+ isOpen={Boolean(isDetailModalOpen && selectedSessionDetail)}
+ onClose={closeSessionDetail}
+ title={selectedSessionDetail?.subject?.name || selectedSessionDetail?.mata_pelajaran || selectedSessionDetail?.activity_name || '-'}
+ description={selectedSessionDetail?.time_start ? `Pukul ${selectedSessionDetail.time_start.slice(0, 5)} - ${(selectedSessionDetail.time_end || '').slice(0, 5)} WIB` : 'Detail Sesi Jadwal Pembelajaran'}
+ icon={CalendarDays}
+ maxWidth="max-w-lg"
+ zIndex="z-[100]"
+ footer={
+ <div className="flex w-full items-center justify-end">
  <button
  type="button"
  onClick={closeSessionDetail}
- className="flex h-8 w-8 items-center justify-center rounded-xl text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 cursor-pointer"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-5 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <X className="h-4 w-4" />
+ Tutup
  </button>
  </div>
-
- {/* Body Dialog */}
- <div className="p-5 space-y-4 overflow-y-auto text-xs">
+ }
+ >
+ {selectedSessionDetail && (
+ <div className="space-y-4 text-xs">
  {/* Box Info Identitas Guru & Ruangan */}
  <div className="grid grid-cols-2 gap-3">
  <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-emerald-200/80 dark:border-emerald-700/80">
@@ -1559,21 +1545,8 @@ export default function ClassScheduleWorkspace({ schedules = [], loading = false
  )}
  </div>
  </div>
-
- {/* Footer Dialog */}
- <div className="flex items-center justify-end p-4 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 dark:bg-slate-900/50">
- <HeroButton
- size="sm"
- color="success"
- onPress={closeSessionDetail}
- className="font-bold text-xs px-5"
- >
- Tutup
- </HeroButton>
- </div>
- </div>
- </div>
  )}
+ </AppModal>
  </div>
  )
 }

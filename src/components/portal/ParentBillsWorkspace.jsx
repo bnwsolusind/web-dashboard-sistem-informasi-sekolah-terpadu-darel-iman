@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react'
+import AppModal from '@/components/app/AppModal'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
  CreditCard,
@@ -639,43 +640,17 @@ export default function ParentBillsWorkspace({ bills = [], loading = false, stud
  )}
  </AnimatePresence>
 
- {/* 6. MODAL PEMBAYARAN VIRTUAL ACCOUNT (HEROUI HERO UI) */}
- <AnimatePresence>
- {isPayModalOpen && (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-lg overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-2xl dark:border-emerald-800/60 dark:bg-[#1B2433]"
+ {/* 6. MODAL PEMBAYARAN VIRTUAL ACCOUNT (HEROUI) */}
+ <AppModal
+ isOpen={isPayModalOpen}
+ onClose={() => setIsPayModalOpen(false)}
+ title={vaResult ? 'Instruksi Pembayaran VA' : 'Bayar Tagihan Siswa'}
+ badge={vaResult ? 'Virtual Account Berhasil Diterbitkan' : 'Pilihan Bank Pembayaran'}
+ icon={CreditCard}
+ maxWidth="max-w-lg"
+ zIndex="z-[70]"
  >
- {/* Garis Aksen Emerald */}
-
- <div className="p-6">
- {/* Header Modal */}
- <div className="flex items-start justify-between gap-3 mb-5 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4 dark:border-emerald-800/60">
- <div className="flex items-center gap-3">
- <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm">
- <CreditCard className="h-6 w-6" />
- </div>
  <div>
- <span className="inline-block rounded-md bg-emerald-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
- {vaResult ? 'Virtual Account Berhasil Diterbitkan' : 'Pilihan Bank Pembayaran'}
- </span>
- <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white mt-0.5">
- {vaResult ? 'Instruksi Pembayaran VA' : 'Bayar Tagihan Siswa'}
- </h3>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setIsPayModalOpen(false)}
- className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-600 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition cursor-pointer"
- >
- <X className="h-5 w-5" />
- </button>
- </div>
-
  {payError && (
  <div className="mb-4 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/70 p-3 text-xs text-rose-800 dark:border-emerald-800/60 dark:bg-rose-950/30 dark:text-rose-300 flex items-start gap-2">
  <AlertCircle className="h-4 w-4 shrink-0 text-rose-600 mt-0.5" />
@@ -887,10 +862,7 @@ export default function ParentBillsWorkspace({ bills = [], loading = false, stud
  </div>
  )}
  </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+ </AppModal>
 
  {/* 7. PRINT RECEIPT TEMPLATE (HIDDEN ON SCREEN, VISIBLE ON PRINT) */}
  {activeReceipt && (

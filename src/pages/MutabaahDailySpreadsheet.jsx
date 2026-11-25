@@ -1,5 +1,6 @@
 import { HeroUiHeader } from "../components/ui/HeroUiHeader"
 import CustomSelect from "../components/ui/CustomSelect"
+import { SquircleActionButton } from "../components/master-data"
 import {
   useCallback,
   useEffect,
@@ -241,10 +242,10 @@ export default function MutabaahDailySpreadsheet() {
  </div>
  <label className="assignment-select"><span>Scope Pembimbing</span><CustomSelect value={assignmentId} onChange={(e) => setAssignmentId(e.target.value)}><option value="">Pilih assignment</option>{context?.assignments?.map((a) => <option key={a.id} value={a.id}>{a.unit_name} · {a.kelas_name || a.rombel_name || a.mentoring_group || a.type}</option>)}</CustomSelect></label>
  <label className="search-student"><span>Cari siswa</span><div><Search size={17} /><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Nama atau NIS..." /></div></label>
- <button className="outline" onClick={copyPrevious} disabled={!students.length}><ClipboardCopy size={17} /> Salin Kemarin</button>
- <button className="outline" onClick={() => Swal.fire({ icon: 'success', title: 'Draft tersimpan', text: 'Seluruh perubahan sel telah disimpan otomatis.', timer: 1200, showConfirmButton: false })} disabled={!students.length}><Save size={17} /> Simpan</button>
- <button className="outline" onClick={handlePrintSheet} disabled={!students.length}><Printer size={17} /> Cetak Lembar</button>
- <button className="primary" onClick={() => finalize([...selected])} disabled={!selected.size}><Send size={17} /> Finalisasi Massal</button>
+ <SquircleActionButton variant="secondary" icon={ClipboardCopy} label="Salin Kemarin" onClick={copyPrevious} disabled={!students.length} showLabel />
+ <SquircleActionButton variant="neutral" icon={Save} label="Simpan" onClick={() => Swal.fire({ icon: 'success', title: 'Draft tersimpan', text: 'Seluruh perubahan sel telah disimpan otomatis.', timer: 1200, showConfirmButton: false })} disabled={!students.length} showLabel />
+ <SquircleActionButton variant="print" icon={Printer} label="Cetak Lembar" onClick={handlePrintSheet} disabled={!students.length} showLabel />
+ <SquircleActionButton variant="primary" icon={Send} label="Finalisasi Massal" onClick={() => finalize([...selected])} disabled={!selected.size} showLabel />
  </section>
 
  {assignment && <div className="scope-strip"><Users size={16} /><b>{assignment.unit_name}</b><span>{assignment.kelas_name || assignment.rombel_name || assignment.mentoring_group || 'Semua siswa dalam unit'}</span><em>{template?.name || 'Template belum tersedia'}</em></div>}
@@ -278,12 +279,10 @@ export default function MutabaahDailySpreadsheet() {
  )}
  <span>{selected.size} siswa dipilih</span>
  {template?.items?.some((it) => it.scope === 'home') && (
- <button type="button" className="verify-home-btn" onClick={handleVerifyHome} title="Verifikasi amalan rumah yang diisi orang tua">
- <CheckCircle2 size={15} /> Verifikasi Catatan Ortu
- </button>
+ <SquircleActionButton variant="teal" icon={CheckCircle2} label="Verifikasi Catatan Ortu" onClick={handleVerifyHome} title="Verifikasi amalan rumah yang diisi orang tua" showLabel />
  )}
- {displayedItems[0] && <button onClick={() => bulkStatus(displayedItems[0], 'good')}>Tandai Baik pada kolom pertama</button>}
- <button disabled={!undo} onClick={() => undo && updateCell(undo.student, undo.item, undo.previous)}><RotateCcw size={15} /> Undo</button>
+ {displayedItems[0] && <SquircleActionButton variant="restore" icon={Check} label="Tandai Baik pada kolom pertama" onClick={() => bulkStatus(displayedItems[0], 'good')} showLabel />}
+ <SquircleActionButton variant="neutral" icon={RotateCcw} label="Undo" disabled={!undo} onClick={() => undo && updateCell(undo.student, undo.item, undo.previous)} showLabel />
  </div>
  <div className="sheet-scroll" role="region" aria-label="Spreadsheet input mutabaah" onScroll={(event) => setScrollTop(event.currentTarget.scrollTop)}>
  <table>

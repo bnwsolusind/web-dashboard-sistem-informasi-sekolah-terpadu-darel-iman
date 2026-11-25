@@ -1,65 +1,55 @@
 import React from 'react'
 import { Briefcase, Pencil, Sparkles, Tag, UserPen, Users, X } from 'lucide-react'
 import { AppButton, IconButton } from "../app"
+import AppModal from '../app/AppModal'
 
 export default function JabatanDetailModal({ isOpen, onClose, jabatan = null, onEdit }) {
  if (!isOpen || !jabatan) return null
 
  const badgeWarna = jabatan.warna || '#3B82F6'
 
- return (
- <div
- id="jabatan-detail-modal"
- className="overlay modal overlay-open:opacity-100 overlay-open:duration-300 fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md animate-fadeIn"
- role="dialog"
- aria-modal="true"
- aria-labelledby="detail-jabatan-title"
- tabIndex={-1}
- onMouseDown={e => { if (e.target === e.currentTarget) onClose() }}
- >
- <div className="modal-dialog font-sans my-auto w-full max-w-xl">
- <div className="modal-content flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] dark:border-emerald-800/60 dark:bg-slate-950">
- {/* Top accent bar */}
-
- {/* Header Bar */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232] dark:bg-slate-950">
- <div className="flex items-center gap-3">
- <div
- className="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-md font-bold text-lg shrink-0"
- style={{ backgroundColor: badgeWarna }}
- >
- <Briefcase className="w-5 h-5" />
- </div>
- <div>
- <h3 id="detail-jabatan-title" className="modal-title flex items-center gap-2 text-sm sm:text-base font-black text-slate-900 dark:text-white">
- <span>{jabatan.nama_jabatan || jabatan.name}</span>
- <span className="text-xs font-mono px-2.5 py-0.5 rounded-lg bg-slate-100 text-slate-800 font-bold dark:bg-slate-800 dark:text-slate-200">
- {jabatan.kode_jabatan || jabatan.code}
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Detail atribut master jabatan & riwayat audit trail.
- </p>
- </div>
- </div>
-        <IconButton
-          icon={X}
-          variant="ghost"
-          size="sm"
-          onClick={onClose}
-          aria-label="Tutup detail jabatan"
-        />
- </div>
-
- {/* Content Body */}
- <div className="modal-body min-h-0 flex-1 space-y-4 overflow-y-auto p-6 text-xs text-slate-700 dark:text-slate-200">
+  return (
+    <AppModal
+      isOpen={Boolean(isOpen && jabatan)}
+      onClose={onClose}
+      title={jabatan ? `${jabatan.nama_jabatan || jabatan.name} (${jabatan.kode_jabatan || jabatan.code})` : 'Detail Jabatan'}
+      badge="Detail"
+      description="Detail atribut master jabatan & riwayat audit trail."
+      icon={Briefcase}
+      maxWidth="max-w-2xl"
+      bodyClassName="space-y-4 text-xs text-slate-700 dark:text-slate-200"
+      footer={
+        <>
+          <button
+            type="button"
+            onClick={onClose}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Tutup</span>
+          </button>
+          {onEdit && (
+            <button
+              type="button"
+              onClick={onEdit}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+            >
+              <Pencil className="size-4" />
+              <span>Edit Jabatan</span>
+            </button>
+          )}
+        </>
+      }
+    >
+      {jabatan && (
+        <>
  {/* Status Bar */}
- <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50/60 p-4 rounded-xl border border-emerald-200/80 dark:bg-slate-900/40 dark:border-emerald-800/60">
+ <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50/60 p-4 rounded-xl border-2 border-[#b6f6d9] dark:bg-slate-900/40 dark:border-emerald-800/60">
  <div>
  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Status</span>
  <span className={`inline-block mt-1 px-3 py-0.5 rounded-full text-xs font-extrabold ${
  jabatan.status === 'Aktif' || jabatan.is_active
- ? 'bg-emerald-100 text-emerald-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800/60'
+ ? 'bg-emerald-100 text-emerald-800 border-2 border-[#b6f6d9] dark:border-emerald-800/60 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800/60'
  : 'bg-slate-200 text-slate-700 dark:bg-emerald-950/60 dark:text-emerald-300'
  }`}>
  {jabatan.status || (jabatan.is_active ? 'Aktif' : 'Nonaktif')}
@@ -98,7 +88,7 @@ export default function JabatanDetailModal({ isOpen, onClose, jabatan = null, on
  <span>Atribut Jabatan</span>
  </h4>
 
- <div className="bg-white rounded-xl p-4 border border-emerald-200/80 space-y-2 text-xs dark:bg-slate-900/40 dark:border-emerald-800/60">
+ <div className="bg-white rounded-xl p-4 border-2 border-[#b6f6d9] space-y-2 text-xs dark:bg-slate-900/40 dark:border-emerald-800/60">
  <div className="flex justify-between border-b border-emerald-100/80 dark:border-emerald-800/60 pb-2">
  <span className="text-slate-500 font-medium">Satuan Kerja:</span>
  <span className="font-bold text-slate-800 dark:text-slate-200">{jabatan.satuan_kerja || '-'}</span>
@@ -140,7 +130,7 @@ export default function JabatanDetailModal({ isOpen, onClose, jabatan = null, on
  <span>Statistik Pemakaian</span>
  </h4>
 
- <div className="bg-white rounded-xl p-4 border border-emerald-200/80 space-y-2 text-xs dark:bg-slate-900/40 dark:border-emerald-800/60">
+ <div className="bg-white rounded-xl p-4 border-2 border-[#b6f6d9] space-y-2 text-xs dark:bg-slate-900/40 dark:border-emerald-800/60">
  <div className="flex justify-between border-b border-emerald-100/80 dark:border-emerald-800/60 pb-2">
  <span className="text-slate-500 font-medium">Total Pegawai Menjabat:</span>
  <span className="font-extrabold text-[#059669] dark:text-[#10B981]">
@@ -169,7 +159,7 @@ export default function JabatanDetailModal({ isOpen, onClose, jabatan = null, on
  <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-500">
  Deskripsi & Job Description
  </h4>
- <div className="p-4 bg-slate-50/60 rounded-xl border border-emerald-200/80 text-xs text-slate-700 dark:bg-slate-900/40 dark:border-emerald-800/60 dark:text-slate-300 leading-relaxed font-semibold">
+ <div className="p-4 bg-slate-50/60 rounded-xl border-2 border-[#b6f6d9] text-xs text-slate-700 dark:bg-slate-900/40 dark:border-emerald-800/60 dark:text-slate-300 leading-relaxed font-semibold">
  {jabatan.deskripsi || jabatan.description || 'Tidak ada deskripsi rinci yang dimasukkan.'}
  </div>
  </div>
@@ -180,7 +170,7 @@ export default function JabatanDetailModal({ isOpen, onClose, jabatan = null, on
  <UserPen className="w-3.5 h-3.5 text-[#059669] dark:text-[#10B981]" />
  <span>Audit Trail (Riwayat Pembuatan)</span>
  </h4>
- <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-slate-50/60 p-4 rounded-xl border border-emerald-200/80 dark:bg-slate-900/40 dark:border-emerald-800/60">
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-slate-50/60 p-4 rounded-xl border-2 border-[#b6f6d9] dark:bg-slate-900/40 dark:border-emerald-800/60">
  <div>
  <span className="text-slate-400 block text-[10px] font-bold uppercase tracking-wider">Dibuat Pada:</span>
  <span className="font-bold text-slate-800 dark:text-slate-200">
@@ -201,21 +191,8 @@ export default function JabatanDetailModal({ isOpen, onClose, jabatan = null, on
  </div>
  </div>
  </div>
- </div>
-
-      {/* Modal Footer */}
-      <div className="modal-footer flex items-center justify-end gap-3 border-t border-emerald-100/80 bg-white px-6 py-4 dark:border-emerald-800/60 dark:bg-slate-950">
-        <AppButton variant="ghost" size="md" icon={X} onClick={onClose}>
-          Tutup
-        </AppButton>
-        {onEdit && (
-          <AppButton variant="primary" size="md" icon={Pencil} onClick={onEdit}>
-            Edit Jabatan
-          </AppButton>
-        )}
-      </div>
- </div>
- </div>
- </div>
- )
+        </>
+      )}
+    </AppModal>
+  )
 }

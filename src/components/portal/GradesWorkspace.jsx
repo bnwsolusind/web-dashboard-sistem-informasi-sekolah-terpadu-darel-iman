@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from 'react'
+import AppModal from '@/components/app/AppModal'
 import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -706,59 +707,31 @@ export default function GradesWorkspace({
  const detailSubjectColor = getSubjectColor(selectedDetail.subject?.name, selectedDetail.subject?.code)
 
  return (
- <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-950/70 p-4 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.95, y: 15 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 15 }}
- transition={{ type: 'spring', damping: 25, stiffness: 300 }}
- className="relative w-full max-w-xl overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-slate-900"
- >
- {/* Top Accent Gradient Bar */}
-
- {/* Modal Header */}
- <div className="flex items-start justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 p-5 dark:border-emerald-800/60">
- <div className="flex items-start gap-3.5">
- <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm">
- <Award className="h-5 w-5" />
- </div>
- <div>
- <div className="flex flex-wrap items-center gap-2">
- <span className={`inline-flex items-center gap-1 rounded-lg border px-2 py-0.5 text-[10px] font-bold ${detailSubjectColor.pill}`}>
- {selectedDetail.subject?.code || selectedDetail.subject?.kode_mapel || '-'}
+ <AppModal
+ isOpen={Boolean(selectedDetail)}
+ onClose={() => setSelectedDetail(null)}
+ title={selectedDetail?.subject?.name || selectedDetail?.subject?.nama_mapel}
+ description={[period?.semester, period?.academic_year].filter(Boolean).join(' · ')}
+ badge={`${selectedDetail?.subject?.code || selectedDetail?.subject?.kode_mapel || '-'} · ${detailIsTuntas ? 'Tuntas KKM' : 'Perlu Penguatan'}`}
+ icon={Award}
+ maxWidth="max-w-xl"
+ footer={
+ <div className="flex w-full items-center justify-between gap-3">
+ <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
+ Dareliman Edu{student?.unit_name || period?.unit_name ? ` · ${student?.unit_name || period?.unit_name}` : ''}
  </span>
- <span
- className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-black border ${
- detailIsTuntas
- ? 'bg-emerald-100 text-emerald-800 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800/60'
- : 'bg-rose-100 text-rose-800 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-rose-950 dark:text-rose-300 dark:border-emerald-800/60'
- }`}
- >
- {detailIsTuntas ? <CheckCircle2 className="h-3 w-3 text-emerald-600" /> : <AlertTriangle className="h-3 w-3 text-rose-600" />}
- {detailIsTuntas ? 'Tuntas KKM' : 'Perlu Penguatan'}
- </span>
- </div>
- <h3 className="mt-1 text-base font-black text-slate-900 dark:text-white leading-snug">
- {selectedDetail.subject?.name || selectedDetail.subject?.nama_mapel}
- </h3>
- <p className="text-xs text-slate-500 mt-0.5">
- {[period?.semester, period?.academic_year].filter(Boolean).join(' · ')}
- </p>
- </div>
- </div>
-
  <button
  type="button"
  onClick={() => setSelectedDetail(null)}
- aria-label="Tutup modal"
- className="rounded-xl p-2 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 dark:hover:text-slate-200 transition"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <X className="h-5 w-5" />
+ Tutup
  </button>
  </div>
-
- {/* Modal Body */}
- <div className="max-h-[68vh] overflow-y-auto p-5 space-y-4">
+ }
+ >
+ {selectedDetail && (
+ <div className="space-y-4">
  {/* Highlight Final Score Banner */}
  <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-4 dark:border-emerald-800/60 dark:bg-emerald-950/30">
  <div className="flex items-center justify-between">
@@ -851,25 +824,8 @@ export default function GradesWorkspace({
  </div>
  )}
  </div>
-
- {/* Modal Footer */}
- <div className="flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 px-5 py-3.5 dark:border-emerald-800/60 dark:bg-slate-800/60">
- <span className="text-xs text-slate-500">
- Dareliman Edu{student?.unit_name || period?.unit_name ? ` · ${student?.unit_name || period?.unit_name}` : ''}
- </span>
- <Button
- type="button"
- variant="ghost"
- appearance="outline"
- size="sm"
- onClick={() => setSelectedDetail(null)}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-700/80 dark:text-slate-300"
- >
- Tutup
- </Button>
- </div>
- </motion.div>
- </div>
+ )}
+ </AppModal>
  )
  })()}
  </AnimatePresence>

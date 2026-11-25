@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import AppModal from './AppModal'
 import {
  CheckCircle2,
  AlertTriangle,
@@ -109,68 +110,48 @@ export function CrudConfirmDialog({
  const finalDesc = description || defaultDesc
  const finalConfirmText = confirmText || defaultBtnText
 
- return (
- <AnimatePresence>
- <div
- role="dialog"
- tabIndex={-1}
- aria-modal="true"
- aria-labelledby="crud-confirm-title"
- className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md"
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !isLoading) handleClose()
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 12 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-				className={`w-full max-w-md overflow-hidden rounded-3xl border-2 bg-white shadow-2xl shadow-emerald-950/20 ${borderColor} dark:bg-card-dark`}
- >
- {/* Top Accent Gradient Bar */}
-				<div className={`h-1.5 w-full bg-gradient-to-r ${topBarGradient} shrink-0`} />
- <div className="p-6">
- {/* Header Icon + Titles */}
- <div className="flex items-center gap-3 mb-4">
- <div
- className={`flex size-11 shrink-0 items-center justify-center rounded-2xl shadow-md ${iconBadgeBg}`}
- >
- <IconComponent className="size-5 text-white" strokeWidth={2.2} />
- </div>
- <div className="min-w-0">
- <div className="flex items-center gap-2">
- <h4 id="crud-confirm-title" className="text-sm font-black text-slate-900 dark:text-white ">
- {finalTitle}
- </h4>
- <span
- className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-extrabold ${
- type === 'delete'
- ? 'bg-rose-100 text-rose-800 dark:bg-rose-950/80 dark:text-rose-300'
- : type === 'update'
- ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300'
- : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300'
- }`}
- >
- {type === 'delete' ? (
- <AlertTriangle className="size-2.5" />
- ) : (
- <Sparkles className="size-2.5" />
- )}
- {tagLabel}
- </span>
- </div>
- <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-0.5">
- {type === 'delete'
- ? 'Konfirmasi tindakan destruktif'
- : type === 'update'
- ? 'Simpan perubahan data ke database'
- : 'Tambahkan data baru ke sistem'}
- </p>
- </div>
- </div>
-
- {/* Entity Details Card (Jika Ada) */}
+  const modalVariant = type === 'delete' ? 'danger' : type === 'update' ? 'warning' : 'emerald'
+  return (
+    <AppModal
+      isOpen={isOpen}
+      onClose={() => !isLoading && handleClose()}
+      title={finalTitle}
+      badge={type === 'delete' ? 'Hapus Permanen' : type === 'update' ? 'Perubahan Data' : 'Konfirmasi'}
+      icon={Icon}
+      variant={modalVariant}
+      maxWidth="max-w-md"
+      zIndex={70}
+      disableBackdropClose={isLoading}
+      hideCloseButton={isLoading}
+      bodyClassName="space-y-3"
+      footer={
+        <>
+          <button
+            type="button"
+            disabled={isLoading}
+            onClick={handleClose}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>{cancelText}</span>
+          </button>
+          <button
+            type="button"
+            disabled={isLoading}
+            onClick={handleConfirm}
+            className={`h-9.5 px-5 rounded-xl text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 shadow-md disabled:opacity-50 ${
+              type === 'delete'
+                ? 'bg-rose-600 hover:bg-rose-700 border-rose-600 shadow-rose-600/20'
+                : type === 'update'
+                  ? 'bg-amber-600 hover:bg-amber-700 border-amber-600 shadow-amber-600/20'
+                  : 'bg-emerald-600 hover:bg-emerald-700 border-emerald-600 shadow-emerald-600/20'
+            }`}
+          >
+            <span>{isLoading ? 'Memproses...' : finalConfirmText}</span>
+          </button>
+        </>
+      }
+    >
  {entityName && (
  <div
  className={`rounded-xl border p-3.5 space-y-1 mb-3 ${
@@ -209,59 +190,8 @@ export function CrudConfirmDialog({
  </div>
  )}
 
- {/* Footer Buttons */}
- <div className="mt-6 flex items-center justify-end gap-2.5">
- {type === 'delete' ? (
- <button
- type="button"
- disabled={isLoading}
- onClick={handleClose}
- className="inline-flex items-center gap-1.5 rounded-2xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-xl shadow-emerald-950/15 bg-slate-100 hover:bg-slate-200 text-slate-700 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200 px-4 py-2.5 text-xs font-extrabold transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer disabled:opacity-50"
- >
- <div className="flex size-4.5 items-center justify-center rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300">
- <X className="size-3 text-current" strokeWidth={2.2} />
- </div>
- <span>{cancelText}</span>
- </button>
- ) : (
- <button
- type="button"
- disabled={isLoading}
- onClick={handleClose}
- className="inline-flex items-center gap-1.5 rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer shadow-sm disabled:opacity-50"
- >
- <div className="flex size-4.5 items-center justify-center rounded-lg bg-white/20">
- <X className="size-3 text-rose-600" strokeWidth={2.2} />
- </div>
- <span>{cancelText}</span>
- </button>
- )}
-
- <button
- type="button"
- disabled={isLoading}
- onClick={handleConfirm}
- className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-extrabold border transition-all duration-200 hover:scale-[1.03] active:scale-95 shadow-md cursor-pointer disabled:opacity-50 ${confirmBtnBg}`}
- >
- {isLoading ? (
- <span className="size-4 animate-spin rounded-full border-2 border-emerald-200/80 border-t-transparent" />
- ) : (
- <div className="flex size-4.5 items-center justify-center rounded-lg bg-white/20">
- {type === 'delete' ? (
- <Trash2 className="size-3 text-rose-600" strokeWidth={2.2} />
- ) : (
- <CheckCircle2 className="size-3 text-amber-600" strokeWidth={2.2} />
- )}
- </div>
- )}
- <span>{isLoading ? 'Memproses...' : finalConfirmText}</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- </AnimatePresence>
- )
+    </AppModal>
+  )
 }
 
 export default CrudConfirmDialog

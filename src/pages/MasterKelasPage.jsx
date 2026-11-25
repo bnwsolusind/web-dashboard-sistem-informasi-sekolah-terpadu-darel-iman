@@ -75,6 +75,7 @@ import {
 import AppDataTable from '../components/app/AppDataTable'
 import PageContainer from '../components/app/PageContainer'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
+import AppModal from '../components/app/AppModal'
 import {
   printCleanTable,
   downloadPdfTable
@@ -1514,57 +1515,36 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
  {/* ══════════════════════════════════════════════════════════════════
  EXPORT DIALOG — Harmonized HeroUI Batch Modal
  ══════════════════════════════════════════════════════════════════ */}
- <AnimatePresence>
- {showExportModal && (
- <div
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="kelas-export-title"
- tabIndex={-1}
- onMouseDown={e => { if (e.target === e.currentTarget) setShowExportModal(false) }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-md"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
-
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-white dark:bg-card-dark p-2.5 shadow-md shadow-xs shrink-0 border border-emerald-200/80 dark:border-emerald-800/60">
- <Download className="h-5 w-5 text-emerald-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3 id="kelas-export-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Export Data Kelas</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-[#059669] border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- Unduh
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Pilih format berkas untuk mengekspor data master kelas
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setShowExportModal(false)}
- aria-label="Tutup modal export"
- className="size-9 flex items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 hover:bg-slate-200 dark:bg-emerald-950/40 dark:text-emerald-300 transition-colors cursor-pointer"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Body */}
- <div className="modal-body space-y-2.5 p-6 text-sm text-slate-700 dark:text-slate-200">
+        <AppModal
+          isOpen={showExportModal}
+          onClose={() => setShowExportModal(false)}
+          icon={Download}
+          title="Export Data Kelas"
+          badge="Batch Export"
+          description="Pilih format berkas untuk mengekspor data rombongan belajar sesuai filter aktif."
+          maxWidth="max-w-md"
+          footer={
+            <div className="flex items-center justify-end gap-2.5 w-full">
+              <button
+                type="button"
+                onClick={() => setShowExportModal(false)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleExportConfirm}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+              >
+                <Download className="size-4" strokeWidth={2} />
+                <span>Unduh Berkas</span>
+              </button>
+            </div>
+          }
+        >
+          <div className="space-y-2.5">
  {[
  { value: 'xlsx', label: 'Excel (.xlsx)', desc: 'Format Microsoft Excel Modern (Disarankan)' },
  { value: 'xls', label: 'Excel Legacy (.xls)', desc: 'Format Microsoft Excel Standard 97-2003' },
@@ -1594,89 +1574,49 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
  </div>
  </label>
  ))}
- </div>
+          </div>
+        </AppModal>
 
- {/* Footer */}
- <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <button
- type="button"
- onClick={() => setShowExportModal(false)}
- className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200/80 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-200 transition cursor-pointer"
- >
- <X className="size-3.5 text-slate-500 dark:text-slate-400" strokeWidth={2.2} />
- <span>Batal</span>
- </button>
- <button
- type="button"
- onClick={handleProcessExport}
- className="inline-flex items-center gap-2 rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 px-5 py-2.5 text-xs font-extrabold border-2 border-emerald-300 dark:border-emerald-800 hover:scale-[1.03] transition-all duration-200 active:scale-95 cursor-pointer"
- >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <Download className="size-3.5 text-emerald-600" strokeWidth={2.25} />
- </div>
- <span>Unduh Berkas</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
-
- {/* ══════════════════════════════════════════════════════════════════
- IMPORT DIALOG — Harmonized HeroUI Batch Modal
- ══════════════════════════════════════════════════════════════════ */}
- <AnimatePresence>
- {showImportModal && (
- <div
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="kelas-import-title"
- tabIndex={-1}
- onMouseDown={e => { if (e.target === e.currentTarget) setShowImportModal(false) }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
-
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-white dark:bg-card-dark p-2.5 shadow-md shadow-sky-500/30 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
- <Upload className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3 id="kelas-import-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Import Data Kelas</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-sky-50 px-2 py-0.5 text-[10px] font-bold text-sky-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- Batch Import
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Unggah berkas spreadsheet (.xlsx, .xls, atau .csv) untuk impor data kelas massal
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setShowImportModal(false)}
- aria-label="Tutup form import"
- className="size-9 flex items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 hover:bg-slate-200 dark:bg-emerald-950/40 dark:text-emerald-300 transition-colors cursor-pointer"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Modal Body */}
- <div className="modal-body min-h-0 flex-1 space-y-4.5 overflow-y-auto p-6 text-sm text-slate-700 dark:text-slate-200">
+        {/* ══════════════════════════════════════════════════════════════════
+             IMPORT DIALOG — Harmonized HeroUI Batch Modal
+             ══════════════════════════════════════════════════════════════════ */}
+        <AppModal
+          isOpen={showImportModal}
+          onClose={() => { if (!isImporting) setShowImportModal(false) }}
+          disableBackdropClose={isImporting}
+          icon={Upload}
+          title="Import Data Kelas"
+          badge="Batch Import"
+          description="Unggah berkas Excel/CSV untuk menambahkan atau memperbarui rombongan belajar."
+          maxWidth="max-w-4xl"
+          footer={
+            <div className="flex items-center justify-between w-full">
+              <button
+                type="button"
+                disabled={isImporting}
+                onClick={() => setShowImportModal(false)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                disabled={!importFile || isImporting}
+                onClick={handleProcessImport}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+              >
+                {isImporting ? (
+                  <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  <Upload className="size-4" strokeWidth={2} />
+                )}
+                <span>{isImporting ? 'Memproses Impor...' : 'Mulai Impor Data'}</span>
+              </button>
+            </div>
+          }
+        >
+          <div className="space-y-4">
  {/* Unduh Template Card */}
  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-card-dark p-4 dark:border-emerald-800/60 dark:bg-slate-900/40">
  <div className="flex items-center gap-3">
@@ -1831,106 +1771,34 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
  Sistem akan otomatis memvalidasi keunikan kode kelas dan menyinkronkan data rombongan belajar tanpa merusak integritas relasi yang sudah ada.
  </p>
  </div>
- </div>
+          </div>
+        </AppModal>
 
- {/* Footer */}
- <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <button
- type="button"
- onClick={() => setShowImportModal(false)}
- className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200/80 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-200 transition cursor-pointer"
- >
- <X className="size-3.5 text-slate-500 dark:text-slate-400" strokeWidth={2.2} />
- <span>Batal</span>
- </button>
- <button
- type="button"
- onClick={handleProcessImport}
- disabled={!importFile || isImporting}
- className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-card-dark px-5 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-[1.03] transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
- >
- {isImporting ? (
- <span className="size-4 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent" />
- ) : (
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <Upload className="size-3.5 text-white" strokeWidth={2.25} />
- </div>
- )}
- <span>{isImporting ? 'Memproses Impor...' : 'Mulai Impor Data'}</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
-
- {/* ── MODAL HASIL IMPOR & PEMBERITAHUAN DATA DUPLIKAT ── */}
- <AnimatePresence>
- {duplicateModalData && (
- <div
- className="overlay modal fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-5 bg-slate-950/75 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="kelas-duplicate-report-title"
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
- <div className={cn(
- "h-1.5 w-full shrink-0",
- duplicateModalData.diperbarui > 0
- ? "bg-white dark:bg-card-dark"
- : duplicateModalData.duplikat > 0
- ? "bg-white dark:bg-card-dark"
- : "bg-white dark:bg-card-dark"
- )} />
-
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3">
- <div className={cn(
- "rounded-xl p-2.5 text-white shadow-md shrink-0 border",
- duplicateModalData.diperbarui > 0
- ? "bg-white dark:bg-card-dark border-emerald-200/80 dark:border-emerald-800/60 shadow-sm"
- : "bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 shadow-sm"
- )}>
- {duplicateModalData.diperbarui > 0 ? (
- <RefreshCcw className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- ) : (
- <CheckCircle2 className="h-5 w-5 text-amber-600" strokeWidth={2.25} />
- )}
- </div>
- <div>
- <h3 id="kelas-duplicate-report-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Hasil Impor & Pemberitahuan Data</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300">
- Total {duplicateModalData.total} Data
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Ringkasan sinkronisasi dan status pemrosesan data kelas
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setDuplicateModalData(null)}
- aria-label="Tutup ringkasan impor"
- className="size-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-sky-950/60 dark:text-sky-300 transition cursor-pointer"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Body */}
- <div className="modal-body min-h-0 flex-1 space-y-4 overflow-y-auto p-6 text-sm text-slate-700 dark:text-slate-200">
+        {/* ══════════════════════════════════════════════════════════════════
+             MODAL HASIL IMPOR & PEMBERITAHUAN DATA DUPLIKAT
+             ══════════════════════════════════════════════════════════════════ */}
+        <AppModal
+          isOpen={Boolean(duplicateModalData)}
+          onClose={() => setDuplicateModalData(null)}
+          zIndex={70}
+          icon={duplicateModalData?.diperbarui > 0 ? RefreshCcw : CheckCircle2}
+          title="Hasil Impor & Pemberitahuan Data Kelas"
+          badge={`Total ${duplicateModalData?.total || 0} Data`}
+          description="Ringkasan sinkronisasi dan status pemrosesan data rombongan belajar"
+          maxWidth="max-w-xl"
+          footer={
+            <button
+              type="button"
+              onClick={() => setDuplicateModalData(null)}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+            >
+              <Check className="size-4" strokeWidth={2.2} />
+              <span>Tutup &amp; Mengerti</span>
+            </button>
+          }
+        >
+          {duplicateModalData && (
+            <div className="space-y-4">
  {/* KPI Summary Cards */}
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
  <div className="p-3 rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 dark:bg-emerald-950/30 text-center">
@@ -2016,79 +1884,32 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
  </ul>
  </div>
  )}
- </div>
-
- {/* Footer */}
- <div className="modal-footer flex items-center justify-end border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 px-6 py-3.5 dark:border-emerald-800/60 dark:bg-slate-900/30">
- <button
- type="button"
- onClick={() => setDuplicateModalData(null)}
- className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 text-xs font-bold transition shadow-sm cursor-pointer"
- >
- <Check className="size-3.5" strokeWidth={2.2} />
- <span>Tutup & Mengerti</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+            </div>
+          )}
+        </AppModal>
 
  {/* ══════════════════════════════════════════════════════════════════
  CETAK & PDF DIALOG — Harmonized HeroUI Scope Selection Modal
  ══════════════════════════════════════════════════════════════════ */}
- <AnimatePresence>
- {printOptionModalOpen && (
- <div
- role="dialog"
- tabIndex={-1}
- aria-modal="true"
- aria-labelledby="kelas-print-option-title"
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- onMouseDown={e => { if (e.target === e.currentTarget) setPrintOptionModalOpen(false) }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.95, y: 16 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.96, y: 12 }}
- transition={{ type: 'spring', stiffness: 400, damping: 30 }}
- className="modal-dialog font-sans w-full max-w-xl"
- >
- <div className="modal-content relative flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
-
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-white dark:bg-card-dark border border-emerald-200/80 dark:border-emerald-800/60 p-2.5 text-[#059669] shadow-xs dark:from-emerald-950/60 dark:to-teal-950/40 dark:border-emerald-800/60 dark:text-[#10B981]">
- <Printer className="h-5 w-5" strokeWidth={2.25} />
- </div>
- <div>
- <h3 id="kelas-print-option-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Opsi & Scope Cetak Laporan</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-[#059669] border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- Cetak & PDF
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Pilih jenis laporan kelas yang ingin dicetak atau diunduh
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setPrintOptionModalOpen(false)}
- aria-label="Tutup modal"
- className="rounded-xl p-2 bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Body */}
- <div className="modal-body min-h-0 flex-1 overflow-y-auto p-6 space-y-4">
+        <AppModal
+          isOpen={printOptionModalOpen}
+          onClose={() => setPrintOptionModalOpen(false)}
+          icon={Printer}
+          title="Opsi Cetak &amp; PDF Rombongan Belajar"
+          badge="Cetak &amp; PDF"
+          description="Pilih metode cetak dokumen atau unduh file PDF daftar kelas."
+          maxWidth="max-w-xl"
+          footer={
+            <button
+              type="button"
+              onClick={() => setPrintOptionModalOpen(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+          }
+        >
  {/* Selector Cards */}
  <div className="space-y-2.5">
  <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
@@ -2211,23 +2032,7 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
  </div>
  </button>
  </div>
- </div>
-
- {/* Footer */}
- <div className="modal-footer flex items-center justify-end border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 px-6 py-4 dark:border-emerald-800/60 dark:bg-[#131B27]">
- <button
- type="button"
- onClick={() => setPrintOptionModalOpen(false)}
- className="inline-flex items-center gap-1.5 rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
- >
- Batal
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+        </AppModal>
 
  <motion.div
  initial="hidden"
@@ -2572,66 +2377,40 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
  </motion.div>
 
  {/* FORM MODAL: TAMBAH / EDIT KELAS & ROMBEL */}
- <AnimatePresence>
- {isFormModalOpen && (
- <div
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="class-form-modal-title"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !createMutation.isPending && !updateMutation.isPending) {
- closeFormModal()
- }
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
-
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3">
- <div className="rounded-xl p-2.5 shadow-md shrink-0 border bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm border-emerald-300">
- <School className="h-5 w-5 text-emerald-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3
- id="class-form-modal-title"
- className="modal-title text-base sm:text-lg font-black text-slate-900 dark:text-white flex items-center gap-2"
- >
- <span>{isEditMode ? 'Edit Data Rombongan Belajar' : 'Tambah Rombongan Belajar Baru'}</span>
- <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold border bg-emerald-50 text-emerald-800 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- {isEditMode ? 'Update Data' : 'Kelas Baru'}
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Lengkapi unit pendidikan, periode akademik, spesifikasi rombel, serta wali kelas.
- </p>
- </div>
- </div>
-
- <button
- type="button"
- disabled={createMutation.isPending || updateMutation.isPending}
- onClick={closeFormModal}
- aria-label="Tutup form modal"
- className="size-9 flex items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer disabled:opacity-50"
- >
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Form Body */}
- <div className="modal-body flex-1 overflow-y-auto p-6 space-y-5">
+        <AppModal
+          isOpen={isFormModalOpen}
+          onClose={closeFormModal}
+          icon={isEditMode ? Pencil : School}
+          title={isEditMode ? 'Edit Data Rombongan Belajar' : 'Tambah Rombongan Belajar Baru'}
+          badge={isEditMode ? 'Update Data' : 'Kelas Baru'}
+          description="Lengkapi unit pendidikan, periode akademik, spesifikasi rombel, serta wali kelas."
+          maxWidth="max-w-2xl"
+          footer={
+            <div className="flex items-center justify-between w-full">
+              <button
+                type="button"
+                onClick={closeFormModal}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleSubmitForm}
+                disabled={createMutation.isPending || updateMutation.isPending}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+              >
+                {(createMutation.isPending || updateMutation.isPending) ? (
+                  <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  <CheckCircle2 className="size-4" strokeWidth={2.2} />
+                )}
+                <span>{isEditMode ? 'Simpan Perubahan' : 'Simpan Kelas'}</span>
+              </button>
+            </div>
+          }
+        >
  <form onSubmit={handleSubmitForm} id="class-form" className="space-y-5">
  {/* GRUP 1: UNIT & PERIODE AKADEMIK */}
  <div className="space-y-4 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 p-4 dark:border-emerald-800/60 dark:bg-slate-800/40">
@@ -2960,101 +2739,30 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
  </div>
  </div>
  </form>
- </div>
-
- {/* Footer */}
- <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-white px-6 py-4 dark:border-emerald-800/60 dark:bg-slate-950">
- <button
- type="button"
- onClick={closeFormModal}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 px-5 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer disabled:opacity-50"
- >
- <div className="flex size-4 items-center justify-center rounded-md bg-white/20">
- <X className="size-3" strokeWidth={2.2} />
- </div>
- <span>Batal</span>
- </button>
-
- <button
- type="button"
- onClick={handleSubmitForm}
- disabled={createMutation.isPending || updateMutation.isPending}
- className="inline-flex items-center gap-2 rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 px-6 py-2.5 text-xs font-extrabold border-2 border-emerald-300 dark:border-emerald-800 hover:scale-[1.03] transition-all duration-200 active:scale-95 disabled:opacity-50 cursor-pointer shadow-sm"
- >
- {(createMutation.isPending || updateMutation.isPending) ? (
- <span className="size-3.5 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent" />
- ) : (
- <div className="flex size-4 items-center justify-center rounded-md bg-white/20">
- <CheckCircle2 className="size-3 text-emerald-600" strokeWidth={2.2} />
- </div>
- )}
- <span>{isEditMode ? 'Simpan Perubahan' : 'Simpan Kelas'}</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+        </AppModal>
 
  {/* MODAL: DETAIL KELAS & ROMBEL */}
- <AnimatePresence>
- {isDetailModalOpen && detailKelas && (
- <div
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="class-detail-modal-title"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget) setIsDetailModalOpen(false)
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
-
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3">
- <div className="rounded-xl p-2.5 shadow-md shrink-0 border bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm border-emerald-300">
- <School className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3
- id="class-detail-modal-title"
- className="modal-title text-base sm:text-lg font-black text-slate-900 dark:text-white flex items-center gap-2"
- >
- <span>Detail Rombongan Belajar</span>
- <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold border bg-emerald-50 text-emerald-800 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- Informasi Rombel
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Informasi spesifikasi kelas, unit pendidikan, dan wali kelas penanggung jawab.
- </p>
- </div>
- </div>
-
- <button
- type="button"
- onClick={() => setIsDetailModalOpen(false)}
- aria-label="Tutup detail modal"
- className="size-9 flex items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer"
- >
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Body */}
- <div className="modal-body p-6 space-y-4 text-sm overflow-y-auto">
+        <AppModal
+          isOpen={Boolean(isDetailModalOpen && detailKelas)}
+          onClose={() => setIsDetailModalOpen(false)}
+          icon={Eye}
+          title="Detail Rombongan Belajar"
+          badge="Informasi Rombel"
+          description="Informasi spesifikasi kelas, unit pendidikan, dan wali kelas penanggung jawab."
+          maxWidth="max-w-xl"
+          footer={
+            <button
+              type="button"
+              onClick={() => setIsDetailModalOpen(false)}
+              className="h-9.5 px-5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Tutup</span>
+            </button>
+          }
+        >
+          {detailKelas && (
+            <>
  <div className="flex items-center justify-between rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-card-dark p-4 dark:border-emerald-800/60 dark:bg-slate-800/60">
  <div>
  <h4 className="text-lg font-black text-slate-900 dark:text-white">{detailKelas.nama_kelas}</h4>
@@ -3095,85 +2803,32 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
  <p className="font-bold text-slate-900 dark:text-white mt-1 text-xs">{detailKelas.ruangan || 'Belum diatur'}</p>
  </div>
  </div>
- </div>
-
- {/* Footer */}
- <div className="modal-footer flex items-center justify-end border-t border-emerald-200/80 bg-white px-6 py-4 dark:border-emerald-800/60 dark:bg-slate-950">
- <button
- type="button"
- onClick={() => setIsDetailModalOpen(false)}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 px-5 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
- >
- <div className="flex size-4 items-center justify-center rounded-md bg-white/20">
- <X className="size-3" strokeWidth={2.2} />
- </div>
- <span>Tutup</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+            </>
+          )}
+        </AppModal>
 
  {/* MODAL: LIHAT & KELOLA DATA SISWA ROMBEL */}
- <AnimatePresence>
- {isSiswaModalOpen && selectedKelasSiswa && (
- <div
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="class-siswa-modal-title"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget) setIsSiswaModalOpen(false)
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-4xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
-
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3">
- <div className="rounded-xl p-2.5 shadow-md shrink-0 border bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm border-emerald-300">
- <Users className="h-5 w-5 text-emerald-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3
- id="class-siswa-modal-title"
- className="modal-title text-base sm:text-lg font-black text-slate-900 dark:text-white flex items-center gap-2"
- >
- <span>Data Siswa Rombel: {selectedKelasSiswa.nama_kelas}</span>
- <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold border bg-emerald-50 text-emerald-800 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- {filteredSiswaList.length} Siswa
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Kode: <span className="font-mono font-bold text-emerald-700 dark:text-emerald-400">{selectedKelasSiswa.kode_kelas}</span> • Unit: {selectedKelasSiswa.unit_pendidikan?.name || '-'} • Ruang: {selectedKelasSiswa.ruangan || '-'}
- </p>
- </div>
- </div>
-
- <button
- type="button"
- onClick={() => setIsSiswaModalOpen(false)}
- aria-label="Tutup modal siswa"
- className="size-9 flex items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer"
- >
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Body */}
- <div className="modal-body flex-1 overflow-y-auto p-6 space-y-4">
+        <AppModal
+          isOpen={Boolean(isSiswaModalOpen && selectedKelasSiswa)}
+          onClose={() => setIsSiswaModalOpen(false)}
+          icon={Users}
+          title={selectedKelasSiswa ? `Data Siswa Rombel: ${selectedKelasSiswa.nama_kelas}` : 'Data Siswa Rombel'}
+          badge={`${filteredSiswaList.length} Siswa`}
+          description={selectedKelasSiswa ? `Kode: ${selectedKelasSiswa.kode_kelas || '-'} • Kelola daftar siswa aktif di kelas ini` : ''}
+          maxWidth="max-w-4xl"
+          footer={
+            <button
+              type="button"
+              onClick={() => setIsSiswaModalOpen(false)}
+              className="h-9.5 px-5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Tutup</span>
+            </button>
+          }
+        >
+          {selectedKelasSiswa && (
+            <>
  {/* Wali Kelas Card Banner */}
  <div className="bg-white dark:bg-card-dark dark:from-slate-800/80 dark:to-slate-800/40 p-4 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
  <div className="flex items-center gap-3">
@@ -3363,114 +3018,53 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
  </TableBody>
  </TableRoot>
  </div>
- </div>
-
- {/* Footer */}
- <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-white px-6 py-4 dark:border-emerald-800/60 dark:bg-slate-950">
- <span className="text-xs text-slate-500 font-medium">
- Menampilkan {filteredSiswaList.length ? (siswaModalPage - 1) * SISWA_MODAL_PAGE_SIZE + 1 : 0}–{Math.min(siswaModalPage * SISWA_MODAL_PAGE_SIZE, filteredSiswaList.length)} dari {filteredSiswaList.length} siswa
- </span>
- <div className="flex items-center gap-2">
- <div className="flex items-center gap-1 mr-4">
- <button
- type="button"
- disabled={siswaModalPage === 1}
- onClick={() => setSiswaModalPage((prev) => prev - 1)}
- className="p-1.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 disabled:opacity-40 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
- >
- <ChevronLeft className="h-4 w-4" />
- </button>
- <span className="text-xs font-bold px-2 text-slate-700 dark:text-slate-300">
- {siswaModalPage} / {siswaTotalPages}
- </span>
- <button
- type="button"
- disabled={siswaModalPage === siswaTotalPages}
- onClick={() => setSiswaModalPage((prev) => prev + 1)}
- className="p-1.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 disabled:opacity-40 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
- >
- <ChevronRight className="h-4 w-4" />
- </button>
- </div>
- <button
- type="button"
- onClick={() => setIsSiswaModalOpen(false)}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 px-5 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
- >
- <div className="flex size-4 items-center justify-center rounded-md bg-white/20">
- <X className="size-3" strokeWidth={2.2} />
- </div>
- <span>Tutup</span>
- </button>
- </div>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+            </>
+          )}
+        </AppModal>
 
  {/* MODAL: PINDAH KELAS SISWA */}
- <AnimatePresence>
- {isPindahModalOpen && selectedKelasSiswa && (
- <div
- className="overlay modal fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="class-transfer-modal-title"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !movingLoading) setIsPindahModalOpen(false)
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-md"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
-
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3">
- <div className="rounded-xl p-2.5 shadow-md shrink-0 border bg-white dark:bg-card-dark shadow-sm border-emerald-200/80 dark:border-emerald-800/60">
- <ArrowRightLeft className="h-5 w-5 text-emerald-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3
- id="class-transfer-modal-title"
- className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2"
- >
- <span>Pindahkan Kelas Siswa</span>
- <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold border bg-purple-50 text-purple-700 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-purple-950/60 dark:text-purple-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- Transfer
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- {singleStudentToMove
- ? `Siswa: ${singleStudentToMove.full_name || singleStudentToMove.nama} (${singleStudentToMove.nis || 'NIS'})`
- : `Jumlah: ${selectedStudentIds.length} Siswa Terpilih`}
- </p>
- </div>
- </div>
-
- <button
- type="button"
- disabled={movingLoading}
- onClick={() => setIsPindahModalOpen(false)}
- aria-label="Tutup modal pindah"
- className="size-9 flex items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer disabled:opacity-50"
- >
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Body */}
- <div className="modal-body p-6 space-y-4 text-slate-700 dark:text-slate-200">
+        <AppModal
+          isOpen={Boolean(isPindahModalOpen && selectedKelasSiswa)}
+          onClose={() => setIsPindahModalOpen(false)}
+          zIndex={70}
+          icon={ArrowRightLeft}
+          title="Pindahkan Kelas Siswa"
+          badge="Transfer"
+          description={
+            singleStudentToMove
+              ? `Siswa: ${singleStudentToMove.full_name || singleStudentToMove.nama} (${singleStudentToMove.nis || '-'})`
+              : `Jumlah: ${selectedStudentIds.length} Siswa Terpilih`
+          }
+          maxWidth="max-w-md"
+          footer={
+            <div className="flex items-center justify-between w-full">
+              <button
+                type="button"
+                disabled={movingLoading}
+                onClick={() => setIsPindahModalOpen(false)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                disabled={movingLoading || !targetKelasId}
+                onClick={handleExecuteMove}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+              >
+                {movingLoading ? (
+                  <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  <ArrowRightLeft className="size-4" strokeWidth={2.2} />
+                )}
+                <span>{movingLoading ? 'Memindahkan...' : 'Proses Pindah Kelas'}</span>
+              </button>
+            </div>
+          }
+        >
+          {selectedKelasSiswa && (
+            <>
  <div className="p-3.5 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 text-xs">
  <span className="block font-extrabold text-slate-500 dark:text-slate-400 text-[10px] uppercase tracking-wider mb-1">Kelas Asal Rombel</span>
  <span className="font-bold text-sm text-emerald-700 dark:text-emerald-400">{selectedKelasSiswa.nama_kelas} ({selectedKelasSiswa.kode_kelas})</span>
@@ -3502,133 +3096,53 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
  className="w-full"
  />
  </div>
- </div>
-
- {/* Footer */}
- <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-white px-6 py-4 dark:border-emerald-800/60 dark:bg-slate-950">
- <button
- type="button"
- disabled={movingLoading}
- onClick={() => setIsPindahModalOpen(false)}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer disabled:opacity-50"
- >
- <div className="flex size-4 items-center justify-center rounded-md bg-white/20">
- <X className="size-3" strokeWidth={2.2} />
- </div>
- <span>Batal</span>
- </button>
-
- <button
- type="button"
- disabled={movingLoading || !targetKelasId}
- onClick={executePindahKelas}
- className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-card-dark hover:from-purple-700 hover:to-indigo-700 px-5 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-[1.03] transition-all duration-200 active:scale-95 disabled:opacity-50 cursor-pointer shadow-sm"
- >
- {movingLoading ? (
- <span className="size-3.5 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent" />
- ) : (
- <div className="flex size-4 items-center justify-center rounded-md bg-white/20">
- <ArrowRightLeft className="size-3 text-slate-600" strokeWidth={2.2} />
- </div>
- )}
- <span>{movingLoading ? 'Memindahkan...' : 'Proses Pindah Kelas'}</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+            </>
+          )}
+        </AppModal>
 
  {/* MODAL: KONFIRMASI SIMPAN / UPDATE DATA KELAS (HARMONIZED HEROUI) */}
- <AnimatePresence>
- {showSaveConfirmModal && (
- <div
- className="overlay modal fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="class-save-confirm-title"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !createMutation.isPending && !updateMutation.isPending) {
- setShowSaveConfirmModal(false)
- }
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-md"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
- <div
- className={cn(
- "h-1.5 w-full shrink-0",
- isEditMode
- ? "bg-white dark:bg-card-dark"
- : "bg-white dark:bg-card-dark"
- )}
- />
-
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3">
- <div
- className={cn(
- "rounded-xl text-white p-2.5 shadow-md shrink-0 border",
- isEditMode
- ? "bg-white dark:bg-card-dark shadow-sm border-emerald-200/80 dark:border-emerald-800/60"
- : "bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm border-emerald-300"
- )}
- >
- {isEditMode ? (
- <Pencil className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- ) : (
- <School className="h-5 w-5 text-amber-600" strokeWidth={2.25} />
- )}
- </div>
- <div>
- <h3
- id="class-save-confirm-title"
- className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2"
- >
- <span>{isEditMode ? 'Konfirmasi Perubahan Kelas' : 'Konfirmasi Simpan Kelas'}</span>
- <span
- className={cn(
- "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold border",
- isEditMode
- ? "bg-amber-50 text-amber-700 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/60 dark:text-amber-400 dark:border-emerald-800/60"
- : "bg-emerald-50 text-emerald-800 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60"
- )}
- >
- <Sparkles className="size-3" />
- {isEditMode ? 'Update Data' : 'Kelas Baru'}
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- {isEditMode
- ? 'Verifikasi data rombel sebelum pembaruan diterapkan ke server.'
- : 'Verifikasi data rombel baru sebelum disimpan ke dalam sistem.'}
- </p>
- </div>
- </div>
-
- <button
- type="button"
- disabled={createMutation.isPending || updateMutation.isPending}
- onClick={() => setShowSaveConfirmModal(false)}
- aria-label="Tutup dialog konfirmasi"
- className="size-9 flex items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer disabled:opacity-50"
- >
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Body */}
- <div className="modal-body p-6 space-y-4 text-slate-700 dark:text-slate-200">
+        <AppModal
+          isOpen={showSaveConfirmModal}
+          onClose={() => setShowSaveConfirmModal(false)}
+          disableBackdropClose={createMutation.isPending || updateMutation.isPending}
+          variant={isEditMode ? 'warning' : 'emerald'}
+          zIndex={70}
+          icon={isEditMode ? Pencil : School}
+          title={isEditMode ? 'Konfirmasi Perubahan Kelas' : 'Konfirmasi Simpan Kelas'}
+          badge={isEditMode ? 'Update Data' : 'Kelas Baru'}
+          description={isEditMode ? 'Verifikasi data rombel sebelum pembaruan diterapkan ke server.' : 'Verifikasi data rombel baru sebelum disimpan ke dalam sistem.'}
+          maxWidth="max-w-md"
+          footer={
+            <div className="flex items-center justify-between w-full">
+              <button
+                type="button"
+                disabled={createMutation.isPending || updateMutation.isPending}
+                onClick={() => setShowSaveConfirmModal(false)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                disabled={createMutation.isPending || updateMutation.isPending}
+                onClick={handleConfirmSaveForm}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+              >
+                {(createMutation.isPending || updateMutation.isPending) ? (
+                  <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  <CheckCircle2 className="size-4" strokeWidth={2.2} />
+                )}
+                <span>
+                  {(createMutation.isPending || updateMutation.isPending)
+                    ? isEditMode ? 'Memperbarui...' : 'Menyimpan...'
+                    : isEditMode ? 'Ya, Perbarui Kelas' : 'Ya, Simpan Kelas'}
+                </span>
+              </button>
+            </div>
+          }
+        >
  {/* Target Info Summary Card */}
  <div className="rounded-xl border border-emerald-200/80 bg-slate-50/70 p-3.5 dark:border-emerald-800/80 dark:bg-slate-900/50 space-y-2.5">
  <div className="flex items-center justify-between">
@@ -3684,110 +3198,49 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
  : 'Data rombongan belajar baru akan tersimpan dan siap digunakan untuk alokasi siswa dan wali kelas.'}
  </div>
  </div>
- </div>
-
- {/* Footer */}
- <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-white px-6 py-4 dark:border-emerald-800/60 dark:bg-slate-950">
- <button
- type="button"
- disabled={createMutation.isPending || updateMutation.isPending}
- onClick={() => setShowSaveConfirmModal(false)}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer disabled:opacity-50"
- >
- <div className="flex size-4 items-center justify-center rounded-md bg-white/20">
- <X className="size-3" strokeWidth={2.2} />
- </div>
- <span>Batal</span>
- </button>
-
- <button
- type="button"
- disabled={createMutation.isPending || updateMutation.isPending}
- onClick={handleConfirmSaveForm}
- className="inline-flex items-center gap-2 rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 px-5 py-2.5 text-xs font-extrabold border-2 border-emerald-300 dark:border-emerald-800 hover:scale-[1.03] transition-all duration-200 active:scale-95 disabled:opacity-50 cursor-pointer shadow-sm"
- >
- {(createMutation.isPending || updateMutation.isPending) ? (
- <span className="size-3.5 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent" />
- ) : (
- <div className="flex size-4 items-center justify-center rounded-md bg-white/20">
- <CheckCircle2 className="size-3 text-slate-600" strokeWidth={2.2} />
- </div>
- )}
- <span>
- {(createMutation.isPending || updateMutation.isPending)
- ? isEditMode ? 'Memperbarui...' : 'Menyimpan...'
- : isEditMode ? 'Ya, Perbarui Kelas' : 'Ya, Simpan Kelas'}
- </span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+        </AppModal>
 
  {/* MODAL: KONFIRMASI HAPUS KELAS (HARMONIZED HEROUI) */}
- <AnimatePresence>
- {isDeleteModalOpen && deleteTarget && (
- <div
- className="overlay modal fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="class-delete-confirm-title"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !deleteMutation.isPending) {
- setIsDeleteModalOpen(false)
- setDeleteTarget(null)
- }
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-md"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
-
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3">
- <div className="rounded-xl  p-2.5 shadow-md shrink-0 border bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 shadow-sm border-emerald-200/80 dark:border-emerald-800/60">
- <Trash2 className="h-5 w-5 text-rose-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3
- id="class-delete-confirm-title"
- className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2"
- >
- <span>Hapus Data Kelas</span>
- <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold border bg-rose-50 text-rose-700 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-rose-950/60 dark:text-rose-400 dark:border-emerald-800/60">
- <AlertTriangle className="size-3" />
- Hapus Kelas
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Tindakan ini akan mengarsipkan data kelas ini (soft delete).
- </p>
- </div>
- </div>
-
- <button
- type="button"
- disabled={deleteMutation.isPending}
- onClick={() => { setIsDeleteModalOpen(false); setDeleteTarget(null) }}
- aria-label="Tutup dialog konfirmasi"
- className="size-9 flex items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer disabled:opacity-50"
- >
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Body */}
- <div className="modal-body p-6 space-y-4 text-slate-700 dark:text-slate-200">
+        <AppModal
+          isOpen={Boolean(isDeleteModalOpen && deleteTarget)}
+          onClose={() => { setIsDeleteModalOpen(false); setDeleteTarget(null) }}
+          disableBackdropClose={deleteMutation.isPending}
+          variant="danger"
+          zIndex={70}
+          icon={Trash2}
+          title="Hapus Data Kelas"
+          badge="Hapus Kelas"
+          description="Tindakan ini akan mengarsipkan data kelas ini (soft delete)."
+          maxWidth="max-w-md"
+          footer={
+            <div className="flex items-center justify-between w-full">
+              <button
+                type="button"
+                disabled={deleteMutation.isPending}
+                onClick={() => { setIsDeleteModalOpen(false); setDeleteTarget(null) }}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                disabled={deleteMutation.isPending}
+                onClick={() => deleteTarget && deleteMutation.mutate(deleteTarget.id)}
+                className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20"
+              >
+                {deleteMutation.isPending ? (
+                  <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  <Trash2 className="size-4" strokeWidth={2.2} />
+                )}
+                <span>{deleteMutation.isPending ? 'Menghapus...' : 'Ya, Hapus Kelas'}</span>
+              </button>
+            </div>
+          }
+        >
+          {deleteTarget && (
+            <>
  {/* Target Info Summary Card */}
  <div className="rounded-xl border-2 border-rose-300 dark:border-rose-800 bg-rose-50/40 p-3.5 dark:border-emerald-800/60 dark:bg-rose-950/20 space-y-2.5">
  <div className="flex items-center justify-between">
@@ -3821,43 +3274,9 @@ export default function MasterKelasPage({ embedded = false, hidePageHeader = fal
  Apakah Anda yakin ingin menghapus data kelas <strong>"{deleteTarget.nama_kelas || deleteTarget.name}"</strong>? Data kelas akan diarsipkan ke sistem soft delete.
  </div>
  </div>
- </div>
-
- {/* Footer */}
- <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-white px-6 py-4 dark:border-emerald-800/60 dark:bg-slate-950">
- <button
- type="button"
- disabled={deleteMutation.isPending}
- onClick={() => { setIsDeleteModalOpen(false); setDeleteTarget(null) }}
- className="inline-flex items-center gap-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-100 hover:bg-slate-200 text-slate-700 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200 px-4 py-2.5 text-xs font-extrabold transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer disabled:opacity-50"
- >
- <div className="flex size-4 items-center justify-center rounded-md bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300">
- <X className="size-3" strokeWidth={2.2} />
- </div>
- <span>Batal</span>
- </button>
-
- <button
- type="button"
- disabled={deleteMutation.isPending}
- onClick={() => deleteTarget && deleteMutation.mutate(deleteTarget.id)}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 px-5 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-[1.03] transition-all duration-200 active:scale-95 disabled:opacity-50 cursor-pointer shadow-sm"
- >
- {deleteMutation.isPending ? (
- <span className="size-3.5 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent" />
- ) : (
- <div className="flex size-4 items-center justify-center rounded-md bg-white/20">
- <Trash2 className="size-3 text-rose-600" strokeWidth={2.2} />
- </div>
- )}
- <span>{deleteMutation.isPending ? 'Menghapus...' : 'Ya, Hapus Kelas'}</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+            </>
+          )}
+        </AppModal>
 
  </PageContainer>
  )

@@ -1,4 +1,5 @@
 import ActionDropdown from "../components/app/ActionDropdown"
+import AppModal from "../components/app/AppModal"
 import { HeroUiHeader } from "../components/ui/HeroUiHeader"
 import CustomSelect from "../components/ui/CustomSelect"
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -392,65 +393,43 @@ export default function LaporanPegawaiPage() {
  />
 
       {/* Detail Dialog Modal (HeroUI Harmonized Modal) */}
-      <AnimatePresence>
+      <AppModal
+        isOpen={Boolean(selectedRowModal)}
+        onClose={() => setSelectedRowModal(null)}
+        title="Detail Data Pegawai"
+        badge="Profil Pegawai"
+        description="Informasi profil lengkap dan penugasan kepegawaian."
+        icon={Eye}
+        maxWidth="max-w-xl"
+        headerActions={
+          selectedRowModal ? (
+            <MasterStatusBadge status={typeof selectedRowModal.status_pegawai === 'string' ? selectedRowModal.status_pegawai : (typeof selectedRowModal.status === 'string' ? selectedRowModal.status : 'Aktif')} />
+          ) : null
+        }
+        footer={
+          selectedRowModal ? (
+            <div className="flex w-full items-center justify-between gap-3">
+              <button
+                type="button"
+                onClick={() => { setPrintTargetRow(selectedRowModal); setIsPrintModalOpen(true); }}
+                className="inline-flex h-9.5 items-center gap-1.5 rounded-xl border-2 border-emerald-600 bg-emerald-600 px-4 text-xs font-black text-white shadow-md shadow-emerald-600/20 hover:bg-emerald-700 active:scale-95 transition-all cursor-pointer"
+              >
+                <Printer className="size-3.5" />
+                Cetak Detail
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedRowModal(null)}
+                className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
+              >
+                Tutup
+              </button>
+            </div>
+          ) : null
+        }
+      >
         {selectedRowModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setSelectedRowModal(null)}
-              className="fixed inset-0 bg-slate-950/70 backdrop-blur-md"
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-              className="relative z-10 w-full max-w-xl overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] dark:border-emerald-800/60 dark:bg-[#182232]"
-              role="dialog"
-              aria-modal="true"
-            >
-              {/* Top Accent Gradient Bar */}
-              <div className="h-1.5 w-full shrink-0 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600" />
-
-              <div className="p-6">
-                {/* Header */}
-                <div className="mb-5 flex items-start justify-between gap-4 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4 dark:border-emerald-800/60">
-                  <div className="flex items-center gap-3.5">
-                    <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 text-white shadow-md border border-emerald-400/40">
-                      <Eye className="size-6 text-white" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h3 className="text-lg font-black tracking-tight text-slate-900 dark:text-white">
-                          Detail Data Pegawai
-                        </h3>
-                        <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
-                          <Sparkles className="size-3" />
-                          Profil Pegawai
-                        </span>
-                      </div>
-                      <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
-                        Informasi profil lengkap dan penugasan kepegawaian.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MasterStatusBadge status={typeof selectedRowModal.status_pegawai === 'string' ? selectedRowModal.status_pegawai : (typeof selectedRowModal.status === 'string' ? selectedRowModal.status : 'Aktif')} />
-                    <button
-                      type="button"
-                      onClick={() => setSelectedRowModal(null)}
-                      className="rounded-xl p-1.5 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-600 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 dark:hover:text-slate-300 transition-colors cursor-pointer"
-                      aria-label="Tutup modal"
-                    >
-                      <X className="size-5" />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Body Content */}
-                <div className="space-y-4 text-xs">
+          <div className="space-y-4 text-xs">
                   <div className="flex items-center gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-emerald-100/80 dark:border-emerald-800/60">
                     <div className="size-14 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 font-extrabold flex items-center justify-center text-sm shrink-0 overflow-hidden shadow-2xs">
                       {(selectedRowModal.full_name || selectedRowModal.nama || 'P').slice(0, 2).toUpperCase()}
@@ -495,30 +474,8 @@ export default function LaporanPegawaiPage() {
                     </div>
                   </div>
                 </div>
-
-                {/* Footer */}
-                <div className="mt-6 flex items-center justify-between gap-3 border-t border-emerald-200/80 pt-4 dark:border-emerald-800/60">
-                  <button
-                    type="button"
-                    onClick={() => { setPrintTargetRow(selectedRowModal); setIsPrintModalOpen(true); }}
-                    className="inline-flex items-center gap-1.5 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-2 text-xs font-bold text-indigo-700 hover:bg-indigo-100 dark:border-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300 transition-all cursor-pointer"
-                  >
-                    <Printer className="size-3.5" />
-                    Cetak Detail
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedRowModal(null)}
-                    className="rounded-xl border border-emerald-200/80 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all cursor-pointer"
-                  >
-                    Tutup
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </div>
         )}
-      </AnimatePresence>
+      </AppModal>
 
 
  {/* KPI Stats Grid */}

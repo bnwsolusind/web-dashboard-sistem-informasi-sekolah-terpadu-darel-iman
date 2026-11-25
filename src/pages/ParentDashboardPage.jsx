@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import AppModal from '../components/app/AppModal'
 import {
   motion,
   AnimatePresence
@@ -914,41 +915,66 @@ export default function ParentDashboardPage() {
  {/* ==================================================== */}
  {/* 5. MODAL POPUP DIALOGS UNTUK 5 KARTU STATS GRID */}
  {/* ==================================================== */}
- <AnimatePresence>
- {activeModal && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/50 backdrop-blur-sm overflow-hidden">
- <motion.div
- initial={{ opacity: 0, scale: 0.95, y: 10 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- className="relative w-full max-w-2xl max-h-[85vh] sm:max-h-[88vh] overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] flex flex-col dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- {/* MODAL 1: RINCIAN PRESENSI HARI INI */}
- {activeModal === 'attendance' && (
- <>
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/80 bg-slate-50/50 dark:bg-slate-900/50 p-5">
- <div className="flex items-center gap-3">
- <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
- 
-            <CalendarCheck className="size-6 sm:size-7 h-5 w-5 text-white" />
- </div>
- <div>
- <h3 className="text-base font-black text-slate-900 dark:text-white">Rincian Presensi & Kehadiran Hari Ini</h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- Santri: <span className="font-bold text-emerald-700 dark:text-emerald-400">{activeChild?.name}</span> ({activeChild?.class_name || '-'})
- </p>
- </div>
- </div>
+ <AppModal
+ isOpen={Boolean(activeModal)}
+ onClose={() => setActiveModal(null)}
+ title={
+ activeModal === 'attendance'
+ ? 'Rincian Presensi & Kehadiran Hari Ini'
+ : activeModal === 'tahfizh'
+ ? "Rincian Hafalan Al-Qur'an (Tahfizh)"
+ : activeModal === 'grades'
+ ? 'Rincian Nilai Hasil Belajar Santri'
+ : activeModal === 'notes'
+ ? 'Buku Penghubung & Catatan Guru'
+ : 'Rincian Tagihan & Histori Pembayaran SPP'
+ }
+ description={`Santri: ${activeChild?.name || '-'}${activeChild?.class_name ? ` (${activeChild.class_name})` : ''}`}
+ icon={
+ activeModal === 'attendance'
+ ? CalendarCheck
+ : activeModal === 'tahfizh'
+ ? BookOpen
+ : activeModal === 'grades'
+ ? Award
+ : activeModal === 'notes'
+ ? BookOpenCheck
+ : CreditCard
+ }
+ maxWidth="max-w-2xl"
+ footer={
+ <div className="flex w-full items-center justify-between gap-2.5">
  <button
  type="button"
  onClick={() => setActiveModal(null)}
- className="rounded-xl p-1.5 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-600 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <X className="h-5 w-5" />
+ Tutup
+ </button>
+ <button
+ type="button"
+ onClick={() => {
+ setActiveModal(null)
+ navigate('/portal-orangtua')
+ }}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 active:scale-95 cursor-pointer"
+ >
+ {activeModal === 'attendance'
+ ? 'Buka Kalender Presensi Lengkap'
+ : activeModal === 'tahfizh'
+ ? 'Buka Log Tahfizh Penuh'
+ : activeModal === 'grades'
+ ? 'Buka Rapor Lengkap'
+ : activeModal === 'notes'
+ ? 'Buka Buku Penghubung Penuh'
+ : 'Buka Lembar Keuangan Penuh'}
  </button>
  </div>
-
- <div className="flex-1 overflow-y-auto p-5 space-y-4">
+ }
+ >
+ {/* MODAL 1: RINCIAN PRESENSI HARI INI */}
+ {activeModal === 'attendance' && (
+ <div className="space-y-4">
  {/* KPI Presensi Bar */}
  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
  <div className="rounded-xl bg-emerald-50/70 p-3 dark:bg-emerald-950/30">
@@ -1023,58 +1049,11 @@ export default function ParentDashboardPage() {
  </div>
  </div>
  </div>
-
- <div className="flex items-center justify-between border-t border-emerald-200/80 p-4 bg-slate-50/50 dark:border-emerald-800/60 dark:bg-slate-900">
- <Button
- type="button"
- variant="ghost"
- size="sm"
- onClick={() => setActiveModal(null)}
- className="cursor-pointer"
- >
- Tutup
- </Button>
- <Button
- type="button"
- variant="primary"
- size="sm"
- onClick={() => {
- setActiveModal(null)
- navigate('/portal-orangtua')
- }}
- className="cursor-pointer !bg-[#059669] !text-white text-xs font-bold"
- >
- Buka Kalender Presensi Lengkap
- </Button>
- </div>
- </>
  )}
 
  {/* MODAL 2: RINCIAN HAFALAN AL-QUR'AN (TAHFIZH) */}
  {activeModal === 'tahfizh' && (
- <>
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/80 bg-white dark:bg-[#1B2433] p-5">
- <div className="flex items-center gap-3">
- <div className="flex h-9 w-10 items-center justify-center rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400">
- <BookOpen className="h-5 w-5" />
- </div>
- <div>
- <h3 className="text-base font-black text-slate-900 dark:text-white">Rincian Hafalan Al-Qur'an (Tahfizh)</h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- Santri: <span className="font-bold text-blue-700 dark:text-blue-400">{activeChild?.name}</span>
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setActiveModal(null)}
- className="rounded-xl p-1.5 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-600 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300"
- >
- <X className="h-5 w-5" />
- </button>
- </div>
-
- <div className="flex-1 overflow-y-auto p-5 space-y-4">
+ <div className="space-y-4">
  {/* Ringkasan Target */}
  <div className="rounded-xl bg-blue-50/70 p-4 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-blue-950/30 dark:border-emerald-800/60">
  <div className="flex flex-wrap items-center justify-between gap-2">
@@ -1126,58 +1105,11 @@ export default function ParentDashboardPage() {
  )}
  </div>
  </div>
-
- <div className="flex items-center justify-between border-t border-emerald-200/80 p-4 bg-slate-50/50 dark:border-emerald-800/60 dark:bg-slate-900">
- <Button
- type="button"
- variant="ghost"
- size="sm"
- onClick={() => setActiveModal(null)}
- className="cursor-pointer"
- >
- Tutup
- </Button>
- <Button
- type="button"
- variant="primary"
- size="sm"
- onClick={() => {
- setActiveModal(null)
- navigate('/portal-orangtua')
- }}
- className="cursor-pointer !bg-emerald-600 !text-white text-xs font-bold"
- >
- Buka Log Tahfizh Penuh
- </Button>
- </div>
- </>
  )}
 
  {/* MODAL 3: RINCIAN RATA-RATA NILAI */}
  {activeModal === 'grades' && (
- <>
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/80 bg-white dark:bg-[#1B2433] p-5">
- <div className="flex items-center gap-3">
- <div className="flex h-9 w-10 items-center justify-center rounded-xl bg-teal-500/15 text-teal-600 dark:text-teal-400">
- <Award className="h-5 w-5" />
- </div>
- <div>
- <h3 className="text-base font-black text-slate-900 dark:text-white">Rincian Nilai Hasil Belajar Santri</h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- Santri: <span className="font-bold text-teal-700 dark:text-teal-400">{activeChild?.name}</span> ({activeChild?.class_name || '-'})
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setActiveModal(null)}
- className="rounded-xl p-1.5 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-600 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300"
- >
- <X className="h-5 w-5" />
- </button>
- </div>
-
- <div className="flex-1 overflow-y-auto p-5 space-y-4">
+ <div className="space-y-4">
  {/* Summary Bar */}
  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
  <div className="rounded-xl bg-teal-50 p-3 dark:bg-teal-950/30 text-center">
@@ -1221,58 +1153,11 @@ export default function ParentDashboardPage() {
  </div>
  </div>
  </div>
-
- <div className="flex items-center justify-between border-t border-emerald-200/80 p-4 bg-slate-50/50 dark:border-emerald-800/60 dark:bg-slate-900">
- <Button
- type="button"
- variant="ghost"
- size="sm"
- onClick={() => setActiveModal(null)}
- className="cursor-pointer"
- >
- Tutup
- </Button>
- <Button
- type="button"
- variant="primary"
- size="sm"
- onClick={() => {
- setActiveModal(null)
- navigate('/portal-orangtua')
- }}
- className="cursor-pointer !bg-teal-700 !text-white text-xs font-bold"
- >
- Buka Rapor Lengkap
- </Button>
- </div>
- </>
  )}
 
  {/* MODAL 4: RINCIAN BUKU PENGHUBUNG */}
  {activeModal === 'notes' && (
- <>
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/80 bg-white dark:bg-[#1B2433] p-5">
- <div className="flex items-center gap-3">
- <div className="flex h-9 w-10 items-center justify-center rounded-xl bg-purple-500/15 text-purple-600 dark:text-purple-400">
- <BookOpenCheck className="h-5 w-5" />
- </div>
- <div>
- <h3 className="text-base font-black text-slate-900 dark:text-white">Buku Penghubung & Catatan Guru</h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- Santri: <span className="font-bold text-purple-700 dark:text-purple-400">{activeChild?.name}</span>
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setActiveModal(null)}
- className="rounded-xl p-1.5 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-600 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300"
- >
- <X className="h-5 w-5" />
- </button>
- </div>
-
- <div className="flex-1 overflow-y-auto p-5 space-y-3">
+ <div className="space-y-3">
  {studentNotes.length > 0 ? (
  studentNotes.map((note) => (
  <div key={note.id} className="rounded-xl border border-emerald-200/80 bg-slate-50/60 p-4 text-xs dark:border-emerald-800/60 dark:bg-slate-800/50 space-y-2">
@@ -1297,58 +1182,11 @@ export default function ParentDashboardPage() {
  </div>
  )}
  </div>
-
- <div className="flex items-center justify-between border-t border-emerald-200/80 p-4 bg-slate-50/50 dark:border-emerald-800/60 dark:bg-slate-900">
- <Button
- type="button"
- variant="ghost"
- size="sm"
- onClick={() => setActiveModal(null)}
- className="cursor-pointer"
- >
- Tutup
- </Button>
- <Button
- type="button"
- variant="primary"
- size="sm"
- onClick={() => {
- setActiveModal(null)
- navigate('/portal-orangtua')
- }}
- className="cursor-pointer !bg-purple-700 !text-white text-xs font-bold"
- >
- Buka Buku Penghubung Penuh
- </Button>
- </div>
- </>
  )}
 
  {/* MODAL 5: RINCIAN TAGIHAN & SPP */}
  {activeModal === 'bills' && (
- <>
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/80 bg-white dark:bg-[#1B2433] p-5">
- <div className="flex items-center gap-3">
- <div className="flex h-9 w-10 items-center justify-center rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400">
- <CreditCard className="h-5 w-5" />
- </div>
- <div>
- <h3 className="text-base font-black text-slate-900 dark:text-white">Rincian Tagihan & Histori Pembayaran SPP</h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- Santri: <span className="font-bold text-amber-700 dark:text-amber-400">{activeChild?.name}</span>
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setActiveModal(null)}
- className="rounded-xl p-1.5 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-600 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300"
- >
- <X className="h-5 w-5" />
- </button>
- </div>
-
- <div className="flex-1 overflow-y-auto p-5 space-y-4">
+ <div className="space-y-4">
  {/* Virtual Account BSI Ananda Card */}
  {selectedChild && (
  <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-4 shadow-sm dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-slate-900 dark:border-emerald-800/60">
@@ -1445,36 +1283,8 @@ export default function ParentDashboardPage() {
  )}
  </div>
  </div>
-
- <div className="flex items-center justify-between border-t border-emerald-200/80 p-4 bg-slate-50/50 dark:border-emerald-800/60 dark:bg-slate-900">
- <Button
- type="button"
- variant="ghost"
- size="sm"
- onClick={() => setActiveModal(null)}
- className="cursor-pointer"
- >
- Tutup
- </Button>
- <Button
- type="button"
- variant="primary"
- size="sm"
- onClick={() => {
- setActiveModal(null)
- navigate('/portal-orangtua')
- }}
- className="cursor-pointer !bg-[#059669] !text-white text-xs font-bold"
- >
- Buka Lembar Keuangan Penuh
- </Button>
- </div>
- </>
  )}
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+ </AppModal>
  </div>
  )
 }

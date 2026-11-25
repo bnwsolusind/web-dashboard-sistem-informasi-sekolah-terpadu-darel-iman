@@ -36,6 +36,8 @@ import PageContainer from '../../components/app/PageContainer'
 import AppBreadcrumb from '../../components/app/AppBreadcrumb'
 import AppDataTable from '../../components/app/AppDataTable'
 import ActionDropdown from '../../components/app/ActionDropdown'
+import AppModal from '../../components/app/AppModal'
+import PageToolbarActions from '../../components/app/PageToolbarActions'
 import {
   useToast,
   KpiStatCard,
@@ -46,7 +48,8 @@ import {
 } from '../../components/common'
 import HeroUiFilterSelect from '../../components/ui/HeroUiFilterSelect'
 import {
-  PrintOptionModal
+  PrintOptionModal,
+  SquircleActionButton
 } from '../../components/master-data'
 import {
   printCleanTable,
@@ -645,41 +648,12 @@ export function FoundationInformationPage() {
  icon={Megaphone}
  iconClassName="!size-8.5 !bg-emerald-600 !text-white shadow-sm shadow-emerald-600/30 rounded-xl flex items-center justify-center"
  actions={
- <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0 self-start sm:self-auto flex-wrap">
- {/* Cetak Laporan Button */}
- <div className="group relative inline-flex">
- <button
- type="button"
- title="Cetak & Export Data Informasi"
- aria-label="Cetak & Export Data Informasi"
- className="flex size-10 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer shadow-xs"
- onClick={() => setPrintOptionModalOpen(true)}
- >
- <Printer className="size-5 text-slate-600" strokeWidth={2.2} />
- </button>
- <div className="pointer-events-none absolute top-full left-1/2 mt-2 -translate-x-1/2 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-out z-50 whitespace-nowrap rounded-xl bg-slate-900 px-2.5 py-1 text-xs font-bold shadow-xl dark:bg-emerald-50 dark:text-slate-900">
- <div className="absolute bottom-full left-1/2 -mb-1 -translate-x-1/2 border-4 border-transparent border-b-slate-900 dark:border-b-slate-100" />
- Cetak & Export
- </div>
- </div>
-
- {/* Tambah Informasi Baru Button */}
- <div className="group relative inline-flex">
- <button
- type="button"
- title="Input Informasi / Berita Baru"
- aria-label="Input Informasi / Berita Baru"
- className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer shadow-xs"
- onClick={() => setIsManageModalOpen(true)}
- >
- <Plus className="size-5 text-slate-600" strokeWidth={2.5} />
- </button>
- <div className="pointer-events-none absolute top-full left-1/2 mt-2 -translate-x-1/2 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-out z-50 whitespace-nowrap rounded-xl bg-slate-900 px-2.5 py-1 text-xs font-bold shadow-xl dark:bg-emerald-50 dark:text-slate-900">
- <div className="absolute bottom-full left-1/2 -mb-1 -translate-x-1/2 border-4 border-transparent border-b-slate-900 dark:border-b-slate-100" />
- Input Informasi Baru
- </div>
- </div>
- </div>
+ <PageToolbarActions
+ onPrint={() => setPrintOptionModalOpen(true)}
+ printLabel="Cetak & Export"
+ onAdd={() => setIsManageModalOpen(true)}
+ addLabel="Input Informasi Baru"
+ />
  }
  columns={columns}
  data={paginatedInfo}
@@ -741,14 +715,13 @@ export function FoundationInformationPage() {
  />
 
  {(search || activeTab !== 'all' || selectedTargetUnit !== 'all' || perPage !== 10) && (
- <button
- type="button"
+ <SquircleActionButton
+ variant="delete"
+ icon={RotateCcw}
+ label="Reset"
  onClick={handleResetFilter}
- className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50 px-3 py-1.5 text-xs font-bold text-rose-700 hover:bg-rose-100 dark:border-emerald-800/60 dark:bg-rose-950/40 dark:text-rose-300 transition cursor-pointer"
- >
- <RotateCcw className="size-3" />
- <span>Reset</span>
- </button>
+ showLabel
+ />
  )}
  </div>
  }
@@ -761,51 +734,34 @@ export function FoundationInformationPage() {
  </motion.div>
 
  {/* Modal Detail Informasi (HeroUI Elevated Style) */}
- <AnimatePresence>
- {selectedInfo && (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md overflow-y-auto">
- <motion.div
- initial={{ opacity: 0, scale: 0.95, y: 15 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 15 }}
- transition={{ type: 'spring', stiffness: 350, damping: 25 }}
- className="relative w-full max-w-2xl my-8 rounded-xl bg-white dark:bg-[#1B2433] p-6 shadow-2xl shadow-sm border border-emerald-200/80"
- >
-
- <div className="flex items-start justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4">
- <div className="flex items-center gap-3">
- <div className="flex h-9 w-11 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm">
- <Megaphone className="h-5 w-5" />
- </div>
- <div>
- <div className="flex items-center gap-2">
- <span className="inline-flex rounded-lg bg-emerald-50 px-2 py-0.5 text-xs font-bold text-emerald-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950 dark:border-emerald-800/60 dark:text-emerald-300">
- {extractCategory(selectedInfo)}
- </span>
- <span className="text-xs font-semibold text-slate-400">
- {formatFullDate(selectedInfo.created_at)}
- </span>
- </div>
- <h3 className="text-base font-extrabold text-slate-900 dark:text-white mt-1">
- Detail Siaran Informasi
- </h3>
- </div>
- </div>
+ <AppModal
+ isOpen={Boolean(selectedInfo)}
+ onClose={() => setSelectedInfo(null)}
+ icon={Megaphone}
+ title="Detail Siaran Informasi"
+ badge={selectedInfo ? extractCategory(selectedInfo) : undefined}
+ description={selectedInfo ? formatFullDate(selectedInfo.created_at) : undefined}
+ maxWidth="max-w-2xl"
+ zIndex={70}
+ footer={
+ <div className="flex justify-end w-full">
  <button
  type="button"
  onClick={() => setSelectedInfo(null)}
- className="flex h-8 w-8 items-center justify-center rounded-full text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-600 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 dark:hover:text-slate-200 transition cursor-pointer"
+ className="h-9.5 px-5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-black text-xs transition-all active:scale-95 cursor-pointer"
  >
- <X className="h-4 w-4" />
+ Tutup
  </button>
  </div>
-
- <div className="mt-4 space-y-4 text-xs text-slate-700 dark:text-slate-200">
+ }
+ >
+ {selectedInfo && (
+ <div className="space-y-4 text-xs text-slate-700 dark:text-slate-200">
  <h2 className="text-lg font-black leading-snug text-slate-900 dark:text-white">
  {selectedInfo.judul_pengumuman || selectedInfo.judul || selectedInfo.title}
  </h2>
 
- <div className="flex items-center gap-3 border-y border-emerald-100/80/80 dark:border-emerald-800/60 py-2.5 text-xs text-slate-500 dark:text-slate-400 flex-wrap">
+ <div className="flex items-center gap-3 border-y border-emerald-100/80 dark:border-emerald-800/60 py-2.5 text-xs text-slate-500 dark:text-slate-400 flex-wrap">
  <span className="flex items-center gap-1">
  <User className="h-3.5 w-3.5 text-emerald-600" />
  Penulis: <strong className="text-slate-800 dark:text-slate-200 font-bold">{selectedInfo.penulis || 'Humas Yayasan'}</strong>
@@ -825,57 +781,48 @@ export function FoundationInformationPage() {
  {selectedInfo.isi_pengumuman || selectedInfo.content || 'Konten pengumuman sekolah.'}
  </div>
  </div>
-
- <div className="flex justify-end pt-5 border-t border-emerald-200/80 dark:border-emerald-800/60 mt-5">
- <Button
- variant="outline"
- onClick={() => setSelectedInfo(null)}
- className="h-9 px-6 rounded-xl font-bold text-xs cursor-pointer"
- >
- Tutup
- </Button>
- </div>
- </motion.div>
- </div>
  )}
- </AnimatePresence>
+ </AppModal>
 
  {/* Modal Input & Kelola Berita / Pengumuman (HeroUI Harmonized Batch Modal) */}
- <AnimatePresence>
- {isManageModalOpen && (
- <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md overflow-y-auto">
- <motion.div
- initial={{ opacity: 0, scale: 0.95, y: 15 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 15 }}
- transition={{ type: 'spring', stiffness: 350, damping: 25 }}
- className="relative w-full max-w-2xl my-8 rounded-xl bg-white dark:bg-[#1B2433] p-6 shadow-2xl shadow-sm border border-emerald-200/80"
- >
-
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4">
- <div className="flex items-center gap-3">
- <div className="flex h-9 w-11 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm">
- <Megaphone className="h-5 w-5" />
- </div>
- <div>
- <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
- Input & Kelola Berita / Pengumuman
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- Publikasikan pengumuman resmi atau berita sekolah ke seluruh portal unit yayasan
- </p>
- </div>
- </div>
+ <AppModal
+ isOpen={isManageModalOpen}
+ onClose={() => setIsManageModalOpen(false)}
+ disableBackdropClose={isSubmittingInfo}
+ hideCloseButton={isSubmittingInfo}
+ icon={Megaphone}
+ title="Input & Kelola Berita / Pengumuman"
+ description="Publikasikan pengumuman resmi atau berita sekolah ke seluruh portal unit yayasan"
+ maxWidth="max-w-2xl"
+ zIndex={60}
+ footer={
+ <div className="flex items-center justify-end gap-2.5 w-full">
  <button
  type="button"
+ disabled={isSubmittingInfo}
  onClick={() => setIsManageModalOpen(false)}
- className="flex h-8 w-8 items-center justify-center rounded-full text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-600 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 dark:hover:text-slate-200 transition cursor-pointer"
+ className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 text-xs font-black transition-all active:scale-95 cursor-pointer disabled:opacity-50"
  >
- <X className="h-4 w-4" />
+ Batal
+ </button>
+ <button
+ type="submit"
+ form="manage-info-form"
+ disabled={isSubmittingInfo}
+ className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white border-2 border-emerald-600 text-xs font-black shadow-md shadow-emerald-600/20 active:scale-95 transition-all cursor-pointer flex items-center gap-2 disabled:opacity-50"
+ >
+ {isSubmittingInfo ? (
+ <RefreshCcw className="h-4 w-4 animate-spin" />
+ ) : (
+ <Send className="h-4 w-4" />
+ )}
+ <span>{isSubmittingInfo ? 'Memproses...' : 'Simpan & Publikasikan'}</span>
  </button>
  </div>
-
+ }
+ >
  <form
+ id="manage-info-form"
  onSubmit={async (e) => {
  e.preventDefault()
  if (!infoForm.judul.trim() || !infoForm.isi.trim()) {
@@ -927,7 +874,7 @@ export function FoundationInformationPage() {
  setIsSubmittingInfo(false)
  }
  }}
- className="mt-5 space-y-4"
+ className="space-y-4"
  >
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
  <div>
@@ -1018,34 +965,8 @@ export function FoundationInformationPage() {
  />
  </div>
  </div>
-
- <div className="flex items-center justify-end gap-3 pt-4 border-t border-emerald-200/80 dark:border-emerald-800/60">
- <Button
- type="button"
- variant="outline"
- onClick={() => setIsManageModalOpen(false)}
- className="h-9 px-5 rounded-xl text-xs font-bold cursor-pointer"
- >
- Batal
- </Button>
- <button
- type="submit"
- disabled={isSubmittingInfo}
- className="h-9 px-6 rounded-lg bg-emerald-600 dark:bg-emerald-50 dark:text-slate-900 dark: hover:from-emerald-700 hover:to-teal-700 text-xs font-extrabold shadow-sm transition cursor-pointer flex items-center gap-2 text-white border border-emerald-200/80 dark:border-emerald-800/60 text-sm font-medium"
- >
- {isSubmittingInfo ? (
- <RefreshCcw className="h-4 w-4 animate-spin" />
- ) : (
- <Send className="h-4 w-4" />
- )}
- <span>{isSubmittingInfo ? 'Memproses...' : 'Simpan & Publikasikan'}</span>
- </button>
- </div>
  </form>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+ </AppModal>
 
  {/* Print / Export Modal */}
  <PrintOptionModal

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
+import AppModal from './app/AppModal'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../stores/authStore'
 import {
@@ -169,18 +170,24 @@ export default function GlobalSearchModal({ isOpen, onClose }) {
  navigate(link)
  }
 
- return (
- <div className="fixed inset-0 z-[70] flex items-start justify-center pt-16 sm:pt-24 p-4">
- {/* Backdrop */}
- <div
- className="fixed inset-0 bg-slate-950/70 backdrop-blur-md transition-opacity animate-in fade-in duration-200"
- onClick={onClose}
- />
-
- {/* Modal Dialog */}
- <div className="relative w-full max-w-xl rounded-modal bg-white text-slate-800 shadow-2xl shadow-emerald-950/20 border-2 border-emerald-300 dark:border-emerald-700/80 dark:bg-card-dark dark:text-slate-100 overflow-hidden z-10 animate-[masterModalFadeScale_0.25s_ease-out]">
- {/* Top Accent Gradient Bar */}
- <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
+  return (
+    <AppModal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Pencarian Cepat Terpadu"
+      badge="Ctrl + K"
+      description="Cari Siswa, Guru, Pegawai, Mapel, Unit, Kelas, Portal, atau Laporan"
+      icon={Search}
+      maxWidth="max-w-xl"
+      zIndex={70}
+      bodyClassName="p-0"
+      footer={
+        <div className="flex w-full items-center justify-between text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+          <span>Tekan <kbd className="font-bold text-slate-700 dark:text-slate-200">Enter</kbd> untuk memilih</span>
+          <span>Dareliman Edu</span>
+        </div>
+      }
+    >
  {/* Search Input Bar */}
  <div className="flex items-center gap-3 border-b border-emerald-100/80 px-4 py-3.5 dark:border-emerald-800/60">
  <Search className="h-5 w-5 text-[#059669] dark:text-[#10B981] shrink-0" />
@@ -270,16 +277,9 @@ export default function GlobalSearchModal({ isOpen, onClose }) {
  <p className="text-xs text-slate-400 mt-1">Coba kata kunci lain atau pilih kategori yang berbeda.</p>
  </div>
  )}
- </div>
-
- {/* Footer */}
- <div className="flex items-center justify-between border-t border-emerald-100/80 bg-slate-50/50 px-4 py-2 text-[10px] font-semibold text-slate-400 dark:border-emerald-800/60 dark:bg-slate-800/40">
- <span>Tekan <kbd className="font-bold text-slate-600 dark:text-slate-300">Enter</kbd> untuk memilih</span>
- <span>Dareliman Edu</span>
- </div>
- </div>
- </div>
- )
+      </div>
+    </AppModal>
+  )
 }
 
 GlobalSearchModal.propTypes = {

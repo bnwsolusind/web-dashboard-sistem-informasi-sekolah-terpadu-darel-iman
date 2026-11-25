@@ -26,6 +26,7 @@ import {
  Building2,
  Printer,
  RefreshCw,
+ Eye,
 } from 'lucide-react'
 import { modulSemesterService } from '../services/modulSemesterService'
 import { codeGeneratorService } from '../services/codeGeneratorService'
@@ -149,131 +150,116 @@ function initialFormState() {
 }
 
 function HarmonizedDeleteModal({ isOpen, onClose, onConfirm, item, isSubmitting }) {
- if (!isOpen || !item) return null
-
- return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fadeIn">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex h-9 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:border-rose-800/60 dark:text-rose-400 shadow-md shadow-sm">
- <Trash2 className="h-6 w-6" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-rose-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
- Hapus Permanen
- </span>
- <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
- Hapus Modul Semester?
- </h3>
- </div>
- </div>
-
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Apakah Anda yakin ingin menghapus modul ini? Data akan dipindahkan ke arsip.
- </p>
-
- <div className="rounded-xl border border-rose-200/80 bg-rose-50/50 p-3.5 dark:border-rose-800/60 dark:bg-rose-950/20 mb-5">
- <p className="text-xs font-black text-rose-950 dark:text-rose-100">
- [{item?.kode_modul}] {item?.nama_modul}
- </p>
- <p className="text-xs text-rose-800/80 dark:text-rose-300/80 mt-0.5">
- Kelas: {item?.kelas?.nama_kelas || '-'} • Mapel: {item?.mata_pelajaran?.name || item?.mata_pelajaran?.nama_mapel || '-'}
- </p>
- </div>
-
- <div className="flex items-center justify-end gap-3">
- <button
- type="button"
- onClick={onClose}
- disabled={isSubmitting}
- className="rounded-xl border border-emerald-200/80 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-slate-800 transition-all cursor-pointer"
- >
- Batal
- </button>
- <button
- type="button"
- onClick={onConfirm}
- disabled={isSubmitting}
- className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white px-5 py-2 text-xs font-bold text-white shadow-md shadow-sm hover:brightness-105 disabled:opacity-50 transition-all cursor-pointer"
- >
- {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
- Hapus Modul
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )
+  return (
+    <AppModal
+      isOpen={Boolean(isOpen && item)}
+      onClose={() => !isSubmitting && onClose()}
+      title="Hapus Modul Semester?"
+      badge="Hapus Permanen"
+      description="Apakah Anda yakin ingin menghapus modul ini? Data akan dipindahkan ke arsip."
+      icon={Trash2}
+      variant="danger"
+      maxWidth="max-w-md"
+      zIndex={70}
+      disableBackdropClose={isSubmitting}
+      hideCloseButton={isSubmitting}
+      bodyClassName="space-y-4"
+      footer={
+        <>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isSubmitting}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={isSubmitting}
+            className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20 disabled:opacity-50"
+          >
+            {isSubmitting ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+            <span>Hapus Modul</span>
+          </button>
+        </>
+      }
+    >
+      {item && (
+        <>
+          <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            Apakah Anda yakin ingin menghapus modul ini? Data akan dipindahkan ke arsip.
+          </p>
+          <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-rose-50/50 p-3.5 dark:bg-rose-950/20">
+            <p className="text-xs font-black text-rose-950 dark:text-rose-100">
+              [{item?.kode_modul}] {item?.nama_modul}
+            </p>
+            <p className="text-xs text-rose-800/80 dark:text-rose-300/80 mt-0.5">
+              Kelas: {item?.kelas?.nama_kelas || '-'} • Mapel: {item?.mata_pelajaran?.name || item?.mata_pelajaran?.nama_mapel || '-'}
+            </p>
+          </div>
+        </>
+      )}
+    </AppModal>
+  )
 }
 
 function HarmonizedDuplicateModal({ isOpen, onClose, onConfirm, item, isSubmitting }) {
- if (!isOpen || !item) return null
-
- return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fadeIn">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex h-9 w-12 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-md shadow-sm border border-emerald-200/80 dark:border-emerald-800/60">
- <Copy className="h-6 w-6" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-emerald-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
- Salin Modul
- </span>
- <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
- Duplikasi Modul Semester?
- </h3>
- </div>
- </div>
-
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Sistem akan membuat salinan baru dari modul ini dengan kode modul baru dan seluruh rincian mingguannya.
- </p>
-
- <div className="rounded-xl border border-emerald-200/80 bg-emerald-50/50 p-3.5 dark:border-emerald-800/60 dark:bg-emerald-950/20 mb-5">
- <p className="text-xs font-black text-emerald-950 dark:text-emerald-100">
- [{item?.kode_modul}] {item?.nama_modul}
- </p>
- <p className="text-xs text-emerald-800/80 dark:text-emerald-300/80 mt-0.5">
- Kelas: {item?.kelas?.nama_kelas || '-'} • Mapel: {item?.mata_pelajaran?.name || item?.mata_pelajaran?.nama_mapel || '-'}
- </p>
- </div>
-
- <div className="flex items-center justify-end gap-3">
- <button
- type="button"
- onClick={onClose}
- disabled={isSubmitting}
- className="rounded-xl border border-emerald-200/80 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-slate-800 transition-all cursor-pointer"
- >
- Batal
- </button>
- <button
- type="button"
- onClick={onConfirm}
- disabled={isSubmitting}
- className="inline-flex items-center gap-1.5 rounded-xl bg-white dark:bg-[#1B2433] px-5 py-2 text-xs font-bold shadow-md shadow-sm hover:brightness-105 disabled:opacity-50 transition-all cursor-pointer border border-emerald-200/80 dark:border-emerald-800/60"
- >
- {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
- Ya, Duplikasi
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )
+  return (
+    <AppModal
+      isOpen={Boolean(isOpen && item)}
+      onClose={() => !isSubmitting && onClose()}
+      title="Duplikasi Modul Semester?"
+      badge="Salin Modul"
+      description="Sistem akan membuat salinan baru dari modul ini dengan kode modul baru dan seluruh rincian mingguannya."
+      icon={Copy}
+      maxWidth="max-w-md"
+      zIndex={70}
+      disableBackdropClose={isSubmitting}
+      hideCloseButton={isSubmitting}
+      bodyClassName="space-y-4"
+      footer={
+        <>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isSubmitting}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={isSubmitting}
+            className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+          >
+            {isSubmitting ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Copy className="h-4 w-4" />}
+            <span>Duplikasi Modul</span>
+          </button>
+        </>
+      }
+    >
+      {item && (
+        <>
+          <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            Sistem akan membuat salinan baru dari modul ini dengan kode modul baru dan seluruh rincian mingguannya.
+          </p>
+          <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/50 p-3.5 dark:bg-emerald-950/20">
+            <p className="text-xs font-black text-emerald-950 dark:text-emerald-100">
+              [{item?.kode_modul}] {item?.nama_modul}
+            </p>
+            <p className="text-xs text-emerald-800/80 dark:text-emerald-300/80 mt-0.5">
+              Kelas: {item?.kelas?.nama_kelas || '-'} • Mapel: {item?.mata_pelajaran?.name || item?.mata_pelajaran?.nama_mapel || '-'}
+            </p>
+          </div>
+        </>
+      )}
+    </AppModal>
+  )
 }
 
 

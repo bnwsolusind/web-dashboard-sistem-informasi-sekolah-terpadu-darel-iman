@@ -44,6 +44,7 @@ import {
 import { SquircleActionButton, PrintOptionModal } from '../components/master-data'
 import { printCleanTable, downloadPdfTable } from '../utils/printHelper'
 import { lmsPresensiService } from '../services/lmsPresensiService'
+import AppModal from '../components/app/AppModal'
 
 // ── PALET WARNA RESMI MODERN KPI CARDS ──
 const MODERN_CARD_TONES = {
@@ -1166,23 +1167,34 @@ export default function LmsPresensiPage() {
  )}
 
  {/* ── SINGLE CREATE / EDIT MODAL ── */}
- {modalOpen && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
- <div className="relative w-full max-w-lg overflow-hidden rounded-xl bg-white p-6 shadow-2xl border border-emerald-200 dark:bg-[#1B2433] dark:border-emerald-800">
- <div className="flex items-center justify-between pb-3 border-b border-emerald-100 dark:border-emerald-900/40">
- <h3 className="text-base font-black text-slate-800 dark:text-white flex items-center gap-2">
- <Sparkles className="w-4 h-4 text-emerald-600" />
- {modalType === 'create' ? 'Tambah Data Presensi Manual' : 'Ubah Data Presensi'}
- </h3>
+ <AppModal
+ isOpen={modalOpen}
+ onClose={() => setModalOpen(false)}
+ title={modalType === 'create' ? 'Tambah Data Presensi Manual' : 'Ubah Data Presensi'}
+ icon={Sparkles}
+ maxWidth="max-w-lg"
+ zIndex={50}
+ footer={
+ <>
  <button
+ type="button"
  onClick={() => setModalOpen(false)}
- className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 cursor-pointer"
+ className="px-4 py-2 rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 text-slate-600 dark:text-slate-300 font-bold text-xs hover:bg-slate-50 cursor-pointer"
  >
- <X className="w-5 h-5" />
+ Batal
  </button>
- </div>
-
- <form onSubmit={handleSubmitSingleModal} className="space-y-4 pt-4">
+ <button
+ type="submit"
+ form="lms-presensi-single-form"
+ disabled={saving}
+ className="px-5 py-2 bg-emerald-600 dark:bg-slate-100 dark:text-slate-900 dark: hover:from-emerald-700 hover:to-teal-700 font-bold text-xs rounded-lg transition-all shadow-md disabled:opacity-50 cursor-pointer text-white border border-emerald-600 h-9 text-sm font-medium"
+ >
+ {saving ? 'Simpan...' : 'Simpan Data'}
+ </button>
+ </>
+ }
+ >
+ <form id="lms-presensi-single-form" onSubmit={handleSubmitSingleModal} className="space-y-4">
  <div>
  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
  Jadwal Pelajaran <span className="text-rose-500">*</span>
@@ -1274,45 +1286,28 @@ export default function LmsPresensiPage() {
  className="w-full p-3 rounded-xl text-xs bg-slate-50 dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-700/80"
  />
  </div>
+ </form>
+ </AppModal>
 
- <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60">
+ {/* ── DETAIL MODAL ── */}
+ <AppModal
+ isOpen={Boolean(detailItem)}
+ onClose={() => setDetailItem(null)}
+ title="Detail Presensi Pembelajaran"
+ icon={CalendarCheck}
+ maxWidth="max-w-md"
+ zIndex={50}
+ footer={
  <button
  type="button"
- onClick={() => setModalOpen(false)}
- className="px-4 py-2 rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 text-slate-600 dark:text-slate-300 font-bold text-xs hover:bg-slate-50 cursor-pointer"
- >
- Batal
- </button>
- <button
- type="submit"
- disabled={saving}
- className="px-5 py-2 bg-emerald-600 dark:bg-slate-100 dark:text-slate-900 dark: hover:from-emerald-700 hover:to-teal-700 font-bold text-xs rounded-lg transition-all shadow-md disabled:opacity-50 cursor-pointer text-white border border-emerald-600 h-9 text-sm font-medium"
- >
- {saving ? 'Simpan...' : 'Simpan Data'}
- </button>
- </div>
- </form>
- </div>
- </div>
- )}
-
- {/* ── DETAIL DRAWER ── */}
- {detailItem && (
- <div className="fixed inset-0 z-50 flex justify-end bg-slate-950/70 backdrop-blur-sm">
- <div className="bg-white dark:bg-[#1B2433] w-full max-w-md h-full shadow-2xl p-6 overflow-y-auto space-y-6 animate-in slide-in-from-right duration-200 border-l border-emerald-200 dark:border-emerald-800">
- <div className="flex items-center justify-between border-b border-emerald-100 dark:border-emerald-900/40 pb-4">
- <h3 className="text-base font-black text-slate-800 dark:text-white flex items-center gap-2">
- <CalendarCheck className="w-5 h-5 text-white" />
- Detail Presensi Pembelajaran
- </h3>
- <button
  onClick={() => setDetailItem(null)}
- className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 cursor-pointer"
+ className="px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:text-slate-200 text-xs font-bold transition-colors cursor-pointer"
  >
- <X className="w-5 h-5" />
+ Tutup
  </button>
- </div>
-
+ }
+ >
+ {detailItem && (
  <div className="space-y-4 text-xs font-medium">
  <div className="p-4 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-800/60">
  <div className="text-xs font-bold text-slate-500 mb-1.5 uppercase tracking-wider">Status Kehadiran</div>
@@ -1356,9 +1351,8 @@ export default function LmsPresensiPage() {
  </p>
  </div>
  </div>
- </div>
- </div>
  )}
+ </AppModal>
  </div>
  </PageContainer>
  )

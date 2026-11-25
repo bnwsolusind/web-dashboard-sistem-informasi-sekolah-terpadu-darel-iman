@@ -59,6 +59,7 @@ import {
 } from '../stores/unitStore'
 import useDebounce from '../hooks/useDebounce'
 import ActionDropdown from '../components/app/ActionDropdown'
+import AppModal from '../components/app/AppModal'
 import PageContainer from '../components/app/PageContainer'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
 import {
@@ -714,33 +715,37 @@ function HarmonizedBatchImportModal({ isOpen, onClose, onImportSuccess, notify }
  }
 
  return (
- <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.96 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.96 }}
- className="relative w-full max-w-xl overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/80 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6 border-b border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between">
- <div className="flex items-center gap-3">
- <div className="flex h-9 w-11 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm">
- <Upload className="h-5 w-5" />
- </div>
- <div>
- <h3 className="text-base font-bold text-slate-900 dark:text-white">Impor Berkas Jadwal CBT</h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">Unggah berkas spreadsheet jadwal ujian online</p>
- </div>
- </div>
+ <AppModal
+ isOpen={isOpen}
+ onClose={onClose}
+ title="Impor Berkas Jadwal CBT"
+ description="Unggah berkas spreadsheet jadwal ujian online"
+ icon={Upload}
+ maxWidth="max-w-xl"
+ zIndex={60}
+ disableBackdropClose={isSubmitting}
+ footer={
+ <>
  <button
  type="button"
  onClick={onClose}
- className="rounded-xl p-2 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-600 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 dark:hover:text-slate-200 transition-colors"
+ disabled={isSubmitting}
+ className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all"
  >
- <X className="h-5 w-5" />
+ Batal
  </button>
- </div>
-
- <div className="p-6 space-y-4">
+ <button
+ type="button"
+ onClick={handleSubmit}
+ disabled={isSubmitting || !selectedFile}
+ className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 text-xs font-bold shadow-md disabled:opacity-50 transition-all"
+ >
+ {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
+ <span>{isSubmitting ? 'Memproses Berkas...' : 'Proses Impor Jadwal'}</span>
+ </button>
+ </>
+ }
+ >
  <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 p-4 dark:border-emerald-800/60 dark:bg-emerald-950/30 flex items-center justify-between">
  <div className="flex items-center gap-3">
  <FileText className="h-5 w-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
@@ -767,8 +772,8 @@ function HarmonizedBatchImportModal({ isOpen, onClose, onImportSuccess, notify }
  onClick={() => fileInputRef.current?.click()}
  className={`cursor-pointer rounded-xl border-2 border-dashed p-6 text-center transition-all ${
  dragActive
- ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/60 dark:border-emerald-800/60 dark:bg-emerald-950/30'
- : 'border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 hover:bg-emerald-50/30 dark:border-emerald-800/60 dark:bg-slate-900/40'
+ ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/60 dark:bg-emerald-950/30'
+ : 'border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 hover:bg-emerald-50/30 dark:bg-slate-900/40'
  }`}
  >
  <input
@@ -818,90 +823,30 @@ function HarmonizedBatchImportModal({ isOpen, onClose, onImportSuccess, notify }
  </div>
  </div>
  )}
- </div>
-
- <div className="flex items-center justify-end gap-3 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 p-5 dark:border-emerald-800/60 dark:bg-slate-900/50">
- <button
- type="button"
- onClick={onClose}
- disabled={isSubmitting}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-800/60 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all"
- >
- Batal
- </button>
- <button
- type="button"
- onClick={handleSubmit}
- disabled={isSubmitting || !selectedFile}
- className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-[#1B2433] px-5 py-2.5 text-xs font-bold shadow-md shadow-sky-600/30 hover:brightness-105 disabled:opacity-50 transition-all"
- >
- {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
- <span>{isSubmitting ? 'Memproses Berkas...' : 'Proses Impor Jadwal'}</span>
- </button>
- </div>
- </motion.div>
- </div>
+ </AppModal>
  )
 }
 
 // ── HARMONIZED SAVE CONFIRMATION MODAL ──
 function HarmonizedSaveModal({ isOpen, onClose, onConfirm, isEdit, title, isSubmitting }) {
- if (!isOpen) return null
-
  return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fadeIn">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div
- className={`h-1.5 w-full bg-white dark:bg-[#1B2433] ${
- isEdit ? 'from-amber-400 via-amber-500 to-orange-600' : 'from-emerald-500 via-teal-400 to-emerald-600'
- }`}
- />
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div
- className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-white shadow-md ${
- isEdit
- ? 'bg-white dark:bg-[#1B2433] shadow-sm'
- : 'bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm'
- }`}
- >
- {isEdit ? <Edit3 className="h-6 w-6" /> : <Play className="h-6 w-6" />}
- </div>
- <div>
- <span
- className={`inline-block rounded-md px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider ${
- isEdit
- ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300'
- : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
- }`}
- >
- {isEdit ? 'Perbarui Jadwal CBT' : 'Jadwal CBT Baru'}
- </span>
- <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
- Konfirmasi Terbitkan Ujian
- </h3>
- </div>
- </div>
-
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Apakah Anda yakin ingin {isEdit ? 'memperbarui pengaturan' : 'mempublikasikan'} sesi ujian CBT:
- </p>
-
- <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 p-3.5 dark:border-emerald-800/60 dark:bg-emerald-950/20 mb-5">
- <p className="text-xs font-black text-emerald-950 dark:text-emerald-100 line-clamp-2">{title || 'Sesi Ujian CBT'}</p>
- </div>
-
- <div className="flex items-center justify-end gap-3">
+ <AppModal
+ isOpen={isOpen}
+ onClose={onClose}
+ title="Konfirmasi Terbitkan Ujian"
+ badge={isEdit ? 'Perbarui Jadwal CBT' : 'Jadwal CBT Baru'}
+ icon={isEdit ? Edit3 : Play}
+ variant={isEdit ? 'warning' : 'emerald'}
+ maxWidth="max-w-md"
+ zIndex={70}
+ disableBackdropClose={isSubmitting}
+ footer={
+ <>
  <button
  type="button"
  onClick={onClose}
  disabled={isSubmitting}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-800/60 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all"
+ className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all"
  >
  Batal
  </button>
@@ -911,17 +856,24 @@ function HarmonizedSaveModal({ isOpen, onClose, onConfirm, isEdit, title, isSubm
  disabled={isSubmitting}
  className={`inline-flex items-center gap-1.5 rounded-xl px-5 py-2 text-xs font-bold text-white shadow-md transition-all ${
  isEdit
- ? 'bg-white dark:bg-[#1B2433] shadow-sm hover:brightness-105'
- : 'bg-white dark:bg-[#1B2433] shadow-sm hover:brightness-105'
+ ? 'bg-amber-600 hover:bg-amber-700'
+ : 'bg-emerald-600 hover:bg-emerald-700'
  } disabled:opacity-50`}
  >
  {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
  <span>{isSubmitting ? 'Menyimpan...' : 'Ya, Konfirmasi & Simpan'}</span>
  </button>
+ </>
+ }
+ >
+ <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+ Apakah Anda yakin ingin {isEdit ? 'memperbarui pengaturan' : 'mempublikasikan'} sesi ujian CBT:
+ </p>
+
+ <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 p-3.5 dark:border-emerald-800/60 dark:bg-emerald-950/20">
+ <p className="text-xs font-black text-emerald-950 dark:text-emerald-100 line-clamp-2">{title || 'Sesi Ujian CBT'}</p>
  </div>
- </div>
- </motion.div>
- </div>
+ </AppModal>
  )
 }
 
@@ -936,55 +888,38 @@ function HarmonizedBatchExportModal({
 }) {
  const [exportFormat, setExportFormat] = useState('xlsx')
 
- if (!isOpen) return null
-
  return (
- <div
- className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md animate-fadeIn"
- role="dialog"
- aria-modal="true"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !isExporting) onClose()
- }}
+ <AppModal
+ isOpen={isOpen}
+ onClose={onClose}
+ title={`Export Data ${moduleTitle}`}
+ badge="Unduh Data"
+ description="Pilih format berkas untuk mengekspor data sesuai filter aktif."
+ icon={Download}
+ maxWidth="max-w-xl"
+ zIndex={50}
+ disableBackdropClose={isExporting}
+ footer={
+ <>
+ <button
+ type="button"
+ onClick={onClose}
+ className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200/80 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs dark:border-emerald-800/60 dark:bg-emerald-600 dark:text-slate-200 transition cursor-pointer text-sm font-medium"
  >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="w-full max-w-xl"
- >
- <div className="flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
-
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232] shrink-0">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 p-2.5 shadow-md shadow-xs shrink-0">
- <Download className="h-5 w-5 text-emerald-600" strokeWidth={2.2} />
- </div>
- <div>
- <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Export Data {moduleTitle}</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/60 dark:text-amber-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" /> Unduh Data
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Pilih format berkas untuk mengekspor data sesuai filter aktif.
- </p>
- </div>
- </div>
+ Batal
+ </button>
  <button
  type="button"
  disabled={isExporting}
- onClick={onClose}
- className="size-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-sky-950/60 dark:text-sky-300 transition-colors cursor-pointer disabled:opacity-50"
+ onClick={() => onExport(exportFormat)}
+ className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 text-xs font-extrabold shadow-sm hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200 disabled:opacity-50 cursor-pointer"
  >
- <X className="size-4" />
+ <Download className="size-4" />
+ {isExporting ? 'Menyiapkan...' : 'Unduh Berkas'}
  </button>
- </div>
-
- <div className="p-6 space-y-4 overflow-y-auto flex-1">
+ </>
+ }
+ >
  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
  {[
  ['xlsx', 'Excel (.xlsx)', FileSpreadsheet, 'Format spreadsheet modern Microsoft Excel.'],
@@ -997,7 +932,7 @@ function HarmonizedBatchExportModal({
  onClick={() => setExportFormat(value)}
  className={`rounded-xl border p-4 text-left transition-all duration-200 cursor-pointer ${
  exportFormat === value
- ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/70 shadow-sm dark:border-emerald-800/60 dark:bg-emerald-950/40'
+ ? 'border-emerald-500 bg-emerald-50/70 shadow-sm dark:border-emerald-700 dark:bg-emerald-950/40'
  : 'border-emerald-200/80 bg-white hover:border-emerald-300 dark:border-emerald-800/60 dark:bg-slate-900/40'
  }`}
  >
@@ -1014,7 +949,7 @@ function HarmonizedBatchExportModal({
  ))}
  </div>
 
- <div className="p-3.5 rounded-xl bg-amber-50/70 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/30 dark:border-emerald-800/60 text-xs text-amber-900 dark:text-amber-300 leading-relaxed">
+ <div className="p-3.5 rounded-xl bg-amber-50/70 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/30 text-xs text-amber-900 dark:text-amber-300 leading-relaxed">
  <p className="font-bold flex items-center gap-1.5 mb-0.5">
  <Sparkles className="size-3.5 text-amber-600 dark:text-amber-400" />
  Filter Ekspor Aktif
@@ -1023,78 +958,30 @@ function HarmonizedBatchExportModal({
  Data yang diekspor akan mencakup seluruh entitas terfilter ({totalCount} sesi {moduleTitle.toLowerCase()}).
  </p>
  </div>
- </div>
-
- <div className="px-6 py-4 border-t border-emerald-200/80 dark:border-emerald-800/80 flex items-center justify-end gap-2.5 bg-slate-50/50 dark:bg-slate-900/40 shrink-0">
- <button
- type="button"
- onClick={onClose}
- className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200/80 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs dark:border-emerald-800/60 dark:bg-emerald-600 dark:text-slate-200 transition cursor-pointer text-sm font-medium"
- >
- Batal
- </button>
- <button
- type="button"
- disabled={isExporting}
- onClick={() => onExport(exportFormat)}
- className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-[#1B2433] px-5 py-2.5 text-xs font-extrabold shadow-sm hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200 disabled:opacity-50 cursor-pointer border border-emerald-200/80 dark:border-emerald-800/60"
- >
- <Download className="size-4" />
- {isExporting ? 'Menyiapkan...' : 'Unduh Berkas'}
- </button>
- </div>
- </div>
- </motion.div>
- </div>
+ </AppModal>
  )
 }
 
 // ── HARMONIZED DELETE CONFIRMATION MODAL ──
 function HarmonizedDeleteModal({ isOpen, onClose, onConfirm, item, isSubmitting }) {
- if (!isOpen || !item) return null
-
  return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex h-9 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 shadow-sm">
- <Trash2 className="h-6 w-6" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-rose-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
- Hapus Permanen
- </span>
- <h3 className="text-base font-bold text-slate-900 dark:text-white mt-0.5">Hapus Sesi CBT Ujian?</h3>
- </div>
- </div>
-
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Apakah Anda yakin ingin menghapus sesi ujian{' '}
- <strong className="text-slate-900 dark:text-white font-bold">"{item.judul_ujian || item.nama_ujian}"</strong>?
- Semua riwayat hasil penilaian dan sesi pengerjaan siswa yang terkait akan terhapus.
- </p>
-
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/50 p-3 dark:border-emerald-800/60 dark:bg-rose-950/20 mb-6">
- <div className="flex items-start gap-2">
- <AlertTriangle className="h-4 w-4 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
- <p className="text-xs text-rose-800 dark:text-rose-300">
- Tindakan ini tidak dapat dibatalkan. Pastikan data tidak sedang dikerjakan secara aktif oleh siswa.
- </p>
- </div>
- </div>
-
- <div className="flex items-center justify-end gap-3">
+ <AppModal
+ isOpen={Boolean(isOpen && item)}
+ onClose={onClose}
+ title="Hapus Sesi CBT Ujian?"
+ badge="Hapus Permanen"
+ icon={Trash2}
+ variant="danger"
+ maxWidth="max-w-md"
+ zIndex={70}
+ disableBackdropClose={isSubmitting}
+ footer={
+ <>
  <button
  type="button"
  onClick={onClose}
  disabled={isSubmitting}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-800/60 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all"
+ className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all"
  >
  Batal
  </button>
@@ -1102,15 +989,33 @@ function HarmonizedDeleteModal({ isOpen, onClose, onConfirm, item, isSubmitting 
  type="button"
  onClick={() => onConfirm(item.id)}
  disabled={isSubmitting}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white px-5 py-2.5 text-xs font-bold text-white shadow-sm hover:brightness-105 disabled:opacity-50 transition-all"
+ className="inline-flex items-center gap-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white px-5 py-2.5 text-xs font-bold shadow-sm hover:brightness-105 disabled:opacity-50 transition-all"
  >
  {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
  <span>{isSubmitting ? 'Menghapus...' : 'Ya, Hapus Sesi'}</span>
  </button>
+ </>
+ }
+ >
+ {item && (
+ <>
+ <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+ Apakah Anda yakin ingin menghapus sesi ujian{' '}
+ <strong className="text-slate-900 dark:text-white font-bold">"{item.judul_ujian || item.nama_ujian}"</strong>?
+ Semua riwayat hasil penilaian dan sesi pengerjaan siswa yang terkait akan terhapus.
+ </p>
+
+ <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/50 p-3 dark:bg-rose-950/20">
+ <div className="flex items-start gap-2">
+ <AlertTriangle className="h-4 w-4 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
+ <p className="text-xs text-rose-800 dark:text-rose-300">
+ Tindakan ini tidak dapat dibatalkan. Pastikan data tidak sedang dikerjakan secara aktif oleh siswa.
+ </p>
  </div>
  </div>
- </motion.div>
- </div>
+ </>
+ )}
+ </AppModal>
  )
 }
 
@@ -1976,42 +1881,52 @@ export default function LmsUjianPage({
         />
 
  {/* ── ROW DETAIL QUICK PREVIEW MODAL ── */}
- {showRowDetailModal && rowDetailItem && (
- <div
- className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
- onClick={() => setShowRowDetailModal(false)}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.95 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.95 }}
- className="bg-white dark:bg-[#182232] rounded-3xl w-full max-w-lg shadow-2xl shadow-emerald-950/20 border-2 border-emerald-300 dark:border-emerald-700/80 dark:border-emerald-800/60 overflow-hidden"
- onClick={(e) => e.stopPropagation()}
- >
- <div className="flex items-start justify-between px-6 py-4 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/40">
- <div className="flex items-start gap-3">
- <div className="w-11 h-9 rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 flex items-center justify-center shadow-sm shrink-0">
- <Play className="w-5 h-5 fill-white/20" />
- </div>
- <div>
- <h2 className="text-base font-bold text-slate-900 dark:text-white leading-tight">
- {rowDetailItem.judul_ujian || rowDetailItem.nama_ujian}
- </h2>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- {rowDetailItem.kelas?.nama_kelas || 'Semua Kelas'} · {rowDetailItem.guru?.nama_lengkap || 'Pengampu'}
- </p>
- </div>
- </div>
+ <AppModal
+ isOpen={Boolean(showRowDetailModal && rowDetailItem)}
+ onClose={() => setShowRowDetailModal(false)}
+ title={rowDetailItem?.judul_ujian || rowDetailItem?.nama_ujian}
+ description={rowDetailItem ? `${rowDetailItem.kelas?.nama_kelas || 'Semua Kelas'} · ${rowDetailItem.guru?.nama_lengkap || 'Pengampu'}` : undefined}
+ icon={Play}
+ maxWidth="max-w-lg"
+ zIndex={50}
+ footer={
+ <div className="flex items-center justify-between gap-3 w-full">
  <button
  type="button"
  onClick={() => setShowRowDetailModal(false)}
- className="p-1.5 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400 shrink-0"
+ className="px-4 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
  >
- <X className="w-5 h-5" />
+ Tutup
+ </button>
+ <div className="flex items-center gap-2">
+ <button
+ type="button"
+ onClick={() => {
+ setShowRowDetailModal(false)
+ handleLaunchCbtEngine(rowDetailItem)
+ }}
+ className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200 text-xs font-bold hover:bg-emerald-200 dark:hover:bg-emerald-900 transition-colors"
+ >
+ <Play className="w-3.5 h-3.5 fill-current" />
+ Simulasi CBT
+ </button>
+ <button
+ type="button"
+ onClick={() => {
+ setShowRowDetailModal(false)
+ handleOpenModal(rowDetailItem)
+ }}
+ className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#059669] hover:bg-[#047857] text-white dark:bg-[#18A972] dark:hover:bg-[#059669] dark:text-white text-xs font-bold hover:brightness-105 shadow-sm transition-all"
+ >
+ <Edit3 className="w-3.5 h-3.5" />
+ Edit Sesi
  </button>
  </div>
-
- <div className="px-6 py-5 space-y-4 max-h-[60vh] overflow-y-auto">
+ </div>
+ }
+ >
+ {rowDetailItem && (
+ <>
  <div className="flex flex-wrap gap-2">
  {getStatusBadge(rowDetailItem.status)}
  {rowDetailItem.acak_soal && (
@@ -2049,78 +1964,44 @@ export default function LmsUjianPage({
  <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-medium">{rowDetailItem.instruksi}</p>
  </div>
  )}
- </div>
-
- <div className="px-6 py-4 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between gap-3 bg-slate-50/50 dark:bg-slate-900/40">
- <button
- type="button"
- onClick={() => setShowRowDetailModal(false)}
- className="px-4 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
- >
- Tutup
- </button>
- <div className="flex items-center gap-2">
- <button
- type="button"
- onClick={() => {
- setShowRowDetailModal(false)
- handleLaunchCbtEngine(rowDetailItem)
- }}
- className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200 text-xs font-bold hover:bg-emerald-200 dark:hover:bg-emerald-900 transition-colors"
- >
- <Play className="w-3.5 h-3.5 fill-current" />
- Simulasi CBT
- </button>
- <button
- type="button"
- onClick={() => {
- setShowRowDetailModal(false)
- handleOpenModal(rowDetailItem)
- }}
- className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#059669] hover:bg-[#047857] text-white dark:bg-[#18A972] dark:hover:bg-[#059669] dark:text-white text-xs font-bold hover:brightness-105 shadow-sm transition-all"
- >
- <Edit3 className="w-3.5 h-3.5" />
- Edit Sesi
- </button>
- </div>
- </div>
- </motion.div>
- </div>
+ </>
  )}
+ </AppModal>
 
  {/* ── CRUD FORM MODAL (CREATE / EDIT CBT EXAM SESSION) ── */}
- {showModal && (
- <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto animate-fadeIn">
- <motion.div
- initial={{ opacity: 0, scale: 0.95 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.95 }}
- className="bg-white dark:bg-[#1B2433] rounded-xl max-w-xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-emerald-200/80 dark:border-emerald-800/80 dark:border-emerald-800/60 flex flex-col"
- >
- <div className="px-6 py-4 border-b border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between bg-white dark:bg-[#1B2433] shrink-0">
- <div className="flex items-center gap-3">
- <div className="flex h-9 w-11 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm">
- {editingItem ? <Edit3 className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
- </div>
- <div>
- <h2 className="text-base font-bold text-slate-900 dark:text-white leading-tight">
- {editingItem ? 'Edit Sesi CBT Ujian' : 'Terbitkan Ujian CBT Baru'}
- </h2>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- Konfigurasi parameter ujian, bank soal rujukan, durasi dan penilaian otomatis
- </p>
- </div>
- </div>
+ <AppModal
+ isOpen={showModal}
+ onClose={() => setShowModal(false)}
+ title={editingItem ? 'Edit Sesi CBT Ujian' : 'Terbitkan Ujian CBT Baru'}
+ description="Konfigurasi parameter ujian, bank soal rujukan, durasi dan penilaian otomatis"
+ icon={editingItem ? Edit3 : Plus}
+ variant={editingItem ? 'warning' : 'emerald'}
+ maxWidth="max-w-xl"
+ zIndex={50}
+ disableBackdropClose={isSubmittingForm}
+ footer={
+ <>
  <button
  type="button"
  onClick={() => setShowModal(false)}
- className="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+ disabled={isSubmittingForm}
+ className="px-4 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer"
  >
- <X className="w-5 h-5" />
+ Batal
  </button>
- </div>
-
- <form onSubmit={handleTriggerSave} className="p-6 space-y-4 overflow-y-auto flex-1">
+ <button
+ type="submit"
+ form="ujianCbtForm"
+ disabled={isSubmittingForm}
+ className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-xs font-extrabold shadow-sm transition-all disabled:opacity-50 cursor-pointer text-white h-9 text-sm font-medium"
+ >
+ {isSubmittingForm && <RefreshCw className="w-4 h-4 animate-spin" />}
+ <span>{editingItem ? 'Simpan Perubahan' : 'Terbitkan Sesi Ujian'}</span>
+ </button>
+ </>
+ }
+ >
+ <form id="ujianCbtForm" onSubmit={handleTriggerSave} className="space-y-4">
  {/* Judul Ujian */}
  <div>
  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
@@ -2268,46 +2149,22 @@ export default function LmsUjianPage({
  />
  </div>
 
- {/* Form Actions - Fixed at bottom without sticky wobble */}
- <div className="pt-4 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3 shrink-0">
- <button
- type="button"
- onClick={() => setShowModal(false)}
- disabled={isSubmittingForm}
- className="px-4 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer"
- >
- Batal
- </button>
- <button
- type="submit"
- disabled={isSubmittingForm}
- className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-emerald-600 dark:bg-slate-100 dark:text-slate-900 dark: text-xs font-extrabold shadow-sm hover:brightness-105 transition-all disabled:opacity-50 cursor-pointer text-white border border-emerald-200/80 dark:border-emerald-800/60 h-9 text-sm font-medium"
- >
- {isSubmittingForm && <RefreshCw className="w-4 h-4 animate-spin" />}
- <span>{editingItem ? 'Simpan Perubahan' : 'Terbitkan Sesi Ujian'}</span>
- </button>
- </div>
  </form>
- </motion.div>
- </div>
- )}
+ </AppModal>
 
  {/* ── LIVE INTERACTIVE CBT STUDENT ENGINE SIMULATION MODAL ── */}
- {showCbtEngineModal && cbtSession && (
- <div className="fixed inset-0 z-50 bg-[#0F172A] text-white flex flex-col overflow-hidden animate-fadeIn">
- {/* CBT Header with Countdown Timer */}
- <div className="bg-[#1E293B] px-6 py-3.5 border-b border-emerald-200/80 flex items-center justify-between shrink-0">
- <div className="flex items-center gap-3">
- <div className="px-3 py-1.5 rounded-xl bg-[#059669] hover:bg-[#047857] text-white dark:bg-[#18A972] dark:hover:bg-[#059669] dark:text-white font-black text-xs shadow-md">
- CBT ENGINE
- </div>
- <div>
- <h3 className="font-bold text-sm text-white leading-tight">{cbtSession.ujian.judul_ujian}</h3>
- <p className="text-xs text-emerald-400 font-semibold">Simulasi Lingkungan Ujian Siswa</p>
- </div>
- </div>
-
- {/* Countdown Timer Banner */}
+ <AppModal
+ isOpen={Boolean(showCbtEngineModal && cbtSession)}
+ onClose={() => setShowCbtEngineModal(false)}
+ title={cbtSession?.ujian?.judul_ujian}
+ badge="CBT ENGINE"
+ description="Simulasi Lingkungan Ujian Siswa"
+ maxWidth="max-w-full"
+ zIndex={50}
+ className="bg-[#0F172A] text-white"
+ bodyClassName="p-0 flex flex-col overflow-hidden bg-[#0F172A] text-white"
+ headerActions={
+ cbtSession && (
  <div
  className={`flex items-center gap-2 px-4 py-2 rounded-xl font-mono text-sm font-black shadow-inner ${
  timerSeconds < 300
@@ -2318,16 +2175,11 @@ export default function LmsUjianPage({
  <Clock className="w-4 h-4" />
  <span>Sisa Waktu: {formatTimer(timerSeconds)}</span>
  </div>
-
- <button
- type="button"
- onClick={() => setShowCbtEngineModal(false)}
- className="p-2 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
+ )
+ }
  >
- <X className="w-5 h-5" />
- </button>
- </div>
-
+ {cbtSession && (
+ <div className="flex flex-col flex-1 overflow-hidden">
  {/* CBT Main Engine Body */}
  {!examResultSummary ? (
  <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
@@ -2528,12 +2380,12 @@ export default function LmsUjianPage({
  </div>
  <span
  className={`inline-block px-4 py-1.5 rounded-full text-xs font-black ${
- examResultSummary.nilai_final >= (cbtSession.ujian.nilai_kkm || 75)
+ examResultSummary.nilai_final >= (cbtSession?.ujian?.nilai_kkm || 75)
  ? 'bg-emerald-950 text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60'
  : 'bg-rose-950 text-rose-300 border border-emerald-200/80 dark:border-emerald-800/60'
  }`}
  >
- {examResultSummary.nilai_final >= (cbtSession.ujian.nilai_kkm || 75) ? 'LULUS KKM' : 'BELUM LULUS KKM'}
+ {examResultSummary.nilai_final >= (cbtSession?.ujian?.nilai_kkm || 75) ? 'LULUS KKM' : 'BELUM LULUS KKM'}
  </span>
  </div>
 
@@ -2564,39 +2416,17 @@ export default function LmsUjianPage({
  )}
 
  {/* CBT Submit Confirmation Modal */}
- {showFinishConfirmModal && (
- <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-xl border border-emerald-200/80 bg-[#1E293B] shadow-2xl text-white"
- >
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
- 
-            <Send className="h-6 w-6 text-white" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-emerald-950/80 border border-emerald-200/80 dark:border-emerald-800/60 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-emerald-300">
- Konfirmasi Selesai
- </span>
- <h3 className="text-base font-bold text-white mt-0.5">Kumpulkan Lembar Ujian?</h3>
- </div>
- </div>
- <p className="text-xs text-slate-300 leading-relaxed mb-4">
- Apakah Anda yakin ingin menyelesaikan dan mengumpulkan ujian ini sekarang? Setelah dikumpulkan, lembar jawaban akan langsung dinilai secara otomatis.
- </p>
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-950/30 p-3 mb-6">
- <div className="flex items-start gap-2">
- <Sparkles className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
- <p className="text-xs text-emerald-300">
- Pastikan seluruh soal telah Anda jawab dengan cermat sebelum mengumpulkan.
- </p>
- </div>
- </div>
- <div className="flex items-center justify-end gap-3">
+ <AppModal
+ isOpen={showFinishConfirmModal}
+ onClose={() => setShowFinishConfirmModal(false)}
+ title="Kumpulkan Lembar Ujian?"
+ badge="Konfirmasi Selesai"
+ icon={Send}
+ maxWidth="max-w-md"
+ zIndex={100}
+ disableBackdropClose={cbtSubmitting}
+ footer={
+ <>
  <button
  type="button"
  onClick={() => setShowFinishConfirmModal(false)}
@@ -2609,51 +2439,51 @@ export default function LmsUjianPage({
  type="button"
  onClick={confirmSubmitCbt}
  disabled={cbtSubmitting}
- className="h-9 px-5 rounded-lg bg-emerald-600 dark:bg-slate-100 dark:text-slate-900 dark: hover:from-emerald-700 hover:to-teal-700 text-xs font-extrabold shadow-sm transition cursor-pointer disabled:opacity-50 text-white border border-emerald-200/80 dark:border-emerald-800/60 text-sm font-medium"
+ className="h-9 px-5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-xs font-extrabold shadow-sm transition cursor-pointer disabled:opacity-50 text-white text-sm font-medium"
  >
  {cbtSubmitting ? 'Mengumpulkan...' : 'Ya, Kumpulkan Ujian'}
  </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </div>
- )}
-
- {/* ── RESULTS & SCORE ANALYTICS MODAL ── */}
- {showResultsModal && resultsData && (
- <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
- <motion.div
- initial={{ opacity: 0, scale: 0.95 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.95 }}
- className="bg-white dark:bg-[#1B2433] rounded-xl max-w-4xl w-full max-h-[85vh] overflow-hidden shadow-2xl border border-emerald-200/80 dark:border-emerald-800/80 dark:border-emerald-800/60 flex flex-col"
+ </>
+ }
  >
- <div className="p-6 border-b border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between bg-white dark:bg-[#1B2433] shrink-0">
- <div className="flex items-center gap-3">
- <div className="flex h-9 w-11 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm">
- <BarChart2 className="w-5 h-5" />
- </div>
- <div>
- <h3 className="text-base font-bold text-slate-900 dark:text-white leading-tight">
- Hasil & Analisis Nilai CBT
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- {resultsData.ujian?.judul_ujian} — {resultsData.ujian?.kelas}
+ <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+ Apakah Anda yakin ingin menyelesaikan dan mengumpulkan ujian ini sekarang? Setelah dikumpulkan, lembar jawaban akan langsung dinilai secara otomatis.
+ </p>
+ <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-950/30 p-3">
+ <div className="flex items-start gap-2">
+ <Sparkles className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+ <p className="text-xs text-emerald-700 dark:text-emerald-300">
+ Pastikan seluruh soal telah Anda jawab dengan cermat sebelum mengumpulkan.
  </p>
  </div>
  </div>
+ </AppModal>
+ </div>
+ )}
+ </AppModal>
+
+ {/* ── RESULTS & SCORE ANALYTICS MODAL ── */}
+ <AppModal
+ isOpen={Boolean(showResultsModal && resultsData)}
+ onClose={() => setShowResultsModal(false)}
+ title="Hasil & Analisis Nilai CBT"
+ description={resultsData ? `${resultsData.ujian?.judul_ujian} — ${resultsData.ujian?.kelas}` : undefined}
+ icon={BarChart2}
+ maxWidth="max-w-4xl"
+ zIndex={50}
+ bodyClassName="space-y-6"
+ footer={
  <button
  type="button"
  onClick={() => setShowResultsModal(false)}
- className="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+ className="px-5 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors"
  >
- <X className="w-5 h-5" />
+ Tutup Rekap Nilai
  </button>
- </div>
-
- <div className="p-6 space-y-6 overflow-y-auto flex-1">
+ }
+ >
+ {resultsData && (
+ <>
  {/* Ringkasan Analitik Cards */}
  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
  <div className="bg-emerald-50 dark:bg-emerald-950/40 p-3.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
@@ -2732,20 +2562,9 @@ export default function LmsUjianPage({
  </TableBody>
  </TableRoot>
  </div>
- </div>
-
- <div className="p-5 border-t border-emerald-200/80 dark:border-emerald-800/60 flex justify-end bg-slate-50/50 dark:bg-slate-900/40 shrink-0">
- <button
- type="button"
- onClick={() => setShowResultsModal(false)}
- className="px-5 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors"
- >
- Tutup Rekap Nilai
- </button>
- </div>
- </motion.div>
- </div>
+ </>
  )}
+ </AppModal>
 
  {/* ── PRINT & PDF EXPORT MODAL ── */}
  <PrintOptionModal

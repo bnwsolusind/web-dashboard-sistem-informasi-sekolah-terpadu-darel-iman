@@ -1,4 +1,5 @@
 import { HeroUiHeader } from "../components/ui/HeroUiHeader"
+import AppModal from '../components/app/AppModal'
 import {
   useEffect,
   useMemo,
@@ -810,34 +811,35 @@ export default function AssessmentFormulaPage({
  </MasterDataPage>
 
  {/* MODAL FORM TAMBAH DRAFT RUMUS */}
- {isModalOpen && (
- <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm animate-fadeIn">
- <div className="relative w-full max-w-2xl overflow-hidden rounded-xl border border-emerald-200/80 bg-white p-6 shadow-2xl dark:border-emerald-800/60 dark:bg-slate-900 animate-scaleUp">
- {/* Header Modal */}
- <div className="mb-5 flex items-center justify-between border-b pb-3 border-emerald-100/80 dark:border-emerald-800/60">
- <div className="flex items-center gap-3">
- <span className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
- <Calculator className="h-5 w-5" />
- </span>
- <div>
- <h3 className="text-base font-black text-slate-900 dark:text-white">
- {editingItem ? 'Edit Draft Rumus Penilaian' : 'Buat Draft Rumus Penilaian'}
- </h3>
- <p className="text-xs text-slate-500">
- {editingItem ? `Mengubah draf rumus: ${editingItem.code}` : 'Formula bobot nilai rapor untuk kurikulum terpadu'}
- </p>
- </div>
- </div>
+ <AppModal
+ isOpen={isModalOpen}
+ onClose={() => setIsModalOpen(false)}
+ title={editingItem ? 'Edit Draft Rumus Penilaian' : 'Buat Draft Rumus Penilaian'}
+ description={editingItem ? `Mengubah draf rumus: ${editingItem.code}` : 'Formula bobot nilai rapor untuk kurikulum terpadu'}
+ icon={Calculator}
+ maxWidth="max-w-2xl"
+ footer={
+ <div className="flex w-full items-center justify-end gap-2.5">
  <button
  type="button"
  onClick={() => setIsModalOpen(false)}
- className="rounded-xl p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 transition"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- ✕
+ Batal
+ </button>
+ <button
+ type="submit"
+ form="assessment-formula-form"
+ disabled={busy || totalWeight !== 100}
+ className="inline-flex h-9.5 items-center gap-2 rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 hover:bg-emerald-700 active:scale-95 transition disabled:opacity-50 cursor-pointer"
+ >
+ <CheckCircle2 className="h-4 w-4" />
+ <span>{busy ? 'Menyimpan...' : 'Simpan Draft Rumus'}</span>
  </button>
  </div>
-
- <form onSubmit={handleSubmitForm} className="space-y-4">
+ }
+ >
+ <form id="assessment-formula-form" onSubmit={handleSubmitForm} className="space-y-4">
  {/* Row 1: Nama & Jenis */}
  <div className="grid gap-3 sm:grid-cols-2">
  <div>
@@ -1059,29 +1061,9 @@ export default function AssessmentFormulaPage({
  ))}
  </div>
  </div>
-
- {/* Footer Buttons */}
- <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60">
- <button
- type="button"
- onClick={() => setIsModalOpen(false)}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-100 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-slate-800 transition"
- >
- Batal
- </button>
- <button
- type="submit"
- disabled={busy || totalWeight !== 100}
- className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 dark:bg-slate-100 dark:text-slate-900 dark: px-5 py-2.5 text-xs font-black hover:opacity-95 transition disabled:opacity-50 shadow-sm text-white border border-emerald-200/80 dark:border-emerald-800/60 h-9 text-sm font-medium"
- >
- {editingItem ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
- <span>{editingItem ? 'Simpan Perubahan' : 'Simpan Draft Rumus'}</span>
- </button>
- </div>
  </form>
- </div>
- </div>
- )}
+ </AppModal>
+
 
  {/* DETAIL DRAWER */}
  <AppDrawer

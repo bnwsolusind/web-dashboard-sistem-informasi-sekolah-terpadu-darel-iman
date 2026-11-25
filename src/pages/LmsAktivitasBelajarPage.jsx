@@ -58,6 +58,7 @@ import {
 import AppDataTable from '../components/app/AppDataTable'
 import MobileDataCard from '../components/app/MobileDataCard'
 import CsvImportModal from '../components/master-data/CsvImportModal'
+import AppModal from '../components/app/AppModal'
 import ActionDropdown from '../components/app/ActionDropdown'
 import {
   RotateCcw,
@@ -1296,30 +1297,24 @@ export default function LmsAktivitasBelajarPage({ embedded = false, hideBreadcru
       </motion.div>
 
  {/* KPI DETAIL MODAL */}
- {kpiModalOpen && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
- <div className="bg-white dark:bg-[#1B2433] w-full max-w-4xl rounded-xl shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 overflow-hidden flex flex-col max-h-[85vh]">
- <div className="bg-white dark:bg-[#1B2433] p-5 flex items-center justify-between">
- <div className="flex items-center gap-3">
- <div className="p-2 bg-white/10 backdrop-blur-md rounded-xl border border-emerald-200/20">
- <Activity className="w-5 h-5 text-emerald-200" />
- </div>
- <div>
- <h3 className="text-lg font-bold">{kpiModalCategory.title}</h3>
- <p className="text-xs text-emerald-100 mt-0.5">
- Menampilkan {kpiModalCategory.items.length} aktivitas terdaftar
- </p>
- </div>
- </div>
+ <AppModal
+ isOpen={kpiModalOpen}
+ onClose={() => setKpiModalOpen(false)}
+ title={kpiModalCategory.title}
+ description={`Menampilkan ${kpiModalCategory.items.length} aktivitas terdaftar`}
+ icon={Activity}
+ maxWidth="max-w-4xl"
+ zIndex={50}
+ footer={
  <button
+ type="button"
  onClick={() => setKpiModalOpen(false)}
- className="text-emerald-100 hover:p-1 rounded-lg hover:bg-white/10 transition-colors"
+ className="px-4 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-slate-200 text-xs font-bold hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors"
  >
- <X className="w-5 h-5" />
+ Tutup
  </button>
- </div>
-
- <div className="p-6 overflow-y-auto flex-1 space-y-4">
+ }
+ >
  {kpiModalCategory.items.length === 0 ? (
  <div className="py-12 text-center text-slate-400">
  <Activity className="w-12 h-9 mx-auto mb-3 opacity-30" />
@@ -1371,45 +1366,38 @@ export default function LmsAktivitasBelajarPage({ embedded = false, hideBreadcru
  </TableRoot>
  </div>
  )}
- </div>
-
- <div className="p-4 border-t border-emerald-200/80 dark:border-emerald-800/60 flex justify-end bg-slate-50/50 dark:bg-slate-900/40">
- <button
- onClick={() => setKpiModalOpen(false)}
- className="px-4 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-slate-200 text-xs font-bold hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors"
- >
- Tutup
- </button>
- </div>
- </div>
- </div>
- )}
+ </AppModal>
 
  {/* Modal Form Tambah / Edit */}
- {isModalOpen && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fadeIn">
- <div className="bg-white dark:bg-[#1B2433] rounded-xl max-w-xl w-full p-6 shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 max-h-[90vh] overflow-y-auto">
- <div className="flex items-center justify-between pb-4 border-b border-emerald-200/80 dark:border-emerald-800/60 mb-5">
- <div className="flex items-center gap-2.5">
- <div className="w-10 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-[#059669] dark:text-emerald-400 flex items-center justify-center">
- <Activity className="w-5 h-5" />
- </div>
- <div>
- <h3 className="text-lg font-bold text-slate-900 dark:text-white">
- {editId ? 'Edit Aktivitas Belajar' : 'Tambah Aktivitas Belajar'}
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">Isi kelengkapan data alur skenario pembelajaran</p>
- </div>
- </div>
+ <AppModal
+ isOpen={isModalOpen}
+ onClose={() => setIsModalOpen(false)}
+ title={editId ? 'Edit Aktivitas Belajar' : 'Tambah Aktivitas Belajar'}
+ description="Isi kelengkapan data alur skenario pembelajaran"
+ icon={Activity}
+ maxWidth="max-w-xl"
+ zIndex={50}
+ footer={
+ <>
  <button
+ type="button"
  onClick={() => setIsModalOpen(false)}
- className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors"
+ className="px-4 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 text-slate-700 dark:text-slate-300 font-medium text-sm hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors"
  >
- <X className="w-5 h-5" />
+ Batal
  </button>
- </div>
-
- <form onSubmit={handleSubmit} className="space-y-4">
+ <button
+ type="submit"
+ form="lms-aktivitas-belajar-form"
+ disabled={formLoading}
+ className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#059669] text-white font-semibold text-sm shadow-md hover:bg-[#1E8E5A] disabled:opacity-50 transition-all duration-200"
+ >
+ {formLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : editId ? 'Simpan Perubahan' : 'Tambah Aktivitas'}
+ </button>
+ </>
+ }
+ >
+ <form id="lms-aktivitas-belajar-form" onSubmit={handleSubmit} className="space-y-4">
  {/* Modul Ajar Dropdown */}
  <div>
  <HeroUiModalSelect
@@ -1513,43 +1501,28 @@ export default function LmsAktivitasBelajarPage({ embedded = false, hideBreadcru
  className="w-full px-3.5 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-slate-50 dark:bg-[#111827] text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#059669]/20 focus:border-[#059669]"
  ></textarea>
  </div>
-
- {/* Submit Buttons */}
- <div className="flex items-center justify-end gap-3 pt-4 border-t border-emerald-200/80 dark:border-emerald-800/60">
- <button
- type="button"
- onClick={() => setIsModalOpen(false)}
- className="px-4 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 text-slate-700 dark:text-slate-300 font-medium text-sm hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors"
- >
- Batal
- </button>
- <button
- type="submit"
- disabled={formLoading}
- className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#059669] text-white font-semibold text-sm shadow-md hover:bg-[#1E8E5A] disabled:opacity-50 transition-all duration-200"
- >
- {formLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : editId ? 'Simpan Perubahan' : 'Tambah Aktivitas'}
- </button>
- </div>
  </form>
- </div>
- </div>
- )}
+ </AppModal>
 
  {/* Modal Detail View */}
- {isDetailOpen && selectedDetail && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fadeIn">
- <div className="bg-white dark:bg-[#1B2433] rounded-xl max-w-lg w-full p-6 shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60">
- <div className="flex items-center justify-between pb-4 border-b border-emerald-200/80 dark:border-emerald-800/60 mb-4">
- <div className="flex items-center gap-2">
- <Activity className="w-5 h-5 text-[#059669]" />
- <h3 className="text-lg font-bold text-slate-900 dark:text-white">Detail Aktivitas Belajar</h3>
- </div>
- <button onClick={() => setIsDetailOpen(false)} className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600">
- <X className="w-5 h-5" />
+ <AppModal
+ isOpen={Boolean(isDetailOpen && selectedDetail)}
+ onClose={() => setIsDetailOpen(false)}
+ title="Detail Aktivitas Belajar"
+ icon={Activity}
+ maxWidth="max-w-lg"
+ zIndex={50}
+ footer={
+ <button
+ type="button"
+ onClick={() => setIsDetailOpen(false)}
+ className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium text-sm hover:bg-slate-200 dark:hover:bg-slate-700"
+ >
+ Tutup
  </button>
- </div>
-
+ }
+ >
+ {selectedDetail && (
  <div className="space-y-4">
  <div>
  <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${getJenisBadgeColor(selectedDetail.jenis_aktivitas)}`}>
@@ -1585,19 +1558,9 @@ export default function LmsAktivitasBelajarPage({ embedded = false, hideBreadcru
  {selectedDetail.instruksi || 'Tidak ada instruksi khusus.'}
  </div>
  </div>
-
- <div className="flex justify-end pt-3">
- <button
- onClick={() => setIsDetailOpen(false)}
- className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium text-sm hover:bg-slate-200 dark:hover:bg-slate-700"
- >
- Tutup
- </button>
- </div>
- </div>
- </div>
  </div>
  )}
+ </AppModal>
  </motion.div>
  </div>
  </PageContainer>

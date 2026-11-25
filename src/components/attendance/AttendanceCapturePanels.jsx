@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import AppModal from '../app/AppModal'
 import { AlertTriangle, Camera, CameraOff, CheckCircle2, ListChecks, QrCode, RefreshCw, X, XCircle } from 'lucide-react'
 import Swal from '@/components/ui/compat/swal-heroui'
 import { lmsPresensiService } from '../../services/lmsPresensiService'
@@ -359,60 +360,39 @@ export function AttendanceCapturePanel({ method, session, onRecorded, captureAct
  )}
 
  {/* Live Camera Pop-up Modal — Premium QR Scanner with Square ID Card Viewfinder */}
- <AnimatePresence>
- {showCameraModal && (
- <motion.div
- initial={{ opacity: 0 }}
- animate={{ opacity: 1 }}
- exit={{ opacity: 0 }}
- transition={{ duration: 0.2 }}
- className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/65 p-4 backdrop-blur-md"
- onClick={closeCameraModal}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 15 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 450, damping: 30 }}
- className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] dark:border-emerald-800/60 dark:bg-slate-900"
- onClick={(e) => e.stopPropagation()}
- >
- {/* Ambient Glow Blobs */}
-
- {/* Modal Header — Gradient Emerald */}
- <div className="relative z-10 flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/80 bg-white dark:bg-[#1B2433] p-5 dark:border-emerald-800/60">
- <div className="flex items-center gap-3.5">
- <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/15 backdrop-blur-md border border-emerald-200/25 shadow-md">
- <Camera className="h-5 w-5" />
- </div>
- <div>
- <div className="flex items-center gap-2 flex-wrap">
- <h3 className="text-base font-black tracking-tight text-white">
- Pemindai Live QR Code Kartu Siswa
- </h3>
- <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 backdrop-blur-sm px-2.5 py-0.5 text-[10px] font-extrabold text-emerald-100 border border-emerald-200/20">
- <span className="relative flex h-1.5 w-1.5">
- <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-200 opacity-75" />
- <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white" />
- </span>
- LIVE
- </span>
- </div>
- <p className="text-xs font-medium text-emerald-100/80 mt-0.5">
- Presensi Mata Pelajaran
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={closeCameraModal}
- className="rounded-full p-2 /70 hover:bg-white/15 hover:text-white transition cursor-pointer"
- >
- <X className="h-5 w-5" />
- </button>
- </div>
-
- {/* Modal Body */}
+      <AppModal
+        isOpen={showCameraModal}
+        onClose={closeCameraModal}
+        title="Pemindai Live QR Code Kartu Siswa"
+        badge="LIVE"
+        description="Presensi Mata Pelajaran"
+        icon={Camera}
+        maxWidth="max-w-md"
+        bodyClassName="p-5 space-y-4"
+        footer={
+          <div className="flex w-full items-center justify-between gap-2">
+            <button
+              type="button"
+              onClick={cameraActive ? stopCamera : startCamera}
+              className="h-9.5 px-3.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:text-emerald-300 text-xs font-black inline-flex items-center gap-1.5 transition cursor-pointer"
+            >
+              {cameraActive ? (
+                <><CameraOff className="h-3.5 w-3.5 text-rose-500" /> Matikan Kamera</>
+              ) : (
+                <><Camera className="h-3.5 w-3.5 text-emerald-600" /> Nyalakan Ulang Kamera</>
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={closeCameraModal}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Tutup</span>
+            </button>
+          </div>
+        }
+      >
  <div className="relative z-10 p-5 space-y-4">
  {/* Warning jika capture belum aktif */}
  {!captureActive && (
@@ -589,33 +569,8 @@ export function AttendanceCapturePanel({ method, session, onRecorded, captureAct
  </button>
  </div>
  </form>
- </div>
-
- {/* Footer */}
- <div className="relative z-10 flex items-center justify-between border-t border-emerald-100/80 bg-slate-50/50 p-4 dark:border-emerald-800/60 dark:bg-slate-800/40">
- <button
- type="button"
- onClick={cameraActive ? stopCamera : startCamera}
- className="flex items-center gap-1.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-emerald-50/40 dark:border-emerald-700/80 dark:bg-emerald-950/60 dark:text-emerald-300 transition"
- >
- {cameraActive ? (
- <><CameraOff className="h-3.5 w-3.5 text-rose-500" /> Matikan Kamera</>
- ) : (
- <><Camera className="h-3.5 w-3.5 text-emerald-500" /> Nyalakan Ulang Kamera</>
- )}
- </button>
- <button
- type="button"
- onClick={closeCameraModal}
- className="rounded-xl bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-800 hover:bg-slate-300 dark:bg-emerald-950/40 dark:text-slate-200 transition"
- >
- Tutup
- </button>
- </div>
- </motion.div>
- </motion.div>
- )}
- </AnimatePresence>
+        </div>
+      </AppModal>
  </div>
  )
 }

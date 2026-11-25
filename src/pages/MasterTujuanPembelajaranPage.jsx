@@ -3,6 +3,7 @@ import {
   KpiStatCard
 } from '../components/app'
 import CustomSelect from "../components/ui/CustomSelect"
+import AppModal from '../components/app/AppModal'
 import {
   useState,
   useEffect,
@@ -321,67 +322,57 @@ function KpiTintedCard({
 }
 
 function HarmonizedDeleteModal({ isOpen, onClose, onConfirm, item, isSubmitting }) {
- if (!isOpen || !item) return null
-
- return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fadeIn">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex h-9 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 shadow-sm">
- <Trash2 className="h-6 w-6" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-rose-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
- Hapus Permanen
- </span>
- <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
- Hapus Tujuan Pembelajaran?
- </h3>
- </div>
- </div>
-
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Apakah Anda yakin ingin menghapus Tujuan Pembelajaran ini? Tindakan ini tidak dapat dibatalkan.
- </p>
-
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/50 p-3.5 dark:border-emerald-800/60 dark:bg-rose-950/20 mb-5">
- <p className="text-xs font-black text-rose-950 dark:text-rose-100">
- [{item?.kode_tp}] {item?.deskripsi_tp}
- </p>
- <p className="text-xs text-rose-800/80 dark:text-rose-300/80 mt-0.5">
- CP Induk: {item?.capaian_pembelajaran?.nama_cp || item?.cp?.nama_cp || '-'} • Alokasi: {item?.alokasi_waktu_jp || 0} JP
- </p>
- </div>
-
- <div className="flex items-center justify-end gap-3">
- <button
- type="button"
- onClick={onClose}
- disabled={isSubmitting}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all cursor-pointer"
- >
- Batal
- </button>
- <button
- type="button"
- onClick={onConfirm}
- disabled={isSubmitting}
- className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white px-5 py-2 text-xs font-bold text-white shadow-sm hover:brightness-105 disabled:opacity-50 transition-all cursor-pointer"
- >
- {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
- Hapus TP
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )
+  return (
+    <AppModal
+      isOpen={Boolean(isOpen && item)}
+      onClose={() => !isSubmitting && onClose()}
+      title="Hapus Tujuan Pembelajaran?"
+      badge="Hapus Permanen"
+      description="Tindakan ini tidak dapat dibatalkan."
+      icon={Trash2}
+      variant="danger"
+      maxWidth="max-w-md"
+      zIndex={70}
+      disableBackdropClose={isSubmitting}
+      hideCloseButton={isSubmitting}
+      bodyClassName="space-y-4"
+      footer={
+        <>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isSubmitting}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={isSubmitting}
+            className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20 disabled:opacity-50"
+          >
+            {isSubmitting ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+            <span>Hapus TP</span>
+          </button>
+        </>
+      }
+    >
+      {item && (
+        <>
+          <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            Apakah Anda yakin ingin menghapus Tujuan Pembelajaran ini? Tindakan ini tidak dapat dibatalkan.
+          </p>
+          <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-rose-50/50 p-3.5 dark:bg-rose-950/20">
+            <p className="text-xs font-black text-rose-950 dark:text-rose-100">
+              [{item?.kode_tp}] {item?.deskripsi_tp || item?.nama_tp}
+            </p>
+          </div>
+        </>
+      )}
+    </AppModal>
+  )
 }
 
 export default function MasterTujuanPembelajaranPage({ embedded = false, hideBreadcrumb = false, hidePageHeader = false, tabNav = null }) {
@@ -1135,22 +1126,40 @@ export default function MasterTujuanPembelajaranPage({ embedded = false, hideBre
         </motion.div>
 
  {/* Modal Form TP - Mengikuti urutan persis yang dipersyaratkan */}
- {modalOpen && (
- <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-3 sm:p-5 bg-slate-900/60 backdrop-blur-sm animate-fadeIn overflow-y-auto">
- <div className="bg-white dark:bg-[#1B2433] w-full max-w-xl my-auto max-h-[calc(100dvh-2rem)] flex flex-col rounded-xl shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 overflow-hidden">
- <div className="bg-white dark:bg-[#1B2433] p-5 flex items-center justify-between shrink-0">
- <div className="flex items-center gap-3">
- <Target className="w-6 h-6 text-emerald-200" />
- <h3 className="text-lg font-bold">
- {editingItem ? 'Edit Tujuan Pembelajaran' : 'Tambah Tujuan Pembelajaran Baru'}
- </h3>
- </div>
- <button onClick={handleCloseModal} className="text-emerald-100 hover:text-white p-1 rounded-lg">
- <X className="w-5 h-5" />
- </button>
- </div>
-
- <form onSubmit={handleSubmitForm} className="p-6 space-y-4 overflow-y-auto min-h-0 flex-1">
+      <AppModal
+        isOpen={modalOpen}
+        onClose={() => !formSubmitting && handleCloseModal()}
+        title={editingItem ? 'Edit Tujuan Pembelajaran' : 'Tambah Tujuan Pembelajaran Baru'}
+        badge={editingItem ? 'Perbarui' : 'TP Baru'}
+        description="Lengkapi unit pendidikan, tahun ajaran, capaian pembelajaran, dan deskripsi TP."
+        icon={Target}
+        maxWidth="max-w-xl"
+        disableBackdropClose={formSubmitting}
+        hideCloseButton={formSubmitting}
+        footer={
+          <>
+            <button
+              type="button"
+              disabled={formSubmitting}
+              onClick={handleCloseModal}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="submit"
+              form="tujuan-pembelajaran-form"
+              disabled={formSubmitting}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+            >
+              {formSubmitting ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+              <span>{formSubmitting ? 'Menyimpan...' : 'Simpan TP'}</span>
+            </button>
+          </>
+        }
+      >
+        <form id="tujuan-pembelajaran-form" onSubmit={handleSubmitForm} className="space-y-4">
  {/* Field 1: Unit Pendidikan */}
  <div>
  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
@@ -1331,36 +1340,8 @@ export default function MasterTujuanPembelajaranPage({ embedded = false, hideBre
  </div>
  </div>
 
- <div className="sticky bottom-0 bg-white dark:bg-[#1B2433] pt-3 pb-1 -mx-6 px-6 flex items-center justify-end gap-3 border-t border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
- <button
- type="button"
- onClick={handleCloseModal}
- className="px-5 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 text-slate-600 dark:text-slate-300 text-sm font-semibold hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition"
- >
- Batal
- </button>
- <button
- type="submit"
- disabled={formSubmitting}
- className="inline-flex items-center gap-2 bg-[#059669] hover:bg-[#1E8E5A] text-white px-6 py-2.5 rounded-xl text-sm font-bold shadow-md transition disabled:opacity-50"
- >
- {formSubmitting ? (
- <>
- <RefreshCw className="w-4 h-4 animate-spin" />
- Menyimpan...
- </>
- ) : (
- <>
- <Sparkles className="w-4 h-4" />
- Simpan TP
- </>
- )}
- </button>
- </div>
- </form>
- </div>
- </div>
- )}
+        </form>
+      </AppModal>
 
  <HarmonizedDeleteModal
  isOpen={isDeleteModalOpen}

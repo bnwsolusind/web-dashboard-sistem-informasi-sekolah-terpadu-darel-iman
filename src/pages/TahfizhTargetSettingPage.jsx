@@ -38,6 +38,8 @@ import {
 } from 'react-router-dom'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
 import AppModal from '../components/app/AppModal'
+import PageToolbarActions from '../components/app/PageToolbarActions'
+import { SquircleActionButton } from '../components/master-data'
 import {
   Badge
 } from '@/components/ui/badge'
@@ -621,22 +623,20 @@ export default function TahfizhTargetSettingPage() {
         badge="Konfigurasi Kurikulum"
         icon={Target}
         actions={
-          <div className="flex flex-wrap items-center gap-2.5 w-full lg:w-auto shrink-0">
-            <button
+          <PageToolbarActions
+            className="w-full lg:w-auto shrink-0"
+            primaryAction={{
+              label: 'Tambah Target Baru',
+              onClick: () => handleOpenForm(),
+            }}
+          >
+            <SquircleActionButton
+              variant="neutral"
+              icon={ArrowLeft}
+              label="Kembali ke Tahfizh"
               onClick={() => navigate('/dashboard/tahfizh')}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 bg-white/80 hover:bg-white border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300 dark:hover:bg-slate-700 dark:border-emerald-700/80 transition shadow-sm cursor-pointer"
-            >
-              <ArrowLeft className="size-3.5" />
-              <span>Kembali ke Tahfizh</span>
-            </button>
-            <button
-              onClick={() => handleOpenForm()}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition cursor-pointer"
-            >
-              <Plus className="size-4 text-white" />
-              <span>Tambah Target Baru</span>
-            </button>
-          </div>
+            />
+          </PageToolbarActions>
         }
       />
 
@@ -654,14 +654,11 @@ export default function TahfizhTargetSettingPage() {
  </p>
  </div>
 
- <button
- onClick={() => fetchTargets()}
- disabled={loading}
- className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-emerald-800 bg-emerald-100/70 hover:bg-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-300 transition"
- >
- <RefreshCw className={`size-3.5 ${loading ? 'animate-spin' : ''}`} />
- <span>Segarkan</span>
- </button>
+ <PageToolbarActions
+ onRefresh={() => fetchTargets()}
+ refreshLabel="Segarkan"
+ refreshing={loading}
+ />
  </div>
 
  {/* Baris 2 & 3: Filter & Search Bar */}
@@ -1088,54 +1085,24 @@ export default function TahfizhTargetSettingPage() {
  </AppModal>
 
  {/* 5. MODAL HAPUS HARMONIS (HeroUI Standard) */}
- <AnimatePresence>
- {showDeleteModal && targetToDelete && (
- <div
- role="alertdialog"
- aria-modal="true"
- aria-label="Hapus Target KPI"
- className="fixed inset-0 z-[80] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md"
- >
- <motion.div
- initial={{ scale: 0.95, opacity: 0 }}
- animate={{ scale: 1, opacity: 1 }}
- exit={{ scale: 0.95, opacity: 0 }}
- className="relative w-full max-w-md overflow-hidden rounded-xl bg-white shadow-2xl shadow-sm dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60"
- >
- {/* Garis Aksen Rose */}
-
- <div className="p-6 space-y-4">
- <div className="flex items-center gap-3">
- <div className="size-12 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center dark:bg-rose-950/50 dark:text-rose-400">
- <Trash2 className="size-6" />
- </div>
- <div>
- <span className="text-[10px] font-black uppercase tracking-wider text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full dark:bg-rose-950 dark:text-rose-300">
- Konfirmasi Hapus Target
- </span>
- <h4 className="text-base font-extrabold text-slate-900 dark:text-white mt-0.5">
- Hapus Target KPI?
- </h4>
- </div>
- </div>
-
- <div className="rounded-xl bg-rose-50/60 p-4 border border-emerald-200/80 dark:border-emerald-800/60 text-xs text-rose-950 dark:bg-rose-950/20 dark:border-emerald-800/60 dark:text-rose-200">
- <p className="font-bold">{targetToDelete.target_name}</p>
- <p className="mt-1 text-xs text-rose-700 dark:text-rose-300">
- Target: {targetToDelete.target_ayats} Ayat ({targetToDelete.target_juz})
- </p>
- </div>
-
- <p className="text-xs text-slate-500 dark:text-slate-400">
- Tindakan ini akan menghapus target KPI dari sistem. Santri di kelas terkait akan menggunakan target fallback default Al-Qur'an.
- </p>
-
- <div className="flex items-center justify-end gap-2.5 pt-2">
+ <AppModal
+ isOpen={Boolean(showDeleteModal && targetToDelete)}
+ onClose={() => { if (!isDeleting) { setShowDeleteModal(false); setTargetToDelete(null); } }}
+ disableBackdropClose={isDeleting}
+ hideCloseButton={isDeleting}
+ variant="danger"
+ badge="Konfirmasi Hapus Target"
+ title="Hapus Target KPI?"
+ icon={Trash2}
+ maxWidth="max-w-md"
+ zIndex="z-[80]"
+ footer={
+ <div className="flex w-full items-center justify-end gap-2.5">
  <button
  type="button"
  onClick={() => { setShowDeleteModal(false); setTargetToDelete(null); }}
  disabled={isDeleting}
- className="px-4 py-2 rounded-xl text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-slate-200 transition"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
  Batal
  </button>
@@ -1143,7 +1110,7 @@ export default function TahfizhTargetSettingPage() {
  type="button"
  onClick={handleDeleteTarget}
  disabled={isDeleting}
- className="inline-flex items-center gap-1.5 px-5 py-2 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 shadow-sm transition disabled:opacity-50"
+ className="inline-flex h-9.5 items-center gap-1.5 rounded-xl border-2 border-rose-600 bg-rose-600 px-5 text-xs font-black text-white shadow-md shadow-rose-600/20 transition-all hover:bg-rose-700 active:scale-95 disabled:opacity-50 cursor-pointer"
  >
  {isDeleting ? (
  <>
@@ -1158,11 +1125,22 @@ export default function TahfizhTargetSettingPage() {
  )}
  </button>
  </div>
+ }
+ >
+ {targetToDelete && (
+ <div className="space-y-4">
+ <div className="rounded-xl bg-rose-50/60 p-4 border border-rose-200/80 text-xs text-rose-950 dark:bg-rose-950/20 dark:border-rose-800/60 dark:text-rose-200">
+ <p className="font-bold">{targetToDelete.target_name}</p>
+ <p className="mt-1 text-xs text-rose-700 dark:text-rose-300">
+ Target: {targetToDelete.target_ayats} Ayat ({targetToDelete.target_juz})
+ </p>
  </div>
- </motion.div>
+ <p className="text-xs text-slate-500 dark:text-slate-400">
+ Tindakan ini akan menghapus target KPI dari sistem. Santri di kelas terkait akan menggunakan target fallback default Al-Qur'an.
+ </p>
  </div>
  )}
- </AnimatePresence>
+ </AppModal>
  </div>
  )
 }

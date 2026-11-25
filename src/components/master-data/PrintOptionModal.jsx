@@ -20,6 +20,7 @@ import { useUnitStore } from '../../stores/unitStore'
 import { useAuthStore } from '../../stores/authStore'
 import { resolveUnitDetails, isCentralOrYayasanRole } from '../../utils/printHelper'
 import { PrintHeader } from '../common/PrintHeader'
+import AppModal from '../app/AppModal'
 import {
   Select,
   SelectTrigger,
@@ -105,65 +106,72 @@ export function PrintOptionModal({
         : userUnit || storeActiveUnit
   const currentUnit = resolveUnitDetails(effectiveUnit, user)
 
-  if (!isModalOpen) return null
-
   return (
-    <AnimatePresence>
-      <div
-        role="dialog"
-        tabIndex={-1}
-        aria-modal="true"
-        aria-labelledby="print-option-modal-title"
-        className="fixed inset-0 z-[80] flex items-start sm:items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto"
-        onMouseDown={(e) => {
-          if (e.target === e.currentTarget) onClose()
-        }}
-      >
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 16 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.96, y: 12 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-          className={`font-sans w-full ${showPreview ? 'max-w-5xl' : 'max-w-2xl'} my-auto`}
-        >
-          <div className="relative flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-card-dark dark:shadow-black/60">
-            {/* Top Accent Gradient Bar */}
-            <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
-
-            {/* Header */}
-            <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner shrink-0">
-              <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-md shadow-emerald-600/20 shrink-0">
-                  <Printer className="h-4.5 w-4.5 text-white" strokeWidth={2.2} />
-                </div>
-                <div>
-                  <h3
-                    id="print-option-modal-title"
-                    className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2"
-                  >
-                    <span>Opsi &amp; Scope Cetak {title}</span>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/40 dark:text-emerald-300">
-                      <Sparkles className="size-3" />
-                      Cetak &amp; PDF
-                    </span>
-                  </h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                    Pilih orientasi kertas, cakupan data, dan tindakan ekspor dokumen resmi.
-                  </p>
-                </div>
-              </div>
+    <AppModal
+      isOpen={Boolean(isModalOpen)}
+      onClose={onClose}
+      title={`Opsi Cetak & Ekspor — ${title}`}
+      badge="Cetak & PDF"
+      description={subtitle || 'Pilih orientasi kertas, cakupan data, dan tindakan ekspor dokumen resmi.'}
+      icon={Printer}
+      maxWidth="max-w-2xl"
+      zIndex={80}
+      bodyClassName="space-y-4 text-xs text-slate-700 dark:text-slate-200"
+      footer={
+        <div className="flex w-full flex-wrap items-center justify-between gap-2">
+          <button
+            type="button"
+            onClick={onClose}
+            className="h-9.5 px-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all duration-200 active:scale-95 cursor-pointer"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            {onExportExcel && (
               <button
                 type="button"
-                onClick={onClose}
-                aria-label="Tutup modal"
-                className="size-8 flex items-center justify-center rounded-lg bg-emerald-50 hover:bg-slate-200 text-emerald-700 hover:text-emerald-700 dark:bg-emerald-950/40 dark:hover:bg-slate-700 dark:text-emerald-300 transition-all cursor-pointer shrink-0 active:scale-95"
+                onClick={() => {
+                  onClose()
+                  onExportExcel(orientation)
+                }}
+                className="h-9.5 px-4 rounded-xl border-2 border-emerald-600 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 dark:bg-slate-800 dark:text-emerald-300 text-xs font-black inline-flex items-center gap-2 transition-all duration-200 active:scale-95 cursor-pointer shadow-xs"
               >
-                <X className="size-4" strokeWidth={2.2} />
+                <FileSpreadsheet className="size-4 text-emerald-700 dark:text-emerald-400" strokeWidth={2} />
+                <span>Ekspor Excel</span>
               </button>
-            </div>
-
-            {/* Body */}
-            <div className="min-h-0 flex-1 overflow-y-auto p-6 space-y-4">
+            )}
+            {(onDownload || onDownloadPdf) && (
+              <button
+                type="button"
+                onClick={() => {
+                  onClose()
+                  const downloadAction = onDownload || onDownloadPdf
+                  downloadAction && downloadAction(orientation)
+                }}
+                className="h-9.5 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all duration-200 active:scale-95 cursor-pointer shadow-md shadow-amber-600/20"
+              >
+                <Download className="size-4" strokeWidth={2} />
+                <span>Unduh PDF</span>
+              </button>
+            )}
+            {onPrint && (
+              <button
+                type="button"
+                onClick={() => {
+                  onClose()
+                  onPrint(orientation)
+                }}
+                className="h-9.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all duration-200 active:scale-95 cursor-pointer shadow-md shadow-emerald-600/20"
+              >
+                <Printer className="size-4" strokeWidth={2} />
+                <span>Cetak Dokumen</span>
+              </button>
+            )}
+          </div>
+        </div>
+      }
+    >
               {/* 1. Active Unit / Scope Badge */}
               <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-emerald-200/80 dark:border-emerald-800/60">
                 <div className="flex items-center gap-3 min-w-0">
@@ -415,71 +423,7 @@ export function PrintOptionModal({
                   </div>
                 )}
               </div>
-            </div>
-
-            {/* Footer dengan Tombol Standar */}
-            <div className="flex flex-wrap items-center justify-between gap-2 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900 dark:bg-slate-900/50 shrink-0 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
-              <button
-                type="button"
-                onClick={onClose}
-                className="h-9 px-4 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-extrabold inline-flex items-center gap-1.5 transition-all duration-200 active:scale-95 cursor-pointer"
-              >
-                <X className="size-4" strokeWidth={2} />
-                <span>Batal</span>
-              </button>
-
-              <div className="flex flex-wrap items-center gap-2">
-                {/* Opsi Ekspor Excel/CSV jika disediakan */}
-                {onExportExcel && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onClose()
-                      onExportExcel(orientation)
-                    }}
-                    className="h-9 px-4 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white text-slate-700 hover:bg-emerald-50/40 text-sm font-medium inline-flex items-center gap-2 transition-all duration-200 active:scale-95 cursor-pointer shadow-xs"
-                  >
-                    <FileSpreadsheet className="size-4 text-slate-500" strokeWidth={2} />
-                    <span>Ekspor Excel</span>
-                  </button>
-                )}
-
-                {/* Opsi Unduh PDF */}
-                {(onDownload || onDownloadPdf) && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onClose()
-                      const downloadAction = onDownload || onDownloadPdf
-                      downloadAction && downloadAction(orientation)
-                    }}
-                    className="h-9 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold inline-flex items-center gap-2 transition-all duration-200 active:scale-95 cursor-pointer shadow-md shadow-amber-600/20"
-                  >
-                    <Download className="size-4" strokeWidth={2} />
-                    <span>Unduh PDF</span>
-                  </button>
-                )}
-
-                {/* Opsi Cetak Dokumen */}
-                {onPrint && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onClose()
-                      onPrint(orientation)
-                    }}
-                    className="h-9 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold inline-flex items-center gap-2 transition-all duration-200 active:scale-95 cursor-pointer shadow-md shadow-emerald-600/20"
-                  >
-                    <Printer className="size-4" strokeWidth={2} />
-                    <span>Cetak Dokumen</span>
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-    </AnimatePresence>
+    </AppModal>
   )
 }
 

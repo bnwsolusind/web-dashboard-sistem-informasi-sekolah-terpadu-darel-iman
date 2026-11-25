@@ -72,6 +72,7 @@ import JenisUnitDetailModal from '../components/jenis-unit/JenisUnitDetailModal'
 import JenisUnitImportModal from '../components/jenis-unit/JenisUnitImportModal'
 import PageContainer from '../components/app/PageContainer'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
+import AppModal from '../components/app/AppModal'
 import AppDataTable from '../components/app/AppDataTable'
 import ActionDropdown from '../components/app/ActionDropdown'
 import AppBadge from '../components/app/AppBadge'
@@ -1267,72 +1268,32 @@ export default function MasterJenisUnitPendidikanPage() {
  result={importResult}
  />
 
- {/* ── MODAL HASIL IMPOR & PEMBERITAHUAN DATA DUPLIKAT ── */}
- <AnimatePresence>
- {duplicateModalData && (
- <div
- className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/75 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="jenis-unit-duplicate-report-title"
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="my-auto w-full max-w-2xl font-sans"
- >
- <div className="flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
- <div className={cn(
- "h-1.5 w-full shrink-0",
- duplicateModalData.diperbarui > 0
- ? "bg-white dark:bg-card-dark"
- : duplicateModalData.duplikat > 0
- ? "bg-white dark:bg-card-dark"
- : "bg-white dark:bg-card-dark"
- )} />
-
- {/* Header */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className={cn(
- "rounded-xl p-2.5 text-white shadow-md shrink-0 border",
- duplicateModalData.diperbarui > 0
- ? "bg-white dark:bg-card-dark border-emerald-200/80 dark:border-emerald-800/60 shadow-sm"
- : "bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 shadow-sm"
- )}>
- {duplicateModalData.diperbarui > 0 ? (
- <RefreshCcw className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- ) : (
- <CheckCircle2 className="h-5 w-5 text-current" strokeWidth={2.25} />
- )}
- </div>
- <div>
- <h3 id="jenis-unit-duplicate-report-title" className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Hasil Impor & Pemberitahuan Data</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
- Total {duplicateModalData.total} Data
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Ringkasan sinkronisasi dan status pemrosesan data jenis unit
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setDuplicateModalData(null)}
- aria-label="Tutup ringkasan impor"
- className="size-9 flex items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 hover:bg-slate-200 dark:bg-emerald-950/40 dark:text-emerald-300 transition cursor-pointer"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Body */}
- <div className="min-h-0 flex-1 space-y-4 overflow-y-auto p-6 text-sm text-slate-700 dark:text-slate-200">
+      {/* ── MODAL HASIL IMPOR & PEMBERITAHUAN DATA DUPLIKAT ── */}
+      <AppModal
+        isOpen={Boolean(duplicateModalData)}
+        onClose={() => setDuplicateModalData(null)}
+        title="Hasil Impor & Pemberitahuan Data"
+        badge={duplicateModalData ? `Total ${duplicateModalData.total} Data` : undefined}
+        description="Ringkasan sinkronisasi dan status pemrosesan data jenis unit"
+        icon={duplicateModalData?.diperbarui > 0 ? RefreshCcw : CheckCircle2}
+        maxWidth="max-w-2xl"
+        zIndex={70}
+        disableBackdropClose
+        bodyClassName="space-y-4 text-sm text-slate-700 dark:text-slate-200"
+        footer={
+          <div className="flex w-full justify-end">
+            <button
+              type="button"
+              onClick={() => setDuplicateModalData(null)}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+            >
+              <span>Mengerti</span>
+            </button>
+          </div>
+        }
+      >
+        {duplicateModalData && (
+          <>
  {/* KPI Cards */}
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
  <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 p-3 text-center dark:border-emerald-800/60 dark:bg-emerald-950/30">
@@ -1397,23 +1358,10 @@ export default function MasterJenisUnitPendidikanPage() {
  </div>
  </div>
  )}
- </div>
+          </>
+        )}
+      </AppModal>
 
- {/* Footer */}
- <div className="flex items-center justify-end border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 px-6 py-3.5 dark:border-emerald-800/60 dark:bg-slate-900/30">
- <button
- type="button"
- onClick={() => setDuplicateModalData(null)}
- className="inline-flex items-center gap-1.5 rounded-xl bg-white dark:bg-card-dark px-5 py-2 text-xs font-bold shadow-md hover:from-emerald-700 hover:to-teal-800 transition cursor-pointer"
- >
- <span>Mengerti</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
 
  {/* Print Option Modal */}
  <PrintOptionModal
@@ -1427,53 +1375,40 @@ export default function MasterJenisUnitPendidikanPage() {
  {/* ══════════════════════════════════════════════════════════════════
  HARMONIZED BATCH EXPORT MODAL
  ══════════════════════════════════════════════════════════════════ */}
- <AnimatePresence>
- {showExportModal && (
- <div
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !isExporting) setShowExportModal(false)
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-lg"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
-
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 p-2.5 shadow-md shadow-xs shrink-0">
- <Download className="h-5 w-5 text-emerald-600" strokeWidth={2.2} />
- </div>
- <div>
- <h3 className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- Export Data Jenis Unit
- <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/60 dark:text-amber-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" /> Unduh Data
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Pilih format berkas untuk mengekspor data sesuai filter aktif.
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setShowExportModal(false)}
- className="size-9 flex items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 hover:bg-slate-200 dark:bg-emerald-950/40 dark:text-emerald-300 transition-colors cursor-pointer"
- >
- <X className="size-4" />
- </button>
- </div>
-
- <div className="modal-body p-6 space-y-4">
+      {/* ── HARMONIZED EXPORT MODAL ── */}
+      <AppModal
+        isOpen={showExportModal}
+        onClose={() => !isExporting && setShowExportModal(false)}
+        title="Export Data Jenis Unit"
+        badge="Unduh Data"
+        description="Pilih format berkas untuk mengekspor data sesuai filter aktif."
+        icon={Download}
+        maxWidth="max-w-lg"
+        disableBackdropClose={isExporting}
+        hideCloseButton={isExporting}
+        bodyClassName="space-y-4"
+        footer={
+          <>
+            <button
+              type="button"
+              onClick={() => setShowExportModal(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="button"
+              disabled={isExporting}
+              onClick={handleProcessExport}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+            >
+              <Download className="size-4" />
+              <span>{isExporting ? 'Menyiapkan...' : 'Unduh Berkas'}</span>
+            </button>
+          </>
+        }
+      >
  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
  {[
  ['xlsx', 'Excel (.xlsx)', FileSpreadsheet, 'Format spreadsheet modern Microsoft Excel.'],
@@ -1512,112 +1447,61 @@ export default function MasterJenisUnitPendidikanPage() {
  Data yang diekspor akan mencakup seluruh entitas terfilter ({totalCount} record jenis unit).
  </p>
  </div>
- </div>
+      </AppModal>
 
- <div className="modal-footer px-6 py-4 border-t border-emerald-200/80 dark:border-emerald-800/80 flex items-center justify-end gap-2.5 bg-slate-50/50 dark:bg-slate-900/40">
- <button
- type="button"
- onClick={() => setShowExportModal(false)}
- className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200/80 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-200 transition cursor-pointer"
- >
- Batal
- </button>
- <button
- type="button"
- disabled={isExporting}
- onClick={handleProcessExport}
- className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-card-dark px-5 py-2.5 text-xs font-extrabold shadow-sm hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200 disabled:opacity-50 cursor-pointer border border-emerald-200/80 dark:border-emerald-800/60"
- >
- <Download className="size-4" />
- {isExporting ? 'Menyiapkan...' : 'Unduh Berkas'}
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
-
- {/* ══════════════════════════════════════════════════════════════════
- HARMONIZED SAVE/UPDATE CONFIRMATION MODAL (z-[70])
- ══════════════════════════════════════════════════════════════════ */}
- <AnimatePresence>
- {showSaveConfirmModal && pendingSavePayload && (
- <div
- className="overlay modal fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !simpanMutation.isPending && !ubahMutation.isPending) {
- setShowSaveConfirmModal(false)
- }
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-md"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
- <div
- className={`h-1.5 w-full shrink-0 ${
- selectedForEdit
- ? 'bg-white dark:bg-card-dark'
- : 'bg-white dark:bg-card-dark'
- }`}
- />
-
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div
- className={`rounded-xl text-white p-2.5 shadow-md shrink-0 border ${
- selectedForEdit
- ? 'bg-white dark:bg-card-dark shadow-sm border-emerald-200/80 dark:border-emerald-800/60'
- : 'bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm border-emerald-300/30'
- }`}
- >
- {selectedForEdit ? (
- <Pencil className="h-5 w-5 text-emerald-600" strokeWidth={2.25} />
- ) : (
- <School className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- )}
- </div>
- <div>
- <h3 className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>{selectedForEdit ? 'Konfirmasi Perubahan Data' : 'Konfirmasi Penyimpanan Data'}</span>
- <span
- className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold border ${
- selectedForEdit
- ? 'bg-amber-50 text-amber-700 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/60 dark:text-amber-400 dark:border-emerald-800/60'
- : 'bg-emerald-50 text-emerald-800 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60'
- }`}
- >
- <Sparkles className="size-3" />
- {selectedForEdit ? 'Update Data' : 'Jenis Unit Baru'}
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- {selectedForEdit
- ? 'Pastikan rincian data sudah sesuai sebelum diperbarui di sistem.'
- : 'Pastikan rincian data jenis unit baru sudah sesuai sebelum disimpan.'}
- </p>
- </div>
- </div>
-
- <button
- type="button"
- disabled={simpanMutation.isPending || ubahMutation.isPending}
- onClick={() => setShowSaveConfirmModal(false)}
- className="size-9 flex items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer disabled:opacity-50"
- >
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
- </button>
- </div>
-
- <div className="modal-body p-6 space-y-4 text-slate-700 dark:text-slate-200">
+      {/* ── HARMONIZED SAVE/UPDATE CONFIRMATION MODAL (z-[70]) ── */}
+      <AppModal
+        isOpen={Boolean(showSaveConfirmModal && pendingSavePayload)}
+        onClose={() => !simpanMutation.isPending && !ubahMutation.isPending && setShowSaveConfirmModal(false)}
+        title={selectedForEdit ? 'Konfirmasi Perubahan Data' : 'Konfirmasi Penyimpanan Data'}
+        badge={selectedForEdit ? 'Update Data' : 'Jenis Unit Baru'}
+        description={
+          selectedForEdit
+            ? 'Pastikan rincian data sudah sesuai sebelum diperbarui di sistem.'
+            : 'Pastikan rincian data jenis unit baru sudah sesuai sebelum disimpan.'
+        }
+        icon={selectedForEdit ? Pencil : School}
+        variant={selectedForEdit ? 'warning' : 'emerald'}
+        maxWidth="max-w-md"
+        zIndex={70}
+        disableBackdropClose={simpanMutation.isPending || ubahMutation.isPending}
+        hideCloseButton={simpanMutation.isPending || ubahMutation.isPending}
+        bodyClassName="space-y-4 text-slate-700 dark:text-slate-200"
+        footer={
+          <>
+            <button
+              type="button"
+              disabled={simpanMutation.isPending || ubahMutation.isPending}
+              onClick={() => setShowSaveConfirmModal(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="button"
+              disabled={simpanMutation.isPending || ubahMutation.isPending}
+              onClick={handleExecuteSave}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+            >
+              {simpanMutation.isPending || ubahMutation.isPending ? (
+                <span className="size-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              ) : (
+                <Save className="size-4" strokeWidth={2} />
+              )}
+              <span>
+                {simpanMutation.isPending || ubahMutation.isPending
+                  ? 'Menyimpan...'
+                  : selectedForEdit
+                    ? 'Ya, Perbarui Data'
+                    : 'Ya, Simpan Jenis Unit'}
+              </span>
+            </button>
+          </>
+        }
+      >
+        {pendingSavePayload && (
+          <>
  {/* Summary Card */}
  <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 p-4 dark:border-emerald-800/60 dark:bg-emerald-950/30">
  <div className="flex items-center gap-3">
@@ -1645,96 +1529,53 @@ export default function MasterJenisUnitPendidikanPage() {
  Data jenis unit ini akan langsung disinkronkan ke master data yayasan.
  </p>
  </div>
- </div>
+          </>
+        )}
+      </AppModal>
 
- <div className="modal-footer px-6 py-4 border-t border-emerald-200/80 dark:border-emerald-800/80 flex items-center justify-end gap-2.5 bg-slate-50/50 dark:bg-slate-900/40">
- <button
- type="button"
- disabled={simpanMutation.isPending || ubahMutation.isPending}
- onClick={() => setShowSaveConfirmModal(false)}
- className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200/80 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs hover:bg-slate-100 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-200 transition cursor-pointer disabled:opacity-50"
- >
- Batal
- </button>
- <button
- type="button"
- disabled={simpanMutation.isPending || ubahMutation.isPending}
- onClick={handleExecuteSave}
- className="inline-flex items-center gap-2 rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 px-5 py-2.5 text-xs font-extrabold shadow-sm hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200 disabled:opacity-50 cursor-pointer border-2 border-emerald-300 dark:border-emerald-800"
- >
- {simpanMutation.isPending || ubahMutation.isPending ? (
- <span className="size-3.5 animate-spin rounded-full border-2 border-emerald-200/80 border-t-transparent" />
- ) : (
- <Save className="size-4" strokeWidth={2} />
- )}
- <span>
- {simpanMutation.isPending || ubahMutation.isPending
- ? 'Menyimpan...'
- : selectedForEdit
- ? 'Ya, Perbarui Data'
- : 'Ya, Simpan Jenis Unit'}
- </span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
-
- {/* ══════════════════════════════════════════════════════════════════
- HARMONIZED DELETE CONFIRMATION DIALOG (z-[70])
- ══════════════════════════════════════════════════════════════════ */}
- <AnimatePresence>
- {deleteTarget && (
- <div
- className="overlay modal fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !hapusMutation.isPending) setDeleteTarget(null)
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-md"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
-
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 p-2.5 shadow-md shadow-xs shrink-0">
- <Trash2 className="h-5 w-5 text-rose-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3 className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Hapus Jenis Unit</span>
- <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold border bg-rose-50 text-rose-700 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-rose-950/60 dark:text-rose-400 dark:border-emerald-800/60">
- <AlertTriangle className="size-3" />
- Hapus Data
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Konfirmasi penghapusan data jenis unit pendidikan.
- </p>
- </div>
- </div>
-
- <button
- type="button"
- disabled={hapusMutation.isPending}
- onClick={() => setDeleteTarget(null)}
- className="size-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-sky-950/60 dark:text-sky-300 transition-colors cursor-pointer disabled:opacity-50"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
-
- <div className="modal-body p-6 space-y-4 text-slate-700 dark:text-slate-200">
+      {/* ── HARMONIZED DELETE CONFIRMATION DIALOG (z-[70]) ── */}
+      <AppModal
+        isOpen={Boolean(deleteTarget)}
+        onClose={() => !hapusMutation.isPending && setDeleteTarget(null)}
+        title="Hapus Jenis Unit"
+        badge="Hapus Data"
+        description="Konfirmasi penghapusan data jenis unit pendidikan."
+        icon={Trash2}
+        variant="danger"
+        maxWidth="max-w-md"
+        zIndex={70}
+        disableBackdropClose={hapusMutation.isPending}
+        hideCloseButton={hapusMutation.isPending}
+        bodyClassName="space-y-4 text-slate-700 dark:text-slate-200"
+        footer={
+          <>
+            <button
+              type="button"
+              disabled={hapusMutation.isPending}
+              onClick={() => setDeleteTarget(null)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="button"
+              disabled={hapusMutation.isPending}
+              onClick={() => hapusMutation.mutate(deleteTarget.id || deleteTarget.uuid)}
+              className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20 disabled:opacity-50"
+            >
+              {hapusMutation.isPending ? (
+                <span className="size-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              ) : (
+                <Trash2 className="size-4" />
+              )}
+              <span>{hapusMutation.isPending ? 'Menghapus...' : 'Ya, Hapus Data'}</span>
+            </button>
+          </>
+        }
+      >
+        {deleteTarget && (
+          <>
  {/* Summary Card */}
  <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/50 p-4 dark:border-emerald-800/60 dark:bg-rose-950/30">
  <p className="text-xs font-black text-rose-900 dark:text-rose-200">
@@ -1755,110 +1596,68 @@ export default function MasterJenisUnitPendidikanPage() {
  Data jenis unit yang sedang digunakan oleh unit sekolah aktif tidak dapat dihapus permanen.
  </p>
  </div>
- </div>
+          </>
+        )}
+      </AppModal>
 
- <div className="modal-footer px-6 py-4 border-t border-emerald-200/80 dark:border-emerald-800/80 flex items-center justify-end gap-2.5 bg-slate-50/50 dark:bg-slate-900/40">
- <button
- type="button"
- disabled={hapusMutation.isPending}
- onClick={() => setDeleteTarget(null)}
- className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200/80 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs hover:bg-slate-100 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-200 transition cursor-pointer disabled:opacity-50"
- >
- Batal
- </button>
- <button
- type="button"
- disabled={hapusMutation.isPending}
- onClick={() => hapusMutation.mutate(deleteTarget.id || deleteTarget.uuid)}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 px-5 py-2.5 text-xs font-extrabold shadow-sm hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200 disabled:opacity-50 cursor-pointer border border-emerald-200/80 dark:border-emerald-800/60"
- >
- {hapusMutation.isPending ? (
- <span className="size-3.5 animate-spin rounded-full border-2 border-emerald-200/80 border-t-transparent" />
- ) : (
- <Trash2 className="size-4" />
- )}
- <span>{hapusMutation.isPending ? 'Menghapus...' : 'Ya, Hapus Data'}</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
-
- {/* ══════════════════════════════════════════════════════════════════
- KPI CARDS DRILL-DOWN MODAL
- ══════════════════════════════════════════════════════════════════ */}
- <AnimatePresence>
- {activeKpiModal && (
- <div
- role="dialog"
- tabIndex={-1}
- aria-modal="true"
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- onMouseDown={(e) => {
- if (e.target === e.currentTarget) setActiveKpiModal(null)
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans w-full max-w-4xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl dark:border-emerald-800/60 dark:bg-card-dark">
-
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 p-2.5 shadow-md shadow-xs shrink-0">
- {activeKpiModal === 'total' && <School className="h-5 w-5" />}
- {activeKpiModal === 'aktif' && <CheckCircle2 className="h-5 w-5" />}
- {activeKpiModal === 'pasif' && <RotateCcw className="h-5 w-5" />}
- {activeKpiModal === 'sampah' && <Trash2 className="h-5 w-5" />}
- </div>
- <div>
- <h3 className="modal-title text-base font-black text-slate-900 dark:text-white">
- {activeKpiModal === 'total' && 'Analisis Total Jenis Unit Pendidikan'}
- {activeKpiModal === 'aktif' && 'Rincian Jenis Unit Pendidikan Aktif'}
- {activeKpiModal === 'pasif' && 'Rincian Jenis Unit Pendidikan Dinonaktifkan'}
- {activeKpiModal === 'sampah' && 'Rincian Jenis Unit Pendidikan di Arsip Sampah'}
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- Menampilkan {filteredKpiItems.length} data jenis unit terfilter
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setActiveKpiModal(null)}
- aria-label="Tutup modal"
- className="size-9 flex items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 hover:bg-slate-200 dark:bg-emerald-950/40 dark:text-emerald-300 transition-colors cursor-pointer"
- >
- <X className="size-4" strokeWidth={2.2} />
- </button>
- </div>
-
- {/* Toolbar Filter inside Modal */}
- <div className="flex items-center gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 px-6 py-3 dark:border-emerald-800/60 dark:bg-slate-900/40">
- <div className="relative flex-1">
- <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-emerald-600 dark:text-emerald-400" />
- <input
- type="text"
- value={kpiModalSearch}
- onChange={(e) => setKpiModalSearch(e.target.value)}
- placeholder="Cari kode, nama jenis unit, atau jenjang..."
- className="h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-10 pr-4 text-xs font-semibold text-slate-700 placeholder:text-slate-400 focus:border-[#059669] focus:outline-none focus:ring-2 focus:ring-[#059669]/20 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-200"
- />
- </div>
- <span className="inline-flex items-center rounded-full bg-emerald-100 px-3.5 py-1 text-xs font-black text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border-2 border-emerald-300 dark:border-emerald-800">
- {filteredKpiItems.length} Jenis Unit
- </span>
- </div>
-
- {/* Body Table */}
- <div className="modal-body flex-1 overflow-y-auto p-6">
+      {/* ── KPI CARDS DRILL-DOWN MODAL ── */}
+      <AppModal
+        isOpen={Boolean(activeKpiModal)}
+        onClose={() => setActiveKpiModal(null)}
+        title={
+          activeKpiModal === 'total'
+            ? 'Analisis Total Jenis Unit Pendidikan'
+            : activeKpiModal === 'aktif'
+              ? 'Rincian Jenis Unit Pendidikan Aktif'
+              : activeKpiModal === 'pasif'
+                ? 'Rincian Jenis Unit Pendidikan Dinonaktifkan'
+                : 'Rincian Jenis Unit Pendidikan di Arsip Sampah'
+        }
+        badge="Data Realtime"
+        description={`Menampilkan ${filteredKpiItems.length} data jenis unit terfilter`}
+        icon={
+          activeKpiModal === 'total'
+            ? School
+            : activeKpiModal === 'aktif'
+              ? CheckCircle2
+              : activeKpiModal === 'pasif'
+                ? RotateCcw
+                : Trash2
+        }
+        maxWidth="max-w-4xl"
+        subHeader={
+          <div className="flex items-center gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/60 px-6 py-3 dark:bg-emerald-950/30">
+            <div className="relative flex-1">
+              <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-emerald-600 dark:text-emerald-400" />
+              <input
+                type="text"
+                value={kpiModalSearch}
+                onChange={(e) => setKpiModalSearch(e.target.value)}
+                placeholder="Cari kode, nama jenis unit, atau jenjang..."
+                className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white pl-10 pr-4 text-xs font-bold text-slate-800 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:bg-slate-900 dark:text-slate-100"
+              />
+            </div>
+            <span className="inline-flex items-center rounded-xl bg-emerald-600 px-3.5 py-1.5 text-xs font-black text-white shadow-xs">
+              {filteredKpiItems.length} data
+            </span>
+          </div>
+        }
+        footer={
+          <div className="flex w-full items-center justify-between gap-3">
+            <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
+              Menampilkan total {filteredKpiItems.length} jenis unit
+            </span>
+            <button
+              type="button"
+              onClick={() => setActiveKpiModal(null)}
+              className="h-9.5 px-5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Tutup</span>
+            </button>
+          </div>
+        }
+      >
  {filteredKpiItems.length === 0 ? (
  <div className="py-12 text-center">
  <p className="text-sm font-bold text-slate-500">Tidak ada data jenis unit yang cocok dengan kriteria ini.</p>
@@ -1924,26 +1723,7 @@ export default function MasterJenisUnitPendidikanPage() {
  </TableRoot>
  </div>
  )}
- </div>
-
- {/* Footer */}
- <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <span className="text-xs font-bold text-slate-500">
- Menampilkan total {filteredKpiItems.length} jenis unit
- </span>
- <button
- type="button"
- onClick={() => setActiveKpiModal(null)}
- className="h-9 px-5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white text-xs font-bold text-slate-700 hover:bg-emerald-50/40 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 transition-colors cursor-pointer shadow-2xs"
- >
- Tutup
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+      </AppModal>
 
  {/* Smart Floating Scroll Navigator (Opsi A) */}
  <SmartScrollFab targetId="tabel-jenis-unit" downTooltip="Langsung ke Tabel Jenis Unit" />

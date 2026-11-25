@@ -5,6 +5,7 @@ import { cn } from '../../lib/utils'
 import AppBadge from './AppBadge'
 import AppSkeleton from './AppSkeleton'
 import { Button } from '../ui/button'
+import AppModal from './AppModal'
 
 const toneMap = {
   emerald: {
@@ -224,67 +225,29 @@ export default function SummaryCard({
     </motion.div>
 
     {/* POP UP DRILLDOWN MODAL HARMONIZED */}
-    <AnimatePresence>
-      {isModalOpen && (
-        <div
-          className="overlay modal fixed inset-0 z-[80] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="summary-card-modal-title"
-          onMouseDown={(e) => {
-            if (e.target === e.currentTarget) setIsModalOpen(false)
-          }}
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.94, y: 14 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-            className={cn(
-              "modal-dialog font-sans my-auto w-full",
-              modalWidth || (modalData && modalData.length > 5 ? "max-w-2xl" : "max-w-lg")
-            )}
-          >
-            <div className="modal-content flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-modal border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-surface-dark-inner dark:shadow-black/60">
-              <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
-
-              <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-5 sm:px-6 py-4 sm:py-5 shrink-0 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className={cn("flex size-11 items-center justify-center rounded-2xl shadow-md shrink-0 text-white", tone ? tone.iconBg : "!bg-emerald-600 !text-white")}>
-                    {Icon ? <Icon className="size-5 text-white" /> : <Info className="size-5 text-white" />}
-                  </div>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <h3 id="summary-card-modal-title" className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white leading-tight truncate">
-                        {modalTitle || title}
-                      </h3>
-                      {badge ? (
-                        <span className={cn("inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider shadow-2xs", tone ? tone.badgeBg : "bg-emerald-100 text-emerald-800")}>
-                          <Sparkles className="size-3" /> {badge}
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider shadow-2xs">
-                          <Sparkles className="size-3" /> Terpadu
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 font-medium truncate mt-0.5">
-                      Rincian Metrik & Integrasi Real-Time
-                    </p>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="size-9 flex items-center justify-center rounded-xl bg-emerald-50 hover:bg-rose-50 hover:text-rose-600 text-slate-400 hover:border-rose-200 dark:bg-emerald-950/40 dark:hover:bg-rose-950/40 dark:hover:text-rose-400 transition-all cursor-pointer active:scale-95 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs shrink-0"
-                  aria-label="Tutup modal"
-                >
-                  <X className="size-4" strokeWidth={2.2} />
-                </button>
-              </div>
-
-              <div className="overflow-y-auto p-5 sm:p-6 space-y-4 text-xs bg-white dark:bg-surface-dark-inner text-slate-700 dark:text-slate-200">
+      <AppModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={modalTitle || title}
+        badge={badge || 'Terpadu'}
+        description="Rincian Metrik & Integrasi Real-Time"
+        icon={Icon || Info}
+        maxWidth={modalWidth || (modalData && modalData.length > 5 ? 'max-w-2xl' : 'max-w-lg')}
+        zIndex={80}
+        bodyClassName="space-y-4 text-xs text-slate-700 dark:text-slate-200"
+        footer={
+          <div className="flex w-full justify-end">
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(false)}
+              className="h-9.5 px-5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Tutup</span>
+            </button>
+          </div>
+        }
+      >
                 <div className={cn("rounded-2xl border-2 p-4", tone ? tone.cardBg : "border-emerald-300 bg-emerald-50/20")}>
                   <div className="flex items-center justify-between">
                     <span className={cn("text-xs font-bold uppercase tracking-wider", tone ? tone.titleColor : "text-emerald-800")}>
@@ -348,24 +311,7 @@ export default function SummaryCard({
                     </div>
                   </div>
                 )}
-              </div>
-
-              <div className="border-t border-emerald-200/80 dark:border-emerald-800/60 px-5 sm:px-6 py-4 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900 flex items-center justify-end gap-2.5 shrink-0">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setIsModalOpen(false)}
-                  className="rounded-xl px-4 py-2 text-xs font-bold border-emerald-300 dark:border-emerald-700 text-slate-700 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 cursor-pointer"
-                >
-                  Tutup
-                </Button>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      )}
-    </AnimatePresence>
+      </AppModal>
     </>
   )
 }

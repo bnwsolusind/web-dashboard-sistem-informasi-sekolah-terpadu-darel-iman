@@ -1,4 +1,5 @@
 import { HeroUiHeader } from "../../components/ui/HeroUiHeader"
+import AppModal from "../../components/app/AppModal"
 import {
   KpiStatCard
 } from '../../components/app'
@@ -1894,57 +1895,50 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
 
  {/* Modal Detail Lembar Kegiatan Tahfizh Siswa (Style matching tab=tahfizh) */}
  {/* 📤 IMPORT MODAL — Harmonized Standard */}
- <AnimatePresence>
- {showImportModal && (
- <motion.div
- initial={{ opacity: 0 }}
- animate={{ opacity: 1 }}
- exit={{ opacity: 0 }}
- className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-3 sm:p-5"
- onClick={(e) => { if (e.target === e.currentTarget) closeImportModal() }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 20 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.94, y: 20 }}
- transition={{ type: 'spring', stiffness: 380, damping: 28 }}
- className="relative w-full max-w-xl max-h-[92vh] flex flex-col overflow-hidden rounded-xl border border-emerald-200/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]"
- >
- {/* Accent Bar */}
-
- {/* Header */}
- <div className="flex shrink-0 items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="flex h-9 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-md shadow-xs">
- <Upload className="h-5 w-5 text-slate-600" />
- </div>
- <div>
- <div className="flex items-center gap-2 flex-wrap">
- <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">Import Data Tahfizh</h3>
- <span className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-extrabold bg-emerald-600 text-white shadow-xs border border-emerald-500/40 dark:border-emerald-600/50">
- 
-                  <Sparkles className="size-3 text-white" />
- Data Baru
- </span>
- </div>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Unggah file Excel (.xlsx) atau CSV untuk impor setoran tahfizh</p>
- </div>
- </div>
+ <AppModal
+ isOpen={showImportModal}
+ onClose={closeImportModal}
+ disableBackdropClose={isImporting}
+ hideCloseButton={isImporting}
+ icon={Upload}
+ title="Import Data Tahfizh"
+ badge="Data Baru"
+ description="Unggah file Excel (.xlsx) atau CSV untuk impor setoran tahfizh"
+ maxWidth="max-w-xl"
+ zIndex={60}
+ footer={
+ <div className="flex items-center justify-between gap-3 w-full">
  <button
  type="button"
+ disabled={isImporting}
  onClick={closeImportModal}
- aria-label="Tutup modal import"
- className="size-9 flex items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer shrink-0"
+ className="inline-flex items-center gap-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 h-9.5 px-4 text-xs font-black text-slate-700 dark:text-slate-200 transition-all active:scale-95 cursor-pointer disabled:opacity-50"
  >
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
+ Batal
+ </button>
+ <button
+ type="button"
+ onClick={handleSubmitImport}
+ disabled={!importFile || parsedRows.length === 0 || isImporting}
+ className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white h-9.5 px-5 text-xs font-black border-2 border-emerald-600 transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer shadow-md shadow-emerald-600/20"
+ >
+ {isImporting ? (
+ <>
+ <RefreshCw className="size-3.5 animate-spin" />
+ Mengimpor...
+ </>
+ ) : (
+ <>
+ <Upload className="size-3.5" />
+ Import {parsedRows.length > 0 ? `${parsedRows.length} Data` : 'Data'}
+ </>
+ )}
  </button>
  </div>
-
- {/* Body — Scrollable */}
- <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4">
-
+ }
+ >
  {/* Download Template Card */}
- <div className="flex items-center justify-between gap-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-3.5 dark:border-emerald-800/60 dark:from-emerald-950/30 dark:via-teal-950/20 dark:to-emerald-950/30">
+ <div className="flex items-center justify-between gap-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-3.5">
  <div className="flex items-center gap-3 min-w-0">
  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-700 shadow-xs dark:bg-emerald-950/40 dark:border-emerald-700/80 dark:text-emerald-300">
  <FileSpreadsheet className="size-4.5" />
@@ -1977,8 +1971,8 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  onClick={() => importInputRef.current?.click()}
  className={`flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed p-8 transition-all cursor-pointer ${
  isDragging
- ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50 dark:border-emerald-800/60 dark:bg-emerald-950/40 scale-[1.01]'
- : 'border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] hover:border-emerald-300 dark:hover:border-emerald-700/80 hover:bg-emerald-50/60 dark:border-emerald-800/60 dark:from-emerald-950/20 dark:to-teal-950/10 dark:hover:border-emerald-700/80'
+ ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 scale-[1.01]'
+ : 'border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] hover:border-emerald-300 dark:hover:border-emerald-700/80 hover:bg-emerald-50/60'
  }`}
  >
  <input
@@ -1988,9 +1982,8 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  className="hidden"
  onChange={(e) => { if (e.target.files[0]) parseImportFile(e.target.files[0]) }}
  />
- <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
- 
-            <FileInput className="size-7 text-white" />
+ <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50">
+ <FileInput className="size-7 text-white" />
  </div>
  {importFile ? (
  <div className="text-center">
@@ -2007,7 +2000,7 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
 
  {/* Parse Error */}
  {parseError && (
- <div className="flex items-start gap-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50 p-3.5 dark:border-emerald-800/60 dark:bg-rose-950/30">
+ <div className="flex items-start gap-2.5 rounded-xl border border-rose-200/80 dark:border-rose-800/60 bg-rose-50 p-3.5 dark:bg-rose-950/30">
  <AlertTriangle className="size-4 text-rose-500 shrink-0 mt-0.5" />
  <p className="text-xs font-semibold text-rose-700 dark:text-rose-300">{parseError}</p>
  </div>
@@ -2024,7 +2017,6 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  <table className="w-full text-xs text-left">
  <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-xs font-bold uppercase tracking-wider text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/80 dark:text-emerald-300">
  <tr>
- 
  <th className="px-3 py-2">Tanggal</th>
  <th className="px-3 py-2">Nama Siswa</th>
  <th className="px-3 py-2">NIS</th>
@@ -2036,7 +2028,6 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  <tbody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40">
  {parsedRows.slice(0, 10).map((row, idx) => (
  <tr key={idx} className="hover:bg-emerald-50/40 dark:hover:bg-emerald-950/20 transition-colors">
- 
  <td className="px-3 py-2 font-mono text-slate-600 dark:text-slate-400">{row.tanggal}</td>
  <td className="px-3 py-2 font-semibold text-slate-800 dark:text-slate-200">{row.nama}</td>
  <td className="px-3 py-2 font-mono text-slate-500">{row.nis}</td>
@@ -2055,83 +2046,35 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  </table>
  </div>
  {parsedRows.length > 10 && (
- <div className="px-4 py-2 text-xs text-slate-400 border-t border-emerald-200/80 dark:border-emerald-800/80 dark:border-emerald-800/60">
+ <div className="px-4 py-2 text-xs text-slate-400 border-t border-emerald-200/80 dark:border-emerald-800/80">
  ... dan {parsedRows.length - 10} baris lainnya
  </div>
  )}
  </div>
  )}
- </div>
+ </AppModal>
 
- {/* Footer */}
- <div className="flex shrink-0 items-center justify-between gap-3 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <button
- type="button"
- onClick={closeImportModal}
- className="inline-flex items-center gap-2 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 bg-white dark:bg-emerald-600 px-4 py-2.5 text-xs font-extrabold text-slate-600 dark:text-slate-300 dark: transition-all cursor-pointer text-sm font-medium"
- >
- Batal
- </button>
- <button
- type="button"
- onClick={handleSubmitImport}
- disabled={!importFile || parsedRows.length === 0 || isImporting}
- className="inline-flex items-center gap-2 rounded-xl bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 px-5 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer shadow-sm"
- >
- {isImporting ? (
- <>
- <RefreshCw className="size-3.5 animate-spin" />
- Mengimpor...
- </>
- ) : (
- <>
- <Upload className="size-3.5" />
- Import {parsedRows.length > 0 ? `${parsedRows.length} Data` : 'Data'}
- </>
- )}
- </button>
- </div>
- </motion.div>
- </motion.div>
- )}
- </AnimatePresence>
-
- {selectedRecordModal && (
- <div
- className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/65 p-3 backdrop-blur-sm sm:p-5"
- role="dialog"
- aria-modal="true"
- aria-labelledby="tahfizh-detail-title"
- onClick={(e) => {
- if (e.target === e.currentTarget) setSelectedRecordModal(null)
- }}
- >
- <div className="flex max-h-[94vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
- <header className="flex shrink-0 flex-col gap-4 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-white px-6 py-4.5 sm:flex-row sm:items-center sm:justify-between dark:border-emerald-800/60 dark:bg-slate-950">
- <div className="flex min-w-0 items-center gap-3">
- <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
- 
-            <BookOpen className="size-6 sm:size-7 h-5 w-5 text-white" strokeWidth={2.25} />
- </div>
- <div className="min-w-0">
- <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
- Lembar Kegiatan Tahfizh
- </p>
- <h2 id="tahfizh-detail-title" className=" text-sm sm:text-base font-black text-slate-900 dark:text-white">
- {selectedRecordModal.student_name || selectedRecordModal.nama_lengkap || 'Santri'}
- </h2>
- <p className="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5 truncate">
- {selectedRecordModal.nis || selectedRecordModal.nisn || 'NIS belum tersedia'} · {selectedRecordModal.class_name || 'Rombel'} {selectedRecordModal.unit_name ? `(${selectedRecordModal.unit_name})` : ''}
- </p>
- </div>
- </div>
-
- <div className="flex items-center gap-1.5 shrink-0 self-end sm:self-auto">
+ <AppModal
+ isOpen={Boolean(selectedRecordModal)}
+ onClose={() => setSelectedRecordModal(null)}
+ icon={BookOpen}
+ badge="Lembar Kegiatan Tahfizh"
+ title={selectedRecordModal?.student_name || selectedRecordModal?.nama_lengkap || 'Santri'}
+ description={
+ selectedRecordModal
+ ? `${selectedRecordModal.nis || selectedRecordModal.nisn || 'NIS belum tersedia'} · ${selectedRecordModal.class_name || 'Rombel'} ${selectedRecordModal.unit_name ? `(${selectedRecordModal.unit_name})` : ''}`
+ : ''
+ }
+ maxWidth="max-w-4xl"
+ zIndex={70}
+ bodyClassName="p-4 sm:p-5"
+ headerActions={
+ <div className="flex items-center gap-1.5">
  <button
  type="button"
  onClick={() => setDetailWeekOffset((value) => value - 1)}
  aria-label="Minggu sebelumnya"
- className="flex size-9 items-center justify-center rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-all duration-150 active:scale-95 cursor-pointer"
+ className="flex size-9 items-center justify-center rounded-xl bg-white/20 hover:bg-white/30 text-white border border-white/25 shadow-xs transition-all duration-150 active:scale-95 cursor-pointer"
  >
  <ChevronLeft className="size-5 shrink-0" />
  </button>
@@ -2139,22 +2082,61 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  type="button"
  onClick={() => setDetailWeekOffset((value) => value + 1)}
  aria-label="Minggu berikutnya"
- className="flex size-9 items-center justify-center rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-all duration-150 active:scale-95 cursor-pointer"
+ className="flex size-9 items-center justify-center rounded-xl bg-white/20 hover:bg-white/30 text-white border border-white/25 shadow-xs transition-all duration-150 active:scale-95 cursor-pointer"
  >
  <ChevronRight className="size-5 shrink-0" />
  </button>
+ </div>
+ }
+ footer={
+ selectedRecordModal && (
+ <div className="flex flex-col gap-3 w-full sm:flex-row sm:items-center sm:justify-between">
+ <div className="flex items-center gap-2 flex-wrap">
+ <span className="text-xs text-slate-500 dark:text-slate-400">
+ Jenis Setoran Terpilih: <strong className="text-emerald-700 dark:text-emerald-400">{selectedRecordModal.type || 'Tahfizh'}</strong>
+ </span>
+ {selectedRecordModal.kelancaran && selectedRecordModal.kelancaran !== '-' && (
+ <span className="text-xs text-slate-500 dark:text-slate-400">
+ · Kelancaran: <strong className="text-slate-800 dark:text-slate-200">{selectedRecordModal.kelancaran}</strong>
+ </span>
+ )}
+ {selectedRecordModal.tajwid && selectedRecordModal.tajwid !== '-' && (
+ <span className="text-xs text-slate-500 dark:text-slate-400">
+ · Tajwid: <strong className="text-slate-800 dark:text-slate-200">{selectedRecordModal.tajwid}</strong>
+ </span>
+ )}
+ {selectedRecordModal.makhraj && selectedRecordModal.makhraj !== '-' && (
+ <span className="text-xs text-slate-500 dark:text-slate-400">
+ · Makhraj: <strong className="text-slate-800 dark:text-slate-200">{selectedRecordModal.makhraj}</strong>
+ </span>
+ )}
+ </div>
+ <div className="flex items-center justify-end gap-2.5">
+ <MasterActionButton
+ variant="primary"
+ icon={Printer}
+ onClick={() => {
+ setPrintTargetRecord(selectedRecordModal)
+ setIsPrintModalOpen(true)
+ }}
+ >
+ <span>Cetak Lembar Tahfizh</span>
+ </MasterActionButton>
  <button
  type="button"
  onClick={() => setSelectedRecordModal(null)}
- aria-label="Tutup detail"
- className="flex size-9 items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer"
+ className="inline-flex items-center gap-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 h-9.5 px-4 text-xs font-black transition-all duration-200 active:scale-95 cursor-pointer"
  >
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
+ <X className="size-3.5" strokeWidth={2.2} />
+ <span>Tutup Detail</span>
  </button>
  </div>
- </header>
-
- <div className="min-h-0 overflow-y-auto p-4 sm:p-5">
+ </div>
+ )
+ }
+ >
+ {selectedRecordModal && (
+ <>
  {/* Mobile View: Cards */}
  <div className="space-y-3 lg:hidden">
  {detailWeekRows.map(({ date, dateKey, log }, index) => {
@@ -2235,7 +2217,6 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  </colgroup>
  <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-xs font-bold uppercase tracking-wider text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/80 dark:text-emerald-300">
  <tr className="bg-emerald-100/80 text-slate-900 dark:bg-emerald-950/60 dark:text-emerald-100">
- 
  <th className="border border-emerald-200/80 dark:border-emerald-800/60 p-2.5 text-left">Hari/Tanggal</th>
  <th className="border border-emerald-200/80 dark:border-emerald-800/60 p-2.5">Tilawah</th>
  <th className="border border-emerald-200/80 dark:border-emerald-800/60 p-2.5">Baris</th>
@@ -2352,55 +2333,9 @@ export default function TahfizhReportSummaryPage({ embedded = false, defaultClas
  </tr>
  </tfoot>
  </table>
- </div>
-
- <footer className="flex shrink-0 flex-col gap-3 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 px-6 py-4 sm:flex-row sm:items-center sm:justify-between dark:border-emerald-800/60 dark:bg-slate-900/40">
- <div className="flex items-center gap-2">
- <span className="text-xs text-slate-500 dark:text-slate-400">
- Jenis Setoran Terpilih: <strong className="text-emerald-700 dark:text-emerald-400">{selectedRecordModal.type || 'Tahfizh'}</strong>
- </span>
- {selectedRecordModal.kelancaran && selectedRecordModal.kelancaran !== '-' && (
- <span className="text-xs text-slate-500 dark:text-slate-400">
- · Kelancaran: <strong className="text-slate-800 dark:text-slate-200">{selectedRecordModal.kelancaran}</strong>
- </span>
+ </>
  )}
- {selectedRecordModal.tajwid && selectedRecordModal.tajwid !== '-' && (
- <span className="text-xs text-slate-500 dark:text-slate-400">
- · Tajwid: <strong className="text-slate-800 dark:text-slate-200">{selectedRecordModal.tajwid}</strong>
- </span>
- )}
- {selectedRecordModal.makhraj && selectedRecordModal.makhraj !== '-' && (
- <span className="text-xs text-slate-500 dark:text-slate-400">
- · Makhraj: <strong className="text-slate-800 dark:text-slate-200">{selectedRecordModal.makhraj}</strong>
- </span>
- )}
- </div>
- <div className="flex items-center justify-end gap-2.5">
- <MasterActionButton
- variant="primary"
- icon={Printer}
- onClick={() => {
- setPrintTargetRecord(selectedRecordModal)
- setIsPrintModalOpen(true)
- }}
- >
- <span>Cetak Lembar Tahfizh</span>
- </MasterActionButton>
- <button
- type="button"
- onClick={() => setSelectedRecordModal(null)}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
- >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
- </div>
- <span>Tutup Detail</span>
- </button>
- </div>
- </footer>
- </div>
- </div>
- )}
+ </AppModal>
 
  {/* Modal Opsi Cetak & Unduh PDF */}
  <PrintOptionModal

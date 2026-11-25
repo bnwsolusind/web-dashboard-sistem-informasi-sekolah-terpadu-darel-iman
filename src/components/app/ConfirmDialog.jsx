@@ -6,6 +6,7 @@ import {
 } from '@heroui/react'
 import { AlertTriangle, CheckCircle2, Info, Trash2, X, Sparkles } from 'lucide-react'
 import { cn } from '../../lib/utils'
+import AppModal from './AppModal'
 
 const CONFIRM_QUESTIONS = {
   create: 'Apakah Anda yakin ingin menambahkan data baru ini ke dalam sistem?',
@@ -70,91 +71,49 @@ export default function ConfirmDialog({
 
   const accentColor = isDelete ? 'rose' : action === 'update' ? 'amber' : 'emerald'
 
+  const modalVariant = isDelete ? 'danger' : action === 'update' ? 'warning' : 'emerald'
   return (
-    <HeroModal
+    <AppModal
       isOpen={Boolean(isOpen)}
-      onOpenChange={handleOpenChange}
-    >
-      <HeroModal.Backdrop className="bg-slate-950/70 backdrop-blur-md fixed inset-0 z-[80] flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
-        <HeroModal.Container className="w-full flex items-center justify-center min-h-full my-auto">
-          <HeroModal.Dialog
+      onClose={() => !isLoading && onClose()}
+      title={finalTitle}
+      badge={isDelete ? 'Hapus Permanen' : action === 'update' ? 'Pembaruan Data' : 'Penyimpanan'}
+      icon={IconComponent}
+      variant={modalVariant}
+      maxWidth="max-w-md"
+      zIndex={80}
+      disableBackdropClose={isLoading}
+      hideCloseButton={isLoading}
+      bodyClassName="space-y-4"
+      footer={
+        <>
+          <button
+            type="button"
+            disabled={isLoading}
+            onClick={onClose}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>{cancelLabel}</span>
+          </button>
+          <button
+            type="button"
+            disabled={isLoading}
+            onClick={onConfirm}
             className={cn(
-              'relative w-full max-w-md my-auto max-h-[calc(100dvh-1.5rem)] flex flex-col overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-[#182232]',
-              accentColor === 'rose'
-                ? 'border-2 border-rose-300 dark:border-rose-700/80 shadow-rose-950/20'
-                : accentColor === 'amber'
-                ? 'border-2 border-amber-300 dark:border-amber-700/80 shadow-amber-950/20'
-                : 'border-2 border-emerald-300 dark:border-emerald-700/80 shadow-emerald-950/20'
+              'h-9.5 px-5 rounded-xl text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 shadow-md disabled:opacity-50',
+              isDelete
+                ? 'bg-rose-600 hover:bg-rose-700 border-rose-600 shadow-rose-600/20'
+                : action === 'update'
+                  ? 'bg-amber-600 hover:bg-amber-700 border-amber-600 shadow-amber-600/20'
+                  : 'bg-emerald-600 hover:bg-emerald-700 border-emerald-600 shadow-emerald-600/20'
             )}
           >
-            {/* Top Accent Gradient Line */}
-            <div
-              className={cn(
-                'h-1.5 w-full bg-gradient-to-r shrink-0',
-                accentColor === 'rose'
-                  ? 'from-rose-500 via-rose-600 to-red-700'
-                  : accentColor === 'amber'
-                  ? 'from-amber-400 via-amber-500 to-orange-600'
-                  : 'from-emerald-500 via-teal-400 to-emerald-600'
-              )}
-            />
-
-            <HeroModal.Header
-              className={cn(
-                'flex items-center justify-between border-b px-6 py-4.5 bg-white dark:bg-[#182232] shrink-0',
-                accentColor === 'rose'
-                  ? 'border-rose-100 dark:border-rose-900/40'
-                  : accentColor === 'amber'
-                  ? 'border-amber-100 dark:border-amber-900/40'
-                  : 'border-emerald-200/80 dark:border-emerald-800/60'
-              )}
-            >
-              <div className="flex items-center gap-3">
-                <div
-                  className={cn(
-                    'flex size-11 items-center justify-center rounded-2xl text-white shadow-md shrink-0',
-                    accentColor === 'rose'
-                      ? 'bg-gradient-to-br from-rose-500 via-rose-600 to-red-700 shadow-rose-600/25'
-                      : accentColor === 'amber'
-                      ? 'bg-gradient-to-br from-amber-400 via-amber-500 to-orange-600 shadow-amber-600/25'
-                      : 'bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 shadow-emerald-600/25'
-                  )}
-                >
-                  <IconComponent className="size-5 text-white" strokeWidth={2.2} />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white leading-tight">
-                    {finalTitle}
-                  </h3>
-                  <span
-                    className={cn(
-                      'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-wider border mt-0.5',
-                      accentColor === 'rose'
-                        ? 'bg-rose-50 text-rose-700 border-rose-200 dark:border-rose-800 dark:bg-rose-950/60 dark:text-rose-300'
-                        : accentColor === 'amber'
-                        ? 'bg-amber-50 text-amber-700 border-amber-200 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-300'
-                        : 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
-                    )}
-                  >
-                    {isDelete ? <AlertTriangle className="size-2.5" /> : <Sparkles className="size-2.5" />}
-                    {isDelete ? 'Hapus Permanen' : action === 'update' ? 'Pembaruan Data' : 'Penyimpanan'}
-                  </span>
-                </div>
-              </div>
-
-              <HeroButton
-                isIconOnly
-                size="sm"
-                isDisabled={isLoading}
-                onPress={onClose}
-                aria-label="Tutup dialog"
-                className="size-9 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-400 hover:border-rose-200 dark:bg-slate-800 dark:hover:bg-rose-950/40 dark:hover:text-rose-400 cursor-pointer transition-all active:scale-95 disabled:opacity-50 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xs shrink-0"
-              >
-                <X className="size-4" strokeWidth={2.2} />
-              </HeroButton>
-            </HeroModal.Header>
-
-            <HeroModal.Body className="p-6 space-y-4 bg-white dark:bg-[#182232]">
+            <span>{isLoading ? 'Memproses...' : finalConfirmLabel}</span>
+          </button>
+        </>
+      }
+    >
               <div
                 className={cn(
                   'rounded-2xl p-4 text-xs sm:text-sm font-medium leading-relaxed border',
@@ -167,54 +126,6 @@ export default function ConfirmDialog({
               >
                 {question}
               </div>
-            </HeroModal.Body>
-
-            <HeroModal.Footer
-              className={cn(
-                'flex items-center justify-end gap-2.5 border-t px-6 py-4 shrink-0',
-                accentColor === 'rose'
-                  ? 'border-rose-100 bg-rose-50/30 dark:border-rose-900/40 dark:bg-slate-900/60'
-                  : 'border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900'
-              )}
-            >
-              <HeroButton
-                variant="outline"
-                size="sm"
-                isDisabled={isLoading}
-                onPress={onClose}
-                className="h-10 px-4 rounded-xl border-2 border-emerald-200/80 dark:border-emerald-700/80 bg-white hover:bg-slate-50 text-slate-700 dark:bg-slate-800 dark:text-slate-200 text-xs font-bold cursor-pointer transition-all active:scale-95 disabled:opacity-50"
-              >
-                {cancelLabel}
-              </HeroButton>
-              <HeroButton
-                size="sm"
-                isDisabled={isLoading}
-                onPress={handleConfirmAction}
-                className={cn(
-                  'h-10 px-5 inline-flex items-center gap-2 rounded-xl text-white text-xs font-bold transition-all duration-200 active:scale-95 cursor-pointer disabled:opacity-50 shadow-md',
-                  accentColor === 'rose'
-                    ? 'bg-rose-600 hover:bg-rose-700 shadow-rose-600/20'
-                    : accentColor === 'amber'
-                    ? 'bg-amber-600 hover:bg-amber-700 shadow-amber-600/20'
-                    : 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-600/20'
-                )}
-              >
-                {isLoading ? (
-                  <>
-                    <HeroSpinner size="sm" color="current" className="size-3.5 text-current shrink-0" />
-                    <span>Memproses...</span>
-                  </>
-                ) : (
-                  <span>{finalConfirmLabel}</span>
-                )}
-              </HeroButton>
-            </HeroModal.Footer>
-          </HeroModal.Dialog>
-        </HeroModal.Container>
-      </HeroModal.Backdrop>
-    </HeroModal>
+    </AppModal>
   )
 }
-
-
-

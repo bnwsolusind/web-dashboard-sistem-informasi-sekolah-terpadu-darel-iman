@@ -19,8 +19,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardAction, CardContent }
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertIndicator, AlertContent, AlertTitle, AlertDescription } from '@/components/ui/alert'
-import { Dialog, DialogHeader, DialogTitle, DialogDescription, DialogBody, DialogFooter, DialogClose } from '@/components/ui/dialog'
-import { Backdrop, OverlayWrapper } from '@/components/ui/overlay'
+import AppModal from '../app/AppModal'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { DatePicker } from '@/components/ui/date-picker'
 import {
@@ -922,28 +921,59 @@ export default function TeacherMonitoringPanel({ data, loading, error, filters =
  </div>
 
  {/* DETAIL MODAL LAPORAN ABSENSI REKAPITULASI PER MATA PELAJARAN GURU */}
+ <AppModal
+ isOpen={Boolean(selectedTeacherRow)}
+ onClose={() => setSelectedTeacherRow(null)}
+ title={`Data Absensi Guru: ${selectedTeacherRow?.teacher?.name || '-'}`}
+ description={`Status rekapitulasi presensi mengajar secara rinci untuk masing-masing mata pelajaran (${activePeriod.toUpperCase()}).`}
+ icon={BookOpen}
+ maxWidth="max-w-xl"
+ variant="emerald"
+ zIndex={60}
+ bodyClassName="space-y-5"
+ footer={
+ selectedTeacherRow && (
+ <div className="flex w-full items-center justify-between gap-2.5">
+ <SquircleActionButton
+ variant="view"
+ icon={Printer}
+ label="Cetak"
+ onClick={() => {
+ const headers = ['NO', 'MATA PELAJARAN', 'KELAS', 'HARI & JAM', 'HADIR', 'IZIN', 'ABSEN', 'PRESENSI']
+ const rowsToPrint = (selectedTeacherRow.schedules || []).map((s, idx) => {
+ const st = s.period_stats
+ return [
+ idx + 1,
+ s.subject || '-',
+ s.class || '-',
+ `${s.nama_hari} (${s.time_start?.slice(0, 5)}-${s.time_end?.slice(0, 5)})`,
+ st ? (st.total_hadir ?? 0) : (['hadir', 'tepat_waktu'].includes(s.attendance_status) ? 1 : 0),
+ st ? (st.total_terlambat ?? 0) : (['izin', 'sakit', 'terlambat'].includes(s.attendance_status) ? 1 : 0),
+ st ? (st.total_belum_presensi ?? 0) : (['belum_presensi', 'absen', 'offline'].includes(s.attendance_status) ? 1 : 0),
+ label(s.attendance_status),
+ ]
+ })
+ printCleanTable({
+ title: `Laporan Rekapitulasi Absensi Masing-Masing Mapel: ${selectedTeacherRow.teacher?.name || '-'}`,
+ subtitle: `Unit: ${selectedTeacherRow.unit?.name || '-'} · Periode: ${activePeriod.toUpperCase()}`,
+ headers,
+ rows: rowsToPrint,
+ })
+ }}
+ />
+ <button
+ type="button"
+ onClick={() => setSelectedTeacherRow(null)}
+ className="h-9.5 px-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black transition-all cursor-pointer active:scale-95"
+ >
+ Tutup
+ </button>
+ </div>
+ )
+ }
+ >
  {selectedTeacherRow && (
- <OverlayWrapper isOpen={Boolean(selectedTeacherRow)} onOpenChange={(open) => !open && setSelectedTeacherRow(null)}>
- <Backdrop isOpen={Boolean(selectedTeacherRow)} onOpenChange={(open) => !open && setSelectedTeacherRow(null)} />
- <Dialog className="max-w-xl rounded-xl p-6 bg-white dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xl">
- <DialogHeader>
- <div className="flex items-center gap-3">
- <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400 shrink-0">
- <BookOpen className="h-5 w-5" />
- </div>
- <div>
- <DialogTitle className="text-base font-bold text-slate-900 dark:text-emerald-600">
- Data Absensi Guru: {selectedTeacherRow.teacher?.name}
- </DialogTitle>
- <DialogDescription className="text-xs text-slate-500 dark:text-slate-400">
- Status rekapitulasi presensi mengajar secara rinci untuk masing-masing mata pelajaran ({activePeriod.toUpperCase()}).
- </DialogDescription>
- </div>
- </div>
- <DialogClose onClick={() => setSelectedTeacherRow(null)} />
- </DialogHeader>
-
- <DialogBody className="space-y-5 py-4">
+ <>
  {/* RINGKASAN PROFIL GURU & UNIT */}
  <div className="grid gap-3 sm:grid-cols-3 text-xs bg-slate-50 p-3.5 rounded-xl dark:bg-slate-900/60 border border-emerald-200/80 dark:border-emerald-800/60">
  <div>
@@ -966,11 +996,11 @@ export default function TeacherMonitoringPanel({ data, loading, error, filters =
  <div>
  <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-200 mb-3 flex items-center gap-2">
  <BookOpen className="h-4 w-4 text-emerald-600" />
- Rekapitulasi Absensi Masing-Masing Mata Pelajaran ({selectedTeacherRow.schedules.length} Mapel)
+ Rekapitulasi Absensi Masing-Masing Mata Pelajaran ({selectedTeacherRow.schedules?.length || 0} Mapel)
  </h4>
 
  <div className="space-y-4 max-h-[380px] overflow-y-auto pr-1">
- {selectedTeacherRow.schedules.map((sch, index) => {
+ {(selectedTeacherRow.schedules || []).map((sch, index) => {
  const schStats = sch.period_stats || null
  return (
  <div
@@ -1056,47 +1086,9 @@ export default function TeacherMonitoringPanel({ data, loading, error, filters =
  })}
  </div>
  </div>
- </DialogBody>
-
- <DialogFooter className="pt-4 flex items-center justify-between border-t border-emerald-100/80 dark:border-emerald-800/60">
- <SquircleActionButton
- variant="view"
- icon={Printer}
- label="Cetak"
- onClick={() => {
- const headers = ['NO', 'MATA PELAJARAN', 'KELAS', 'HARI & JAM', 'HADIR', 'IZIN', 'ABSEN', 'PRESENSI']
- const rowsToPrint = selectedTeacherRow.schedules.map((s, idx) => {
- const st = s.period_stats
- return [
- idx + 1,
- s.subject || '-',
- s.class || '-',
- `${s.nama_hari} (${s.time_start?.slice(0, 5)}-${s.time_end?.slice(0, 5)})`,
- st ? (st.total_hadir ?? 0) : (['hadir', 'tepat_waktu'].includes(s.attendance_status) ? 1 : 0),
- st ? (st.total_terlambat ?? 0) : (['izin', 'sakit', 'terlambat'].includes(s.attendance_status) ? 1 : 0),
- st ? (st.total_belum_presensi ?? 0) : (['belum_presensi', 'absen', 'offline'].includes(s.attendance_status) ? 1 : 0),
- label(s.attendance_status),
- ]
- })
- printCleanTable({
- title: `Laporan Rekapitulasi Absensi Masing-Masing Mapel: ${selectedTeacherRow.teacher?.name}`,
- subtitle: `Unit: ${selectedTeacherRow.unit?.name || '-'} · Periode: ${activePeriod.toUpperCase()}`,
- headers,
- rows: rowsToPrint,
- })
- }}
- />
- <button
- type="button"
- onClick={() => setSelectedTeacherRow(null)}
- className="px-5 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 text-slate-600 dark:text-slate-300 text-sm font-semibold hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition"
- >
- Tutup
- </button>
- </DialogFooter>
- </Dialog>
- </OverlayWrapper>
+ </>
  )}
+ </AppModal>
 
  {/* PRINT OPTION MODAL */}
  <PrintOptionModal

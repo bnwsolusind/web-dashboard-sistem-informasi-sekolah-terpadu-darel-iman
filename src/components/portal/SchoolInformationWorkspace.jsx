@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import AppModal from '@/components/app/AppModal'
 import CustomSelect from '@/components/ui/CustomSelect'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
@@ -915,34 +916,48 @@ export default function SchoolInformationWorkspace({ studentId, student, embedde
  </section>
  )}
 
- {/* DETAIL MODAL DRAWER */}
- {detail && (
- <div
- className="fixed inset-0 z-50 flex justify-end bg-slate-950/70 backdrop-blur-xs"
- role="dialog"
- aria-modal="true"
- aria-labelledby="information-detail-title"
- onMouseDown={(e) => e.target === e.currentTarget && setDetail(null)}
- >
- <div className="h-full w-full overflow-y-auto bg-white shadow-2xl dark:bg-slate-900 sm:max-w-2xl sm:rounded-l-[22px]">
- <header className="sticky top-0 z-10 flex items-start justify-between border-b border-emerald-200/80 bg-white/95 p-5 backdrop-blur dark:border-emerald-800/60 dark:bg-slate-900/95">
- <div>
- <span className="inline-flex items-center rounded-full border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50 px-2.5 py-0.5 text-[10px] font-black text-emerald-800 dark:border-emerald-800/60 dark:bg-emerald-950 dark:text-emerald-300 uppercase">
- {typeLabels[detail.type] || detail.category}
- </span>
- <h2 id="information-detail-title" className="mt-2.5 text-lg sm:text-xl font-black text-slate-900 dark:text-white">
- {detail.title}
- </h2>
- </div>
+ {/* DETAIL MODAL */}
+ <AppModal
+ isOpen={Boolean(detail)}
+ onClose={() => setDetail(null)}
+ title={detail?.title}
+ badge={detail ? (typeLabels[detail.type] || detail.category) : ''}
+ icon={Newspaper}
+ maxWidth="max-w-2xl"
+ footer={
+ detail ? (
+ <div className="flex w-full flex-wrap justify-end gap-2">
  <button
+ type="button"
  onClick={() => setDetail(null)}
- aria-label="Tutup detail"
- className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 text-slate-500"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <X className="h-5 w-5" />
+ Tutup
  </button>
- </header>
- <div className="space-y-5 p-5">
+ <button
+ type="button"
+ onClick={() => mutate.mutate({ id: detail.id, action: detail.is_bookmarked ? 'unbookmark' : 'bookmark' })}
+ className="inline-flex h-9.5 items-center gap-2 rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
+ >
+ <Bookmark className="h-4 w-4" />
+ {detail.is_bookmarked ? 'Hapus Simpan' : 'Simpan'}
+ </button>
+ {detail.requires_acknowledgement && !detail.acknowledged_at && (
+ <button
+ type="button"
+ onClick={() => mutate.mutate({ id: detail.id, action: 'acknowledge' })}
+ className="inline-flex h-9.5 items-center gap-2 rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 hover:bg-emerald-700 active:scale-95 cursor-pointer"
+ >
+ <Check className="h-4 w-4" />
+ Saya Sudah Membaca
+ </button>
+ )}
+ </div>
+ ) : null
+ }
+ >
+ {detail && (
+ <div className="space-y-5">
  <div className="flex flex-wrap gap-2">
  <span className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[10px] font-black uppercase ${priorityThemes[detail.priority]?.badge || priorityThemes.umum.badge}`}>
  <AlertCircle className="h-3 w-3" />
@@ -996,32 +1011,8 @@ export default function SchoolInformationWorkspace({ studentId, student, embedde
  </div>
  )}
  </div>
- <footer className="sticky bottom-0 flex flex-wrap justify-end gap-2 border-t border-emerald-200/80 bg-white p-4 dark:border-emerald-800/60 dark:bg-slate-900">
- <Button variant="ghost" onClick={() => setDetail(null)} className="rounded-xl font-bold">
- Tutup
- </Button>
- <Button
- variant="ghost"
- appearance="outline"
- onClick={() => mutate.mutate({ id: detail.id, action: detail.is_bookmarked ? 'unbookmark' : 'bookmark' })}
- className="gap-2 border-emerald-200/80 dark:border-emerald-700/80 rounded-xl font-bold"
- >
- <Bookmark className="h-4 w-4" />
- {detail.is_bookmarked ? 'Hapus Simpan' : 'Simpan'}
- </Button>
- {detail.requires_acknowledgement && !detail.acknowledged_at && (
- <Button
- onClick={() => mutate.mutate({ id: detail.id, action: 'acknowledge' })}
- className="gap-2 bg-[#059669] text-white rounded-xl font-bold"
- >
- <Check className="h-4 w-4" />
- Saya Sudah Membaca
- </Button>
  )}
- </footer>
- </div>
- </div>
- )}
+ </AppModal>
  </div>
  )
 }

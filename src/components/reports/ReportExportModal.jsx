@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { FileSpreadsheet, FileText, Download } from 'lucide-react'
-import { Dialog, DialogHeader, DialogTitle, DialogDescription, DialogBody, DialogFooter, DialogClose } from '@/components/ui/dialog'
-import { Backdrop, OverlayWrapper } from '@/components/ui/overlay'
-import { Button } from '@/components/ui/button'
+import AppModal from '../app/AppModal'
 
 export function ReportExportModal({ isOpen, onClose, onConfirmExport, defaultFormat = 'excel' }) {
  const [includeSummary, setIncludeSummary] = useState(true)
@@ -38,24 +36,36 @@ export function ReportExportModal({ isOpen, onClose, onConfirmExport, defaultFor
  }
 
  return (
- <OverlayWrapper isOpen={isOpen} onOpenChange={(open) => !open && onClose()} className="z-[70]">
- <Backdrop className="z-[70] bg-slate-950/70 backdrop-blur-md" isOpen={isOpen} onOpenChange={(open) => !open && onClose()} />
- <Dialog className="z-[70] max-w-md w-full p-0 rounded-3xl overflow-hidden bg-white dark:bg-[#1B2433] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20">
- <div className="p-6">
- <DialogHeader className="pb-4 border-b border-emerald-100/80 dark:border-emerald-800/60">
- <div className="flex items-center gap-3">
- <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm">
- <Download className="h-5 w-5" />
- </div>
- <div>
- <DialogTitle className="text-base font-black text-slate-900 dark:text-white">Opsi Export Laporan</DialogTitle>
- <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Pilih format dan opsi unduhan dokumen laporan</DialogDescription>
- </div>
- </div>
- <DialogClose onClick={onClose} />
- </DialogHeader>
-
- <DialogBody className="space-y-5 py-4">
+ <AppModal
+ isOpen={isOpen}
+ onClose={onClose}
+ title="Opsi Export Laporan"
+ description="Pilih format dan opsi unduhan dokumen laporan"
+ icon={Download}
+ maxWidth="max-w-md"
+ variant="emerald"
+ zIndex={70}
+ bodyClassName="space-y-5"
+ footer={
+ <>
+ <button
+ type="button"
+ onClick={onClose}
+ className="h-9.5 px-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black transition-all cursor-pointer active:scale-95"
+ >
+ Batal
+ </button>
+ <button
+ type="button"
+ onClick={handleDownload}
+ className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black shadow-md shadow-emerald-600/20 transition-all inline-flex items-center gap-2 cursor-pointer border-2 border-emerald-600 active:scale-95"
+ >
+ <Download className="h-4 w-4" />
+ <span>Unduh Sekarang</span>
+ </button>
+ </>
+ }
+ >
  {/* Content options */}
  <div className="space-y-2">
  <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Isi Laporan Ditampilkan</label>
@@ -124,19 +134,7 @@ export function ReportExportModal({ isOpen, onClose, onConfirmExport, defaultFor
  </div>
  </div>
  )}
- </DialogBody>
-
- <DialogFooter className="gap-2 border-t border-emerald-100/80 dark:border-emerald-800/60 pt-4">
- <Button variant="ghost" onClick={onClose} className="rounded-xl font-bold">
- Batal
- </Button>
- <Button variant="success" appearance="fill" onClick={handleDownload} prefixIcon={<Download className="h-4 w-4" />} className="rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm">
- Unduh Sekarang
- </Button>
- </DialogFooter>
- </div>
- </Dialog>
- </OverlayWrapper>
+ </AppModal>
  )
 }
 

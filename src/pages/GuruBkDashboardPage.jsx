@@ -24,6 +24,7 @@ import {
   HeroUiHeader
 } from '../components/app'
 import { Tooltip } from '../components/ui/tooltip'
+import PageToolbarActions from '../components/app/PageToolbarActions'
 
 import SkeletonDashboard from '../components/dashboard/SkeletonDashboard'
 import ErrorState from '../components/dashboard/ErrorState'
@@ -117,29 +118,13 @@ export default function GuruBkDashboardPage() {
         tag={{ text: 'Konseling & Proteksi BK', icon: ShieldCheck }}
         description="Ruang pendampingan konseling dan penanganan catatan perilaku santri yang terproteksi dan rahasia."
         actions={
-          <div className="flex items-center gap-2">
-            <Tooltip content="Tambah Catatan Konseling Baru">
-              <button
-                type="button"
-                onClick={() => navigate('/portal-guru/workspace')}
-                aria-label="Tambah Catatan Konseling Baru"
-                className="size-9 flex items-center justify-center p-0 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-all active:scale-95 cursor-pointer"
-              >
-                <Plus className="size-4 text-white" />
-              </button>
-            </Tooltip>
-            <Tooltip content="Segarkan Data Konseling">
-              <button
-                type="button"
-                onClick={fetchDashboard}
-                disabled={loading}
-                aria-label="Segarkan Data Konseling"
-                className="size-9 flex items-center justify-center p-0 rounded-xl border-2 border-emerald-300/80 bg-white dark:bg-slate-900 text-emerald-800 dark:text-emerald-300 shadow-2xs hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-all active:scale-95 cursor-pointer disabled:opacity-50"
-              >
-                <RefreshCw className={loading ? 'size-4 animate-spin text-emerald-700' : 'size-4 text-emerald-700 dark:text-emerald-300'} />
-              </button>
-            </Tooltip>
-          </div>
+          <PageToolbarActions
+            onRefresh={fetchDashboard}
+            refreshLabel="Segarkan Data Konseling"
+            refreshing={loading}
+            onAdd={() => navigate('/portal-guru/workspace')}
+            addLabel="Tambah Catatan Konseling Baru"
+          />
         }
       />
 

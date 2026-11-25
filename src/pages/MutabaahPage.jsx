@@ -59,24 +59,14 @@ import {
 import {
   DatePicker
 } from '@/components/ui'
-import {
-  Dialog,
-  DialogBody,
-  DialogClose,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle
-} from '@/components/ui/dialog'
-import {
-  Backdrop,
-  OverlayWrapper
-} from '@/components/ui/dialog'
+import AppModal from '../components/app/AppModal'
 import {
   MasterDataPage,
   MasterStatCard,
-  MasterStatsGrid
+  MasterStatsGrid,
+  SquircleActionButton
 } from '../components/master-data'
+import PageToolbarActions from '../components/app/PageToolbarActions'
 import {
   Tabs
 } from '../components/ui/tabs'
@@ -351,9 +341,9 @@ function LegacyMutabaahPage() {
  <LabeledSelect label="Pilih Siswa" icon={<UserRound size={17} />} value={studentId} onChange={setStudentId} options={options.students.map((s) => ({ value: s.id, label: `${s.name} — ${s.nis}` }))} />
  <div className="field"><span>Tanggal</span><DatePicker value={date} onChange={(e) => setDate(e.target.value)} /></div>
  <LabeledSelect label="Pilih Guru / Musyrif" icon={<BookHeart size={17} />} value={mentorId} onChange={setMentorId} options={options.mentors.map((m) => ({ value: m.id, label: `${m.name}${m.position ? ` — ${m.position}` : ''}` }))} />
- <button className="outline-action" onClick={() => Swal.fire({ title: 'Riwayat siswa', text: 'Pilih tanggal pada minggu yang ingin dilihat.', icon: 'info' })}><History size={18} /> Riwayat Siswa</button>
- <button className="outline-action note-action" onClick={() => document.querySelector('.daily-note')?.focus()}><NotebookPen size={18} /> Catatan Harian</button>
- <button className="primary-action" onClick={saveDaily} disabled={saving || !daily?.agendas?.length}>{saving ? <Loader2 className="spin" size={18} /> : <Save size={18} />} Simpan Semua</button>
+ <SquircleActionButton variant="neutral" icon={History} label="Riwayat Siswa" onClick={() => Swal.fire({ title: 'Riwayat siswa', text: 'Pilih tanggal pada minggu yang ingin dilihat.', icon: 'info' })} showLabel />
+ <SquircleActionButton variant="secondary" icon={NotebookPen} label="Catatan Harian" onClick={() => document.querySelector('.daily-note')?.focus()} showLabel />
+ <SquircleActionButton variant="primary" icon={Save} label="Simpan Semua" onClick={saveDaily} disabled={saving || !daily?.agendas?.length} loading={saving} showLabel />
  </section>
 
  <div className="mutabaah-grid">
@@ -412,7 +402,7 @@ function LegacyMutabaahPage() {
  </>
  ) : (
  <section className="agenda-management">
- <div className="management-head"><div><h2>Pengaturan Rincian Agenda</h2><p>Agenda umum berlaku per jenis unit. Pilih unit tertentu bila rincian hanya berlaku pada cabang tersebut.</p></div><div className="management-actions"><CustomSelect value={filterJenis} onChange={(e) => setFilterJenis(e.target.value)}><option value="">Semua jenis unit</option>{options.jenis_units.map((j) => <option key={j.uuid} value={j.uuid}>{j.singkatan} — {j.nama_jenis}</option>)}</CustomSelect><button className="primary-action" onClick={() => openAgenda()}><Plus size={18} /> Tambah Rincian</button></div></div>
+ <div className="management-head"><div><h2>Pengaturan Rincian Agenda</h2><p>Agenda umum berlaku per jenis unit. Pilih unit tertentu bila rincian hanya berlaku pada cabang tersebut.</p></div><div className="management-actions"><CustomSelect value={filterJenis} onChange={(e) => setFilterJenis(e.target.value)}><option value="">Semua jenis unit</option>{options.jenis_units.map((j) => <option key={j.uuid} value={j.uuid}>{j.singkatan} — {j.nama_jenis}</option>)}</CustomSelect><PageToolbarActions onAdd={() => openAgenda()} addLabel="Tambah Rincian" showLabel /></div></div>
  <div className="management-table-wrap"><table className="management-table"><thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-xs font-bold uppercase tracking-wider text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/80 dark:text-emerald-300"><tr><th>Urut</th><th>Jenis / Unit</th><th>Kelompok</th><th>Rincian Agenda</th><th>Status</th><th>Aksi</th></tr></thead><tbody>
  {agendas.map((agenda) => <tr key={agenda.id}><td>{agenda.sort_order}</td><td><b>{agenda.jenis_unit?.singkatan}</b><small>{agenda.unit?.name || 'Semua unit sejenis'}</small></td><td>{agenda.category}</td><td><b>{agenda.name}</b><small>{agenda.description}</small></td><td><span className={`state ${agenda.is_active ? 'active' : ''}`}>{agenda.is_active ? 'Aktif' : 'Nonaktif'}</span></td><td><div className="row-actions"><button onClick={() => openAgenda(agenda)}><Pencil size={16} /></button><button className="danger" onClick={() => removeAgenda(agenda)}><Trash2 size={16} /></button></div></td></tr>)}
  {!agendas.length && <tr><td colSpan="6"><div className="empty-box">Belum ada rincian agenda.</div></td></tr>}
@@ -567,22 +557,10 @@ function MutabaahOverviewPage({ view }) {
  <p className="text-xs text-slate-400">Monitoring pencapaian target dan evaluasi pembiasaan ibadah santri per periode</p>
  </div>
 
- <div className="flex items-center gap-2.5 flex-nowrap shrink-0 overflow-visible py-1">
- <div className="group relative inline-flex">
- <button
- type="button"
- aria-label="Tambah Target Mutaba'ah"
- className="flex size-10 items-center justify-center rounded-xl bg-emerald-100/90 text-emerald-700 hover:bg-emerald-600 hover:text-white dark:bg-emerald-950/60 dark:text-emerald-300 dark:hover:bg-emerald-600 dark:hover:text-white transition-colors duration-200 hover:shadow-md hover:shadow-sm cursor-pointer shadow-2xs"
- onClick={() => setTargetModal({ mode: 'create' })}
- >
- <Plus className="size-5 transition-colors" />
- </button>
- <div className="pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-out z-50 whitespace-nowrap rounded-lg bg-emerald-950/95 border border-emerald-700/60 px-2.5 py-1 text-xs font-bold shadow-xl text-emerald-100 dark:bg-emerald-900/90 dark:text-emerald-100">
- <div className="absolute top-full left-1/2 -mt-1 -translate-x-1/2 border-4 border-transparent border-t-slate-900 dark:border-t-slate-100" />
- Tambah Target Mutaba'ah
- </div>
- </div>
- </div>
+ <PageToolbarActions
+ onAdd={() => setTargetModal({ mode: 'create' })}
+ addLabel="Tambah Target Mutaba'ah"
+ />
  </div>
 
  {/* Filter Baris 2: Search Input */}
@@ -685,23 +663,42 @@ function MutabaahOverviewPage({ view }) {
  </section>
 
  {/* 🟢 HEROUI DIALOG: MODAL TAMBAH & EDIT TARGET MUTABA'AH */}
- <OverlayWrapper isOpen={Boolean(targetModal)} onOpenChange={() => setTargetModal(null)}>
- <Backdrop isOpen={Boolean(targetModal)} onOpenChange={() => setTargetModal(null)} isDismissable={true}>
- <Dialog isOpen={Boolean(targetModal)} onClose={() => setTargetModal(null)} className="max-w-md rounded-xl bg-white p-6 dark:bg-[#1B2433] shadow-2xl">
- <DialogHeader className="border-b border-emerald-200/80 dark:border-emerald-800/60 pb-3 dark:border-emerald-800/60">
- <DialogTitle className="text-lg font-bold text-slate-900 dark:text-white">
- {targetModal?.mode === 'edit' ? 'Edit Target Mutaba’ah' : 'Tambah Target Mutaba’ah Baru'}
- </DialogTitle>
- <DialogDescription className="text-xs text-slate-400">
- Atur indikator dan nilai target pencapaian mutabaah santri
- </DialogDescription>
- <DialogClose onClick={() => setTargetModal(null)} />
- </DialogHeader>
-
- <form onSubmit={handleSaveTarget}>
- <DialogBody className="space-y-4 py-4 text-xs">
+ <AppModal
+ isOpen={Boolean(targetModal)}
+ onClose={() => setTargetModal(null)}
+ icon={targetModal?.mode === 'edit' ? Pencil : Plus}
+ title={targetModal?.mode === 'edit' ? 'Edit Target Mutaba’ah' : 'Tambah Target Mutaba’ah Baru'}
+ badge={targetModal?.mode === 'edit' ? 'Update Data' : 'Target Baru'}
+ description="Atur indikator dan nilai target pencapaian mutabaah santri"
+ variant={targetModal?.mode === 'edit' ? 'warning' : 'emerald'}
+ maxWidth="max-w-md"
+ zIndex={70}
+ footer={
+ <>
+ <button
+ type="button"
+ onClick={() => setTargetModal(null)}
+ className="inline-flex items-center gap-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 h-9.5 px-4 text-xs font-black border border-slate-300 dark:border-slate-700 transition-all active:scale-95 cursor-pointer"
+ >
+ <X className="size-3.5" strokeWidth={2.2} />
+ <span>Batal</span>
+ </button>
+ <button
+ type="submit"
+ form="mutabaah-target-form"
+ disabled={savingTarget}
+ className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white h-9.5 px-5 text-xs font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 transition-all active:scale-95 cursor-pointer disabled:opacity-60"
+ >
+ {savingTarget ? <Loader2 className="animate-spin size-3.5" /> : <Save className="size-3.5" />}
+ <span>Simpan Target</span>
+ </button>
+ </>
+ }
+ >
+ {targetModal && (
+ <form id="mutabaah-target-form" onSubmit={handleSaveTarget} className="space-y-4 text-xs">
  <div>
- <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+ <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
  Nama Target Mutaba’ah *
  </label>
  <input
@@ -710,18 +707,18 @@ function MutabaahOverviewPage({ view }) {
  placeholder="Contoh: Target Shalat Berjamaah 100%"
  value={targetForm.name}
  onChange={(e) => setTargetForm({ ...targetForm, name: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 p-2.5 font-semibold text-slate-800 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 px-3.5 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  />
  </div>
 
  <div>
- <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+ <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
  Unit Pendidikan
  </label>
  <CustomSelect
  value={targetForm.unit_id}
  onChange={(e) => setTargetForm({ ...targetForm, unit_id: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 p-2.5 font-semibold text-slate-800 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 px-3.5 text-xs font-bold text-slate-800 dark:text-slate-100 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  >
  <option value="">Pilih Unit Pendidikan</option>
  {options.units?.map((u) => <option key={u.id} value={u.id}>{u.name}</option>)}
@@ -730,19 +727,19 @@ function MutabaahOverviewPage({ view }) {
 
  <div className="grid grid-cols-2 gap-3">
  <div>
- <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+ <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
  Jenjang
  </label>
  <input
  type="text"
  value={targetForm.education_level}
  onChange={(e) => setTargetForm({ ...targetForm, education_level: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 p-2.5 font-semibold text-slate-800 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 px-3.5 text-xs font-bold text-slate-800 dark:text-slate-100 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  />
  </div>
 
  <div>
- <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+ <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
  Nilai Target %
  </label>
  <input
@@ -751,19 +748,19 @@ function MutabaahOverviewPage({ view }) {
  max="100"
  value={targetForm.target_value}
  onChange={(e) => setTargetForm({ ...targetForm, target_value: Number(e.target.value) })}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 p-2.5 font-semibold text-slate-800 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 px-3.5 text-xs font-bold text-slate-800 dark:text-slate-100 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  />
  </div>
  </div>
 
  <div>
- <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+ <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
  Status Target
  </label>
  <CustomSelect
  value={targetForm.status}
  onChange={(e) => setTargetForm({ ...targetForm, status: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 p-2.5 font-semibold text-slate-800 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="w-full h-10 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 px-3.5 text-xs font-bold text-slate-800 dark:text-slate-100 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  >
  <option value="active">Aktif</option>
  <option value="inactive">Nonaktif</option>
@@ -771,7 +768,7 @@ function MutabaahOverviewPage({ view }) {
  </div>
 
  <div>
- <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+ <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
  Keterangan & Indikator Target
  </label>
  <textarea
@@ -779,57 +776,45 @@ function MutabaahOverviewPage({ view }) {
  placeholder="Catatan mengenai target dan indikator pembiasaan..."
  value={targetForm.description}
  onChange={(e) => setTargetForm({ ...targetForm, description: e.target.value })}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 p-2.5 font-semibold text-slate-800 focus:border-[#059669] focus:outline-none dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="w-full p-3.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 leading-relaxed focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  />
  </div>
- </DialogBody>
-
- <DialogFooter className="flex justify-end gap-2 border-t border-emerald-200/80 pt-3 dark:border-emerald-800/60">
- <Button appearance="outline" size="sm" type="button" onClick={() => setTargetModal(null)}>
- Batal
- </Button>
- <Button variant="primary" size="sm" type="submit" disabled={savingTarget}>
- {savingTarget && <Loader2 className="animate-spin mr-1 h-3.5 w-3.5" />} Simpan Target
- </Button>
- </DialogFooter>
  </form>
- </Dialog>
- </Backdrop>
- </OverlayWrapper>
+ )}
+ </AppModal>
 
  {/* 🟢 HEROUI DIALOG: MODAL LIHAT DETAIL EVALUASI SISWA */}
- <OverlayWrapper isOpen={Boolean(selectedItem)} onOpenChange={() => setSelectedItem(null)}>
- <Backdrop isOpen={Boolean(selectedItem)} onOpenChange={() => setSelectedItem(null)} isDismissable={true}>
- <Dialog isOpen={Boolean(selectedItem)} onClose={() => setSelectedItem(null)} className="max-w-md rounded-xl bg-white p-6 dark:bg-[#1B2433] shadow-2xl">
- <DialogHeader className="border-b border-emerald-200/80 dark:border-emerald-800/60 pb-3 dark:border-emerald-800/60">
- <DialogTitle className="text-lg font-bold text-slate-900 dark:text-slate-600">
- Detail Evaluasi Siswa
- </DialogTitle>
- <DialogDescription className="text-xs text-slate-400">
- Informasi capaian indikator dan evaluasi target mutabaah
- </DialogDescription>
- <DialogClose onClick={() => setSelectedItem(null)} />
- </DialogHeader>
-
- <DialogBody className="space-y-3 py-4 text-xs">
- <div className="space-y-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 p-3 dark:border-emerald-800/60 dark:bg-slate-800/40">
- <p><span className="text-slate-400">Nama Siswa:</span> <strong className="text-slate-800 dark:text-slate-200">{selectedItem?.full_name || selectedItem?.nama_siswa}</strong></p>
- <p><span className="text-slate-400">Kelas:</span> <strong className="text-slate-800 dark:text-slate-200">{selectedItem?.class_name || selectedItem?.kelas || '-'}</strong></p>
- <p><span className="text-slate-400">Capaian Baik:</span> <strong className="text-emerald-600">{selectedItem?.baik ?? 5} Indikator</strong></p>
- <p><span className="text-slate-400">Kurang:</span> <strong className="text-amber-600">{selectedItem?.kurang ?? 1} Indikator</strong></p>
- <p><span className="text-slate-400">Persentase:</span> <strong className="text-slate-800 dark:text-slate-200">{selectedItem?.progress ?? selectedItem?.percentage ?? 80}%</strong></p>
- <p><span className="text-slate-400">Status Target:</span> <strong className="text-emerald-600">{((selectedItem?.progress ?? 80) >= 75) ? 'Tercapai' : 'Perlu Tingkat Pembiasaan'}</strong></p>
+ <AppModal
+ isOpen={Boolean(selectedItem)}
+ onClose={() => setSelectedItem(null)}
+ icon={NotebookPen}
+ title="Detail Evaluasi Siswa"
+ badge="Evaluasi Mutabaah"
+ description="Informasi capaian indikator dan evaluasi target mutabaah"
+ maxWidth="max-w-md"
+ zIndex={70}
+ footer={
+ <button
+ type="button"
+ onClick={() => setSelectedItem(null)}
+ className="inline-flex items-center gap-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 h-9.5 px-4 text-xs font-black border border-slate-300 dark:border-slate-700 transition-all active:scale-95 cursor-pointer"
+ >
+ <X className="size-3.5" strokeWidth={2.2} />
+ <span>Tutup</span>
+ </button>
+ }
+ >
+ {selectedItem && (
+ <div className="space-y-2.5 rounded-2xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-slate-50/80 p-4 text-xs dark:bg-slate-800/40">
+ <p><span className="text-slate-500 dark:text-slate-400">Nama Siswa:</span> <strong className="text-slate-800 dark:text-slate-200">{selectedItem?.full_name || selectedItem?.nama_siswa}</strong></p>
+ <p><span className="text-slate-500 dark:text-slate-400">Kelas:</span> <strong className="text-slate-800 dark:text-slate-200">{selectedItem?.class_name || selectedItem?.kelas || '-'}</strong></p>
+ <p><span className="text-slate-500 dark:text-slate-400">Capaian Baik:</span> <strong className="text-emerald-600 dark:text-emerald-400">{selectedItem?.baik ?? 5} Indikator</strong></p>
+ <p><span className="text-slate-500 dark:text-slate-400">Kurang:</span> <strong className="text-amber-600 dark:text-amber-400">{selectedItem?.kurang ?? 1} Indikator</strong></p>
+ <p><span className="text-slate-500 dark:text-slate-400">Persentase:</span> <strong className="text-slate-800 dark:text-slate-200">{selectedItem?.progress ?? selectedItem?.percentage ?? 80}%</strong></p>
+ <p><span className="text-slate-500 dark:text-slate-400">Status Target:</span> <strong className="text-emerald-600 dark:text-emerald-400">{((selectedItem?.progress ?? 80) >= 75) ? 'Tercapai' : 'Perlu Tingkat Pembiasaan'}</strong></p>
  </div>
- </DialogBody>
-
- <DialogFooter className="flex justify-end border-t border-emerald-200/80 pt-3 dark:border-emerald-800/60">
- <Button appearance="outline" size="sm" onClick={() => setSelectedItem(null)}>
- Tutup
- </Button>
- </DialogFooter>
- </Dialog>
- </Backdrop>
- </OverlayWrapper>
+ )}
+ </AppModal>
  </MasterDataPage>
  )
  }

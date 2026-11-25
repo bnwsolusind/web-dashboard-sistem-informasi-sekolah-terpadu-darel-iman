@@ -67,6 +67,8 @@ import {
 import StatCard from '../components/StatCard'
 import KpiQuickViewModal from '../components/KpiQuickViewModal'
 import ModalErrorBoundary from '../components/common/ModalErrorBoundary'
+import PageToolbarActions from '../components/app/PageToolbarActions'
+import { SquircleActionButton } from '../components/master-data'
 import {
   Badge
 } from '@/components/ui/badge'
@@ -264,13 +266,11 @@ export default function DashboardPage() {
             </div>
 
             <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0 self-start sm:self-auto flex-wrap">
-              <button
-                onClick={handleExportData}
-                className="px-4 py-2.5 rounded-xl bg-white/80 hover:bg-white text-emerald-900 dark:bg-white/10 dark:hover:bg-white/20 dark:text-white backdrop-blur-md text-xs font-bold border border-emerald-300 dark:border-white/20 transition flex items-center gap-2 shadow-xs cursor-pointer"
-              >
-                <FileSpreadsheet className="w-4 h-4 text-emerald-600 dark:text-emerald-200" />
-                <span>Export Laporan</span>
-              </button>
+              <PageToolbarActions
+                onExport={handleExportData}
+                exportLabel="Export Laporan"
+                showLabel
+              />
             </div>
           </div>
 
@@ -444,12 +444,12 @@ export default function DashboardPage() {
  <CardTitle className="text-sm font-extrabold text-slate-900 dark:text-emerald-600">
  Prestasi Siswa <span className="text-xs text-slate-400 font-normal">(Semua Unit)</span>
  </CardTitle>
- <button
+ <SquircleActionButton
+ variant="view"
+ label="Lihat Semua"
  onClick={() => navigate('/dashboard/laporan-siswa')}
- className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline"
- >
- Lihat Semua
- </button>
+ showLabel
+ />
  </CardHeader>
  <CardContent className="flex items-center gap-3 pt-2">
  {/* Donut Chart with Center Text */}
@@ -638,9 +638,7 @@ export default function DashboardPage() {
  <CardTitle className="text-xs font-bold text-slate-900 dark:text-slate-600">
  Ranking Unit Pendidikan
  </CardTitle>
- <button onClick={() => navigate('/dashboard/students/unit-pendidikan')} className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline">
- Lihat Semua
- </button>
+ <SquircleActionButton variant="view" label="Lihat Semua" onClick={() => navigate('/dashboard/students/unit-pendidikan')} showLabel />
  </CardHeader>
  <CardContent className="space-y-3 pt-1 text-xs">
  {(apiData?.unit_rankings || []).length > 0 ? (
@@ -669,9 +667,7 @@ export default function DashboardPage() {
  <CardTitle className="text-xs font-bold text-slate-900 dark:text-emerald-600">
  Agenda Yayasan
  </CardTitle>
- <button onClick={() => navigate('/dashboard/pengaturan')} className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline">
- Lihat Semua
- </button>
+ <SquircleActionButton variant="view" label="Lihat Semua" onClick={() => navigate('/dashboard/pengaturan')} showLabel />
  </CardHeader>
  <CardContent className="space-y-3 pt-1 text-xs">
  {(apiData?.agenda_yayasan || []).length > 0 ? (
@@ -734,9 +730,7 @@ export default function DashboardPage() {
  <CardTitle className="text-xs font-bold text-slate-900 dark:text-emerald-600">
  Aktivitas Terbaru
  </CardTitle>
- <button onClick={() => navigate('/dashboard/attendance')} className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline">
- Lihat Semua
- </button>
+ <SquircleActionButton variant="view" label="Lihat Semua" onClick={() => navigate('/dashboard/attendance')} showLabel />
  </CardHeader>
  <CardContent className="space-y-3 pt-1 text-xs">
  {(apiData?.recent_activities || []).length > 0 ? (
@@ -761,9 +755,7 @@ export default function DashboardPage() {
  <CardTitle className="text-xs font-bold text-slate-900 dark:text-slate-600">
  Pengumuman
  </CardTitle>
- <button onClick={() => navigate('/dashboard/yayasan/informasi-sekolah')} className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline">
- Lihat Semua
- </button>
+ <SquircleActionButton variant="view" label="Lihat Semua" onClick={() => navigate('/dashboard/yayasan/informasi-sekolah')} showLabel />
  </CardHeader>
  <CardContent className="space-y-3 pt-1 text-xs">
  {recentInformationList.slice(0, 3).map((info, idx) => (
@@ -877,9 +869,7 @@ export default function DashboardPage() {
  <CardTitle className="text-sm font-extrabold text-slate-900 dark:text-white">
  Data Unit Pendidikan
  </CardTitle>
- <button onClick={() => navigate('/dashboard/students/unit-pendidikan')} className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline">
- Lihat Semua
- </button>
+ <SquircleActionButton variant="view" label="Lihat Semua" onClick={() => navigate('/dashboard/students/unit-pendidikan')} showLabel />
  </CardHeader>
 
  <CardContent className="pt-0">

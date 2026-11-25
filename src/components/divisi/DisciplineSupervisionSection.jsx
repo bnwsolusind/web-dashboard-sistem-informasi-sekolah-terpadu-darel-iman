@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import AppModal from '../app/AppModal'
 import {
  ShieldAlert,
  ShieldCheck,
@@ -675,42 +676,41 @@ export default function DisciplineSupervisionSection() {
  )}
 
  {/* ── 7. MODAL LAPORAN EKSEKUTIF UNTUK PENGURUS YAYASAN (HERO UI) ── */}
- <AnimatePresence>
- {isReportModalOpen && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.95, y: 15 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 15 }}
- className="relative w-full max-w-3xl overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 flex flex-col max-h-[90vh]"
- >
- {/* Header Modal */}
- <div className="p-5 sm:p-6 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50 flex items-center justify-between">
- <div className="flex items-center gap-3">
- <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#059669] text-white shadow-md">
- <FileText className="h-6 w-6" />
- </div>
- <div>
- <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white">
- {executive_summary?.report_title || 'Laporan Eksekutif Supervisi Ketertiban'}
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- Format Ditujukan Kepada: <strong>{executive_summary?.audience || 'Pengurus Yayasan'}</strong>
- </p>
- </div>
- </div>
-
- <button
- type="button"
- onClick={() => setIsReportModalOpen(false)}
- className="rounded-xl p-2 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-600 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition"
- >
- <X className="h-5 w-5" />
- </button>
- </div>
-
- {/* Body Modal / Print Document */}
- <div className="p-6 overflow-y-auto space-y-6 text-xs text-slate-700 dark:text-slate-300">
+      <AppModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        title={executive_summary?.report_title || 'Laporan Eksekutif Supervisi Ketertiban'}
+        badge="Laporan Eksekutif"
+        description={`Format Ditujukan Kepada: ${executive_summary?.audience || 'Pengurus Yayasan'}`}
+        icon={FileText}
+        maxWidth="max-w-3xl"
+        bodyClassName="space-y-6 text-xs text-slate-700 dark:text-slate-300"
+        footer={
+          <div className="flex w-full items-center justify-between gap-3">
+            <span className="text-xs text-slate-400">
+              Dokumen resmi Supervisi Divisi Pendidikan Yayasan
+            </span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setIsReportModalOpen(false)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Tutup</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+              >
+                <Printer className="h-4 w-4 shrink-0" />
+                <span>Cetak Dokumen</span>
+              </button>
+            </div>
+          </div>
+        }
+      >
  {/* Meta Laporan */}
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-emerald-200/80 dark:border-emerald-700/80">
  <div>
@@ -774,38 +774,7 @@ export default function DisciplineSupervisionSection() {
  ))}
  </ul>
  </div>
- </div>
-
- {/* Footer Modal */}
- <div className="p-4 sm:p-5 border-t border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50 flex items-center justify-between">
- <span className="text-xs text-slate-400">
- Dokumen resmi Supervisi Divisi Pendidikan Yayasan
- </span>
- <div className="flex items-center gap-2">
- <HeroButton
- size="sm"
- variant="flat"
- color="default"
- onPress={() => setIsReportModalOpen(false)}
- >
- Tutup
- </HeroButton>
- <HeroButton
- size="sm"
- color="primary"
- variant="solid"
- className="inline-flex items-center gap-1.5 font-bold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-indigo-50 text-indigo-700 hover:bg-indigo-100/90 dark:border-emerald-800/60 dark:bg-indigo-950/60 dark:text-indigo-300 dark:hover:bg-indigo-900/60 shadow-xs cursor-pointer"
- onPress={() => window.print()}
- >
- <Printer className="h-4 w-4 shrink-0" />
- <span>Cetak Dokumen</span>
- </HeroButton>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+      </AppModal>
  </div>
  )
 }

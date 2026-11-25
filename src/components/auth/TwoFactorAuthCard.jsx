@@ -6,6 +6,7 @@ import { useToast } from '../app/ToastProvider'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertContent, AlertDescription, AlertIndicator } from '@/components/ui/alert'
 import { Card } from '@/components/ui/card'
+import AppModal from '../app/AppModal'
 
 export default function TwoFactorAuthCard() {
  const [activeTab, setActiveTab] = useState('Ringkasan')
@@ -398,13 +399,44 @@ export default function TwoFactorAuthCard() {
  )}
 
  {/* Disable 2FA Modal */}
- {showDisableModal && (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
- <div className="w-full max-w-md bg-white dark:bg-slate-900 p-6 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xl space-y-4">
- <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
- <FiAlertTriangle className="text-rose-600" />
- <span>Konfirmasi Nonaktifkan 2FA</span>
- </h3>
+ <AppModal
+ isOpen={showDisableModal}
+ onClose={() => {
+ setShowDisableModal(false)
+ setPasswordConfirm('')
+ }}
+ title="Konfirmasi Nonaktifkan 2FA"
+ description="Menonaktifkan 2FA akan menurunkan perlindungan akun Anda."
+ badge="Keamanan"
+ icon={FiAlertTriangle}
+ variant="danger"
+ maxWidth="max-w-md"
+ zIndex={70}
+ footer={
+ <>
+ <button
+ type="button"
+ onClick={() => {
+ setShowDisableModal(false)
+ setPasswordConfirm('')
+ }}
+ className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black border border-slate-300 dark:border-slate-700 transition-all cursor-pointer"
+ >
+ Batal
+ </button>
+ <Button
+ type="button"
+ variant="danger"
+ size="sm"
+ onClick={handleDisable2fa}
+ disabled={submitting}
+ className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black border-2 border-rose-600 shadow-md shadow-rose-600/20 active:scale-95"
+ >
+ {submitting ? 'Memproses...' : 'Nonaktifkan 2FA'}
+ </Button>
+ </>
+ }
+ >
  <p className="text-xs text-slate-600 dark:text-slate-300">
  Menonaktifkan 2FA akan menurunkan perlindungan akun Anda. Masukkan kata sandi akun untuk melanjutkan.
  </p>
@@ -413,33 +445,9 @@ export default function TwoFactorAuthCard() {
  placeholder="Kata sandi saat ini"
  value={passwordConfirm}
  onChange={(e) => setPasswordConfirm(e.target.value)}
- className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 rounded-xl text-sm"
+ className="w-full h-10 px-3.5 bg-white dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-700/80 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
  />
- <div className="flex justify-end gap-2 pt-2">
- <Button
- type="button"
- variant="ghost"
- size="sm"
- onClick={() => {
- setShowDisableModal(false)
- setPasswordConfirm('')
- }}
- >
- Batal
- </Button>
- <Button
- type="button"
- variant="danger"
- size="sm"
- onClick={handleDisable2fa}
- disabled={submitting}
- >
- {submitting ? 'Memproses...' : 'Nonaktifkan 2FA'}
- </Button>
- </div>
- </div>
- </div>
- )}
+ </AppModal>
  </Card>
  )
 }

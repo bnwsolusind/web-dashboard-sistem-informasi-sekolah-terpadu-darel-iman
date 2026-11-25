@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from 'react'
+import AppModal from '@/components/app/AppModal'
 import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -648,14 +649,6 @@ export default function ExamGridsWorkspace({
  </div>
 
  {/* 5. HERO UI MODAL FOR KISI-KISI DETAIL */}
- <HeroModal
- isOpen={Boolean(activeModal)}
- onOpenChange={(open) => {
- if (!open) setActiveModal(null)
- }}
- >
- <HeroModal.Backdrop className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md">
- <HeroModal.Container placement="center" className="w-full max-w-xl">
  {activeModal && (() => {
  const modalSubject = activeModal.subject?.name || activeModal.subject?.nama_mapel || activeModal.mata_pelajaran || '-'
  const modalExamType = activeModal.jenis_ujian || activeModal.tipe || '-'
@@ -664,55 +657,31 @@ export default function ExamGridsWorkspace({
  const modalBobot = activeModal.distribusi_bobot || null
 
  return (
- <HeroModal.Dialog className="modal-dialog font-sans my-auto w-full max-w-xl flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60 outline-hidden">
- {/* Top Accent Gradient Bar */}
- <div className={cn('h-1.5 w-full shrink-0', modalTheme.topBar)} />
-
- {/* Header */}
- <HeroModal.Header className="modal-header flex !flex-row items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232] dark:bg-slate-950">
- <div className="flex items-center gap-3">
- <div className={cn('flex h-11 w-11 shrink-0 items-center justify-center rounded-xl shadow-md text-white', modalTheme.iconBg)}>
- <FileSpreadsheet className="h-5 w-5" />
- </div>
- <div>
- <div className="flex flex-wrap items-center gap-2">
- <HeroChip
- size="sm"
- variant="soft"
- className={cn('font-bold text-[10px] inline-flex items-center gap-1 border', modalTheme.badge)}
+ <AppModal
+ isOpen={Boolean(activeModal)}
+ onClose={() => setActiveModal(null)}
+ title={activeModal.judul_kisi || activeModal.judul || activeModal.title || '-'}
+ description={`Guru: ${modalTeacher}${activeModal.kelas?.nama_kelas ? ` · Rombel: ${activeModal.kelas.nama_kelas}` : ''}`}
+ badge={`${modalSubject} · ${modalExamType}`}
+ icon={FileSpreadsheet}
+ maxWidth="max-w-xl"
+ zIndex="z-[70]"
+ footer={
+ <div className="flex w-full items-center justify-between gap-3">
+ <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
+ Dareliman Edu {student?.unit_name ? `· ${student.unit_name}` : ''}
+ </span>
+ <button
+ type="button"
+ onClick={() => setActiveModal(null)}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <HeroChip.Label>{modalSubject}</HeroChip.Label>
- </HeroChip>
- <HeroChip
- size="sm"
- variant="soft"
- className="font-bold text-[10px] inline-flex items-center gap-1 border bg-emerald-50 text-slate-800 border-emerald-200/80 dark:bg-emerald-950/40 dark:text-emerald-300"
+ Tutup
+ </button>
+ </div>
+ }
  >
- <HeroChip.Label>{modalExamType}</HeroChip.Label>
- </HeroChip>
- </div>
- <h3 className="modal-title mt-1 text-sm sm:text-base font-black text-slate-900 dark:text-white leading-tight">
- {activeModal.judul_kisi || activeModal.judul || activeModal.title || '-'}
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Guru: <span className="font-bold text-slate-700 dark:text-slate-300">{modalTeacher}</span>
- {activeModal.kelas?.nama_kelas ? ` · Rombel: ${activeModal.kelas.nama_kelas}` : ''}
- </p>
- </div>
- </div>
-
- <HeroButton
- isIconOnly
- size="sm"
- onPress={() => setActiveModal(null)}
- className="size-8 flex items-center justify-center rounded-xl bg-emerald-50 hover:bg-slate-200 text-emerald-700 hover:text-emerald-700 dark:bg-emerald-950/40 dark:hover:bg-slate-700 dark:text-emerald-300 cursor-pointer transition-all active:scale-95 shrink-0"
- >
- <X className="size-4" strokeWidth={2.2} />
- </HeroButton>
- </HeroModal.Header>
-
- {/* Body */}
- <HeroModal.Body className="modal-body p-6 space-y-4 text-slate-700 dark:text-slate-200 overflow-y-auto">
+ <div className="space-y-4 text-slate-700 dark:text-slate-200">
  {/* 4 Quick Spec Badges */}
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
  <div className="rounded-xl border border-emerald-200/80 bg-slate-50/70 p-3 text-center dark:border-emerald-800/60 dark:bg-slate-800/40">
@@ -783,27 +752,10 @@ export default function ExamGridsWorkspace({
  {activeModal.catatan || activeModal.saran_guru || activeModal.panduan}
  </div>
  )}
- </HeroModal.Body>
-
- {/* Footer */}
- <HeroModal.Footer className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-white px-6 py-4 dark:border-emerald-800/60 dark:bg-slate-950">
- <span className="text-xs font-medium text-slate-400">
- Dareliman Edu {student?.unit_name ? `· ${student.unit_name}` : ''}
- </span>
- <HeroButton
- size="sm"
- onPress={() => setActiveModal(null)}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-4 py-2 text-xs font-bold text-slate-700 hover:bg-emerald-50/40 dark:border-emerald-700/80 dark:bg-emerald-950/60 dark:text-emerald-300 cursor-pointer"
- >
- Tutup
- </HeroButton>
- </HeroModal.Footer>
- </HeroModal.Dialog>
+ </div>
+ </AppModal>
  )
  })()}
- </HeroModal.Container>
- </HeroModal.Backdrop>
- </HeroModal>
  </div>
  )
 }

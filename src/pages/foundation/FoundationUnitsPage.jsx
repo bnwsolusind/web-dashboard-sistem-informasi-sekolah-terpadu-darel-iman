@@ -46,6 +46,7 @@ import {
   AppDataTable,
   AppBadge
 } from '../../components/app'
+import PageToolbarActions from '../../components/app/PageToolbarActions'
 import api from '../../services/api'
 import HeroUiFilterSelect from '../../components/ui/HeroUiFilterSelect'
 import {
@@ -61,6 +62,7 @@ import {
   MasterStatCard,
   MasterStatsGrid,
   MasterStatusBadge,
+  SquircleActionButton,
   masterStyles
 } from '../../components/master-data'
 import {
@@ -608,16 +610,10 @@ export function FoundationUnitsPage() {
             onRetry={handleRefresh}
             density="compact"
             actions={
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowExport(true)}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-sky-50 px-3.5 py-1.5 text-xs font-bold text-sky-700 shadow-xs transition-all duration-200 hover:scale-105 hover:bg-sky-100 hover:shadow-md dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300 cursor-pointer"
-                >
-                  <FileSpreadsheet className="h-3.5 w-3.5 text-sky-600" />
-                  <span>Export Data</span>
-                </button>
-              </div>
+              <PageToolbarActions
+                onExport={() => setShowExport(true)}
+                exportLabel="Export Data"
+              />
             }
             filters={
               <div className="flex flex-wrap items-center gap-2.5 w-full">
@@ -684,29 +680,27 @@ export function FoundationUnitsPage() {
 
                 {/* Reset Filter Button if active */}
                 {(selectedLevel !== 'all' || selectedStatus !== 'all' || search) && (
-                  <button
-                    type="button"
+                  <SquircleActionButton
+                    variant="restore"
+                    label="Reset Filter"
+                    showLabel
                     onClick={() => {
                       setSelectedLevel('all')
                       setSelectedStatus('all')
                       setSearch('')
                     }}
-                    className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50 hover:bg-slate-200 dark:bg-emerald-950/40 dark:hover:bg-slate-700 text-emerald-700 dark:text-emerald-300 px-3 py-1 text-xs font-bold transition cursor-pointer"
-                  >
-                    Reset Filter
-                  </button>
+                  />
                 )}
 
                 {/* Muat Ulang */}
-                <button
-                  type="button"
+                <SquircleActionButton
+                  variant="sync"
+                  icon={RefreshCcw}
+                  label="Muat ulang"
                   onClick={handleRefresh}
-                  aria-label="Muat ulang data"
-                  title="Muat ulang"
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-emerald-200/80 bg-white dark:bg-slate-900 text-slate-600 transition hover:bg-emerald-50 hover:text-emerald-800 dark:border-emerald-800/60 dark:text-slate-300 dark:hover:bg-emerald-950/40 shadow-2xs cursor-pointer ml-auto"
-                >
-                  <RefreshCcw className={`h-3.5 w-3.5 ${isFetching ? 'animate-spin' : ''}`} />
-                </button>
+                  loading={isFetching}
+                  className="ml-auto"
+                />
               </div>
             }
             hasActiveFilters={selectedLevel !== 'all' || selectedStatus !== 'all' || Boolean(search)}

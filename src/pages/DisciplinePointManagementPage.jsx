@@ -53,8 +53,11 @@ import Swal from '@/components/ui/compat/swal-heroui'
 import {
   PageContainer,
   AppBreadcrumb,
-  AppTabs
+  AppModal,
+  AppTabs,
+  PageToolbarActions
 } from '../components/app'
+import { SquircleActionButton } from '../components/master-data'
 import HeroUiHeader from '../components/ui/HeroUiHeader'
 import HeroUiFilterSelect from '../components/ui/HeroUiFilterSelect'
 import {
@@ -632,28 +635,21 @@ export default function DisciplinePointManagementPage() {
  roleBadge={userRoles[0] || 'Petugas'}
  theme="emerald"
  actions={
- <div className="flex flex-wrap items-center gap-2">
- <HeroButton
- color="primary"
- variant="shadow"
- className="font-bold bg-[#059669] hover:bg-[#047857] text-white dark:bg-[#18A972] dark:hover:bg-[#059669] dark:text-white shadow-sm"
- startContent={<Plus className="w-4 h-4" />}
- onPress={() => setIsInputModalOpen(true)}
+ <PageToolbarActions
+ primaryAction={{
+ label: 'Catat Pelanggaran',
+ onClick: () => setIsInputModalOpen(true),
+ }}
  >
- Catat Pelanggaran
- </HeroButton>
  {isAdmin && (
- <HeroButton
- color="secondary"
- variant="flat"
- className="font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/40"
- startContent={<Bookmark className="w-4 h-4" />}
- onPress={() => setActiveTab('rules')}
- >
- Kelola Tata Tertib
- </HeroButton>
+ <SquircleActionButton
+ variant="secondary"
+ icon={Bookmark}
+ label="Kelola Tata Tertib"
+ onClick={() => setActiveTab('rules')}
+ />
  )}
- </div>
+ </PageToolbarActions>
  }
  />
 
@@ -889,16 +885,12 @@ export default function DisciplinePointManagementPage() {
  Total {pagination.total || 0} Kasus
  </span>
 
- <HeroButton
- size="sm"
- color="primary"
- variant="solid"
- className="font-black bg-[#059669] hover:bg-[#047857] text-white dark:bg-[#18A972] dark:hover:bg-[#059669] dark:text-white rounded-xl shadow-xs"
- startContent={<Plus className="w-4 h-4" />}
- onPress={() => setIsInputModalOpen(true)}
- >
- Catat Pelanggaran
- </HeroButton>
+ <PageToolbarActions
+ primaryAction={{
+ label: 'Catat Pelanggaran',
+ onClick: () => setIsInputModalOpen(true),
+ }}
+ />
  </div>
  </div>
 
@@ -1001,13 +993,11 @@ export default function DisciplinePointManagementPage() {
  </div>
 
  {(selectedCluster !== 'all' || selectedLevel !== 'all' || selectedUnitId !== 'all' || selectedClassId !== 'all' || searchInput || sortBy !== 'date_desc') && (
- <HeroButton
- size="sm"
- variant="flat"
- color="default"
- className="font-bold rounded-xl"
- startContent={<RotateCcw className="w-3.5 h-3.5" />}
- onPress={() => {
+ <SquircleActionButton
+ variant="restore"
+ icon={RotateCcw}
+ label="Reset Filter"
+ onClick={() => {
  setSearchInput('')
  setSelectedCluster('all')
  setSelectedLevel('all')
@@ -1015,9 +1005,7 @@ export default function DisciplinePointManagementPage() {
  setSelectedClassId('all')
  setSortBy('date_desc')
  }}
- >
- Reset Filter
- </HeroButton>
+ />
  )}
  </div>
 
@@ -1227,12 +1215,10 @@ export default function DisciplinePointManagementPage() {
  </div>
 
  {isAdmin && (
- <HeroButton
- color="primary"
- variant="solid"
- className="bg-[#059669] hover:bg-[#047857] text-white font-bold rounded-xl"
- startContent={<Plus className="w-4 h-4" />}
- onPress={() => {
+ <PageToolbarActions
+ primaryAction={{
+ label: 'Tambah Aturan Tata Tertib',
+ onClick: () => {
  setEditingCategory(null)
  setCategoryForm({
  cluster: 'peraturan_umum',
@@ -1248,10 +1234,9 @@ export default function DisciplinePointManagementPage() {
  target_unit_type: 'all',
  })
  setIsCategoryModalOpen(true)
+ },
  }}
- >
- Tambah Aturan Tata Tertib
- </HeroButton>
+ />
  )}
  </div>
 
@@ -1434,42 +1419,39 @@ export default function DisciplinePointManagementPage() {
  </div>
  )}
 
- {/* ========================================================= */}
- {/* 4. MODAL INPUT PELANGGARAN KEDISIPLINAN */}
- {/* ========================================================= */}
- <AnimatePresence>
- {isInputModalOpen && (
- <div className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md" role="dialog" aria-modal="true" aria-label="Catat Pelanggaran Tata Tertib">
- <motion.div
- initial={{ opacity: 0, scale: 0.95, y: 15 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 15 }}
- className="modal-dialog font-sans my-auto w-full max-w-3xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="w-10 h-9 rounded-xl bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 flex items-center justify-center shadow-md">
- <ShieldAlert className="w-5 h-5 text-emerald-600" />
- </div>
- <div>
- <h3 className="modal-title text-base sm:text-lg font-black text-slate-900 dark:text-white">
- Catat Pelanggaran Tata Tertib
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- Input poin kelakuan santri/siswa sesuai Buku Saku Peraturan Resmi
- </p>
- </div>
- </div>
- <button
- onClick={() => setIsInputModalOpen(false)}
- className="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
- >
- <X className="w-5 h-5" />
- </button>
- </div>
-
- <form onSubmit={handleSubmitViolation} className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-5 text-xs">
+      {/* 4. MODAL INPUT PELANGGARAN KEDISIPLINAN */}
+      <AppModal
+        isOpen={isInputModalOpen}
+        onClose={() => !savingViolation && setIsInputModalOpen(false)}
+        title="Catat Pelanggaran Tata Tertib"
+        badge="Buku Saku"
+        description="Input poin kelakuan santri/siswa sesuai Buku Saku Peraturan Resmi"
+        icon={ShieldAlert}
+        maxWidth="max-w-3xl"
+        disableBackdropClose={savingViolation}
+        hideCloseButton={savingViolation}
+        footer={
+          <>
+            <button
+              type="button"
+              onClick={() => setIsInputModalOpen(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="submit"
+              form="discipline-violation-form"
+              disabled={savingViolation || !selectedStudent || !selectedCategory || (studentUnitContext && !studentUnitContext.isAuthorized)}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+            >
+              <span>{savingViolation ? 'Menyimpan...' : 'Simpan Catatan Poin'}</span>
+            </button>
+          </>
+        }
+      >
+        <form id="discipline-violation-form" onSubmit={handleSubmitViolation} className="space-y-5 text-xs">
  {/* SEKSI 1: IDENTIFIKASI SANTRI / SISWA */}
  <div className="p-4 rounded-xl bg-slate-50/80 dark:bg-slate-900/60 border border-emerald-200/80 dark:border-emerald-800/60 space-y-3">
  <div className="flex items-center justify-between">
@@ -1840,62 +1822,32 @@ export default function DisciplinePointManagementPage() {
  </div>
  </div>
 
- {/* FOOTER AKSI */}
- <div className="pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-2">
- <HeroButton variant="flat" color="default" onPress={() => setIsInputModalOpen(false)}>
- Batal
- </HeroButton>
- <HeroButton
- type="submit"
- color="primary"
- className="bg-[#059669] hover:bg-[#047857] text-white font-bold shadow-sm rounded-xl"
- isLoading={savingViolation}
- disabled={!selectedStudent || !selectedCategory || (studentUnitContext && !studentUnitContext.isAuthorized)}
- >
- Simpan Catatan Poin
- </HeroButton>
- </div>
- </form>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+        </form>
+      </AppModal>
 
- {/* ========================================================= */}
- {/* 5. MODAL LEMBAR SKOR SANTRI (SPEEDOMETER 0 - 250 POIN) */}
- {/* ========================================================= */}
- <AnimatePresence>
- {isSummaryModalOpen && (
- <div className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.95, y: 15 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 15 }}
- className="modal-dialog font-sans my-auto w-full max-w-3xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-2">
- <Scale className="w-5 h-5 text-emerald-600" />
- <div>
- <h3 className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white">
- Lembar Skor Kedisiplinan & Buku Saku Santri
- </h3>
- <p className="text-xs text-slate-500">
- Rekapitulasi berjalan dan status sanksi resmi
- </p>
- </div>
- </div>
- <button
- onClick={() => setIsSummaryModalOpen(false)}
- className="p-1 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
- >
- <X className="w-5 h-5" />
- </button>
- </div>
-
- <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-5 text-xs">
+      {/* 5. MODAL LEMBAR SKOR SANTRI */}
+      <AppModal
+        isOpen={isSummaryModalOpen}
+        onClose={() => setIsSummaryModalOpen(false)}
+        title="Lembar Skor Kedisiplinan & Buku Saku Santri"
+        badge="Rekapitulasi"
+        description="Rekapitulasi berjalan dan status sanksi resmi"
+        icon={Scale}
+        maxWidth="max-w-3xl"
+        bodyClassName="space-y-5 text-xs"
+        footer={
+          <div className="flex w-full justify-end">
+            <button
+              type="button"
+              onClick={() => setIsSummaryModalOpen(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Tutup</span>
+            </button>
+          </div>
+        }
+      >
  {summaryLoading ? (
  <div className="py-12 text-center">
  <HeroSpinner color="primary" label="Memuat lembar skor santri..." />
@@ -2024,11 +1976,11 @@ export default function DisciplinePointManagementPage() {
  )}
  </div>
 
- {summaryData.warning_letters?.length === 0 ? (
+ {(!summaryData.warning_letters || summaryData.warning_letters.length === 0) ? (
  <p className="text-xs text-slate-500 py-2">Belum ada surat peringatan yang diterbitkan untuk santri ini.</p>
  ) : (
  <div className="space-y-2">
- {summaryData.warning_letters.map((letRow) => (
+ {(summaryData.warning_letters || []).map((letRow) => (
  <div
  key={letRow.id}
  className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between text-xs"
@@ -2051,45 +2003,42 @@ export default function DisciplinePointManagementPage() {
  </div>
  </>
  ) : null}
- </div>
+      </AppModal>
 
- <div className="modal-footer flex items-center justify-end border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 px-6 py-3.5 dark:border-emerald-800/60 dark:bg-slate-900/30">
- <HeroButton color="default" variant="flat" onPress={() => setIsSummaryModalOpen(false)}>
- Tutup
- </HeroButton>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
-
- {/* ========================================================= */}
- {/* 6. MODAL TERBITKAN SURAT PERINGATAN (ST, SP1, SP2) */}
- {/* ========================================================= */}
- <AnimatePresence>
- {isLetterModalOpen && (
- <div role="dialog" aria-modal="true" aria-label="Penerbitan Surat Peringatan" className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.95, y: 15 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 15 }}
- className="modal-dialog font-sans my-auto w-full max-w-lg"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/80 bg-rose-50/40 px-6 py-4 dark:border-emerald-800/60 dark:bg-rose-950/20">
- <div className="flex items-center gap-2">
- <AlertTriangle className="w-5 h-5 text-rose-600" />
- <h3 className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white">
- Penerbitan Surat Peringatan / Teguran Resmi
- </h3>
- </div>
- <button onClick={() => setIsLetterModalOpen(false)} className="p-1 rounded-xl text-slate-400 hover:text-slate-600">
- <X className="w-5 h-5" />
- </button>
- </div>
-
- <form onSubmit={handleSubmitLetter} className="flex-1 overflow-y-auto p-5 space-y-3 text-xs">
+      {/* 6. MODAL TERBITKAN SURAT PERINGATAN */}
+      <AppModal
+        isOpen={isLetterModalOpen}
+        onClose={() => !savingLetter && setIsLetterModalOpen(false)}
+        title="Penerbitan Surat Peringatan / Teguran Resmi"
+        badge="Surat Peringatan"
+        description="Terbitkan ST, SP1, SP2, atau surat pengembalian resmi santri"
+        icon={AlertTriangle}
+        variant="danger"
+        maxWidth="max-w-lg"
+        disableBackdropClose={savingLetter}
+        hideCloseButton={savingLetter}
+        footer={
+          <>
+            <button
+              type="button"
+              onClick={() => setIsLetterModalOpen(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="submit"
+              form="discipline-letter-form"
+              disabled={savingLetter}
+              className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20 disabled:opacity-50"
+            >
+              <span>{savingLetter ? 'Menerbitkan...' : 'Terbitkan Surat'}</span>
+            </button>
+          </>
+        }
+      >
+        <form id="discipline-letter-form" onSubmit={handleSubmitLetter} className="space-y-3 text-xs">
  <div>
  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">
  Jenis Surat Peringatan <span className="text-rose-500">*</span>
@@ -2150,45 +2099,44 @@ export default function DisciplinePointManagementPage() {
  />
  </div>
 
- <div className="pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-2">
- <HeroButton variant="flat" color="default" onPress={() => setIsLetterModalOpen(false)}>
- Batal
- </HeroButton>
- <HeroButton type="submit" color="danger" className="font-bold" isLoading={savingLetter}>
- Terbitkan Surat
- </HeroButton>
- </div>
- </form>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+        </form>
+      </AppModal>
 
- {/* ========================================================= */}
- {/* 7. MODAL MASTER ATURAN TATA TERTIB (CRUD ADMIN) */}
- {/* ========================================================= */}
- {isAdmin && (
- <AnimatePresence>
- {isCategoryModalOpen && (
- <div role="dialog" aria-modal="true" aria-label={editingCategory ? 'Edit Aturan Tata Tertib' : 'Tambah Aturan Tata Tertib Baru'} className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.95, y: 15 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 15 }}
- className="modal-dialog font-sans my-auto w-full max-w-2xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <h3 className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white">
- {editingCategory ? 'Edit Aturan Tata Tertib' : 'Tambah Aturan Tata Tertib Baru'}
- </h3>
- <button onClick={() => setIsCategoryModalOpen(false)} className="p-1 rounded-xl text-slate-400 hover:text-slate-600">
- <X className="w-5 h-5" />
- </button>
- </div>
-
- <form
+      {/* 7. MODAL MASTER ATURAN TATA TERTIB (CRUD ADMIN) */}
+      {isAdmin && (
+        <AppModal
+          isOpen={isCategoryModalOpen}
+          onClose={() => !savingCategory && setIsCategoryModalOpen(false)}
+          title={editingCategory ? 'Edit Aturan Tata Tertib' : 'Tambah Aturan Tata Tertib Baru'}
+          badge={editingCategory ? 'Perbarui' : 'Aturan Baru'}
+          description="Kelola pasal pelanggaran, kluster, bobot poin, dan konsekuensi"
+          icon={ShieldAlert}
+          maxWidth="max-w-2xl"
+          disableBackdropClose={savingCategory}
+          hideCloseButton={savingCategory}
+          footer={
+            <>
+              <button
+                type="button"
+                onClick={() => setIsCategoryModalOpen(false)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="submit"
+                form="discipline-category-form"
+                disabled={savingCategory}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+              >
+                <span>{savingCategory ? 'Menyimpan...' : 'Simpan Aturan'}</span>
+              </button>
+            </>
+          }
+        >
+          <form
+            id="discipline-category-form"
  onSubmit={async (e) => {
  e.preventDefault()
  try {
@@ -2208,8 +2156,8 @@ export default function DisciplinePointManagementPage() {
  setSavingCategory(false)
  }
  }}
- className="flex-1 overflow-y-auto p-5 space-y-3 text-xs"
- >
+            className="space-y-3 text-xs"
+          >
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
  <div>
  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Kluster</label>
@@ -2353,20 +2301,8 @@ export default function DisciplinePointManagementPage() {
  </label>
  </div>
 
- <div className="pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-2">
- <HeroButton variant="flat" color="default" onPress={() => setIsCategoryModalOpen(false)}>
- Batal
- </HeroButton>
- <HeroButton type="submit" color="primary" className="bg-[#059669] hover:bg-[#047857] text-white font-bold rounded-xl" isLoading={savingCategory}>
- Simpan Aturan
- </HeroButton>
- </div>
- </form>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+          </form>
+        </AppModal>
  )}
  </PageContainer>
  )

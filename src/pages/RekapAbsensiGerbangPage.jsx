@@ -1,4 +1,5 @@
 import { HeroUiHeader } from "../components/ui/HeroUiHeader"
+import AppModal from '../components/app/AppModal'
 import ActionDropdown from '../components/app/ActionDropdown'
 import {
   useCallback,
@@ -133,8 +134,7 @@ import {
   DialogTitle
 } from '@/components/ui/dialog'
 import {
-  Backdrop,
-  OverlayWrapper
+  Backdrop
 } from '@/components/ui/dialog'
 import {
   printCleanTable,
@@ -2503,40 +2503,42 @@ export default function RekapAbsensiGerbangPage() {
  )}
 
  {/* Modal Detail Rincian Presensi Siswa saat Klik Data */}
- <OverlayWrapper isOpen={!!selectedDetailStudent} onOpenChange={() => setSelectedDetailStudent(null)}>
- <Backdrop isOpen={!!selectedDetailStudent} onOpenChange={() => setSelectedDetailStudent(null)} className="z-[70] bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-3 sm:p-5">
- <Dialog
+ <AppModal
  isOpen={!!selectedDetailStudent}
- onOpenChange={() => setSelectedDetailStudent(null)}
- showCloseButton={true}
- className="w-full max-w-xl rounded-xl p-0 bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xl overflow-hidden"
+ onClose={() => setSelectedDetailStudent(null)}
+ icon={UserCheck}
+ title={selectedDetailStudent?.student?.nama_lengkap || selectedDetailStudent?.student?.full_name || 'Detail Presensi'}
+ badge="Detail Presensi"
+ description={selectedDetailStudent ? `NIS: ${selectedDetailStudent.student?.nis || selectedDetailStudent.student?.nisn || '-'}` : ''}
+ maxWidth="max-w-xl"
+ zIndex={70}
+ footer={
+ <>
+ <button
+ type="button"
+ onClick={() => setSelectedDetailStudent(null)}
+ className="inline-flex items-center gap-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 h-9.5 px-4 text-xs font-black border border-slate-300 dark:border-slate-700 transition-all active:scale-95 cursor-pointer"
+ >
+ <X className="size-3.5" strokeWidth={2.2} />
+ <span>Tutup</span>
+ </button>
+ <button
+ type="button"
+ onClick={() => {
+ setSelectedDetailStudent(null)
+ setIsPrintModalOpen(true)
+ }}
+ className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white h-9.5 px-5 text-xs font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 transition-all active:scale-95 cursor-pointer"
+ >
+ <Printer className="size-3.5" strokeWidth={2.2} />
+ <span>Cetak Data Gerbang</span>
+ </button>
+ </>
+ }
  >
  {selectedDetailStudent && (
- <div className="p-6 space-y-4">
- <DialogHeader className="p-0">
- <DialogTitle className="flex items-center gap-3">
- <div className="size-11 rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 flex items-center justify-center font-extrabold text-sm shrink-0 shadow-md shadow-xs">
- {(selectedDetailStudent.student?.nama_lengkap || selectedDetailStudent.student?.full_name || 'S')[0]}
- </div>
- <div className="min-w-0">
- <div className="flex items-center gap-2 flex-wrap">
- <h3 className="text-sm sm:text-base font-black leading-tight text-slate-900 dark:text-white ">
- {selectedDetailStudent.student?.nama_lengkap || selectedDetailStudent.student?.full_name}
- </h3>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- Detail Presensi
- </span>
- </div>
- <p className="text-xs text-slate-500 dark:text-slate-400 font-medium font-mono mt-0.5">
- NIS: {selectedDetailStudent.student?.nis || selectedDetailStudent.student?.nisn || '-'}
- </p>
- </div>
- </DialogTitle>
- </DialogHeader>
-
- <DialogBody className="space-y-4 py-2">
- <div className="grid grid-cols-2 gap-3 text-xs bg-slate-50 dark:bg-slate-800/60 p-4 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="space-y-4">
+ <div className="grid grid-cols-2 gap-3 text-xs bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border-2 border-[#b6f6d9] dark:border-emerald-700/80">
  <div>
  <span className="text-slate-400 block text-[10px] font-semibold">Unit Pendidikan</span>
  <span className="font-bold text-slate-800 dark:text-slate-200">
@@ -2566,7 +2568,7 @@ export default function RekapAbsensiGerbangPage() {
  </div>
 
  <div className="grid grid-cols-2 gap-3">
- <div className="p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border-2 border-[#b6f6d9] dark:border-emerald-700/80">
  <span className="block text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">
  Jam Scan Masuk
  </span>
@@ -2575,7 +2577,7 @@ export default function RekapAbsensiGerbangPage() {
  </span>
  </div>
 
- <div className="p-3.5 rounded-xl bg-sky-50 dark:bg-sky-950/40 border border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="p-3.5 rounded-2xl bg-sky-50 dark:bg-sky-950/40 border-2 border-sky-200 dark:border-sky-800/60">
  <span className="block text-[10px] font-bold text-sky-700 dark:text-sky-400 uppercase tracking-wider">
  Jam Scan Pulang
  </span>
@@ -2584,38 +2586,9 @@ export default function RekapAbsensiGerbangPage() {
  </span>
  </div>
  </div>
- </DialogBody>
-
- <DialogFooter className="pt-2 flex flex-wrap items-center justify-end gap-2.5">
- <button
- type="button"
- onClick={() => setSelectedDetailStudent(null)}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
- >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
- </div>
- <span>Tutup</span>
- </button>
- <button
- type="button"
- onClick={() => {
- setSelectedDetailStudent(null)
- setIsPrintModalOpen(true)
- }}
- className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-[#1B2433] px-5 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
- >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <Printer className="size-3.5 text-emerald-600" strokeWidth={2.2} />
- </div>
- <span>Cetak Data Gerbang</span>
- </button>
- </DialogFooter>
  </div>
  )}
- </Dialog>
- </Backdrop>
- </OverlayWrapper>
+ </AppModal>
 
  {/* Modal Opsi Cetak & Unduh PDF */}
  <PrintOptionModal
@@ -2627,57 +2600,17 @@ export default function RekapAbsensiGerbangPage() {
  />
 
  {/* Pop-Up Camera Scanner Modal */}
- <AnimatePresence>
- {showCameraModal && (
- <motion.div
- initial={{ opacity: 0 }}
- animate={{ opacity: 1 }}
- exit={{ opacity: 0 }}
- transition={{ duration: 0.25 }}
- className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/70 p-3 sm:p-5 backdrop-blur-md"
+ <AppModal
+ isOpen={showCameraModal}
+ onClose={closeCameraModal}
+ badge={scanMode === 'checkin' ? 'KEDATANGAN' : 'PULANG'}
+ title="Pemindai QR Code Live"
+ description="Arahkan QR Code kartu siswa ke dalam kotak pemindai"
+ icon={Camera}
+ maxWidth="max-w-xl"
+ zIndex="z-[70]"
  >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto relative w-full max-w-xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
-
- {/* Modal Header */}
- <div className="modal-header relative z-10 flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-md shadow-xs">
- <Camera className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- </div>
- <div>
- <div className="flex items-center gap-2 flex-wrap">
- <h3 className="modal-title text-sm sm:text-base font-black tracking-tight text-slate-900 dark:text-white">
- Pemindai QR Code Live
- </h3>
- <span className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-extrabold bg-emerald-600 text-white shadow-xs border border-emerald-500/40 dark:border-emerald-600/50">
- <span className="h-2 w-2 rounded-full bg-white animate-pulse" />
- {scanMode === 'checkin' ? 'KEDATANGAN' : 'PULANG'}
- </span>
- </div>
- <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">
- Arahkan QR Code kartu siswa ke dalam kotak pemindai
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={closeCameraModal}
- aria-label="Tutup pemindai"
- className="size-9 flex items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer shrink-0"
- >
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Modal Body */}
- <div className="relative z-10 p-6 space-y-4">
+ <div className="space-y-4">
  {/* Square QR Code Viewfinder */}
  <div className="relative mx-auto aspect-square w-full max-w-[320px] sm:max-w-[340px] overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-950 shadow-2xl shadow-sm dark:border-emerald-800/60">
  <video
@@ -2795,55 +2728,19 @@ export default function RekapAbsensiGerbangPage() {
  </div>
  </form>
  </div>
- </div>
- </motion.div>
- </motion.div>
- )}
- </AnimatePresence>
+ </AppModal>
 
  {/* Pop-Up Schedule Configuration Modal */}
- <AnimatePresence>
- {showScheduleModal && (
- <motion.div
- initial={{ opacity: 0 }}
- animate={{ opacity: 1 }}
- exit={{ opacity: 0 }}
- transition={{ duration: 0.25 }}
- className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/70 p-3 sm:p-5 backdrop-blur-md"
+ <AppModal
+ isOpen={showScheduleModal}
+ onClose={() => setShowScheduleModal(false)}
+ title="Pengaturan Jam Masuk & Pulang Gerbang"
+ description="Tentukan jam masuk, toleransi keterlambatan, dan jam kepulangan siswa."
+ icon={Settings}
+ maxWidth="max-w-xl"
+ zIndex="z-[70]"
  >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto relative w-full max-w-xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
- <div className="modal-header relative z-10 flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-md border border-emerald-200/80 dark:border-emerald-800/60">
- <Settings className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3 className="modal-title text-sm sm:text-base font-black tracking-tight text-slate-900 dark:text-white">
- Pengaturan Jam Masuk & Pulang Gerbang
- </h3>
- <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">
- Tentukan jam masuk, toleransi keterlambatan, dan jam kepulangan siswa.
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setShowScheduleModal(false)}
- aria-label="Tutup pengaturan"
- className="size-9 flex items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer shrink-0"
- >
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
- </button>
- </div>
-
- <div className="relative z-10 p-6 space-y-5 overflow-y-auto max-h-[calc(100dvh-12rem)]">
+ <div className="space-y-5">
  <form onSubmit={handleSaveScheduleConfig} className="space-y-4">
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
  <div>
@@ -2962,11 +2859,7 @@ export default function RekapAbsensiGerbangPage() {
  </div>
  )}
  </div>
- </div>
- </motion.div>
- </motion.div>
- )}
- </AnimatePresence>
+ </AppModal>
 
  </PageContainer>
  )

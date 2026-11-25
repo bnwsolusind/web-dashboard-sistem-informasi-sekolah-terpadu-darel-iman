@@ -14,6 +14,7 @@ import {
   Network as FaSitemap,
   LockOpen as FaLockOpen,
   Lock as FaLock,
+  RotateCcw,
   RotateCcw as FaRedo,
   ChevronDown,
   RefreshCcw,
@@ -68,6 +69,7 @@ import {
   KpiStatCard
 } from '../components/app'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
+import AppModal from '../components/app/AppModal'
 import AppDataTable from '../components/app/AppDataTable'
 import ActionDropdown from '../components/app/ActionDropdown'
 import AppBadge from '../components/app/AppBadge'
@@ -1399,64 +1401,28 @@ export default function MasterJabatanPage() {
  />
 
  {/* ── MODAL HASIL IMPOR & PEMBERITAHUAN DATA DUPLIKAT ── */}
- <AnimatePresence>
- {duplicateModalData && (
- <div
- className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/75 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="jabatan-duplicate-report-title"
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="my-auto w-full max-w-2xl font-sans"
- >
- <div className="flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
- <div className={cn(
- "h-1.5 w-full shrink-0",
- duplicateModalData.diperbarui > 0
- ? "bg-white dark:bg-card-dark"
- : duplicateModalData.duplikat > 0
- ? "bg-white dark:bg-card-dark"
- : "bg-white dark:bg-card-dark"
- )} />
-
- {/* Header */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className={cn(
- "rounded-xl p-2.5 text-white shadow-md shrink-0 border",
- duplicateModalData.diperbarui > 0
- ? "bg-white dark:bg-card-dark border-emerald-200/80 dark:border-emerald-800/60 shadow-sm"
- : "bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 shadow-sm"
- )}>
- {duplicateModalData.diperbarui > 0 ? (
- <RefreshCcw className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- ) : (
- <CheckCircle2 className="h-5 w-5 text-amber-600" strokeWidth={2.25} />
- )}
- </div>
- <div>
- <h3 id="jabatan-duplicate-report-title" className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Hasil Impor & Pemberitahuan Data</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
- Total {duplicateModalData.total} Data
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Ringkasan sinkronisasi dan status pemrosesan data jabatan
- </p>
- </div>
- </div>
- <IconButton icon={X} variant="ghost" size="sm" onClick={() => setDuplicateModalData(null)} />
- </div>
-
- {/* Body */}
- <div className="min-h-0 flex-1 space-y-4 overflow-y-auto p-6 text-sm text-slate-700 dark:text-slate-200">
+        <AppModal
+          isOpen={Boolean(duplicateModalData)}
+          onClose={() => setDuplicateModalData(null)}
+          zIndex={70}
+          icon={duplicateModalData?.diperbarui > 0 ? RefreshCcw : CheckCircle2}
+          title="Hasil Impor & Pemberitahuan Data"
+          badge={`Total ${duplicateModalData?.total || 0} Data`}
+          description="Ringkasan sinkronisasi dan status pemrosesan data jabatan"
+          maxWidth="max-w-xl"
+          footer={
+            <button
+              type="button"
+              onClick={() => setDuplicateModalData(null)}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+            >
+              <CheckCircle2 className="size-4" strokeWidth={2} />
+              <span>Mengerti</span>
+            </button>
+          }
+        >
+          {duplicateModalData && (
+            <>
  {/* KPI Cards */}
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
  <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 p-3 text-center dark:border-emerald-800/60 dark:bg-emerald-950/30">
@@ -1521,17 +1487,9 @@ export default function MasterJabatanPage() {
  </div>
  </div>
  )}
- </div>
-
- {/* Footer */}
- <div className="flex items-center justify-end border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 px-6 py-3.5 dark:border-emerald-800/60 dark:bg-slate-900/30">
- <AppButton variant="primary" size="md" icon={CheckCircle2} onClick={() => setDuplicateModalData(null)}>Mengerti</AppButton>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+            </>
+          )}
+        </AppModal>
 
  {/* Print Option Modal */}
  <PrintOptionModal
@@ -1545,51 +1503,41 @@ export default function MasterJabatanPage() {
  {/* ══════════════════════════════════════════════════════════════════
  KPI CARDS DRILL-DOWN MODAL — Interactive Analytics Breakdown
  ══════════════════════════════════════════════════════════════════ */}
- <AnimatePresence>
- {activeKpiModal && (
- <div
- role="dialog"
- tabIndex={-1}
- aria-modal="true"
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- onMouseDown={(e) => { if (e.target === e.currentTarget) setActiveKpiModal(null) }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-4xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl dark:border-emerald-800/60 dark:bg-slate-950">
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 p-2.5 shadow-md shadow-xs shrink-0">
- {activeKpiModal === 'total' && <FaBriefcase className="h-5 w-5" />}
- {activeKpiModal === 'aktif' && <FaCheckCircle className="h-5 w-5" />}
- {activeKpiModal === 'struktur' && <FaSitemap className="h-5 w-5" />}
- {activeKpiModal === 'login' && <FaLockOpen className="h-5 w-5" />}
- </div>
- <div>
- <h3 className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>
- {activeKpiModal === 'total' && 'Analisis Total Jabatan Terdaftar'}
- {activeKpiModal === 'aktif' && 'Rincian Jabatan Berstatus Aktif'}
- {activeKpiModal === 'struktur' && 'Rincian Jabatan Tampil di Bagan Struktur Organisasi'}
- {activeKpiModal === 'login' && 'Rincian Jabatan Berhak Akses Login Sistem'}
- </span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-[#059669] border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" /> Drill-down
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Menampilkan {filteredKpiItems.length} data posisi jabatan terfilter
- </p>
- </div>
- </div>
- <IconButton icon={X} variant="ghost" size="sm" onClick={() => setActiveKpiModal(null)} />
- </div>
-
+        <AppModal
+          isOpen={Boolean(activeKpiModal)}
+          onClose={() => setActiveKpiModal(null)}
+          icon={
+            activeKpiModal === 'total' ? FaBriefcase :
+            activeKpiModal === 'aktif' ? CheckCircle2 :
+            activeKpiModal === 'struktur' ? FaSitemap :
+            FaLockOpen
+          }
+          title={
+            activeKpiModal === 'total' ? 'Analisis Total Jabatan Terdaftar' :
+            activeKpiModal === 'aktif' ? 'Rincian Jabatan Berstatus Aktif' :
+            activeKpiModal === 'struktur' ? 'Rincian Jabatan Tampil di Bagan Struktur Organisasi' :
+            'Rincian Jabatan Berhak Akses Login Sistem'
+          }
+          badge="Drill-down"
+          description={`Menampilkan ${filteredKpiItems.length} data posisi jabatan terfilter`}
+          maxWidth="max-w-4xl"
+          bodyClassName="p-0"
+          footer={
+            <div className="flex items-center justify-between w-full">
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                Menampilkan total {filteredKpiItems.length} baris
+              </span>
+              <button
+                type="button"
+                onClick={() => setActiveKpiModal(null)}
+                className="h-9.5 px-5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Tutup</span>
+              </button>
+            </div>
+          }
+        >
  <div className="flex items-center gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 px-6 py-3 dark:border-emerald-800/60 dark:bg-slate-900/40">
  <div className="relative flex-1">
  <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-emerald-600 dark:text-emerald-400" />
@@ -1678,62 +1626,45 @@ export default function MasterJabatanPage() {
  )}
  </div>
 
- <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-white px-6 py-4 dark:border-emerald-800/60 dark:bg-slate-950">
- <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
- Menampilkan total {filteredKpiItems.length} baris
- </span>
- <AppButton variant="outline" size="sm" icon={X} onClick={() => setActiveKpiModal(null)}>Tutup</AppButton>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+        </AppModal>
 
  {/* ══════════════════════════════════════════════════════════════════
  HARMONIZED BATCH EXPORT MODAL
  ══════════════════════════════════════════════════════════════════ */}
- <AnimatePresence>
- {showExportModal && (
- <div
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !isExporting) setShowExportModal(false)
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-lg"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
-
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 p-2.5 shadow-md shadow-xs shrink-0">
- <Download className="h-5 w-5 text-emerald-600" strokeWidth={2.2} />
- </div>
- <div>
- <h3 className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- Export Data Jabatan
- <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/60 dark:text-amber-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" /> Unduh Data
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Pilih format berkas untuk mengekspor data sesuai filter aktif.
- </p>
- </div>
- </div>
- <IconButton icon={X} variant="ghost" size="sm" onClick={() => setShowExportModal(false)} />
- </div>
-
- <div className="modal-body p-6 space-y-4">
+        <AppModal
+          isOpen={showExportModal}
+          onClose={() => setShowExportModal(false)}
+          icon={Download}
+          title="Export Data Jabatan"
+          badge="Batch Export"
+          description="Pilih format berkas untuk mengekspor data master jabatan."
+          maxWidth="max-w-md"
+          footer={
+            <div className="flex items-center justify-end gap-2.5 w-full">
+              <button
+                type="button"
+                onClick={() => setShowExportModal(false)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                disabled={isExporting}
+                onClick={handleProcessExport}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+              >
+                {isExporting ? (
+                  <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  <Download className="size-4" strokeWidth={2} />
+                )}
+                <span>{isExporting ? 'Menyiapkan...' : 'Unduh Berkas'}</span>
+              </button>
+            </div>
+          }
+        >
  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
  {[
  ['xlsx', 'Excel (.xlsx)', FileSpreadsheet, 'Format spreadsheet modern Microsoft Excel.'],
@@ -1772,89 +1703,55 @@ export default function MasterJabatanPage() {
  Data yang diekspor akan mencakup seluruh entitas terfilter ({totalCount} record jabatan).
  </p>
  </div>
- </div>
-
- <div className="modal-footer px-6 py-4 border-t border-emerald-200/80 dark:border-emerald-800/80 flex items-center justify-end gap-2.5 bg-slate-50/50 dark:bg-slate-900/40">
- <AppButton variant="ghost" size="md" onClick={() => setShowExportModal(false)}>Batal</AppButton>
- <AppButton variant="primary" size="md" icon={Download} loading={isExporting} onClick={handleProcessExport}>{isExporting ? "Menyiapkan..." : "Unduh Berkas"}</AppButton>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+        </AppModal>
 
  {/* ══════════════════════════════════════════════════════════════════
  HARMONIZED SAVE/UPDATE CONFIRMATION MODAL (z-[70])
  ══════════════════════════════════════════════════════════════════ */}
- <AnimatePresence>
- {showSaveConfirmModal && pendingSaveData && (
- <div
- className="overlay modal fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !simpanMutation.isPending && !ubahMutation.isPending) {
- setShowSaveConfirmModal(false)
- }
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-md"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
- <div
- className={`h-1.5 w-full shrink-0 ${
- selectedJabatanForEdit
- ? 'bg-white dark:bg-card-dark'
- : 'bg-white dark:bg-card-dark'
- }`}
- />
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div
- className={`rounded-xl text-white p-2.5 shadow-md shrink-0 border ${
- selectedJabatanForEdit
- ? 'bg-white dark:bg-card-dark shadow-sm border-emerald-200/80 dark:border-emerald-800/60'
- : 'bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm border-emerald-300/30'
- }`}
- >
- {selectedJabatanForEdit ? (
- <Pencil className="h-5 w-5 text-emerald-600" strokeWidth={2.25} />
- ) : (
- <FaBriefcase className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- )}
- </div>
- <div>
- <h3 className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>{selectedJabatanForEdit ? 'Konfirmasi Perubahan Data' : 'Konfirmasi Penyimpanan Data'}</span>
- <span
- className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold border ${
- selectedJabatanForEdit
- ? 'bg-amber-50 text-amber-700 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/60 dark:text-amber-400 dark:border-emerald-800/60'
- : 'bg-emerald-50 text-emerald-800 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60'
- }`}
- >
- <Sparkles className="size-3" />
- {selectedJabatanForEdit ? 'Update Data' : 'Jabatan Baru'}
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- {selectedJabatanForEdit
- ? 'Pastikan rincian data sudah sesuai sebelum diperbarui di sistem.'
- : 'Pastikan rincian data jabatan baru sudah sesuai sebelum disimpan.'}
- </p>
- </div>
- </div>
- <IconButton icon={X} variant="ghost" size="sm" disabled={simpanMutation.isPending || ubahMutation.isPending} onClick={() => setShowSaveConfirmModal(false)} />
- </div>
-
- <div className="modal-body p-6 space-y-4 text-slate-700 dark:text-slate-200">
+        <AppModal
+          isOpen={Boolean(showSaveConfirmModal && pendingSaveData)}
+          onClose={() => setShowSaveConfirmModal(false)}
+          disableBackdropClose={simpanMutation.isPending || ubahMutation.isPending}
+          variant={selectedJabatanForEdit ? 'warning' : 'emerald'}
+          zIndex={70}
+          icon={selectedJabatanForEdit ? Pencil : Save}
+          title={selectedJabatanForEdit ? 'Konfirmasi Perubahan Jabatan' : 'Konfirmasi Simpan Jabatan'}
+          badge={selectedJabatanForEdit ? 'Update Data' : 'Jabatan Baru'}
+          description="Verifikasi data jabatan sebelum disimpan ke dalam sistem."
+          maxWidth="max-w-md"
+          footer={
+            <div className="flex items-center justify-end gap-2.5 w-full">
+              <button
+                type="button"
+                disabled={simpanMutation.isPending || ubahMutation.isPending}
+                onClick={() => setShowSaveConfirmModal(false)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                disabled={simpanMutation.isPending || ubahMutation.isPending}
+                onClick={handleConfirmSaveForm}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+              >
+                {(simpanMutation.isPending || ubahMutation.isPending) ? (
+                  <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  <Save className="size-4" strokeWidth={2} />
+                )}
+                <span>
+                  {(simpanMutation.isPending || ubahMutation.isPending)
+                    ? 'Menyimpan...'
+                    : selectedJabatanForEdit ? 'Ya, Perbarui Data' : 'Ya, Simpan Jabatan'}
+                </span>
+              </button>
+            </div>
+          }
+        >
+          {pendingSaveData && (
+            <>
  {/* Summary Card */}
  <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 p-4 dark:border-emerald-800/60 dark:bg-emerald-950/30">
  <div className="flex items-center gap-3">
@@ -1882,63 +1779,53 @@ export default function MasterJabatanPage() {
  Data jabatan ini akan langsung disinkronkan ke master data jabatan yayasan.
  </p>
  </div>
- </div>
-
- <div className="modal-footer px-6 py-4 border-t border-emerald-200/80 dark:border-emerald-800/80 flex items-center justify-end gap-2.5 bg-slate-50/50 dark:bg-slate-900/40">
- <AppButton variant="ghost" size="md" disabled={simpanMutation.isPending || ubahMutation.isPending} onClick={() => setShowSaveConfirmModal(false)}>Batal</AppButton>
-					<AppButton variant="primary" size="md" icon={Save} loading={simpanMutation.isPending || ubahMutation.isPending} onClick={handleConfirmSaveForm}>{simpanMutation.isPending || ubahMutation.isPending ? "Menyimpan..." : selectedJabatanForEdit ? "Ya, Perbarui Data" : "Ya, Simpan Jabatan"}</AppButton>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+            </>
+          )}
+        </AppModal>
 
  {/* ══════════════════════════════════════════════════════════════════
  HARMONIZED DELETE CONFIRMATION MODAL (z-[70])
  ══════════════════════════════════════════════════════════════════ */}
- <AnimatePresence>
- {deleteTarget && (
- <div
- className="overlay modal fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !hapusMutation.isPending) setDeleteTarget(null)
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-md"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
-
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 p-2.5 shadow-md shadow-xs shrink-0">
- <Trash2 className="h-5 w-5 text-rose-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3 className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Hapus Data Jabatan</span>
- <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold border bg-rose-50 text-rose-700 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-rose-950/60 dark:text-rose-400 dark:border-emerald-800/60">
- <AlertTriangle className="size-3" />
- Hapus Permanen
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Konfirmasi penghapusan data posisi jabatan ini.
- </p>
- </div>
- </div>
- <IconButton icon={X} variant="ghost" size="sm" disabled={hapusMutation.isPending} onClick={() => setDeleteTarget(null)} />
- </div>
-
- <div className="modal-body p-6 space-y-4 text-slate-700 dark:text-slate-200">
+        <AppModal
+          isOpen={Boolean(deleteTarget)}
+          onClose={() => setDeleteTarget(null)}
+          disableBackdropClose={hapusMutation.isPending}
+          variant="danger"
+          zIndex={70}
+          icon={Trash2}
+          title="Hapus Data Jabatan"
+          badge="Hapus Permanen"
+          description="Konfirmasi penghapusan data posisi jabatan ini."
+          maxWidth="max-w-md"
+          footer={
+            <div className="flex items-center justify-end gap-2.5 w-full">
+              <button
+                type="button"
+                disabled={hapusMutation.isPending}
+                onClick={() => setDeleteTarget(null)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                disabled={hapusMutation.isPending}
+                onClick={() => hapusMutation.mutate(deleteTarget.id)}
+                className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20"
+              >
+                {hapusMutation.isPending ? (
+                  <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  <Trash2 className="size-4" strokeWidth={2.2} />
+                )}
+                <span>Hapus Permanen</span>
+              </button>
+            </div>
+          }
+        >
+          {deleteTarget && (
+            <>
  {/* Summary Card */}
  <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/50 p-4 dark:border-emerald-800/60 dark:bg-rose-950/30">
  <p className="text-xs font-black text-rose-900 dark:text-rose-200">
@@ -1964,63 +1851,51 @@ export default function MasterJabatanPage() {
  Data jabatan yang sedang digunakan oleh pegawai aktif tidak dapat dihapus permanen. Data akan dipindahkan ke arsip (soft delete).
  </p>
  </div>
- </div>
-
- <div className="modal-footer px-6 py-4 border-t border-emerald-200/80 dark:border-emerald-800/80 flex items-center justify-end gap-2.5 bg-slate-50/50 dark:bg-slate-900/40">
- <AppButton variant="ghost" size="md" disabled={hapusMutation.isPending} onClick={() => setDeleteTarget(null)}>Batal</AppButton>
- <AppButton variant="danger" size="md" icon={Trash2} loading={hapusMutation.isPending} onClick={() => hapusMutation.mutate(deleteTarget.id)}>Hapus Permanen</AppButton>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+            </>
+          )}
+        </AppModal>
 
  {/* ══════════════════════════════════════════════════════════════════
  HARMONIZED BATCH DELETE CONFIRMATION MODAL (z-[70])
  ══════════════════════════════════════════════════════════════════ */}
- <AnimatePresence>
- {showBatchDeleteModal && (
- <div
- className="overlay modal fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !batchDeleteMutation.isPending) setShowBatchDeleteModal(false)
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-lg"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
-
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 p-2.5 shadow-md shadow-xs shrink-0">
- <Trash2 className="h-5 w-5 text-rose-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3 className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Hapus Massal Jabatan</span>
- <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold border bg-rose-50 text-rose-700 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-rose-950/60 dark:text-rose-400 dark:border-emerald-800/60">
- <AlertTriangle className="size-3" />
- {selectedJabatanIds.length} Data Dipilih
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Konfirmasi penghapusan serentak data jabatan terpilih.
- </p>
- </div>
- </div>
- <IconButton icon={X} variant="ghost" size="sm" disabled={batchDeleteMutation.isPending} onClick={() => setShowBatchDeleteModal(false)} />
- </div>
-
- <div className="modal-body p-6 space-y-4 text-slate-700 dark:text-slate-200 overflow-y-auto max-h-[50vh]">
+        <AppModal
+          isOpen={showBatchDeleteModal}
+          onClose={() => setShowBatchDeleteModal(false)}
+          disableBackdropClose={batchDeleteMutation.isPending}
+          variant="danger"
+          zIndex={70}
+          icon={Trash2}
+          title="Hapus Massal Jabatan"
+          badge={`${selectedJabatanIds.length} Data Dipilih`}
+          description="Konfirmasi penghapusan serentak data jabatan terpilih."
+          maxWidth="max-w-md"
+          footer={
+            <div className="flex items-center justify-end gap-2.5 w-full">
+              <button
+                type="button"
+                disabled={batchDeleteMutation.isPending}
+                onClick={() => setShowBatchDeleteModal(false)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                disabled={batchDeleteMutation.isPending}
+                onClick={() => batchDeleteMutation.mutate(selectedJabatanIds)}
+                className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20"
+              >
+                {batchDeleteMutation.isPending ? (
+                  <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  <Trash2 className="size-4" strokeWidth={2.2} />
+                )}
+                <span>Hapus ({selectedJabatanIds.length}) Jabatan</span>
+              </button>
+            </div>
+          }
+        >
  {/* Summary Card with List */}
  <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/50 p-4 dark:border-emerald-800/60 dark:bg-rose-950/30">
  <p className="text-xs font-bold text-rose-950 dark:text-rose-200 mb-2">
@@ -2055,63 +1930,50 @@ export default function MasterJabatanPage() {
  Sebanyak <strong>{selectedJabatanIds.length} jabatan</strong> akan dipindahkan ke arsip (soft delete). Riwayat assignment pegawai tidak akan hilang permanen dan dapat dipulihkan kapan saja bila diperlukan.
  </p>
  </div>
- </div>
-
- <div className="modal-footer px-6 py-4 border-t border-emerald-200/80 dark:border-emerald-800/80 flex items-center justify-end gap-2.5 bg-slate-50/50 dark:bg-slate-900/40">
- <AppButton variant="ghost" size="md" disabled={batchDeleteMutation.isPending} onClick={() => setShowBatchDeleteModal(false)}>Batal</AppButton>
- <AppButton variant="danger" size="md" icon={Trash2} loading={batchDeleteMutation.isPending} onClick={() => batchDeleteMutation.mutate(selectedJabatanIds)}>Hapus ({selectedJabatanIds.length}) Jabatan</AppButton>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+        </AppModal>
 
  {/* ══════════════════════════════════════════════════════════════════
  HARMONIZED RESTORE CONFIRMATION MODAL (z-[70])
  ══════════════════════════════════════════════════════════════════ */}
- <AnimatePresence>
- {restoreTarget && (
- <div
- className="overlay modal fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !pulihkanMutation.isPending) setRestoreTarget(null)
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-md"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
-
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 p-2.5 shadow-md shadow-xs shrink-0">
- <FaRedo className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3 className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Pulihkan Data Jabatan</span>
- <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold border bg-emerald-50 text-emerald-700 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
- <FaRedo className="size-3" />
- Restore Data
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Konfirmasi pemulihan data posisi jabatan dari arsip.
- </p>
- </div>
- </div>
- <IconButton icon={X} variant="ghost" size="sm" disabled={pulihkanMutation.isPending} onClick={() => setRestoreTarget(null)} />
- </div>
-
- <div className="modal-body p-6 space-y-4 text-slate-700 dark:text-slate-200">
+        <AppModal
+          isOpen={Boolean(restoreTarget)}
+          onClose={() => setRestoreTarget(null)}
+          disableBackdropClose={pulihkanMutation.isPending}
+          zIndex={70}
+          icon={RotateCcw}
+          title="Pulihkan Data Jabatan"
+          badge="Restore Data"
+          description="Konfirmasi pemulihan data posisi jabatan dari arsip."
+          maxWidth="max-w-md"
+          footer={
+            <div className="flex items-center justify-end gap-2.5 w-full">
+              <button
+                type="button"
+                disabled={pulihkanMutation.isPending}
+                onClick={() => setRestoreTarget(null)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                disabled={pulihkanMutation.isPending}
+                onClick={() => pulihkanMutation.mutate(restoreTarget.id)}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+              >
+                {pulihkanMutation.isPending ? (
+                  <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  <RotateCcw className="size-4" strokeWidth={2} />
+                )}
+                <span>Pulihkan Data</span>
+              </button>
+            </div>
+          }
+        >
+          {restoreTarget && (
+            <>
  {/* Summary Card */}
  <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 p-4 dark:border-emerald-800/60 dark:bg-emerald-950/30">
  <p className="text-xs font-black text-emerald-900 dark:text-emerald-200">
@@ -2132,17 +1994,9 @@ export default function MasterJabatanPage() {
  Jabatan ini akan dipulihkan dari arsip dan kembali tersedia di sistem manajemen pegawai.
  </p>
  </div>
- </div>
-
- <div className="modal-footer px-6 py-4 border-t border-emerald-200/80 dark:border-emerald-800/80 flex items-center justify-end gap-2.5 bg-slate-50/50 dark:bg-slate-900/40">
- <AppButton variant="ghost" size="md" disabled={pulihkanMutation.isPending} onClick={() => setRestoreTarget(null)}>Batal</AppButton>
- <AppButton variant="primary" size="md" icon={RotateCcw} loading={pulihkanMutation.isPending} onClick={() => pulihkanMutation.mutate(restoreTarget.id)}>Pulihkan Data</AppButton>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+            </>
+          )}
+        </AppModal>
 
  {/* Smart Floating Scroll Navigator (Opsi A) */}
  <SmartScrollFab targetId="tabel-master-jabatan" downTooltip="Langsung ke Tabel Jabatan" />

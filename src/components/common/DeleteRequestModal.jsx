@@ -4,6 +4,7 @@ import { deleteRequestService } from '../../services/deleteRequestService'
 import { Input } from '@/components/ui/input'
 import { TextArea } from '@/components/ui/text-area'
 import { Button } from '@/components/ui/button'
+import AppModal from '../app/AppModal'
 
 export default function DeleteRequestModal({
  isOpen,
@@ -47,32 +48,43 @@ export default function DeleteRequestModal({
  }
  }
 
- return (
- <div
- role="dialog"
- aria-modal="true"
- aria-label="Ajukan Permintaan Penghapusan"
- className="fixed inset-0 z-[80] bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4"
- >
- <div className="relative overflow-hidden bg-white dark:bg-[#1B2433] rounded-3xl max-w-xl w-full shadow-2xl shadow-rose-950/20 border border-rose-500/30 dark:border-rose-700/60 animate-in zoom-in-95">
-        <div className="h-1.5 w-full bg-gradient-to-r from-amber-500 via-rose-500 to-rose-600 shrink-0" />
- <div className="p-6">
- <div className="flex items-center justify-between border-b border-emerald-100/80 dark:border-emerald-800/60 pb-3 mb-4">
- <div className="flex items-center gap-2.5 text-amber-700 dark:text-amber-300 font-bold text-base">
- <FiAlertTriangle className="w-5 h-5 text-amber-500 shrink-0" />
- <span>Ajukan Permintaan Penghapusan</span>
- </div>
- <button
- type="button"
- onClick={onClose}
- aria-label="Tutup modal"
- className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300"
- >
- <FiX className="w-5 h-5" />
- </button>
- </div>
-
- <form onSubmit={handleSubmit} className="space-y-4">
+  return (
+    <AppModal
+      isOpen={true}
+      onClose={() => !loading && onClose()}
+      title="Ajukan Permintaan Penghapusan"
+      badge="Persetujuan Superadmin"
+      description="Kirim permintaan penghapusan data ke Superadmin"
+      icon={FiAlertTriangle}
+      variant="warning"
+      maxWidth="max-w-xl"
+      zIndex={80}
+      disableBackdropClose={loading}
+      hideCloseButton={loading}
+      footer={
+        <>
+          <button
+            type="button"
+            disabled={loading}
+            onClick={onClose}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <FiX className="w-4 h-4" />
+            <span>Batal</span>
+          </button>
+          <button
+            type="submit"
+            form="delete-request-modal-form"
+            disabled={loading || !reason.trim()}
+            className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20 disabled:opacity-50"
+          >
+            <FiSend className="w-3.5 h-3.5" />
+            <span>{loading ? 'Mengirim...' : 'Kirim Permintaan'}</span>
+          </button>
+        </>
+      }
+    >
+      <form id="delete-request-modal-form" onSubmit={handleSubmit} className="space-y-4">
  <div className="bg-amber-50 border border-emerald-200/80 dark:border-emerald-800/60 rounded-xl p-3.5 text-xs text-amber-900 leading-relaxed">
  <p className="font-bold mb-1">Ketentuan Penghapusan Data (Role Admin):</p>
  <p>
@@ -117,28 +129,7 @@ export default function DeleteRequestModal({
  />
  </div>
 
- <div className="flex gap-2 pt-2">
- <Button
- type="button"
- variant="secondary"
- onPress={onClose}
- className="flex-1 rounded-xl"
- >
- Batal
- </Button>
- <Button
- type="submit"
- variant="primary"
- isDisabled={loading || !reason.trim()}
- className="flex-1 py-2.5 px-4 bg-gradient-to-r from-amber-600 to-rose-600 hover:from-amber-700 hover:to-rose-700 disabled:opacity-50 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-md shadow-amber-600/20"
- >
- <FiSend className="w-3.5 h-3.5" />
- <span>{loading ? 'Mengirim...' : 'Kirim Permintaan'}</span>
- </Button>
- </div>
- </form>
- </div>
- </div>
- </div>
- )
+      </form>
+    </AppModal>
+  )
 }

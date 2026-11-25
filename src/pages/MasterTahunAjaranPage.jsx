@@ -36,6 +36,7 @@ import PageContainer from '../components/app/PageContainer'
 import {
   HeroUiHeader, useToast, MobileDataCard, KpiStatCard, PageToolbarActions } from '../components/app'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
+import AppModal from '../components/app/AppModal'
 import AppDataTable from '../components/app/AppDataTable'
 import { useAuthStore } from '../stores/authStore'
 import { hasRoleLevel, ROLE_LEVELS, isFoundationUser } from '../auth/portalResolver'
@@ -687,72 +688,31 @@ export default function MasterTahunAjaranPage({
  isSubmitting={importMutation.isPending}
  />
 
- {/* ── MODAL HASIL IMPOR & PEMBERITAHUAN DATA DUPLIKAT TAHUN AJARAN ── */}
- <AnimatePresence>
- {duplicateModalData && (
- <div
- className="overlay modal fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-5 bg-slate-950/75 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="ta-duplicate-report-title"
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-2xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-2xl border border-emerald-200/80 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
- <div className={cn(
- "h-1.5 w-full shrink-0",
- duplicateModalData.diperbarui > 0
- ? "bg-white dark:bg-[#1B2433]"
- : duplicateModalData.duplikat > 0
- ? "bg-white dark:bg-[#1B2433]"
- : "bg-white dark:bg-[#1B2433]"
- )} />
-
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className={cn(
- "rounded-xl p-2.5 text-white shadow-md shrink-0 border",
- duplicateModalData.diperbarui > 0
- ? "bg-white dark:bg-[#1B2433] border-amber-300/30 shadow-sm"
- : "bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-800/60 dark:text-slate-300 border-emerald-300/30 shadow-sm"
- )}>
- {duplicateModalData.diperbarui > 0 ? (
- <RefreshCcw className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- ) : (
- <CheckCircle2 className="h-5 w-5 text-current" strokeWidth={2.25} />
- )}
- </div>
- <div>
- <h3 id="ta-duplicate-report-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Hasil Impor & Pemberitahuan Data Tahun Ajaran</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300">
- Total {duplicateModalData.total || 0} Data
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Ringkasan sinkronisasi dan status pemrosesan data tahun ajaran
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setDuplicateModalData(null)}
- aria-label="Tutup ringkasan impor"
- className="size-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-sky-950/60 dark:text-sky-300 transition cursor-pointer"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Body */}
- <div className="modal-body min-h-0 flex-1 space-y-4 overflow-y-auto p-6 text-sm text-slate-700 dark:text-slate-200">
+      <AppModal
+        isOpen={Boolean(duplicateModalData)}
+        onClose={() => setDuplicateModalData(null)}
+        title="Hasil Impor & Pemberitahuan Data"
+        badge={duplicateModalData ? `Total ${duplicateModalData.total} Data` : undefined}
+        description="Ringkasan sinkronisasi dan status pemrosesan data tahun ajaran"
+        icon={duplicateModalData?.diperbarui > 0 ? RefreshCcw : CheckCircle2}
+        maxWidth="max-w-2xl"
+        zIndex={60}
+        disableBackdropClose
+        bodyClassName="space-y-4 text-sm text-slate-700 dark:text-slate-200"
+        footer={
+          <div className="flex w-full justify-end">
+            <button
+              type="button"
+              onClick={() => setDuplicateModalData(null)}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+            >
+              <span>Mengerti</span>
+            </button>
+          </div>
+        }
+      >
+        {duplicateModalData && (
+          <>
  {/* KPI Summary Cards */}
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
  <div className="p-3 rounded-xl border border-emerald-200/80 bg-emerald-50/50 dark:border-emerald-900/40 dark:bg-emerald-950/30 text-center">
@@ -836,79 +796,40 @@ export default function MasterTahunAjaranPage({
  </ul>
  </div>
  )}
- </div>
+          </>
+        )}
+      </AppModal>
 
- {/* Footer */}
- <div className="modal-footer flex items-center justify-end border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 px-6 py-3.5 dark:border-emerald-800/60 dark:bg-slate-900/30">
- <button
- type="button"
- onClick={() => setDuplicateModalData(null)}
- className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 text-xs font-bold transition shadow-sm cursor-pointer"
- >
- <CheckCircle2 className="size-3.5" strokeWidth={2.2} />
- <span>Tutup & Mengerti</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
-
- {/* ── HARMONIZED EXPORT MODAL (Identik EducationUnitsPage & MasterKelasPage) ── */}
- <AnimatePresence>
- {isExportModalOpen && (
- <div
- className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="tahun-ajaran-export-title"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget) setIsExportModalOpen(false)
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="w-full max-w-md font-sans my-auto"
- >
- <div className="flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-2xl border border-emerald-200/80 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
-
- {/* Header */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-white dark:bg-[#1B2433] p-2.5 shadow-md shadow-sm border border-amber-300/30 shrink-0">
- <Download className="size-5 text-emerald-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3 id="tahun-ajaran-export-title" className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Export Tahun Ajaran</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-[#0E5C44] border border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- Unduh
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Pilih format berkas untuk mengekspor data kalender akademik
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setIsExportModalOpen(false)}
- aria-label="Tutup modal export"
- className="rounded-xl p-2 bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:border-rose-800/60 dark:text-rose-400 border border-rose-300/40 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Body */}
- <div className="space-y-2.5 p-6 text-sm text-slate-700 dark:text-slate-200">
+      <AppModal
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+        title="Export Tahun Ajaran"
+        badge="Unduh"
+        description="Pilih format berkas untuk mengekspor data kalender akademik"
+        icon={Download}
+        maxWidth="max-w-md"
+        bodyClassName="space-y-2.5 text-sm text-slate-700 dark:text-slate-200"
+        footer={
+          <>
+            <button
+              type="button"
+              onClick={() => setIsExportModalOpen(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleProcessExport}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+            >
+              <Download className="size-4" />
+              <span>Unduh Berkas</span>
+            </button>
+          </>
+        }
+      >
  {[
  { value: 'xlsx', label: 'Excel (.xlsx)', desc: 'Format Microsoft Excel Modern (Disarankan)' },
  { value: 'xls', label: 'Excel Legacy (.xls)', desc: 'Format Microsoft Excel Standard 97-2003' },
@@ -938,133 +859,62 @@ export default function MasterTahunAjaranPage({
  </div>
  </label>
  ))}
- </div>
+      </AppModal>
 
- {/* Footer */}
- <div className="flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <button
- type="button"
- onClick={() => setIsExportModalOpen(false)}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:border-rose-800/60 dark:text-rose-400 px-4 py-2.5 text-xs font-extrabold border border-rose-300/40 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
- >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
- </div>
- <span>Batal</span>
- </button>
- <button
- type="button"
- onClick={handleProcessExport}
- className="inline-flex items-center gap-2 rounded-xl bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-800/60 dark:text-slate-300 px-5 py-2.5 text-xs font-extrabold border border-amber-300/40 hover:scale-[1.03] transition-all duration-200 active:scale-95 cursor-pointer"
- >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <Download className="size-3.5 text-emerald-600" strokeWidth={2.25} />
- </div>
- <span>Unduh Berkas</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
-
- {/* ── HARMONIZED SAVE / UPDATE CONFIRMATION MODAL (z-[70]) ────────────── */}
- <AnimatePresence>
- {showSaveConfirmModal && (
- <div
- className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto"
- role="dialog"
- aria-modal="true"
- aria-labelledby="save-confirm-modal-title"
- onMouseDown={(e) => {
- if (
- e.target === e.currentTarget &&
- !simpanMutation.isPending &&
- !ubahMutation.isPending
- ) {
- setShowSaveConfirmModal(false)
- }
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="my-auto w-full max-w-md font-sans"
- >
- <div className="flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-2xl border border-emerald-200/80 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
- <div
- className={cn(
- 'h-1.5 w-full shrink-0',
- selectedForEdit
- ? 'bg-white dark:bg-[#1B2433]'
- : 'bg-white dark:bg-[#1B2433]'
- )}
- />
-
- {/* Header */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232] shrink-0">
- <div className="flex items-center gap-3">
- <div
- className={cn(
- 'rounded-xl text-white p-2.5 shadow-md shrink-0 border',
- selectedForEdit
- ? 'bg-white dark:bg-[#1B2433] shadow-sm border-amber-300/30'
- : 'bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-800/60 dark:text-slate-300 shadow-sm border-emerald-300/30'
- )}
- >
- {selectedForEdit ? (
- <Pencil className="size-5 text-slate-600" strokeWidth={2.25} />
- ) : (
- <CalendarDays className="size-5 text-amber-600" strokeWidth={2.25} />
- )}
- </div>
- <div>
- <h3
- id="save-confirm-modal-title"
- className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2"
- >
- <span>
- {selectedForEdit
- ? 'Konfirmasi Perubahan Data'
- : 'Konfirmasi Simpan Tahun Ajaran'}
- </span>
- <span
- className={cn(
- 'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold border',
- selectedForEdit
- ? 'bg-amber-50 text-amber-700 border-amber-200/80 dark:bg-amber-950/60 dark:text-amber-400 dark:border-amber-800/60'
- : 'bg-emerald-50 text-emerald-800 border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60'
- )}
- >
- <Sparkles className="size-3" />
- {selectedForEdit ? 'Update Data' : 'Periode Baru'}
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- {selectedForEdit
- ? 'Verifikasi data tahun ajaran sebelum perubahan disimpan ke sistem.'
- : 'Verifikasi data tahun ajaran sebelum disimpan ke sistem.'}
- </p>
- </div>
- </div>
-
- <button
- type="button"
- disabled={simpanMutation.isPending || ubahMutation.isPending}
- onClick={() => setShowSaveConfirmModal(false)}
- aria-label="Tutup dialog konfirmasi"
- className="size-9 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer disabled:opacity-50 shrink-0"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Body */}
- <div className="p-6 space-y-4 text-slate-700 dark:text-slate-200 text-xs">
+      <AppModal
+        isOpen={showSaveConfirmModal}
+        onClose={() => !(simpanMutation.isPending || ubahMutation.isPending) && setShowSaveConfirmModal(false)}
+        title={selectedForEdit ? 'Konfirmasi Perubahan Tahun Ajaran' : 'Konfirmasi Tahun Ajaran Baru'}
+        badge={selectedForEdit ? 'Update Data' : 'Periode Baru'}
+        description="Pastikan informasi kalender akademik sudah benar sebelum disimpan"
+        icon={selectedForEdit ? Pencil : CalendarDays}
+        variant={selectedForEdit ? 'warning' : 'emerald'}
+        maxWidth="max-w-md"
+        zIndex={70}
+        disableBackdropClose={simpanMutation.isPending || ubahMutation.isPending}
+        hideCloseButton={simpanMutation.isPending || ubahMutation.isPending}
+        bodyClassName="space-y-4 text-slate-700 dark:text-slate-200 text-xs"
+        footer={
+          <>
+            <button
+              type="button"
+              disabled={simpanMutation.isPending || ubahMutation.isPending}
+              onClick={() => setShowSaveConfirmModal(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="button"
+              disabled={simpanMutation.isPending || ubahMutation.isPending}
+              onClick={() => {
+                if (!pendingSavePayload) return
+                if (selectedForEdit) {
+                  ubahMutation.mutate({
+                    id: selectedForEdit.id,
+                    payload: pendingSavePayload,
+                  })
+                } else {
+                  simpanMutation.mutate(pendingSavePayload)
+                }
+              }}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+            >
+              {simpanMutation.isPending || ubahMutation.isPending ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <CheckCircle2 className="size-4" strokeWidth={2.2} />
+              )}
+              <span>
+                {simpanMutation.isPending || ubahMutation.isPending
+                  ? 'Memproses...'
+                  : 'Ya, Konfirmasi & Simpan'}
+              </span>
+            </button>
+          </>
+        }
+      >
  {/* Target Info Summary Card */}
  <div className="rounded-xl border border-emerald-100/90 bg-emerald-50/40 p-4 dark:border-emerald-900/40 dark:bg-emerald-950/20 space-y-2.5">
  <div className="flex items-center justify-between">
@@ -1102,114 +952,46 @@ export default function MasterTahunAjaranPage({
  Pastikan seluruh tanggal kalender akademik telah sesuai dengan SK penetapan tahun ajaran yayasan sebelum menyimpan.
  </p>
  </div>
- </div>
+      </AppModal>
 
- {/* Footer */}
- <div className="flex items-center justify-between border-t border-emerald-200/80 bg-white px-6 py-4 dark:border-emerald-800/60 dark:bg-slate-950 shrink-0">
- <button
- type="button"
- disabled={simpanMutation.isPending || ubahMutation.isPending}
- onClick={() => setShowSaveConfirmModal(false)}
- className="inline-flex items-center gap-2 rounded-xl border border-rose-300 bg-rose-50 px-4 py-2.5 text-xs font-extrabold text-rose-700 transition-all duration-200 hover:scale-[1.02] hover:bg-rose-100 active:scale-95 dark:border-rose-800 dark:bg-rose-950/40 dark:text-rose-300 cursor-pointer disabled:opacity-50"
- >
- <X className="size-3.5" strokeWidth={2.2} />
- <span>Batal</span>
- </button>
-
- <button
- type="button"
- disabled={simpanMutation.isPending || ubahMutation.isPending}
- onClick={() => {
- if (!pendingSavePayload) return
- if (selectedForEdit) {
- ubahMutation.mutate({
- id: selectedForEdit.id,
- payload: pendingSavePayload,
- })
- } else {
- simpanMutation.mutate(pendingSavePayload)
- }
- }}
- className="inline-flex items-center gap-2 rounded-xl bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-800/60 dark:text-slate-300 px-5 py-2.5 text-xs font-black shadow-md shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-95 cursor-pointer disabled:opacity-50"
- >
- {simpanMutation.isPending || ubahMutation.isPending ? (
- <Loader2 className="size-4 animate-spin" />
- ) : (
- <CheckCircle2 className="size-4" strokeWidth={2.2} />
- )}
- <span>
- {simpanMutation.isPending || ubahMutation.isPending
- ? 'Memproses...'
- : 'Ya, Konfirmasi & Simpan'}
- </span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
-
- {/* ── HARMONIZED DELETE CONFIRMATION MODAL (z-[70]) ───────────────────── */}
- <AnimatePresence>
- {deleteTarget && (
- <div
- className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto"
- role="dialog"
- aria-modal="true"
- aria-labelledby="delete-tahun-ajaran-modal-title"
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !hapusMutation.isPending) {
- setDeleteTarget(null)
- }
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="my-auto w-full max-w-md font-sans"
- >
- <div className="flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-2xl border border-rose-200/60 bg-white shadow-2xl shadow-sm dark:border-rose-900/50 dark:bg-[#182232] dark:shadow-black/60">
- {/* Top Accent Gradient Bar Merah Rose */}
-
- {/* Header */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232] shrink-0">
- <div className="flex items-center gap-3">
- <div className="rounded-xl p-2.5 shadow-md shrink-0 border bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:border-rose-800/60 dark:text-rose-400 shadow-sm border-rose-300/30">
- <Trash2 className="size-5 text-rose-600 dark:text-rose-400" strokeWidth={2.25} />
- </div>
- <div>
- <h3
- id="delete-tahun-ajaran-modal-title"
- className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2"
- >
- <span>Hapus Tahun Ajaran</span>
- <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold border bg-rose-50 text-rose-700 border-rose-200/80 dark:bg-rose-950/60 dark:text-rose-400 dark:border-rose-800/60">
- <AlertTriangle className="size-3" />
- Hapus Periode
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Data akan dipindahkan ke arsip dan dapat dipulihkan kembali.
- </p>
- </div>
- </div>
-
- <button
- type="button"
- disabled={hapusMutation.isPending}
- onClick={() => setDeleteTarget(null)}
- aria-label="Tutup dialog hapus"
- className="size-9 flex items-center justify-center rounded-xl bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:border-rose-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-md shadow-sm cursor-pointer disabled:opacity-50 shrink-0"
- >
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Body */}
- <div className="p-6 space-y-4 text-slate-700 dark:text-slate-200 text-xs">
+      <AppModal
+        isOpen={Boolean(deleteTarget)}
+        onClose={() => !hapusMutation.isPending && setDeleteTarget(null)}
+        title="Hapus Tahun Ajaran"
+        badge="Hapus Periode"
+        description="Data akan dipindahkan ke arsip dan dapat dipulihkan kembali."
+        icon={Trash2}
+        variant="danger"
+        maxWidth="max-w-md"
+        zIndex={70}
+        disableBackdropClose={hapusMutation.isPending}
+        hideCloseButton={hapusMutation.isPending}
+        bodyClassName="space-y-4 text-slate-700 dark:text-slate-200 text-xs"
+        footer={
+          <>
+            <button
+              type="button"
+              disabled={hapusMutation.isPending}
+              onClick={() => setDeleteTarget(null)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="button"
+              disabled={hapusMutation.isPending}
+              onClick={() => hapusMutation.mutate(deleteTarget.id)}
+              className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20 disabled:opacity-50"
+            >
+              {hapusMutation.isPending ? <Loader2 className="size-4 animate-spin" /> : <Trash2 className="size-4" />}
+              <span>{hapusMutation.isPending ? 'Menghapus...' : 'Ya, Hapus Data'}</span>
+            </button>
+          </>
+        }
+      >
+        {deleteTarget && (
+          <>
  {/* Target Info Summary Card */}
  <div className="rounded-xl border border-rose-100/90 bg-rose-50/40 p-4 dark:border-rose-900/40 dark:bg-rose-950/20 space-y-2.5">
  <div className="flex items-center justify-between">
@@ -1247,39 +1029,9 @@ export default function MasterTahunAjaranPage({
  Apakah Anda yakin ingin menghapus periode ini? Tindakan ini akan mengarsipkan data tahun ajaran dari daftar operasional aktif.
  </p>
  </div>
- </div>
-
- {/* Footer */}
- <div className="flex items-center justify-between border-t border-emerald-200/80 bg-white px-6 py-4 dark:border-emerald-800/60 dark:bg-slate-950 shrink-0">
- <button
- type="button"
- disabled={hapusMutation.isPending}
- onClick={() => setDeleteTarget(null)}
- className="inline-flex items-center gap-2 rounded-xl border border-emerald-300 bg-emerald-50 border border-emerald-200/80 px-4 py-2.5 text-xs font-extrabold text-emerald-700 transition-all duration-200 hover:scale-[1.02] hover:bg-slate-200 active:scale-95 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 cursor-pointer disabled:opacity-50"
- >
- <X className="size-3.5" strokeWidth={2.2} />
- <span>Batal</span>
- </button>
-
- <button
- type="button"
- disabled={hapusMutation.isPending}
- onClick={() => hapusMutation.mutate(deleteTarget.id)}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:border-rose-800/60 dark:text-rose-400 px-5 py-2.5 text-xs font-black text-white shadow-md shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-95 cursor-pointer disabled:opacity-50"
- >
- {hapusMutation.isPending ? (
- <Loader2 className="size-4 animate-spin" />
- ) : (
- <Trash2 className="size-4" strokeWidth={2.2} />
- )}
- <span>{hapusMutation.isPending ? 'Menghapus...' : 'Ya, Hapus Data'}</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+          </>
+        )}
+      </AppModal>
 
  {/* Smart Floating Scroll Navigator (Opsi A) */}
  <SmartScrollFab targetId="tabel-tahun-ajaran" downTooltip="Langsung ke Tabel Tahun Ajaran" />

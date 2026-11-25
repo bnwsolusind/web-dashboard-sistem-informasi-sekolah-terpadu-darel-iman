@@ -21,6 +21,7 @@ import {
 import { renderJenisUnitIcon } from './JenisUnitTable'
 import HeroUiFilterSelect from '../ui/HeroUiFilterSelect'
 import { AppInput, AppTextarea } from '../app'
+import AppModal from '../app/AppModal'
 
 const JENJANG_OPTIONS = [
  'PAUD',
@@ -152,84 +153,45 @@ export default function JenisUnitFormModal({
  }
 
  const isEdit = Boolean(initialData)
+ const handleClose = () => {
+   if (!isSubmitting && onClose) onClose()
+ }
 
- return (
- <AnimatePresence>
- {isOpen && (
- <div
- id="jenis-unit-form-modal"
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="jenis-unit-form-title"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !isSubmitting) onClose()
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-card-dark dark:shadow-black/60">
- {/* Top accent line */}
- <div
- className={`h-1.5 w-full shrink-0 ${
- isEdit
- ? 'bg-white dark:bg-[#1B2433]'
- : 'bg-white dark:bg-[#1B2433]'
- }`}
- />
-
- {/* Header Modal */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3">
- <div
- className={`rounded-xl border p-2.5 shadow-md ${
- isEdit
- ? 'bg-white dark:bg-[#1B2433] shadow-sm border-emerald-200/80 dark:border-emerald-800/60'
- : 'bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm border-emerald-300'
- }`}
- >
- <School className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3
- id="jenis-unit-form-title"
- className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2"
- >
- {isEdit ? 'Edit Jenis Unit Pendidikan' : 'Tambah Jenis Unit Pendidikan'}
- <span
- className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold border ${
- isEdit
- ? 'bg-amber-50 text-amber-700 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/60 dark:text-amber-400 dark:border-emerald-800/60'
- : 'bg-emerald-50 text-emerald-800 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60'
- }`}
- >
- <Sparkles className="size-3" /> {isEdit ? 'Update Data' : 'Unit Baru'}
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Kelola klasifikasi jenjang, visual kategori, dan status operasional jenis unit.
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={onClose}
- disabled={isSubmitting}
- aria-label="Tutup form jenis unit"
- className="size-9 flex items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer disabled:opacity-50"
- >
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Form Body */}
- <form onSubmit={handleSubmit} className="modal-body min-h-0 flex-1 space-y-4 overflow-y-auto p-6 text-xs text-slate-700 dark:text-slate-200">
+  return (
+    <AppModal
+      isOpen={isOpen}
+      onClose={() => !isSubmitting && handleClose()}
+      title={isEdit ? 'Ubah Jenis Unit Pendidikan' : 'Tambah Jenis Unit Pendidikan'}
+      badge={isEdit ? 'Perbarui' : 'Baru'}
+      description={isEdit ? 'Perbarui identitas jenjang pendidikan dan konfigurasi sistem' : 'Tambahkan kategori jenjang sekolah baru ke direktori yayasan'}
+      icon={isEdit ? Pencil : GraduationCap}
+      variant={isEdit ? 'warning' : 'emerald'}
+      maxWidth="max-w-2xl"
+      disableBackdropClose={isSubmitting}
+      hideCloseButton={isSubmitting}
+      footer={
+        <>
+          <button
+            type="button"
+            onClick={handleClose}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="submit"
+            form="jenis-unit-form"
+            disabled={isSubmitting}
+            className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+          >
+            {isSubmitting ? <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" /> : <Save className="size-4" />}
+            <span>{isEdit ? 'Simpan Perubahan' : 'Simpan Data'}</span>
+          </button>
+        </>
+      }
+    >
+      <form id="jenis-unit-form" onSubmit={handleSubmit} className="space-y-4 text-xs text-slate-700 dark:text-slate-200">
  {/* Kode & Nama */}
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  {/* Kode Jenis */}
@@ -498,46 +460,7 @@ export default function JenisUnitFormModal({
  </div>
  </div>
 
- {/* Buttons Footer */}
- <div className="modal-footer px-6 py-4 border-t border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-surface-dark-inner flex items-center justify-between shrink-0">
- <button
- type="button"
- onClick={handleReset}
- className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 px-4 py-2.5 text-xs font-extrabold text-slate-700 dark:text-slate-200 transition-all duration-200 active:scale-95 cursor-pointer disabled:opacity-50"
- >
- <RefreshCcw className="size-4" strokeWidth={2} />
- Reset
- </button>
-
- <div className="flex items-center gap-2.5">
- <button
- type="button"
- onClick={onClose}
- className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 px-4 py-2.5 text-xs font-extrabold text-slate-700 dark:text-slate-200 transition-all duration-200 active:scale-95 cursor-pointer disabled:opacity-50"
- >
- <X className="size-4" />
- Batal
- </button>
- <button
- type="submit"
- disabled={isSubmitting}
- className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 text-xs font-extrabold shadow-md shadow-emerald-600/25 hover:scale-[1.02] active:scale-95 transition-all duration-200 disabled:opacity-50 cursor-pointer"
- >
- {isSubmitting ? (
- <span className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-200/80 border-t-transparent" />
- ) : (
- <Save className="size-4" strokeWidth={2} />
- )}
- {isSubmitting ? 'Menyimpan...' : isEdit ? 'Simpan Perubahan' : 'Simpan Jenis Unit'}
- </button>
- </div>
- </div>
- </form>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
- )
+      </form>
+    </AppModal>
+  )
 }
-

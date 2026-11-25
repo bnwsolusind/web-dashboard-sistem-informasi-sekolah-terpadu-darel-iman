@@ -649,106 +649,104 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
  }
 
  function ModernKpiCard({ icon: Icon, label, subtext, value, tag, tone = 'emerald', onClick, active }) {
- const t = MODERN_CARD_TONES[tone] || MODERN_CARD_TONES.emerald
- const isClickable = typeof onClick === 'function'
+  const isClickable = typeof onClick === 'function'
 
- return (
- <motion.div
- variants={itemVariants}
- whileHover={{ scale: 1.02, y: -2 }}
- whileTap={{ scale: 0.98 }}
- transition={{ type: 'spring', stiffness: 400, damping: 25 }}
- onClick={onClick}
- role={isClickable ? 'button' : undefined}
- tabIndex={isClickable ? 0 : undefined}
- onKeyDown={isClickable ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } } : undefined}
- className={`group relative overflow-hidden rounded-2xl border-2 p-4.5 sm:p-5 shadow-sm transition-all duration-200 text-left ${
- isClickable ? 'cursor-pointer hover:shadow-md' : 'cursor-default'
- } ${
- active
- ? 'ring-2 ring-emerald-500/60 border-emerald-500/90 shadow-md shadow-sm dark:ring-emerald-400/60 dark:border-emerald-400/90'
- : ''
- } ${t.card}`}
- >
- {/* Ambient Glow */}
+  return (
+   <div
+    onClick={onClick}
+    role={isClickable ? 'button' : undefined}
+    tabIndex={isClickable ? 0 : undefined}
+    onKeyDown={isClickable ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } } : undefined}
+    className={`group relative overflow-hidden rounded-[20px] border-2 p-4 sm:p-5 shadow-sm transition-all duration-200 text-left ${
+     isClickable ? 'cursor-pointer hover:shadow-md hover:-translate-y-0.5 active:translate-y-0' : 'cursor-default'
+    } ${
+     active
+      ? 'ring-2 ring-emerald-500 border-emerald-500 bg-gradient-to-br from-emerald-50/80 via-white to-teal-50/40 dark:from-emerald-950/40 dark:via-[#1B2433] dark:to-teal-950/20 shadow-md shadow-emerald-500/10'
+      : 'border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] hover:border-emerald-400'
+    }`}
+   >
+    {/* Header with Gradient Icon Box & Pill Tag */}
+    <div className="flex items-center justify-between mb-3">
+     <div className="flex items-center gap-2.5">
+      <div className={`flex size-9 items-center justify-center rounded-xl shadow-xs ${
+       active ? 'bg-emerald-600 text-white' : 'bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/60 dark:border-emerald-800 dark:text-emerald-300'
+      }`}>
+       <Icon className="size-4.5" />
+      </div>
+      <div>
+       <p className="text-xs font-extrabold text-slate-700 dark:text-slate-300">{label}</p>
+      </div>
+     </div>
+     {tag && (
+      <span className={`rounded-lg px-2 py-0.5 text-[10px] font-black border ${
+       active
+        ? 'bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-900/60 dark:text-emerald-300'
+        : 'bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-300'
+      }`}>
+       {tag}
+      </span>
+     )}
+    </div>
 
- {/* Header with Gradient Icon Box & Pill Tag */}
- <div className="flex items-center justify-between mb-3">
- <div className="flex items-center gap-2.5">
- <div className={`flex h-9 w-9 items-center justify-center rounded-xl text-emerald-600 shadow-sm ${t.iconBox}`}>
- <Icon className="h-4.5 w-4.5" />
- </div>
- <div>
- <p className={`text-xs font-bold uppercase tracking-wider ${t.title}`}>{label}</p>
- </div>
- </div>
- {tag && (
- <span className={`rounded-lg px-2 py-0.5 text-[10px] font-extrabold ${t.tag}`}>
- {tag}
- </span>
- )}
- </div>
+    {/* Metric Value */}
+    <p className="text-3xl sm:text-4xl font-black tabular-nums text-slate-900 dark:text-white">
+     {value ?? '0'}
+    </p>
+    {subtext && (
+     <p className="mt-0.5 text-xs font-semibold text-slate-500 dark:text-slate-400">
+      {subtext}
+     </p>
+    )}
 
- {/* Metric Value */}
- <p className={`text-3xl sm:text-4xl font-black tabular-nums ${t.val}`}>
- {value ?? '0'}
- </p>
- {subtext && (
- <p className={`mt-0.5 text-xs font-semibold ${t.sub}`}>
- {subtext}
- </p>
- )}
-
- {/* Click Affordance Footer */}
- {isClickable && (
- <p className={`mt-3 text-[10px] font-bold flex items-center gap-1 ${t.cta}`}>
- <Eye className="h-3 w-3" /> {active ? 'Tab Sedang Dipilih' : 'Klik untuk Buka Tab'}
- </p>
- )}
- </motion.div>
- )
+    {/* Click Affordance Footer */}
+    {isClickable && (
+     <p className={`mt-3 text-[10px] font-bold flex items-center gap-1 ${
+      active ? 'text-emerald-700 dark:text-emerald-300 font-black' : 'text-slate-400 hover:text-emerald-600'
+     }`}>
+      <Eye className="size-3" /> {active ? 'Tab Sedang Dipilih' : 'Klik untuk Buka Tab'}
+     </p>
+    )}
+   </div>
+  )
  }
 
  return (
- <motion.div initial="hidden" animate="visible" variants={containerVariants} className="space-y-6">
-
+ <div className="space-y-6">
 
  {/* BREADCRUMB NAV */}
  <AppBreadcrumb items={[{ label: 'Absensi', href: '/absensi/rekap-kehadiran' }, { label: 'Manajemen Kehadiran Siswa' }]} />
 
- {/* MODERN HERO CARD HEADER (MATCHING PORTAL ORANG TUA / SISWA STYLE) */}
- <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
- <div className="relative overflow-hidden rounded-2xl border border-emerald-200/80 bg-white dark:border-emerald-800/60 dark:bg-[#1B2433] p-5 sm:p-6 shadow-md shadow-sm dark:border-emerald-600/40 dark:bg-[#1B2433]">
-
+ {/* MODERN HERO CARD HEADER (Canonical HeroUI Header Standard) */}
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-500/30 bg-gradient-to-r from-emerald-500/15 via-teal-500/10 to-emerald-600/15 p-5 sm:p-6 shadow-md shadow-emerald-500/10 dark:border-emerald-600/40 dark:bg-gradient-to-r dark:from-emerald-950/70 dark:via-teal-950/50 dark:to-slate-900">
  <div className="relative z-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
  <div className="flex items-center gap-4">
- <div className="flex size-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-700/80 dark:text-slate-300 shadow-xl shadow-sm border border-emerald-300 dark:from-emerald-400 dark:via-emerald-500 dark:to-teal-600">
- <CalendarCheck className="size-6 sm:size-7 text-slate-600" />
+ <div className="flex size-12 sm:size-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-md shadow-emerald-600/20">
+ <CalendarCheck className="size-6 sm:size-7 text-white" />
  </div>
  <div className="min-w-0">
  <div className="flex items-center gap-2.5 flex-wrap">
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-1 text-xs font-extrabold shadow-md shadow-sm">
+ <span className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-3 py-0.5 text-xs font-black shadow-xs">
  <Sparkles className="size-3 text-amber-300 animate-pulse" />
  Manajemen Presensi Terpadu
  </span>
- <span className="inline-flex items-center rounded-full bg-emerald-100 px-3 py-0.5 text-xs font-bold text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60">
+ <span className="inline-flex items-center rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-300/80 px-2.5 py-0.5 text-xs font-bold">
  Rekapitulasi Kehadiran Siswa
  </span>
  </div>
- <h1 className="mt-1.5 text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
- Rekapitulasi & Manajemen Kehadiran Siswa
+ <h1 className="mt-1 text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+ Rekapitulasi &amp; Manajemen Kehadiran Siswa
  </h1>
- <p className="mt-0.5 text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300 w-full">
- Kelola matriks rekapitulasi presensi bulanan, absensi per mata pelajaran & guru, verifikasi surat izin/sakit, koreksi presensi, serta tindak lanjut siswa.
+ <p className="mt-0.5 text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300 max-w-3xl">
+ Kelola matriks rekapitulasi presensi bulanan, absensi per mata pelajaran &amp; guru, verifikasi surat izin/sakit, koreksi presensi, serta tindak lanjut siswa.
  </p>
  </div>
  </div>
 
  {/* Quick Action Buttons */}
- <div className="flex items-center gap-2.5 shrink-0">
+ <div className="flex items-center gap-2.5 shrink-0 self-start sm:self-auto">
  <button
  type="button"
- className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 dark:bg-slate-100 dark:text-slate-900 dark: px-4 py-2.5 text-xs font-bold shadow-md shadow-sm transition-all hover:scale-[1.02] cursor-pointer text-white border border-emerald-600 h-9 text-sm font-medium"
+ className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 text-xs font-extrabold shadow-sm transition-all cursor-pointer border border-indigo-500 active:scale-95"
  onClick={() => setPrintOptionModalOpen(true)}
  >
  <Printer className="size-4" />
@@ -756,19 +754,19 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
  </button>
  <button
  type="button"
- className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-xs font-bold text-slate-800 shadow-sm border border-emerald-200/80 hover:bg-slate-50 dark:bg-slate-800 dark:border-emerald-700/80 dark:text-white transition-all cursor-pointer"
+ disabled={loading}
+ className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 text-xs font-extrabold shadow-sm transition-all cursor-pointer border border-emerald-500 active:scale-95 disabled:opacity-60"
  onClick={loadData}
  >
- <RefreshCcw className="size-4 text-emerald-600" />
+ <RefreshCcw className={`size-4 ${loading ? 'animate-spin' : ''}`} />
  <span>Segarkan Data</span>
  </button>
  </div>
  </div>
  </div>
- </motion.div>
 
- {/* Modern KPI Metric Grid (Style Kepala Sekolah Dashboard) */}
- <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3.5 sm:gap-4">
+ {/* Modern KPI Metric Grid */}
+ <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3.5 sm:gap-4">
  <ModernKpiCard
  icon={Users}
  label="Rekapitulasi Siswa"
@@ -819,127 +817,117 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
  active={activeTab === 'tindak-lanjut'}
  onClick={() => handleTabChange('tindak-lanjut')}
  />
- </motion.div>
+ </div>
 
- {/* Main Master Datatable Container Card (Gold Standard Architecture) */}
- <motion.div variants={itemVariants} className="relative overflow-hidden rounded-2xl border-2 border-emerald-500/25 bg-white shadow-md shadow-sm dark:border-emerald-600/35 dark:bg-[#1B2433]">
- {/* Workspace Navigation Tabs Toolbar Header */}
- <div className="relative z-30 bg-slate-50/50 dark:bg-slate-900/50 border-b border-emerald-500/20 px-4 py-3 sm:px-6 md:px-8">
- <nav role="tablist" className="flex items-center gap-2.5 flex-wrap py-1" aria-label="Modul Presensi Siswa">
- {/* Tab 1: Rekapitulasi Kehadiran */}
- <div className="group relative inline-flex">
+ {/* Main Master Datatable Container Card (Canonical Emerald Datatable) */}
+ <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-md shadow-emerald-500/10 dark:bg-[#1B2433]">
+ {/* Workspace Navigation Tabs Toolbar Header (Admin Dashboard Standard) */}
+ <div className="relative z-30 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent border-b border-emerald-200/90 dark:border-emerald-800/60 px-4 py-3 sm:px-6">
+ <nav role="tablist" className="flex items-center gap-2 overflow-x-auto pb-1 max-w-full" aria-label="Modul Presensi Siswa">
+ {/* Tab 1: Rekapitulasi Matriks */}
  <button
  type="button"
-                role="tab"
-                aria-selected={activeTab === 'rekap'}
-                title="Rekapitulasi Kehadiran"
-                aria-label="Rekapitulasi Kehadiran"
-                onClick={() => handleTabChange('rekap')}
-                className={`flex size-10 items-center justify-center rounded-xl cursor-pointer shadow-2xs transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 select-none ${
-                  activeTab === 'rekap'
-                    ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-600/20 dark:bg-emerald-600 dark:text-white'
-                    : 'bg-emerald-50 text-emerald-800 hover:bg-emerald-600 hover:text-white dark:bg-emerald-950/60 dark:text-emerald-300 dark:hover:bg-emerald-600 dark:hover:text-white hover:shadow-md hover:shadow-sm'
-                }`}
+ role="tab"
+ aria-selected={activeTab === 'rekap'}
+ onClick={() => handleTabChange('rekap')}
+ className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-black transition-all cursor-pointer whitespace-nowrap shadow-2xs ${
+   activeTab === 'rekap'
+     ? 'bg-emerald-600 text-white shadow-xs'
+     : 'bg-white dark:bg-[#1B2433] text-slate-700 dark:text-slate-300 border border-emerald-200/80 dark:border-emerald-800/60 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 hover:text-emerald-700'
+ }`}
  >
- <Users className="size-5 transition-colors" />
+ <Users className="size-4 shrink-0" />
+ <span>Rekap Matriks</span>
+ <span className={`px-1.5 py-0.2 rounded-md text-[10px] font-extrabold ${
+   activeTab === 'rekap' ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+ }`}>
+ {metrics.recapTotal}
+ </span>
  </button>
- <div className="pointer-events-none absolute top-full left-1/2 mt-2 -translate-x-1/2 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-out z-[9999] whitespace-nowrap rounded-xl bg-slate-900 px-3 py-1.5 text-xs font-bold shadow-2xl dark:bg-slate-100 dark:text-slate-900 border border-emerald-700/80/50 dark:border-emerald-300">
- <div className="absolute bottom-full left-1/2 -mb-1 -translate-x-1/2 border-4 border-transparent border-b-slate-900 dark:border-b-slate-100" />
- Rekapitulasi Kehadiran
- </div>
- </div>
 
  {/* Tab 2: Sesi Pelajaran */}
- <div className="group relative inline-flex">
  <button
  type="button"
  role="tab"
  aria-selected={activeTab === 'sesi-pelajaran'}
- title="Absensi Per Mata Pelajaran & Guru"
- aria-label="Absensi Per Mata Pelajaran & Guru"
  onClick={() => handleTabChange('sesi-pelajaran')}
- className={`flex size-10 items-center justify-center rounded-xl cursor-pointer shadow-2xs transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 select-none ${
- activeTab === 'sesi-pelajaran'
- ? 'bg-emerald-600 shadow-md shadow-sm dark:bg-emerald-500 dark:text-white'
- : 'bg-emerald-100/90 text-emerald-600 hover:bg-emerald-500 hover:dark:bg-emerald-950/60 dark:text-emerald-300 dark:hover:bg-emerald-500 dark:hover:text-white hover:shadow-md hover:shadow-sm'
+ className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-black transition-all cursor-pointer whitespace-nowrap shadow-2xs ${
+   activeTab === 'sesi-pelajaran'
+     ? 'bg-emerald-600 text-white shadow-xs'
+     : 'bg-white dark:bg-[#1B2433] text-slate-700 dark:text-slate-300 border border-emerald-200/80 dark:border-emerald-800/60 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 hover:text-emerald-700'
  }`}
  >
- <BookOpen className="size-5 transition-colors" />
+ <BookOpen className="size-4 shrink-0" />
+ <span>Sesi Pelajaran</span>
+ <span className={`px-1.5 py-0.2 rounded-md text-[10px] font-extrabold ${
+   activeTab === 'sesi-pelajaran' ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+ }`}>
+ {metrics.sessionTotal}
+ </span>
  </button>
- <div className="pointer-events-none absolute top-full left-1/2 mt-2 -translate-x-1/2 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-out z-[9999] whitespace-nowrap rounded-xl bg-slate-900 px-3 py-1.5 text-xs font-bold shadow-2xl dark:bg-slate-100 dark:text-slate-900 border border-emerald-700/80/50 dark:border-emerald-300">
- <div className="absolute bottom-full left-1/2 -mb-1 -translate-x-1/2 border-4 border-transparent border-b-slate-900 dark:border-b-slate-100" />
- Absensi Per Mata Pelajaran & Guru
- </div>
- </div>
 
  {/* Tab 3: Verifikasi Izin / Sakit */}
- <div className="group relative inline-flex">
  <button
  type="button"
  role="tab"
  aria-selected={activeTab === 'verifikasi'}
- title="Verifikasi Izin / Sakit"
- aria-label="Verifikasi Izin / Sakit"
  onClick={() => handleTabChange('verifikasi')}
- className={`flex size-10 items-center justify-center rounded-xl cursor-pointer shadow-2xs transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/40 select-none ${
- activeTab === 'verifikasi'
- ? 'bg-amber-600 text-white shadow-md shadow-sm dark:bg-amber-500 dark:text-white'
- : 'bg-amber-100/90 text-amber-600 hover:bg-amber-500 hover:text-white dark:bg-amber-950/60 dark:text-amber-300 dark:hover:bg-amber-500 dark:hover:text-white hover:shadow-md hover:shadow-sm'
+ className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-black transition-all cursor-pointer whitespace-nowrap shadow-2xs ${
+   activeTab === 'verifikasi'
+     ? 'bg-amber-600 text-white shadow-xs'
+     : 'bg-white dark:bg-[#1B2433] text-slate-700 dark:text-slate-300 border border-emerald-200/80 dark:border-emerald-800/60 hover:bg-amber-50 dark:hover:bg-amber-950/40 hover:text-amber-700'
  }`}
  >
- <FileCheck2 className="size-5 transition-colors" />
+ <FileCheck2 className="size-4 shrink-0" />
+ <span>Verifikasi Izin</span>
+ <span className={`px-1.5 py-0.2 rounded-md text-[10px] font-extrabold ${
+   activeTab === 'verifikasi' ? 'bg-white/20 text-white' : 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300'
+ }`}>
+ {metrics.permPending}
+ </span>
  </button>
- <div className="pointer-events-none absolute top-full left-1/2 mt-2 -translate-x-1/2 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-out z-[9999] whitespace-nowrap rounded-xl bg-slate-900 px-3 py-1.5 text-xs font-bold shadow-2xl dark:bg-slate-100 dark:text-slate-900 border border-emerald-700/80/50 dark:border-emerald-300">
- <div className="absolute bottom-full left-1/2 -mb-1 -translate-x-1/2 border-4 border-transparent border-b-slate-900 dark:border-b-slate-100" />
- Verifikasi Izin / Sakit
- </div>
- </div>
 
  {/* Tab 4: Koreksi Presensi */}
- <div className="group relative inline-flex">
  <button
  type="button"
  role="tab"
  aria-selected={activeTab === 'koreksi'}
- title="Koreksi Presensi"
- aria-label="Koreksi Presensi"
  onClick={() => handleTabChange('koreksi')}
- className={`flex size-10 items-center justify-center rounded-xl cursor-pointer shadow-2xs transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500/40 select-none ${
- activeTab === 'koreksi'
- ? 'bg-purple-600 text-white shadow-md shadow-sm dark:bg-purple-500 dark:text-white'
- : 'bg-purple-100/90 text-purple-600 hover:bg-purple-500 hover:text-white dark:bg-purple-950/60 dark:text-purple-300 dark:hover:bg-purple-500 dark:hover:text-white hover:shadow-md hover:shadow-sm'
+ className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-black transition-all cursor-pointer whitespace-nowrap shadow-2xs ${
+   activeTab === 'koreksi'
+     ? 'bg-purple-600 text-white shadow-xs'
+     : 'bg-white dark:bg-[#1B2433] text-slate-700 dark:text-slate-300 border border-emerald-200/80 dark:border-emerald-800/60 hover:bg-purple-50 dark:hover:bg-purple-950/40 hover:text-purple-700'
  }`}
  >
- <FileEdit className="size-5 transition-colors" />
+ <FileEdit className="size-4 shrink-0" />
+ <span>Koreksi Presensi</span>
+ <span className={`px-1.5 py-0.2 rounded-md text-[10px] font-extrabold ${
+   activeTab === 'koreksi' ? 'bg-white/20 text-white' : 'bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300'
+ }`}>
+ {metrics.corrPending}
+ </span>
  </button>
- <div className="pointer-events-none absolute top-full left-1/2 mt-2 -translate-x-1/2 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-out z-[9999] whitespace-nowrap rounded-xl bg-slate-900 px-3 py-1.5 text-xs font-bold shadow-2xl dark:bg-slate-100 dark:text-slate-900 border border-emerald-700/80/50 dark:border-emerald-300">
- <div className="absolute bottom-full left-1/2 -mb-1 -translate-x-1/2 border-4 border-transparent border-b-slate-900 dark:border-b-slate-100" />
- Koreksi Presensi
- </div>
- </div>
 
  {/* Tab 5: Tindak Lanjut Siswa */}
- <div className="group relative inline-flex">
  <button
  type="button"
  role="tab"
  aria-selected={activeTab === 'tindak-lanjut'}
- title="Tindak Lanjut Siswa"
- aria-label="Tindak Lanjut Siswa"
  onClick={() => handleTabChange('tindak-lanjut')}
- className={`flex size-10 items-center justify-center rounded-xl cursor-pointer shadow-2xs transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/40 select-none ${
- activeTab === 'tindak-lanjut'
- ? 'bg-rose-600 text-white shadow-md shadow-sm dark:bg-rose-500 dark:text-white'
- : 'bg-rose-100/90 text-rose-600 hover:bg-rose-500 hover:text-white dark:bg-rose-950/60 dark:text-rose-300 dark:hover:bg-rose-500 dark:hover:text-white hover:shadow-md hover:shadow-sm'
+ className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-black transition-all cursor-pointer whitespace-nowrap shadow-2xs ${
+   activeTab === 'tindak-lanjut'
+     ? 'bg-rose-600 text-white shadow-xs'
+     : 'bg-white dark:bg-[#1B2433] text-slate-700 dark:text-slate-300 border border-emerald-200/80 dark:border-emerald-800/60 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-700'
  }`}
  >
- <ShieldAlert className="size-5 transition-colors" />
+ <ShieldAlert className="size-4 shrink-0" />
+ <span>Tindak Lanjut</span>
+ <span className={`px-1.5 py-0.2 rounded-md text-[10px] font-extrabold ${
+   activeTab === 'tindak-lanjut' ? 'bg-white/20 text-white' : 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300'
+ }`}>
+ {metrics.followUpOpen}
+ </span>
  </button>
- <div className="pointer-events-none absolute top-full left-1/2 mt-2 -translate-x-1/2 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-out z-[9999] whitespace-nowrap rounded-xl bg-slate-900 px-3 py-1.5 text-xs font-bold shadow-2xl dark:bg-slate-100 dark:text-slate-900 border border-emerald-700/80/50 dark:border-emerald-300">
- <div className="absolute bottom-full left-1/2 -mb-1 -translate-x-1/2 border-4 border-transparent border-b-slate-900 dark:border-b-slate-100" />
- Tindak Lanjut Siswa
- </div>
- </div>
  </nav>
  </div>
 
@@ -1589,7 +1577,7 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
  variant="default"
  />
  </div>
- </motion.div>
+  </div>
 
  {/* ── HeroUI Dialog Modals ──────────────────────────────────────────── */}
 
@@ -1881,6 +1869,6 @@ export default function StudentAttendanceManagementPage({ initialTab = 'rekap' }
  onDownload={handleDownloadPdfTable}
  title="Data Presensi Siswa"
  />
- </motion.div>
+  </div>
  )
 }

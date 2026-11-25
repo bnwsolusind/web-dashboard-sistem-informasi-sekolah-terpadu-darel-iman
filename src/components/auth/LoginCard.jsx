@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
 import { Alert, AlertContent, AlertDescription, AlertIndicator, AlertTitle } from '@/components/ui/alert'
 import { showAuthPopup } from '../ui/AuthPopup'
+import AppModal from '../app/AppModal'
 
 export default function LoginCard({ onNavigate, onLoginSuccess }) {
  const setSession = useAuthStore((state) => state.setSession)
@@ -238,7 +239,7 @@ export default function LoginCard({ onNavigate, onLoginSuccess }) {
  setSuccessNotice(null)
 
  try {
- const result = await authService.loginParentStudent({
+ const result = await authService.login({
  portal_type: portalType,
  identifier: form.identifier,
  password: form.password,
@@ -558,24 +559,48 @@ export default function LoginCard({ onNavigate, onLoginSuccess }) {
  </div>
 
  {/* QR Scanner Modal with Real WebRTC Camera Stream */}
- {showQrModal && (
- <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
- <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 animate-in zoom-in-95">
- <div className="flex items-center justify-between border-b border-emerald-100/80 pb-3 mb-4">
- <div className="flex items-center gap-2 text-emerald-900 font-bold text-sm">
- <BsQrCode className="w-5 h-5 text-emerald-600" />
- <span>Scan QR Code ID Card Pegawai / Kartu Siswa</span>
- </div>
+ <AppModal
+ isOpen={showQrModal}
+ onClose={() => setShowQrModal(false)}
+ title="Scan QR Code ID Card Pegawai / Kartu Siswa"
+ description="Arahkan QR code ke kamera atau tempelkan token secara manual."
+ badge="QR Login"
+ icon={BsQrCode}
+ variant="emerald"
+ maxWidth="max-w-md"
+ zIndex={50}
+ footer={
+ <>
  <button
  type="button"
  onClick={() => setShowQrModal(false)}
- className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-emerald-50 hover:text-emerald-700"
+ className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black border border-slate-300 dark:border-slate-700 transition-all cursor-pointer"
  >
- <FiX className="w-5 h-5" />
+ Batal
  </button>
- </div>
-
- <form onSubmit={handleQrSubmit} className="space-y-4">
+ <Button
+ type="submit"
+ form="login-qr-form"
+ disabled={qrLoading || !qrTokenInput.trim() || Boolean(successNotice)}
+ pending={qrLoading || Boolean(successNotice)}
+ variant="primary"
+ appearance="fill"
+ size="sm"
+ className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 active:scale-95"
+ >
+ {(qrLoading || successNotice) ? (
+ <>
+ <Spinner size="xs" />
+ <span>{successNotice ? 'Berhasil...' : 'Memverifikasi...'}</span>
+ </>
+ ) : (
+ 'Verifikasi QR'
+ )}
+ </Button>
+ </>
+ }
+ >
+ <form id="login-qr-form" onSubmit={handleQrSubmit} className="space-y-4">
  {qrError && (
  <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-xl text-xs font-medium flex items-center gap-2">
  <FiAlertCircle className="w-4 h-4 shrink-0 text-red-500" />
@@ -638,7 +663,7 @@ export default function LoginCard({ onNavigate, onLoginSuccess }) {
 
  {/* Alternative Token Input for Hardware Scanner */}
  <div>
- <label className="block text-xs font-semibold text-slate-600 mb-1">
+ <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">
  Atau tempelkan token/input barcode scanner:
  </label>
  <input
@@ -646,41 +671,11 @@ export default function LoginCard({ onNavigate, onLoginSuccess }) {
  value={qrTokenInput}
  onChange={(e) => setQrTokenInput(e.target.value)}
  placeholder="Paste token QR di sini..."
- className="w-full px-3.5 py-2.5 text-xs bg-slate-50 text-slate-800 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 focus:outline-none focus:ring-2 focus:ring-emerald-600 font-mono"
+ className="w-full h-10 px-3.5 text-xs font-bold bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 placeholder-slate-400 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 font-mono transition-all"
  />
  </div>
-
- <div className="flex gap-2 pt-1">
- <button
- type="button"
- onClick={() => setShowQrModal(false)}
- className="flex-1 py-2.5 px-4 bg-emerald-50 hover:bg-slate-200 text-emerald-700 rounded-xl text-xs font-semibold transition-all"
- >
- Batal
- </button>
- <Button
- type="submit"
- disabled={qrLoading || !qrTokenInput.trim() || Boolean(successNotice)}
- pending={qrLoading || Boolean(successNotice)}
- variant="primary"
- appearance="fill"
- size="sm"
- className="flex-1 font-semibold shadow-sm"
- >
- {(qrLoading || successNotice) ? (
- <>
- <Spinner size="xs" />
- <span>{successNotice ? 'Berhasil...' : 'Memverifikasi...'}</span>
- </>
- ) : (
- 'Verifikasi QR'
- )}
- </Button>
- </div>
  </form>
- </div>
- </div>
- )}
+ </AppModal>
  </div>
  )
 }

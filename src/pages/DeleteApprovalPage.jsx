@@ -27,6 +27,7 @@ import {
 } from '../components/app/ToastProvider'
 
 import PageContainer from '../components/app/PageContainer'
+import AppModal from '../components/app/AppModal'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
 import {
   deleteRequestService
@@ -612,38 +613,37 @@ export default function DeleteApprovalPage() {
  </motion.div>
 
  {/* ── Harmonized Approve Confirmation Modal ── */}
- <AnimatePresence>
- {approveConfirmModal.open && (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
- <motion.div
- initial={{ opacity: 0 }}
- animate={{ opacity: 1 }}
- exit={{ opacity: 0 }}
+ <AppModal
+ isOpen={approveConfirmModal.open}
+ onClose={() => { if (!actionLoadingId) setApproveConfirmModal({ open: false, item: null }) }}
+ disableBackdropClose={Boolean(actionLoadingId)}
+ hideCloseButton={Boolean(actionLoadingId)}
+ title="Konfirmasi Persetujuan Hapus"
+ description="Otorisasi Penghapusan Data Superadmin"
+ icon={CheckCircle2}
+ maxWidth="max-w-md"
+ zIndex="z-[70]"
+ footer={
+ <div className="flex w-full items-center justify-end gap-2.5">
+ <button
+ type="button"
  onClick={() => setApproveConfirmModal({ open: false, item: null })}
- className="fixed inset-0 bg-slate-950/70 backdrop-blur-md"
- />
- <motion.div
- initial={{ opacity: 0, scale: 0.95, y: 15 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 15 }}
- transition={{ type: 'spring', stiffness: 350, damping: 25 }}
- className="relative w-full max-w-md overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-6 shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433] z-10"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm">
- <CheckCircle2 className="size-6 text-emerald-600" />
+ Batal
+ </button>
+ <button
+ type="button"
+ onClick={handleConfirmApprove}
+ disabled={Boolean(actionLoadingId)}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 active:scale-95 disabled:opacity-50 cursor-pointer"
+ >
+ {actionLoadingId ? 'Memproses...' : 'Ya, Setujui Hapus'}
+ </button>
  </div>
- <div>
- <h3 className="text-base font-black text-slate-900 dark:text-white">
- Konfirmasi Persetujuan Hapus
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
- Otorisasi Penghapusan Data Superadmin
- </p>
- </div>
- </div>
-
- <div className="rounded-xl bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 p-3.5 text-xs text-emerald-900 dark:text-emerald-200 mb-5 leading-relaxed">
+ }
+ >
+ <div className="rounded-xl bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 p-3.5 text-xs text-emerald-900 dark:text-emerald-200 leading-relaxed">
  Apakah Anda yakin ingin <strong>MENYETUJUI</strong> penghapusan data ini?
  <div className="mt-2 font-bold text-slate-900 dark:text-white">
  Target: {approveConfirmModal.item?.target_label || `ID #${approveConfirmModal.item?.target_id}`}
@@ -652,62 +652,41 @@ export default function DeleteApprovalPage() {
  Tabel: {approveConfirmModal.item?.target_table}
  </div>
  </div>
+ </AppModal>
 
- <div className="flex items-center justify-end gap-2.5">
+ {/* ── Harmonized Rejection Modal ── */}
+ <AppModal
+ isOpen={rejectionModal.open}
+ onClose={() => { if (!actionLoadingId) setRejectionModal({ open: false, requestId: null, reason: '', item: null }) }}
+ disableBackdropClose={Boolean(actionLoadingId)}
+ hideCloseButton={Boolean(actionLoadingId)}
+ variant="danger"
+ title="Tolak Permintaan Hapus"
+ description="Beri alasan resmi penolakan untuk admin pemohon"
+ icon={XCircle}
+ maxWidth="max-w-md"
+ zIndex="z-[70]"
+ footer={
+ <div className="flex w-full items-center justify-end gap-2.5">
  <button
  type="button"
- onClick={() => setApproveConfirmModal({ open: false, item: null })}
- className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition cursor-pointer"
+ onClick={() => setRejectionModal({ open: false, requestId: null, reason: '', item: null })}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
  Batal
  </button>
  <button
- type="button"
- onClick={handleConfirmApprove}
- disabled={Boolean(actionLoadingId)}
- className="px-5 py-2 rounded-lg text-xs font-bold bg-emerald-600 text-white dark:bg-emerald-50 dark:text-slate-900 dark: hover:from-emerald-700 hover:to-teal-700 shadow-sm transition cursor-pointer border border-emerald-200/80 dark:border-emerald-800/60 h-9 text-sm font-medium"
+ type="submit"
+ form="delete-rejection-form"
+ disabled={!rejectionModal.reason.trim() || Boolean(actionLoadingId)}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border-2 border-rose-600 bg-rose-600 px-5 text-xs font-black text-white shadow-md shadow-rose-600/20 transition-all hover:bg-rose-700 active:scale-95 disabled:opacity-50 cursor-pointer"
  >
- {actionLoadingId ? 'Memproses...' : 'Ya, Setujui Hapus'}
+ {actionLoadingId ? 'Mengirim...' : 'Kirim Penolakan'}
  </button>
  </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
-
- {/* ── Harmonized Rejection Modal ── */}
- <AnimatePresence>
- {rejectionModal.open && (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
- <motion.div
- initial={{ opacity: 0 }}
- animate={{ opacity: 1 }}
- exit={{ opacity: 0 }}
- onClick={() => setRejectionModal({ open: false, requestId: null, reason: '', item: null })}
- className="fixed inset-0 bg-slate-950/70 backdrop-blur-md"
- />
- <motion.div
- initial={{ opacity: 0, scale: 0.95, y: 15 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 15 }}
- transition={{ type: 'spring', stiffness: 350, damping: 25 }}
- className="relative w-full max-w-md overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-6 shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433] z-10"
+ }
  >
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 shadow-sm">
- <XCircle className="size-6 text-rose-600" />
- </div>
- <div>
- <h3 className="text-base font-black text-slate-900 dark:text-white">
- Tolak Permintaan Hapus
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
- Beri alasan resmi penolakan untuk admin pemohon
- </p>
- </div>
- </div>
-
- <form onSubmit={handleRejectSubmit} className="space-y-4">
+ <form id="delete-rejection-form" onSubmit={handleRejectSubmit} className="space-y-4">
  <div>
  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
  Alasan Penolakan <span className="text-rose-500">*</span>
@@ -717,32 +696,12 @@ export default function DeleteApprovalPage() {
  value={rejectionModal.reason}
  onChange={(e) => setRejectionModal({ ...rejectionModal, reason: e.target.value })}
  placeholder="Tuliskan catatan alasan penolakan secara jelas..."
- className="w-full p-3 bg-slate-50 dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-100 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 focus:ring-2 focus:ring-rose-500 focus:outline-none"
+ className="w-full p-3.5 bg-white dark:bg-slate-900 text-xs font-bold text-slate-800 dark:text-slate-100 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20 focus:outline-none leading-relaxed"
  required
  />
  </div>
-
- <div className="flex items-center justify-end gap-2.5 pt-1">
- <button
- type="button"
- onClick={() => setRejectionModal({ open: false, requestId: null, reason: '', item: null })}
- className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition cursor-pointer"
- >
- Batal
- </button>
- <button
- type="submit"
- disabled={!rejectionModal.reason.trim() || Boolean(actionLoadingId)}
- className="px-5 py-2 rounded-xl text-xs font-bold bg-white dark:bg-[#1B2433] hover:from-rose-700 hover:to-red-700 shadow-sm disabled:opacity-50 transition cursor-pointer"
- >
- {actionLoadingId ? 'Mengirim...' : 'Kirim Penolakan'}
- </button>
- </div>
  </form>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+ </AppModal>
  </PageContainer>
  )
 }

@@ -48,6 +48,7 @@ import {
 } from '../components/app'
 import { Tooltip } from '../components/ui/tooltip'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
+import AppModal from '../components/app/AppModal'
 import {
   Dialog,
   DialogHeader,
@@ -667,80 +668,40 @@ export default function MasterStatusSiswaPage() {
         />
 
         {/* ================= MODAL TAMBAH / UBAH STATUS (HARMONIZED MODAL) ================= */}
-        <AnimatePresence>
-          {isFormOpen && (
-            <div
-              className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto"
-              role="dialog"
-              aria-modal="true"
-            >
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: 14 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-                className="my-auto w-full max-w-xl font-sans"
+        <AppModal
+          isOpen={isFormOpen}
+          onClose={() => !(createMutation.isPending || updateMutation.isPending) && setIsFormOpen(false)}
+          title={editingItem ? 'Ubah Status Siswa' : 'Tambah Status Siswa Baru'}
+          badge={editingItem ? 'Update Data' : 'Opsi Baru'}
+          description="Atur label, kode status, serta warna badge yang tampil pada profil siswa."
+          icon={editingItem ? Pencil : Tag}
+          variant={editingItem ? 'warning' : 'emerald'}
+          maxWidth="max-w-xl"
+          disableBackdropClose={createMutation.isPending || updateMutation.isPending}
+          hideCloseButton={createMutation.isPending || updateMutation.isPending}
+          footer={
+            <>
+              <button
+                type="button"
+                onClick={() => setIsFormOpen(false)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
               >
-                <div className="flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232]">
-                  {/* Top Accent Gradient Bar */}
-                  <div
-                    className={cn(
-                      'h-1.5 w-full shrink-0',
-                      editingItem
-                        ? 'bg-gradient-to-r from-amber-400 via-amber-500 to-orange-600'
-                        : 'bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600'
-                    )}
-                  />
-
-                  {/* Header */}
-                  <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-slate-950">
-                    <div className="flex items-center gap-3.5">
-                      <div
-                        className={cn(
-                          'flex size-11 shrink-0 items-center justify-center rounded-xl shadow-xs border',
-                          editingItem
-                            ? 'bg-amber-500 text-white border-amber-400 dark:bg-amber-600'
-                            : 'bg-emerald-600 text-white border-emerald-500/40 dark:bg-emerald-600'
-                        )}
-                      >
-                        {editingItem ? (
-                          <Pencil className="size-5 text-white" strokeWidth={2.2} />
-                        ) : (
-                          <Tag className="size-5 text-white" strokeWidth={2.2} />
-                        )}
-                      </div>
-                      <div>
-                        <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
-                          <span>{editingItem ? 'Ubah Status Siswa' : 'Tambah Status Siswa Baru'}</span>
-                          <span
-                            className={cn(
-                              'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-extrabold',
-                              editingItem
-                                ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300'
-                                : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300'
-                            )}
-                          >
-                            <Sparkles className="size-3" />
-                            {editingItem ? 'Update Data' : 'Opsi Baru'}
-                          </span>
-                        </h3>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                          Konfigurasi parameter opsi status operasional peserta didik di sistem
-                        </p>
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setIsFormOpen(false)}
-                      className="size-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-sky-950/60 dark:text-sky-300 transition cursor-pointer"
-                      aria-label="Tutup form modal"
-                    >
-                      <X className="size-4" strokeWidth={2.25} />
-                    </button>
-                  </div>
-
-                  <form onSubmit={handleSubmit} className="flex flex-col overflow-hidden">
-                    <div className="max-h-[calc(100dvh-13rem)] overflow-y-auto px-6 py-5 space-y-4">
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="submit"
+                form="status-siswa-form"
+                disabled={createMutation.isPending || updateMutation.isPending}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+              >
+                {(createMutation.isPending || updateMutation.isPending) && <Spinner size="xs" />}
+                <span>{editingItem ? 'Simpan Perubahan' : 'Tambah Status'}</span>
+              </button>
+            </>
+          }
+        >
+          <form id="status-siswa-form" onSubmit={handleSubmit} className="space-y-4">
                       {formErrors.submit && (
                         <div className="rounded-xl border border-rose-200 dark:border-rose-900/60 bg-rose-50/80 p-3 text-xs text-rose-800 dark:bg-rose-950/40 dark:text-rose-300 font-medium">
                           {formErrors.submit}
@@ -914,91 +875,46 @@ export default function MasterStatusSiswaPage() {
                           className="mt-1"
                         />
                       </div>
-                    </div>
+          </form>
+        </AppModal>
 
-                    <div className="flex items-center justify-end gap-2.5 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setIsFormOpen(false)}
-                        className="rounded-xl px-4 text-xs font-semibold"
-                      >
-                        Batal
-                      </Button>
-                      <Button
-                        type="submit"
-                        variant="success"
-                        size="sm"
-                        disabled={createMutation.isPending || updateMutation.isPending}
-                        className={cn(
-                          'rounded-xl px-5 text-xs font-bold text-white shadow-sm border-0 transition cursor-pointer',
-                          editingItem
-                            ? 'bg-amber-600 hover:bg-amber-700'
-                            : 'bg-emerald-600 hover:bg-emerald-700'
-                        )}
-                      >
-                        {(createMutation.isPending || updateMutation.isPending) && (
-                          <Spinner size="xs" />
-                        )}
-                        <span>{editingItem ? 'Simpan Perubahan' : 'Tambah Status'}</span>
-                      </Button>
-                    </div>
-                  </form>
-                </div>
-              </motion.div>
-            </div>
-          )}
-        </AnimatePresence>
-
-        {/* ================= MODAL KONFIRMASI HAPUS (HARMONIZED MODAL) ================= */}
-        <AnimatePresence>
-          {Boolean(deleteTarget) && (
-            <div
-              className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto"
-              role="dialog"
-              aria-modal="true"
-            >
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: 14 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-                className="my-auto w-full max-w-md font-sans"
+        <AppModal
+          isOpen={Boolean(deleteTarget)}
+          onClose={() => !deleteMutation.isPending && setDeleteTarget(null)}
+          title="Hapus Status Siswa?"
+          badge="Konfirmasi Hapus"
+          description="Tindakan ini tidak dapat dibatalkan"
+          icon={Trash2}
+          variant="danger"
+          maxWidth="max-w-md"
+          zIndex={70}
+          disableBackdropClose={deleteMutation.isPending}
+          hideCloseButton={deleteMutation.isPending}
+          bodyClassName="space-y-4"
+          footer={
+            <>
+              <button
+                type="button"
+                onClick={() => setDeleteTarget(null)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
               >
-                <div className="flex flex-col overflow-hidden rounded-3xl border-2 border-rose-300 dark:border-rose-800 bg-white shadow-2xl shadow-rose-950/20 dark:bg-[#182232]">
-                  {/* Top Accent Gradient Bar — Rose Red */}
-                  <div className="h-1.5 w-full bg-gradient-to-r from-rose-500 via-rose-600 to-red-700 shrink-0" />
-
-                  {/* Header */}
-                  <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-slate-950">
-                    <div className="flex items-center gap-3.5">
-                      <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-rose-100 text-rose-600 dark:bg-rose-950/60 dark:text-rose-400 border border-rose-200 dark:border-rose-900/50 shadow-xs">
-                        <Trash2 className="size-5.5 text-rose-600 dark:text-rose-400" strokeWidth={2.2} />
-                      </div>
-                      <div>
-                        <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
-                          <span>Hapus Status Siswa?</span>
-                          <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 dark:bg-rose-950/80 px-2 py-0.5 text-[10px] font-extrabold text-rose-800 dark:text-rose-300">
-                            Konfirmasi Hapus
-                          </span>
-                        </h3>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                          Tindakan ini tidak dapat dibatalkan
-                        </p>
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setDeleteTarget(null)}
-                      className="size-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-sky-950/60 dark:text-sky-300 transition cursor-pointer"
-                      aria-label="Tutup dialog konfirmasi hapus"
-                    >
-                      <X className="size-4" strokeWidth={2.25} />
-                    </button>
-                  </div>
-
-                  <div className="p-6 space-y-4">
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                disabled={deleteMutation.isPending}
+                onClick={() => deleteMutation.mutate(deleteTarget.id)}
+                className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20 disabled:opacity-50"
+              >
+                {deleteMutation.isPending && <Spinner size="xs" />}
+                <span>Ya, Hapus Permanen</span>
+              </button>
+            </>
+          }
+        >
+          {deleteTarget && (
+            <>
                     <div className="rounded-xl border border-rose-200 dark:border-rose-900/60 bg-rose-50/70 p-4 text-xs text-rose-900 dark:bg-rose-950/40 dark:text-rose-200 leading-relaxed">
                       <div className="flex items-start gap-2.5">
                         <AlertTriangle className="size-4.5 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
@@ -1010,90 +926,43 @@ export default function MasterStatusSiswaPage() {
                         </div>
                       </div>
                     </div>
-                  </div>
-
-                  <div className="flex items-center justify-end gap-2.5 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setDeleteTarget(null)}
-                      className="rounded-xl px-4 text-xs font-semibold"
-                    >
-                      Batal
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="danger"
-                      size="sm"
-                      disabled={deleteMutation.isPending}
-                      onClick={() => deleteMutation.mutate(deleteTarget.id)}
-                      className="rounded-xl bg-rose-600 hover:bg-rose-700 px-5 text-xs font-bold text-white shadow-sm border-0 transition cursor-pointer"
-                    >
-                      {deleteMutation.isPending && <Spinner size="xs" />}
-                      <span>Ya, Hapus Permanen</span>
-                    </Button>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
+            </>
           )}
-        </AnimatePresence>
+        </AppModal>
 
- {/* ── HARMONIZED BATCH IMPORT MODAL (z-50) ────────────────────────────── */}
- <AnimatePresence>
- {isImportModalOpen && (
- <div
- className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="status-siswa-import-title"
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="my-auto w-full max-w-xl font-sans"
- >
- <div className="flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-sky-950/20 dark:bg-[#182232]">
- {/* Top accent bar — sky blue */}
-
- {/* Header */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-lg bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/50 dark:border-emerald-800/60 dark:text-emerald-400 p-2.5 shadow-xs shrink-0">
-                  <FileSpreadsheet className="size-5 text-emerald-600 dark:text-emerald-400" strokeWidth={2.25} />
- </div>
- <div>
- <h3 id="status-siswa-import-title" className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Import Master Status Siswa</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-sky-100 dark:bg-sky-950/80 px-2 py-0.5 text-[10px] font-extrabold text-sky-800 dark:text-sky-300">
- <Sparkles className="size-3" />
- Batch Excel / CSV
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Unggah berkas spreadsheet untuk sinkronisasi data master status siswa
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => {
- setIsImportModalOpen(false)
- setImportFile(null)
- setOverwriteExisting(false)
- }}
- aria-label="Tutup modal import"
- className="size-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-sky-950/60 dark:text-sky-300 transition cursor-pointer"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Form Body */}
- <form onSubmit={handleImportSubmit} className="p-6 space-y-4 overflow-y-auto">
+        <AppModal
+          isOpen={isImportModalOpen}
+          onClose={() => !importMutation.isPending && setIsImportModalOpen(false)}
+          title="Import Status Siswa"
+          badge="Batch"
+          description="Unggah berkas Excel atau CSV sesuai template status siswa"
+          icon={Upload}
+          maxWidth="max-w-xl"
+          disableBackdropClose={importMutation.isPending}
+          hideCloseButton={importMutation.isPending}
+          footer={
+            <>
+              <button
+                type="button"
+                onClick={() => setIsImportModalOpen(false)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="submit"
+                form="status-siswa-import-form"
+                disabled={importMutation.isPending || !importFile}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+              >
+                <Upload className="size-4" />
+                <span>{importMutation.isPending ? 'Mengimpor...' : 'Upload & Impor'}</span>
+              </button>
+            </>
+          }
+        >
+          <form id="status-siswa-import-form" onSubmit={handleImportSubmit} className="space-y-4">
  {/* Download Template Banner */}
  <div className="flex items-center justify-between p-3.5 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60">
  <div className="flex items-center gap-2.5">
@@ -1170,95 +1039,34 @@ export default function MasterStatusSiswaPage() {
  </label>
  </div>
 
- {/* Footer */}
- <div className="flex items-center justify-between border-t border-emerald-200/80 bg-white pt-4 dark:border-emerald-800/60 dark:bg-slate-950">
- <button
- type="button"
- onClick={() => {
- setIsImportModalOpen(false)
- setImportFile(null)
- setOverwriteExisting(false)
- }}
- className="inline-flex items-center gap-2 rounded-xl border-2 border-rose-300 bg-rose-50 text-rose-700 hover:bg-rose-100 dark:border-rose-800 dark:bg-rose-950/60 dark:text-rose-300 px-4 py-2.5 text-xs font-bold transition-all active:scale-95 cursor-pointer"
- >
- <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
- <span>Batal</span>
- </button>
- <button
- type="submit"
- disabled={!importFile || importMutation.isPending}
- className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 text-xs shadow-md shadow-emerald-600/20 transition-all duration-200 active:scale-95 cursor-pointer disabled:opacity-50"
- >
- <Upload className="size-3.5 text-white" strokeWidth={2.25} />
- <span>{importMutation.isPending ? 'Mengimpor...' : 'Upload & Impor'}</span>
- </button>
- </div>
- </form>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+          </form>
+        </AppModal>
 
- {/* ── MODAL HASIL IMPOR & PEMBERITAHUAN DATA DUPLIKAT ── */}
- <AnimatePresence>
- {duplicateModalData && (
- <div
- className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/75 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="status-siswa-duplicate-report-title"
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="my-auto w-full max-w-xl font-sans"
- >
- <div className="flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232]">
- {/* Top Accent Gradient Bar */}
- <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
-
- {/* Header */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className={cn(
- "flex size-11 items-center justify-center rounded-2xl text-white shadow-md shrink-0",
- duplicateModalData.diperbarui > 0
- ? "bg-gradient-to-br from-amber-400 via-amber-500 to-orange-600 shadow-amber-600/25"
- : "bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 shadow-emerald-600/25"
- )}>
- {duplicateModalData.diperbarui > 0 ? (
- <RefreshCcw className="h-5 w-5 text-white" strokeWidth={2.25} />
- ) : (
- <CheckCircle2 className="h-5 w-5 text-white" strokeWidth={2.25} />
- )}
- </div>
- <div>
- <h3 id="status-siswa-duplicate-report-title" className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Hasil Impor & Pemberitahuan Data</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300">
- Total {duplicateModalData.total} Data
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Ringkasan sinkronisasi dan status pemrosesan data status siswa
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setDuplicateModalData(null)}
- aria-label="Tutup ringkasan impor"
- className="size-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-sky-950/60 dark:text-sky-300 transition cursor-pointer"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Body */}
- <div className="min-h-0 flex-1 space-y-4 overflow-y-auto p-6 text-sm text-slate-700 dark:text-slate-200">
+        <AppModal
+          isOpen={Boolean(duplicateModalData)}
+          onClose={() => setDuplicateModalData(null)}
+          title="Hasil Impor & Pemberitahuan Data"
+          badge={duplicateModalData ? `Total ${duplicateModalData.total} Data` : undefined}
+          description="Ringkasan sinkronisasi dan status pemrosesan data status siswa"
+          icon={duplicateModalData?.diperbarui > 0 ? RefreshCcw : CheckCircle2}
+          maxWidth="max-w-2xl"
+          zIndex={70}
+          disableBackdropClose
+          bodyClassName="space-y-4 text-sm text-slate-700 dark:text-slate-200"
+          footer={
+            <div className="flex w-full justify-end">
+              <button
+                type="button"
+                onClick={() => setDuplicateModalData(null)}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+              >
+                <span>Mengerti</span>
+              </button>
+            </div>
+          }
+        >
+          {duplicateModalData && (
+            <>
  {/* KPI Cards */}
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
  <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 p-3 text-center dark:bg-emerald-950/30">
@@ -1323,24 +1131,9 @@ export default function MasterStatusSiswaPage() {
  </div>
  </div>
  )}
- </div>
-
- {/* Footer */}
- <div className="flex items-center justify-end border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <Button
- variant="primary"
- size="md"
- onClick={() => setDuplicateModalData(null)}
- className="px-6 font-bold shadow-sm"
- >
- Mengerti
- </Button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+            </>
+          )}
+        </AppModal>
 
  {/* Smart Floating Scroll Navigator (Opsi A) */}
  <SmartScrollFab targetId="tabel-status-siswa" downTooltip="Langsung ke Tabel Status" />

@@ -82,7 +82,7 @@ export function SearchableRegionInput({
  value={query}
  onFocus={() => setIsOpen(true)}
  onChange={handleInputChange}
- className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white py-2.5 pl-10 pr-14 text-sm text-slate-800 placeholder:text-slate-400 transition focus:border-[#059669] focus:outline-none focus:ring-2 focus:ring-[#059669]/15 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200 disabled:opacity-50"
+ className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-14 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder:text-slate-400 shadow-xs focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all disabled:opacity-50"
  />
  <div className="absolute right-3 flex items-center gap-1">
  {isLoading ? (

@@ -14,8 +14,7 @@ import {
   useQueryClient
 } from '@tanstack/react-query'
 import {
-  motion,
-  AnimatePresence
+  motion
 } from 'framer-motion'
 import {
   AlertTriangle,
@@ -112,6 +111,7 @@ import {
 } from '../stores/pengaturanStore'
 import AppPageHeader from '../components/app/AppPageHeader'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
+import AppModal from '../components/app/AppModal'
 import KpiCard from '../components/app/KpiCard'
 import {
   HeroUiHeader,
@@ -193,8 +193,6 @@ import HeroUiFilterSelect from '../components/ui/HeroUiFilterSelect'
 import {
   Button as HeroButton,
   Card as HeroCard,
-  Modal as HeroModal,
-  Spinner as HeroSpinner,
   Tooltip as HeroTooltip
 } from '@heroui/react'
 import { Chip as HeroChip } from '../components/ui/badge'
@@ -1037,6 +1035,10 @@ export default function EducationUnitsPage() {
   })
 
   // ── Modal Handlers ─────────────────────────────────────────────────────
+  const openDetailModal = unit => {
+    setActiveDetailTab('Informasi')
+    setDetailUnit(unit)
+  }
   const openAddModal = () => {
     setIsEditMode(false)
     setFormData(initialFormState())
@@ -1774,62 +1776,63 @@ export default function EducationUnitsPage() {
       </motion.div>
 
       {/* ══════════════════════════════════════════════════════════════════
- DETAIL MODAL POPUP — HeroUI & Motion Structure
+ DETAIL MODAL POPUP — AppModal
  ══════════════════════════════════════════════════════════════════ */}
-      <AnimatePresence>
-        {detailUnit && (
-          <div
-            role="dialog"
-            tabIndex={-1}
-            aria-modal="true"
-            aria-labelledby="edu-unit-detail-title"
-            className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
-            onMouseDown={e => { if (e.target === e.currentTarget) setDetailUnit(null) }}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.94, y: 14 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-              className="modal-dialog font-sans my-auto w-full max-w-xl"
+      <AppModal
+        isOpen={!!detailUnit}
+        onClose={() => setDetailUnit(null)}
+        title={detailUnit?.name || 'Detail Unit Pendidikan'}
+        badge="Detail Unit"
+        description={detailUnit ? [detailUnit.unit_type, detailUnit.city, detailUnit.province].filter(Boolean).join(' · ') : ''}
+        icon={Building2}
+        maxWidth="max-w-2xl sm:max-w-3xl"
+        zIndex={50}
+        bodyClassName="p-6 text-sm space-y-5"
+        subHeader={
+          <div className="flex items-center gap-1.5 px-6 py-2.5 bg-emerald-50/90 dark:bg-emerald-950/40 border-b border-emerald-200/80 dark:border-emerald-800/60 shrink-0 overflow-x-auto">
+            {['Informasi', 'Statistik', 'Guru', 'Siswa', 'Kelas'].map(tab => (
+              <button
+                key={tab}
+                type="button"
+                onClick={() => setActiveDetailTab(tab)}
+                className={`px-3.5 py-1.5 text-xs font-black rounded-xl transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 ${
+                  activeDetailTab === tab
+                    ? 'bg-emerald-600 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-emerald-700 hover:bg-emerald-100/60 dark:text-slate-300 dark:hover:bg-slate-800'
+                }`}
+              >
+                <span>{tab}</span>
+              </button>
+            ))}
+          </div>
+        }
+        footer={
+          <div className="flex w-full items-center justify-between">
+            <button
+              type="button"
+              onClick={() => setDetailUnit(null)}
+              className="h-9.5 px-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-2 transition-all duration-200 active:scale-95 cursor-pointer"
             >
-              <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
-                {/* Top Accent Gradient Bar */}
-
-                {/* Header */}
-                <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
-
-                      <Building2 className="size-6 sm:size-7 h-5 w-5 text-white" strokeWidth={2.25} />
-                    </div>
-                    <div>
-                      <h3 id="edu-unit-detail-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
-                        <span>{detailUnit.name || 'Detail Unit Pendidikan'}</span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
-                          <Sparkles className="size-3" />
-                          Detail Unit
-                        </span>
-                      </h3>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                        {[detailUnit.unit_type, detailUnit.city, detailUnit.province].filter(Boolean).join(' · ')}
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setDetailUnit(null)}
-                    aria-label="Tutup detail unit"
-                    className="size-9 flex items-center justify-center rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer"
-                  >
-                    <X className="size-4 text-rose-600" strokeWidth={2.25} />
-                  </button>
-                </div>
-
-                {/* Body */}
-                <div className="modal-body min-h-0 flex-1 overflow-y-auto p-5 text-sm space-y-5">
+              <X className="size-4" strokeWidth={2.2} />
+              <span>Tutup</span>
+            </button>
+            {canUpdate && detailUnit && (
+              <button
+                type="button"
+                onClick={() => { const t = detailUnit; setDetailUnit(null); openEditModal(t) }}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 inline-flex items-center gap-2 transition-all duration-200 active:scale-95 cursor-pointer"
+              >
+                <Pencil className="size-4 text-white" strokeWidth={2.2} />
+                <span>Ubah Data Unit</span>
+              </button>
+            )}
+          </div>
+        }
+      >
+        {detailUnit && (
+          <>
                   {/* Hero Card */}
-                  <div className="flex items-center gap-4 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50 p-4 dark:border-emerald-800/60 dark:bg-slate-800/40">
+                  <div className="flex items-center gap-4 rounded-2xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/30 dark:bg-slate-900/40 p-4 shadow-2xs">
                     {detailUnit.logo_url ? (
                       <img src={detailUnit.logo_url} alt={detailUnit.name} className="h-16 w-16 shrink-0 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 object-cover shadow-sm" />
                     ) : (
@@ -1853,23 +1856,6 @@ export default function EducationUnitsPage() {
                     </div>
                   </div>
 
-                  {/* Tabs */}
-                  <div className="flex gap-1.5 overflow-x-auto rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/40 p-1.5 dark:border-emerald-800/60 dark:bg-slate-900/40">
-                    {['Informasi', 'Statistik', 'Guru', 'Siswa', 'Kelas'].map(tab => (
-                      <button
-                        key={tab}
-                        type="button"
-                        onClick={() => setActiveDetailTab(tab)}
-                        className={`flex-1 rounded-xl px-3.5 py-2 text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${activeDetailTab === tab
-                          ? 'bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm'
-                          : 'text-slate-600 hover:text-slate-900 hover:bg-white/60 dark:text-slate-400 dark:hover:text-slate-200'
-                          }`}
-                      >
-                        {tab}
-                      </button>
-                    ))}
-                  </div>
-
                   {/* Tab: Informasi */}
                   {activeDetailTab === 'Informasi' && (
                     <div className="space-y-4">
@@ -1882,22 +1868,22 @@ export default function EducationUnitsPage() {
                           ['Email', detailUnit.email || 'info@sekolah.sch.id'],
                           ['Telepon', detailUnit.phone || '-'],
                         ].map(([label, value]) => (
-                          <div key={label} className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 dark:border-emerald-800/60 dark:bg-slate-800/50">
-                            <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">{label}</p>
+                          <div key={label} className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white p-3 dark:bg-slate-800/50">
+                            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{label}</p>
                             <p className="mt-0.5 text-xs font-bold text-slate-900 dark:text-white">{value}</p>
                           </div>
                         ))}
                       </div>
 
                       {/* Model Program & Jadwal Kegiatan Card */}
-                      <div className="rounded-lg border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 p-3.5 dark:border-emerald-800/60 dark:bg-emerald-950/30 space-y-2">
+                      <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/50 p-3.5 dark:bg-emerald-950/30 space-y-2">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2 text-xs font-bold text-slate-900 dark:text-white">
                             <School className="size-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                             Model Sistem Pembelajaran & Jam Operasional
                           </div>
                           <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-extrabold border ${detailUnit.program_type === 'boarding'
-                            ? 'bg-emerald-50 text-emerald-700 dark:text-emerald-300  border-emerald-300 dark:border-emerald-800  dark:bg-emerald-50/70 dark:text-emerald-700 dark:text-emerald-300  dark:border-emerald-800/60 '
+                            ? 'bg-emerald-50 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-50/70 dark:border-emerald-800/60'
                             : 'bg-emerald-100 text-emerald-800 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800/60'
                             }`}>
                             {detailUnit.program_type === 'boarding' ? <Moon className="size-3" /> : <Sun className="size-3" />}
@@ -1905,15 +1891,15 @@ export default function EducationUnitsPage() {
                           </span>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1 text-xs">
-                          <div className="rounded-lg bg-white/80 p-2 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-800/80 dark:border-emerald-800/60">
+                          <div className="rounded-lg bg-white/80 p-2 border border-emerald-200/80 dark:bg-slate-800/80">
                             <span className="text-[10px] font-semibold text-slate-400 block">Jam Masuk / KBM</span>
                             <span className="font-bold text-slate-800 dark:text-slate-100">{detailUnit.jam_masuk || (detailUnit.program_type === 'boarding' ? '04:00' : '07:15')} WIB</span>
                           </div>
-                          <div className="rounded-lg bg-white/80 p-2 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-800/80 dark:border-emerald-800/60">
+                          <div className="rounded-lg bg-white/80 p-2 border border-emerald-200/80 dark:bg-slate-800/80">
                             <span className="text-[10px] font-semibold text-slate-400 block">Jam Pulang Siswa/Santri</span>
                             <span className="font-bold text-slate-800 dark:text-slate-100">{detailUnit.jam_pulang || (detailUnit.program_type === 'boarding' ? '21:00' : '16:00')} WIB</span>
                           </div>
-                          <div className="rounded-lg bg-white/80 p-2 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-800/80 dark:border-emerald-800/60">
+                          <div className="rounded-lg bg-white/80 p-2 border border-emerald-200/80 dark:bg-slate-800/80">
                             <span className="text-[10px] font-semibold text-slate-400 block">Keterangan Kegiatan</span>
                             <span className="font-bold text-slate-800 dark:text-slate-100 truncate block">{detailUnit.jam_kegiatan || (detailUnit.program_type === 'boarding' ? '24 Jam Pengasuhan' : '07:15 - 16:00 WIB')}</span>
                           </div>
@@ -1922,10 +1908,10 @@ export default function EducationUnitsPage() {
 
                       {/* Titik Peta & Geofencing Card */}
                       {(detailUnit.latitude || detailUnit.longitude) && (
-                        <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/70 p-3.5 dark:border-emerald-300 dark:border-emerald-800 dark:bg-emerald-50/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/70 p-3.5 dark:bg-emerald-950/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                           <div className="space-y-0.5">
                             <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900 dark:text-white">
-                              <MapPin className="size-4 text-emerald-700 dark:text-emerald-300  dark:text-emerald-700 dark:text-emerald-300  shrink-0" />
+                              <MapPin className="size-4 text-emerald-700 dark:text-emerald-300 shrink-0" />
                               Titik Koordinat Map & Geofencing Presensi
                             </div>
                             <p className="text-xs font-mono text-slate-600 dark:text-slate-300">
@@ -1936,7 +1922,7 @@ export default function EducationUnitsPage() {
                             href={`https://www.google.com/maps?q=${detailUnit.latitude},${detailUnit.longitude}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white px-3 py-1.5 text-xs font-bold shadow-xs transition shrink-0 cursor-pointer"
+                            className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 text-xs font-black shadow-xs transition shrink-0 cursor-pointer"
                           >
                             <ExternalLink className="size-3.5" /> Buka Google Maps
                           </a>
@@ -1944,7 +1930,7 @@ export default function EducationUnitsPage() {
                       )}
 
                       {/* Alamat Lengkap */}
-                      <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3.5 dark:border-emerald-800/60 dark:bg-slate-800/50">
+                      <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white p-3.5 dark:bg-slate-800/50">
                         <div className="flex items-center gap-2 text-xs font-bold text-slate-900 dark:text-white mb-1">
                           <MapPin className="size-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                           Alamat Lengkap Unit
@@ -1963,7 +1949,7 @@ export default function EducationUnitsPage() {
                         const pctP = totalS > 0 ? Math.round((sP / totalS) * 100) : 0
 
                         return (
-                          <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/80 p-4 dark:border-emerald-800/60 dark:bg-slate-900/40 space-y-3">
+                          <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-slate-50/80 p-4 dark:bg-slate-900/40 space-y-3">
                             <div className="flex items-center justify-between">
                               <h4 className="text-xs font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5">
                                 <GraduationCap className="size-4 text-amber-500" />
@@ -1974,7 +1960,7 @@ export default function EducationUnitsPage() {
                               </span>
                             </div>
                             <div className="grid grid-cols-2 gap-3">
-                              <div className="rounded-xl border-2 border-sky-300 dark:border-sky-800 bg-sky-50/70 p-3 dark:border-emerald-800/60 dark:bg-sky-950/30">
+                              <div className="rounded-xl border-2 border-sky-300 dark:border-sky-800 bg-sky-50/70 p-3 dark:bg-sky-950/30">
                                 <p className="text-[10px] font-bold uppercase tracking-wide text-sky-700 dark:text-sky-300">Siswa Laki-laki (Santriwan)</p>
                                 <p className="mt-1 text-xl font-black text-sky-900 dark:text-sky-100 tabular-nums">
                                   {sL.toLocaleString('id-ID')}{' '}
@@ -1983,7 +1969,7 @@ export default function EducationUnitsPage() {
                                   </span>
                                 </p>
                               </div>
-                              <div className="rounded-xl border-2 border-rose-300 dark:border-rose-800 bg-rose-50/70 p-3 dark:border-emerald-800/60 dark:bg-rose-950/30">
+                              <div className="rounded-xl border-2 border-rose-300 dark:border-rose-800 bg-rose-50/70 p-3 dark:bg-rose-950/30">
                                 <p className="text-[10px] font-bold uppercase tracking-wide text-rose-700 dark:text-rose-300">Siswa Perempuan (Santriwati)</p>
                                 <p className="mt-1 text-xl font-black text-rose-900 dark:text-rose-100 tabular-nums">
                                   {sP.toLocaleString('id-ID')}{' '}
@@ -1999,14 +1985,14 @@ export default function EducationUnitsPage() {
 
                       {/* Ringkasan SDM Pendidik & Pegawai */}
                       <div className="grid grid-cols-2 gap-3">
-                        <div className="flex items-center justify-between rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 dark:border-emerald-800/60 dark:bg-slate-800/50">
+                        <div className="flex items-center justify-between rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white p-3 dark:bg-slate-800/50">
                           <div>
                             <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Tenaga Pendidik (Guru)</p>
                             <p className="text-base font-black text-emerald-700 dark:text-emerald-400 tabular-nums">{Number(detailUnit.total_guru ?? 0).toLocaleString('id-ID')}</p>
                           </div>
                           <UsersRound className="size-5 text-emerald-500 shrink-0 opacity-60" />
                         </div>
-                        <div className="flex items-center justify-between rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 dark:border-emerald-800/60 dark:bg-slate-800/50">
+                        <div className="flex items-center justify-between rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white p-3 dark:bg-slate-800/50">
                           <div>
                             <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Rombongan Belajar</p>
                             <p className="text-base font-black text-purple-700 dark:text-purple-400 tabular-nums">{Number(detailUnit.total_rombel ?? detailUnit.total_kelas ?? 0).toLocaleString('id-ID')} Rombel</p>
@@ -2029,7 +2015,7 @@ export default function EducationUnitsPage() {
                           {/* Grid 2 Kolom untuk Kartu Statistik */}
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                             {/* Kartu Siswa */}
-                            <div className="relative overflow-hidden rounded-2xl border-2 border-emerald-200/80 bg-white p-5 sm:p-6 shadow-sm dark:border-emerald-700/80 dark:bg-card-dark print:hidden">
+                            <div className="relative overflow-hidden rounded-2xl border-2 border-[#b6f6d9] bg-white p-5 sm:p-6 shadow-sm dark:border-emerald-700/80 dark:bg-card-dark print:hidden">
                               <div className="flex items-center justify-between">
                                 <div className="flex h-9 w-10 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400">
                                   <GraduationCap className="h-5 w-5" />
@@ -2050,10 +2036,9 @@ export default function EducationUnitsPage() {
                             </div>
 
                             {/* Kartu Guru */}
-                            <div className="relative overflow-hidden rounded-2xl border-2 border-emerald-200/80 bg-white p-5 sm:p-6 shadow-sm dark:border-emerald-700/80 dark:bg-card-dark print:hidden">
+                            <div className="relative overflow-hidden rounded-2xl border-2 border-[#b6f6d9] bg-white p-5 sm:p-6 shadow-sm dark:border-emerald-700/80 dark:bg-card-dark print:hidden">
                               <div className="flex items-center justify-between">
                                 <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
-
                                   <UsersRound className="size-6 sm:size-7 h-5 w-5 text-white" />
                                 </div>
                                 <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-extrabold text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300">
@@ -2072,7 +2057,7 @@ export default function EducationUnitsPage() {
                             </div>
 
                             {/* Kartu Pegawai */}
-                            <div className="relative overflow-hidden rounded-2xl border-2 border-emerald-200/80 bg-white p-5 sm:p-6 shadow-sm dark:border-emerald-700/80 dark:bg-card-dark print:hidden">
+                            <div className="relative overflow-hidden rounded-2xl border-2 border-[#b6f6d9] bg-white p-5 sm:p-6 shadow-sm dark:border-emerald-700/80 dark:bg-card-dark print:hidden">
                               <div className="flex items-center justify-between">
                                 <div className="flex h-9 w-10 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-600 dark:bg-cyan-500/20 dark:text-cyan-400">
                                   <UsersRound className="h-5 w-5" />
@@ -2093,7 +2078,7 @@ export default function EducationUnitsPage() {
                             </div>
 
                             {/* Kartu Kelas & Rombel */}
-                            <div className="relative overflow-hidden rounded-2xl border-2 border-emerald-200/80 bg-white p-5 sm:p-6 shadow-sm dark:border-emerald-700/80 dark:bg-card-dark print:hidden">
+                            <div className="relative overflow-hidden rounded-2xl border-2 border-[#b6f6d9] bg-white p-5 sm:p-6 shadow-sm dark:border-emerald-700/80 dark:bg-card-dark print:hidden">
                               <div className="flex items-center justify-between">
                                 <div className="flex h-9 w-10 items-center justify-center rounded-xl bg-purple-500/10 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400">
                                   <School className="h-5 w-5" />
@@ -2122,7 +2107,7 @@ export default function EducationUnitsPage() {
                           </div>
 
                           {/* Ringkasan Rasio & Insight Bar */}
-                          <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-card-dark p-4 dark:border-emerald-800/60 dark:from-emerald-950/20 dark:to-slate-800/40">
+                          <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-card-dark p-4">
                             <div className="flex items-center justify-between">
                               <div>
                                 <p className="text-xs font-extrabold text-emerald-900 dark:text-emerald-300">Rasio Pendidik : Peserta Didik</p>
@@ -2152,7 +2137,7 @@ export default function EducationUnitsPage() {
                           unitGuruQuery.data?.length === 0 ? <AppEmptyState title="Belum ada data guru" description="Tidak ada tenaga pendidik terdaftar pada unit ini." /> :
                             <div className="space-y-2">
                               {unitGuruQuery.data.map(guru => (
-                                <div key={guru.id || guru.niy} className="flex items-center gap-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 dark:border-emerald-800/60 dark:bg-slate-800/50">
+                                <div key={guru.id || guru.niy} className="flex items-center justify-between rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white p-3 dark:bg-slate-800/50 shadow-2xs">
                                   <PersonIdentityCell
                                     src={guru.foto || guru.avatar}
                                     name={guru.nama_lengkap || guru.nama || guru.name}
@@ -2174,7 +2159,7 @@ export default function EducationUnitsPage() {
                           unitSiswaQuery.data?.length === 0 ? <AppEmptyState title="Belum ada data siswa" description="Tidak ada peserta didik terdaftar aktif pada unit ini." /> :
                             <div className="space-y-2">
                               {unitSiswaQuery.data.map(siswa => (
-                                <div key={siswa.id || siswa.nis} className="flex items-center justify-between rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 dark:border-emerald-800/60 dark:bg-slate-800/50">
+                                <div key={siswa.id || siswa.nis} className="flex items-center justify-between rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white p-3 dark:bg-slate-800/50 shadow-2xs">
                                   <PersonIdentityCell
                                     src={siswa.foto}
                                     name={siswa.nama || siswa.full_name}
@@ -2198,7 +2183,7 @@ export default function EducationUnitsPage() {
                               {unitKelasQuery.data.map(kelas => {
                                 const namaKelas = typeof kelas.nama_kelas === 'object' ? (kelas.nama_kelas?.name || '-') : (kelas.nama_kelas || kelas.name || '-')
                                 return (
-                                  <div key={kelas.id || namaKelas} className="flex items-center justify-between rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 dark:border-emerald-800/60 dark:bg-slate-800/50">
+                                  <div key={kelas.id || namaKelas} className="flex items-center justify-between rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white p-3 dark:bg-slate-800/50 shadow-2xs">
                                     <div>
                                       <p className="text-xs font-bold text-slate-900 dark:text-white">{namaKelas}</p>
                                       <p className="text-[10px] text-slate-500">{kelas.tingkat || kelas.level || ''}</p>
@@ -2211,100 +2196,47 @@ export default function EducationUnitsPage() {
                       }
                     </div>
                   )}
-                </div>
-
-                {/* Footer */}
-                <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
-                  <button
-                    type="button"
-                    onClick={() => setDetailUnit(null)}
-                    className="inline-flex items-center gap-2 rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
-                  >
-                    <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
-                      <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
-                    </div>
-                    <span>Tutup</span>
-                  </button>
-                  {canUpdate && (
-                    <button
-                      type="button"
-                      onClick={() => { const t = detailUnit; setDetailUnit(null); openEditModal(t) }}
-                      className="inline-flex items-center gap-2 rounded-xl bg-[#059669] hover:bg-[#047857] text-white px-5 py-2.5 text-xs font-extrabold shadow-sm hover:scale-[1.02] transition-all duration-200 active:scale-95 cursor-pointer"
-                    >
-                      <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
-                        <Pencil className="size-3.5 text-emerald-600" strokeWidth={2.25} />
-                      </div>
-                      <span>Ubah Data Unit</span>
-                    </button>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          </div>
+          </>
         )}
-      </AnimatePresence>
-
-      {/* ══════════════════════════════════════════════════════════════════
+      </AppModal>
+{/* ══════════════════════════════════════════════════════════════════
  KPI CARDS DRILL-DOWN MODAL — Interactive Analytics Breakdown
  ══════════════════════════════════════════════════════════════════ */}
-      <AnimatePresence>
-        {activeKpiModal && (
-          <div
-            role="dialog"
-            tabIndex={-1}
-            aria-modal="true"
-            className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
-            onMouseDown={e => { if (e.target === e.currentTarget) setActiveKpiModal(null) }}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.94, y: 14 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-              className="modal-dialog font-sans my-auto w-full max-w-4xl"
+      <AppModal
+        isOpen={Boolean(activeKpiModal)}
+        onClose={() => setActiveKpiModal(null)}
+        icon={
+          activeKpiModal === 'total_unit' ? Building2 :
+          activeKpiModal === 'total_siswa' ? GraduationCap :
+          activeKpiModal === 'total_guru' ? UsersRound :
+          CheckCircle2
+        }
+        title={
+          activeKpiModal === 'total_unit' ? 'Analisis Total Unit Pendidikan Terdaftar' :
+          activeKpiModal === 'total_siswa' ? 'Distribusi Siswa (Santriwan & Santriwati)' :
+          activeKpiModal === 'total_guru' ? 'Distribusi Tenaga Pendidik & Guru Aktif' :
+          'Status Operasional Unit Pendidikan Aktif'
+        }
+        badge="Metrik KPI"
+        description="Rincian data agregat berdasarkan unit pendidikan di seluruh jaringan yayasan"
+        maxWidth="max-w-4xl"
+        footer={
+          <div className="flex items-center justify-between w-full">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+              Menampilkan rincian agregat unit pendidikan Dareliman Edu
+            </span>
+            <button
+              type="button"
+              onClick={() => setActiveKpiModal(null)}
+              className="h-9.5 px-5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
             >
-              <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
-                {/* Top Accent Gradient Bar */}
-
-                {/* Header */}
-                <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
-                      {activeKpiModal === 'total_unit' && <Building2 className="h-5 w-5 text-slate-600" strokeWidth={2.25} />}
-                      {activeKpiModal === 'total_siswa' && <GraduationCap className="h-5 w-5 text-amber-600" strokeWidth={2.25} />}
-                      {activeKpiModal === 'total_guru' && <UsersRound className="h-5 w-5 text-current" strokeWidth={2.25} />}
-                      {activeKpiModal === 'unit_aktif' && <CheckCircle2 className="h-5 w-5 text-current" strokeWidth={2.25} />}
-                    </div>
-                    <div>
-                      <h3 className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
-                        <span>
-                          {activeKpiModal === 'total_unit' && 'Analisis Total Unit Pendidikan Terdaftar'}
-                          {activeKpiModal === 'total_siswa' && 'Distribusi Siswa (Santriwan & Santriwati)'}
-                          {activeKpiModal === 'total_guru' && 'Distribusi Tenaga Pendidik & Guru Aktif'}
-                          {activeKpiModal === 'unit_aktif' && 'Status Operasional Unit Pendidikan Aktif'}
-                        </span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
-                          <Sparkles className="size-3" />
-                          Metrik KPI
-                        </span>
-                      </h3>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                        Rincian data agregat berdasarkan unit pendidikan di seluruh jaringan yayasan
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setActiveKpiModal(null)}
-                    aria-label="Tutup modal"
-                    className="size-9 flex items-center justify-center rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer"
-                  >
-                    <X className="size-4 text-rose-600" strokeWidth={2.25} />
-                  </button>
-                </div>
-
-                {/* Body */}
-                <div className="modal-body min-h-0 flex-1 overflow-y-auto p-6 space-y-4">
+              <X className="size-4" strokeWidth={2} />
+              <span>Tutup Rincian</span>
+            </button>
+          </div>
+        }
+      >
+        <div className="space-y-4">
                   {/* Summary Bar */}
                   <div className="grid grid-cols-3 gap-3">
                     <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 p-3 dark:border-emerald-800/60 dark:bg-slate-800/40">
@@ -2399,132 +2331,109 @@ export default function EducationUnitsPage() {
                       </div>
                     )}
                   </div>
-                </div>
-
-                {/* Footer */}
-                <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
-                  <span className="text-xs font-semibold text-slate-400 dark:text-slate-500">
-                    Menampilkan rincian agregat unit pendidikan Dareliman Edu
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setActiveKpiModal(null)}
-                    className="inline-flex items-center gap-1.5 rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs px-4 py-2 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
-                  >
-                    <X className="size-4 text-rose-600" />
-                    <span>Tutup Rincian</span>
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+        </div>
+      </AppModal>
 
       {/* ══════════════════════════════════════════════════════════════════
  FORM MODAL (Add / Edit) — Step Wizard
  ══════════════════════════════════════════════════════════════════ */}
-      <AnimatePresence>
-        {isFormOpen && (
-          <div
-            className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
-            role="dialog"
-            tabIndex={-1}
-            aria-modal="true"
-            aria-labelledby="edu-unit-form-title"
-            onMouseDown={e => { if (e.target === e.currentTarget) closeFormModal() }}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.94, y: 14 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-              className="modal-dialog font-sans my-auto w-full max-w-xl"
-            >
-              <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
-                {/* Top Accent Gradient Bar */}
-
-                {/* Header */}
-                <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
-                  <div className="flex items-center gap-3">
-                    <div className={cn(
-                      "flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl text-white shadow-md shrink-0 border",
-                      isEditMode
-                        ? "bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 shadow-sm"
-                        : "bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 shadow-sm"
-                    )}>
-                      {isEditMode ? (
-                        <Pencil className="h-5 w-5 text-emerald-600" strokeWidth={2.25} />
-                      ) : (
-                        <School className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
-                      )}
-                    </div>
-                    <div>
-                      <h3 id="edu-unit-form-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
-                        <span>{isEditMode ? 'Edit Unit Pendidikan' : 'Tambah Unit Pendidikan'}</span>
-                        <span className={cn(
-                          "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold border",
-                          isEditMode
-                            ? "bg-amber-50 text-amber-700 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/60 dark:text-amber-400 dark:border-emerald-800/60"
-                            : "bg-emerald-50 text-emerald-800 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60"
-                        )}>
-                          <Sparkles className="size-3" />
-                          {isEditMode ? 'Update Data' : 'Unit Baru'}
-                        </span>
-                      </h3>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                        Langkah {currentStep} dari 4 · {
-                          currentStep === 1 ? 'Informasi Utama Unit' :
-                            currentStep === 2 ? 'Alamat & Lokasi Fisik' :
-                              currentStep === 3 ? 'Kepala Sekolah & SK' :
-                                'Ringkasan Data & Konfirmasi'
-                        }
-                      </p>
-                    </div>
-                  </div>
+      <AppModal
+        isOpen={isFormOpen}
+        onClose={closeFormModal}
+        title={isEditMode ? 'Edit Unit Pendidikan' : 'Tambah Unit Pendidikan'}
+        badge={isEditMode ? 'Update Data' : 'Unit Baru'}
+        description={`Langkah ${currentStep} dari 4 · ${
+          currentStep === 1 ? 'Informasi Utama Unit' :
+            currentStep === 2 ? 'Alamat & Lokasi Fisik' :
+              currentStep === 3 ? 'Kepala Sekolah & SK' :
+                'Ringkasan Data & Konfirmasi'
+        }`}
+        icon={isEditMode ? Pencil : School}
+        maxWidth="max-w-3xl sm:max-w-4xl"
+        zIndex={50}
+        bodyClassName="p-6 pb-8 space-y-4"
+        subHeader={
+          <div className="border-b border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/90 dark:bg-emerald-950/40 px-6 py-2.5 shrink-0 shadow-2xs">
+            <div className="grid grid-cols-4 gap-2">
+              {[
+                { step: 1, label: '1. Info Unit', icon: Building2 },
+                { step: 2, label: '2. Alamat', icon: MapPin },
+                { step: 3, label: '3. Pimpinan', icon: UsersRound },
+                { step: 4, label: '4. Konfirmasi', icon: CheckCircle2 },
+              ].map(s => {
+                const isActive = currentStep === s.step
+                const isDone = currentStep > s.step
+                return (
                   <button
+                    key={s.step}
                     type="button"
-                    onClick={closeFormModal}
-                    aria-label="Tutup form"
-                    className="size-9 flex items-center justify-center rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer"
+                    onClick={() => setCurrentStep(s.step)}
+                    className={cn(
+                      "flex items-center justify-center gap-1.5 rounded-xl py-2 px-3 text-xs font-black transition-all duration-200 cursor-pointer active:scale-95",
+                      isActive
+                        ? "bg-emerald-600 text-white shadow-xs"
+                        : isDone
+                          ? "bg-emerald-100/90 text-emerald-900 dark:bg-emerald-900/60 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-700/80"
+                          : "text-slate-600 hover:text-emerald-700 hover:bg-emerald-100/60 dark:text-slate-300 dark:hover:bg-slate-800"
+                    )}
                   >
-                    <X className="size-4 text-rose-600" strokeWidth={2.25} />
+                    <s.icon className={cn("size-3.5 shrink-0", isActive ? "text-white" : isDone ? "text-emerald-700 dark:text-emerald-300" : "text-slate-400")} />
+                    <span className="truncate">{s.label}</span>
                   </button>
-                </div>
-
-                {/* Step Wizard Indicator */}
-                <div className="border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/70 p-2.5 dark:border-emerald-800/60 dark:bg-slate-900/50">
-                  <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
-                    {[
-                      { step: 1, label: 'Info Unit', icon: Building2 },
-                      { step: 2, label: 'Alamat', icon: MapPin },
-                      { step: 3, label: 'Pimpinan', icon: UsersRound },
-                      { step: 4, label: 'Konfirmasi', icon: CheckCircle2 },
-                    ].map(s => {
-                      const isActive = currentStep === s.step
-                      const isDone = currentStep > s.step
-                      return (
-                        <button
-                          key={s.step}
-                          type="button"
-                          onClick={() => setCurrentStep(s.step)}
-                          className={`flex items-center justify-center gap-1.5 rounded-xl py-2 px-2.5 text-xs font-extrabold transition-all duration-200 cursor-pointer ${isActive
-                            ? 'bg-emerald-600 text-white shadow-xs border border-emerald-500/40 dark:border-emerald-600/50'
-                            : isDone
-                              ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 hover:bg-emerald-100/80 border-2 border-emerald-300 dark:border-emerald-800'
-                              : 'bg-white text-slate-400 border border-emerald-200/80 hover:bg-emerald-50 hover:text-emerald-700 dark:bg-slate-800/60 dark:border-emerald-800/60 dark:text-slate-500'
-                            }`}
-                        >
-                          <s.icon className={`size-3.5 shrink-0 ${isActive ? 'text-white' : isDone ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}`} />
-                          <span className="truncate">{s.label}</span>
-                        </button>
-                      )
-                    })}
-                  </div>
-                </div>
-
-                {/* Body */}
-                <div className="min-h-0 flex-1 overflow-y-auto p-6 pb-8 space-y-4">
+                )
+              })}
+            </div>
+          </div>
+        }
+        footer={
+          <div className="flex w-full items-center justify-between">
+            <button
+              type="button"
+              onClick={closeFormModal}
+              className="inline-flex items-center gap-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 h-9.5 px-4 text-xs font-black border border-slate-300 dark:border-slate-700 active:scale-95 transition-all cursor-pointer"
+            >
+              <X className="size-4 text-rose-600" strokeWidth={2.5} />
+              <span>Batal</span>
+            </button>
+            <div className="flex items-center gap-2.5">
+              {currentStep > 1 && (
+                <button
+                  type="button"
+                  onClick={() => setCurrentStep(s => s - 1)}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 h-9.5 px-4 text-xs font-black border border-slate-300 dark:border-slate-700 active:scale-95 transition-all cursor-pointer"
+                >
+                  <ArrowLeft className="size-4" strokeWidth={2.2} />
+                  <span>Kembali</span>
+                </button>
+              )}
+              {currentStep < 4 ? (
+                <button
+                  type="button"
+                  onClick={() => setCurrentStep(s => Math.min(4, s + 1))}
+                  className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white h-9.5 px-5 text-xs font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 active:scale-95 transition-all cursor-pointer"
+                >
+                  <span>Selanjutnya</span>
+                  <ArrowRight className="size-4 text-white" strokeWidth={2.5} />
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleFormSubmit}
+                  disabled={isMutating}
+                  className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white h-9.5 px-5 text-xs font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 active:scale-95 transition-all disabled:opacity-50 cursor-pointer"
+                >
+                  {isMutating ? (
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  ) : (
+                    <Save className="size-4 text-white" strokeWidth={2.2} />
+                  )}
+                  <span>{isEditMode ? 'Simpan Perubahan' : 'Simpan Unit'}</span>
+                </button>
+              )}
+            </div>
+          </div>
+        }
+      >
                   {(formAlert || formMutationAlert) && (
                     <InlineAlert
                       type={formMutationAlert ? 'error' : 'warning'}
@@ -2548,7 +2457,7 @@ export default function EducationUnitsPage() {
                       <div className="space-y-1.5">
                         <label className="block text-xs font-bold text-slate-700 dark:text-slate-200">Foto / Logo Unit</label>
                         {formData.logo_url ? (
-                          <div className="flex items-center gap-4 rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/70 p-3.5 dark:border-emerald-800/60 dark:bg-emerald-950/30">
+                          <div className="flex items-center gap-4 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800 bg-emerald-50/70 p-3.5 dark:border-emerald-800/60 dark:bg-emerald-950/30">
                             <img src={formData.logo_url} alt="Logo" className="h-14 w-14 shrink-0 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 object-cover shadow-xs" />
                             <div>
                               <p className="text-xs font-extrabold text-slate-800 dark:text-slate-100">Logo unit terpasang</p>
@@ -2567,26 +2476,51 @@ export default function EducationUnitsPage() {
                         )}
                       </div>
 
-                      {/* Nama Unit */}
-                      <div className="space-y-1.5">
-                        <label htmlFor="name" className="block text-xs font-bold text-slate-700 dark:text-slate-200">
-                          Nama Unit Pendidikan <span className="text-rose-500">*</span>
-                        </label>
-                        <div className="relative flex items-center">
-                          <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
-                            <Building2 className="size-4" />
+                      {/* Nama Unit & Jenis Unit */}
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div className="space-y-1.5 sm:col-span-2">
+                          <label htmlFor="name" className="block text-xs font-bold text-slate-700 dark:text-slate-200">
+                            Nama Unit Pendidikan <span className="text-rose-500">*</span>
+                          </label>
+                          <div className="relative flex items-center">
+                            <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
+                              <Building2 className="size-4" />
+                            </div>
+                            <input
+                              id="name"
+                              name="name"
+                              type="text"
+                              placeholder="Contoh: TKIT 1 Dar el-Iman"
+                              value={formData.name}
+                              onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
+                              className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 shadow-xs outline-none transition-all"
+                            />
                           </div>
-                          <input
-                            id="name"
-                            name="name"
-                            type="text"
-                            placeholder="Contoh: Nama Unit Sekolah"
-                            value={formData.name}
-                            onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
-                            className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
-                          />
+                          <p className="text-[11px] font-medium text-slate-400">Nama resmi unit pendidikan yang terdaftar</p>
                         </div>
-                        <p className="text-xs font-medium text-slate-400">Nama resmi unit pendidikan yang terdaftar</p>
+
+                        <div className="space-y-1.5 sm:col-span-1">
+                          <label className="block text-xs font-bold text-slate-700 dark:text-slate-200">
+                            Jenis Unit <span className="text-rose-500">*</span>
+                          </label>
+                          <HeroUiFilterSelect
+                            value={formData.unit_type}
+                            onChange={val => setFormData(p => ({ ...p, unit_type: val }))}
+                            options={[
+                              { value: '', label: '-- Pilih Jenis Unit --' },
+                              ...(typeOptions.length > 0
+                                ? typeOptions
+                                : ['TKIT', 'TAUD', 'SDIT', 'MIT', 'SMPIT', 'SMAIT', 'PONPES', 'Mahad']
+                              ).map(t => ({ value: t, label: t }))
+                            ]}
+                            placeholder="-- Pilih Jenis --"
+                            icon={School}
+                            ariaLabel="Pilih jenis unit pendidikan"
+                            size="md"
+                            className="w-full"
+                          />
+                          <p className="text-[11px] font-medium text-slate-400">Jenjang sekolah</p>
+                        </div>
                       </div>
 
                       {/* Kode Unit & NPSN */}
@@ -2603,10 +2537,10 @@ export default function EducationUnitsPage() {
                               id="code"
                               name="code"
                               type="text"
-                              placeholder="Contoh: SDIT-002"
+                              placeholder="Contoh: TKIT-001"
                               value={formData.code}
                               onChange={e => setFormData(p => ({ ...p, code: e.target.value }))}
-                              className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                              className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 shadow-xs outline-none transition-all"
                             />
                           </div>
                         </div>
@@ -2626,7 +2560,7 @@ export default function EducationUnitsPage() {
                               placeholder="Nomor Pokok Sekolah Nasional"
                               value={formData.npsn}
                               onChange={e => setFormData(p => ({ ...p, npsn: e.target.value }))}
-                              className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                              className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 shadow-xs outline-none transition-all"
                             />
                           </div>
                         </div>
@@ -2649,7 +2583,7 @@ export default function EducationUnitsPage() {
                               placeholder="info@sekolah.sch.id"
                               value={formData.email}
                               onChange={e => setFormData(p => ({ ...p, email: e.target.value }))}
-                              className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                              className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 shadow-xs outline-none transition-all"
                             />
                           </div>
                         </div>
@@ -2669,37 +2603,14 @@ export default function EducationUnitsPage() {
                               placeholder="0751-xxxxxx / 08xxxxxxxxxx"
                               value={formData.phone}
                               onChange={e => setFormData(p => ({ ...p, phone: e.target.value }))}
-                              className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                              className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 shadow-xs outline-none transition-all"
                             />
                           </div>
                         </div>
                       </div>
 
-                      {/* Jenis Unit */}
-                      <div className="space-y-1.5">
-                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-200">
-                          Jenis Unit <span className="text-rose-500">*</span>
-                        </label>
-                        <HeroUiFilterSelect
-                          value={formData.unit_type}
-                          onChange={val => setFormData(p => ({ ...p, unit_type: val }))}
-                          options={[
-                            { value: '', label: '-- Pilih Jenis Unit --' },
-                            ...(typeOptions.length > 0
-                              ? typeOptions
-                              : ['TKIT', 'TAUD', 'SDIT', 'MIT', 'SMPIT', 'SMAIT', 'PONPES', 'Mahad']
-                            ).map(t => ({ value: t, label: t }))
-                          ]}
-                          placeholder="-- Pilih Jenis Unit --"
-                          icon={School}
-                          ariaLabel="Pilih jenis unit pendidikan"
-                          size="md"
-                          className="w-full"
-                        />
-                      </div>
-
                       {/* Model Program & Jam Kegiatan Unit */}
-                      <div className="space-y-3 rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/40 p-4 dark:border-emerald-800/60 dark:bg-emerald-950/20">
+                      <div className="space-y-3 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800 bg-emerald-50/40 p-4 dark:border-emerald-800/60 dark:bg-emerald-950/20">
                         <div className="flex items-center justify-between">
                           <label className="block text-xs font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5">
                             <School className="size-4 text-emerald-600 dark:text-emerald-400" />
@@ -2722,25 +2633,27 @@ export default function EducationUnitsPage() {
                                 jam_kegiatan: p.jam_kegiatan && !p.jam_kegiatan.includes('24 Jam') ? p.jam_kegiatan : '07:15 - 16:00 WIB',
                               }))
                             }}
-                            className={`relative flex items-start gap-3 rounded-xl border-2 p-3 transition-all cursor-pointer ${formData.program_type === 'fullday'
-                              ? 'border-emerald-200/80 bg-white shadow-sm ring-2 ring-emerald-500/20 dark:bg-slate-800 dark:border-emerald-800/60'
-                              : 'border-emerald-200/80 bg-white/70 hover:border-emerald-300 dark:border-emerald-800/60 dark:bg-slate-800/60'
+                            className={`relative flex items-start gap-3.5 rounded-xl border-2 p-3.5 transition-all duration-200 cursor-pointer ${formData.program_type === 'fullday'
+                              ? 'border-emerald-500 bg-emerald-50/40 dark:bg-emerald-950/40 shadow-xs ring-2 ring-emerald-500/20'
+                              : 'border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 hover:border-emerald-400'
                               }`}
                           >
-                            <div className={`mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl ${formData.program_type === 'fullday'
-                              ? 'bg-emerald-600 text-white'
-                              : 'bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400'
+                            <div className={`mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-xl transition-all ${formData.program_type === 'fullday'
+                              ? 'bg-emerald-600 text-white shadow-xs'
+                              : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400'
                               }`}>
                               <Sun className="size-5" />
                             </div>
                             <div className="min-w-0 flex-1">
                               <div className="flex items-center justify-between">
                                 <p className="text-xs font-black text-slate-900 dark:text-white">Fullday School</p>
-                                {formData.program_type === 'fullday' && (
-                                  <span className="size-2 rounded-full bg-emerald-500 ring-4 ring-emerald-100 dark:ring-emerald-900/50" />
+                                {formData.program_type === 'fullday' ? (
+                                  <span className="size-2.5 rounded-full bg-emerald-500 ring-4 ring-emerald-100 dark:ring-emerald-900/50" />
+                                ) : (
+                                  <span className="size-2.5 rounded-full border-2 border-slate-300 dark:border-slate-700" />
                                 )}
                               </div>
-                              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
+                              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-snug">
                                 Siswa pulang harian sore hari. Kemitraan KBM sekolah & pengasuhan rumah.
                               </p>
                             </div>
@@ -2757,25 +2670,27 @@ export default function EducationUnitsPage() {
                                 jam_kegiatan: p.jam_kegiatan && !p.jam_kegiatan.includes('16:00') ? p.jam_kegiatan : '24 Jam (Pengasuhan Asrama & Halaqah)',
                               }))
                             }}
-                            className={`relative flex items-start gap-3 rounded-xl border-2 p-3 transition-all cursor-pointer ${formData.program_type === 'boarding'
-                              ? 'border-emerald-200/80  bg-white shadow-sm ring-2 ring-emerald-500/20 dark:bg-slate-800 dark:border-emerald-800/60 '
-                              : 'border-emerald-200/80 bg-white/70 hover:border-emerald-300 dark:border-emerald-800/60 dark:bg-slate-800/60'
+                            className={`relative flex items-start gap-3.5 rounded-xl border-2 p-3.5 transition-all duration-200 cursor-pointer ${formData.program_type === 'boarding'
+                              ? 'border-emerald-500 bg-emerald-50/40 dark:bg-emerald-950/40 shadow-xs ring-2 ring-emerald-500/20'
+                              : 'border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 hover:border-emerald-400'
                               }`}
                           >
-                            <div className={`mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl ${formData.program_type === 'boarding'
-                              ? 'bg-emerald-50 text-emerald-700  text-white'
-                              : 'bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400'
+                            <div className={`mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-xl transition-all ${formData.program_type === 'boarding'
+                              ? 'bg-emerald-600 text-white shadow-xs'
+                              : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400'
                               }`}>
                               <Moon className="size-5" />
                             </div>
                             <div className="min-w-0 flex-1">
                               <div className="flex items-center justify-between">
                                 <p className="text-xs font-black text-slate-900 dark:text-white">Boarding / Pesantren</p>
-                                {formData.program_type === 'boarding' && (
-                                  <span className="size-2 rounded-full bg-emerald-50 text-emerald-700  ring-4 ring-emerald-100 dark:ring-emerald-900/50" />
+                                {formData.program_type === 'boarding' ? (
+                                  <span className="size-2.5 rounded-full bg-emerald-500 ring-4 ring-emerald-100 dark:ring-emerald-900/50" />
+                                ) : (
+                                  <span className="size-2.5 rounded-full border-2 border-slate-300 dark:border-slate-700" />
                                 )}
                               </div>
-                              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
+                              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-snug">
                                 Santri mukim asrama 24 jam. Pengasuhan intensif, halaqah quran & musyrif.
                               </p>
                             </div>
@@ -2783,7 +2698,7 @@ export default function EducationUnitsPage() {
                         </div>
 
                         {/* Jam Masuk, Jam Pulang, Jam Kegiatan */}
-                        <div className="pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div className="pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60 grid grid-cols-1 sm:grid-cols-3 gap-3">
                           <div className="space-y-1">
                             <label htmlFor="jam_masuk" className="block text-xs font-bold text-slate-700 dark:text-slate-300">
                               Jam Masuk / Mulai
@@ -2797,7 +2712,7 @@ export default function EducationUnitsPage() {
                                 type="time"
                                 value={formData.jam_masuk}
                                 onChange={e => setFormData(p => ({ ...p, jam_masuk: e.target.value }))}
-                                className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-9 pr-3 py-2 text-xs font-semibold text-slate-800 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100"
+                                className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-9 pr-3 text-xs font-bold text-slate-800 dark:text-slate-100 shadow-xs focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
                               />
                             </div>
                           </div>
@@ -2815,7 +2730,7 @@ export default function EducationUnitsPage() {
                                 type="time"
                                 value={formData.jam_pulang}
                                 onChange={e => setFormData(p => ({ ...p, jam_pulang: e.target.value }))}
-                                className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-9 pr-3 py-2 text-xs font-semibold text-slate-800 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100"
+                                className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-9 pr-3 text-xs font-bold text-slate-800 dark:text-slate-100 shadow-xs focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
                               />
                             </div>
                           </div>
@@ -2831,7 +2746,7 @@ export default function EducationUnitsPage() {
                                 placeholder="07:15 - 16:00 WIB"
                                 value={formData.jam_kegiatan}
                                 onChange={e => setFormData(p => ({ ...p, jam_kegiatan: e.target.value }))}
-                                className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 py-2 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100"
+                                className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 px-3.5 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 shadow-xs focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
                               />
                             </div>
                           </div>
@@ -2955,7 +2870,7 @@ export default function EducationUnitsPage() {
                             placeholder="Jl. Khatib Sulaiman No. 10..."
                             value={formData.address}
                             onChange={e => setFormData(p => ({ ...p, address: e.target.value }))}
-                            className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                            className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
                           />
                         </div>
                         <p className="text-xs font-medium text-slate-400">
@@ -3088,7 +3003,7 @@ export default function EducationUnitsPage() {
                             placeholder="25136"
                             value={formData.postal_code}
                             onChange={e => setFormData(p => ({ ...p, postal_code: e.target.value }))}
-                            className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
+                            className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 shadow-xs outline-none transition-all"
                           />
                         </div>
                         <p className="text-xs font-medium text-slate-400">Kode pos terisi otomatis saat memilih kelurahan / kecamatan (dapat disunting manual)</p>
@@ -3147,7 +3062,7 @@ export default function EducationUnitsPage() {
                         <button
                           type="button"
                           onClick={() => setIsAddEmployeeModalOpen(true)}
-                          className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 px-3 py-1.5 text-xs font-bold text-[#059669] dark:text-[#10B981] hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition border-2 border-emerald-300 dark:border-emerald-800/80 cursor-pointer"
+                          className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 px-3 py-1.5 text-xs font-bold text-[#059669] dark:text-[#10B981] hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition border-2 border-[#b6f6d9] dark:border-emerald-800/80 cursor-pointer"
                         >
                           <Plus className="h-3.5 w-3.5" /> Tambah Pegawai Baru
                         </button>
@@ -3194,71 +3109,71 @@ export default function EducationUnitsPage() {
                         </p>
                       </div>
 
-                      {/* Nama Pimpinan */}
-                      <div className="space-y-1.5">
-                        <label htmlFor="principal_name" className="block text-xs font-bold text-slate-700 dark:text-slate-200">
-                          Nama Pimpinan / Kepala Sekolah
-                        </label>
-                        <div className="relative flex items-center">
-                          <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
-                            <UserCheck className="size-4" />
+                      {/* Nama Pimpinan & NIP / NIPY */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div className="space-y-1.5">
+                          <label htmlFor="principal_name" className="block text-xs font-bold text-slate-700 dark:text-slate-200">
+                            Nama Pimpinan / Kepala Sekolah
+                          </label>
+                          <div className="relative flex items-center">
+                            <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
+                              <UserCheck className="size-4" />
+                            </div>
+                            <input
+                              id="principal_name"
+                              name="principal_name"
+                              type="text"
+                              placeholder="Ust. Fadli Rahman, S.Pd"
+                              value={formData.principal_name}
+                              onChange={e => setFormData(p => ({ ...p, principal_name: e.target.value }))}
+                              className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 shadow-xs outline-none transition-all"
+                            />
                           </div>
-                          <input
-                            id="principal_name"
-                            name="principal_name"
-                            type="text"
-                            placeholder="Ust. Fadli Rahman, S.Pd"
-                            value={formData.principal_name}
-                            onChange={e => setFormData(p => ({ ...p, principal_name: e.target.value }))}
-                            className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
-                          />
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label htmlFor="principal_nip" className="block text-xs font-bold text-slate-700 dark:text-slate-200">
+                            NIP / NIPY
+                          </label>
+                          <div className="relative flex items-center">
+                            <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
+                              <FileCheck className="size-4" />
+                            </div>
+                            <input
+                              id="principal_nip"
+                              name="principal_nip"
+                              type="text"
+                              placeholder="1985xxxxxx"
+                              value={formData.principal_nip}
+                              onChange={e => setFormData(p => ({ ...p, principal_nip: e.target.value }))}
+                              className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 shadow-xs outline-none transition-all"
+                            />
+                          </div>
                         </div>
                       </div>
 
-                      {/* NIP / NIPY */}
-                      <div className="space-y-1.5">
-                        <label htmlFor="principal_nip" className="block text-xs font-bold text-slate-700 dark:text-slate-200">
-                          NIP / NIPY
-                        </label>
-                        <div className="relative flex items-center">
-                          <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
-                            <FileCheck className="size-4" />
+                      {/* No. SK Pendirian, Tahun Berdiri & Akreditasi */}
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pb-8">
+                        <div className="space-y-1.5">
+                          <label htmlFor="sk_pendirian" className="block text-xs font-bold text-slate-700 dark:text-slate-200">
+                            No. SK Pendirian Unit
+                          </label>
+                          <div className="relative flex items-center">
+                            <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
+                              <FileText className="size-4" />
+                            </div>
+                            <input
+                              id="sk_pendirian"
+                              name="sk_pendirian"
+                              type="text"
+                              placeholder="Contoh: SK-YDI/2021/005"
+                              value={formData.sk_pendirian}
+                              onChange={e => setFormData(p => ({ ...p, sk_pendirian: e.target.value }))}
+                              className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 shadow-xs outline-none transition-all"
+                            />
                           </div>
-                          <input
-                            id="principal_nip"
-                            name="principal_nip"
-                            type="text"
-                            placeholder="1985xxxxxx"
-                            value={formData.principal_nip}
-                            onChange={e => setFormData(p => ({ ...p, principal_nip: e.target.value }))}
-                            className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
-                          />
                         </div>
-                      </div>
 
-                      {/* No. SK Pendirian */}
-                      <div className="space-y-1.5">
-                        <label htmlFor="sk_pendirian" className="block text-xs font-bold text-slate-700 dark:text-slate-200">
-                          No. SK Pendirian Unit
-                        </label>
-                        <div className="relative flex items-center">
-                          <div className="pointer-events-none absolute left-3.5 flex items-center text-slate-400 dark:text-slate-500">
-                            <FileText className="size-4" />
-                          </div>
-                          <input
-                            id="sk_pendirian"
-                            name="sk_pendirian"
-                            type="text"
-                            placeholder="Contoh: SK-YDI/2021/005"
-                            value={formData.sk_pendirian}
-                            onChange={e => setFormData(p => ({ ...p, sk_pendirian: e.target.value }))}
-                            className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white pl-10 pr-4 py-2.5 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-xs font-semibold text-slate-800 placeholder-slate-400 shadow-xs focus:border-emerald-200/80 focus:outline-hidden focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 transition-colors"
-                          />
-                        </div>
-                      </div>
-
-                      {/* Tahun Berdiri & Akreditasi */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-8">
                         <div className="space-y-1.5">
                           <label className="block text-xs font-bold text-slate-700 dark:text-slate-200">
                             Tahun Berdiri
@@ -3310,7 +3225,7 @@ export default function EducationUnitsPage() {
                         <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">Siap Disimpan</span>
                       </div>
 
-                      <div className="divide-y divide-emerald-100/80 rounded-xl border border-emerald-200/80 bg-slate-50/80 text-xs dark:divide-slate-700/70 dark:border-emerald-800/80 dark:bg-slate-800/30 overflow-hidden">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                         {[
                           ['Nama Unit', formData.name || '-'],
                           ['Jenis Unit', formData.unit_type || '-'],
@@ -3322,14 +3237,14 @@ export default function EducationUnitsPage() {
                           ['Akreditasi', formData.accreditation || 'A'],
                           ['Status Operasional', formData.is_active ? 'Aktif' : 'Nonaktif'],
                         ].map(([label, value]) => (
-                          <div key={label} className="flex items-center justify-between px-4 py-3">
+                          <div key={label} className="p-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/40 dark:bg-slate-800/40 flex items-center justify-between text-xs">
                             <span className="font-semibold text-slate-500 dark:text-slate-400">{label}</span>
                             <span className="font-extrabold text-slate-900 dark:text-white">{value}</span>
                           </div>
                         ))}
                       </div>
 
-                      <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/70 p-4 dark:border-emerald-800/60 dark:bg-emerald-950/30 flex items-start gap-3">
+                      <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-800 bg-emerald-50/70 p-4 dark:border-emerald-800/60 dark:bg-emerald-950/30 flex items-start gap-3">
                         <ShieldCheck className="size-5 text-[#059669] dark:text-emerald-400 shrink-0 mt-0.5" />
                         <p className="text-xs text-slate-700 dark:text-slate-200 leading-relaxed">
                           Pastikan seluruh data unit yang dimasukkan telah sesuai dengan dokumen resmi yayasan sebelum menekan tombol simpan.
@@ -3337,421 +3252,214 @@ export default function EducationUnitsPage() {
                       </div>
                     </div>
                   )}
-                </div>
-
-                {/* Footer */}
-                <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
-                  <button
-                    type="button"
-                    onClick={closeFormModal}
-                    className="inline-flex items-center gap-2 rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
-                  >
-                    <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
-                      <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
-                    </div>
-                    <span>Batal</span>
-                  </button>
-                  <div className="flex items-center gap-2.5">
-                    {currentStep > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => setCurrentStep(s => s - 1)}
-                        className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-card-dark px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
-                      >
-                        <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
-                          <ArrowLeft className="size-3.5" strokeWidth={2.2} />
-                        </div>
-                        <span>Kembali</span>
-                      </button>
-                    )}
-                    {currentStep < 4 ? (
-                      <button
-                        type="button"
-                        onClick={() => setCurrentStep(s => Math.min(4, s + 1))}
-                        className="inline-flex items-center gap-2 rounded-xl bg-[#059669] hover:bg-[#047857] text-white px-5 py-2.5 text-xs font-extrabold shadow-sm hover:scale-[1.02] transition-all duration-200 active:scale-95 cursor-pointer"
-                      >
-                        <span>Selanjutnya</span>
-                        <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
-                          <ArrowRight className="size-3.5 text-emerald-600" strokeWidth={2.2} />
-                        </div>
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={handleFormSubmit}
-                        disabled={isMutating}
-                        className={cn(
-                          "inline-flex items-center gap-2 rounded-xl text-white px-5 py-2.5 text-xs font-extrabold transition-all duration-200 hover:scale-[1.03] active:scale-95 disabled:opacity-50 cursor-pointer",
-                          isEditMode
-                            ? "bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 border-2 border-emerald-300 dark:border-emerald-800 "
-                            : "bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 border-2 border-emerald-300 dark:border-emerald-800 "
-                        )}
-                      >
-                        {isMutating ? (
-                          <span className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent" />
-                        ) : (
-                          <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
-                            <Save className="size-3.5 text-slate-600" strokeWidth={2.2} />
-                          </div>
-                        )}
-                        <span>{isEditMode ? 'Simpan Perubahan' : 'Simpan Unit'}</span>
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+      </AppModal>
 
       {/* ══════════════════════════════════════════════════════════════════
- SAVE / UPDATE CONFIRMATION DIALOG — Harmonized with HeroUI & Full Responsive
+ SAVE / UPDATE CONFIRMATION DIALOG — AppModal
  ══════════════════════════════════════════════════════════════════ */}
-      <HeroModal
+      <AppModal
         isOpen={showSaveConfirmDialog}
-        onOpenChange={(open) => {
-          if (!open && !isMutating) setShowSaveConfirmDialog(false)
-        }}
+        onClose={() => { if (!isMutating) setShowSaveConfirmDialog(false) }}
+        disableBackdropClose={isMutating}
+        title={isEditMode ? 'Konfirmasi Perubahan Data' : 'Konfirmasi Penyimpanan Data'}
+        badge={isEditMode ? 'Update Data' : 'Unit Baru'}
+        description={isEditMode
+          ? 'Verifikasi data unit sebelum pembaruan diterapkan ke sistem.'
+          : 'Verifikasi data unit baru sebelum disimpan ke sistem.'}
+        icon={isEditMode ? Pencil : School}
+        variant={isEditMode ? 'warning' : 'emerald'}
+        maxWidth="max-w-md"
+        zIndex={70}
+        bodyClassName="p-4 sm:p-6 space-y-3.5 sm:space-y-4"
+        footer={
+          <div className="flex w-full flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-2.5">
+            <button
+              type="button"
+              disabled={isMutating}
+              onClick={() => setShowSaveConfirmDialog(false)}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 h-9.5 px-4 text-xs font-black border border-slate-300 dark:border-slate-700 transition-all duration-200 active:scale-95 cursor-pointer disabled:opacity-50"
+            >
+              <X className="size-4 text-rose-600" strokeWidth={2.5} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="button"
+              disabled={isMutating}
+              onClick={handleConfirmSave}
+              className={cn(
+                "w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl text-white h-9.5 px-5 text-xs font-black transition-all duration-200 active:scale-95 disabled:opacity-50 cursor-pointer shadow-md",
+                isEditMode
+                  ? "bg-amber-600 hover:bg-amber-700 border-2 border-amber-600 shadow-amber-600/20"
+                  : "bg-emerald-600 hover:bg-emerald-700 border-2 border-emerald-600 shadow-emerald-600/20"
+              )}
+            >
+              {isMutating ? (
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              ) : (
+                <Save className="size-4 text-white" strokeWidth={2.2} />
+              )}
+              <span>
+                {isMutating
+                  ? isEditMode ? "Memperbarui..." : "Menyimpan..."
+                  : isEditMode ? "Ya, Perbarui Data" : "Ya, Simpan Unit"}
+              </span>
+            </button>
+          </div>
+        }
       >
-        <HeroModal.Backdrop isDismissable={!isMutating} className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto">
-          <HeroModal.Container placement="center" className="w-full max-w-md my-auto">
-            <HeroModal.Dialog className="modal-dialog font-sans my-auto w-full max-w-md flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60 outline-hidden">
-              {/* Top Accent Gradient Bar */}
-              <div
-                className={cn(
-                  "h-1.5 w-full shrink-0",
-                  isEditMode
-                    ? "bg-white dark:bg-card-dark"
-                    : "bg-white dark:bg-card-dark"
-                )}
-              />
+        {/* Target Info Summary Card using HeroCard */}
+        <HeroCard className="rounded-xl border border-emerald-200/80 bg-slate-50/70 p-3.5 sm:p-4 dark:border-emerald-800/80 dark:bg-slate-900/50 space-y-2.5 shadow-none">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Unit Pendidikan</span>
+            <span className="text-xs font-extrabold text-slate-900 dark:text-white sm:text-right break-words min-w-0">
+              {formData.name || "-"}
+            </span>
+          </div>
+          {formData.code && (
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-emerald-200/60 pt-2 dark:border-emerald-800/60">
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Kode Unit</span>
+              <span className="font-mono text-xs font-bold text-slate-800 dark:text-slate-200 sm:text-right">
+                {formData.code}
+              </span>
+            </div>
+          )}
+          {formData.unit_type && (
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-emerald-200/60 pt-2 dark:border-emerald-800/60">
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Jenjang / Jenis</span>
+              <span className="text-xs font-bold text-slate-800 dark:text-slate-200 sm:text-right">
+                {formData.unit_type}
+              </span>
+            </div>
+          )}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-emerald-200/60 pt-2 dark:border-emerald-800/60">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Model Program</span>
+            <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400 capitalize sm:text-right">
+              {formData.program_type === "boarding" ? "Boarding / Pesantren (24 Jam)" : "Fullday School"}
+            </span>
+          </div>
+          {formData.jam_pulang && (
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-emerald-200/60 pt-2 dark:border-emerald-800/60">
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Jam Operasional</span>
+              <span className="text-xs font-bold text-slate-800 dark:text-slate-200 sm:text-right">
+                {formData.jam_masuk ? `${formData.jam_masuk} - ` : ""}{formData.jam_pulang} WIB
+              </span>
+            </div>
+          )}
+          {formData.latitude && formData.longitude && (
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-emerald-200/60 pt-2 dark:border-emerald-800/60">
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Titik Koordinat & Radius</span>
+              <span className="text-xs font-mono font-bold text-emerald-700 dark:text-emerald-300 sm:text-right break-all">
+                {formData.latitude}, {formData.longitude} (R: {formData.radius_meter || 100}m)
+              </span>
+            </div>
+          )}
+        </HeroCard>
 
-              {/* Header */}
-              <HeroModal.Header className="modal-header flex flex-row items-start sm:items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 bg-white px-4.5 sm:px-6 py-4 dark:border-emerald-800/60 dark:bg-slate-950 gap-3">
-                <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1">
-                  <div
-                    className={cn(
-                      "size-10 sm:size-11 flex items-center justify-center rounded-xl text-white shadow-md shrink-0 border",
-                      isEditMode
-                        ? "bg-white dark:bg-card-dark shadow-sm border-emerald-200/80 dark:border-emerald-800/60"
-                        : "bg-white dark:bg-card-dark shadow-sm border-emerald-300/30"
-                    )}
-                  >
-                    {isEditMode ? (
-                      <Pencil className="size-5 text-amber-600" strokeWidth={2.25} />
-                    ) : (
-                      <School className="size-5 text-current" strokeWidth={2.25} />
-                    )}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-1.5">
-                      <h3
-                        id="edu-unit-save-confirm-title"
-                        className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white leading-tight"
-                      >
-                        {isEditMode ? "Konfirmasi Perubahan Data" : "Konfirmasi Penyimpanan Data"}
-                      </h3>
-                      <HeroChip
-                        size="sm"
-                        variant="soft"
-                        color={isEditMode ? "warning" : "success"}
-                        className={cn(
-                          "font-bold text-[10px] shrink-0 border inline-flex items-center gap-1 px-2 py-0.5",
-                          isEditMode
-                            ? "bg-amber-50 text-amber-700 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/60 dark:text-amber-400 dark:border-emerald-800/60"
-                            : "bg-emerald-50 text-emerald-800 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60"
-                        )}
-                      >
-                        <Sparkles className="size-3" />
-                        <HeroChip.Label>{isEditMode ? "Update Data" : "Unit Baru"}</HeroChip.Label>
-                      </HeroChip>
-                    </div>
-                    <p className="text-xs sm:text-xs text-slate-500 dark:text-slate-400 mt-1 leading-snug">
-                      {isEditMode
-                        ? "Verifikasi data unit sebelum pembaruan diterapkan ke sistem."
-                        : "Verifikasi data unit baru sebelum disimpan ke sistem."}
-                    </p>
-                  </div>
-                </div>
-
-                <HeroButton
-                  isIconOnly
-                  size="sm"
-                  isDisabled={isMutating}
-                  disabled={isMutating}
-                  onPress={() => setShowSaveConfirmDialog(false)}
-                  aria-label="Tutup dialog konfirmasi"
-                  className="size-8 sm:size-9 shrink-0 flex items-center justify-center rounded-xl sm:rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer disabled:opacity-50"
-                >
-                  <X className="size-4 text-rose-600" strokeWidth={2.25} />
-                </HeroButton>
-              </HeroModal.Header>
-
-              {/* Body */}
-              <HeroModal.Body className="modal-body p-4 sm:p-6 space-y-3.5 sm:space-y-4 text-slate-700 dark:text-slate-200 overflow-y-auto">
-                {/* Target Info Summary Card using HeroCard */}
-                <HeroCard className="rounded-xl border border-emerald-200/80 bg-slate-50/70 p-3.5 sm:p-4 dark:border-emerald-800/80 dark:bg-slate-900/50 space-y-2.5 shadow-none">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2">
-                    <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Unit Pendidikan</span>
-                    <span className="text-xs font-extrabold text-slate-900 dark:text-white sm:text-right break-words min-w-0">
-                      {formData.name || "-"}
-                    </span>
-                  </div>
-                  {formData.code && (
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-emerald-200/60 pt-2 dark:border-emerald-800/60">
-                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Kode Unit</span>
-                      <span className="font-mono text-xs font-bold text-slate-800 dark:text-slate-200 sm:text-right">
-                        {formData.code}
-                      </span>
-                    </div>
-                  )}
-                  {formData.unit_type && (
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-emerald-200/60 pt-2 dark:border-emerald-800/60">
-                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Jenjang / Jenis</span>
-                      <span className="text-xs font-bold text-slate-800 dark:text-slate-200 sm:text-right">
-                        {formData.unit_type}
-                      </span>
-                    </div>
-                  )}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-emerald-200/60 pt-2 dark:border-emerald-800/60">
-                    <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Model Program</span>
-                    <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400 capitalize sm:text-right">
-                      {formData.program_type === "boarding" ? "Boarding / Pesantren (24 Jam)" : "Fullday School"}
-                    </span>
-                  </div>
-                  {formData.jam_pulang && (
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-emerald-200/60 pt-2 dark:border-emerald-800/60">
-                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Jam Operasional</span>
-                      <span className="text-xs font-bold text-slate-800 dark:text-slate-200 sm:text-right">
-                        {formData.jam_masuk ? `${formData.jam_masuk} - ` : ""}{formData.jam_pulang} WIB
-                      </span>
-                    </div>
-                  )}
-                  {formData.latitude && formData.longitude && (
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-emerald-200/60 pt-2 dark:border-emerald-800/60">
-                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Titik Koordinat & Radius</span>
-                      <span className="text-xs font-mono font-bold text-emerald-700 dark:text-emerald-300  dark:text-emerald-700 dark:text-emerald-300  sm:text-right break-all">
-                        {formData.latitude}, {formData.longitude} (R: {formData.radius_meter || 100}m)
-                      </span>
-                    </div>
-                  )}
-                </HeroCard>
-
-                {/* Callout Notice Box */}
-                <div
-                  className={cn(
-                    "rounded-xl border p-3.5 text-xs font-medium leading-relaxed flex items-start gap-2.5 sm:gap-3",
-                    isEditMode
-                      ? "border-emerald-200/80 dark:border-emerald-800/60 bg-amber-50/70 text-amber-950 dark:border-emerald-800/60 dark:bg-amber-950/30 dark:text-amber-200"
-                      : "border-emerald-300 dark:border-emerald-800 bg-emerald-50/70 text-emerald-950 dark:border-emerald-800/60 dark:bg-emerald-950/30 dark:text-emerald-200"
-                  )}
-                >
-                  <div
-                    className={cn(
-                      "flex size-6 shrink-0 items-center justify-center rounded-xl text-white mt-0.5 shadow-xs",
-                      isEditMode
-                        ? "bg-white dark:bg-card-dark shadow-sm"
-                        : "bg-white dark:bg-card-dark shadow-sm"
-                    )}
-                  >
-                    <Sparkles className="size-3.5 text-emerald-600" />
-                  </div>
-                  <div className="flex-1 leading-relaxed">
-                    {isEditMode
-                      ? "Data unit pendidikan yang sudah ada akan segera diperbarui di database server dengan informasi terbaru yang Anda masukkan."
-                      : "Data unit pendidikan baru akan tersimpan dan langsung aktif sesuai konfigurasi sistem."}
-                  </div>
-                </div>
-              </HeroModal.Body>
-
-              {/* Footer */}
-              <HeroModal.Footer className="modal-footer flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-2.5 border-t border-emerald-200/80 bg-white px-4.5 sm:px-6 py-3.5 sm:py-4 dark:border-emerald-800/60 dark:bg-slate-950">
-                <HeroButton
-                  variant="outline"
-                  size="sm"
-                  isDisabled={isMutating}
-                  disabled={isMutating}
-                  onPress={() => setShowSaveConfirmDialog(false)}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.02] active:scale-95 cursor-pointer disabled:opacity-50 shadow-sm"
-                >
-                  <div className="flex size-4 shrink-0 items-center justify-center rounded-md bg-white/20">
-                    <X className="size-3" strokeWidth={2.2} />
-                  </div>
-                  <span>Batal</span>
-                </HeroButton>
-
-                <HeroButton
-                  variant="solid"
-                  size="sm"
-                  isDisabled={isMutating}
-                  disabled={isMutating}
-                  onPress={handleConfirmSave}
-                  className={cn(
-                    "w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl text-white px-5 py-2.5 text-xs font-extrabold transition-all duration-200 hover:scale-[1.02] active:scale-95 disabled:opacity-50 cursor-pointer shadow-md",
-                    isEditMode
-                      ? "bg-white dark:bg-card-dark border border-emerald-200/80 dark:border-emerald-800/60 shadow-sm"
-                      : "bg-white dark:bg-card-dark border border-emerald-200/80 dark:border-emerald-800/60 shadow-sm"
-                  )}
-                >
-                  {isMutating ? (
-                    <HeroSpinner size="sm" className="size-3.5 text-amber-600" />
-                  ) : (
-                    <div className="flex size-4 shrink-0 items-center justify-center rounded-md bg-white/20">
-                      <Save className="size-3 text-current" strokeWidth={2.2} />
-                    </div>
-                  )}
-                  <span>
-                    {isMutating
-                      ? isEditMode ? "Memperbarui..." : "Menyimpan..."
-                      : isEditMode ? "Ya, Perbarui Data" : "Ya, Simpan Unit"}
-                  </span>
-                </HeroButton>
-              </HeroModal.Footer>
-            </HeroModal.Dialog>
-          </HeroModal.Container>
-        </HeroModal.Backdrop>
-      </HeroModal>
+        {/* Callout Notice Box */}
+        <div
+          className={cn(
+            "rounded-xl border p-3.5 text-xs font-medium leading-relaxed flex items-start gap-2.5 sm:gap-3",
+            isEditMode
+              ? "border-emerald-200/80 dark:border-emerald-800/60 bg-amber-50/70 text-amber-950 dark:bg-amber-950/30 dark:text-amber-200"
+              : "border-emerald-300 dark:border-emerald-800/60 bg-emerald-50/70 text-emerald-950 dark:bg-emerald-950/30 dark:text-emerald-200"
+          )}
+        >
+          <div className="flex size-6 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-card-dark mt-0.5 shadow-sm">
+            <Sparkles className="size-3.5 text-emerald-600" />
+          </div>
+          <div className="flex-1 leading-relaxed">
+            {isEditMode
+              ? "Data unit pendidikan yang sudah ada akan segera diperbarui di database server dengan informasi terbaru yang Anda masukkan."
+              : "Data unit pendidikan baru akan tersimpan dan langsung aktif sesuai konfigurasi sistem."}
+          </div>
+        </div>
+      </AppModal>
 
       {/* ══════════════════════════════════════════════════════════════════
- DELETE CONFIRM DIALOG — Harmonized with HeroUI & Full Responsive
+ DELETE CONFIRM DIALOG — AppModal
  ══════════════════════════════════════════════════════════════════ */}
-      <HeroModal
+      <AppModal
         isOpen={!!deleteTarget}
-        onOpenChange={(open) => {
-          if (!open && !deleteMutation.isPending) setDeleteTarget(null)
-        }}
+        onClose={() => { if (!deleteMutation.isPending) setDeleteTarget(null) }}
+        disableBackdropClose={deleteMutation.isPending}
+        title="Hapus Unit Pendidikan"
+        badge="Hapus Permanen"
+        description="Tindakan ini permanen dan tidak dapat dibatalkan."
+        icon={Trash2}
+        variant="danger"
+        maxWidth="max-w-md"
+        zIndex={70}
+        bodyClassName="p-4 sm:p-6 space-y-3.5 sm:space-y-4"
+        footer={
+          <div className="flex w-full flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-2.5">
+            <button
+              type="button"
+              disabled={deleteMutation.isPending}
+              onClick={() => setDeleteTarget(null)}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 h-9.5 px-4 text-xs font-black border border-slate-300 dark:border-slate-700 transition-all duration-200 active:scale-95 cursor-pointer disabled:opacity-50"
+            >
+              <X className="size-4 text-slate-600 dark:text-slate-300" strokeWidth={2.5} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="button"
+              disabled={deleteMutation.isPending}
+              onClick={() => {
+                if (deleteMutation.isPending || !deleteTarget) return
+                deleteMutation.mutate(deleteTarget.id)
+              }}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white h-9.5 px-5 text-xs font-black border-2 border-rose-600 shadow-md shadow-rose-600/20 transition-all duration-200 active:scale-95 disabled:opacity-50 cursor-pointer"
+            >
+              {deleteMutation.isPending ? (
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              ) : (
+                <Trash2 className="size-4 text-white" strokeWidth={2.2} />
+              )}
+              <span>{deleteMutation.isPending ? "Menghapus..." : "Ya, Hapus Unit"}</span>
+            </button>
+          </div>
+        }
       >
-        <HeroModal.Backdrop isDismissable={!deleteMutation.isPending} className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto">
-          <HeroModal.Container placement="center" className="w-full max-w-md my-auto">
-            {deleteTarget && (
-              <HeroModal.Dialog className="modal-dialog font-sans my-auto w-full max-w-md flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60 outline-hidden">
-                {/* Top Accent Gradient Bar */}
+        {deleteTarget && (
+          <>
+            {/* Target Info Summary Card */}
+            <HeroCard className="rounded-xl border-2 border-rose-300 dark:border-rose-800 bg-rose-50/40 p-3.5 sm:p-4 dark:bg-rose-950/20 space-y-2.5 shadow-none">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Unit Pendidikan</span>
+                <span className="text-xs font-extrabold text-slate-900 dark:text-white sm:text-right break-words min-w-0">
+                  {deleteTarget.name || "-"}
+                </span>
+              </div>
+              {deleteTarget.code && (
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-rose-200/80 dark:border-rose-800/60 pt-2">
+                  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Kode Unit</span>
+                  <span className="font-mono text-xs font-bold text-slate-800 dark:text-slate-200 sm:text-right">
+                    {deleteTarget.code}
+                  </span>
+                </div>
+              )}
+              {deleteTarget.unit_type && (
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-rose-200/80 dark:border-rose-800/60 pt-2">
+                  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Jenjang / Jenis</span>
+                  <span className="text-xs font-bold text-slate-800 dark:text-slate-200 sm:text-right">
+                    {deleteTarget.unit_type}
+                  </span>
+                </div>
+              )}
+            </HeroCard>
 
-                {/* Header */}
-                <HeroModal.Header className="modal-header flex flex-row items-start sm:items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 bg-white px-4.5 sm:px-6 py-4 dark:border-emerald-800/60 dark:bg-slate-950 gap-3">
-                  <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1">
-                    <div className="size-10 sm:size-11 flex items-center justify-center rounded-xl  shadow-md shrink-0 border border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs shadow-sm border-emerald-200/80 dark:border-emerald-800/60">
-                      <Trash2 className="size-5 text-rose-600" strokeWidth={2.25} />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-1.5">
-                        <h3
-                          id="edu-unit-delete-confirm-title"
-                          className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white leading-tight"
-                        >
-                          Hapus Unit Pendidikan
-                        </h3>
-                        <HeroChip
-                          size="sm"
-                          variant="soft"
-                          color="danger"
-                          className="font-bold text-[10px] shrink-0 border inline-flex items-center gap-1 px-2 py-0.5 bg-rose-50 text-rose-700 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-rose-950/60 dark:text-rose-400 dark:border-emerald-800/60"
-                        >
-                          <AlertTriangle className="size-3" />
-                          <HeroChip.Label>Hapus Permanen</HeroChip.Label>
-                        </HeroChip>
-                      </div>
-                      <p className="text-xs sm:text-xs text-slate-500 dark:text-slate-400 mt-1 leading-snug">
-                        Tindakan ini permanen dan tidak dapat dibatalkan.
-                      </p>
-                    </div>
-                  </div>
-
-                  <HeroButton
-                    isIconOnly
-                    size="sm"
-                    isDisabled={deleteMutation.isPending}
-                    disabled={deleteMutation.isPending}
-                    onPress={() => setDeleteTarget(null)}
-                    aria-label="Tutup dialog konfirmasi"
-                    className="size-8 sm:size-9 shrink-0 flex items-center justify-center rounded-xl sm:rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer disabled:opacity-50"
-                  >
-                    <X className="size-4 text-rose-600" strokeWidth={2.25} />
-                  </HeroButton>
-                </HeroModal.Header>
-
-                {/* Body */}
-                <HeroModal.Body className="modal-body p-4 sm:p-6 space-y-3.5 sm:space-y-4 text-slate-700 dark:text-slate-200 overflow-y-auto">
-                  {/* Target Info Summary Card */}
-                  <HeroCard className="rounded-xl border-2 border-rose-300 dark:border-rose-800 bg-rose-50/40 p-3.5 sm:p-4 dark:border-emerald-800/60 dark:bg-rose-950/20 space-y-2.5 shadow-none">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2">
-                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Unit Pendidikan</span>
-                      <span className="text-xs font-extrabold text-slate-900 dark:text-white sm:text-right break-words min-w-0">
-                        {deleteTarget.name || "-"}
-                      </span>
-                    </div>
-                    {deleteTarget.code && (
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 pt-2">
-                        <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Kode Unit</span>
-                        <span className="font-mono text-xs font-bold text-slate-800 dark:text-slate-200 sm:text-right">
-                          {deleteTarget.code}
-                        </span>
-                      </div>
-                    )}
-                    {deleteTarget.unit_type && (
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 border-t border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 pt-2">
-                        <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 shrink-0">Jenjang / Jenis</span>
-                        <span className="text-xs font-bold text-slate-800 dark:text-slate-200 sm:text-right">
-                          {deleteTarget.unit_type}
-                        </span>
-                      </div>
-                    )}
-                  </HeroCard>
-
-                  {/* Danger Notice Box */}
-                  <div className="rounded-xl border-2 border-rose-300 dark:border-rose-800 bg-rose-50/70 p-3.5 text-xs font-medium text-rose-900 dark:border-emerald-800/60 dark:bg-rose-950/30 dark:text-rose-300 leading-relaxed flex items-start gap-2.5 sm:gap-3">
-                    <div className="flex size-6 shrink-0 items-center justify-center rounded-xl  border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs mt-0.5 shadow-xs">
-                      <AlertTriangle className="size-3.5 text-rose-600" />
-                    </div>
-                    <div className="flex-1 leading-relaxed">
-                      Data unit <strong>"{deleteTarget.name}"</strong> akan dihapus secara permanen dari server. Semua data kelas, siswa, dan relasi terkait akan terpengaruh.
-                    </div>
-                  </div>
-                </HeroModal.Body>
-
-                {/* Footer */}
-                <HeroModal.Footer className="modal-footer flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-2.5 border-t border-emerald-200/80 bg-white px-4.5 sm:px-6 py-3.5 sm:py-4 dark:border-emerald-800/60 dark:bg-slate-950">
-                  <HeroButton
-                    variant="outline"
-                    size="sm"
-                    isDisabled={deleteMutation.isPending}
-                    disabled={deleteMutation.isPending}
-                    onPress={() => setDeleteTarget(null)}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-100 hover:bg-slate-200 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 px-4 py-2.5 text-xs font-extrabold transition-all duration-200 hover:scale-[1.02] active:scale-95 cursor-pointer disabled:opacity-50"
-                  >
-                    <div className="flex size-4 shrink-0 items-center justify-center rounded-md bg-emerald-50 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300">
-                      <X className="size-3" strokeWidth={2.2} />
-                    </div>
-                    <span>Batal</span>
-                  </HeroButton>
-
-                  <HeroButton
-                    variant="solid"
-                    size="sm"
-                    isDisabled={deleteMutation.isPending}
-                    disabled={deleteMutation.isPending}
-                    onPress={() => {
-                      if (deleteMutation.isPending) return
-                      deleteMutation.mutate(deleteTarget.id)
-                    }}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs px-5 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-[1.02] transition-all duration-200 active:scale-95 disabled:opacity-50 cursor-pointer shadow-sm"
-                  >
-                    {deleteMutation.isPending ? (
-                      <HeroSpinner size="sm" className="size-3.5 text-slate-600" />
-                    ) : (
-                      <div className="flex size-4 shrink-0 items-center justify-center rounded-md bg-white/20">
-                        <Trash2 className="size-3 text-white" strokeWidth={2.2} />
-                      </div>
-                    )}
-                    <span>{deleteMutation.isPending ? "Menghapus..." : "Ya, Hapus Unit"}</span>
-                  </HeroButton>
-                </HeroModal.Footer>
-              </HeroModal.Dialog>
-            )}
-          </HeroModal.Container>
-        </HeroModal.Backdrop>
-      </HeroModal>
+            {/* Danger Notice Box */}
+            <div className="rounded-xl border-2 border-rose-300 dark:border-rose-800 bg-rose-50/70 p-3.5 text-xs font-medium text-rose-900 dark:bg-rose-950/30 dark:text-rose-300 leading-relaxed flex items-start gap-2.5 sm:gap-3">
+              <div className="flex size-6 shrink-0 items-center justify-center rounded-xl border border-rose-200 bg-white dark:border-rose-800/60 dark:bg-slate-800 mt-0.5 shadow-xs">
+                <AlertTriangle className="size-3.5 text-rose-600" />
+              </div>
+              <div className="flex-1 leading-relaxed">
+                Data unit <strong>"{deleteTarget.name}"</strong> akan dihapus secara permanen dari server. Semua data kelas, siswa, dan relasi terkait akan terpengaruh.
+              </div>
+            </div>
+          </>
+        )}
+      </AppModal>
 
       {/* ══════════════════════════════════════════════════════════════════
  EXPORT DIALOG
@@ -3759,219 +3467,151 @@ export default function EducationUnitsPage() {
       {/* ══════════════════════════════════════════════════════════════════
  EXPORT DIALOG — Harmonized with Modal Tambah UI/UX
  ══════════════════════════════════════════════════════════════════ */}
-      <AnimatePresence>
-        {showExportModal && (
-          <div
-            className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="edu-unit-export-title"
-            tabIndex={-1}
-            onMouseDown={e => { if (e.target === e.currentTarget) setShowExportModal(false) }}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.94, y: 14 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-              className="modal-dialog font-sans my-auto w-full max-w-md"
+      <AppModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        title="Export Data Unit"
+        badge="Unduh"
+        description="Pilih format berkas untuk mengekspor data master unit"
+        icon={Download}
+        maxWidth="max-w-lg"
+        zIndex={50}
+        bodyClassName="space-y-3 p-6 text-sm"
+        footer={
+          <div className="flex w-full items-center justify-between">
+            <button
+              type="button"
+              onClick={() => setShowExportModal(false)}
+              className="inline-flex items-center gap-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 h-9.5 px-4 text-xs font-black border border-slate-300 dark:border-slate-700 active:scale-95 transition-all cursor-pointer"
             >
-              <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
-                {/* Top Accent Gradient Bar */}
-
-                {/* Header */}
-                <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
-                  <div className="flex items-center gap-3">
-                    <div className="rounded-xl bg-white dark:bg-card-dark p-2.5 shadow-md shadow-xs shrink-0 border border-emerald-200/80 dark:border-emerald-800/60">
-                      <Download className="h-5 w-5 text-current" strokeWidth={2.25} />
-                    </div>
-                    <div>
-                      <h3 id="edu-unit-export-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
-                        <span>Export Data Unit</span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-[#059669] border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
-                          <Sparkles className="size-3" />
-                          Unduh
-                        </span>
-                      </h3>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                        Pilih format berkas untuk mengekspor data master unit
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setShowExportModal(false)}
-                    aria-label="Tutup modal export"
-                    className="rounded-xl p-2 border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer"
-                  >
-                    <X className="size-4" strokeWidth={2.25} />
-                  </button>
-                </div>
-
-                {/* Body */}
-                <div className="modal-body space-y-2.5 p-6 text-sm text-slate-700 dark:text-slate-200">
-                  {[
-                    { value: 'xlsx', label: 'Excel (.xlsx)', desc: 'Format Microsoft Excel Modern (Disarankan)' },
-                    { value: 'xls', label: 'Excel Legacy (.xls)', desc: 'Format Microsoft Excel Standard 97-2003' },
-                    { value: 'csv', label: 'CSV (.csv)', desc: 'Format Comma-Separated Values universal' },
-                    { value: 'pdf', label: 'PDF (.pdf)', desc: 'Format Cetak Dokumen Resmi' },
-                  ].map(opt => (
-                    <label
-                      key={opt.value}
-                      className={cn(
-                        "flex cursor-pointer items-center gap-3 rounded-xl border p-3.5 transition-all",
-                        exportFormat === opt.value
-                          ? "border-emerald-300 dark:border-emerald-800 bg-emerald-50/60 shadow-2xs dark:border-emerald-800/60 dark:bg-emerald-950/40"
-                          : "border-emerald-200/80 hover:border-emerald-300 hover:bg-emerald-50/40 dark:border-emerald-800/60 dark:hover:border-emerald-200/80 dark:hover:bg-emerald-950/30"
-                      )}
-                    >
-                      <input
-                        type="radio"
-                        name="export-fmt"
-                        value={opt.value}
-                        checked={exportFormat === opt.value}
-                        onChange={() => setExportFormat(opt.value)}
-                        className="accent-emerald-600 size-4"
-                      />
-                      <div>
-                        <p className="text-xs font-bold text-slate-800 dark:text-slate-100">{opt.label}</p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">{opt.desc}</p>
-                      </div>
-                    </label>
-                  ))}
-                </div>
-
-                {/* Footer */}
-                <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
-                  <button
-                    type="button"
-                    onClick={() => setShowExportModal(false)}
-                    className="inline-flex items-center gap-2 rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
-                  >
-                    <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
-                      <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
-                    </div>
-                    <span>Batal</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleProcessExport}
-                    className="inline-flex items-center gap-2 rounded-xl bg-[#059669] hover:bg-[#047857] text-white px-5 py-2.5 text-xs font-extrabold shadow-sm hover:scale-[1.02] transition-all duration-200 active:scale-95 cursor-pointer"
-                  >
-                    <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
-                      <Download className="size-3.5 text-emerald-600" strokeWidth={2.25} />
-                    </div>
-                    <span>Unduh Berkas</span>
-                  </button>
-                </div>
-              </div>
-            </motion.div>
+              <X className="size-4 text-rose-600" strokeWidth={2.5} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleProcessExport}
+              className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white h-9.5 px-5 text-xs font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 active:scale-95 transition-all cursor-pointer"
+            >
+              <Download className="size-4 text-white" strokeWidth={2.25} />
+              <span>Unduh Berkas</span>
+            </button>
           </div>
-        )}
-      </AnimatePresence>
+        }
+      >
+        {[
+          { value: 'xlsx', label: 'Excel (.xlsx)', desc: 'Format Microsoft Excel Modern (Disarankan)' },
+          { value: 'xls', label: 'Excel Legacy (.xls)', desc: 'Format Microsoft Excel Standard 97-2003' },
+          { value: 'csv', label: 'CSV (.csv)', desc: 'Format Comma-Separated Values universal' },
+          { value: 'pdf', label: 'PDF (.pdf)', desc: 'Format Cetak Dokumen Resmi' },
+        ].map(opt => (
+          <label
+            key={opt.value}
+            className={cn(
+              "flex cursor-pointer items-center gap-3.5 rounded-xl border-2 p-3.5 transition-all",
+              exportFormat === opt.value
+                ? "border-emerald-500 bg-emerald-50/50 shadow-xs ring-2 ring-emerald-500/20 dark:border-emerald-500 dark:bg-emerald-950/40"
+                : "border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 hover:border-emerald-400"
+            )}
+          >
+            <input
+              type="radio"
+              name="export-fmt"
+              value={opt.value}
+              checked={exportFormat === opt.value}
+              onChange={() => setExportFormat(opt.value)}
+              className="accent-emerald-600 size-4"
+            />
+            <div>
+              <p className="text-xs font-black text-slate-800 dark:text-slate-100">{opt.label}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{opt.desc}</p>
+            </div>
+          </label>
+        ))}
+      </AppModal>
 
       {/* ══════════════════════════════════════════════════════════════════
  IMPORT DIALOG — Harmonized with Modal Tambah UI/UX
  ══════════════════════════════════════════════════════════════════ */}
-      <AnimatePresence>
-        {showImportModal && (
-          <div
-            className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="edu-unit-import-title"
-            tabIndex={-1}
-            onMouseDown={e => { if (e.target === e.currentTarget) setShowImportModal(false) }}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.94, y: 14 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-              className="modal-dialog font-sans my-auto w-full max-w-xl"
+      <AppModal
+        isOpen={showImportModal}
+        onClose={() => setShowImportModal(false)}
+        title="Import Data Unit Pendidikan"
+        badge="Batch Import"
+        description="Unggah berkas spreadsheet (.xlsx, .xls, atau .csv) untuk impor data massal"
+        icon={Upload}
+        maxWidth="max-w-2xl sm:max-w-3xl"
+        zIndex={50}
+        bodyClassName="space-y-4.5 p-6 text-sm"
+        footer={
+          <div className="flex w-full items-center justify-between">
+            <button
+              type="button"
+              onClick={() => setShowImportModal(false)}
+              className="inline-flex items-center gap-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 h-9.5 px-4 text-xs font-black border border-slate-300 dark:border-slate-700 active:scale-95 transition-all cursor-pointer"
             >
-              <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
-                {/* Top Accent Gradient Bar */}
-
-                {/* Header */}
-                <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
-                  <div className="flex items-center gap-3">
-                    <div className="rounded-xl bg-white dark:bg-card-dark p-2.5 shadow-md shadow-sky-500/30 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
-                      <Upload className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
-                    </div>
-                    <div>
-                      <h3 id="edu-unit-import-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
-                        <span>Import Data Unit Pendidikan</span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-sky-50 px-2 py-0.5 text-[10px] font-bold text-sky-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300 dark:border-emerald-800/60">
-                          <Sparkles className="size-3" />
-                          Batch Import
-                        </span>
-                      </h3>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                        Unggah berkas spreadsheet (.xlsx, .xls, atau .csv) untuk impor data massal
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setShowImportModal(false)}
-                    aria-label="Tutup form import"
-                    className="rounded-xl p-2 border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer"
-                  >
-                    <X className="size-4" strokeWidth={2.25} />
-                  </button>
-                </div>
-
-                {/* Modal Body */}
-                <div className="modal-body min-h-0 flex-1 space-y-4.5 overflow-y-auto p-6 text-sm text-slate-700 dark:text-slate-200">
+              <X className="size-4 text-rose-600" strokeWidth={2.5} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleProcessImport}
+              disabled={!importFile || isImporting}
+              className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white h-9.5 px-5 text-xs font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 active:scale-95 transition-all disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+            >
+              {isImporting ? (
+                <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              ) : (
+                <Upload className="size-4 text-white" strokeWidth={2.25} />
+              )}
+              <span>{isImporting ? 'Memproses Impor...' : 'Mulai Impor Data'}</span>
+            </button>
+          </div>
+        }
+      >
                   {/* Unduh Template Card */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-card-dark p-4 dark:border-emerald-800/60 dark:bg-slate-900/40">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 p-4">
                     <div className="flex items-center gap-3">
-                      <div className="flex size-9 items-center justify-center rounded-xl bg-white dark:bg-card-dark border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
-                        <Download className="size-4.5 text-current" strokeWidth={2.2} />
+                      <div className="flex size-9 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 text-emerald-700 dark:text-emerald-300 shrink-0">
+                        <Download className="size-4.5" strokeWidth={2.2} />
                       </div>
                       <div>
-                        <p className="text-xs font-bold text-slate-800 dark:text-slate-100">Unduh Format Berkas</p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">Gunakan berkas template resmi agar kolom terpetakan otomatis</p>
+                        <p className="text-xs font-black text-slate-800 dark:text-slate-100">Unduh Format Berkas</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Gunakan berkas template resmi agar kolom terpetakan otomatis</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
                       <button
                         type="button"
                         onClick={() => handleDownloadTemplate('xlsx')}
-                        className="inline-flex items-center gap-1.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 hover:bg-emerald-100/70 text-[#059669] px-3 py-1.5 text-xs font-bold transition-all dark:border-emerald-800/60 dark:bg-emerald-950/40 dark:text-emerald-300 cursor-pointer hover:scale-[1.02] active:scale-95"
+                        className="inline-flex items-center gap-1.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 hover:bg-emerald-100/70 text-[#059669] px-3 py-1.5 text-xs font-black transition-all dark:border-emerald-800/60 dark:bg-emerald-950/40 dark:text-emerald-300 cursor-pointer hover:scale-[1.02] active:scale-95"
                       >
-                        <div className="flex size-5 items-center justify-center rounded-md bg-emerald-600 text-white">
-                          <Download className="size-3 text-emerald-600" strokeWidth={2.2} />
-                        </div>
+                        <Download className="size-3 text-emerald-600" strokeWidth={2.5} />
                         <span>Excel (.xlsx)</span>
                       </button>
                       <button
                         type="button"
                         onClick={() => handleDownloadTemplate('csv')}
-                        className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-all dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 cursor-pointer hover:scale-[1.02] active:scale-95"
+                        className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 text-xs font-black text-slate-700 transition-all dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 cursor-pointer hover:scale-[1.02] active:scale-95"
                       >
-                        <div className="flex size-5 items-center justify-center rounded-md bg-slate-100 text-slate-600 dark:bg-emerald-950/60 dark:text-emerald-300">
-                          <Download className="size-3" strokeWidth={2.2} />
-                        </div>
+                        <Download className="size-3 text-slate-600" strokeWidth={2.5} />
                         <span>CSV</span>
                       </button>
                     </div>
                   </div>
 
                   {/* Dropzone Upload */}
-                  <label className="group relative flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-card-dark p-6 text-center transition-all duration-200 hover:border-emerald-300 dark:hover:border-emerald-200/80 hover:bg-emerald-50/40 hover:shadow-xs dark:border-emerald-800/60 dark:bg-slate-900/30 dark:hover:border-emerald-200/80 dark:hover:bg-emerald-950/20">
-                    <div className="mb-2.5 flex size-12 items-center justify-center rounded-xl bg-white dark:bg-card-dark border border-emerald-200/80 dark:border-emerald-800/60 text-[#059669] transition-transform duration-200 group-hover:scale-110 dark:from-emerald-950/60 dark:to-teal-950/40 dark:border-emerald-800/60 dark:text-[#10B981]">
-                      <FileSpreadsheet className="size-6" strokeWidth={2.2} />
+                  <label className="group relative flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/20 dark:bg-slate-900/40 p-6 text-center transition-all duration-200 hover:border-emerald-400 hover:bg-emerald-50/40">
+                    <div className="mb-2.5 flex size-12 items-center justify-center rounded-xl bg-emerald-100 dark:bg-emerald-900/50 text-[#059669] transition-transform duration-200 group-hover:scale-110">
+                      <FileSpreadsheet className="size-6 text-emerald-600 dark:text-emerald-400" strokeWidth={2.2} />
                     </div>
-                    <p className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100">
+                    <p className="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-100">
                       {importFile ? importFile.name : 'Pilih atau Tarik Berkas Spreadsheet ke Sini'}
                     </p>
-                    <p className="mt-1 text-xs text-slate-400 dark:text-slate-400">
+                    <p className="mt-1 text-xs text-slate-400 dark:text-slate-400 font-medium">
                       Mendukung format Microsoft Excel (.xlsx, .xls) & CSV
                     </p>
                     {importFile && (
-                      <div className="mt-2.5 inline-flex items-center gap-1.5 rounded-full bg-emerald-100/80 px-3 py-1 text-xs font-bold text-[#059669] border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800/60">
+                      <div className="mt-2.5 inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-xs font-black text-[#059669] border border-emerald-300 dark:bg-emerald-950/80 dark:text-emerald-300">
                         <CheckCircle2 className="size-3.5" />
                         <span>{(importFile.size / 1024).toFixed(1)} KB · Berkas Siap Diunggah</span>
                       </div>
@@ -3990,7 +3630,7 @@ export default function EducationUnitsPage() {
                           </span>
                         </p>
                       </div>
-                      <div className="max-h-44 overflow-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-2xs dark:border-emerald-800/60 dark:bg-surface-dark-inner">
+                      <div className="max-h-44 overflow-auto rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white shadow-2xs dark:bg-surface-dark-inner">
                         <TableRoot className="w-full text-left text-xs">
                           <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 text-slate-800 border-b-2 border-emerald-200/90 text-xs font-black uppercase tracking-wider dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:text-emerald-300">
                             <TableRow>
@@ -4009,8 +3649,8 @@ export default function EducationUnitsPage() {
                                   <span className={cn(
                                     "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold",
                                     r.status === 'Valid' || r.status === 'Siap Impor'
-                                      ? "bg-emerald-50 text-[#059669] border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60"
-                                      : "bg-rose-50 text-rose-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-rose-950/60 dark:text-rose-400 dark:border-emerald-800/60"
+                                      ? "bg-emerald-50 text-[#059669] border border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-400"
+                                      : "bg-rose-50 text-rose-700 border border-rose-200 dark:bg-rose-950/60 dark:text-rose-400"
                                   )}>
                                     {r.status}
                                   </span>
@@ -4025,10 +3665,10 @@ export default function EducationUnitsPage() {
 
                   {/* Opsi Timpa Data Jika Ada yang Sama */}
                   <div className={cn(
-                    "rounded-xl border p-4 transition-all duration-200",
+                    "rounded-xl border-2 p-4 transition-all duration-200",
                     overwriteExisting
-                      ? "border-emerald-200/80 dark:border-emerald-800/60 bg-amber-50/70 dark:border-emerald-800/60 dark:bg-amber-950/25"
-                      : "border-emerald-200/80 bg-slate-50/50 dark:border-emerald-800/60 dark:bg-slate-900/30"
+                      ? "border-emerald-500 bg-amber-50/70 dark:border-emerald-500 dark:bg-amber-950/25"
+                      : "border-[#b6f6d9] bg-white dark:border-emerald-700/80 dark:bg-slate-900"
                   )}>
                     <label className="flex items-start gap-3 cursor-pointer select-none">
                       <input
@@ -4072,108 +3712,31 @@ export default function EducationUnitsPage() {
                       Sistem akan otomatis memvalidasi keunikan kode unit dan menyinkronkan data master unit tanpa merusak integritas relasi yang sudah ada.
                     </p>
                   </div>
-                </div>
-
-                {/* Footer */}
-                <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
-                  <button
-                    type="button"
-                    onClick={() => setShowImportModal(false)}
-                    className="inline-flex items-center gap-2 rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
-                  >
-                    <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
-                      <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
-                    </div>
-                    <span>Batal</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleProcessImport}
-                    disabled={!importFile || isImporting}
-                    className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-card-dark px-5 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-[1.03] transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
-                  >
-                    {isImporting ? (
-                      <span className="size-4 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent" />
-                    ) : (
-                      <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
-                        <Upload className="size-3.5 text-white" strokeWidth={2.25} />
-                      </div>
-                    )}
-                    <span>{isImporting ? 'Memproses Impor...' : 'Mulai Impor Data'}</span>
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+      </AppModal>
 
       {/* ── MODAL HASIL IMPOR & PEMBERITAHUAN DATA DUPLIKAT UNIT ── */}
-      <AnimatePresence>
-        {duplicateModalData && (
-          <div
-            className="overlay modal fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-5 bg-slate-950/75 backdrop-blur-md"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="unit-duplicate-report-title"
+      <AppModal
+        isOpen={Boolean(duplicateModalData)}
+        onClose={() => setDuplicateModalData(null)}
+        zIndex={70}
+        icon={duplicateModalData?.diperbarui > 0 ? RefreshCcw : CheckCircle2}
+        title="Hasil Impor & Pemberitahuan Data Unit"
+        badge={`Total ${duplicateModalData?.total || 0} Data`}
+        description="Ringkasan sinkronisasi dan status pemrosesan data unit pendidikan"
+        maxWidth="max-w-xl"
+        footer={
+          <button
+            type="button"
+            onClick={() => setDuplicateModalData(null)}
+            className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
           >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.94, y: 14 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-              className="modal-dialog font-sans my-auto w-full max-w-xl"
-            >
-              <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
-                {/* Top Accent Gradient Bar */}
-                <div className={cn(
-                  "h-1.5 w-full shrink-0",
-                  duplicateModalData.diperbarui > 0
-                    ? "bg-white dark:bg-card-dark"
-                    : duplicateModalData.duplikat > 0
-                      ? "bg-white dark:bg-card-dark"
-                      : "bg-white dark:bg-card-dark"
-                )} />
-
-                {/* Header */}
-                <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
-                  <div className="flex items-center gap-3">
-                    <div className={cn(
-                      "rounded-xl p-2.5 text-white shadow-md shrink-0 border",
-                      duplicateModalData.diperbarui > 0
-                        ? "bg-white dark:bg-card-dark border-emerald-200/80 dark:border-emerald-800/60 shadow-sm"
-                        : "bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 shadow-sm"
-                    )}>
-                      {duplicateModalData.diperbarui > 0 ? (
-                        <RefreshCcw className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
-                      ) : (
-                        <CheckCircle2 className="h-5 w-5 text-amber-600" strokeWidth={2.25} />
-                      )}
-                    </div>
-                    <div>
-                      <h3 id="unit-duplicate-report-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
-                        <span>Hasil Impor & Pemberitahuan Data Unit</span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300">
-                          Total {duplicateModalData.total || 0} Data
-                        </span>
-                      </h3>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                        Ringkasan sinkronisasi dan status pemrosesan data unit pendidikan
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setDuplicateModalData(null)}
-                    aria-label="Tutup ringkasan impor"
-                    className="size-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-sky-950/60 dark:text-sky-300 transition cursor-pointer"
-                  >
-                    <X className="size-4" strokeWidth={2.25} />
-                  </button>
-                </div>
-
-                {/* Body */}
-                <div className="modal-body min-h-0 flex-1 space-y-4 overflow-y-auto p-6 text-sm text-slate-700 dark:text-slate-200">
+            <Check className="size-4" strokeWidth={2.2} />
+            <span>Tutup &amp; Mengerti</span>
+          </button>
+        }
+      >
+        {duplicateModalData && (
+          <div className="space-y-4">
                   {/* KPI Summary Cards */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                     <div className="p-3 rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 dark:bg-emerald-950/30 text-center">
@@ -4259,80 +3822,47 @@ export default function EducationUnitsPage() {
                       </ul>
                     </div>
                   )}
-                </div>
-
-                {/* Footer */}
-                <div className="modal-footer flex items-center justify-end border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 px-6 py-3.5 dark:border-emerald-800/60 dark:bg-slate-900/30">
-                  <button
-                    type="button"
-                    onClick={() => setDuplicateModalData(null)}
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 text-xs font-bold transition shadow-sm cursor-pointer"
-                  >
-                    <Check className="size-3.5" strokeWidth={2.2} />
-                    <span>Tutup & Mengerti</span>
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </div>
+        </div>
         )}
-      </AnimatePresence>
+      </AppModal>
 
       {/* Modal 2: Quick Add Pegawai (Overlay Modal on top of Modal 1) */}
-      <AnimatePresence>
-        {isAddEmployeeModalOpen && (
-          <div
-            role="dialog"
-            tabIndex={-1}
-            aria-modal="true"
-            aria-labelledby="quick-add-emp-title"
-            className="overlay modal fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
-            onMouseDown={e => {
-              if (e.target === e.currentTarget) setIsAddEmployeeModalOpen(false)
-            }}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 16 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 12 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-              className="modal-dialog font-sans w-full max-w-xl"
+      <AppModal
+        isOpen={isAddEmployeeModalOpen}
+        onClose={() => setIsAddEmployeeModalOpen(false)}
+        zIndex={70}
+        icon={UserPlus}
+        title="Tambah Pegawai Cepat"
+        badge="Pimpinan Baru"
+        description="Daftarkan calon kepala sekolah / pimpinan unit secara langsung"
+        maxWidth="max-w-xl"
+        footer={
+          <div className="flex items-center justify-end gap-2.5 w-full">
+            <button
+              type="button"
+              onClick={() => setIsAddEmployeeModalOpen(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
             >
-              <div className="modal-content relative flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
-                {/* Top Accent Gradient Bar */}
-
-                {/* Header */}
-                <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
-
-                      <UserPlus className="size-6 sm:size-7 h-5 w-5 text-white" strokeWidth={2.25} />
-                    </div>
-                    <div>
-                      <h3 id="quick-add-emp-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
-                        <span>Tambah Pegawai Cepat</span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
-                          <Sparkles className="size-3" />
-                          Pimpinan Baru
-                        </span>
-                      </h3>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                        Daftarkan calon kepala sekolah / pimpinan unit secara langsung
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setIsAddEmployeeModalOpen(false)}
-                    aria-label="Tutup modal"
-                    className="size-9 flex items-center justify-center rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer"
-                  >
-                    <X className="size-4 text-rose-600" strokeWidth={2.25} />
-                  </button>
-                </div>
-
-                {/* Form */}
-                <form
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="submit"
+              form="quick-add-emp-form"
+              disabled={createEmployeeMutation.isPending}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+            >
+              {createEmployeeMutation.isPending ? (
+                <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              ) : (
+                <Save className="size-4" strokeWidth={2.2} />
+              )}
+              <span>{createEmployeeMutation.isPending ? 'Menyimpan...' : 'Simpan Pegawai'}</span>
+            </button>
+          </div>
+        }
+      >
+        <form id="quick-add-emp-form"
                   onSubmit={e => {
                     e.preventDefault()
                     if (!employeeFormData.name?.trim()) {
@@ -4461,114 +3991,52 @@ export default function EducationUnitsPage() {
                     </div>
                   </div>
 
-                  {/* Footer */}
-                  <div className="modal-footer flex items-center justify-end gap-2.5 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 px-6 py-4 dark:border-emerald-800/60 dark:bg-[#131B27]">
-                    <button
-                      type="button"
-                      onClick={() => setIsAddEmployeeModalOpen(false)}
-                      className="inline-flex items-center gap-2 rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
-                    >
-                      <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
-                        <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
-                      </div>
-                      <span>Batal</span>
-                    </button>
-                    <button
-                      type="submit"
-                      disabled={createEmployeeMutation.isPending}
-                      className="inline-flex items-center gap-2 rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 px-5 py-2.5 text-xs font-extrabold border-2 border-emerald-300 dark:border-emerald-800 transition-all duration-200 hover:scale-[1.03] active:scale-95 disabled:opacity-50 cursor-pointer"
-                    >
-                      {createEmployeeMutation.isPending ? (
-                        <span className="size-4 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent" />
-                      ) : (
-                        <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
-                          <Save className="size-3.5 text-emerald-600" strokeWidth={2.2} />
-                        </div>
-                      )}
-                      <span>{createEmployeeMutation.isPending ? 'Menyimpan...' : 'Simpan Pegawai'}</span>
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+        </form>
+      </AppModal>
 
       {/* HeroUI Print & PDF Download Scope Selection Modal */}
-      <AnimatePresence>
-        {printOptionModalOpen && (
-          <div
-            role="dialog"
-            tabIndex={-1}
-            aria-modal="true"
-            aria-labelledby="print-option-modal-title"
-            className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
-            onMouseDown={e => { if (e.target === e.currentTarget) setPrintOptionModalOpen(false) }}
+      <AppModal
+        isOpen={printOptionModalOpen}
+        onClose={() => setPrintOptionModalOpen(false)}
+        title="Opsi & Scope Cetak Laporan"
+        badge="Cetak & PDF"
+        description="Pilih jenis laporan yang ingin dicetak atau diunduh"
+        icon={Printer}
+        maxWidth="max-w-xl"
+        zIndex={50}
+        bodyClassName="p-6 space-y-4"
+        footer={
+          <button
+            type="button"
+            onClick={() => setPrintOptionModalOpen(false)}
+            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:text-slate-200 shadow-2xs px-4 h-9.5 text-xs font-black transition-all duration-200 active:scale-95 cursor-pointer"
           >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 16 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 12 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-              className="modal-dialog font-sans w-full max-w-xl"
-            >
-              <div className="modal-content relative flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
-                {/* Top Accent Gradient Bar */}
-
-                {/* Header */}
-                <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
-                  <div className="flex items-center gap-3">
-                    <div className="rounded-xl bg-white dark:bg-card-dark border border-emerald-200/80 dark:border-emerald-800/60 p-2.5 text-[#059669] shadow-xs dark:from-emerald-950/60 dark:to-teal-950/40 dark:border-emerald-800/60 dark:text-[#10B981]">
-                      <Printer className="h-5 w-5" strokeWidth={2.25} />
-                    </div>
-                    <div>
-                      <h3 id="print-option-modal-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
-                        <span>Opsi & Scope Cetak Laporan</span>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-[#059669] border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
-                          <Sparkles className="size-3" />
-                          Cetak & PDF
-                        </span>
-                      </h3>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                        Pilih jenis laporan yang ingin dicetak atau diunduh
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setPrintOptionModalOpen(false)}
-                    aria-label="Tutup modal"
-                    className="rounded-xl p-2 border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer"
-                  >
-                    <X className="size-4" strokeWidth={2.25} />
-                  </button>
-                </div>
-
-                {/* Body */}
-                <div className="modal-body min-h-0 flex-1 overflow-y-auto p-6 space-y-4">
+            Batal
+          </button>
+        }
+      >
                   {/* Selector Cards */}
                   <div className="space-y-2.5">
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                    <label className="block text-xs font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">
                       Pilih Kategori Laporan Unit
                     </label>
 
                     {/* Mode 1: Seluruh Data Unit */}
                     <div
                       onClick={() => setPrintScopeMode('all')}
-                      className={`flex items-start gap-3.5 p-4 rounded-xl border cursor-pointer transition-all duration-200 ${printScopeMode === 'all'
-                        ? 'border-[#059669] bg-emerald-50/70 dark:border-emerald-800/60 dark:bg-emerald-950/40 shadow-xs ring-1 ring-[#059669]'
-                        : 'border-emerald-200/80 bg-white hover:bg-slate-50/80 dark:border-emerald-800/60 dark:bg-slate-900/40'
+                      className={`flex items-start gap-3.5 p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${printScopeMode === 'all'
+                        ? 'border-emerald-500 bg-emerald-50/70 dark:border-emerald-700/80 dark:bg-emerald-950/40 shadow-xs ring-2 ring-emerald-500/20'
+                        : 'border-[#b6f6d9] bg-white hover:bg-slate-50/80 dark:border-emerald-700/80 dark:bg-slate-900/40'
                         }`}
                     >
-                      <div className={`mt-0.5 size-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${printScopeMode === 'all' ? 'border-[#059669] bg-[#059669] text-white' : 'border-emerald-300 dark:border-emerald-800/60'
+                      <div className={`mt-0.5 size-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${printScopeMode === 'all' ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-slate-300 dark:border-slate-700'
                         }`}>
                         {printScopeMode === 'all' && <span className="size-2 rounded-full bg-white" />}
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
-                          <Building2 className="size-4 text-[#059669] dark:text-emerald-400" />
-                          <h4 className="text-xs font-extrabold text-slate-900 dark:text-white">
+                          <Building2 className="size-4 text-emerald-600 dark:text-emerald-400" />
+                          <h4 className="text-xs font-black text-slate-900 dark:text-white">
                             Cetak Seluruh Data Unit Pendidikan
                           </h4>
                         </div>
@@ -4581,19 +4049,19 @@ export default function EducationUnitsPage() {
                     {/* Mode 2: Jumlah Pegawai Menurut Unit */}
                     <div
                       onClick={() => setPrintScopeMode('pegawai')}
-                      className={`flex items-start gap-3.5 p-4 rounded-xl border cursor-pointer transition-all duration-200 ${printScopeMode === 'pegawai'
-                        ? 'border-[#059669] bg-emerald-50/70 dark:border-emerald-800/60 dark:bg-emerald-950/40 shadow-xs ring-1 ring-[#059669]'
-                        : 'border-emerald-200/80 bg-white hover:bg-slate-50/80 dark:border-emerald-800/60 dark:bg-slate-900/40'
+                      className={`flex items-start gap-3.5 p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${printScopeMode === 'pegawai'
+                        ? 'border-emerald-500 bg-emerald-50/70 dark:border-emerald-700/80 dark:bg-emerald-950/40 shadow-xs ring-2 ring-emerald-500/20'
+                        : 'border-[#b6f6d9] bg-white hover:bg-slate-50/80 dark:border-emerald-700/80 dark:bg-slate-900/40'
                         }`}
                     >
-                      <div className={`mt-0.5 size-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${printScopeMode === 'pegawai' ? 'border-[#059669] bg-[#059669] text-white' : 'border-emerald-300 dark:border-emerald-800/60'
+                      <div className={`mt-0.5 size-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${printScopeMode === 'pegawai' ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-slate-300 dark:border-slate-700'
                         }`}>
                         {printScopeMode === 'pegawai' && <span className="size-2 rounded-full bg-white" />}
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
                           <UsersRound className="size-4 text-emerald-600 dark:text-emerald-400" />
-                          <h4 className="text-xs font-extrabold text-slate-900 dark:text-white">
+                          <h4 className="text-xs font-black text-slate-900 dark:text-white">
                             Cetak Jumlah Pegawai & Guru Menurut Unit
                           </h4>
                         </div>
@@ -4606,19 +4074,19 @@ export default function EducationUnitsPage() {
                     {/* Mode 3: Jumlah Siswa/Santri Menurut Unit */}
                     <div
                       onClick={() => setPrintScopeMode('siswa')}
-                      className={`flex items-start gap-3.5 p-4 rounded-xl border cursor-pointer transition-all duration-200 ${printScopeMode === 'siswa'
-                        ? 'border-[#059669] bg-emerald-50/70 dark:border-emerald-800/60 dark:bg-emerald-950/40 shadow-xs ring-1 ring-[#059669]'
-                        : 'border-emerald-200/80 bg-white hover:bg-slate-50/80 dark:border-emerald-800/60 dark:bg-slate-900/40'
+                      className={`flex items-start gap-3.5 p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${printScopeMode === 'siswa'
+                        ? 'border-emerald-500 bg-emerald-50/70 dark:border-emerald-700/80 dark:bg-emerald-950/40 shadow-xs ring-2 ring-emerald-500/20'
+                        : 'border-[#b6f6d9] bg-white hover:bg-slate-50/80 dark:border-emerald-700/80 dark:bg-slate-900/40'
                         }`}
                     >
-                      <div className={`mt-0.5 size-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${printScopeMode === 'siswa' ? 'border-[#059669] bg-[#059669] text-white' : 'border-emerald-300 dark:border-emerald-800/60'
+                      <div className={`mt-0.5 size-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${printScopeMode === 'siswa' ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-slate-300 dark:border-slate-700'
                         }`}>
                         {printScopeMode === 'siswa' && <span className="size-2 rounded-full bg-white" />}
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
                           <GraduationCap className="size-4 text-amber-500" />
-                          <h4 className="text-xs font-extrabold text-slate-900 dark:text-white">
+                          <h4 className="text-xs font-black text-slate-900 dark:text-white">
                             Cetak Jumlah Siswa / Santri Menurut Unit
                           </h4>
                         </div>
@@ -4637,10 +4105,10 @@ export default function EducationUnitsPage() {
                         setPrintOptionModalOpen(false)
                         handlePrintClean(printScopeMode)
                       }}
-                      className="w-full flex items-center justify-between p-3.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/70 hover:bg-emerald-100/70 dark:border-emerald-800/60 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/50 text-left transition-all duration-200 cursor-pointer shadow-2xs hover:shadow-xs group"
+                      className="w-full flex items-center justify-between p-3.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/70 hover:bg-emerald-100/70 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/50 text-left transition-all duration-200 cursor-pointer shadow-2xs hover:shadow-xs group active:scale-98"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="size-9 rounded-xl bg-white dark:bg-card-dark flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform border border-emerald-200/80 dark:border-emerald-800/60">
+                        <div className="size-9 rounded-xl bg-white dark:bg-card-dark flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-700">
                           <Printer className="size-4.5" strokeWidth={2.25} />
                         </div>
                         <div>
@@ -4656,10 +4124,10 @@ export default function EducationUnitsPage() {
                         setPrintOptionModalOpen(false)
                         handleDownloadPdfTable(printScopeMode)
                       }}
-                      className="w-full flex items-center justify-between p-3.5 rounded-xl border-2 border-rose-300 dark:border-rose-800 bg-rose-50/70 hover:bg-rose-100/70 dark:border-emerald-800/60 dark:bg-rose-950/30 dark:hover:bg-rose-900/40 text-left transition-all duration-200 cursor-pointer shadow-2xs hover:shadow-xs group"
+                      className="w-full flex items-center justify-between p-3.5 rounded-xl border-2 border-rose-300 dark:border-rose-800 bg-rose-50/70 hover:bg-rose-100/70 dark:bg-rose-950/30 dark:hover:bg-rose-900/40 text-left transition-all duration-200 cursor-pointer shadow-2xs hover:shadow-xs group active:scale-98"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="size-9 rounded-xl bg-white dark:bg-card-dark flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform border border-emerald-200/80 dark:border-emerald-800/60">
+                        <div className="size-9 rounded-xl bg-white dark:bg-card-dark flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform border border-rose-200/80 dark:border-rose-800/60 text-rose-600">
                           <Download className="size-4.5" strokeWidth={2.25} />
                         </div>
                         <div>
@@ -4669,23 +4137,7 @@ export default function EducationUnitsPage() {
                       </div>
                     </button>
                   </div>
-                </div>
-
-                {/* Footer */}
-                <div className="modal-footer flex items-center justify-end border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 px-6 py-4 dark:border-emerald-800/60 dark:bg-[#131B27]">
-                  <button
-                    type="button"
-                    onClick={() => setPrintOptionModalOpen(false)}
-                    className="inline-flex items-center gap-1.5 rounded-xl border-2 border-emerald-300 bg-white hover:bg-emerald-50 text-emerald-800 text-slate-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 shadow-2xs px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
-                  >
-                    Batal
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+      </AppModal>
 
       {/* Smart Floating Scroll Navigator (Option A) */}
       <SmartScrollFab targetId="tabel-unit-pendidikan" downTooltip="Langsung ke Tabel Unit" />

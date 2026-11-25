@@ -49,6 +49,7 @@ import {
 } from '../services/lmsMediaService'
 import PageContainer from '../components/app/PageContainer'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
+import AppModal from '../components/app/AppModal'
 import {
   useDebounce
 } from '../hooks/useDebounce'
@@ -74,7 +75,8 @@ import {
 import ActionDropdown from '../components/app/ActionDropdown'
 import {
   RotateCcw,
-  Printer
+  Printer,
+  Check
 } from 'lucide-react'
 
 const containerVariants = {
@@ -313,41 +315,19 @@ function KpiTintedCard({
 }
 
 function HarmonizedDeleteMediaModal({ isOpen, onClose, onConfirm, item, isSubmitting }) {
- if (!isOpen || !item) return null
  return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex h-9 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 shadow-sm">
- <Trash2 className="h-6 w-6" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-rose-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
- Hapus Permanen
- </span>
- <h3 className="text-base font-bold text-slate-900 dark:text-white mt-0.5">
- Hapus Media Pembelajaran?
- </h3>
- </div>
- </div>
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Apakah Anda yakin ingin menghapus media <strong className="text-slate-900 dark:text-white">"{item.nama_file}"</strong>?
- </p>
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/50 p-3 dark:border-emerald-800/60 dark:bg-rose-950/20 mb-6">
- <div className="flex items-start gap-2">
- <AlertCircle className="h-4 w-4 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
- <p className="text-xs text-rose-800 dark:text-rose-300">
- File media ini tidak akan dapat diakses oleh siswa atau guru yang terhubung ke materi terkait.
- </p>
- </div>
- </div>
- <div className="flex items-center justify-end gap-3">
+ <AppModal
+ isOpen={Boolean(isOpen && item)}
+ onClose={onClose}
+ title="Hapus Media Pembelajaran?"
+ badge="Hapus Permanen"
+ icon={Trash2}
+ variant="danger"
+ maxWidth="max-w-md"
+ zIndex={70}
+ disableBackdropClose={isSubmitting}
+ footer={
+ <>
  <button
  type="button"
  onClick={onClose}
@@ -360,14 +340,29 @@ function HarmonizedDeleteMediaModal({ isOpen, onClose, onConfirm, item, isSubmit
  type="button"
  onClick={onConfirm}
  disabled={isSubmitting}
- className="h-9 px-5 rounded-xl bg-white dark:bg-[#1B2433] hover:from-rose-700 hover:to-red-700 text-xs font-extrabold shadow-sm transition cursor-pointer disabled:opacity-50"
+ className="h-9 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-extrabold shadow-sm transition cursor-pointer disabled:opacity-50"
  >
  {isSubmitting ? 'Menghapus...' : 'Ya, Hapus Media'}
  </button>
+ </>
+ }
+ >
+ {item && (
+ <>
+ <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+ Apakah Anda yakin ingin menghapus media <strong className="text-slate-900 dark:text-white">"{item.nama_file}"</strong>?
+ </p>
+ <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/50 p-3 dark:border-emerald-800/60 dark:bg-rose-950/20">
+ <div className="flex items-start gap-2">
+ <AlertCircle className="h-4 w-4 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
+ <p className="text-xs text-rose-800 dark:text-rose-300">
+ File media ini tidak akan dapat diakses oleh siswa atau guru yang terhubung ke materi terkait.
+ </p>
  </div>
  </div>
- </motion.div>
- </div>
+ </>
+ )}
+ </AppModal>
  )
 }
 
@@ -1411,30 +1406,24 @@ export default function LmsMediaPage({ embedded = false, hideBreadcrumb = false,
  </motion.div>
 
  {/* KPI DETAIL MODAL */}
- {kpiModalOpen && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
- <div className="bg-white dark:bg-[#1B2433] w-full max-w-4xl rounded-xl shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 overflow-hidden flex flex-col max-h-[85vh]">
- <div className="bg-white dark:bg-[#1B2433] p-5 flex items-center justify-between">
- <div className="flex items-center gap-3">
- <div className="p-2 bg-white/10 backdrop-blur-md rounded-xl border border-emerald-200/20">
- <Layers className="w-5 h-5 text-emerald-200" />
- </div>
- <div>
- <h3 className="text-lg font-bold">{kpiModalCategory.title}</h3>
- <p className="text-xs text-emerald-100 mt-0.5">
- Menampilkan {kpiModalCategory.items.length} file media terdaftar
- </p>
- </div>
- </div>
+ <AppModal
+ isOpen={kpiModalOpen}
+ onClose={() => setKpiModalOpen(false)}
+ title={kpiModalCategory.title}
+ description={`Menampilkan ${kpiModalCategory.items.length} file media terdaftar`}
+ icon={Layers}
+ maxWidth="max-w-4xl"
+ zIndex={50}
+ footer={
  <button
+ type="button"
  onClick={() => setKpiModalOpen(false)}
- className="text-emerald-100 hover:p-1 rounded-lg hover:bg-white/10 transition-colors"
+ className="px-4 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-slate-200 text-xs font-bold hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors"
  >
- <X className="w-5 h-5" />
+ Tutup
  </button>
- </div>
-
- <div className="p-6 overflow-y-auto flex-1 space-y-4">
+ }
+ >
  {kpiModalCategory.items.length === 0 ? (
  <div className="py-12 text-center text-slate-400">
  <Layers className="w-12 h-9 mx-auto mb-3 opacity-30" />
@@ -1478,49 +1467,39 @@ export default function LmsMediaPage({ embedded = false, hideBreadcrumb = false,
  </TableRoot>
  </div>
  )}
- </div>
-
- <div className="p-4 border-t border-emerald-200/80 dark:border-emerald-800/60 flex justify-end bg-slate-50/50 dark:bg-slate-900/40">
- <button
- onClick={() => setKpiModalOpen(false)}
- className="px-4 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-slate-200 text-xs font-bold hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors"
- >
- Tutup
- </button>
- </div>
- </div>
- </div>
- )}
+ </AppModal>
 
  {/* Modal Form Create / Edit */}
- {modalOpen && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
- <div className="relative w-full max-w-2xl rounded-xl bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
- {/* Modal Header */}
- <div className="px-6 py-5 bg-slate-50 dark:bg-slate-900/80 border-b border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between shrink-0">
- <div className="flex items-center gap-3">
- <div className="p-2.5 rounded-xl bg-[#059669] text-white">
- <FileUp className="w-5 h-5" />
- </div>
- <div>
- <h3 className="text-lg font-bold text-slate-900 dark:text-white">
- {editingItem ? 'Edit Media Pembelajaran' : 'Tambah Media Pembelajaran Baru'}
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- Lengkapi detail media atau unggah file pendukung
- </p>
- </div>
- </div>
+ <AppModal
+ isOpen={modalOpen}
+ onClose={() => setModalOpen(false)}
+ title={editingItem ? 'Edit Media Pembelajaran' : 'Tambah Media Pembelajaran Baru'}
+ description="Lengkapi detail media atau unggah file pendukung"
+ icon={FileUp}
+ maxWidth="max-w-2xl"
+ zIndex={50}
+ footer={
+ <>
  <button
+ type="button"
  onClick={() => setModalOpen(false)}
- className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg"
+ className="px-5 py-2.5 rounded-[12px] border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors"
  >
- <X className="w-5 h-5" />
+ Batal
  </button>
- </div>
-
- {/* Modal Body */}
- <form onSubmit={handleSubmitForm} className="p-6 overflow-y-auto space-y-5 flex-1">
+ <button
+ type="submit"
+ form="lms-media-form"
+ disabled={formSubmitting}
+ className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#059669] hover:bg-[#1E8E5A] text-white font-bold text-sm rounded-[12px] shadow-md transition-all disabled:opacity-50"
+ >
+ {formSubmitting ? <RefreshCw className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
+ <span>{editingItem ? 'Simpan Perubahan' : 'Tambah Media'}</span>
+ </button>
+ </>
+ }
+ >
+ <form id="lms-media-form" onSubmit={handleSubmitForm} className="space-y-5">
  <div>
  <HeroUiModalSelect
  label="Materi Pembelajaran"
@@ -1635,50 +1614,44 @@ export default function LmsMediaPage({ embedded = false, hideBreadcrumb = false,
  className="w-full px-4 py-2.5 rounded-[12px] bg-slate-50 dark:bg-slate-900/60 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 text-sm focus:outline-none focus:ring-2 focus:ring-[#059669]"
  />
  </div>
-
- {/* Modal Footer */}
- <div className="pt-4 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3">
- <button
- type="button"
- onClick={() => setModalOpen(false)}
- className="px-5 py-2.5 rounded-[12px] border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors"
- >
- Batal
- </button>
- <button
- type="submit"
- disabled={formSubmitting}
- className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#059669] hover:bg-[#1E8E5A] text-white font-bold text-sm rounded-[12px] shadow-md transition-all disabled:opacity-50"
- >
- {formSubmitting ? <RefreshCw className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
- <span>{editingItem ? 'Simpan Perubahan' : 'Tambah Media'}</span>
- </button>
- </div>
  </form>
- </div>
- </div>
- )}
+ </AppModal>
 
  {/* Modal Preview Media */}
- {previewModalOpen && previewItem && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm animate-fadeIn">
- <div className="relative w-full max-w-3xl rounded-xl bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
- <div className="px-6 py-4 bg-slate-50 dark:bg-slate-900/80 border-b border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between">
- <div className="flex items-center gap-3">
- {getTipeBadge(previewItem.tipe_file)}
- <h3 className="text-base font-bold text-slate-900 dark:text-white max-w-md">
- {previewItem.nama_file}
- </h3>
- </div>
- <button
- onClick={() => setPreviewModalOpen(false)}
- className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg"
+ <AppModal
+ isOpen={Boolean(previewModalOpen && previewItem)}
+ onClose={() => setPreviewModalOpen(false)}
+ title={previewItem?.nama_file || 'Pratinjau Media'}
+ icon={Eye}
+ headerActions={previewItem ? getTipeBadge(previewItem.tipe_file) : null}
+ maxWidth="max-w-3xl"
+ zIndex={50}
+ footer={
+ previewItem ? (
+ <div className="flex items-center justify-between w-full">
+ {(previewItem.file_url || previewItem.url_eksternal) ? (
+ <a
+ href={previewItem.file_url || previewItem.url_eksternal}
+ target="_blank"
+ rel="noreferrer"
+ className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#059669] text-white text-xs font-bold hover:bg-[#1E8E5A]"
  >
- <X className="w-5 h-5" />
+ <Download className="w-4 h-4" /> Buka / Unduh Berkas
+ </a>
+ ) : <div />}
+ <button
+ type="button"
+ onClick={() => setPreviewModalOpen(false)}
+ className="px-4 py-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 text-xs font-semibold text-slate-600 dark:text-slate-300"
+ >
+ Tutup
  </button>
  </div>
-
- <div className="p-6 overflow-y-auto space-y-4 flex-1">
+ ) : null
+ }
+ >
+ {previewItem && (
+ <>
  {/* Media Player / Embed Preview based on type */}
  {previewItem.tipe_file === 'image' && (previewItem.file_url || previewItem.url_eksternal) && (
  <div className="flex justify-center bg-slate-900/80 rounded-xl p-4">
@@ -1757,29 +1730,9 @@ export default function LmsMediaPage({ embedded = false, hideBreadcrumb = false,
  </div>
  )}
  </div>
- </div>
-
- <div className="px-6 py-4 bg-slate-50 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between">
- {(previewItem.file_url || previewItem.url_eksternal) && (
- <a
- href={previewItem.file_url || previewItem.url_eksternal}
- target="_blank"
- rel="noreferrer"
- className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#059669] text-white text-xs font-bold hover:bg-[#1E8E5A]"
- >
- <Download className="w-4 h-4" /> Buka / Unduh Berkas
- </a>
+ </>
  )}
- <button
- onClick={() => setPreviewModalOpen(false)}
- className="px-4 py-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 text-xs font-semibold text-slate-600 dark:text-slate-300"
- >
- Tutup
- </button>
- </div>
- </div>
- </div>
- )}
+ </AppModal>
  </motion.div>
  </div>
  </PageContainer>

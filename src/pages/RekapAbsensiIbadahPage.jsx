@@ -58,6 +58,7 @@ import {
   worshipAttendanceService
 } from '../services/worshipAttendanceService'
 import PageContainer from '../components/app/PageContainer'
+import AppModal from '../components/app/AppModal'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
 import AppBadge from '../components/app/AppBadge'
 import AppSkeleton from '../components/app/AppSkeleton'
@@ -105,10 +106,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle
-} from '@/components/ui/dialog'
-import {
-  Backdrop,
-  OverlayWrapper
 } from '@/components/ui/dialog'
 
 const MODAL_PAGE_SIZE = 6
@@ -1305,34 +1302,44 @@ export default function RekapAbsensiIbadahPage() {
  )}
 
  {/* Modal Detail Rincian Presensi Santri saat Klik Data */}
- <OverlayWrapper isOpen={!!selectedRowModal} onOpenChange={() => setSelectedRowModal(null)}>
- <Backdrop isOpen={!!selectedRowModal} onOpenChange={() => setSelectedRowModal(null)}>
- <Dialog
+ <AppModal
  isOpen={!!selectedRowModal}
- onOpenChange={() => setSelectedRowModal(null)}
- showCloseButton={true}
- className="w-full max-w-xl rounded-xl p-6 bg-white dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xl space-y-4"
+ onClose={() => setSelectedRowModal(null)}
+ icon={HeartHandshake}
+ title={selectedRowModal?.student?.nama_lengkap || selectedRowModal?.student?.full_name || selectedRowModal?.student?.nama || 'Detail Presensi Ibadah'}
+ badge="Detail Presensi"
+ description={selectedRowModal ? `NIS: ${selectedRowModal.student?.nis || '-'}` : ''}
+ maxWidth="max-w-xl"
+ zIndex={70}
+ footer={
+ <>
+ <button
+ type="button"
+ onClick={() => setSelectedRowModal(null)}
+ className="inline-flex items-center gap-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 h-9.5 px-4 text-xs font-black border border-slate-300 dark:border-slate-700 transition-all active:scale-95 cursor-pointer"
+ >
+ <X className="size-3.5" strokeWidth={2.2} />
+ <span>Tutup</span>
+ </button>
+ <button
+ type="button"
+ onClick={() => {
+ if (!selectedRowModal) return
+ setPrintTargetRow(selectedRowModal)
+ setSelectedRowModal(null)
+ setIsPrintModalOpen(true)
+ }}
+ className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white h-9.5 px-5 text-xs font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 transition-all active:scale-95 cursor-pointer"
+ >
+ <Printer className="size-3.5" strokeWidth={2.2} />
+ <span>Cetak Data Ibadah</span>
+ </button>
+ </>
+ }
  >
  {selectedRowModal && (
- <>
- <DialogHeader>
- <DialogTitle className="text-lg font-bold text-[#059669] dark:text-[#10B981] flex items-center gap-3">
- <div className="size-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-[#059669] dark:text-[#10B981] flex items-center justify-center font-extrabold text-sm shrink-0">
- {(selectedRowModal.student?.nama_lengkap || selectedRowModal.student?.full_name || selectedRowModal.student?.nama || 'S')[0]}
- </div>
- <div>
- <h3 className="text-lg font-extrabold leading-tight text-slate-900 dark:text-white">
- {selectedRowModal.student?.nama_lengkap || selectedRowModal.student?.full_name || selectedRowModal.student?.nama}
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 font-medium font-mono">
- NIS: {selectedRowModal.student?.nis || '-'}
- </p>
- </div>
- </DialogTitle>
- </DialogHeader>
-
- <DialogBody className="space-y-4 py-2">
- <div className="grid grid-cols-2 gap-3 text-xs bg-slate-50 dark:bg-slate-800/60 p-4 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="space-y-4">
+ <div className="grid grid-cols-2 gap-3 text-xs bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border-2 border-[#b6f6d9] dark:border-emerald-700/80">
  <div>
  <span className="text-slate-400 block text-[10px] font-semibold">Nama Ibadah / Sesi</span>
  <span className="font-bold text-slate-800 dark:text-slate-200">
@@ -1359,7 +1366,7 @@ export default function RekapAbsensiIbadahPage() {
  </div>
  </div>
 
- <div className="p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border-2 border-[#b6f6d9] dark:border-emerald-700/80">
  <span className="block text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">
  Waktu Scan Presensi
  </span>
@@ -1367,35 +1374,9 @@ export default function RekapAbsensiIbadahPage() {
  {selectedRowModal.scan_time || '-'}
  </span>
  </div>
- </DialogBody>
-
- <DialogFooter className="pt-2 flex justify-end gap-2">
- <Button
- variant="ghost"
- appearance="outline"
- size="sm"
- onClick={() => setSelectedRowModal(null)}
- >
- Tutup
- </Button>
- <Button
- variant="primary"
- appearance="fill"
- size="sm"
- onClick={() => {
- setPrintTargetRow(selectedRowModal)
- setSelectedRowModal(null)
- setIsPrintModalOpen(true)
- }}
- >
- <Printer className="size-4 mr-1.5" /> Cetak Data Ibadah
- </Button>
- </DialogFooter>
- </>
+ </div>
  )}
- </Dialog>
- </Backdrop>
- </OverlayWrapper>
+ </AppModal>
 
  {/* Modal Opsi Cetak & Unduh PDF */}
  <PrintOptionModal

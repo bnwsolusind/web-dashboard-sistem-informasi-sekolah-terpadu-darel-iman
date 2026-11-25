@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Input } from '@/components/ui/input'
 import { TextArea } from '@/components/ui/text-area'
+import AppModal from '../app/AppModal'
 import {
  PRESET_CATEGORIES,
  COLOR_PALETTE,
@@ -862,34 +863,27 @@ export default function AcademicCalendarModal({ isOpen, onClose, lockedUnit = nu
  const currentDetailEvent = selectedEventDetail
 
  return (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto bg-slate-950/65 backdrop-blur-md animate-[fadeIn_0.2s_ease-out] print:static print:inset-auto print:z-auto print:bg-white print:p-0 print:m-0 print:block print:w-full print:overflow-visible">
- <div
- className="relative w-full max-w-4xl h-[92vh] max-h-[92vh] flex flex-col rounded-xl overflow-hidden border border-emerald-200/80 bg-white shadow-xl transition-all dark:border-emerald-800/60 dark:bg-[#0F172A] print:w-full print:max-w-none print:h-auto print:max-h-none print:shadow-none print:border-none print:rounded-none print:bg-white print:p-0 print:m-0 print:overflow-visible"
- onClick={(e) => e.stopPropagation()}
- >
- {/* TOP NAVIGATION HEADER BAR (GOOGLE CALENDAR / OUTLOOK STYLE) */}
- <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/90 bg-white px-5 py-3.5 dark:border-emerald-800/60 dark:bg-[#1E293B] shrink-0 print:hidden">
- {/* LEFT SECTION: BRAND TITLE & DATE SWITCHER */}
+ <AppModal
+ isOpen={isOpen}
+ onClose={onClose}
+ title="Kalender Akademik"
+ description={foundationName || 'Semua Unit Pendidikan'}
+ badge="Akademik"
+ icon={CalendarDays}
+ variant="emerald"
+ maxWidth="max-w-4xl"
+ zIndex={50}
+ className="h-[92vh] max-h-[92vh] print:w-full print:max-w-none print:h-auto print:max-h-none print:shadow-none print:border-none print:rounded-none print:bg-white print:p-0 print:m-0 print:overflow-visible"
+ bodyClassName="p-0 space-y-0 max-h-none flex flex-col overflow-hidden print:block print:overflow-visible"
+ subHeader={
+ <div className="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-200/90 bg-emerald-50/70 px-5 py-2.5 dark:border-emerald-800/60 dark:bg-emerald-950/30 shrink-0 print:hidden">
+ {/* LEFT SECTION: DATE SWITCHER */}
  <div className="flex flex-wrap items-center gap-3">
- <div className="flex items-center gap-2.5 pr-2 border-r border-emerald-200/80 dark:border-emerald-700/80">
- <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md shadow-sm">
- <CalendarDays className="h-5 w-5 stroke-[2.2]" />
- </div>
- <div>
- <h2 className="text-sm font-black text-slate-900 dark:text-white leading-none">
- Kalender Akademik
- </h2>
- <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">
- {foundationName}
- </span>
- </div>
- </div>
-
  {/* HARI INI BUTTON */}
  <button
  type="button"
  onClick={() => handleSelectPresetRange('today')}
- className="inline-flex items-center justify-center rounded-xl bg-slate-100 px-3.5 py-1.5 text-xs font-black text-slate-800 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 transition-colors shadow-2xs cursor-pointer"
+ className="inline-flex items-center justify-center rounded-xl bg-white px-3.5 py-1.5 text-xs font-black text-slate-800 hover:bg-slate-100 border border-emerald-200/80 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 dark:border-emerald-800/60 transition-colors shadow-2xs cursor-pointer"
  >
  Hari ini
  </button>
@@ -899,7 +893,7 @@ export default function AcademicCalendarModal({ isOpen, onClose, lockedUnit = nu
  <button
  type="button"
  onClick={() => navigateMonth(-1)}
- className="flex h-8 w-8 items-center justify-center rounded-xl text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+ className="flex h-8 w-8 items-center justify-center rounded-xl text-slate-600 hover:bg-white dark:text-slate-300 dark:hover:bg-slate-800 transition-colors cursor-pointer"
  title="Bulan Sebelumnya"
  >
  <ChevronLeft className="h-4 w-4 stroke-[2.5]" />
@@ -907,7 +901,7 @@ export default function AcademicCalendarModal({ isOpen, onClose, lockedUnit = nu
  <button
  type="button"
  onClick={() => navigateMonth(1)}
- className="flex h-8 w-8 items-center justify-center rounded-xl text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+ className="flex h-8 w-8 items-center justify-center rounded-xl text-slate-600 hover:bg-white dark:text-slate-300 dark:hover:bg-slate-800 transition-colors cursor-pointer"
  title="Bulan Berikutnya"
  >
  <ChevronRight className="h-4 w-4 stroke-[2.5]" />
@@ -917,10 +911,10 @@ export default function AcademicCalendarModal({ isOpen, onClose, lockedUnit = nu
  {/* MAIN DATE RANGE DISPLAY */}
  <div className="flex items-center gap-2">
  <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
- {dateRangeDisplay.title}
+ {dateRangeDisplay?.title}
  </h3>
- {dateRangeDisplay.badge && (
- <span className="rounded-md bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-sky-950/60 dark:text-sky-300">
+ {dateRangeDisplay?.badge && (
+ <span className="rounded-md bg-emerald-100/80 border border-emerald-200/80 px-2 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-sky-950/60 dark:text-sky-300">
  {dateRangeDisplay.badge}
  </span>
  )}
@@ -931,7 +925,7 @@ export default function AcademicCalendarModal({ isOpen, onClose, lockedUnit = nu
  <div
  role="tablist"
  aria-label="Tampilan kalender akademik"
- className="inline-flex items-center rounded-xl bg-slate-100/90 p-1 dark:bg-slate-800/80 border border-emerald-200/80 dark:border-emerald-700/80/60 shadow-2xs overflow-x-auto no-scrollbar"
+ className="inline-flex items-center rounded-xl bg-white/90 p-1 dark:bg-slate-800/80 border border-emerald-200/80 dark:border-emerald-700/60 shadow-2xs overflow-x-auto no-scrollbar"
  >
  {[
  { id: 'hari', label: 'Hari' },
@@ -952,8 +946,8 @@ export default function AcademicCalendarModal({ isOpen, onClose, lockedUnit = nu
  }}
  className={`rounded-xl px-3.5 py-1.5 text-xs font-extrabold whitespace-nowrap transition-all duration-200 cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ${
  isSelected
- ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-sm border border-emerald-400/40 scale-[1.01]'
- : 'border border-transparent text-slate-600 hover:text-emerald-700 dark:text-slate-300 dark:hover:text-emerald-300 hover:bg-white/80 dark:hover:bg-slate-700/60 font-bold'
+ ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm border border-emerald-400/40 scale-[1.01]'
+ : 'border border-transparent text-slate-600 hover:text-emerald-700 dark:text-slate-300 dark:hover:text-emerald-300 hover:bg-emerald-50/70 dark:hover:bg-slate-700/60 font-bold'
  }`}
  >
  {mode.label}
@@ -962,7 +956,7 @@ export default function AcademicCalendarModal({ isOpen, onClose, lockedUnit = nu
  })}
  </div>
 
- {/* RIGHT SECTION: ACTIONS (CETAK, KELOLA, REFRESH, CLOSE) */}
+ {/* RIGHT SECTION: ACTIONS (UNIT, CETAK, KELOLA, REFRESH) */}
  <div className="flex items-center gap-2">
  {/* UNIT FILTER SELECTOR */}
  <div className="w-44 sm:w-52">
@@ -990,7 +984,7 @@ export default function AcademicCalendarModal({ isOpen, onClose, lockedUnit = nu
  <button
  type="button"
  onClick={handlePrintCalendar}
- className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-50 border border-emerald-200/80 px-3 py-1.5 text-xs font-bold text-emerald-700 hover:bg-slate-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:hover:bg-slate-700 transition-colors cursor-pointer"
+ className="inline-flex items-center gap-1.5 rounded-xl bg-white border border-emerald-200/80 px-3 py-1.5 text-xs font-bold text-emerald-700 hover:bg-emerald-50 dark:bg-emerald-950/60 dark:text-emerald-300 dark:hover:bg-slate-700 transition-colors cursor-pointer"
  title="Cetak atau Ekspor Laporan ke PDF"
  >
  <Printer className="h-4 w-4 text-blue-600 dark:text-blue-400" />
@@ -1011,7 +1005,7 @@ export default function AcademicCalendarModal({ isOpen, onClose, lockedUnit = nu
  }}
  className={`inline-flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-black transition-all cursor-pointer ${
  activeTab === 'manage'
- ? 'bg-white dark:bg-[#1B2433] shadow-md'
+ ? 'bg-emerald-600 text-white shadow-md'
  : 'bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-950/60 dark:text-blue-300'
  }`}
  >
@@ -1025,23 +1019,15 @@ export default function AcademicCalendarModal({ isOpen, onClose, lockedUnit = nu
  type="button"
  onClick={loadData}
  disabled={isLoading}
- className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-emerald-950/60 dark:text-emerald-300 transition-colors cursor-pointer"
+ className="flex h-8 w-8 items-center justify-center rounded-xl bg-white text-slate-600 hover:bg-slate-100 border border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-300 transition-colors cursor-pointer"
  title="Refresh Data API Backend"
  >
  <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
  </button>
-
- {/* CLOSE BUTTON */}
- <button
- type="button"
- onClick={onClose}
- className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-emerald-950/60 dark:text-emerald-300 transition-colors cursor-pointer"
- title="Tutup Modal Kalender"
+ </div>
+ </div>
+ }
  >
- <X className="h-5 w-5 stroke-[2.2]" />
- </button>
- </div>
- </div>
 
  {/* MAIN BODY LAYOUT (LEFT SIDEBAR + CENTER WORKSPACE + RIGHT DETAIL FLYOUT) */}
  <div className="flex flex-1 overflow-hidden print:block print:overflow-visible">
@@ -2044,7 +2030,6 @@ export default function AcademicCalendarModal({ isOpen, onClose, lockedUnit = nu
  </>
  )}
  </div>
- </div>
- </div>
+ </AppModal>
  )
 }

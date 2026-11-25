@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react'
+import AppModal from '@/components/app/AppModal'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
  X,
@@ -121,47 +122,18 @@ export default function InAppEmbedViewerModal({
  if (!isOpen || !url) return null
 
  return (
- <AnimatePresence>
- <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 bg-slate-950/75 backdrop-blur-md">
- {/* Glow Ambient di Balik Modal (Hero UI Style) */}
-
- <motion.div
- initial={{ opacity: 0, scale: 0.95, y: 15 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 15 }}
- transition={{ type: 'spring', stiffness: 380, damping: 28 }}
- className={`relative flex flex-col overflow-hidden rounded-3xl border border-emerald-500/30 dark:border-emerald-700/60 bg-white/95 dark:bg-[#1B2433]/95 shadow-2xl shadow-emerald-950/20 backdrop-blur-xl transition-all duration-200 ${
- isFullscreen ? 'w-[98vw] h-[96vh]' : 'w-full max-w-4xl h-[88vh]'
- }`}
- >
- {/* Top Accent Gradient Bar (Hero UI Style) */}
-        <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
-
- {/* Modal Header */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50 px-5 py-3.5 sm:px-6">
- <div className="flex items-center gap-3 min-w-0">
- {/* Squircle Icon Badge */}
- <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-sm">
- <IconComponent className="h-5 w-5" />
- </div>
- <div className="min-w-0">
- <div className="flex items-center gap-2">
- <h3 className="text-sm sm:text-base font-black tracking-tight text-slate-800 dark:text-white ">
- {title}
- </h3>
- <span className="hidden xs:inline-flex items-center gap-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 px-2.5 py-0.5 text-[10px] font-black text-emerald-800 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60">
- <Sparkles className="h-2.5 w-2.5" />
- {resource.label}
- </span>
- </div>
- <p className="text-xs font-medium text-slate-500 dark:text-slate-400 truncate mt-0.5">
- {subtitle || resource.embedUrl}
- </p>
- </div>
- </div>
-
- {/* Header Action Controls */}
- <div className="flex items-center gap-1.5 sm:gap-2">
+ <AppModal
+ isOpen={Boolean(isOpen && url)}
+ onClose={onClose}
+ title={title}
+ description={subtitle || resource.embedUrl}
+ badge={resource.label}
+ icon={IconComponent}
+ maxWidth={isFullscreen ? 'max-w-[98vw]' : 'max-w-4xl'}
+ zIndex="z-[100]"
+ bodyClassName="p-0"
+ headerActions={
+ <div className="flex items-center gap-1.5">
  <button
  type="button"
  onClick={() => {
@@ -169,33 +141,38 @@ export default function InAppEmbedViewerModal({
  setReloadKey((k) => k + 1)
  }}
  title="Muat Ulang Pratinjau"
- className="flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 text-slate-600 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-slate-800 transition"
+ className="flex size-9 items-center justify-center rounded-xl bg-white/20 text-white hover:bg-white/30 border border-white/25 transition cursor-pointer"
  >
  <RotateCw className="h-4 w-4" />
  </button>
-
  <button
  type="button"
  onClick={() => setIsFullscreen((prev) => !prev)}
  title={isFullscreen ? 'Keluar Layar Penuh' : 'Layar Penuh'}
- className="hidden sm:flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 text-slate-600 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-slate-800 transition"
+ className="hidden sm:flex size-9 items-center justify-center rounded-xl bg-white/20 text-white hover:bg-white/30 border border-white/25 transition cursor-pointer"
  >
  {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
  </button>
-
+ </div>
+ }
+ footer={
+ <div className="flex w-full flex-wrap items-center justify-between gap-3">
+ <div className="flex items-center gap-2 text-xs font-semibold text-emerald-800 dark:text-emerald-300">
+ <ShieldCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+ <span>Pratinjau Aman Terintegrasi (Pengguna Tetap Berada di Dashboard)</span>
+ </div>
  <button
  type="button"
  onClick={onClose}
- title="Tutup (Kembali ke Dashboard)"
- className="flex h-9 w-9 items-center justify-center rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-950/40 dark:text-rose-400 dark:hover:bg-rose-900/60 transition"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <X className="h-5 w-5" />
+ Tutup Pratinjau
  </button>
  </div>
- </div>
-
+ }
+ >
  {/* Modal Body / Embed Content */}
- <div className="relative flex-1 bg-slate-950 overflow-hidden flex items-center justify-center">
+ <div className={`relative bg-slate-950 overflow-hidden flex items-center justify-center ${isFullscreen ? 'h-[78vh]' : 'h-[66vh]'}`}>
  {resource.type === 'image' ? (
  <div className="h-full w-full flex items-center justify-center p-4 overflow-auto">
  <img
@@ -252,26 +229,6 @@ export default function InAppEmbedViewerModal({
  />
  )}
  </div>
-
- {/* Footer Bar (Hero UI Style) */}
- <div className="flex flex-wrap items-center justify-between gap-3 border-t border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] px-5 py-3 sm:px-6">
- <div className="flex items-center gap-2 text-xs font-semibold text-emerald-800 dark:text-emerald-300">
- <ShieldCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
- <span>Pratinjau Aman Terintegrasi (Pengguna Tetap Berada di Dashboard)</span>
- </div>
-
- <div className="flex items-center gap-2">
- <button
- type="button"
- onClick={onClose}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 px-4 py-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition"
- >
- Tutup Pratinjau
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- </AnimatePresence>
+ </AppModal>
  )
 }

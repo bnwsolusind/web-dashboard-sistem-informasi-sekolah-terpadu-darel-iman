@@ -498,20 +498,20 @@ export default function KpiQuickViewModal({ type, isOpen, onClose, initialUnitId
  onClose={onClose}
  maxWidth="max-w-6xl"
  title={
- <div className="flex items-center gap-3">
- <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 text-white shadow-md shadow-emerald-600/25">
+ <div className="flex items-center gap-3.5">
+ <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 text-white shadow-sm">
  <IconComponent className="size-5 text-white" />
  </div>
  <div className="min-w-0">
  <div className="flex items-center gap-2 flex-wrap">
- <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white leading-tight">
+ <h3 className="text-base sm:text-lg font-black tracking-tight text-white leading-tight">
  {config.title}
  </h3>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider shadow-2xs">
+ <span className="inline-flex items-center gap-1 rounded-full bg-white/20 text-white border border-white/30 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider shrink-0">
  <Sparkles className="size-3" /> Data Realtime
  </span>
  </div>
- <p className="text-xs text-slate-500 font-medium dark:text-slate-400 mt-0.5 truncate">
+ <p className="text-xs sm:text-sm text-emerald-100 font-medium mt-0.5 truncate">
  {config.subtitle}
  </p>
  </div>
@@ -543,7 +543,7 @@ export default function KpiQuickViewModal({ type, isOpen, onClose, initialUnitId
                       setPerPage(Number(e.target.value))
                       setPage(1)
                     }}
-                    className="rounded-lg border border-emerald-200/80 dark:border-emerald-700/80 bg-white dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200 px-2 py-1 focus:outline-none focus:ring-1 focus:ring-emerald-500 cursor-pointer"
+                    className="h-9 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-xs font-bold text-slate-800 dark:text-slate-100 px-2.5 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 cursor-pointer"
                   >
                     <option value={10}>10 / hal</option>
                     <option value={25}>25 / hal</option>
@@ -566,39 +566,36 @@ export default function KpiQuickViewModal({ type, isOpen, onClose, initialUnitId
                 Gunakan filter di atas untuk mempersempit pencarian
               </span>
               <div className="flex items-center gap-2.5 ml-auto">
-                <Button
-                  variant="secondary"
-                  size="sm"
+                <button
+                  type="button"
                   onClick={onClose}
-                  className="rounded-xl font-bold bg-emerald-50 hover:bg-slate-200 text-emerald-700 dark:bg-emerald-950/40 dark:text-slate-200 dark:hover:bg-slate-700 px-4 py-2 border border-emerald-200/80 dark:border-emerald-700/80 cursor-pointer text-xs"
+                  className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
                 >
                   Tutup
-                </Button>
+                </button>
 
-                <Button
-                  variant="outline"
-                  size="sm"
+                <button
+                  type="button"
                   onClick={fetchData}
                   disabled={loading}
-                  className="gap-1.5 rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 bg-white dark:bg-slate-800 text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 font-bold px-4 py-2 text-xs shadow-2xs cursor-pointer"
+                  className="h-9.5 px-4 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-sky-600 shadow-xs disabled:opacity-50"
                 >
                   <RefreshCw className={`h-3.5 w-3.5 ${loading ? 'animate-spin' : ''}`} />
                   <span>Refresh</span>
-                </Button>
+                </button>
 
                 {canAccessDetail && config.linkTo && (
-                  <Button
-                    variant="primary"
-                    size="sm"
+                  <button
+                    type="button"
                     onClick={() => {
                       onClose()
                       navigate(config.linkTo)
                     }}
-                    className="gap-2 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-800 text-white font-extrabold shadow-md shadow-emerald-600/20 px-5 py-2 text-xs cursor-pointer transition-all hover:scale-[1.02] active:scale-95"
+                    className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
                   >
                     <span>Lihat Detail</span>
                     <ArrowRight className="h-4 w-4" />
-                  </Button>
+                  </button>
                 )}
               </div>
             </div>
@@ -630,7 +627,7 @@ export default function KpiQuickViewModal({ type, isOpen, onClose, initialUnitId
  value={search}
  onChange={(e) => setSearch(e.target.value)}
  placeholder={`Cari data ${config.title.toLowerCase()}...`}
- className="w-full pl-10 pr-4 py-2 text-xs font-medium bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-800 dark:text-slate-100"
+ className="h-10 w-full pl-10 pr-4 text-xs font-bold bg-white dark:bg-slate-900 border-2 border-[#b6f6d9] dark:border-emerald-700/80 rounded-xl placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-slate-100 shadow-xs transition-all"
  />
  </div>
 
@@ -683,7 +680,7 @@ export default function KpiQuickViewModal({ type, isOpen, onClose, initialUnitId
  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-md">
  Terjadi kesalahan saat mengunduh data dari server. Silakan coba beberapa saat lagi.
  </p>
- <Button variant="primary" size="sm" onClick={fetchData} className="mt-4 gap-2 bg-rose-600 hover:bg-rose-700 text-emerald-600 rounded-xl">
+ <Button variant="primary" size="sm" onClick={fetchData} className="mt-4 gap-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl">
  <RefreshCw className="h-3.5 w-3.5" />
  <span>Coba Lagi</span>
  </Button>
@@ -754,15 +751,14 @@ function RenderKpiFormulaBanner({ config, canAccessDetail, onGoToDetail }) {
  </span>
  )}
  {canAccessDetail && config.linkTo && (
- <Button
- variant="outline"
- size="xs"
+ <button
+ type="button"
  onClick={onGoToDetail}
- className="gap-1 rounded-lg border-slate-600 text-emerald-700 hover:bg-emerald-100 dark:border-emerald-800/60 dark:text-emerald-300 font-bold px-2.5 py-1 text-xs"
+ className="inline-flex items-center gap-1 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black px-3 py-1.5 text-xs shadow-xs transition-all active:scale-95 cursor-pointer"
  >
  <span>Telusuri Sumber</span>
  <ArrowRight className="h-3 w-3" />
- </Button>
+ </button>
  )}
  </div>
  </div>

@@ -1,4 +1,5 @@
 import { HeroUiHeader } from "../components/ui/HeroUiHeader"
+import AppModal from "../components/app/AppModal"
 import React, { useState, useEffect, useRef, useMemo } from 'react'
 import {
   motion,
@@ -1866,39 +1867,34 @@ export default function StudentWorshipAttendancePage() {
  </section>
 
  {/* ── MODAL UBAH MANUAL JADWAL SESI IBADAH ─────────────────────────── */}
- <AnimatePresence>
- {showEditSessionModal && (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 sm:p-6 bg-slate-950/70 backdrop-blur-md overflow-y-auto">
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 12 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.94, y: 12 }}
- transition={{ duration: 0.2 }}
- className="relative w-full max-w-md my-auto overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <form onSubmit={handleSaveEditSession} className="p-6 space-y-4">
- <div className="flex items-center justify-between pb-3 border-b border-emerald-200/80 dark:border-emerald-800/60">
- <div className="flex items-center gap-3">
- <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-md shadow-sky-500/30">
- <Clock className="size-5 text-emerald-600" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-sky-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-sky-800 dark:bg-sky-950/60 dark:text-sky-300">
- Sesi Ibadah
- </span>
- <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
- Ubah Jam & Lokasi Sesi
- </h3>
- </div>
- </div>
+ <AppModal
+ isOpen={showEditSessionModal}
+ onClose={() => setShowEditSessionModal(false)}
+ badge="Sesi Ibadah"
+ title="Ubah Jam & Lokasi Sesi"
+ icon={Clock}
+ maxWidth="max-w-md"
+ zIndex="z-[70]"
+ footer={
+ <div className="flex w-full justify-end gap-2.5">
  <button
  type="button"
  onClick={() => setShowEditSessionModal(false)}
- className="rounded-xl p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 cursor-pointer"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <X className="size-5" />
+ Batal
+ </button>
+ <button
+ type="submit"
+ form="student-worship-edit-session-form"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 active:scale-95 cursor-pointer"
+ >
+ Simpan Perubahan
  </button>
  </div>
+ }
+ >
+ <form id="student-worship-edit-session-form" onSubmit={handleSaveEditSession} className="space-y-4">
 
  <div className="space-y-3 text-xs">
  <div>
@@ -1950,61 +1946,43 @@ export default function StudentWorshipAttendancePage() {
  />
  </div>
  </div>
-
- <div className="flex justify-end gap-2.5 border-t border-emerald-200/80 pt-3 dark:border-emerald-800/60">
- <button
- type="button"
- onClick={() => setShowEditSessionModal(false)}
- className="rounded-xl border border-emerald-200/80 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-slate-800 transition-all cursor-pointer"
- >
- Batal
- </button>
- <button
- type="submit"
- className="rounded-lg bg-emerald-600 dark:bg-slate-100 dark:text-slate-900 dark: px-4 py-2 text-xs font-bold shadow-md shadow-sm hover:brightness-105 transition-all cursor-pointer text-white border border-emerald-600 h-9 text-sm font-medium"
- >
- Simpan Perubahan
- </button>
- </div>
  </form>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+ </AppModal>
 
  {/* ── MODAL CAMERA SCANNER QR CODE ──────────────────────────────────── */}
- <AnimatePresence>
- {showCameraModal && (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 sm:p-6 bg-slate-950/70 backdrop-blur-md overflow-y-auto">
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 12 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.94, y: 12 }}
- transition={{ duration: 0.2 }}
- className="relative w-full max-w-xl my-auto rounded-xl bg-white p-6 shadow-2xl dark:bg-[#111827] space-y-4 border border-emerald-200/80 dark:border-emerald-800/60"
- >
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-3 dark:border-emerald-800/60">
- <div className="flex items-center gap-2">
- <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">
- <Camera className="h-4 w-4" />
- </div>
- <div>
- <h3 className="text-base font-bold text-slate-900 dark:text-white">
- Scanner QR Code Kartu Siswa
- </h3>
- <p className="text-xs text-slate-400">Arahkan QR Code pada kartu siswa ke area pemindai</p>
- </div>
- </div>
+ <AppModal
+ isOpen={showCameraModal}
+ onClose={() => {
+ setShowCameraModal(false)
+ stopCamera()
+ }}
+ title="Scanner QR Code Kartu Siswa"
+ description="Arahkan QR Code pada kartu siswa ke area pemindai"
+ icon={Camera}
+ maxWidth="max-w-xl"
+ zIndex={70}
+ footer={
+ <div className="flex w-full justify-between items-center text-xs">
  <button
+ type="button"
+ onClick={cameraActive ? stopCamera : startCamera}
+ className="inline-flex h-9.5 items-center gap-1.5 rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 hover:bg-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
+ >
+ {cameraActive ? <><CameraOff className="h-3.5 w-3.5 text-rose-500" /> Matikan Kamera</> : <><Camera className="h-3.5 w-3.5 text-emerald-500" /> Nyalakan Kamera</>}
+ </button>
+ <button
+ type="button"
  onClick={() => {
  setShowCameraModal(false)
  stopCamera()
  }}
- className="rounded-xl p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 cursor-pointer"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 hover:bg-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <X className="h-5 w-5" />
+ Tutup Kamera
  </button>
  </div>
+ }
+ >
 
  {/* Video Camera Viewfinder Screen */}
  <div className="relative overflow-hidden rounded-xl bg-black aspect-video flex items-center justify-center border-2 border-indigo-500/50 shadow-inner">
@@ -2066,66 +2044,39 @@ export default function StudentWorshipAttendancePage() {
  Proses QR
  </button>
  </div>
-
- <div className="flex justify-between items-center pt-2 text-xs text-slate-400 border-t border-emerald-200/80 dark:border-emerald-800/60">
- <button
- type="button"
- onClick={cameraActive ? stopCamera : startCamera}
- className="flex items-center gap-1.5 font-bold text-slate-600 hover:text-slate-800 dark:text-slate-300 cursor-pointer"
- >
- {cameraActive ? <><CameraOff className="h-3.5 w-3.5 text-rose-500" /> Matikan Kamera</> : <><Camera className="h-3.5 w-3.5 text-emerald-500" /> Nyalakan Kamera</>}
- </button>
- <button
- type="button"
- onClick={() => {
- setShowCameraModal(false)
- stopCamera()
- }}
- className="text-slate-500 hover:text-slate-700 font-semibold cursor-pointer"
- >
- Tutup Kamera
- </button>
  </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+ </AppModal>
 
  {/* ── MODAL VERIFIKASI STATUS IBADAH SISWA ──────────────────────────── */}
- <AnimatePresence>
- {showVerifyModal && selectedStudentForVerify && (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 sm:p-6 bg-slate-950/70 backdrop-blur-md overflow-y-auto">
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 12 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.94, y: 12 }}
- transition={{ duration: 0.2 }}
- className="relative w-full max-w-md my-auto overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6 space-y-4">
- <div className="flex items-center justify-between pb-3 border-b border-emerald-200/80 dark:border-emerald-800/60">
- <div className="flex items-center gap-3">
- <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-700/80 dark:text-slate-300 shadow-md shadow-sm">
- <UserCheck className="size-5 text-white" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-emerald-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
- Verifikasi
- </span>
- <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
- Verifikasi Ibadah Siswa
- </h3>
- </div>
- </div>
+ <AppModal
+ isOpen={Boolean(showVerifyModal && selectedStudentForVerify)}
+ onClose={() => setShowVerifyModal(false)}
+ badge="Verifikasi"
+ title="Verifikasi Ibadah Siswa"
+ icon={UserCheck}
+ maxWidth="max-w-md"
+ zIndex="z-[70]"
+ footer={
+ <div className="flex w-full justify-end gap-2.5">
  <button
  type="button"
  onClick={() => setShowVerifyModal(false)}
- className="rounded-xl p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 cursor-pointer"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <X className="size-5" />
+ Batal
+ </button>
+ <button
+ type="button"
+ onClick={handleSaveVerify}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 active:scale-95 cursor-pointer"
+ >
+ Simpan Verifikasi
  </button>
  </div>
+ }
+ >
+ {selectedStudentForVerify && (
+ <div className="space-y-4">
 
  <div className="space-y-3.5 text-xs">
  <div className="rounded-xl border border-emerald-100 bg-emerald-50/50 p-3 dark:border-emerald-900/40 dark:bg-emerald-950/20">
@@ -2157,62 +2108,39 @@ export default function StudentWorshipAttendancePage() {
  </div>
  </div>
 
- <div className="flex justify-end gap-2.5 border-t border-emerald-200/80 pt-3 dark:border-emerald-800/60">
+ </div>
+ )}
+ </AppModal>
+
+ {/* ── MODAL TAMBAH TEMPLATE IBADAH SEKOLAH ─────────────────────────── */}
+ <AppModal
+ isOpen={showTemplateModal}
+ onClose={() => setShowTemplateModal(false)}
+ badge="Jadwal Baru"
+ title="Tambah Jadwal Ibadah Sekolah"
+ icon={Plus}
+ maxWidth="max-w-xl"
+ zIndex="z-[70]"
+ footer={
+ <div className="flex w-full justify-end gap-2.5">
  <button
  type="button"
- onClick={() => setShowVerifyModal(false)}
- className="rounded-xl border border-emerald-200/80 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-slate-800 transition-all cursor-pointer"
+ onClick={() => setShowTemplateModal(false)}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
  Batal
  </button>
  <button
- type="button"
- onClick={handleSaveVerify}
- className="rounded-lg bg-emerald-600 dark:bg-slate-100 dark:text-slate-900 dark: px-4 py-2 text-xs font-bold shadow-md shadow-sm hover:brightness-105 transition-all cursor-pointer text-white border border-emerald-600 h-9 text-sm font-medium"
+ type="submit"
+ form="student-worship-template-form"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 active:scale-95 cursor-pointer"
  >
- Simpan Verifikasi
+ Simpan Jadwal
  </button>
  </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
-
- {/* ── MODAL TAMBAH TEMPLATE IBADAH SEKOLAH ─────────────────────────── */}
- <AnimatePresence>
- {showTemplateModal && (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 sm:p-6 bg-slate-950/70 backdrop-blur-md overflow-y-auto">
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 12 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.94, y: 12 }}
- transition={{ duration: 0.2 }}
- className="relative w-full max-w-xl my-auto overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
+ }
  >
- <form onSubmit={handleCreateTemplate} className="p-6 space-y-4">
- <div className="flex items-center justify-between pb-3 border-b border-emerald-200/80 dark:border-emerald-800/60">
- <div className="flex items-center gap-3">
- <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-700/80 dark:text-slate-300 shadow-md shadow-sm">
- <Plus className="size-5 text-white" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-emerald-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
- Jadwal Baru
- </span>
- <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
- Tambah Jadwal Ibadah Sekolah
- </h3>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setShowTemplateModal(false)}
- className="rounded-xl p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 cursor-pointer"
- >
- <X className="size-5" />
- </button>
- </div>
+ <form id="student-worship-template-form" onSubmit={handleCreateTemplate} className="space-y-4">
 
  <div className="grid grid-cols-2 gap-3 text-xs">
  <div className="col-span-2">
@@ -2278,27 +2206,8 @@ export default function StudentWorshipAttendancePage() {
  />
  </div>
  </div>
-
- <div className="flex justify-end gap-2.5 border-t border-emerald-200/80 pt-3 dark:border-emerald-800/60">
- <button
- type="button"
- onClick={() => setShowTemplateModal(false)}
- className="rounded-xl border border-emerald-200/80 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-slate-800 transition-all cursor-pointer"
- >
- Batal
- </button>
- <button
- type="submit"
- className="rounded-lg bg-emerald-600 dark:bg-slate-100 dark:text-slate-900 dark: px-4 py-2 text-xs font-bold shadow-md shadow-sm hover:brightness-105 transition-all cursor-pointer text-white border border-emerald-600 h-9 text-sm font-medium"
- >
- Simpan Jadwal
- </button>
- </div>
  </form>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+ </AppModal>
 
  {/* ── MODAL DATA SISWA PRESENSI SHOLAT ────────────────────────────── */}
  <Backdrop isOpen={isAttendingModalOpen} onOpenChange={setIsAttendingModalOpen}>

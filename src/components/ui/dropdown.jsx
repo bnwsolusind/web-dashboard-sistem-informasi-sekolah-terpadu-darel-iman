@@ -41,11 +41,21 @@ export function DropdownMenuContent({ children, className, placement = 'bottom e
 }
 
 export function DropdownMenuItem({ className, onAction, onClick, onPress, ...props }) {
- const handleSelect = onAction || onClick || onPress
+ const rawHandler = onAction || onClick || onPress
+ const lastTriggerRef = React.useRef(0)
+ const handleSelect = React.useCallback((e) => {
+  if (!rawHandler) return
+  const now = Date.now()
+  if (now - lastTriggerRef.current < 250) return
+  lastTriggerRef.current = now
+  rawHandler(e)
+ }, [rawHandler])
  return (
  <HeroDropdown.Item
  {...props}
  onAction={handleSelect}
+ onPress={handleSelect}
+ onClick={handleSelect}
  className={cn(
  'group flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 focus:bg-emerald-50 focus:text-emerald-700 outline-none transition-colors data-[disabled]:opacity-50 data-[disabled]:pointer-events-none dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white dark:focus:bg-slate-800 dark:focus:text-white',
  className

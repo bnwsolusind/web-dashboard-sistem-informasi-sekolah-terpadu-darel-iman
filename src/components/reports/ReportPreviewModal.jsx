@@ -1,8 +1,6 @@
 import React from 'react'
 import { Printer, Download, ShieldCheck, Building2 } from 'lucide-react'
-import { Dialog, DialogHeader, DialogTitle, DialogDescription, DialogBody, DialogClose } from '@/components/ui/dialog'
-import { Backdrop, OverlayWrapper } from '@/components/ui/overlay'
-import { Button } from '../ui/button'
+import AppModal from '../app/AppModal'
 
 export function ReportPreviewModal({ isOpen, onClose, reportData, onPrint, onExportPdf }) {
  if (!isOpen || !reportData) return null
@@ -13,35 +11,49 @@ export function ReportPreviewModal({ isOpen, onClose, reportData, onPrint, onExp
  const generatedAt = report?.generated_at ? new Date(report.generated_at).toLocaleString('id-ID') : new Date().toLocaleString('id-ID')
 
  return (
- <OverlayWrapper isOpen={isOpen} onOpenChange={(open) => !open && onClose()} className="z-[70]">
- <Backdrop className="print:hidden z-[70] bg-slate-950/70 backdrop-blur-md" isOpen={isOpen} onOpenChange={(open) => !open && onClose()} />
- <Dialog className="z-[70] max-w-4xl max-h-[90vh] p-0 rounded-3xl overflow-hidden bg-white dark:bg-[#1B2433] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 print:max-w-full print:max-h-none print:h-auto print:border-none print:shadow-none print:bg-white print:static print:p-0">
- <div className="p-6">
- <DialogHeader className="print:hidden pb-4 border-b border-emerald-100/80 dark:border-emerald-800/60">
- <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 w-full pr-6">
- <div className="flex items-center gap-3">
- <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm">
- <ShieldCheck className="h-5 w-5" />
+ <AppModal
+ isOpen={Boolean(isOpen && reportData)}
+ onClose={onClose}
+ title="Dokumen Preview Laporan"
+ description="Pratinjau sebelum cetak atau ekspor PDF"
+ icon={ShieldCheck}
+ maxWidth="max-w-4xl"
+ variant="emerald"
+ zIndex={70}
+ className="print:max-w-full print:max-h-none print:h-auto print:border-none print:shadow-none print:bg-white print:static print:p-0"
+ bodyClassName="space-y-6 print:max-h-none print:overflow-visible print:p-0 print:text-slate-900 text-slate-800 dark:text-slate-100 font-sans"
+ headerActions={
+ <div className="flex items-center gap-2 print:hidden">
+ <button
+ type="button"
+ onClick={onPrint}
+ className="h-9 px-3 rounded-xl bg-white/20 hover:bg-white/30 text-white border border-white/25 text-xs font-black transition-all inline-flex items-center gap-1.5 cursor-pointer active:scale-95"
+ >
+ <Printer className="h-3.5 w-3.5" />
+ <span>Cetak</span>
+ </button>
+ <button
+ type="button"
+ onClick={onExportPdf}
+ className="h-9 px-3.5 rounded-xl bg-white text-emerald-700 hover:bg-emerald-50 text-xs font-black shadow-xs transition-all inline-flex items-center gap-1.5 cursor-pointer active:scale-95"
+ >
+ <Download className="h-3.5 w-3.5" />
+ <span>Download PDF</span>
+ </button>
  </div>
- <div>
- <DialogTitle className="text-base font-black text-slate-900 dark:text-white">Dokumen Preview Laporan</DialogTitle>
- <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Pratinjau sebelum cetak atau ekspor PDF</DialogDescription>
- </div>
- </div>
-
- <div className="flex items-center gap-2">
- <Button variant="ghost" size="sm" onClick={onPrint} prefixIcon={<Printer className="h-3.5 w-3.5" />} className="rounded-xl font-bold">
- Cetak
- </Button>
- <Button variant="success" appearance="fill" size="sm" onClick={onExportPdf} prefixIcon={<Download className="h-3.5 w-3.5" />} className="rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm">
- Download PDF
- </Button>
- </div>
- </div>
- <DialogClose onClick={onClose} />
- </DialogHeader>
-
- <DialogBody className="space-y-6 py-4 overflow-y-auto max-h-[72vh] print:max-h-none print:overflow-visible print:p-0 print:text-slate-900 text-slate-800 dark:text-slate-100 font-sans">
+ }
+ footer={
+ <button
+ type="button"
+ onClick={onClose}
+ className="print:hidden h-9.5 px-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black transition-all cursor-pointer active:scale-95"
+ >
+ Tutup
+ </button>
+ }
+ >
+ {reportData && (
+ <>
  {/* Foundation Letterhead */}
  <div className="border-b-2 border-[#059669] pb-4 text-center">
  {(() => {
@@ -142,10 +154,9 @@ export function ReportPreviewModal({ isOpen, onClose, reportData, onPrint, onExp
  <span>Dareliman Edu • Dokumentasi Pengurus Yayasan</span>
  <span>Halaman 1 / 1</span>
  </div>
- </DialogBody>
- </div>
- </Dialog>
- </OverlayWrapper>
+ </>
+ )}
+ </AppModal>
  )
 }
 

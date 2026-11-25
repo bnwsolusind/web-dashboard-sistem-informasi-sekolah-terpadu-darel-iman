@@ -39,6 +39,7 @@ import AppBadge from '../components/app/AppBadge'
 import {
   Button
 } from '../components/ui/button'
+import { SquircleActionButton } from '../components/master-data'
 import {
   DatePicker
 } from '@/components/ui/date-picker'
@@ -180,16 +181,14 @@ export default function NotificationsPage() {
  </div>
 
  <div className="flex shrink-0 items-center gap-2">
- <Button
+ <SquircleActionButton
  variant="primary"
- size="sm"
+ icon={CheckCheck}
+ label="Tandai Semua Dibaca"
  onClick={handleMarkAllRead}
  disabled={loadingNotif || unreadCount === 0}
- className="rounded-xl font-bold"
- >
- <CheckCheck className="size-4 mr-1.5" />
- Tandai Semua Dibaca
- </Button>
+ showLabel
+ />
  </div>
  </div>
  </div>
@@ -278,15 +277,14 @@ export default function NotificationsPage() {
  </div>
  </div>
  {!n.is_read && (
- <Button
- variant="ghost"
- size="xs"
+ <SquircleActionButton
+ variant="restore"
+ icon={CheckCheck}
+ label="Tandai Dibaca"
  onClick={() => handleMarkRead(n.id)}
- className="shrink-0 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 rounded-lg font-bold self-start sm:self-auto"
- >
- <CheckCheck className="size-3.5 mr-1" />
- Tandai Dibaca
- </Button>
+ showLabel
+ className="shrink-0 self-start sm:self-auto"
+ />
  )}
  </div>
  ))}
@@ -460,14 +458,12 @@ export default function NotificationsPage() {
  </AppBadge>
  </td>
                   <td className="px-4 py-3.5 text-right">
-                    <button
-                      type="button"
+                    <SquircleActionButton
+                      variant="delete"
+                      icon={Trash2}
+                      label="Hapus Pengumuman"
                       onClick={() => setDeleteTarget(row)}
-                      className="p-1.5 rounded-xl border border-rose-200 bg-rose-50 text-rose-600 hover:bg-rose-100 dark:border-rose-800 dark:bg-rose-950/40 dark:text-rose-300 transition-colors cursor-pointer"
-                      title="Hapus Pengumuman"
-                    >
-                      <Trash2 className="size-4" />
-                    </button>
+                    />
                   </td>
  </tr>
  ))

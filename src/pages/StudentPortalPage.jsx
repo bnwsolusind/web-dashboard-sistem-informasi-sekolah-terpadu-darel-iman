@@ -1,4 +1,5 @@
 import CustomSelect from "../components/ui/CustomSelect"
+import AppModal from "../components/app/AppModal"
 import {
   useCallback,
   useEffect,
@@ -334,74 +335,81 @@ function ExamWorkspace({ session, onClose, onFinished }) {
  <Button variant="ghost" appearance="outline" iconOnly onClick={() => setShowCloseModal(true)} className="absolute right-2 top-[70px] rounded-full bg-white text-slate-600 shadow-md border-emerald-200/80 hover:bg-slate-100 dark:bg-slate-800 dark:text-slate-200 dark:border-emerald-700/80 lg:right-5" title="Tutup ruang ujian"><X className="h-4 w-4" /></Button>
 
  {/* Modal Konfirmasi Kumpulkan Ujian */}
- {showSubmitModal && (
- <div className="fixed inset-0 z-[120] flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-xs">
- <div className="w-full max-w-md rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-6 shadow-2xl shadow-emerald-950/20 dark:bg-[#182232]">
- <h3 className="text-base font-black text-slate-900 dark:text-white">
- Konfirmasi Kumpulkan Ujian
- </h3>
- <p className="mt-2 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+ <AppModal
+ isOpen={showSubmitModal}
+ onClose={() => { if (!submitting) setShowSubmitModal(false) }}
+ disableBackdropClose={submitting}
+ hideCloseButton={submitting}
+ title="Konfirmasi Kumpulkan Ujian"
+ icon={Send}
+ maxWidth="max-w-md"
+ zIndex="z-[120]"
+ footer={
+ <div className="flex w-full justify-end gap-2.5">
+ <button
+ type="button"
+ onClick={() => setShowSubmitModal(false)}
+ disabled={submitting}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
+ >
+ Batal
+ </button>
+ <button
+ type="button"
+ onClick={handleExecuteFinish}
+ disabled={submitting}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 active:scale-95 disabled:opacity-50 cursor-pointer"
+ >
+ {submitting ? 'Mengumpulkan...' : 'Ya, Kumpulkan Ujian'}
+ </button>
+ </div>
+ }
+ >
+ <div className="space-y-3">
+ <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
  Apakah Anda yakin ingin mengumpulkan ujian sekarang? Jawaban tidak dapat diubah lagi setelah dikumpulkan.
  </p>
  {doubtfulCount > 0 && (
- <div className="mt-3 flex items-center gap-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-amber-50 p-3 text-xs font-semibold text-amber-800 dark:border-emerald-800/60 dark:bg-amber-950/40 dark:text-amber-300">
+ <div className="flex items-center gap-2 rounded-xl border border-amber-200/80 bg-amber-50 p-3 text-xs font-semibold text-amber-800 dark:border-amber-800/60 dark:bg-amber-950/40 dark:text-amber-300">
  <AlertCircle className="h-4 w-4 shrink-0 text-amber-600" />
  <span>Perhatian: Masih ada <strong>{doubtfulCount}</strong> soal yang Anda tandai ragu-ragu.</span>
  </div>
  )}
- <div className="mt-6 flex justify-end gap-2.5">
- <Button
- variant="ghost"
- appearance="outline"
- onClick={() => setShowSubmitModal(false)}
- disabled={submitting}
- className="font-bold text-xs"
- >
- Batal
- </Button>
- <Button
- onClick={handleExecuteFinish}
- pending={submitting}
- disabled={submitting}
- className="bg-[#059669] hover:bg-[#047857] text-white font-bold text-xs"
- >
- Ya, Kumpulkan Ujian
- </Button>
  </div>
- </div>
- </div>
- )}
+ </AppModal>
 
  {/* Modal Konfirmasi Keluar Ruang Ujian */}
- {showCloseModal && (
- <div className="fixed inset-0 z-[120] flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-xs">
- <div className="w-full max-w-md rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-6 shadow-2xl shadow-emerald-950/20 dark:bg-[#182232]">
- <h3 className="text-base font-black text-slate-900 dark:text-white">
- Keluar dari Ruang Ujian?
- </h3>
- <p className="mt-2 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
- Sesi ujian dan timer tetap berjalan di sistem. Anda dapat kembali melanjutkan ujian selama batas waktu pengerjaan belum berakhir.
- </p>
- <div className="mt-6 flex justify-end gap-2.5">
- <Button
- variant="ghost"
- appearance="outline"
+ <AppModal
+ isOpen={showCloseModal}
+ onClose={() => setShowCloseModal(false)}
+ variant="danger"
+ title="Keluar dari Ruang Ujian?"
+ icon={AlertCircle}
+ maxWidth="max-w-md"
+ zIndex="z-[120]"
+ footer={
+ <div className="flex w-full justify-end gap-2.5">
+ <button
+ type="button"
  onClick={() => setShowCloseModal(false)}
- className="font-bold text-xs"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
  Tetap di Ujian
- </Button>
- <Button
- variant="danger"
+ </button>
+ <button
+ type="button"
  onClick={() => { setShowCloseModal(false); onClose() }}
- className="bg-rose-600 text-white font-bold text-xs"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border-2 border-rose-600 bg-rose-600 px-5 text-xs font-black text-white shadow-md shadow-rose-600/20 transition-all hover:bg-rose-700 active:scale-95 cursor-pointer"
  >
  Keluar
- </Button>
+ </button>
  </div>
- </div>
- </div>
- )}
+ }
+ >
+ <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+ Sesi ujian dan timer tetap berjalan di sistem. Anda dapat kembali melanjutkan ujian selama batas waktu pengerjaan belum berakhir.
+ </p>
+ </AppModal>
  </div>
  )
 }

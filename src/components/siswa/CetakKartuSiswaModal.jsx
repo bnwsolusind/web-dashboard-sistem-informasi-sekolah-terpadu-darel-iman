@@ -20,6 +20,7 @@ import { studentService } from '../../services/studentService'
 import { usePengaturanStore } from '../../stores/pengaturanStore'
 import PersonAvatar from '../ui/PersonAvatar'
 import Swal from '@/components/ui/compat/swal-heroui'
+import AppModal from '../app/AppModal'
 
 function getStudentUnitAddress(data, pengaturan) {
  const unitObj = data?.raw?.unit || (typeof data?.unit === 'object' && data?.unit !== null ? data.unit : null)
@@ -420,27 +421,53 @@ export default function CetakKartuSiswaModal({ student, onClose, showSettings = 
 
  return (
  <>
- <div className="fixed inset-0 z-[70] flex items-center justify-center overflow-y-auto bg-slate-950/70 p-3 backdrop-blur-md">
- <section className="my-3 flex max-h-[calc(100vh-1.5rem)] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-emerald-500/30 dark:border-emerald-700/60 bg-white dark:bg-card-dark shadow-2xl shadow-emerald-950/20">
-      <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
- <header className="flex shrink-0 items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 px-6 py-4">
- <div className="flex items-center gap-3">
- <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-600 text-white shadow-sm"><FaIdCard /></span>
- <div>
- <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Kartu Siswa (Pelajar)</h2>
- <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{showSettings ? 'Pratinjau kartu identitas, QR absensi Dareliman Edu, dan kustomisasi sisi belakang.' : 'Pratinjau kartu identitas resmi dan QR absensi Dareliman Edu.'}</p>
- </div>
- </div>
- <div className="flex items-center gap-2">
- {showSettings && (
- <button type="button" onClick={saveTemplate} disabled={isSaving} className="hidden h-9 items-center gap-2 rounded-lg bg-emerald-600 px-4 text-sm font-medium text-white disabled:opacity-60 sm:flex cursor-pointer transition-colors shadow-xs border border-emerald-200/80 dark:border-emerald-800/60">
+ <AppModal
+ isOpen={true}
+ onClose={onClose}
+ title="Kartu Siswa (Pelajar)"
+ description={showSettings ? 'Pratinjau kartu identitas, QR absensi Dareliman Edu, dan kustomisasi sisi belakang.' : 'Pratinjau kartu identitas resmi dan QR absensi Dareliman Edu.'}
+ badge="CR80 ID Card"
+ icon={FaIdCard}
+ variant="emerald"
+ maxWidth="max-w-4xl"
+ zIndex={70}
+ bodyClassName="p-0 space-y-0 flex flex-col min-h-0 overflow-hidden"
+ headerActions={
+ showSettings ? (
+ <button type="button" onClick={saveTemplate} disabled={isSaving} className="hidden h-9 items-center gap-2 rounded-xl bg-white/20 hover:bg-white/30 px-4 text-xs font-black text-white disabled:opacity-60 sm:flex cursor-pointer transition-all border border-white/30 backdrop-blur-md shadow-xs">
  {isSaving ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <FaBookmark />} {isSaving ? 'Menyimpan...' : 'Simpan Pilihan'}
  </button>
- )}
- <button type="button" onClick={onClose} aria-label="Tutup" className="flex size-8 items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-400 cursor-pointer transition-colors h-9 px-3.5"><FaTimes /></button>
+ ) : null
+ }
+ footer={
+ <div className="flex w-full flex-wrap items-center justify-between gap-2">
+ <button type="button" onClick={onClose} className="h-9.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 px-4 text-xs font-black border border-slate-300 dark:border-slate-700 cursor-pointer transition-all">Tutup</button>
+ <div className="flex flex-wrap items-center gap-2">
+ <button
+ type="button"
+ onClick={() => modalFileInputRef.current?.click()}
+ className="flex h-9.5 items-center gap-1.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-800 px-3 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-emerald-50/40 cursor-pointer transition-colors shadow-xs"
+ >
+ <Camera className="h-4 w-4 text-slate-500" /> Ubah Foto
+ </button>
+ <input
+ ref={modalFileInputRef}
+ type="file"
+ accept="image/*"
+ className="hidden"
+ onChange={handleModalPhotoChange}
+ />
+ <button type="button" onClick={saveTemplate} disabled={isSaving} className="flex h-9.5 items-center gap-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 px-4 text-xs font-black disabled:opacity-60 sm:hidden cursor-pointer shadow-xs">
+ {isSaving ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <FaBookmark />} Simpan
+ </button>
+ <button type="button" onClick={handleDownload} disabled={isProcessing} className="flex h-9.5 items-center gap-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 px-4 text-xs font-black border border-slate-300 dark:border-slate-700 disabled:opacity-60 cursor-pointer shadow-xs transition-colors">
+ <FaDownload className="text-slate-500 dark:text-slate-300" /> Unduh ID Card
+ </button>
+ <button type="button" onClick={handlePrint} className="flex h-9.5 items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 px-5 text-xs font-black text-white cursor-pointer shadow-md shadow-emerald-600/20 active:scale-95 transition-all border-2 border-emerald-600"><FaPrint /> Cetak ID Card</button>
  </div>
- </header>
-
+ </div>
+ }
+ >
  <div className={`grid min-h-0 flex-1 ${showSettings ? 'lg:grid-cols-[360px_minmax(0,1fr)]' : 'grid-cols-1'}`}>
  {showSettings && (
  <aside className="overflow-y-auto border-r border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 dark:bg-slate-900/60 p-4">
@@ -882,35 +909,7 @@ export default function CetakKartuSiswaModal({ student, onClose, showSettings = 
  )}
  </main>
  </div>
-
- <footer className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-t border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50 px-6 py-4">
- <button type="button" onClick={onClose} className="h-9 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 px-4 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer transition-colors shadow-xs">Tutup</button>
- <div className="flex items-center gap-2">
- <button
- type="button"
- onClick={() => modalFileInputRef.current?.click()}
- className="flex h-9 items-center gap-1.5 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-sm font-medium text-slate-700 hover:bg-emerald-50/40 cursor-pointer transition-colors shadow-xs"
- >
- <Camera className="h-4 w-4 text-slate-500" /> Ubah Foto
- </button>
- <input
- ref={modalFileInputRef}
- type="file"
- accept="image/*"
- className="hidden"
- onChange={handleModalPhotoChange}
- />
- <button type="button" onClick={saveTemplate} disabled={isSaving} className="flex h-9 items-center gap-2 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 px-4 text-sm font-medium text-slate-700 dark:text-slate-200 disabled:opacity-60 sm:hidden cursor-pointer shadow-xs">
- {isSaving ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <FaBookmark />} Simpan
- </button>
- <button type="button" onClick={handleDownload} disabled={isProcessing} className="flex h-9 items-center gap-2 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-200 px-4 text-sm font-bold border-slate-300/80 disabled:opacity-60 cursor-pointer shadow-xs transition-colors">
- <FaDownload className="text-slate-500" /> Unduh ID Card
- </button>
- <button type="button" onClick={handlePrint} className="flex h-9 items-center gap-2 rounded-lg bg-emerald-600 px-4 text-sm font-medium text-white cursor-pointer shadow-xs transition-colors border border-emerald-200/80 dark:border-emerald-800/60"><FaPrint /> Cetak ID Card</button>
- </div>
- </footer>
- </section>
- </div>
+ </AppModal>
  {toast && (
  <div className={`fixed right-4 top-4 z-[70] w-[min(360px,calc(100vw-2rem))] rounded-xl border bg-white dark:bg-card-dark p-4 shadow-2xl ${
  toast.tone === 'danger' ? 'border-emerald-200/80 dark:border-emerald-800/60' : toast.tone === 'warning' ? 'border-emerald-200/80 dark:border-emerald-800/60' : 'border-emerald-200/80 dark:border-emerald-800/60'

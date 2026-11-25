@@ -4,6 +4,7 @@ import {
  X,
  FileInput,
  Download,
+ Upload,
  UploadCloud,
  CheckCircle2,
  AlertTriangle,
@@ -12,6 +13,7 @@ import {
  RefreshCcw,
 } from 'lucide-react'
 import { parseSpreadsheetFile, downloadSpreadsheetTemplate } from '../../utils/spreadsheetParser'
+import AppModal from '../app/AppModal'
 
 export default function JenisUnitImportModal({
  isOpen,
@@ -154,65 +156,45 @@ export default function JenisUnitImportModal({
  onClose()
  }
 
- return (
- <AnimatePresence>
- {isOpen && (
- <div
- id="jenis-unit-import-modal"
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="jenis-unit-import-title"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !isSubmitting) handleClose()
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sky-950/20 dark:border-emerald-800/60 dark:bg-[#182232]">
- {/* Top accent bar — sky blue for import */}
-
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232] dark:bg-slate-950">
- <div className="flex items-center gap-3">
- <div className="rounded-lg bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/50 dark:border-emerald-800/60 dark:text-emerald-400 p-2.5 shadow-xs shrink-0">
-                  <FileInput className="size-5 text-emerald-600 dark:text-emerald-400" strokeWidth={2.2} />
- </div>
- <div>
- <h3
- id="jenis-unit-import-title"
- className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2"
- >
- <span>Import Data Jenis Unit Pendidikan</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-sky-50 px-2 py-0.5 text-[10px] font-bold text-sky-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" /> Batch Import
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Unggah berkas CSV atau JSON berisi daftar jenis unit secara massal.
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={handleClose}
- disabled={isSubmitting}
- aria-label="Tutup modal import"
- className="size-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-sky-950/60 dark:text-sky-300 transition-colors cursor-pointer disabled:opacity-50"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Body */}
- <form onSubmit={handleSubmit} className="flex min-h-0 flex-1 flex-col">
- <div className="modal-body min-h-0 flex-1 space-y-4 overflow-y-auto p-6 text-sm text-slate-700 dark:text-slate-200">
+  return (
+    <AppModal
+      isOpen={isOpen}
+      onClose={() => !isSubmitting && handleClose()}
+      title="Import Jenis Unit Pendidikan"
+      badge="Batch Import"
+      description="Unggah berkas spreadsheet (Excel/CSV) untuk memperbarui data jenjang sekolah massal."
+      icon={Upload}
+      maxWidth="max-w-2xl"
+      disableBackdropClose={isSubmitting}
+      hideCloseButton={isSubmitting}
+      footer={
+        <>
+          <button
+            type="button"
+            disabled={isSubmitting}
+            onClick={handleClose}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="submit"
+            form="jenis-unit-import-form"
+            disabled={isSubmitting || parsedData.length === 0}
+            className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+          >
+            {isSubmitting ? (
+              <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+            ) : (
+              <Upload className="size-4" strokeWidth={2} />
+            )}
+            <span>{isSubmitting ? 'Memproses Import...' : `Mulai Import${parsedData.length > 0 ? ` (${parsedData.length})` : ''}`}</span>
+          </button>
+        </>
+      }
+    >
+      <form id="jenis-unit-import-form" onSubmit={handleSubmit} className="space-y-4 text-sm text-slate-700 dark:text-slate-200">
  {/* Template Download Card */}
  <div className="flex items-center justify-between rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/60 p-4 dark:border-emerald-800/60 dark:bg-emerald-950/30">
  <div>
@@ -429,44 +411,7 @@ export default function JenisUnitImportModal({
  </div>
  </label>
  </div>
- </div>
-
- {/* Footer */}
- <div className="modal-footer px-6 py-4 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between bg-white dark:bg-[#182232] shrink-0">
- <button
- type="button"
- disabled={isSubmitting}
- onClick={handleClose}
- className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200/80 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs dark:border-emerald-700/80 dark:bg-emerald-600 dark:text-slate-200 transition cursor-pointer disabled:opacity-50 text-sm font-medium"
- >
- <X className="size-3.5 text-emerald-600 dark:text-slate-400" strokeWidth={2.2} />
- <span>{result ? 'Tutup' : 'Batal'}</span>
- </button>
-
- <button
- type="submit"
- disabled={isSubmitting || parsedData.length === 0 || Boolean(result)}
- className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-[#1B2433] px-5 py-2.5 text-xs font-extrabold shadow-md shadow-sky-500/25 hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200 disabled:opacity-50 cursor-pointer border border-emerald-200/80 dark:border-emerald-800/60"
- >
- {isSubmitting ? (
- <span className="size-3.5 animate-spin rounded-full border-2 border-emerald-200/80 border-t-transparent" />
- ) : (
- <FileInput className="size-4" strokeWidth={2} />
- )}
- <span>
- {isSubmitting
- ? 'Memproses Import...'
- : result
- ? 'Import Selesai'
- : `Mulai Import${parsedData.length > 0 ? ` (${parsedData.length})` : ''}`}
- </span>
- </button>
- </div>
- </form>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
- )
+      </form>
+    </AppModal>
+  )
 }

@@ -84,6 +84,8 @@ import {
   TableCell
 } from '../components/ui/table'
 import ActionDropdown from '../components/app/ActionDropdown'
+import AppModal from '../components/app/AppModal'
+import AppDrawer from '../components/app/AppDrawer'
 import {
   useDebounce
 } from '../hooks/useDebounce'
@@ -717,35 +719,40 @@ function HarmonizedBatchImportModal({ isOpen, onClose, onImportSuccess, notify }
  }
 
  return (
- <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.96 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.96 }}
- className="relative w-full max-w-2xl overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 p-6 dark:border-emerald-800/60">
- <div className="flex items-center gap-3">
- <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
- 
-            <Upload className="size-6 sm:size-7 h-5 w-5 text-white" />
- </div>
- <div>
- <h3 className="text-base font-black text-slate-900 dark:text-white">Impor Data Forum Diskusi</h3>
- <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Unggah berkas CSV atau XLSX berisi topik diskusi kelas.</p>
- </div>
- </div>
+ <AppModal
+ isOpen={isOpen}
+ onClose={onClose}
+ title="Impor Data Forum Diskusi"
+ description="Unggah berkas CSV atau XLSX berisi topik diskusi kelas."
+ icon={Upload}
+ maxWidth="max-w-2xl"
+ zIndex={60}
+ disableBackdropClose={isSubmitting}
+ bodyClassName="space-y-5"
+ footer={
+ <>
  <button
+ type="button"
  onClick={onClose}
- className="rounded-xl p-2 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-600 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 dark:hover:text-slate-200 transition-colors"
+ disabled={isSubmitting}
+ className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all"
  >
- <X className="h-5 w-5" />
+ Batal
  </button>
- </div>
-
- <div className="p-6 space-y-5">
+ <button
+ type="button"
+ onClick={handleSubmit}
+ disabled={isSubmitting || !selectedFile}
+ className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 text-xs font-bold shadow-md disabled:opacity-50 transition-all"
+ >
+ {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
+ <span>{isSubmitting ? 'Memproses Berkas...' : 'Proses Impor Topik'}</span>
+ </button>
+ </>
+ }
+ >
  {/* Download Template Card */}
- <div className="flex items-center justify-between rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/50 p-4 dark:border-emerald-800/60 dark:bg-emerald-950/20">
+ <div className="flex items-center justify-between rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/50 p-4 dark:bg-emerald-950/20">
  <div className="flex items-center gap-3">
  <FileSpreadsheet className="h-8 w-8 text-emerald-600 dark:text-emerald-400 shrink-0" />
  <div>
@@ -756,7 +763,7 @@ function HarmonizedBatchImportModal({ isOpen, onClose, onImportSuccess, notify }
  <button
  type="button"
  onClick={handleDownloadTemplate}
- className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3.5 py-2 text-xs font-bold text-emerald-700 shadow-xs dark:border-emerald-800/60 dark:bg-emerald-600 dark:text-emerald-300 dark: transition-all text-sm font-medium"
+ className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3.5 py-2 text-xs font-bold text-emerald-700 shadow-xs dark:bg-emerald-600 dark:text-emerald-300 transition-all text-sm font-medium"
  >
  <Download className="h-3.5 w-3.5" /> Unduh Format
  </button>
@@ -771,8 +778,8 @@ function HarmonizedBatchImportModal({ isOpen, onClose, onImportSuccess, notify }
  onClick={() => fileInputRef.current?.click()}
  className={`cursor-pointer rounded-xl border-2 border-dashed p-7 text-center transition-all ${
  dragActive
- ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/60 dark:border-emerald-800/60 dark:bg-emerald-950/30'
- : 'border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 hover:bg-emerald-50/30 dark:border-emerald-800/60 dark:bg-slate-900/40'
+ ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/60 dark:bg-emerald-950/30'
+ : 'border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 hover:bg-emerald-50/30 dark:bg-slate-900/40'
  }`}
  >
  <input
@@ -801,7 +808,7 @@ function HarmonizedBatchImportModal({ isOpen, onClose, onImportSuccess, notify }
  <TableRoot className="w-full text-left text-xs">
  <TableHeader className="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 font-bold border-b border-emerald-200/80 dark:border-emerald-800/80">
  <TableRow>
- 
+ <TableHead className="py-2 px-3">No</TableHead>
  <TableHead className="py-2 px-3">Judul Topik</TableHead>
  <TableHead className="py-2 px-3">Kategori</TableHead>
  <TableHead className="py-2 px-3">Status</TableHead>
@@ -821,90 +828,30 @@ function HarmonizedBatchImportModal({ isOpen, onClose, onImportSuccess, notify }
  </div>
  </div>
  )}
- </div>
-
- <div className="flex items-center justify-end gap-3 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 p-5 dark:border-emerald-800/60 dark:bg-slate-900/50">
- <button
- type="button"
- onClick={onClose}
- disabled={isSubmitting}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-800/60 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all"
- >
- Batal
- </button>
- <button
- type="button"
- onClick={handleSubmit}
- disabled={isSubmitting || !selectedFile}
- className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-[#1B2433] px-5 py-2.5 text-xs font-bold shadow-md shadow-sky-600/30 hover:brightness-105 disabled:opacity-50 transition-all border border-emerald-200/80 dark:border-emerald-800/60"
- >
- {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
- <span>{isSubmitting ? 'Memproses Berkas...' : 'Proses Impor Topik'}</span>
- </button>
- </div>
- </motion.div>
- </div>
+ </AppModal>
  )
 }
 
 // ── 4. HARMONIZED SAVE CONFIRMATION MODAL ──
 function HarmonizedSaveModal({ isOpen, onClose, onConfirm, isEdit, title, isSubmitting }) {
- if (!isOpen) return null
-
  return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fadeIn">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div
- className={`h-1.5 w-full bg-white dark:bg-[#1B2433] ${
- isEdit ? 'from-amber-400 via-amber-500 to-orange-600' : 'from-emerald-500 via-teal-400 to-emerald-600'
- }`}
- />
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div
- className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-white shadow-md ${
- isEdit
- ? 'bg-white dark:bg-[#1B2433] shadow-sm'
- : 'bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm'
- }`}
- >
- {isEdit ? <Edit3 className="h-6 w-6" /> : <MessageSquare className="h-6 w-6" />}
- </div>
- <div>
- <span
- className={`inline-block rounded-md px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider ${
- isEdit
- ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300'
- : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
- }`}
- >
- {isEdit ? 'Perbarui Diskusi' : 'Diskusi Baru'}
- </span>
- <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
- Konfirmasi Penyimpanan
- </h3>
- </div>
- </div>
-
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Apakah Anda yakin ingin {isEdit ? 'memperbarui informasi' : 'mempublikasikan'} topik diskusi:
- </p>
-
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/50 p-3.5 dark:border-emerald-800/60 dark:bg-emerald-950/20 mb-5">
- <p className="text-xs font-black text-emerald-950 dark:text-emerald-100 line-clamp-2">{title || 'Topik Forum Diskusi'}</p>
- </div>
-
- <div className="flex items-center justify-end gap-3">
+ <AppModal
+ isOpen={isOpen}
+ onClose={onClose}
+ title="Konfirmasi Penyimpanan"
+ badge={isEdit ? 'Perbarui Diskusi' : 'Diskusi Baru'}
+ icon={isEdit ? Edit3 : MessageSquare}
+ variant={isEdit ? 'warning' : 'emerald'}
+ maxWidth="max-w-md"
+ zIndex={70}
+ disableBackdropClose={isSubmitting}
+ footer={
+ <>
  <button
  type="button"
  onClick={onClose}
  disabled={isSubmitting}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-800/60 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all"
+ className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all"
  >
  Batal
  </button>
@@ -914,17 +861,24 @@ function HarmonizedSaveModal({ isOpen, onClose, onConfirm, isEdit, title, isSubm
  disabled={isSubmitting}
  className={`inline-flex items-center gap-1.5 rounded-xl px-5 py-2 text-xs font-bold text-white shadow-md transition-all ${
  isEdit
- ? 'bg-white dark:bg-[#1B2433] shadow-sm hover:brightness-105'
- : 'bg-white dark:bg-[#1B2433] shadow-sm hover:brightness-105'
+ ? 'bg-amber-600 hover:bg-amber-700'
+ : 'bg-emerald-600 hover:bg-emerald-700'
  } disabled:opacity-50`}
  >
  {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
  <span>{isSubmitting ? 'Menyimpan...' : 'Ya, Konfirmasi & Simpan'}</span>
  </button>
+ </>
+ }
+ >
+ <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+ Apakah Anda yakin ingin {isEdit ? 'memperbarui informasi' : 'mempublikasikan'} topik diskusi:
+ </p>
+
+ <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/50 p-3.5 dark:bg-emerald-950/20">
+ <p className="text-xs font-black text-emerald-950 dark:text-emerald-100 line-clamp-2">{title || 'Topik Forum Diskusi'}</p>
  </div>
- </div>
- </motion.div>
- </div>
+ </AppModal>
  )
 }
 
@@ -939,55 +893,39 @@ function HarmonizedBatchExportModal({
 }) {
  const [exportFormat, setExportFormat] = useState('xlsx')
 
- if (!isOpen) return null
-
  return (
- <div
- className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md animate-fadeIn"
- role="dialog"
- aria-modal="true"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !isExporting) onClose()
- }}
+ <AppModal
+ isOpen={isOpen}
+ onClose={onClose}
+ title={`Export Data ${moduleTitle}`}
+ badge="Unduh Data"
+ description="Pilih format berkas untuk mengekspor data sesuai filter aktif."
+ icon={Download}
+ maxWidth="max-w-lg"
+ zIndex={50}
+ disableBackdropClose={isExporting}
+ footer={
+ <>
+ <button
+ type="button"
+ onClick={onClose}
+ className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200/80 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs dark:border-emerald-800/60 dark:bg-emerald-600 dark:text-slate-200 transition cursor-pointer text-sm font-medium"
  >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="w-full max-w-lg"
- >
- <div className="flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
-
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232] shrink-0">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 p-2.5 shadow-md shadow-xs shrink-0">
- <Download className="h-5 w-5 text-emerald-600" strokeWidth={2.2} />
- </div>
- <div>
- <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Export Data {moduleTitle}</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/60 dark:text-amber-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" /> Unduh Data
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Pilih format berkas untuk mengekspor data sesuai filter aktif.
- </p>
- </div>
- </div>
+ Batal
+ </button>
  <button
  type="button"
  disabled={isExporting}
- onClick={onClose}
- className="size-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-sky-950/60 dark:text-sky-300 transition-colors cursor-pointer disabled:opacity-50"
+ onClick={() => onExport(exportFormat)}
+ className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 text-xs font-extrabold shadow-sm hover:shadow-lg transition-all duration-200 disabled:opacity-50 cursor-pointer"
  >
- <X className="size-4" />
+ <Download className="size-4" />
+ {isExporting ? 'Menyiapkan...' : 'Unduh Berkas'}
  </button>
- </div>
-
- <div className="p-6 space-y-4 overflow-y-auto flex-1">
+ </>
+ }
+ >
+ <div className="space-y-4">
  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
  {[
  ['xlsx', 'Excel (.xlsx)', FileSpreadsheet, 'Format spreadsheet modern Microsoft Excel.'],
@@ -1027,72 +965,30 @@ function HarmonizedBatchExportModal({
  </p>
  </div>
  </div>
-
- <div className="px-6 py-4 border-t border-emerald-200/80 dark:border-emerald-800/80 flex items-center justify-end gap-2.5 bg-slate-50/50 dark:bg-slate-900/40 shrink-0">
- <button
- type="button"
- onClick={onClose}
- className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200/80 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs dark:border-emerald-800/60 dark:bg-emerald-600 dark:text-slate-200 transition cursor-pointer text-sm font-medium"
- >
- Batal
- </button>
- <button
- type="button"
- disabled={isExporting}
- onClick={() => onExport(exportFormat)}
- className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-[#1B2433] px-5 py-2.5 text-xs font-extrabold shadow-sm hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200 disabled:opacity-50 cursor-pointer border border-emerald-200/80 dark:border-emerald-800/60"
- >
- <Download className="size-4" />
- {isExporting ? 'Menyiapkan...' : 'Unduh Berkas'}
- </button>
- </div>
- </div>
- </motion.div>
- </div>
+ </AppModal>
  )
 }
 
 // ── 6. HARMONIZED DELETE CONFIRMATION MODAL ──
 function HarmonizedDeleteModal({ isOpen, onClose, onConfirm, title, isSubmitting }) {
- if (!isOpen) return null
-
  return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fadeIn">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex h-9 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 shadow-sm">
- <Trash2 className="h-6 w-6" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-rose-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
- Hapus Permanen
- </span>
- <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
- Konfirmasi Hapus Diskusi
- </h3>
- </div>
- </div>
-
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Apakah Anda yakin ingin menghapus topik diskusi berikut beserta seluruh komentar yang ada di dalamnya? Tindakan ini tidak dapat dibatalkan.
- </p>
-
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/50 p-3.5 dark:border-emerald-800/60 dark:bg-rose-950/20 mb-5">
- <p className="text-xs font-black text-rose-950 dark:text-rose-100 line-clamp-2">{title || 'Topik Forum Diskusi'}</p>
- </div>
-
- <div className="flex items-center justify-end gap-3">
+ <AppModal
+ isOpen={isOpen}
+ onClose={onClose}
+ title="Konfirmasi Hapus Diskusi"
+ badge="Hapus Permanen"
+ icon={Trash2}
+ variant="danger"
+ maxWidth="max-w-md"
+ zIndex={70}
+ disableBackdropClose={isSubmitting}
+ footer={
+ <>
  <button
  type="button"
  onClick={onClose}
  disabled={isSubmitting}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-800/60 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all"
+ className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all"
  >
  Batal
  </button>
@@ -1100,15 +996,22 @@ function HarmonizedDeleteModal({ isOpen, onClose, onConfirm, title, isSubmitting
  type="button"
  onClick={onConfirm}
  disabled={isSubmitting}
- className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white px-5 py-2 text-xs font-bold text-white shadow-sm hover:brightness-105 disabled:opacity-50 transition-all"
+ className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white px-5 py-2 text-xs font-bold shadow-sm hover:brightness-105 disabled:opacity-50 transition-all"
  >
  {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
  <span>{isSubmitting ? 'Menghapus...' : 'Ya, Hapus Diskusi'}</span>
  </button>
+ </>
+ }
+ >
+ <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+ Apakah Anda yakin ingin menghapus topik diskusi berikut beserta seluruh komentar yang ada di dalamnya? Tindakan ini tidak dapat dibatalkan.
+ </p>
+
+ <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/50 p-3.5 dark:bg-rose-950/20">
+ <p className="text-xs font-black text-rose-950 dark:text-rose-100 line-clamp-2">{title || 'Topik Forum Diskusi'}</p>
  </div>
- </div>
- </motion.div>
- </div>
+ </AppModal>
  )
 }
 
@@ -2057,30 +1960,23 @@ export default function LmsDiskusiPage({ embedded = false, hideBreadcrumb = fals
  />
 
  {/* Harmonized KPI Detail Modal */}
- {kpiModalOpen && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fadeIn">
- <div className="bg-white dark:bg-[#1B2433] w-full max-w-4xl rounded-xl shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 overflow-hidden flex flex-col max-h-[85vh]">
- <div className="bg-white dark:bg-[#1B2433] p-5 flex items-center justify-between">
- <div className="flex items-center gap-3">
- <div className="p-2.5 bg-white/10 backdrop-blur-md rounded-xl border border-emerald-200/20">
- <MessageSquare className="w-5 h-5 text-emerald-200" />
- </div>
- <div>
- <h3 className="text-base font-black">{kpiModalCategory.title}</h3>
- <p className="text-xs text-emerald-100 mt-0.5">
- Menampilkan {kpiModalCategory.items.length} topik diskusi terdaftar
- </p>
- </div>
- </div>
+ <AppModal
+ isOpen={kpiModalOpen}
+ onClose={() => setKpiModalOpen(false)}
+ title={kpiModalCategory.title}
+ description={`Menampilkan ${kpiModalCategory.items.length} topik diskusi terdaftar`}
+ icon={MessageSquare}
+ maxWidth="max-w-4xl"
+ zIndex={50}
+ footer={
  <button
  onClick={() => setKpiModalOpen(false)}
- className="text-emerald-100 hover:p-1.5 rounded-xl hover:bg-white/10 transition-colors border border-emerald-200/80 dark:border-emerald-800/60"
+ className="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors"
  >
- <X className="w-5 h-5" />
+ Tutup
  </button>
- </div>
-
- <div className="p-6 overflow-y-auto flex-1 space-y-4">
+ }
+ >
  {kpiModalCategory.items.length === 0 ? (
  <div className="py-12 text-center text-slate-400">
  <MessageSquare className="w-12 h-9 mx-auto mb-3 opacity-30 text-emerald-600" />
@@ -2090,8 +1986,7 @@ export default function LmsDiskusiPage({ embedded = false, hideBreadcrumb = fals
  <div className="overflow-x-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
  <TableRoot className="w-full text-left border-collapse text-xs">
  <TableHeader>
- <TableRow className="bg-emerald-50 dark:bg-emerald-950/40 border-b border-emerald-200/80 dark:border-emerald-800/80 dark:border-emerald-800/60 text-xs font-black text-emerald-900 dark:text-emerald-200 uppercase tracking-wider">
- 
+ <TableRow className="bg-emerald-50 dark:bg-emerald-950/40 border-b border-emerald-200/80 dark:border-emerald-800/80 text-xs font-black text-emerald-900 dark:text-emerald-200 uppercase tracking-wider">
  <TableHead className="py-3 px-4">Judul Diskusi</TableHead>
  <TableHead className="py-3 px-4">Kategori</TableHead>
  <TableHead className="py-3 px-4">Modul Ajar</TableHead>
@@ -2102,7 +1997,6 @@ export default function LmsDiskusiPage({ embedded = false, hideBreadcrumb = fals
  <TableBody className="divide-y divide-emerald-100/80 dark:divide-slate-800">
  {kpiModalCategory.items.map((item, idx) => (
  <TableRow key={item.id || idx} className="hover:bg-emerald-50/40 dark:hover:bg-emerald-950/30 transition-colors">
- 
  <TableCell className="py-3 px-4 font-bold text-slate-900 dark:text-slate-100">{item.judul_diskusi || item.judul}</TableCell>
  <TableCell className="py-3 px-4 font-semibold text-slate-600 dark:text-slate-300">
  {item.kategori || 'Umum'}
@@ -2138,63 +2032,42 @@ export default function LmsDiskusiPage({ embedded = false, hideBreadcrumb = fals
  </TableRoot>
  </div>
  )}
- </div>
-
- <div className="p-4 border-t border-emerald-200/80 dark:border-emerald-800/60 flex justify-end bg-slate-50/50 dark:bg-slate-900/40">
- <button
- onClick={() => setKpiModalOpen(false)}
- className="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors"
- >
- Tutup
- </button>
- </div>
- </div>
- </div>
- )}
+ </AppModal>
 
  {/* Modal Form Tambah / Edit Diskusi */}
- {isModalOpen && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fadeIn">
- <motion.div
- initial={{ opacity: 0, scale: 0.96 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.96 }}
- className="relative w-full max-w-2xl overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div
- className={`h-1.5 w-full bg-white dark:bg-[#1B2433] ${
- editId ? 'from-amber-400 via-amber-500 to-orange-600' : 'from-emerald-500 via-teal-400 to-emerald-600'
- }`}
- />
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 p-6 dark:border-emerald-800/60">
- <div className="flex items-center gap-3">
- <div
- className={`flex h-10 w-10 items-center justify-center rounded-xl text-white shadow-md ${
- editId
- ? 'bg-white dark:bg-[#1B2433] shadow-sm'
- : 'bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm'
- }`}
- >
- <MessageSquare className="h-5 w-5" />
- </div>
- <div>
- <h3 className="text-base font-black text-slate-900 dark:text-white">
- {editId ? 'Edit Topik Diskusi Kelas' : 'Buat Topik Diskusi Kelas Baru'}
- </h3>
- <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
- Publikasikan bahan diskusi atau pertanyaan pemantik modul ajar.
- </p>
- </div>
- </div>
+ <AppModal
+ isOpen={isModalOpen}
+ onClose={() => setIsModalOpen(false)}
+ title={editId ? 'Edit Topik Diskusi Kelas' : 'Buat Topik Diskusi Kelas Baru'}
+ description="Publikasikan bahan diskusi atau pertanyaan pemantik modul ajar."
+ icon={MessageSquare}
+ variant={editId ? 'warning' : 'emerald'}
+ maxWidth="max-w-2xl"
+ zIndex={50}
+ footer={
+ <>
  <button
+ type="button"
  onClick={() => setIsModalOpen(false)}
- className="rounded-xl p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition-colors"
+ className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 transition-all"
  >
- <X className="h-5 w-5" />
+ Batal
  </button>
- </div>
-
- <form onSubmit={handleTriggerSave} className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
+ <button
+ type="submit"
+ form="diskusiForm"
+ className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold text-white shadow-md transition-all ${
+ editId
+ ? 'bg-amber-600 hover:bg-amber-700'
+ : 'bg-emerald-600 hover:bg-emerald-700'
+ }`}
+ >
+ <span>{editId ? 'Perbarui Topik' : 'Publikasikan Diskusi'}</span>
+ </button>
+ </>
+ }
+ >
+ <form id="diskusiForm" onSubmit={handleTriggerSave} className="space-y-4">
  {/* Modul Ajar Relasi */}
  <div>
  <HeroUiModalSelect
@@ -2219,7 +2092,7 @@ export default function LmsDiskusiPage({ embedded = false, hideBreadcrumb = fals
  placeholder="Contoh: Pemahaman Kasus Hukum Newton II Pada Kehidupan..."
  value={formData.judul}
  onChange={(e) => setFormData({ ...formData, judul: e.target.value })}
- className="w-full px-3.5 py-2.5 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-xs font-semibold focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 outline-none"
+ className="w-full px-3.5 py-2.5 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-xs font-semibold focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 outline-none"
  />
  </div>
 
@@ -2245,7 +2118,7 @@ export default function LmsDiskusiPage({ embedded = false, hideBreadcrumb = fals
  placeholder="Tuliskan petunjuk diskusi, topik pemantik, atau studi kasus bagi santri/siswa..."
  value={formData.deskripsi}
  onChange={(e) => setFormData({ ...formData, deskripsi: e.target.value })}
- className="w-full px-3.5 py-2.5 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-xs font-semibold focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 outline-none leading-relaxed"
+ className="w-full px-3.5 py-2.5 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-xs font-semibold focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 outline-none leading-relaxed"
  />
  </div>
 
@@ -2259,7 +2132,7 @@ export default function LmsDiskusiPage({ embedded = false, hideBreadcrumb = fals
  type="datetime-local"
  value={formData.tanggal_mulai}
  onChange={(e) => setFormData({ ...formData, tanggal_mulai: e.target.value })}
- className="w-full px-3.5 py-2.5 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-xs font-semibold focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 outline-none"
+ className="w-full px-3.5 py-2.5 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-xs font-semibold focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 outline-none"
  />
  </div>
  <div>
@@ -2270,7 +2143,7 @@ export default function LmsDiskusiPage({ embedded = false, hideBreadcrumb = fals
  type="datetime-local"
  value={formData.tanggal_tutup}
  onChange={(e) => setFormData({ ...formData, tanggal_tutup: e.target.value })}
- className="w-full px-3.5 py-2.5 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-xs font-semibold focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 outline-none"
+ className="w-full px-3.5 py-2.5 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 text-xs font-semibold focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/12 outline-none"
  />
  </div>
  </div>
@@ -2285,30 +2158,8 @@ export default function LmsDiskusiPage({ embedded = false, hideBreadcrumb = fals
  placeholder="Pilih Status"
  />
  </div>
-
- <div className="pt-4 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-end gap-3">
- <button
- type="button"
- onClick={() => setIsModalOpen(false)}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:border-emerald-800/60 dark:text-slate-300 dark:hover:bg-slate-800 transition-all"
- >
- Batal
- </button>
- <button
- type="submit"
- className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-bold text-white shadow-md transition-all ${
- editId
- ? 'bg-white dark:bg-[#1B2433] shadow-sm hover:brightness-105'
- : 'bg-white dark:bg-[#1B2433] shadow-sm hover:brightness-105'
- }`}
- >
- <span>{editId ? 'Perbarui Topik' : 'Publikasikan Diskusi'}</span>
- </button>
- </div>
  </form>
- </motion.div>
- </div>
- )}
+ </AppModal>
 
  {/* Harmonized Save Confirmation Modal */}
  <HarmonizedSaveModal
@@ -2330,43 +2181,81 @@ export default function LmsDiskusiPage({ embedded = false, hideBreadcrumb = fals
  />
 
  {/* Interactive Comments & Thread Drawer */}
- {isThreadOpen && selectedDiskusi && (
- <div className="fixed inset-0 z-50 flex justify-end bg-slate-950/70 backdrop-blur-md">
- <motion.div
- initial={{ x: '100%' }}
- animate={{ x: 0 }}
- exit={{ x: '100%' }}
- transition={{ type: 'spring', damping: 25, stiffness: 300 }}
- className="bg-white dark:bg-[#1B2433] w-full max-w-2xl h-full shadow-2xl flex flex-col justify-between border-l border-emerald-200/80 dark:border-emerald-800/60"
- >
- {/* Drawer Header */}
- <div className="p-6 bg-slate-50/50 dark:bg-slate-900/50 border-b border-emerald-200/80 dark:border-emerald-800/80 flex items-center justify-between">
- <div className="flex items-center gap-3">
- <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
- 
-            <MessageCircle className="size-6 sm:size-7 h-5 w-5 text-white" />
- </div>
- <div>
- <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
- Utasan Komentar Diskusi
- </span>
- <h3 className="text-base font-black text-slate-900 dark:text-white line-clamp-1">
- {selectedDiskusi.judul_diskusi || selectedDiskusi.judul}
- </h3>
- </div>
- </div>
+ <AppDrawer
+ isOpen={isThreadOpen && Boolean(selectedDiskusi)}
+ onClose={() => setIsThreadOpen(false)}
+ title={selectedDiskusi?.judul_diskusi || selectedDiskusi?.judul}
+ description="Utasan Komentar Diskusi"
+ icon={MessageCircle}
+ position="right"
+ footer={
+ selectedDiskusi && !selectedDiskusi.is_closed ? (
+ <div className="w-full">
+ {replyParentId && (
+ <div className="mb-2 p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-xs text-emerald-800 dark:text-emerald-300 flex items-center justify-between">
+ <span className="font-semibold">Membalas tanggapan terpilih...</span>
  <button
- onClick={() => setIsThreadOpen(false)}
- className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+ onClick={() => setReplyParentId(null)}
+ className="text-emerald-600 font-bold hover:underline"
  >
- <X className="h-5 w-5" />
+ Batal
  </button>
  </div>
+ )}
 
- {/* Main Thread Body */}
- <div className="p-6 flex-1 overflow-y-auto space-y-5">
+ <form onSubmit={handlePostKomentar} className="space-y-2.5">
+ <div className="flex items-center justify-between gap-2">
+ <div className="flex items-center gap-2">
+ <span className="text-xs font-bold text-slate-600 dark:text-slate-400">
+ Kirim Sebagai:
+ </span>
+ <div className="w-48">
+ <HeroUiFilterSelect
+ value={komentarForm.peran_pengirim}
+ onChange={(val) =>
+ setKomentarForm({ ...komentarForm, peran_pengirim: val })
+ }
+ options={peranPengirimOptions}
+ placeholder="Kirim Sebagai"
+ popoverWidth="min-w-[170px]"
+ />
+ </div>
+ </div>
+ </div>
+
+ <div className="flex items-center gap-2">
+ <input
+ type="text"
+ required
+ placeholder="Tuliskan komentar atau tanggapan diskusi..."
+ value={komentarForm.konten}
+ onChange={(e) =>
+ setKomentarForm({ ...komentarForm, konten: e.target.value })
+ }
+ className="flex-1 px-4 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-800 text-xs font-medium focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 outline-none"
+ />
+ <button
+ type="submit"
+ disabled={submittingKomentar || !komentarForm.konten.trim()}
+ className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md disabled:opacity-50 flex items-center gap-1.5 shrink-0 transition-all"
+ >
+ {submittingKomentar ? (
+ <RefreshCw className="w-4 h-4 animate-spin" />
+ ) : (
+ <Send className="w-4 h-4" />
+ )}
+ <span>Kirim</span>
+ </button>
+ </div>
+ </form>
+ </div>
+ ) : null
+ }
+ >
+ {selectedDiskusi && (
+ <div className="space-y-5">
  {/* Discussion Prompt Card */}
- <div className="p-5 rounded-xl bg-white dark:bg-[#1B2433] dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-slate-900 border border-emerald-200/80 dark:border-emerald-800/80 shadow-xs">
+ <div className="p-5 rounded-xl bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/80 shadow-xs">
  <div className="flex items-center justify-between mb-2">
  <span className="px-2.5 py-0.5 rounded-lg text-[10px] font-black bg-emerald-100 dark:bg-emerald-950 text-[#059669] dark:text-emerald-300">
  {selectedDiskusi.kategori}
@@ -2495,72 +2384,8 @@ export default function LmsDiskusiPage({ embedded = false, hideBreadcrumb = fals
  )}
  </div>
  </div>
-
- {/* Drawer Footer / Reply Composer */}
- {!selectedDiskusi.is_closed && (
- <div className="p-4.5 bg-slate-50 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60">
- {replyParentId && (
- <div className="mb-2 p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-xs text-emerald-800 dark:text-emerald-300 flex items-center justify-between">
- <span className="font-semibold">Membalas tanggapan terpilih...</span>
- <button
- onClick={() => setReplyParentId(null)}
- className="text-emerald-600 font-bold hover:underline"
- >
- Batal
- </button>
- </div>
  )}
-
- <form onSubmit={handlePostKomentar} className="space-y-2.5">
- <div className="flex items-center justify-between gap-2">
- <div className="flex items-center gap-2">
- <span className="text-xs font-bold text-slate-600 dark:text-slate-400">
- Kirim Sebagai:
- </span>
- <div className="w-48">
- <HeroUiFilterSelect
- value={komentarForm.peran_pengirim}
- onChange={(val) =>
- setKomentarForm({ ...komentarForm, peran_pengirim: val })
- }
- options={peranPengirimOptions}
- placeholder="Kirim Sebagai"
- popoverWidth="min-w-[170px]"
- />
- </div>
- </div>
- </div>
-
- <div className="flex items-center gap-2">
- <input
- type="text"
- required
- placeholder="Tuliskan komentar atau tanggapan diskusi..."
- value={komentarForm.konten}
- onChange={(e) =>
- setKomentarForm({ ...komentarForm, konten: e.target.value })
- }
- className="flex-1 px-4 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-white dark:bg-slate-800 text-xs font-medium focus:border-[#059669] focus:ring-4 focus:ring-[#059669]/20 outline-none"
- />
- <button
- type="submit"
- disabled={submittingKomentar || !komentarForm.konten.trim()}
- className="px-4 py-2.5 rounded-xl bg-white dark:bg-[#1B2433] hover:brightness-105 font-bold text-xs shadow-md disabled:opacity-50 flex items-center gap-1.5 shrink-0 transition-all border border-emerald-200/80 dark:border-emerald-800/60"
- >
- {submittingKomentar ? (
- <RefreshCw className="w-4 h-4 animate-spin" />
- ) : (
- <Send className="w-4 h-4" />
- )}
- <span>Kirim</span>
- </button>
- </div>
- </form>
- </div>
- )}
- </motion.div>
- </div>
- )}
+ </AppDrawer>
 
  {/* Harmonized Batch Export Modal */}
  <HarmonizedBatchExportModal

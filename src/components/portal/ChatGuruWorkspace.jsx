@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
+import AppModal from '@/components/app/AppModal'
 import CustomSelect from '@/components/ui/CustomSelect'
 import {
  MessageSquare,
@@ -1745,19 +1746,36 @@ export default function ChatGuruWorkspace({
  </div>
 
  {/* MODAL: + PERCAKAPAN BARU (Direct or Group Chat) */}
- {showNewChatModal && (
- <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-xs">
- <div className="w-full max-w-md rounded-xl bg-white p-5 shadow-2xl dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 space-y-4">
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-3 dark:border-emerald-800/60">
- <h3 className="text-sm font-black text-slate-900 dark:text-white flex items-center gap-2">
- <Plus className="h-4 w-4 text-emerald-600" /> Buat Percakapan / Grup Baru
- </h3>
- <button onClick={() => setShowNewChatModal(false)} className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
- <X className="h-4.5 w-4.5" />
+ <AppModal
+ isOpen={showNewChatModal}
+ onClose={() => setShowNewChatModal(false)}
+ title="Buat Percakapan / Grup Baru"
+ description={mode === 'teacher' ? 'Pilih wali santri / murid atau buat grup kelas' : 'Pilih pegawai atau buat grup percakapan baru'}
+ icon={Plus}
+ maxWidth="max-w-md"
+ footer={
+ <div className="flex w-full items-center justify-end gap-2.5">
+ <button
+ type="button"
+ onClick={() => setShowNewChatModal(false)}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
+ >
+ Batal
  </button>
+ {groupName.trim() && (
+ <button
+ type="submit"
+ form="chat-new-group-form"
+ disabled={selectedGroupParticipants.length === 0 || isCreatingGroup}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 active:scale-95 disabled:opacity-40 cursor-pointer"
+ >
+ Buat Grup
+ </button>
+ )}
  </div>
-
- <form onSubmit={handleCreateGroup} className="space-y-3">
+ }
+ >
+ <form id="chat-new-group-form" onSubmit={handleCreateGroup} className="space-y-3">
  <div>
  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
  Nama Grup (Opsional jika Chat 1-on-1):
@@ -1767,7 +1785,7 @@ export default function ChatGuruWorkspace({
  value={groupName}
  onChange={(e) => setGroupName(e.target.value)}
  placeholder={mode === 'teacher' ? 'Contoh: Informasi Kelas & Wali Santri' : 'Contoh: Rapat Divisi Pendidikan'}
- className="h-10 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 px-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 px-3 text-xs font-bold text-slate-800 dark:text-slate-100 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
 
@@ -1775,7 +1793,7 @@ export default function ChatGuruWorkspace({
  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
  {mode === 'teacher' ? 'Pilih Wali Santri / Murid:' : 'Pilih Anggota Pegawai:'}
  </label>
- <div className="max-h-64 overflow-y-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 p-2 dark:border-emerald-800/60 space-y-1 scroll-smooth">
+ <div className="max-h-64 overflow-y-auto rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 p-2 space-y-1 scroll-smooth">
  {directoryContacts.map((contact) => {
  const contactId = contact.user_id || contact.parent_user_id || contact.id
  const displayName = mode === 'teacher' ? (contact.parent_name || contact.name) : contact.name
@@ -1816,69 +1834,53 @@ export default function ChatGuruWorkspace({
  })}
  </div>
  </div>
-
- <div className="flex justify-end gap-2 pt-2 border-t border-emerald-200/80 dark:border-emerald-800/60">
- <button
- type="button"
- onClick={() => setShowNewChatModal(false)}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:border-emerald-700/80 dark:text-slate-300 cursor-pointer"
- >
- Batal
- </button>
- {groupName.trim() && (
- <button
- type="submit"
- disabled={selectedGroupParticipants.length === 0 || isCreatingGroup}
- className="rounded-lg bg-emerald-600 px-4 py-2 text-xs font-bold text-white shadow-md disabled:opacity-40 cursor-pointer border border-emerald-200/80 dark:border-emerald-800/60 h-9 text-sm font-medium"
- >
- Buat Grup
- </button>
- )}
- </div>
  </form>
- </div>
- </div>
- )}
+ </AppModal>
+
  {/* Image Lightbox Modal */}
- {lightboxMedia && (
- <div
- className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-xs animate-in fade-in duration-200"
- onClick={() => setLightboxMedia(null)}
- >
- <div className="relative max-w-4xl max-h-[90vh] overflow-hidden rounded-xl bg-slate-950 p-2 shadow-2xl" onClick={(e) => e.stopPropagation()}>
- <div className="flex items-center justify-between p-2 text-white border-b border-emerald-200/10">
- <span className="text-xs font-bold truncate max-w-xs">{lightboxMedia.name || 'Pratinjau Foto'}</span>
- <div className="flex items-center gap-2">
+ <AppModal
+ isOpen={Boolean(lightboxMedia)}
+ onClose={() => setLightboxMedia(null)}
+ title={lightboxMedia?.name || 'Pratinjau Foto'}
+ description="Pratinjau lampiran media percakapan"
+ icon={Eye}
+ maxWidth="max-w-4xl"
+ headerActions={
+ lightboxMedia ? (
  <a
  href={lightboxMedia.url}
  download={lightboxMedia.name}
  target="_blank"
  rel="noreferrer"
- className="p-1 rounded-lg hover:bg-white/10 transition"
+ className="flex size-9 items-center justify-center rounded-xl bg-white/20 text-white hover:bg-white/30 border border-white/25 transition"
  title="Unduh"
  >
  <Download className="h-4 w-4" />
  </a>
+ ) : null
+ }
+ footer={
+ <div className="flex w-full items-center justify-end gap-2.5">
  <button
  type="button"
  onClick={() => setLightboxMedia(null)}
- className="p-1 rounded-lg hover:bg-white/10 transition cursor-pointer"
- title="Tutup"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <X className="h-4 w-4" />
+ Tutup
  </button>
  </div>
- </div>
- <div className="flex items-center justify-center p-2">
+ }
+ >
+ {lightboxMedia && (
+ <div className="flex items-center justify-center rounded-2xl bg-slate-950 p-3">
  <img
  src={lightboxMedia.url}
  alt={lightboxMedia.name}
- className="max-h-[75vh] max-w-full rounded-xl object-contain"
+ className="max-h-[70vh] max-w-full rounded-xl object-contain"
  />
  </div>
- </div>
- </div>
  )}
+ </AppModal>
  </div>
  )
 }

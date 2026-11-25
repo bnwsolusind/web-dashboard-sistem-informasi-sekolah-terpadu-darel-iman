@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react'
+import AppModal from '../components/app/AppModal'
 import {
   motion,
   AnimatePresence
@@ -948,43 +949,24 @@ export default function MonitoringDivisiPage() {
  </div>
  ),
  },
- {
- key: 'aksi',
- label: 'AKSI',
- headerProps: { className: 'text-right w-36' },
- cellProps: { className: 'text-right w-36' },
- render: (row) => (
- <div className="flex items-center justify-end gap-1.5">
-						<IconButton
-							icon={FileText}
-							label="Lihat Detail"
-							size="sm"
-							onClick={() => {
-								setSelectedRecord(row)
-								setIsDetailOpen(true)
-							}}
-						/>
-						{canManage && (
-							<>
-								<IconButton
-									icon={Pencil}
-									label="Ubah Data Supervisi"
-									variant="warning"
-									size="sm"
-									onClick={() => handleOpenEdit(row)}
-								/>
-								<IconButton
-									icon={Trash2}
-									label="Hapus Data Supervisi"
-									variant="danger"
-									size="sm"
-									onClick={() => handleOpenDelete(row.id)}
-								/>
-							</>
-						)}
-					</div>
- ),
- },
+  {
+   key: 'aksi',
+   label: '',
+   headerProps: { className: 'text-right w-16' },
+   cellProps: { className: 'text-right w-16' },
+   render: (row) => (
+    <div className="flex items-center justify-end">
+     <ActionDropdown
+      onView={() => {
+       setSelectedRecord(row)
+       setIsDetailOpen(true)
+      }}
+      onEdit={canManage ? () => handleOpenEdit(row) : undefined}
+      onDelete={canManage ? () => handleOpenDelete(row.id) : undefined}
+     />
+    </div>
+   ),
+  },
  ]
 
  // Soft Pastel Squircle Action Buttons (Toolbar Row 1 Header) - Compliant with Capability Lock
@@ -999,7 +981,7 @@ export default function MonitoringDivisiPage() {
  title="Tambah Laporan Supervisi Divisi"
  aria-label="Tambah Laporan Supervisi Divisi"
  onClick={handleOpenCreate}
- className="flex size-10 items-center justify-center rounded-xl bg-emerald-100/90 text-emerald-700 hover:bg-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:hover:bg-emerald-900/80 transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer shadow-2xs"
+ className="flex size-10 items-center justify-center rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 dark:bg-emerald-600 dark:text-white dark:hover:bg-emerald-500 transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer shadow-sm border border-emerald-500"
  >
  <Plus className="size-5" />
  </button>
@@ -1016,7 +998,7 @@ export default function MonitoringDivisiPage() {
  title="Impor Data Laporan Supervisi (CSV)"
  aria-label="Impor Data Laporan Supervisi (CSV)"
  onClick={() => setIsImportOpen(true)}
- className="flex size-10 items-center justify-center rounded-xl bg-sky-100/90 text-sky-700 hover:bg-sky-200 dark:bg-sky-950/60 dark:text-sky-300 dark:hover:bg-sky-900/80 transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer shadow-2xs"
+ className="flex size-10 items-center justify-center rounded-xl bg-sky-600 text-white hover:bg-sky-700 dark:bg-sky-600 dark:text-white dark:hover:bg-sky-500 transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer shadow-sm border border-sky-500"
  >
  <Upload1 className="size-5" />
  </button>
@@ -1035,7 +1017,7 @@ export default function MonitoringDivisiPage() {
  title="Ekspor Data Laporan (CSV/Excel)"
  aria-label="Ekspor Data Laporan (CSV/Excel)"
  onClick={handleExportCsv}
- className="flex size-10 items-center justify-center rounded-xl bg-[#FEF3C7] text-[#D97706] hover:bg-[#FDE68A] dark:bg-amber-950/60 dark:text-amber-300 dark:hover:bg-amber-900/80 transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer shadow-2xs"
+ className="flex size-10 items-center justify-center rounded-xl bg-amber-600 text-white hover:bg-amber-700 dark:bg-amber-600 dark:text-white dark:hover:bg-amber-500 transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer shadow-sm border border-amber-500"
  >
  <Download1 className="size-5" />
  </button>
@@ -1053,7 +1035,7 @@ export default function MonitoringDivisiPage() {
  aria-label="Segarkan Data Real-Time"
  onClick={handleRefresh}
  disabled={isRefreshing || isFetching}
- className="flex size-10 items-center justify-center rounded-xl bg-[#EDE9FE] text-[#7C3AED] hover:bg-[#DDD6FE] dark:bg-purple-950/60 dark:text-purple-300 dark:hover:bg-purple-900/80 transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer shadow-2xs disabled:opacity-60 disabled:cursor-not-allowed"
+ className="flex size-10 items-center justify-center rounded-xl bg-violet-600 text-white hover:bg-violet-700 dark:bg-violet-600 dark:text-white dark:hover:bg-violet-500 transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer shadow-sm border border-violet-500 disabled:opacity-60 disabled:cursor-not-allowed"
  >
  <RefreshCcw className={`size-5 ${isRefreshing || isFetching ? 'animate-spin' : ''}`} />
  </button>
@@ -1070,7 +1052,7 @@ export default function MonitoringDivisiPage() {
  title="Cetak Data Laporan (Print/PDF)"
  aria-label="Cetak Data Laporan (Print/PDF)"
  onClick={handleOpenPrintModal}
- className="flex size-10 items-center justify-center rounded-xl bg-[#E0E7FF] text-[#4338CA] hover:bg-[#C7D2FE] dark:bg-indigo-950/60 dark:text-indigo-300 dark:hover:bg-indigo-900/80 transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer shadow-2xs"
+ className="flex size-10 items-center justify-center rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 dark:bg-indigo-600 dark:text-white dark:hover:bg-indigo-500 transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer shadow-sm border border-indigo-500"
  >
  <Printer className="size-5" />
  </button>
@@ -1534,60 +1516,55 @@ export default function MonitoringDivisiPage() {
  </motion.div>
 
  {/* Detail Modal (Hero UI Specification) */}
- <AnimatePresence>
- {isDetailOpen && selectedRecord && (
- <div
- role="dialog"
- tabIndex={-1}
- aria-modal="true"
- aria-labelledby="detail-divisi-modal-title"
- className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- onMouseDown={(e) => {
- if (e.target === e.currentTarget) setIsDetailOpen(false)
+ <AppModal
+ isOpen={Boolean(isDetailOpen && selectedRecord)}
+ onClose={() => setIsDetailOpen(false)}
+ title="Detail Pemantauan Divisi"
+ badge="Detail Kinerja"
+ description={selectedRecord ? `${selectedRecord.nama_divisi} · ${selectedRecord.unit_pendidikan}` : ''}
+ icon={Building2}
+ maxWidth="max-w-lg"
+ footer={
+ selectedRecord ? (
+ <div className="flex w-full items-center justify-between gap-2">
+ <button
+ type="button"
+ onClick={() => {
+ const id = selectedRecord.id
+ setIsDetailOpen(false)
+ handleOpenDelete(id)
  }}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border-2 border-rose-600 bg-rose-600 px-4 text-xs font-black text-white shadow-md shadow-rose-600/20 hover:bg-rose-700 active:scale-95 transition-all cursor-pointer"
  >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="font-sans my-auto w-full max-w-lg"
- >
- <div className="flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
-
- {/* Header */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent dark:from-emerald-950/50 dark:via-teal-950/20 dark:to-transparent px-6 py-4.5">
- <div className="flex items-center gap-3">
- <div className="flex h-9 w-11 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-md shadow-xs shrink-0">
- <Building2 className="h-5 w-5 text-emerald-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3 id="detail-divisi-modal-title" className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Detail Pemantauan Divisi</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-extrabold text-emerald-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-400">
- <Sparkles className="size-3" />
- Detail Kinerja
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- {selectedRecord.nama_divisi} · {selectedRecord.unit_pendidikan}
- </p>
- </div>
- </div>
-
+ Hapus
+ </button>
+ <div className="flex items-center gap-2">
  <button
  type="button"
  onClick={() => setIsDetailOpen(false)}
- aria-label="Tutup detail modal"
- className="size-9 flex items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
+ Tutup
+ </button>
+ <button
+ type="button"
+ onClick={() => {
+ const rec = selectedRecord
+ setIsDetailOpen(false)
+ handleOpenEdit(rec)
+ }}
+ className="inline-flex h-9.5 items-center gap-1.5 rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 hover:bg-emerald-700 active:scale-95 transition-all cursor-pointer"
+ >
+ <Pencil className="size-3.5" />
+ Ubah Data
  </button>
  </div>
-
- {/* Modal Body */}
- <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4 text-sm">
+ </div>
+ ) : null
+ }
+ >
+ {selectedRecord && (
+ <div className="space-y-4 text-sm">
  {/* Live Metric Banner Card */}
  <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 bg-white dark:bg-[#1B2433] p-4 shadow-xs dark:border-emerald-800/60 dark:bg-slate-900/60">
  <div className="flex items-center justify-between gap-2">
@@ -1631,47 +1608,8 @@ export default function MonitoringDivisiPage() {
  )}
  </div>
  </div>
-
- {/* Modal Footer */}
- <div className="flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 px-6 py-4 dark:border-emerald-800/60 dark:bg-slate-950/80">
- <button
- type="button"
- onClick={() => {
- const id = selectedRecord.id
- setIsDetailOpen(false)
- handleOpenDelete(id)
- }}
- className="px-4 py-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50 text-rose-700 hover:bg-rose-100 font-extrabold text-xs transition-all shadow-2xs cursor-pointer dark:border-emerald-800/60 dark:bg-rose-950/50 dark:text-rose-300"
- >
- Hapus
- </button>
- <div className="flex items-center gap-2">
- <button
- type="button"
- onClick={() => setIsDetailOpen(false)}
- className="px-4 py-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 font-extrabold text-xs transition-all shadow-2xs cursor-pointer dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-300"
- >
- Tutup
- </button>
- <button
- type="button"
- onClick={() => {
- const rec = selectedRecord
- setIsDetailOpen(false)
- handleOpenEdit(rec)
- }}
- className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#059669] hover:bg-[#047857] text-white dark:bg-[#18A972] dark:hover:bg-[#059669] dark:text-white font-black text-xs shadow-sm hover:from-emerald-500 hover:to-teal-500 transition-all cursor-pointer"
- >
- <Pencil className="size-3.5" />
- Ubah Data
- </button>
- </div>
- </div>
- </div>
- </motion.div>
- </div>
  )}
- </AnimatePresence>
+ </AppModal>
 
  {/* Form Modal (Create / Edit - Hero UI) */}
  <PemantauanDivisiFormModal
@@ -1715,48 +1653,25 @@ export default function MonitoringDivisiPage() {
  ])}
  />
 
- {/* Delete Confirmation Alert Dialog (HeroUI Hero UI Harmonized) */}
- <AnimatePresence>
- {isDeleteOpen && (
- <div
- role="dialog"
- tabIndex={-1}
- aria-modal="true"
- aria-labelledby="delete-divisi-modal-title"
- className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md"
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !hapus.isPending) {
+ {/* Delete Confirmation Alert Dialog (HeroUI Harmonized) */}
+ <AppModal
+ isOpen={isDeleteOpen}
+ onClose={() => {
+ if (!hapus.isPending) {
  setIsDeleteOpen(false)
  setDeleteTargetId(null)
  }
  }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="font-sans my-auto w-full max-w-md"
- >
- <div className="flex flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
-
- {/* Header */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="flex h-9 w-11 items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 shadow-md shadow-xs shrink-0">
- <Trash2 className="h-5 w-5 text-rose-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3 id="delete-divisi-modal-title" className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Hapus Laporan Supervisi?</span>
- </h3>
- <span className="inline-flex items-center gap-1 rounded-full bg-rose-50 px-2 py-0.5 text-[10px] font-extrabold text-rose-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-rose-950/60 dark:text-rose-400">
- Hapus Permanen
- </span>
- </div>
- </div>
-
+ disableBackdropClose={hapus.isPending}
+ hideCloseButton={hapus.isPending}
+ variant="danger"
+ badge="Hapus Permanen"
+ title="Hapus Laporan Supervisi?"
+ icon={Trash2}
+ maxWidth="max-w-md"
+ zIndex="z-[70]"
+ footer={
+ <div className="flex w-full items-center justify-end gap-2">
  <button
  type="button"
  onClick={() => {
@@ -1764,30 +1679,7 @@ export default function MonitoringDivisiPage() {
  setDeleteTargetId(null)
  }}
  disabled={hapus.isPending}
- aria-label="Batal hapus"
- className="size-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-emerald-950/60 dark:text-emerald-300 hover:scale-105 active:scale-95 transition-all cursor-pointer"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Body */}
- <div className="p-6 space-y-3">
- <p className="text-xs text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
- Laporan supervisi divisi ini akan dihapus secara permanen dari database. Tindakan ini tidak dapat dipulihkan. Apakah Anda yakin ingin melanjutkan?
- </p>
- </div>
-
- {/* Footer */}
- <div className="flex items-center justify-end gap-2 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 px-6 py-4 dark:border-emerald-800/60 dark:bg-slate-950/80">
- <button
- type="button"
- onClick={() => {
- setIsDeleteOpen(false)
- setDeleteTargetId(null)
- }}
- disabled={hapus.isPending}
- className="px-4 py-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white hover:bg-slate-100 text-slate-700 font-extrabold text-xs transition-all shadow-2xs cursor-pointer dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-300"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
  Batal
  </button>
@@ -1795,17 +1687,18 @@ export default function MonitoringDivisiPage() {
  type="button"
  disabled={hapus.isPending}
  onClick={handleConfirmDelete}
- className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs shadow-sm hover:from-rose-600 hover:to-red-800 transition-all cursor-pointer disabled:opacity-60"
+ className="inline-flex h-9.5 items-center gap-1.5 rounded-xl border-2 border-rose-600 bg-rose-600 px-5 text-xs font-black text-white shadow-md shadow-rose-600/20 hover:bg-rose-700 active:scale-95 transition-all cursor-pointer disabled:opacity-60"
  >
  <Trash2 className="size-4" />
  {hapus.isPending ? 'Menghapus...' : 'Ya, Hapus Data'}
  </button>
  </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+ }
+ >
+ <p className="text-xs text-slate-600 dark:text-slate-300 font-medium leading-relaxed">
+ Laporan supervisi divisi ini akan dihapus secara permanen dari database. Tindakan ini tidak dapat dipulihkan. Apakah Anda yakin ingin melanjutkan?
+ </p>
+ </AppModal>
  </motion.div>
 
  {/* Smart Floating Scroll Navigator */}

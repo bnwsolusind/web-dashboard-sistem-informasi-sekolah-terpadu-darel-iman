@@ -110,10 +110,10 @@ export default function HeroUiFilterSelect({
  const hasValue = value !== '' && value !== 'semua' && value !== 'all' && value !== undefined && value !== null
 
  const sizeClasses = {
- sm: 'h-9 text-sm',
- md: 'h-9 text-sm',
- lg: 'h-10 text-sm',
- }
+		sm: 'h-10 text-xs font-semibold',
+		md: 'h-10 text-xs font-semibold',
+		lg: 'h-10 text-xs font-semibold',
+	}
 
  const handleClear = (e) => {
  e.stopPropagation()
@@ -136,13 +136,13 @@ export default function HeroUiFilterSelect({
  setSearch('')
  }
  }}
- className={`${sizeClasses[size] || sizeClasses.sm} w-full flex items-center justify-between gap-2 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 px-3 text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 shadow-xs ${
- isOpen
-					? 'border-emerald-500 bg-white ring-2 ring-emerald-500/20 dark:border-emerald-500 dark:bg-card-dark dark:ring-emerald-400 text-slate-900 dark:text-white'
- : hasValue
-					? 'border-emerald-400 dark:border-emerald-600 bg-emerald-50/40 dark:bg-card-dark text-slate-900 dark:text-white font-semibold'
-					: 'border-emerald-300 dark:border-emerald-700/80 bg-white text-slate-700 hover:border-emerald-400 hover:bg-emerald-50/40 dark:bg-card-dark dark:text-slate-200 dark:hover:bg-emerald-950/30'
- }`}
+ className={`${sizeClasses[size] || sizeClasses.sm} w-full flex items-center justify-between gap-2 rounded-xl border-2 px-3.5 text-xs font-bold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-800/60 dark:bg-slate-900/50 dark:text-slate-100 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 shadow-2xs ${
+					isOpen
+						? 'border-emerald-500 bg-white ring-2 ring-emerald-500/20 dark:border-emerald-500 dark:bg-slate-900 text-slate-900 dark:text-white'
+						: hasValue
+						? 'border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-bold'
+						: 'border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:border-emerald-400'
+				}`}
  >
  <div className="flex items-center gap-2 truncate">
  {IconComponent && (

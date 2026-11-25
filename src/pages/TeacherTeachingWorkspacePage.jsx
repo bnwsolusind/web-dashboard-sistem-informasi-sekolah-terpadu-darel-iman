@@ -121,8 +121,10 @@ import {
   MasterPageHeader,
   MasterActionButton,
   MasterStatCard,
-  MasterStatsGrid
+  MasterStatsGrid,
+  SquircleActionButton
 } from '../components/master-data'
+import PageToolbarActions from '../components/app/PageToolbarActions'
 import {
   KpiStatCard,
   HeroUiHeader
@@ -4832,28 +4834,22 @@ export default function TeacherTeachingWorkspacePage() {
  })}
  </div>
 
- {/* Export Summary Button */}
- <button
- type="button"
- onClick={handleExportHistorySessionsSummary}
- disabled={loadingHistorySessions || historySessions.length === 0}
- title="Export Rekap Sesi KBM Periode Ini ke Excel (.csv)"
- className="flex items-center gap-1.5 h-9 px-3 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white text-xs font-bold text-emerald-700 shadow-xs hover:bg-emerald-50 disabled:opacity-50 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-emerald-400 cursor-pointer"
+ {/* Export Summary & Refresh Buttons */}
+ <PageToolbarActions
+   onRefresh={fetchHistorySessions}
+   refreshLabel="Muat Ulang Riwayat"
+   refreshing={loadingHistorySessions}
  >
- <Download className="h-3.5 w-3.5" />
- <span className="hidden sm:inline">Export Rekap</span>
- </button>
-
- {/* Refresh Button */}
- <button
- type="button"
- onClick={fetchHistorySessions}
- disabled={loadingHistorySessions}
- title="Muat Ulang Riwayat"
- className="flex h-9 w-9 items-center justify-center rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white text-emerald-700 shadow-xs hover:bg-emerald-50 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-emerald-400"
- >
- <RefreshCw className={`h-4 w-4 ${loadingHistorySessions ? 'animate-spin' : ''}`} />
- </button>
+   <SquircleActionButton
+     variant="export"
+     icon={Download}
+     label="Export Rekap"
+     onClick={handleExportHistorySessionsSummary}
+     disabled={loadingHistorySessions || historySessions.length === 0}
+     title="Export Rekap Sesi KBM Periode Ini ke Excel (.csv)"
+     showLabel
+   />
+ </PageToolbarActions>
  </div>
  </div>
 
@@ -6574,31 +6570,27 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
  </div>
  <div className="flex items-center gap-2">
- <button
- type="button"
- onClick={() => {
- printCleanTable({
- title: `Jadwal Mengajar Guru - ${teacherName || 'Guru'}`,
- subtitle: `Unit / Kelas: ${selectedClassName} | Tahun Ajaran 2026/2027`,
- headers: ['No', 'Hari', 'Jam Sesi', 'Mata Pelajaran', 'Kelas', 'Ruangan'],
- rows: sortedSchedules.map((s, idx) => [
- idx + 1,
- getScheduleDay(s) || '-',
- `${s.jam_mulai || s.time_start || '-'} - ${s.jam_selesai || s.time_end || '-'}`,
- getScheduleSubject(s) || '-',
- s.kelas?.nama_kelas || selectedClassName || '-',
- s.ruangan || s.room || 'Ruang Kelas',
- ]),
- user,
- unit: teacherProfile?.unit || user?.employee?.unit || user?.unit,
- })
- }}
- className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-800 shadow-xs transition hover:bg-emerald-100 hover:border-emerald-300 dark:hover:border-emerald-700/80 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-200 dark:hover:bg-emerald-900/80 cursor-pointer"
- title="Cetak matriks jadwal mengajar mingguan"
- >
- <Printer className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
- <span>Cetak Jadwal</span>
- </button>
+ <PageToolbarActions
+   onPrint={() => {
+     printCleanTable({
+       title: `Jadwal Mengajar Guru - ${teacherName || 'Guru'}`,
+       subtitle: `Unit / Kelas: ${selectedClassName} | Tahun Ajaran 2026/2027`,
+       headers: ['No', 'Hari', 'Jam Sesi', 'Mata Pelajaran', 'Kelas', 'Ruangan'],
+       rows: sortedSchedules.map((s, idx) => [
+         idx + 1,
+         getScheduleDay(s) || '-',
+         `${s.jam_mulai || s.time_start || '-'} - ${s.jam_selesai || s.time_end || '-'}`,
+         getScheduleSubject(s) || '-',
+         s.kelas?.nama_kelas || selectedClassName || '-',
+         s.ruangan || s.room || 'Ruang Kelas',
+       ]),
+       user,
+       unit: teacherProfile?.unit || user?.employee?.unit || user?.unit,
+     })
+   }}
+   printLabel="Cetak Jadwal"
+   showLabel
+ />
  <span className="rounded-full border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-100/80 px-3 py-1 text-xs font-black text-emerald-800 dark:border-emerald-800/60 dark:bg-emerald-950/80 dark:text-emerald-300">
  {timelineSchedules.length} sesi ditampilkan
  </span>
@@ -7180,63 +7172,40 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
  </div>
 
- <div className="flex flex-wrap items-center gap-2">
- <button
- type="button"
- onClick={() => {
- setImportTarget('presensi')
- setImportFile(null)
- setImportError('')
- setShowImportModal(true)
- }}
- className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-sky-50/80 px-3 py-1.5 text-xs font-bold text-sky-700 transition hover:bg-sky-100 dark:border-emerald-800/60 dark:bg-sky-950/50 dark:text-sky-300"
- title="Import presensi dari file spreadsheet"
+ <PageToolbarActions
+   onImport={() => {
+     setImportTarget('presensi')
+     setImportFile(null)
+     setImportError('')
+     setShowImportModal(true)
+   }}
+   importLabel="Import Data"
+   onExport={() => {
+     setShowExportModal(true)
+   }}
+   exportLabel="Export Data"
+   onPrint={() => {
+     const target = (paginatedAttendanceStudents && paginatedAttendanceStudents.length > 0 ? paginatedAttendanceStudents[0] : null)
+       || (students && students.length > 0 ? students[0] : null)
+     handlePrintWeeklyEvaluation(target)
+   }}
+   printLabel="Cetak Evaluasi Pekanan"
+   primaryAction={{
+     label: 'Simpan Presensi',
+     onClick: handleSaveAttendance,
+     icon: Save,
+   }}
+   showLabel
  >
- <Upload className="h-3.5 w-3.5 text-sky-600 dark:text-sky-400" />
- Import Data
- </button>
- <button
- type="button"
- onClick={() => {
- setShowExportModal(true)
- }}
- className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-amber-50/80 px-3 py-1.5 text-xs font-bold text-amber-700 transition hover:bg-amber-100 dark:border-emerald-800/60 dark:bg-amber-950/50 dark:text-amber-300"
- title="Export presensi ke spreadsheet atau PDF"
- >
- <Download className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
- Export Data
- </button>
- <button
- type="button"
- onClick={() => {
- const target = (paginatedAttendanceStudents && paginatedAttendanceStudents.length > 0 ? paginatedAttendanceStudents[0] : null)
- || (students && students.length > 0 ? students[0] : null)
- handlePrintWeeklyEvaluation(target)
- }}
- className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200/80 bg-orange-50/80 px-3 py-1.5 text-xs font-bold text-orange-700 transition hover:bg-orange-100 dark:border-emerald-800/60 dark:bg-orange-950/50 dark:text-orange-300 cursor-pointer shadow-sm active:scale-95"
- title="Cetak Lembar Evaluasi Mingguan Santri"
- >
- <Printer className="h-3.5 w-3.5 text-orange-600 dark:text-orange-400" />
- Cetak Evaluasi Pekanan
- </button>
- <button
- type="button"
- onClick={markAllStudentsPresent}
- className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-emerald-50/80 px-3 py-1.5 text-xs font-bold text-emerald-700 transition hover:bg-emerald-100 dark:border-emerald-800/60 dark:bg-emerald-950/50 dark:text-emerald-300"
- title="Tandai semua siswa hadir"
- >
- <CheckSquare className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
- Tandai Semua Hadir
- </button>
- <button
- type="button"
- onClick={handleSaveAttendance}
- className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 dark:bg-slate-100 dark:text-slate-900 dark: px-3.5 py-1.5 text-xs font-bold shadow-sm transition hover:from-emerald-700 hover:to-teal-700 text-white border border-emerald-200/80 dark:border-emerald-800/60 h-9 text-sm font-medium"
- >
- <Save className="h-3.5 w-3.5" />
- Simpan Presensi
- </button>
- </div>
+   <SquircleActionButton
+     variant="restore"
+     icon={CheckSquare}
+     label="Tandai Semua Hadir"
+     onClick={markAllStudentsPresent}
+     title="Tandai semua siswa hadir"
+     showLabel
+   />
+ </PageToolbarActions>
  </div>
 
  {/* Filter Bar */}
@@ -8548,73 +8517,55 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
  </div>
 
- <div className="flex flex-wrap items-center gap-2">
- <button
- type="button"
- onClick={() => {
- setImportTarget('penilaian')
- setImportFile(null)
- setImportError('')
- setShowImportModal(true)
- }}
- className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-sky-50/80 px-3 py-1.5 text-xs font-bold text-sky-700 transition hover:bg-sky-100 dark:border-emerald-800/60 dark:bg-sky-950/50 dark:text-sky-300"
- title="Import nilai dari spreadsheet (.csv, .xls, .xlsx)"
+ <PageToolbarActions
+   onImport={() => {
+     setImportTarget('penilaian')
+     setImportFile(null)
+     setImportError('')
+     setShowImportModal(true)
+   }}
+   importLabel="Import Nilai"
+   onExport={() => setShowExportModal(true)}
+   exportLabel="Export Nilai"
+   onPrint={() => {
+     printCleanTable({
+       title: 'Buku Nilai Harian & Rapor Siswa',
+       subtitle: `Rombel: ${selectedClassName} | Semester Ganjil 2026/2027`,
+       headers: ['No', 'NIS', 'Nama Siswa', 'Nilai Tugas (20%)', 'Nilai Kuis (20%)', 'Nilai UTS (30%)', 'Nilai UAS (30%)', 'Nilai Akhir', 'Catatan Guru'],
+       rows: students.map((st, idx) => {
+         const row = gradesData[st.id] || {}
+         const tugas = row.nilai_tugas ?? '-'
+         const kuis = row.nilai_kuis ?? '-'
+         const uts = row.nilai_uts ?? '-'
+         const uas = row.nilai_uas ?? '-'
+         const akhir = (row.nilai_tugas != null || row.nilai_kuis != null || row.nilai_uts != null || row.nilai_uas != null)
+           ? Math.round(Number(row.nilai_tugas || 0) * 0.2 + Number(row.nilai_kuis || 0) * 0.2 + Number(row.nilai_uts || 0) * 0.3 + Number(row.nilai_uas || 0) * 0.3)
+           : '-'
+         const catatan = row.catatan || row.notes || '-'
+         return [idx + 1, st.nis || st.student_id || '-', st.name || st.full_name || '-', tugas, kuis, uts, uas, akhir, catatan]
+       }),
+       user,
+       unit: teacherProfile?.unit || user?.employee?.unit || user?.unit,
+     })
+     addToast('info', 'Dokumen Siap Dicetak', 'Pratinjau cetak buku nilai siswa berhasil dibuka.')
+   }}
+   printLabel="Cetak Nilai"
+   primaryAction={{
+     label: 'Simpan Nilai',
+     onClick: handleSaveGradesBulk,
+     icon: Save,
+   }}
+   showLabel
  >
- <Upload className="h-3.5 w-3.5 text-sky-600 dark:text-sky-400" /> Import Nilai
- </button>
- <button
- type="button"
- onClick={() => setShowExportModal(true)}
- className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-amber-50/80 px-3 py-1.5 text-xs font-bold text-amber-700 transition hover:bg-amber-100 dark:border-emerald-800/60 dark:bg-amber-950/50 dark:text-amber-300"
- title="Export nilai ke format Excel atau CSV"
- >
- <Download className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" /> Export Nilai
- </button>
- <button
- type="button"
- onClick={() => {
- printCleanTable({
- title: 'Buku Nilai Harian & Rapor Siswa',
- subtitle: `Rombel: ${selectedClassName} | Semester Ganjil 2026/2027`,
- headers: ['No', 'NIS', 'Nama Siswa', 'Nilai Tugas (20%)', 'Nilai Kuis (20%)', 'Nilai UTS (30%)', 'Nilai UAS (30%)', 'Nilai Akhir', 'Catatan Guru'],
- rows: students.map((st, idx) => {
- const row = gradesData[st.id] || {}
- const tugas = row.nilai_tugas ?? '-'
- const kuis = row.nilai_kuis ?? '-'
- const uts = row.nilai_uts ?? '-'
- const uas = row.nilai_uas ?? '-'
- const akhir = (row.nilai_tugas != null || row.nilai_kuis != null || row.nilai_uts != null || row.nilai_uas != null)
- ? Math.round(Number(row.nilai_tugas || 0) * 0.2 + Number(row.nilai_kuis || 0) * 0.2 + Number(row.nilai_uts || 0) * 0.3 + Number(row.nilai_uas || 0) * 0.3)
- : '-'
- const catatan = row.catatan || row.notes || '-'
- return [idx + 1, st.nis || st.student_id || '-', st.name || st.full_name || '-', tugas, kuis, uts, uas, akhir, catatan]
- }),
- user,
- unit: teacherProfile?.unit || user?.employee?.unit || user?.unit,
- })
- addToast('info', 'Dokumen Siap Dicetak', 'Pratinjau cetak buku nilai siswa berhasil dibuka.')
- }}
- className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-emerald-50/80 px-3 py-1.5 text-xs font-bold text-emerald-700 transition hover:bg-emerald-100 dark:border-emerald-800/60 dark:bg-emerald-950/50 dark:text-emerald-300 cursor-pointer shadow-xs active:scale-95"
- title="Cetak Buku Nilai Harian & Rapor Fisik"
- >
- <Printer className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" /> Cetak Nilai
- </button>
- <button
- type="button"
- onClick={handleSyncGradesFromAssignments}
- className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200/80  bg-emerald-50/70 px-3 py-1.5 text-xs font-bold text-emerald-700 dark:text-emerald-300  transition hover:bg-emerald-700  dark:border-emerald-800/60  dark:bg-emerald-50/70 dark:text-emerald-700 dark:text-emerald-300 "
- title="Tarik rata-rata nilai tugas & kuis yang dikumpulkan siswa di LMS"
- >
- <Sparkles className="h-3.5 w-3.5 text-emerald-700 dark:text-emerald-400" /> Tarik Nilai LMS
- </button>
- <button
- type="button"
- onClick={handleSaveGradesBulk}
- className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 dark:bg-slate-100 dark:text-slate-900 dark: px-3.5 py-1.5 text-xs font-bold shadow-sm transition hover:from-emerald-700 hover:to-teal-700 text-white border border-emerald-200/80 dark:border-emerald-800/60 h-9 text-sm font-medium"
- >
- <Save className="h-3.5 w-3.5" /> Simpan Nilai
- </button>
- </div>
+   <SquircleActionButton
+     variant="sync"
+     icon={Sparkles}
+     label="Tarik Nilai LMS"
+     onClick={handleSyncGradesFromAssignments}
+     title="Tarik rata-rata nilai tugas & kuis yang dikumpulkan siswa di LMS"
+     showLabel
+   />
+ </PageToolbarActions>
  </div>
 
  {/* Subbar Info & Filter */}
@@ -9198,26 +9149,13 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
  </div>
 
- <div className="flex flex-wrap items-center gap-2">
- <button
- type="button"
- onClick={handlePrintTahfizhLeaderboard}
- className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-emerald-50/80 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900 px-3 py-1.5 text-xs font-bold text-emerald-800 dark:text-emerald-200 transition-colors cursor-pointer shadow-xs"
- title="Cetak Leaderboard Tahfizh"
- >
- <Printer className="size-3.5 text-emerald-600 dark:text-emerald-400" />
- <span>Cetak Ranking</span>
- </button>
- <button
- type="button"
- onClick={handleDownloadPdfTahfizhLeaderboard}
- className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-amber-50/80 dark:bg-amber-950/60 hover:bg-amber-100 dark:hover:bg-amber-900 px-3 py-1.5 text-xs font-bold text-amber-800 dark:text-amber-200 transition-colors cursor-pointer shadow-xs"
- title="Unduh Dokumen PDF Leaderboard"
- >
- <FileText className="size-3.5 text-amber-600 dark:text-amber-400" />
- <span>Unduh PDF</span>
- </button>
- </div>
+ <PageToolbarActions
+   onPrint={handlePrintTahfizhLeaderboard}
+   printLabel="Cetak Ranking"
+   onExport={handleDownloadPdfTahfizhLeaderboard}
+   exportLabel="Unduh PDF"
+   showLabel
+ />
  </div>
 
  {/* ── TOOLBAR BARIS 2: Full-Width Search Input ── */}
@@ -9364,22 +9302,21 @@ export default function TeacherTeachingWorkspacePage() {
 
  {/* Right: Reset Filter Button */}
  {(tahfizhSearch || (isGlobalTahfizhScope && selectedTahfizhUnit !== 'semua') || tahfizhFilterClass !== 'all' || tahfizhSortOrder !== 'highest' || tahfizhPerPage !== 10) && (
- <button
- type="button"
- onClick={() => {
- setTahfizhSearch('')
- if (isGlobalTahfizhScope) setSelectedTahfizhUnit('semua')
- setTahfizhFilterClass('all')
- setTahfizhSortOrder('highest')
- setTahfizhPerPage(10)
- setTahfizhPage(1)
- }}
- className="inline-flex h-9 items-center justify-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-rose-50/90 hover:bg-rose-100 dark:border-emerald-800/60 dark:bg-rose-950/60 dark:hover:bg-rose-900/80 px-3.5 text-xs font-bold text-rose-700 dark:text-rose-300 transition-all cursor-pointer shrink-0 shadow-2xs hover:scale-102 active:scale-98 self-end md:self-center"
- title="Reset Semua Filter"
- >
- <RefreshCw className="size-3.5 text-rose-600 dark:text-rose-400" />
- <span>Reset Filter</span>
- </button>
+ <SquircleActionButton
+   variant="delete"
+   icon={RefreshCw}
+   label="Reset Filter"
+   onClick={() => {
+     setTahfizhSearch('')
+     if (isGlobalTahfizhScope) setSelectedTahfizhUnit('semua')
+     setTahfizhFilterClass('all')
+     setTahfizhSortOrder('highest')
+     setTahfizhPerPage(10)
+     setTahfizhPage(1)
+   }}
+   title="Reset Semua Filter"
+   showLabel
+ />
  )}
  </div>
  </div>
@@ -9651,49 +9588,44 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
  </div>
 
- <div className="flex items-center gap-2">
- <button
- type="button"
- onClick={() => {
- printCleanTable({
- title: 'Rekapitulasi Catatan Perkembangan Siswa',
- subtitle: `Rombel: ${selectedClassName} | Tahun Ajaran 2026/2027`,
- headers: ['No', 'NIS', 'Nama Siswa', 'Kategori', 'Judul Catatan', 'Tanggal', 'Prioritas'],
- rows: studentNotes.map((n, idx) => [
- idx + 1,
- n.student?.nis || n.student_nis || '-',
- n.student?.nama_lengkap || n.student_name || '-',
- n.category || '-',
- n.title || '-',
- n.date || '-',
- n.priority || 'Normal',
- ]),
- user,
- unit: teacherProfile?.unit || user?.employee?.unit || user?.unit,
- })
- addToast('info', 'Dokumen Siap Dicetak', 'Pratinjau cetak rekapitulasi catatan perkembangan siswa berhasil dibuka.')
- }}
- className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-emerald-50/80 px-3 py-1.5 text-xs font-bold text-emerald-700 transition hover:bg-emerald-100 dark:border-emerald-800/60 dark:bg-emerald-950/50 dark:text-emerald-300 cursor-pointer shadow-xs active:scale-95"
- title="Cetak rekapitulasi catatan perkembangan siswa"
+ <div className="flex flex-wrap items-center gap-2">
+ <PageToolbarActions
+   onPrint={() => {
+     printCleanTable({
+       title: 'Rekapitulasi Catatan Perkembangan Siswa',
+       subtitle: `Rombel: ${selectedClassName} | Tahun Ajaran 2026/2027`,
+       headers: ['No', 'NIS', 'Nama Siswa', 'Kategori', 'Judul Catatan', 'Tanggal', 'Prioritas'],
+       rows: studentNotes.map((n, idx) => [
+         idx + 1,
+         n.student?.nis || n.student_nis || '-',
+         n.student?.nama_lengkap || n.student_name || '-',
+         n.category || '-',
+         n.title || '-',
+         n.date || '-',
+         n.priority || 'Normal',
+       ]),
+       user,
+       unit: teacherProfile?.unit || user?.employee?.unit || user?.unit,
+     })
+     addToast('info', 'Dokumen Siap Dicetak', 'Pratinjau cetak rekapitulasi catatan perkembangan siswa berhasil dibuka.')
+   }}
+   printLabel="Cetak Catatan"
+   primaryAction={{
+     label: 'Penilaian Perilaku TU',
+     onClick: () => openPelanggaranModal(null),
+     icon: ShieldAlert,
+   }}
+   showLabel
  >
- <Printer className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" /> Cetak Catatan
- </button>
- <button
- type="button"
- onClick={() => navigate('/dashboard/tata-tertib')}
- className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-rose-50/80 px-3 py-1.5 text-xs font-bold text-rose-700 transition hover:bg-rose-100 dark:border-emerald-800/60 dark:bg-rose-950/50 dark:text-rose-300 cursor-pointer shadow-xs active:scale-95"
- title="Buku Tata Tertib & Poin Kedisiplinan Siswa"
- >
- <AlertTriangle className="h-3.5 w-3.5 text-rose-600 dark:text-rose-400" /> Tata Tertib & Poin
- </button>
- <button
- type="button"
- onClick={() => openPelanggaranModal(null)}
- className="inline-flex items-center gap-1.5 rounded-xl bg-white dark:bg-card-dark px-3 py-1.5 text-xs font-bold shadow-sm transition hover:brightness-110 cursor-pointer active:scale-95 border border-emerald-200/80 dark:border-emerald-800/60"
- title="Input Catatan Penilaian Perilaku Santri (Standar Master TU)"
- >
- <ShieldAlert className="h-3.5 w-3.5 text-emerald-600" /> + Penilaian Perilaku TU
- </button>
+   <SquircleActionButton
+     variant="delete"
+     icon={AlertTriangle}
+     label="Tata Tertib & Poin"
+     onClick={() => navigate('/dashboard/tata-tertib')}
+     title="Buku Tata Tertib & Poin Kedisiplinan Siswa"
+     showLabel
+   />
+ </PageToolbarActions>
  <span className="inline-flex items-center rounded-lg bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 px-2.5 py-1 text-xs font-black text-emerald-800 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300">
  {students.length} siswa
  </span>
@@ -10222,15 +10154,11 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
  </div>
 
- <div className="flex items-center gap-2">
- <button
- type="button"
- onClick={() => handleProcessExport()}
- className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-amber-50 hover:bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 dark:border-emerald-800/60 px-3.5 py-2 text-xs font-extrabold shadow-xs transition cursor-pointer active:scale-95"
- >
- <Download className="size-3.5 text-amber-600 dark:text-amber-400" /> Export PDF
- </button>
- </div>
+ <PageToolbarActions
+   onExport={() => handleProcessExport()}
+   exportLabel="Export PDF"
+   showLabel
+ />
  </div>
 
  {/* Filter Bar */}
@@ -10844,14 +10772,12 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
 
  {/* ── COMMAND PALETTE MODAL (CTRL + K) ───────────────────────────────── */}
- {showCommandPalette && (
- <div
- className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-md flex items-start justify-center pt-20 p-4"
- onClick={() => setShowCommandPalette(false)}
- >
- <div
- className="bg-white dark:bg-card-dark w-full max-w-xl rounded-3xl shadow-2xl shadow-emerald-950/20 border-2 border-emerald-300 dark:border-emerald-800/60 overflow-hidden relative animate-in fade-in zoom-in duration-150 space-y-3 p-4"
- onClick={(e) => e.stopPropagation()}
+ <AppModal
+ isOpen={showCommandPalette}
+ onClose={() => setShowCommandPalette(false)}
+ zIndex={100}
+ maxWidth="max-w-xl"
+ bodyClassName="p-4 space-y-3"
  >
  <div className="flex items-center gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-3">
  <Search className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
@@ -10863,7 +10789,7 @@ export default function TeacherTeachingWorkspacePage() {
  placeholder="Cari siswa, kelas, materi, atau navigasi workspace (Ctrl + K)..."
  className="w-full text-sm font-semibold bg-transparent outline-none text-slate-900 dark:text-white"
  />
- <button onClick={() => setShowCommandPalette(false)} className="text-slate-400 hover:text-slate-600">
+ <button type="button" onClick={() => setShowCommandPalette(false)} className="text-slate-400 hover:text-slate-600">
  <X className="w-5 h-5" />
  </button>
  </div>
@@ -10873,6 +10799,7 @@ export default function TeacherTeachingWorkspacePage() {
  {cardModulesList.map((mod) => (
  <button
  key={mod.id}
+ type="button"
  onClick={() => {
  changeTab(mod.id)
  setShowCommandPalette(false)
@@ -10887,19 +10814,24 @@ export default function TeacherTeachingWorkspacePage() {
  </button>
  ))}
  </div>
- </div>
- </div>
- )}
+ </AppModal>
 
- {showQrCamera && (
- <div className="fixed inset-0 z-[90] flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-md" onClick={closeQrCamera} role="presentation">
- <section className="w-full max-w-xl overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl dark:border-emerald-800/60 dark:bg-slate-900" onClick={(event) => event.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="qr-camera-title">
- <header className="flex items-center justify-between border-b border-emerald-200/80 p-5 dark:border-emerald-800/60 bg-white dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3"><span className="flex h-9 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-400"><Camera className="h-5 w-5" /></span><div><h2 id="qr-camera-title" className="text-base font-bold text-slate-900 dark:text-white">Pemindai Kamera Web Live</h2><p className="text-xs text-slate-500">Mode: KEDATANGAN</p></div></div>
- <button type="button" onClick={closeQrCamera} className="rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800" aria-label="Tutup kamera"><X className="h-5 w-5" /></button>
- </header>
-
- <div className="space-y-4 p-6">
+ <AppModal
+ isOpen={showQrCamera}
+ onClose={closeQrCamera}
+ zIndex={90}
+ maxWidth="max-w-xl"
+ title="Pemindai Kamera Web Live"
+ description="Mode: KEDATANGAN"
+ icon={Camera}
+ bodyClassName="space-y-4 p-6"
+ footer={
+ <div className="flex w-full items-center justify-between gap-3">
+ <button type="button" onClick={qrCameraActive ? stopQrCamera : openQrCamera} className="flex items-center gap-1.5 rounded-xl border border-slate-300/80 dark:border-slate-700 bg-slate-100 hover:bg-slate-200 px-3 py-2 text-xs font-bold text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 shadow-xs cursor-pointer">{qrCameraActive ? <><CameraOff className="h-3.5 w-3.5 text-rose-500" /> Matikan Kamera</> : <><Camera className="h-3.5 w-3.5 text-emerald-500" /> Nyalakan Ulang Kamera</>}</button>
+ <button type="button" onClick={closeQrCamera} className="rounded-xl bg-sky-50 border border-sky-200/80 px-4 py-2 text-xs font-bold text-sky-700 hover:bg-slate-300 dark:bg-emerald-950/60 dark:text-emerald-300">Tutup Window</button>
+ </div>
+ }
+ >
  <div className="relative aspect-video w-full overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-black shadow-inner dark:border-emerald-800/60">
  <video ref={qrVideoRef} autoPlay muted playsInline className="h-full w-full object-cover" />
  {!qrCameraActive && !qrCameraError && <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-slate-900/80 text-white"><RefreshCw className="h-8 w-8 animate-spin text-emerald-400" /><p className="text-xs font-semibold">Menghubungkan ke kamera...</p></div>}
@@ -10969,33 +10901,24 @@ export default function TeacherTeachingWorkspacePage() {
  <label className="block text-xs font-semibold uppercase text-slate-500">Input / Hasil Pindai Kode Kartu</label>
  <div className="flex flex-col gap-2 sm:flex-row"><input ref={scanInputRef} value={scanInput} onChange={(event) => setScanInput(event.target.value)} autoFocus autoComplete="off" placeholder="Hasil scan QR / Ketik nomor kartu..." className="w-full rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-900 outline-none focus:border-emerald-500 focus:bg-white dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white" /><button type="submit" disabled={!scanInput.trim() || scanProcessing} className="whitespace-nowrap rounded-lg bg-emerald-600 px-5 py-3 text-sm font-bold text-white shadow disabled:opacity-50 border border-emerald-200/80 dark:border-emerald-800/60 h-9">{scanProcessing ? 'Proses...' : 'Proses Absen'}</button></div>
  </form>
- </div>
+ </AppModal>
 
- <footer className="flex items-center justify-between gap-3 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 p-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900 dark:border-emerald-800/60 dark:bg-slate-800/40">
- <button type="button" onClick={qrCameraActive ? stopQrCamera : openQrCamera} className="flex items-center gap-1.5 rounded-xl border border-slate-300/80 dark:border-slate-700 bg-slate-100 hover:bg-slate-200 px-3 py-2 text-xs font-bold text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 shadow-xs cursor-pointer">{qrCameraActive ? <><CameraOff className="h-3.5 w-3.5 text-rose-500" /> Matikan Kamera</> : <><Camera className="h-3.5 w-3.5 text-emerald-500" /> Nyalakan Ulang Kamera</>}</button>
- <button type="button" onClick={closeQrCamera} className="rounded-xl bg-sky-50 border border-sky-200/80 px-4 py-2 text-xs font-bold text-sky-700 hover:bg-slate-300 dark:bg-emerald-950/60 dark:text-emerald-300">Tutup Window</button>
- </footer>
- </section>
- </div>
- )}
-
- {showAttendanceMethodModal && (
- <div className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/65 p-3 backdrop-blur-sm sm:p-5" onClick={() => setShowAttendanceMethodModal(false)} role="presentation">
- <section className="flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl dark:border-emerald-700/80 dark:bg-card-dark" onClick={(event) => event.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="attendance-modal-title">
- <header className="flex shrink-0 items-center justify-between gap-4 border-b border-emerald-200/80 p-5 dark:border-emerald-800/60 bg-white dark:bg-surface-dark-inner">
- <div className="flex min-w-0 items-center gap-3">
- <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${selectedMethod === 'rollcall' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300' : selectedMethod === 'qr' ? 'bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300' : 'bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-300'}`}>
- {selectedMethod === 'rollcall' ? <UserCheck className="h-5 w-5" /> : selectedMethod === 'qr' ? <QrCode className="h-5 w-5" /> : <Wifi className="h-5 w-5" />}
- </span>
- <div className="min-w-0">
- <h2 id="attendance-modal-title" className=" text-lg font-extrabold text-slate-900 dark:text-white">{selectedMethod === 'rollcall' ? 'Checklist Kehadiran Siswa' : selectedMethod === 'qr' ? 'Scan QR Code Kartu Siswa' : 'Identifikasi RFID Kartu Siswa'}</h2>
- <p className="mt-0.5 truncate text-xs text-slate-500">{selectedClassName} • {getScheduleSubject(getCurrentSchedule() || {})} • Jam Pelajaran: {getScheduleLessonHours(getCurrentSchedule())} • Waktu Sekarang: {formattedLiveTime}</p>
- </div>
- </div>
- <button type="button" onClick={() => setShowAttendanceMethodModal(false)} aria-label="Tutup popup presensi" className="flex h-9 w-10 shrink-0 items-center justify-center rounded-xl text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 focus-visible:ring-3 focus-visible:ring-emerald-700/20 dark:hover:bg-slate-800 dark:hover:text-slate-200"><X className="h-5 w-5" /></button>
- </header>
-
- <div className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-5">
+ <AppModal
+ isOpen={showAttendanceMethodModal}
+ onClose={() => setShowAttendanceMethodModal(false)}
+ zIndex={70}
+ maxWidth="max-w-4xl"
+ title={selectedMethod === 'rollcall' ? 'Checklist Kehadiran Siswa' : selectedMethod === 'qr' ? 'Scan QR Code Kartu Siswa' : 'Identifikasi RFID Kartu Siswa'}
+ description={`${selectedClassName} • ${getScheduleSubject(getCurrentSchedule() || {})} • Jam Pelajaran: ${getScheduleLessonHours(getCurrentSchedule())} • Waktu Sekarang: ${formattedLiveTime}`}
+ icon={selectedMethod === 'rollcall' ? UserCheck : selectedMethod === 'qr' ? QrCode : Wifi}
+ bodyClassName="p-4 sm:p-5"
+ footer={
+ <>
+ <button type="button" onClick={() => setShowAttendanceMethodModal(false)} className="h-9 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 px-4 text-xs font-bold text-slate-600 transition hover:bg-slate-50 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-slate-800">Tutup</button>
+ <button type="button" onClick={handleSaveAttendance} className="flex h-9 items-center justify-center gap-2 rounded-lg bg-emerald-600 px-5 text-xs font-bold text-white transition border border-emerald-200/80 dark:border-emerald-800/60 text-sm font-medium"><Save className="h-4 w-4" /> Simpan Presensi</button>
+ </>
+ }
+ >
  {selectedMethod === 'rollcall' ? (
  <div className="space-y-4">
  <div className="flex flex-wrap items-center justify-between gap-3 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-emerald-50/60 p-3 dark:border-emerald-800/60 dark:bg-emerald-950/20">
@@ -11055,15 +10978,7 @@ export default function TeacherTeachingWorkspacePage() {
  {lastScannedResult && <div className={`flex items-center gap-3 rounded-xl border p-4 ${lastScannedResult.error ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50 dark:border-emerald-800/60 dark:bg-rose-950/30' : 'border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50 dark:border-emerald-800/60 dark:bg-emerald-950/30'}`} role="status">{lastScannedResult.error ? <AlertCircle className="h-6 w-6 shrink-0 text-rose-600" /> : <CheckCircle2 className="h-6 w-6 shrink-0 text-emerald-600" />}<div className="min-w-0"><p className="truncate text-sm font-bold text-slate-900 dark:text-white">{lastScannedResult.error ? 'Kartu tidak dikenali' : (lastScannedResult.student?.nama_lengkap || lastScannedResult.student?.full_name)}</p><p className="mt-0.5 text-xs text-slate-500">{lastScannedResult.error ? lastScannedResult.message : `${lastScannedResult.method}${lastScannedResult.time ? ` • ${lastScannedResult.time} WIB` : ''}`}</p></div></div>}
  </div>
  )}
- </div>
-
- <footer className="flex shrink-0 flex-col-reverse gap-2 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 p-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900 dark:border-emerald-800/60 dark:bg-card-dark sm:flex-row sm:justify-end">
- <button type="button" onClick={() => setShowAttendanceMethodModal(false)} className="h-9 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 px-4 text-xs font-bold text-slate-600 transition hover:bg-slate-50 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-slate-800">Tutup</button>
- <button type="button" onClick={handleSaveAttendance} className="flex h-9 items-center justify-center gap-2 rounded-lg bg-emerald-600 px-5 text-xs font-bold text-white transition border border-emerald-200/80 dark:border-emerald-800/60 text-sm font-medium"><Save className="h-4 w-4" /> Simpan Presensi</button>
- </footer>
- </section>
- </div>
- )}
+ </AppModal>
 
  {/* MODAL DETAIL DATA PRESENSI PERORANGAN SISWA (STYLE LEMBAR TAHFIZH WORKSPACE) */}
  {showStudentAttendanceDetailModal && selectedStudentAttendanceDetail && (() => {
@@ -11121,31 +11036,22 @@ export default function TeacherTeachingWorkspacePage() {
  const subjectName = activeSchedule?.subject?.name || activeSchedule?.subject?.nama_mapel || activeSchedule?.nama_mapel || 'Mata Pelajaran'
 
  return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/65 p-3 backdrop-blur-sm sm:p-5" role="dialog" aria-modal="true" aria-labelledby="attendance-detail-title">
- <div className="flex max-h-[94vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl dark:border-emerald-700/80 dark:bg-card-dark">
-
- {/* Header Style Tahfizh */}
- <header className="flex shrink-0 flex-col gap-4 border-b border-emerald-200/80 p-5 sm:flex-row sm:items-center sm:justify-between dark:border-emerald-700/80">
- <div className="flex min-w-0 items-center gap-3">
- <div className="flex h-9 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
- <UserCheck className="h-5 w-5" />
- </div>
- <div className="min-w-0">
- <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
- Lembar Presensi & Rekapitulasi Kehadiran Siswa
- </p>
- <h2 id="attendance-detail-title" className=" text-lg font-black text-slate-900 dark:text-white">
- {student.nama_lengkap || student.full_name}
- </h2>
- <p className="text-xs text-slate-500">
- {student.nis || student.nisn || 'NIS belum tersedia'} · Rombel {selectedClassName} · Mapel: {subjectName}
- </p>
- </div>
- </div>
-
- {/* Filter Periode Tab Buttons & Close */}
- <div className="flex flex-wrap items-center gap-2">
- <div className="inline-flex rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-slate-50 p-1 dark:border-emerald-700/80 dark:bg-slate-900">
+ <AppModal
+ isOpen={true}
+ onClose={() => {
+ setShowStudentAttendanceDetailModal(false)
+ setSelectedStudentAttendanceDetail(null)
+ setStudentDetailSessions([])
+ }}
+ zIndex={70}
+ maxWidth="max-w-4xl"
+ title={student.nama_lengkap || student.full_name}
+ badge="Lembar Presensi"
+ description={`${student.nis || student.nisn || 'NIS belum tersedia'} · Rombel ${selectedClassName} · Mapel: ${subjectName}`}
+ icon={UserCheck}
+ subHeader={
+ <div className="flex flex-wrap items-center justify-between gap-2 bg-emerald-50/90 dark:bg-emerald-950/40 border-b border-emerald-200/80 dark:border-emerald-800/60 px-5 sm:px-6 py-2.5">
+ <div className="inline-flex rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white/80 p-1 dark:bg-slate-900">
  {[
  { id: 'harian', label: 'Harian', count: periodCounts.harian },
  { id: 'mingguan', label: 'Mingguan', count: periodCounts.mingguan },
@@ -11162,25 +11068,34 @@ export default function TeacherTeachingWorkspacePage() {
  setStudentDetailPage(1)
  }}
  className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition ${isActive
- ? 'bg-emerald-700 text-white shadow-sm'
- : 'text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white'
+ ? 'bg-emerald-600 text-white shadow-sm'
+ : 'text-slate-600 hover:text-emerald-700 dark:text-slate-300 dark:hover:text-white'
  }`}
  >
  <span>{t.label}</span>
- <span className={`rounded-full px-1.5 py-0.2 text-[9px] font-extrabold ${isActive ? 'bg-emerald-800 text-white' : 'bg-slate-200 text-slate-600 dark:bg-emerald-950/60 dark:text-emerald-300'}`}>
+ <span className={`rounded-md px-1.5 py-0.2 text-[10px] font-extrabold ${isActive ? 'bg-white text-emerald-800' : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'}`}>
  {t.count}
  </span>
  </button>
  )
  })}
  </div>
-
- <div className="hidden sm:block min-w-36 text-center border-l border-emerald-200/80 pl-3 dark:border-emerald-700/80">
- <p className="text-[10px] font-bold uppercase text-slate-400">Periode</p>
- <p className="text-xs font-bold text-slate-800 dark:text-white truncate max-w-[160px]" title={periodDetailDesc[studentDetailPeriodFilter]}>
+ <div className="text-xs font-bold text-emerald-800 dark:text-emerald-300 truncate" title={periodDetailDesc[studentDetailPeriodFilter]}>
  {periodDetailDesc[studentDetailPeriodFilter]}
- </p>
  </div>
+ </div>
+ }
+ bodyClassName="p-4 sm:p-5"
+ footer={
+ <div className="flex w-full flex-wrap items-center justify-between gap-2">
+ <button
+ type="button"
+ onClick={() => handlePrintSingleStudentAttendance(student, studentDetailPeriodFilter)}
+ className="inline-flex h-9 items-center justify-center gap-2 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-emerald-50 px-4 text-xs font-bold text-emerald-800 shadow-sm transition hover:bg-emerald-100 dark:bg-emerald-950/60 dark:text-emerald-300 dark:hover:bg-emerald-900 cursor-pointer"
+ >
+ <Printer className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+ <span>Cetak Lembar Presensi ({studentDetailPeriodFilter.toUpperCase()})</span>
+ </button>
 
  <button
  type="button"
@@ -11189,15 +11104,13 @@ export default function TeacherTeachingWorkspacePage() {
  setSelectedStudentAttendanceDetail(null)
  setStudentDetailSessions([])
  }}
- aria-label="Tutup detail"
- className="ml-1 inline-flex h-9 w-10 items-center justify-center rounded-xl text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+ className="h-9 rounded-xl border border-slate-300 bg-slate-200 hover:bg-slate-300 px-5 text-xs font-black text-slate-700 dark:bg-slate-800 dark:text-slate-200 cursor-pointer"
  >
- <X className="h-5 w-5" />
+ Tutup Detail
  </button>
  </div>
- </header>
-
- {/* Body Content */}
+ }
+ >
  <div className="min-h-0 overflow-y-auto p-4 sm:p-5 space-y-4">
  {loadingStudentDetailSessions && (
  <div className="flex items-center justify-center gap-2 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-emerald-50/80 p-3 text-xs font-bold text-emerald-800 dark:border-emerald-800/60 dark:bg-emerald-950/40 dark:text-emerald-300 animate-pulse">
@@ -11457,32 +11370,7 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
  )}
  </div>
-
- {/* Footer Modal Style Tahfizh */}
- <footer className="flex shrink-0 flex-wrap items-center justify-between border-t border-emerald-200/80 bg-white p-4 dark:border-emerald-700/80 dark:bg-card-dark">
- <button
- type="button"
- onClick={() => handlePrintSingleStudentAttendance(student, studentDetailPeriodFilter)}
- className="inline-flex h-9 items-center justify-center gap-2 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-emerald-50 px-4 text-xs font-bold text-emerald-800 shadow-sm transition hover:bg-emerald-100 hover:border-emerald-300 dark:hover:border-emerald-700/80 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300 dark:hover:bg-emerald-900 cursor-pointer"
- >
- <Printer className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
- <span>Cetak Lembar Presensi ({studentDetailPeriodFilter.toUpperCase()})</span>
- </button>
-
- <button
- type="button"
- onClick={() => {
- setShowStudentAttendanceDetailModal(false)
- setSelectedStudentAttendanceDetail(null)
- setStudentDetailSessions([])
- }}
- className="h-9 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 px-5 text-xs font-bold text-slate-700 hover:bg-slate-50 dark:border-emerald-700/80 dark:text-slate-200 dark:hover:bg-slate-800 cursor-pointer"
- >
- Tutup Detail
- </button>
- </footer>
- </div>
- </div>
+ </AppModal>
  )
  })()}
 
@@ -11522,25 +11410,19 @@ export default function TeacherTeachingWorkspacePage() {
  }
 
  return (
- <div className="fixed inset-0 z-[80] flex items-center justify-center bg-slate-950/65 p-3 backdrop-blur-sm sm:p-5" role="dialog" aria-modal="true">
- <div className="flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl dark:border-emerald-700/80 dark:bg-card-dark">
- {/* Header Modal */}
- <div className="flex shrink-0 items-center justify-between border-b border-emerald-200/80 p-4 sm:p-5 dark:border-emerald-700/80 bg-slate-50/50 dark:bg-slate-900/50">
- <div className="flex items-center gap-3">
- <div className="flex h-9 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 border border-emerald-200/80 text-slate-700 shadow-xs dark:bg-slate-800 dark:border-emerald-700/80 dark:text-slate-300">
- <UserCheck className="h-5 w-5" />
- </div>
- <div>
- <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
- Detail Presensi • Pertemuan ke-{session.meeting_number || 1}
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- {session.schedule?.subject?.name || 'Mata Pelajaran'} • {session.schedule?.kelas?.name || selectedClassName} • {dateFormatted} ({timeRange})
- </p>
- </div>
- </div>
-
- <div className="flex items-center gap-2">
+ <AppModal
+ isOpen={true}
+ onClose={() => {
+ setIsEditingHistorySession(false)
+ setShowHistorySessionModal(false)
+ }}
+ zIndex={80}
+ maxWidth="max-w-4xl"
+ title={`Detail Presensi • Pertemuan ke-${session.meeting_number || 1}`}
+ description={`${session.schedule?.subject?.name || 'Mata Pelajaran'} • ${session.schedule?.kelas?.name || selectedClassName} • ${dateFormatted} (${timeRange})`}
+ icon={UserCheck}
+ headerActions={
+ <div className="flex items-center gap-1.5">
  <button
  type="button"
  onClick={() => {
@@ -11551,8 +11433,8 @@ export default function TeacherTeachingWorkspacePage() {
  }
  }}
  className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-bold shadow-xs transition cursor-pointer ${isEditingHistorySession
- ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-amber-500 text-white hover:bg-amber-600'
- : 'border-emerald-200/80 dark:border-emerald-800/60 bg-amber-50 text-amber-800 hover:bg-amber-100 dark:border-emerald-800/60 dark:bg-amber-950/40 dark:text-amber-300'
+ ? 'border-amber-400 bg-amber-500 text-white hover:bg-amber-600'
+ : 'border-white/30 bg-white/20 text-white hover:bg-white/30'
  }`}
  title={isEditingHistorySession ? 'Batalkan mode koreksi' : 'Koreksi kesalahan data presensi sesi ini'}
  >
@@ -11564,7 +11446,7 @@ export default function TeacherTeachingWorkspacePage() {
  type="button"
  onClick={() => handlePrintSingleHistorySession(session)}
  title="Cetak Berita Acara & Presensi Sesi Ini"
- className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3 py-1.5 text-xs font-bold text-emerald-700 shadow-xs transition hover:bg-emerald-50 hover:border-emerald-300 dark:hover:border-emerald-700/80 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-emerald-300 cursor-pointer"
+ className="inline-flex items-center gap-1.5 rounded-xl border border-white/30 bg-white/20 px-3 py-1.5 text-xs font-bold text-white shadow-xs transition hover:bg-white/30 cursor-pointer"
  >
  <Printer className="h-3.5 w-3.5" />
  <span className="hidden sm:inline">Cetak</span>
@@ -11574,7 +11456,7 @@ export default function TeacherTeachingWorkspacePage() {
  type="button"
  onClick={() => handleDownloadSingleHistorySessionPdf(session)}
  title="Unduh Lembar Presensi Sesi (PDF)"
- className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3 py-1.5 text-xs font-bold text-emerald-700 shadow-xs transition hover:bg-emerald-50 hover:border-emerald-300 dark:hover:border-emerald-700/80 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-emerald-300 cursor-pointer"
+ className="inline-flex items-center gap-1.5 rounded-xl border border-white/30 bg-white/20 px-3 py-1.5 text-xs font-bold text-white shadow-xs transition hover:bg-white/30 cursor-pointer"
  >
  <FileText className="h-3.5 w-3.5" />
  <span className="hidden sm:inline">PDF</span>
@@ -11584,28 +11466,18 @@ export default function TeacherTeachingWorkspacePage() {
  type="button"
  onClick={() => handleExportSingleHistorySessionCsv(session)}
  title="Export Presensi Sesi ke Excel (.csv)"
- className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3 py-1.5 text-xs font-bold text-emerald-700 shadow-xs transition hover:bg-emerald-50 hover:border-emerald-300 dark:hover:border-emerald-700/80 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-emerald-300 cursor-pointer"
+ className="inline-flex items-center gap-1.5 rounded-xl border border-white/30 bg-white/20 px-3 py-1.5 text-xs font-bold text-white shadow-xs transition hover:bg-white/30 cursor-pointer"
  >
  <Download className="h-3.5 w-3.5" />
  <span className="hidden sm:inline">Excel</span>
  </button>
-
- <button
- type="button"
- onClick={() => {
- setIsEditingHistorySession(false)
- setShowHistorySessionModal(false)
- }}
- className="rounded-xl p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200 cursor-pointer"
- >
- <X className="h-5 w-5" />
- </button>
  </div>
- </div>
-
+ }
+ subHeader={
+ <>
  {/* Mode Koreksi Alert Banner */}
  {isEditingHistorySession && (
- <div className="flex flex-wrap items-center justify-between gap-2 bg-white dark:bg-card-dark dark:from-amber-950/40 dark:to-orange-950/30 border-b border-emerald-200/80 dark:border-emerald-800/80 px-4 py-2.5 text-xs text-amber-900 dark:text-amber-200">
+ <div className="flex flex-wrap items-center justify-between gap-2 bg-amber-50/90 dark:bg-amber-950/40 border-b border-emerald-200/80 dark:border-emerald-800/80 px-4 py-2.5 text-xs text-amber-900 dark:text-amber-200">
  <div className="flex items-center gap-2">
  <AlertCircle className="h-4 w-4 text-amber-600 shrink-0" />
  <span><strong>Mode Koreksi Aktif:</strong> Ubah status kehadiran atau keterangan siswa yang salah input di bawah, lalu klik Simpan Koreksi.</span>
@@ -11614,7 +11486,7 @@ export default function TeacherTeachingWorkspacePage() {
  type="button"
  onClick={handleSaveHistoryCorrection}
  disabled={isSavingHistoryEdit}
- className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-600 disabled:opacity-50 text-white rounded-lg text-xs font-bold transition shadow-sm cursor-pointer shrink-0 border border-emerald-200/80 dark:border-emerald-800/60 h-9 text-sm font-medium"
+ className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-600 disabled:opacity-50 text-white rounded-lg text-xs font-bold transition shadow-sm cursor-pointer shrink-0 border border-emerald-200/80 dark:border-emerald-800/60 h-9"
  >
  {isSavingHistoryEdit ? <RefreshCw className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
  <span>Simpan Koreksi</span>
@@ -11623,7 +11495,7 @@ export default function TeacherTeachingWorkspacePage() {
  )}
 
  {/* Sub-header Stats & Search */}
- <div className="shrink-0 border-b border-emerald-200/80 dark:border-emerald-800/60 p-4 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/40">
+ <div className="shrink-0 border-b border-emerald-200/80 dark:border-emerald-800/60 p-4 bg-slate-50/50 dark:bg-slate-900/40">
  <div className="flex flex-wrap items-center justify-between gap-3">
  <div className="flex flex-wrap items-center gap-2">
  <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
@@ -11650,14 +11522,78 @@ export default function TeacherTeachingWorkspacePage() {
  value={historySessionStudentSearch}
  onChange={(e) => setHistorySessionStudentSearch(e.target.value)}
  placeholder="Cari nama / NISN siswa..."
- className="h-8 w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-8 pr-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-white"
+ className="h-8 w-full rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-8 pr-3 text-xs outline-none focus:border-emerald-500 dark:bg-slate-800 dark:text-white"
  />
  </div>
  </div>
  </div>
+ </>
+ }
+ bodyClassName="p-4"
+ footer={
+ <div className="flex w-full flex-wrap items-center justify-between gap-3">
+ <div className="flex flex-wrap items-center gap-2">
+ {isEditingHistorySession ? (
+ <button
+ type="button"
+ onClick={handleSaveHistoryCorrection}
+ disabled={isSavingHistoryEdit}
+ className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 disabled:opacity-50 px-4 py-2 text-xs font-bold text-white shadow-md transition cursor-pointer border border-emerald-200/80 dark:border-emerald-800/60 h-9"
+ >
+ {isSavingHistoryEdit ? (
+ <>
+ <RefreshCw className="h-4 w-4 animate-spin" /> Menyimpan Koreksi...
+ </>
+ ) : (
+ <>
+ <Save className="h-4 w-4" /> Simpan Koreksi Presensi
+ </>
+ )}
+ </button>
+ ) : (
+ <>
+ <button
+ type="button"
+ onClick={() => handlePrintSingleHistorySession(session)}
+ className="inline-flex items-center gap-1.5 rounded-xl bg-[#059669] hover:bg-[#047857] text-white dark:bg-[#18A972] dark:hover:bg-[#059669] dark:text-white px-4 py-2 text-xs font-bold shadow-sm transition cursor-pointer"
+ >
+ <Printer className="h-4 w-4" /> Cetak Lembar Presensi Sesi
+ </button>
+ <button
+ type="button"
+ onClick={() => handleExportSingleHistorySessionCsv(session)}
+ className="inline-flex items-center gap-1.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white px-3.5 py-2 text-xs font-bold text-emerald-700 shadow-xs hover:bg-emerald-50 dark:bg-slate-800 dark:text-emerald-300 cursor-pointer"
+ >
+ <Download className="h-4 w-4" /> Export Excel (.csv)
+ </button>
+ </>
+ )}
+ </div>
 
- {/* Table of Students */}
- <div className="flex-1 overflow-y-auto p-4">
+ <div className="flex items-center gap-2">
+ {isEditingHistorySession && (
+ <button
+ type="button"
+ onClick={() => setIsEditingHistorySession(false)}
+ className="rounded-xl border border-slate-300 bg-slate-200 hover:bg-slate-300 px-4 py-2 text-xs font-bold text-slate-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 cursor-pointer"
+ >
+ Batal
+ </button>
+ )}
+ <button
+ type="button"
+ onClick={() => {
+ setIsEditingHistorySession(false)
+ setShowHistorySessionModal(false)
+ }}
+ className="rounded-xl border border-slate-300 bg-slate-200 hover:bg-slate-300 px-4 py-2 text-xs font-bold text-slate-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 cursor-pointer"
+ >
+ Tutup
+ </button>
+ </div>
+ </div>
+ }
+ >
  {filteredAttList.length === 0 ? (
  <div className="py-12 text-center text-xs text-slate-500">
  {attList.length === 0
@@ -11757,72 +11693,7 @@ export default function TeacherTeachingWorkspacePage() {
  </table>
  </div>
  )}
- </div>
-
- {/* Footer Modal */}
- <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-t border-emerald-200/80 p-4 dark:border-emerald-700/80 bg-slate-50/50 dark:bg-slate-900/40">
- <div className="flex flex-wrap items-center gap-2">
- {isEditingHistorySession ? (
- <button
- type="button"
- onClick={handleSaveHistoryCorrection}
- disabled={isSavingHistoryEdit}
- className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 disabled:opacity-50 px-4 py-2 text-xs font-bold text-white shadow-md transition cursor-pointer border border-emerald-200/80 dark:border-emerald-800/60 h-9 text-sm font-medium"
- >
- {isSavingHistoryEdit ? (
- <>
- <RefreshCw className="h-4 w-4 animate-spin" /> Menyimpan Koreksi...
- </>
- ) : (
- <>
- <Save className="h-4 w-4" /> Simpan Koreksi Presensi
- </>
- )}
- </button>
- ) : (
- <>
- <button
- type="button"
- onClick={() => handlePrintSingleHistorySession(session)}
- className="inline-flex items-center gap-1.5 rounded-xl bg-[#059669] hover:bg-[#047857] text-white dark:bg-[#18A972] dark:hover:bg-[#059669] dark:text-white px-4 py-2 text-xs font-bold shadow-sm transition hover:from-emerald-700 hover:to-teal-700 cursor-pointer"
- >
- <Printer className="h-4 w-4" /> Cetak Lembar Presensi Sesi
- </button>
- <button
- type="button"
- onClick={() => handleExportSingleHistorySessionCsv(session)}
- className="inline-flex items-center gap-1.5 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-3.5 py-2 text-xs font-bold text-emerald-700 shadow-xs hover:bg-emerald-50 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-emerald-300 cursor-pointer"
- >
- <Download className="h-4 w-4" /> Export Excel (.csv)
- </button>
- </>
- )}
- </div>
-
- <div className="flex items-center gap-2">
- {isEditingHistorySession && (
- <button
- type="button"
- onClick={() => setIsEditingHistorySession(false)}
- className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 cursor-pointer"
- >
- Batal
- </button>
- )}
- <button
- type="button"
- onClick={() => {
- setIsEditingHistorySession(false)
- setShowHistorySessionModal(false)
- }}
- className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 cursor-pointer"
- >
- Tutup
- </button>
- </div>
- </div>
- </div>
- </div>
+ </AppModal>
  )
  })()}
 
@@ -12493,13 +12364,27 @@ export default function TeacherTeachingWorkspacePage() {
 
  {/* DETAIL JURNAL TAHFIZH MINGGUAN */}
  {showTahfizhDetail && tahfizhDetailStudent && (
- <div className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/65 p-3 backdrop-blur-sm sm:p-5" role="dialog" aria-modal="true" aria-labelledby="tahfizh-detail-title">
- <div className="flex max-h-[94vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl dark:border-emerald-700/80 dark:bg-card-dark">
- <header className="flex shrink-0 flex-col gap-4 border-b border-emerald-200/80 p-5 sm:flex-row sm:items-center sm:justify-between dark:border-emerald-700/80">
- <div className="flex min-w-0 items-center gap-3"><div className="flex h-9 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300"><BookOpen className="h-5 w-5" /></div><div className="min-w-0"><p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">Lembar Kegiatan Tahfizh</p><h2 id="tahfizh-detail-title" className=" text-lg font-black text-slate-900 dark:text-white">{tahfizhDetailStudent.nama_lengkap}</h2><p className="text-xs text-slate-500">{tahfizhDetailStudent.nis || tahfizhDetailStudent.nisn || 'NIS belum tersedia'} · {selectedClassName}</p></div></div>
- <div className="flex items-center gap-2"><button type="button" onClick={() => setTahfizhWeekOffset((value) => value - 1)} aria-label="Minggu sebelumnya" className="inline-flex h-9 w-10 items-center justify-center rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 text-slate-600 hover:bg-slate-50 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-slate-800"><ChevronLeft className="h-4 w-4" /></button><div className="min-w-44 text-center"><p className="text-[10px] font-bold uppercase text-slate-400">Periode</p><p className="text-xs font-bold text-slate-800 dark:text-white">{new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short' }).format(tahfizhWeekRows[0].date)} – {new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }).format(tahfizhWeekRows[6].date)}</p></div><button type="button" onClick={() => setTahfizhWeekOffset((value) => Math.min(value + 1, 0))} disabled={tahfizhWeekOffset >= 0} aria-label="Minggu berikutnya" className="inline-flex h-9 w-10 items-center justify-center rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 text-slate-600 hover:bg-slate-50 disabled:opacity-40 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-slate-800"><ChevronRight className="h-4 w-4" /></button><button type="button" onClick={() => setShowTahfizhDetail(false)} aria-label="Tutup detail" className="ml-1 inline-flex h-9 w-10 items-center justify-center rounded-xl text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"><X className="h-5 w-5" /></button></div>
- </header>
- <div className="min-h-0 overflow-y-auto p-4 sm:p-5">
+ <AppModal
+ isOpen={true}
+ onClose={() => setShowTahfizhDetail(false)}
+ zIndex={70}
+ maxWidth="max-w-4xl"
+ title={tahfizhDetailStudent.nama_lengkap}
+ badge="Lembar Kegiatan Tahfizh"
+ description={`${tahfizhDetailStudent.nis || tahfizhDetailStudent.nisn || 'NIS belum tersedia'} · ${selectedClassName}`}
+ icon={BookOpen}
+ headerActions={
+ <div className="flex items-center gap-2">
+ <button type="button" onClick={() => setTahfizhWeekOffset((value) => value - 1)} aria-label="Minggu sebelumnya" className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-white/30 bg-white/20 text-white hover:bg-white/30"><ChevronLeft className="h-4 w-4" /></button>
+ <div className="min-w-36 text-center"><p className="text-[10px] font-bold uppercase text-emerald-100">Periode</p><p className="text-xs font-bold text-white">{new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short' }).format(tahfizhWeekRows[0].date)} – {new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }).format(tahfizhWeekRows[6].date)}</p></div>
+ <button type="button" onClick={() => setTahfizhWeekOffset((value) => Math.min(value + 1, 0))} disabled={tahfizhWeekOffset >= 0} aria-label="Minggu berikutnya" className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-white/30 bg-white/20 text-white hover:bg-white/30 disabled:opacity-40"><ChevronRight className="h-4 w-4" /></button>
+ </div>
+ }
+ bodyClassName="p-4 sm:p-5"
+ footer={
+ <button type="button" onClick={() => setShowTahfizhDetail(false)} className="h-9 rounded-xl border border-slate-300 bg-slate-200 hover:bg-slate-300 px-5 text-xs font-black text-slate-700 dark:bg-slate-800 dark:text-slate-200">Tutup Detail</button>
+ }
+ >
  <div className="space-y-3 lg:hidden">
  {tahfizhWeekRows.map(({ date, dateKey, log }, index) => (
  <article key={dateKey} className="overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-700/80">
@@ -12516,45 +12401,135 @@ export default function TeacherTeachingWorkspacePage() {
  <tbody>{tahfizhWeekRows.map(({ date, dateKey, log }, index) => <tr key={dateKey} className="h-24 align-top hover:bg-emerald-50/40 transition-colors dark:hover:bg-emerald-950/30"><td className="border border-emerald-200/80 dark:border-emerald-800/60 p-3 text-center font-bold dark:border-slate-600">{index + 1}</td><td className="border border-emerald-200/80 dark:border-emerald-800/60 p-3 dark:border-slate-600"><p className="font-bold text-slate-900 dark:text-white">{new Intl.DateTimeFormat('id-ID', { weekday: 'long' }).format(date)}</p><p className="mt-1 text-[10px] text-slate-500">{new Intl.DateTimeFormat('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(date)}</p></td><td className="border border-emerald-200/80 dark:border-emerald-800/60 p-3 dark:border-slate-600">{log?.tilawah_text || '—'}</td><td className="border border-emerald-200/80 dark:border-emerald-800/60 p-3 text-center dark:border-slate-600">{log?.tilawah_baris || '—'}</td><td className="border border-emerald-200/80 dark:border-emerald-800/60 p-3 dark:border-slate-600">{log?.hafalan_surah_name ? <><p className="font-bold">{log.hafalan_surah_name}</p><p className="mt-1 text-[10px] text-slate-500">Ayat {log.hafalan_ayah_start}–{log.hafalan_ayah_end} · Juz {log.metadata?.juz || '-'}</p></> : '—'}</td><td className="border border-emerald-200/80 dark:border-emerald-800/60 p-3 text-center dark:border-slate-600">{log?.hafalan_baris || (log ? `${Number(log.hafalan_ayah_end) - Number(log.hafalan_ayah_start) + 1} ayat` : '—')}</td><td className="border border-emerald-200/80 dark:border-emerald-800/60 p-3 dark:border-slate-600">{log?.murajaah_text || '—'}</td><td className="border border-emerald-200/80 dark:border-emerald-800/60 p-3 text-center dark:border-slate-600">{log?.murajaah_lembar || '—'}</td><td className="border border-emerald-200/80 dark:border-emerald-800/60 p-3 dark:border-slate-600">{log?.notes_teacher || '—'}</td><td className="border border-emerald-200/80 dark:border-emerald-800/60 p-3 text-center dark:border-slate-600">{log?.signature_teacher ? <CheckCircle2 className="mx-auto h-5 w-5 text-emerald-600" aria-label="Sudah ditandatangani" /> : '—'}</td></tr>)}</tbody>
  <tfoot><tr className="bg-slate-50 align-top dark:bg-slate-800/60"><td colSpan="8" className="h-20 border border-emerald-200/80 dark:border-emerald-800/60 p-3 dark:border-slate-600"><strong>Catatan Guru:</strong><p className="mt-1 font-normal text-slate-600 dark:text-slate-300">{tahfizhWeekRows.map(({ log }) => log?.notes_teacher).filter(Boolean).at(-1) || 'Belum ada catatan guru pada minggu ini.'}</p></td><td colSpan="2" className="border border-emerald-200/80 dark:border-emerald-800/60 p-3 dark:border-slate-600"><strong>Guru:</strong><p className="mt-2 font-normal">{teacherName}</p></td></tr><tr className="bg-slate-50 align-top dark:bg-slate-800/60"><td colSpan="8" className="h-20 border border-emerald-200/80 dark:border-emerald-800/60 p-3 dark:border-slate-600"><strong>Catatan Orang Tua:</strong><p className="mt-1 font-normal text-slate-600 dark:text-slate-300">{tahfizhWeekRows.map(({ log }) => log?.notes_parent).filter(Boolean).at(-1) || 'Belum ada catatan orang tua pada minggu ini.'}</p></td><td colSpan="2" className="border border-emerald-200/80 dark:border-emerald-800/60 p-3 dark:border-slate-600"><strong>Ttd Orang Tua:</strong><p className="mt-2 font-normal">{tahfizhWeekRows.some(({ log }) => log?.signature_parent) ? 'Sudah ditandatangani' : 'Belum ditandatangani'}</p></td></tr></tfoot>
  </table>
- </div>
- <footer className="flex shrink-0 justify-end border-t border-emerald-200/80 bg-white p-4 dark:border-emerald-700/80 dark:bg-card-dark"><button type="button" onClick={() => setShowTahfizhDetail(false)} className="h-9 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 px-5 text-xs font-bold text-slate-700 hover:bg-slate-50 dark:border-emerald-700/80 dark:text-slate-200 dark:hover:bg-slate-800">Tutup Detail</button></footer>
- </div>
- </div>
+ </AppModal>
  )}
 
  {/* CREATE / EDIT / DELETE MODALS */}
- {showModal && (
- <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-y-auto">
- <div className={
- modalType === 'materi'
- ? 'bg-white dark:bg-card-dark w-full max-w-xl rounded-3xl shadow-2xl shadow-emerald-950/20 border-2 border-emerald-300 dark:border-emerald-800/60 relative my-auto max-h-[92vh] overflow-hidden p-0 flex flex-col'
- : modalType === 'tahfizh'
- ? 'bg-white dark:bg-card-dark w-full max-w-4xl rounded-xl p-5 sm:p-7 shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 relative my-auto max-h-[92vh] overflow-y-auto space-y-4'
- : [
- 'bg-white dark:bg-card-dark w-full rounded-xl p-5 sm:p-6 shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 relative my-auto max-h-[92vh] overflow-y-auto space-y-4',
- modalType === 'tugas' || modalType === 'pelanggaran' ? 'max-w-xl' : 'max-w-xl',
- ].join(' ')
- }>
- {modalType !== 'materi' && (
- <button
- onClick={() => {
- setShowModal(false);
- setEditingId(null);
+ <AppModal
+ isOpen={showModal}
+ onClose={() => {
+ setShowModal(false)
+ setEditingId(null)
  if (modalType === 'tugas') {
- setSoalList([]);
- resetSoalForm();
+ setSoalList([])
+ resetSoalForm()
  }
  }}
- className="sticky top-0 float-right z-20 -mr-1 -mt-1 p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition bg-white/80 dark:bg-card-dark/80 backdrop-blur-sm shadow-sm border border-emerald-200/80 dark:border-emerald-800/60"
- title="Tutup"
+ zIndex={50}
+ variant={modalType === 'delete-confirm' ? 'danger' : 'emerald'}
+ maxWidth={modalType === 'delete-confirm' ? 'max-w-md' : modalType === 'tahfizh' ? 'max-w-4xl' : 'max-w-xl'}
+ title={
+ modalType === 'materi'
+ ? undefined
+ : modalType === 'delete-confirm'
+ ? 'Konfirmasi Hapus Data'
+ : modalType === 'tahfizh'
+ ? "Pencatatan Setoran Tahfizh Al-Qur'an"
+ : `${editingId ? 'Edit' : 'Form Input'} ${modalType}`
+ }
+ badge={
+ modalType === 'delete-confirm'
+ ? 'Hapus Permanen'
+ : modalType === 'tahfizh'
+ ? (editingId ? 'Edit Setoran' : 'Input Setoran Baru')
+ : undefined
+ }
+ description={
+ modalType === 'tahfizh'
+ ? 'Bimbingan dan evaluasi capaian hafalan santri/siswa sesuai target kurikulum'
+ : undefined
+ }
+ icon={
+ modalType === 'delete-confirm'
+ ? AlertTriangle
+ : modalType === 'tahfizh'
+ ? BookOpen
+ : modalType === 'materi'
+ ? undefined
+ : Plus
+ }
+ bodyClassName={modalType === 'materi' ? 'p-0 space-y-0 max-h-[92vh]' : 'p-5 sm:p-6 space-y-4'}
+ footer={
+ modalType === 'delete-confirm' ? (
+ <>
+ <button
+ type="button"
+ onClick={() => setShowModal(false)}
+ className="px-4 py-2 border border-slate-300 bg-slate-200 hover:bg-slate-300 rounded-xl text-xs font-black text-slate-700 dark:bg-slate-800 dark:text-slate-200"
  >
- <X className="w-5 h-5" />
+ Batal
  </button>
- )}
-
+ <button
+ type="button"
+ onClick={handleExecuteDelete}
+ className="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl shadow-md"
+ >
+ Ya, Hapus Data
+ </button>
+ </>
+ ) : modalType === 'tugas' ? (
+ <>
+ <button type="button" onClick={() => { setShowModal(false); setEditingId(null); }} className="px-4 py-2 border border-slate-300 bg-slate-200 hover:bg-slate-300 rounded-xl text-slate-700 dark:bg-slate-800 dark:text-slate-200 font-black text-xs">
+ Batal
+ </button>
+ <button type="submit" form="form-tugas" disabled={savingTugas} className="inline-flex min-w-32 items-center justify-center gap-2 px-4 py-2 bg-[#059669] hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-md disabled:cursor-wait disabled:opacity-60">
+ {savingTugas && <RefreshCw className="h-4 w-4 animate-spin" />}
+ {savingTugas ? 'Menerbitkan...' : editingId ? 'Perbarui Tugas' : 'Terbitkan Tugas'}
+ </button>
+ </>
+ ) : modalType === 'tahfizh' ? (
+ <>
+ <button
+ type="button"
+ onClick={() => setShowModal(false)}
+ className="h-9 px-5 border border-slate-300 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:text-slate-200 rounded-xl text-slate-700 font-black text-xs transition"
+ >
+ Batal
+ </button>
+ <button
+ type="submit"
+ form="form-tahfizh"
+ disabled={savingTahfizh || loadingSurahs || !tahfizhForm.student_id || !tahfizhForm.surah_number}
+ className="h-9 inline-flex min-w-40 items-center justify-center gap-2 px-6 bg-emerald-600 hover:bg-emerald-700 rounded-xl font-black shadow-md disabled:opacity-50 active:scale-95 transition text-white text-xs"
+ >
+ {savingTahfizh && <RefreshCw className="h-4 w-4 animate-spin" />}
+ {savingTahfizh ? 'Menyimpan...' : 'Simpan Setoran Tahfizh'}
+ </button>
+ </>
+ ) : modalType === 'catatan' ? (
+ <>
+ <button type="button" onClick={() => { setShowModal(false); setEditingId(null); }} className="px-4 py-2 border border-slate-300 bg-slate-200 hover:bg-slate-300 rounded-xl text-slate-700 dark:bg-slate-800 dark:text-slate-200 font-black text-xs">
+ Batal
+ </button>
+ <button type="submit" form="form-catatan" disabled={savingStudentNote} className="inline-flex min-w-36 items-center justify-center gap-2 rounded-xl bg-[#059669] hover:bg-emerald-700 px-4 py-2 font-bold text-xs text-white shadow-md disabled:opacity-60">
+ {savingStudentNote && <RefreshCw className="h-4 w-4 animate-spin" />}{savingStudentNote ? 'Menyimpan...' : editingId ? 'Simpan Perubahan' : 'Simpan Catatan'}
+ </button>
+ </>
+ ) : modalType === 'pelanggaran' ? (
+ <>
+ <button
+ type="button"
+ onClick={() => setShowModal(false)}
+ className="rounded-xl border border-slate-300 bg-slate-200 hover:bg-slate-300 px-4 py-2 font-black text-xs text-slate-700 transition dark:bg-slate-800 dark:text-slate-200"
+ >
+ Batal
+ </button>
+ <button
+ type="submit"
+ form="form-pelanggaran"
+ disabled={savingPelanggaran}
+ className="inline-flex min-w-36 items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 font-bold text-xs shadow-md transition disabled:opacity-60 cursor-pointer"
+ >
+ {savingPelanggaran && <RefreshCw className="h-4 w-4 animate-spin" />}
+ {savingPelanggaran ? 'Menyimpan...' : 'Simpan Penilaian Perilaku'}
+ </button>
+ </>
+ ) : null
+ }
+ >
  {modalType === 'delete-confirm' ? (
  <div role="alertdialog" aria-modal="true" aria-labelledby="delete-confirm-title" className="space-y-4 text-center py-2">
- <div className="w-12 h-9 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto">
+ <div className="w-12 h-12 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto">
  <AlertTriangle className="w-6 h-6" />
  </div>
  <div>
@@ -12562,20 +12537,6 @@ export default function TeacherTeachingWorkspacePage() {
  <p className="text-xs text-slate-500 mt-1">
  Apakah Anda yakin ingin menghapus data <strong>{deleteTarget?.title}</strong>? Tindakan ini tidak dapat dibatalkan.
  </p>
- </div>
- <div className="flex justify-center gap-3 pt-2">
- <button
- onClick={() => setShowModal(false)}
- className="px-4 py-2 border rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50"
- >
- Batal
- </button>
- <button
- onClick={handleExecuteDelete}
- className="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl shadow-md"
- >
- Ya, Hapus Data
- </button>
  </div>
  </div>
  ) : modalType === 'materi' ? (
@@ -12588,33 +12549,8 @@ export default function TeacherTeachingWorkspacePage() {
  />
  ) : (
  <>
- {modalType === 'tahfizh' ? (
- <div className="border-b border-emerald-200/80 dark:border-emerald-800/80 pb-3 -mt-1">
- <div className="flex items-center gap-3">
- <div className="flex h-9 w-11 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-md shadow-xs shrink-0">
- <BookOpen className="h-6 w-6" />
- </div>
- <div className="min-w-0 flex-1">
- <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Pencatatan Setoran Tahfizh Al-Qur'an</span>
- <span className="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-black text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
- {editingId ? 'Edit Setoran' : 'Input Setoran Baru'}
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- Bimbingan dan evaluasi capaian hafalan santri/siswa sesuai target kurikulum
- </p>
- </div>
- </div>
- </div>
- ) : (
- <h3 className="text-base font-bold uppercase tracking-wider text-[#059669] dark:text-emerald-400 flex items-center gap-2">
- <Plus className="w-5 h-5" /> {editingId ? 'Edit' : 'Form Input'} {modalType}
- </h3>
- )}
-
  {modalType === 'tugas' && (
- <form onSubmit={handleSaveTugas} className="space-y-3.5 text-xs">
+ <form id="form-tugas" onSubmit={handleSaveTugas} className="space-y-3.5 text-xs">
  {/* Format Selector: Tugas PR vs Kuis CBT */}
  <div className="p-1 rounded-xl bg-slate-100 dark:bg-slate-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 flex items-center gap-1">
  <button
@@ -13172,14 +13108,13 @@ export default function TeacherTeachingWorkspacePage() {
  : 'bg-[#059669] hover:bg-emerald-800 text-white'
  const tipeShort = { pg: 'PG', esai: 'Essay', benar_salah: 'B/S', menjodohkan: 'Jodoh' }[autoTipe] || autoTipe
  return (
- <button
- type="button"
- onClick={handlePrepareNewSoal}
- className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm transition-all active:scale-95 ${btnColor}`}
- >
- <span className="text-sm leading-none">+</span>
- Tambah Soal #{nextNum} ({tipeShort})
- </button>
+ <SquircleActionButton
+   variant="primary"
+   icon={Plus}
+   label={`Tambah Soal #${nextNum} (${tipeShort})`}
+   onClick={handlePrepareNewSoal}
+   showLabel
+ />
  )
  })()}
  </div>
@@ -13310,20 +13245,11 @@ export default function TeacherTeachingWorkspacePage() {
  />
  </div>
  </div>
- <div className="flex justify-end gap-2 pt-3">
- <button type="button" onClick={() => { setShowModal(false); setEditingId(null); }} className="px-4 py-2 border rounded-xl text-slate-600 hover:bg-slate-50 font-semibold">
- Batal
- </button>
- <button type="submit" disabled={savingTugas} className="inline-flex min-w-32 items-center justify-center gap-2 px-4 py-2 bg-[#059669] text-white rounded-xl font-bold shadow-md disabled:cursor-wait disabled:opacity-60">
- {savingTugas && <RefreshCw className="h-4 w-4 animate-spin" />}
- {savingTugas ? 'Menerbitkan...' : editingId ? 'Perbarui Tugas' : 'Terbitkan Tugas'}
- </button>
- </div>
  </form>
  )}
 
  {modalType === 'tahfizh' && (
- <form onSubmit={handleSaveTahfizh} className="space-y-4 text-xs">
+ <form id="form-tahfizh" onSubmit={handleSaveTahfizh} className="space-y-4 text-xs">
  {/* 1. SELEKSI SISWA & FILTER ROMBEL */}
  <div className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-emerald-50/50 p-3.5 sm:p-4 dark:border-emerald-800/60 dark:bg-emerald-950/20 space-y-3">
  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -13699,25 +13625,6 @@ export default function TeacherTeachingWorkspacePage() {
  className="w-full border rounded-xl p-3 dark:bg-slate-800 border-emerald-300 dark:border-emerald-700/80 font-semibold text-slate-800 dark:text-white shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
-
- {/* Tombol Aksi */}
- <div className="flex justify-end gap-2.5 pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60">
- <button
- type="button"
- onClick={() => setShowModal(false)}
- className="h-9 px-5 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold transition"
- >
- Batal
- </button>
- <button
- type="submit"
- disabled={savingTahfizh || loadingSurahs || !tahfizhForm.student_id || !tahfizhForm.surah_number}
- className="h-9 inline-flex min-w-40 items-center justify-center gap-2 px-6 bg-emerald-600 dark:bg-slate-100 dark:text-slate-900 dark: rounded-lg font-black shadow-lg shadow-sm disabled:opacity-50 hover:brightness-110 active:scale-95 transition text-white border border-emerald-200/80 dark:border-emerald-800/60 text-sm font-medium"
- >
- {savingTahfizh && <RefreshCw className="h-4 w-4 animate-spin" />}
- {savingTahfizh ? 'Menyimpan...' : 'Simpan Setoran Tahfizh'}
- </button>
- </div>
  </form>
  )}
 
@@ -13951,7 +13858,7 @@ export default function TeacherTeachingWorkspacePage() {
  </AppModal>
 
  {modalType === 'catatan' && (
- <form onSubmit={handleSaveCatatan} className="space-y-3.5 text-xs">
+ <form id="form-catatan" onSubmit={handleSaveCatatan} className="space-y-3.5 text-xs">
  <div className="flex items-center justify-between"><div><h3 className="text-base font-extrabold text-slate-900 dark:text-white">{editingId ? 'Edit Catatan Siswa' : 'Tambah Catatan Siswa'}</h3><p className="mt-0.5 text-[10px] text-slate-500">Catat perkembangan dan rencana tindak lanjut siswa.</p></div><button type="button" onClick={() => setShowModal(false)} className="rounded-lg p-2 text-slate-400 hover:bg-slate-100"><X className="h-4 w-4" /></button></div>
  <div>
  <label className="mb-1 block font-semibold text-slate-700 dark:text-slate-200">Siswa</label>
@@ -14031,19 +13938,11 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
  <div className="flex items-end gap-4 pb-2"><label className="flex items-center gap-2"><input type="checkbox" checked={catatanForm.visible_to_parent} onChange={(e) => setCatatanForm({ ...catatanForm, visible_to_parent: e.target.checked })} /> Orang tua</label><label className="flex items-center gap-2"><input type="checkbox" checked={catatanForm.visible_to_student} onChange={(e) => setCatatanForm({ ...catatanForm, visible_to_student: e.target.checked })} /> Siswa</label></div>
  </div>
- <div className="flex justify-end gap-2 pt-3">
- <button type="button" onClick={() => { setShowModal(false); setEditingId(null); }} className="px-4 py-2 border rounded-xl text-slate-600 hover:bg-slate-50 font-semibold">
- Batal
- </button>
- <button type="submit" disabled={savingStudentNote} className="inline-flex min-w-36 items-center justify-center gap-2 rounded-xl bg-[#059669] px-4 py-2 font-bold text-white shadow-md disabled:opacity-60">
- {savingStudentNote && <RefreshCw className="h-4 w-4 animate-spin" />}{savingStudentNote ? 'Menyimpan...' : editingId ? 'Simpan Perubahan' : 'Simpan Catatan'}
- </button>
- </div>
  </form>
  )}
 
  {modalType === 'pelanggaran' && (
- <form onSubmit={handleSavePelanggaran} className="space-y-4 text-xs">
+ <form id="form-pelanggaran" onSubmit={handleSavePelanggaran} className="space-y-4 text-xs">
  {/* Header */}
  <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/80 pb-3 dark:border-emerald-800/60">
  <div className="flex items-center gap-2.5">
@@ -14238,60 +14137,37 @@ export default function TeacherTeachingWorkspacePage() {
  />
  </div>
  </div>
-
- {/* Footer Buttons */}
- <div className="flex justify-end gap-2 pt-2 border-t border-emerald-200/80 dark:border-emerald-800/60">
- <button
- type="button"
- onClick={() => setShowModal(false)}
- className="rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 px-4 py-2 font-semibold text-slate-600 transition hover:bg-slate-50 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-slate-800"
- >
- Batal
- </button>
- <button
- type="submit"
- disabled={savingPelanggaran}
- className="inline-flex min-w-36 items-center justify-center gap-2 rounded-xl bg-white dark:bg-card-dark px-4 py-2 font-bold shadow-md transition hover:brightness-110 disabled:opacity-60 cursor-pointer border border-emerald-200/80 dark:border-emerald-800/60"
- >
- {savingPelanggaran && <RefreshCw className="h-4 w-4 animate-spin" />}
- {savingPelanggaran ? 'Menyimpan...' : 'Simpan Penilaian Perilaku'}
- </button>
- </div>
  </form>
  )}
  </>
  )}
- </div>
- </div>
- )}
+ </AppModal>
 
  {/* SUBMISSIONS & GRADES MODAL */}
- {showSubmissionsModal && (
- <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-y-auto">
- <div className="bg-white dark:bg-card-dark w-full max-w-4xl rounded-xl p-5 sm:p-6 shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 relative my-auto max-h-[92vh] flex flex-col space-y-4">
- {/* Header */}
- <div className="flex items-start justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4">
- <div className="flex items-center gap-3">
- <div className="w-10 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 flex items-center justify-center shrink-0">
- <CheckCircle2 className="w-5 h-5" />
- </div>
- <div>
- <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
- Hasil Pengumpulan & Nilai Siswa
- </h3>
- <p className="text-xs text-slate-500 mt-0.5">
- {selectedAssignmentForSubmissions?.judul || selectedAssignmentForSubmissions?.judul_tugas} • Rombel {selectedAssignmentForSubmissions?.kelas?.nama_kelas || selectedAssignmentForSubmissions?.kelas?.name || selectedClassName}
- </p>
- </div>
- </div>
+ <AppModal
+ isOpen={showSubmissionsModal}
+ onClose={() => setShowSubmissionsModal(false)}
+ zIndex={50}
+ maxWidth="max-w-4xl"
+ title="Hasil Pengumpulan & Nilai Siswa"
+ description={`${selectedAssignmentForSubmissions?.judul || selectedAssignmentForSubmissions?.judul_tugas || ''} • Rombel ${selectedAssignmentForSubmissions?.kelas?.nama_kelas || selectedAssignmentForSubmissions?.kelas?.name || selectedClassName}`}
+ icon={CheckCircle2}
+ bodyClassName="p-5 sm:p-6 space-y-4"
+ footer={
+ <div className="flex w-full items-center justify-between gap-3">
+ <span className="text-xs text-slate-500">
+ Nilai yang disimpan akan otomatis tersinkronisasi ke rekap rapor.
+ </span>
  <button
  type="button"
  onClick={() => setShowSubmissionsModal(false)}
- className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+ className="px-4 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-black text-xs rounded-xl border border-slate-300 transition"
  >
- <X className="w-5 h-5" />
+ Selesai & Tutup
  </button>
  </div>
+ }
+ >
 
  {/* Quick Stats Banner */}
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
@@ -14380,33 +14256,37 @@ export default function TeacherTeachingWorkspacePage() {
  ))
  )}
  </div>
-
- {/* Modal Footer */}
- <div className="flex items-center justify-between pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60">
- <span className="text-xs text-slate-500">
- Nilai yang disimpan akan otomatis tersinkronisasi ke rekap rapor.
- </span>
- <button
- type="button"
- onClick={() => setShowSubmissionsModal(false)}
- className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-xl transition"
- >
- Selesai & Tutup
- </button>
- </div>
- </div>
- </div>
- )}
+ </AppModal>
 
  {/* EXPORT OPTIONS MODAL */}
- {showExportModal && (
- <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-start sm:items-center justify-center p-3 sm:p-5 overflow-y-auto">
- <div className="bg-white dark:bg-card-dark w-full max-w-md my-auto rounded-xl p-6 shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 space-y-4">
- <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
- <Download className="w-5 h-5 text-[#059669]" /> Export Data Workspace
- </h3>
- <p className="text-xs text-slate-500">Pilih format berkas yang ingin Anda unduh untuk rekap pengajaran.</p>
-
+ <AppModal
+ isOpen={showExportModal}
+ onClose={() => setShowExportModal(false)}
+ zIndex={50}
+ maxWidth="max-w-md"
+ title="Export Data Workspace"
+ description="Pilih format berkas yang ingin Anda unduh untuk rekap pengajaran."
+ icon={Download}
+ bodyClassName="p-6 space-y-4"
+ footer={
+ <>
+ <button
+ type="button"
+ onClick={() => setShowExportModal(false)}
+ className="px-4 py-2 border border-slate-300 bg-slate-200 hover:bg-slate-300 rounded-xl text-xs font-black text-slate-700 dark:bg-slate-800 dark:text-slate-200"
+ >
+ Batal
+ </button>
+ <button
+ type="button"
+ onClick={handleProcessExport}
+ className="px-4 py-2 bg-[#059669] hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-md"
+ >
+ Unduh Berkas
+ </button>
+ </>
+ }
+ >
  <div className="grid grid-cols-3 gap-3">
  {[
  { id: 'xlsx', label: 'Excel (.xlsx)', icon: FileSpreadsheet },
@@ -14431,43 +14311,24 @@ export default function TeacherTeachingWorkspacePage() {
  )
  })}
  </div>
-
- <div className="flex justify-end gap-2 pt-2">
- <button
- type="button"
- onClick={() => setShowExportModal(false)}
- className="px-4 py-2 border rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50"
- >
- Batal
- </button>
- <button
- type="button"
- onClick={handleProcessExport}
- className="px-4 py-2 bg-[#059669] text-white text-xs font-bold rounded-xl shadow-md"
- >
- Unduh Berkas
- </button>
- </div>
- </div>
- </div>
- )}
+ </AppModal>
 
  {/* IMPORT DATA SPREADSHEET MODAL (.csv, .xls, .xlsx) */}
- {showImportModal && (
- <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-start sm:items-center justify-center p-3 sm:p-5 overflow-y-auto" role="dialog" aria-modal="true">
- <div className="bg-white dark:bg-card-dark w-full max-w-xl my-auto rounded-xl p-6 shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 space-y-4">
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-3">
- <div className="flex items-center gap-2.5">
- <div className="p-2 rounded-xl bg-sky-100 text-sky-700 dark:bg-sky-950/60 dark:text-sky-300">
- <Upload className="w-5 h-5" />
- </div>
- <div>
- <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
- Import Data {importTarget === 'penilaian' ? 'Buku Nilai' : 'Presensi Siswa'}
- </h3>
- <p className="text-xs text-slate-400">Rombel: {selectedClassName}</p>
- </div>
- </div>
+ <AppModal
+ isOpen={showImportModal}
+ onClose={() => {
+ setShowImportModal(false)
+ setImportFile(null)
+ setImportError('')
+ }}
+ zIndex={50}
+ maxWidth="max-w-xl"
+ title={`Import Data ${importTarget === 'penilaian' ? 'Buku Nilai' : 'Presensi Siswa'}`}
+ description={`Rombel: ${selectedClassName}`}
+ icon={Upload}
+ bodyClassName="p-6 space-y-4"
+ footer={
+ <>
  <button
  type="button"
  onClick={() => {
@@ -14475,11 +14336,22 @@ export default function TeacherTeachingWorkspacePage() {
  setImportFile(null)
  setImportError('')
  }}
- className="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
+ className="px-4 py-2 border border-slate-300 bg-slate-200 hover:bg-slate-300 rounded-xl text-xs font-black text-slate-700 dark:bg-slate-800 dark:text-slate-200"
  >
- <X className="w-5 h-5" />
+ Batal
  </button>
- </div>
+ <button
+ type="button"
+ disabled={!importFile || isImporting}
+ onClick={handleProcessImport}
+ className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white text-xs font-bold rounded-xl shadow-md transition"
+ >
+ {isImporting ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+ {isImporting ? 'Memproses Import...' : 'Proses & Terapkan Data'}
+ </button>
+ </>
+ }
+ >
 
  <div className="space-y-3">
  <div className="flex items-center justify-between rounded-xl bg-emerald-50/70 p-3 text-xs border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/30 dark:border-emerald-800/60">
@@ -14528,32 +14400,7 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
  )}
  </div>
-
- <div className="flex justify-end gap-2 border-t border-emerald-200/80 dark:border-emerald-800/60 pt-3">
- <button
- type="button"
- onClick={() => {
- setShowImportModal(false)
- setImportFile(null)
- setImportError('')
- }}
- className="px-4 py-2 border rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:border-emerald-700/80 dark:text-slate-300"
- >
- Batal
- </button>
- <button
- type="button"
- disabled={!importFile || isImporting}
- onClick={handleProcessImport}
- className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white text-xs font-bold rounded-xl shadow-md transition"
- >
- {isImporting ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
- {isImporting ? 'Memproses Import...' : 'Proses & Terapkan Data'}
- </button>
- </div>
- </div>
- </div>
- )}
+ </AppModal>
 
  {/* DETAIL DRAWER / MODAL */}
  {showDetailModal && detailData && (() => {
@@ -14592,29 +14439,36 @@ export default function TeacherTeachingWorkspacePage() {
  const tidakHadirCount = izinCount + sakitCount + alphaCount
 
  return (
- <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-start sm:items-center justify-center p-3 sm:p-5 overflow-y-auto" role="dialog" aria-modal="true">
- <div className="bg-white dark:bg-card-dark w-full max-w-4xl my-auto max-h-[calc(100dvh-1.5rem)] flex flex-col rounded-3xl shadow-2xl shadow-emerald-950/20 border-2 border-emerald-300 dark:border-emerald-800/60 overflow-hidden relative animate-in fade-in zoom-in duration-200">
- {/* Header Modal */}
- <div className="flex shrink-0 items-center justify-between border-b border-emerald-200/80 p-4 sm:p-5 dark:border-emerald-700/80 bg-white dark:bg-card-dark">
- <div className="flex items-center gap-3">
- <div className="p-2.5 bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 rounded-xl shadow-sm">
- <CalendarRange className="w-5 h-5" />
- </div>
- <div>
- <div className="flex items-center gap-2">
- <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
- Detail Jadwal Mengajar KBM
- </span>
- {schStatus && (
- <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${schStatus.className}`}>
- {schStatus.label}
- </span>
- )}
- </div>
- <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white leading-tight">
- {getScheduleSubject(schedule)}
- </h3>
- </div>
+ <AppModal
+ isOpen={true}
+ onClose={() => setShowDetailModal(false)}
+ zIndex={50}
+ maxWidth="max-w-4xl"
+ title={getScheduleSubject(schedule)}
+ badge={schStatus?.label}
+ description="Detail Jadwal Mengajar KBM"
+ icon={CalendarRange}
+ headerActions={
+ schStatus?.isActive ? (
+ <button
+ type="button"
+ onClick={() => {
+ setShowDetailModal(false)
+ openPresensiModal(schedule)
+ }}
+ className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/20 hover:bg-white/30 text-white border border-white/30 rounded-xl text-xs font-bold transition shadow-xs cursor-pointer"
+ title="Buka Lembar Presensi Pembelajaran"
+ >
+ <UserCheck className="w-3.5 h-3.5" />
+ <span>Buka Presensi</span>
+ </button>
+ ) : null
+ }
+ bodyClassName="p-0 space-y-0"
+ footer={
+ <div className="flex w-full flex-wrap items-center justify-between gap-3">
+ <div className="text-xs text-slate-500 dark:text-slate-400">
+ Menampilkan <strong className="text-emerald-700 dark:text-emerald-300">{filteredScheduleStudents.length}</strong> dari <strong>{scheduleDetailStudents.length}</strong> siswa rombel {getScheduleClass(schedule)}
  </div>
 
  <div className="flex items-center gap-2">
@@ -14625,22 +14479,22 @@ export default function TeacherTeachingWorkspacePage() {
  setShowDetailModal(false)
  openPresensiModal(schedule)
  }}
- className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#059669] hover:bg-emerald-800 text-white rounded-xl text-xs font-bold transition shadow-xs cursor-pointer"
- title="Buka Lembar Presensi Pembelajaran"
+ className="px-4 py-2 bg-[#059669] hover:bg-emerald-800 text-white text-xs font-bold rounded-xl shadow-md flex items-center gap-1.5 transition cursor-pointer"
  >
- <UserCheck className="w-3.5 h-3.5" />
- <span>Buka Presensi</span>
+ <UserCheck className="w-4 h-4" /> Buka Presensi Sesi KBM
  </button>
  )}
  <button
  type="button"
  onClick={() => setShowDetailModal(false)}
- className="p-1.5 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+ className="px-4 py-2 border border-slate-300 bg-slate-200 hover:bg-slate-300 rounded-xl text-xs font-black text-slate-700 dark:text-slate-200 dark:bg-slate-800 cursor-pointer"
  >
- <X className="w-5 h-5" />
+ Tutup
  </button>
  </div>
  </div>
+ }
+ >
 
  {/* Info Bar Jadwal */}
  <div className="shrink-0 bg-slate-50/70 dark:bg-slate-900/40 border-b border-emerald-200/80 dark:border-emerald-800/60 p-3 sm:p-4">
@@ -14811,37 +14665,7 @@ export default function TeacherTeachingWorkspacePage() {
  </div>
  )}
  </div>
-
- {/* Footer Modal */}
- <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-t border-emerald-200/80 p-4 dark:border-emerald-700/80 bg-slate-50/50 dark:bg-slate-900/40">
- <div className="text-xs text-slate-500 dark:text-slate-400">
- Menampilkan <strong className="text-emerald-700 dark:text-emerald-300">{filteredScheduleStudents.length}</strong> dari <strong>{scheduleDetailStudents.length}</strong> siswa rombel {getScheduleClass(schedule)}
- </div>
-
- <div className="flex items-center gap-2">
- {schStatus?.isActive && (
- <button
- type="button"
- onClick={() => {
- setShowDetailModal(false)
- openPresensiModal(schedule)
- }}
- className="px-4 py-2 bg-[#059669] hover:bg-emerald-800 text-white text-xs font-bold rounded-xl shadow-md flex items-center gap-1.5 transition cursor-pointer"
- >
- <UserCheck className="w-4 h-4" /> Buka Presensi Sesi KBM
- </button>
- )}
- <button
- type="button"
- onClick={() => setShowDetailModal(false)}
- className="px-4 py-2 border rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:border-emerald-700/80 dark:text-slate-300 cursor-pointer"
- >
- Tutup
- </button>
- </div>
- </div>
- </div>
- </div>
+ </AppModal>
  )
  }
 
@@ -14852,42 +14676,18 @@ export default function TeacherTeachingWorkspacePage() {
  const waitingCount = notes.length - signedCount
 
  return (
- <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-3 sm:p-5" role="dialog" aria-modal="true">
- <div className="bg-white dark:bg-card-dark w-full max-w-4xl max-h-[90vh] flex flex-col rounded-3xl shadow-2xl shadow-emerald-950/20 border-2 border-emerald-300 dark:border-emerald-800/60 overflow-hidden relative animate-in fade-in zoom-in duration-200">
- {/* Header */}
- <div className="flex shrink-0 items-center justify-between border-b border-emerald-200/80 p-4 sm:p-5 dark:border-emerald-700/80 bg-white dark:bg-card-dark">
- <div className="flex items-center gap-3">
- <div className="flex h-9 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 font-bold shadow-md">
- {(student.nama_lengkap || student.full_name || 'S').slice(0, 2).toUpperCase()}
- </div>
- <div>
- <div className="flex items-center gap-2 flex-wrap">
- <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
- Buku Penghubung Santri
- </span>
- <span className="rounded-full bg-emerald-100 dark:bg-emerald-950 px-2 py-0.5 text-[10px] font-bold text-emerald-800 dark:text-emerald-300">
- {student.kelas?.nama_kelas || student.kelas?.name || selectedClassName}
- </span>
- </div>
- <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white leading-tight">
- {student.nama_lengkap || student.full_name}
- </h3>
- <p className="text-xs text-slate-500 font-mono">
- NIS/NISN: {student.nis || student.nisn || '-'}
- </p>
- </div>
- </div>
- <button
- onClick={() => setShowDetailModal(false)}
- className="p-1.5 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition"
- >
- <X className="w-5 h-5" />
- </button>
- </div>
-
- {/* KPI mini stats */}
+ <AppModal
+ isOpen={true}
+ onClose={() => setShowDetailModal(false)}
+ zIndex={50}
+ maxWidth="max-w-4xl"
+ title={student.nama_lengkap || student.full_name}
+ badge={student.kelas?.nama_kelas || student.kelas?.name || selectedClassName}
+ description={`Buku Penghubung Santri • NIS/NISN: ${student.nis || student.nisn || '-'}`}
+ icon={MessageSquare}
+ subHeader={
  <div className="grid grid-cols-3 gap-2 px-5 py-3 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 dark:bg-slate-900/40 text-center text-xs">
- <div className="rounded-xl bg-white p-2 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800">
+ <div className="rounded-xl bg-white p-2 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-800">
  <span className="text-[10px] text-slate-500 block font-medium">Total Catatan</span>
  <strong className="text-sm font-black text-slate-800 dark:text-white">{notes.length}</strong>
  </div>
@@ -14900,9 +14700,40 @@ export default function TeacherTeachingWorkspacePage() {
  <strong className="text-sm font-black text-amber-700 dark:text-amber-300">{waitingCount}</strong>
  </div>
  </div>
+ }
+ bodyClassName="p-4 sm:p-5 space-y-3"
+ footer={
+ <div className="flex w-full flex-wrap items-center justify-between gap-3">
+ <button
+ type="button"
+ onClick={() => handlePrintWeeklyEvaluation(student)}
+ className="px-3.5 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl shadow-md flex items-center gap-1.5 transition cursor-pointer"
+ >
+ <Printer className="w-3.5 h-3.5" /> Cetak Evaluasi Pekanan
+ </button>
 
- {/* List of notes */}
- <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-3">
+ <div className="flex items-center gap-2">
+ <button
+ type="button"
+ onClick={() => {
+ setShowDetailModal(false)
+ openCatatanForm(null, student)
+ }}
+ className="px-3.5 py-2 bg-[#059669] hover:bg-emerald-800 text-white text-xs font-bold rounded-xl shadow-md flex items-center gap-1.5 transition cursor-pointer"
+ >
+ <Plus className="w-3.5 h-3.5" /> Tambah Catatan
+ </button>
+ <button
+ type="button"
+ onClick={() => setShowDetailModal(false)}
+ className="px-3.5 py-2 border border-slate-300 bg-slate-200 hover:bg-slate-300 rounded-xl text-xs font-black text-slate-700 dark:text-slate-200 dark:bg-slate-800 cursor-pointer"
+ >
+ Tutup
+ </button>
+ </div>
+ </div>
+ }
+ >
  {notes.length === 0 ? (
  <div className="py-12 text-center text-slate-400">
  <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-50" />
@@ -15024,67 +14855,43 @@ export default function TeacherTeachingWorkspacePage() {
  )
  })
  )}
- </div>
-
- {/* Footer */}
- <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-t border-emerald-200/80 p-4 dark:border-emerald-700/80 bg-slate-50/50 dark:bg-slate-900/40">
- <button
- type="button"
- onClick={() => handlePrintWeeklyEvaluation(student)}
- className="px-3.5 py-2 bg-white dark:bg-card-dark hover:from-orange-700 hover:to-amber-700 text-xs font-bold rounded-xl shadow-md flex items-center gap-1.5 transition cursor-pointer"
- >
- <Printer className="w-3.5 h-3.5" /> Cetak Evaluasi Pekanan
- </button>
-
- <div className="flex items-center gap-2">
- <button
- type="button"
- onClick={() => {
- setShowDetailModal(false)
- openCatatanForm(null, student)
- }}
- className="px-3.5 py-2 bg-[#059669] hover:bg-emerald-800 text-white text-xs font-bold rounded-xl shadow-md flex items-center gap-1.5 transition cursor-pointer"
- >
- <Plus className="w-3.5 h-3.5" /> Tambah Catatan
- </button>
- <button
- type="button"
- onClick={() => setShowDetailModal(false)}
- className="px-3.5 py-2 border rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 dark:border-emerald-700/80 dark:text-slate-300 cursor-pointer"
- >
- Tutup
- </button>
- </div>
- </div>
- </div>
- </div>
+ </AppModal>
  )
  }
 
  // Default Modal for Non-Schedule items (Materi, Evaluasi, etc.)
  return (
- <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-start sm:items-center justify-center p-3 sm:p-5 overflow-y-auto">
- <div className={`bg-white dark:bg-card-dark w-full my-auto ${detailData.category === 'Materi Belajar' ? 'max-w-xl max-h-[calc(100dvh-2rem)] overflow-y-auto' : 'max-w-md max-h-[calc(100dvh-2rem)] overflow-y-auto'} rounded-xl p-6 shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 space-y-4 relative animate-in fade-in zoom-in duration-200`}>
+ <AppModal
+ isOpen={true}
+ onClose={() => setShowDetailModal(false)}
+ zIndex={50}
+ maxWidth={detailData.category === 'Materi Belajar' ? 'max-w-xl' : 'max-w-md'}
+ title={detailData.title}
+ badge={detailData.category}
+ icon={BookOpen}
+ bodyClassName="p-6 space-y-4"
+ footer={
+ <>
+ {detailData.rawStudent && (
  <button
- onClick={() => setShowDetailModal(false)}
- className="absolute right-5 top-5 p-1.5 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+ type="button"
+ onClick={() => handlePrintWeeklyEvaluation(detailData.rawStudent)}
+ className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl shadow-md flex items-center gap-1.5 transition cursor-pointer"
+ title="Cetak Lembar Evaluasi Mingguan Santri Resmi"
  >
- <X className="w-5 h-5" />
+ <Printer className="w-4 h-4" /> Cetak Evaluasi Pekanan
  </button>
-
- <div className="flex items-center gap-2.5">
- <div className="p-2 bg-emerald-100 dark:bg-emerald-950 text-[#059669] dark:text-emerald-300 rounded-xl">
- <BookOpen className="w-5 h-5" />
- </div>
- <div>
- <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
- {detailData.category}
- </span>
- <h3 className="text-base font-bold text-slate-900 dark:text-white leading-tight">
- {detailData.title}
- </h3>
- </div>
- </div>
+ )}
+ <button
+ type="button"
+ onClick={() => setShowDetailModal(false)}
+ className="px-4 py-2 bg-[#059669] hover:bg-emerald-800 text-white text-xs font-bold rounded-xl shadow-md transition cursor-pointer"
+ >
+ Tutup Detail
+ </button>
+ </>
+ }
+ >
 
  {/* Video Embed */}
  {detailData.video && (
@@ -15123,7 +14930,7 @@ export default function TeacherTeachingWorkspacePage() {
  )}
 
  <div className="space-y-2 border-t border-b border-emerald-200/80 dark:border-emerald-800/60 py-3 text-xs">
- {detailData.items.map((it, idx) => (
+ {detailData.items?.map((it, idx) => (
  <div key={idx} className="flex justify-between py-1 border-b border-slate-50 dark:border-emerald-800/50 last:border-0">
  <span className="text-slate-500 font-medium">{it.label}</span>
  <span className="font-bold text-slate-900 dark:text-white text-right">{it.value}</span>
@@ -15131,58 +14938,46 @@ export default function TeacherTeachingWorkspacePage() {
  ))}
  </div>
 
- <div className="flex justify-end items-center gap-2 pt-1">
- {detailData.rawStudent && (
- <button
- type="button"
- onClick={() => handlePrintWeeklyEvaluation(detailData.rawStudent)}
- className="px-4 py-2 bg-white dark:bg-card-dark hover:from-orange-700 hover:to-amber-700 text-xs font-bold rounded-xl shadow-md flex items-center gap-1.5 transition cursor-pointer"
- title="Cetak Lembar Evaluasi Mingguan Santri Resmi"
- >
- <Printer className="w-4 h-4" /> Cetak Evaluasi Pekanan
- </button>
- )}
- <button
- onClick={() => setShowDetailModal(false)}
- className="px-4 py-2 bg-[#059669] hover:bg-emerald-800 text-white text-xs font-bold rounded-xl shadow-md transition cursor-pointer"
- >
- Tutup Detail
- </button>
- </div>
- </div>
- </div>
+ </AppModal>
  )
  })()}
 
  {/* FACE RECOGNITION MODAL */}
- {showFaceModal && (
- <div className="fixed inset-0 z-[999] flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-md animate-in fade-in duration-200">
- <div className="w-full max-w-xl overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-card-dark border border-emerald-200/80 dark:border-emerald-800/60">
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 p-4 dark:border-emerald-800/60 bg-purple-950/20">
- <div className="flex items-center gap-3">
- <div className="p-2 bg-purple-500/20 text-purple-400 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20">
- <ScanFace className="w-6 h-6 animate-pulse" />
- </div>
- <div>
- <h3 className="text-base font-bold text-slate-900 dark:text-white">Presensi AI Face Recognition</h3>
- <p className="text-xs text-slate-400">Pindai & verifikasi wajah siswa</p>
- </div>
- </div>
+ <AppModal
+ isOpen={showFaceModal}
+ onClose={() => setShowFaceModal(false)}
+ zIndex={100}
+ maxWidth="max-w-xl"
+ title="Presensi AI Face Recognition"
+ description="Pindai & verifikasi wajah siswa"
+ icon={ScanFace}
+ bodyClassName="p-5 space-y-4"
+ footer={
+ <>
  <button
  type="button"
  onClick={() => setShowFaceModal(false)}
- className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+ className="px-4 py-2.5 rounded-xl border border-slate-300 bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:text-slate-200 font-black text-xs"
  >
- <X className="w-5 h-5" />
+ Batal
  </button>
- </div>
-
+ <button
+ type="submit"
+ form="form-face-recognition"
+ className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md flex items-center gap-2"
+ >
+ <CheckCircle2 className="w-4 h-4" /> Simpan Presensi Wajah
+ </button>
+ </>
+ }
+ >
  <form
+ id="form-face-recognition"
  onSubmit={(e) => {
  e.preventDefault()
  handleFaceRecognitionSubmit()
  }}
- className="p-5 space-y-4 text-xs"
+ className="space-y-4 text-xs"
  >
  <div className="relative h-44 bg-black/80 rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 flex flex-col items-center justify-center overflow-hidden">
  <div className="w-32 h-36 border border-emerald-200/80 dark:border-emerald-800/60 rounded-full relative flex items-center justify-center shadow-2xl">
@@ -15211,25 +15006,8 @@ export default function TeacherTeachingWorkspacePage() {
  </CustomSelect>
  </div>
 
- <div className="flex justify-end gap-2 pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60">
- <button
- type="button"
- onClick={() => setShowFaceModal(false)}
- className="px-4 py-2.5 rounded-xl border text-slate-600 dark:text-slate-300 font-semibold"
- >
- Batal
- </button>
- <button
- type="submit"
- className="px-5 py-2.5 rounded-lg bg-emerald-600 text-white text-xs font-bold shadow-md flex items-center gap-2 border border-emerald-200/80 dark:border-emerald-800/60 h-9 text-sm font-medium"
- >
- <CheckCircle2 className="w-4 h-4" /> Simpan Presensi Wajah
- </button>
- </div>
  </form>
- </div>
- </div>
- )}
+ </AppModal>
 
  {/* ── MODAL HERO UI: PENGISIAN RANGKUMAN JURNAL TERLEWAT ── */}
  <AppModal
@@ -15448,8 +15226,13 @@ function CbtQuizRunnerModal({ quiz, onClose }) {
  }
 
  return (
- <div className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 md:p-6 overflow-y-auto animate-in fade-in duration-200">
- <div className="bg-white dark:bg-[#121926] w-full max-w-4xl rounded-3xl shadow-2xl shadow-emerald-950/20 border-2 border-emerald-300 dark:border-emerald-800/60 overflow-hidden flex flex-col max-h-[95vh] relative">
+ <AppModal
+ isOpen={true}
+ onClose={onClose}
+ zIndex={100}
+ maxWidth="max-w-4xl"
+ bodyClassName="p-0 space-y-0 flex flex-col max-h-[90vh]"
+ >
  {/* TOP BAR / RUNNER HEADER */}
  <div className="bg-white dark:bg-card-dark px-5 py-3.5 flex items-center justify-between gap-4 shrink-0 shadow-md">
  <div className="flex items-center gap-3">
@@ -15870,8 +15653,7 @@ function CbtQuizRunnerModal({ quiz, onClose }) {
  </div>
  </div>
  )}
- </div>
- </div>
+ </AppModal>
  )
 }
 

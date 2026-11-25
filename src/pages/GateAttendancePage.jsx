@@ -1,4 +1,5 @@
 import { HeroUiHeader } from "../components/ui/HeroUiHeader"
+import AppModal from '../components/app/AppModal'
 import {
   KpiStatCard
 } from '../components/app'
@@ -1488,56 +1489,28 @@ export default function GateAttendancePage() {
  </AnimatePresence>
 
  {/* Per-Unit Schedule Config Modal */}
- <AnimatePresence>
- {showScheduleModal && (
- <motion.div
- role="dialog"
- aria-modal="true"
- aria-label={kpiModal.title || 'Detail Data Siswa'}
- initial={{ opacity: 0 }}
- animate={{ opacity: 1 }}
- exit={{ opacity: 0 }}
- transition={{ duration: 0.2 }}
- className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/70 p-3 sm:p-5 backdrop-blur-md"
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-2xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
- {/* Modal Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232] shrink-0">
- <div className="flex items-center gap-3">
- <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
-
-            <Settings className="size-6 sm:size-7 h-5 w-5 text-white" strokeWidth={2.25} />
- </div>
- <div>
- <h3 className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Pengaturan Jam Masuk & Pulang Per Unit</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
- <Clock className="size-3" />
- Jadwal Unit
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Konfigurasi jadwal jam absensi spesifik masing-masing unit pendidikan.</p>
- </div>
- </div>
+ <AppModal
+ isOpen={showScheduleModal}
+ onClose={() => setShowScheduleModal(false)}
+ badge="Jadwal Unit"
+ title="Pengaturan Jam Masuk & Pulang Per Unit"
+ description="Konfigurasi jadwal jam absensi spesifik masing-masing unit pendidikan."
+ icon={Settings}
+ maxWidth="max-w-2xl"
+ zIndex="z-[70]"
+ footer={
+ <div className="flex w-full items-center justify-end">
  <button
  type="button"
  onClick={() => setShowScheduleModal(false)}
- aria-label="Tutup modal"
- className="size-9 flex items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer shrink-0"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
+ Tutup Form
  </button>
  </div>
-
- {/* Modal Content */}
- <div className="modal-body min-h-0 flex-1 overflow-y-auto p-6 space-y-6">
+ }
+ >
+ <div className="space-y-6">
  {/* Unit Target Selector */}
  <div>
  <label className="mb-1.5 block text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
@@ -1722,81 +1695,43 @@ export default function GateAttendancePage() {
  </div>
  </div>
  </div>
-
- {/* Modal Footer */}
- <div className="modal-footer flex items-center justify-end border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900 shrink-0">
- <button
- type="button"
- onClick={() => setShowScheduleModal(false)}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
- >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
- </div>
- <span>Tutup Form</span>
- </button>
- </div>
- </div>
- </motion.div>
- </motion.div>
- )}
- </AnimatePresence>
+ </AppModal>
 
  {/* Pop-Up Camera Scanner Modal with HeroUI Prompt Style & Framer Motion Scan Animation */}
- <AnimatePresence>
- {showCameraModal && (
- <motion.div
- role="dialog"
- aria-modal="true"
- aria-label="Pemindai QR Code Live"
- initial={{ opacity: 0 }}
- animate={{ opacity: 1 }}
- exit={{ opacity: 0 }}
- transition={{ duration: 0.25 }}
- className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/70 p-3 sm:p-5 backdrop-blur-md"
+ <AppModal
+ isOpen={showCameraModal}
+ onClose={closeCameraModal}
+ badge={scanMode === 'checkin' ? 'KEDATANGAN' : 'PULANG'}
+ title="Pemindai QR Code Live"
+ description="Arahkan QR Code kartu siswa ke dalam kotak pemindai"
+ icon={Camera}
+ maxWidth="max-w-xl"
+ zIndex="z-[70]"
+ footer={
+ <div className="flex w-full flex-wrap items-center justify-between gap-2.5">
+ <button
+ type="button"
+ onClick={cameraActive ? stopCamera : startCamera}
+ className="inline-flex h-9.5 items-center gap-2 rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 hover:bg-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 active:scale-95 cursor-pointer"
  >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto relative w-full max-w-xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
-
- {/* Modal Header */}
- <div className="modal-header relative z-10 flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-md shadow-xs">
- <Camera className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- </div>
- <div>
- <div className="flex items-center gap-2 flex-wrap">
- <h3 className="modal-title text-sm sm:text-base font-black tracking-tight text-slate-900 dark:text-white">
- Pemindai QR Code Live
- </h3>
- <span className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-extrabold bg-emerald-600 text-white shadow-xs border border-emerald-500/40 dark:border-emerald-600/50">
- <span className="h-2 w-2 rounded-full bg-white animate-pulse" />
- {scanMode === 'checkin' ? 'KEDATANGAN' : 'PULANG'}
- </span>
- </div>
- <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">
- Arahkan QR Code kartu siswa ke dalam kotak pemindai
- </p>
- </div>
- </div>
+ {cameraActive ? (
+ <CameraOff className="h-3.5 w-3.5 text-rose-500" />
+ ) : (
+ <Camera className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+ )}
+ <span>{cameraActive ? 'Matikan Kamera' : 'Nyalakan Ulang Kamera'}</span>
+ </button>
  <button
  type="button"
  onClick={closeCameraModal}
- aria-label="Tutup pemindai"
- className="size-9 flex items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer shrink-0"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
+ Tutup Window
  </button>
  </div>
-
- {/* Modal Body */}
- <div className="relative z-10 p-6 space-y-4">
+ }
+ >
+ <div className="space-y-4">
  {/* Dedicated Square QR Code Scanner Viewfinder */}
  <div className="relative mx-auto aspect-square w-full max-w-[320px] sm:max-w-[340px] overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-950 shadow-2xl shadow-sm dark:border-emerald-800/60">
  <video
@@ -1927,93 +1862,36 @@ export default function GateAttendancePage() {
  </div>
  </form>
  </div>
-
- {/* Modal Footer */}
- <div className="modal-footer relative z-10 flex flex-wrap items-center justify-between gap-2.5 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <div className="flex items-center gap-2">
- <button
- type="button"
- onClick={cameraActive ? stopCamera : startCamera}
- className="inline-flex items-center gap-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-4 py-2.5 text-xs font-bold text-emerald-800 shadow-2xs hover:bg-emerald-50 transition-all dark:border-emerald-800/60 dark:bg-slate-800 dark:text-emerald-300 dark:hover:bg-slate-700 active:scale-95 cursor-pointer"
- >
- {cameraActive ? (
- <CameraOff className="h-3.5 w-3.5 text-rose-500" />
- ) : (
- <Camera className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
- )}
- <span>{cameraActive ? 'Matikan Kamera' : 'Nyalakan Ulang Kamera'}</span>
- </button>
- </div>
- <button
- type="button"
- onClick={closeCameraModal}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
- >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
- </div>
- <span>Tutup Window</span>
- </button>
- </div>
- </div>
- </motion.div>
- </motion.div>
- )}
- </AnimatePresence>
+ </AppModal>
 
  {/* Modal Detail Data KPI Siswa */}
- <AnimatePresence>
- {kpiModal.isOpen && (
- <motion.div
- role="dialog"
- aria-modal="true"
- aria-label={kpiModal.title || 'Detail Data Siswa'}
- initial={{ opacity: 0 }}
- animate={{ opacity: 1 }}
- exit={{ opacity: 0 }}
- transition={{ duration: 0.2 }}
- className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/70 p-3 sm:p-5 backdrop-blur-md"
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-3xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
- {/* Header Modal */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232] shrink-0">
- <div className="flex items-center gap-3">
- <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
-
-            <Users className="size-6 sm:size-7 h-5 w-5 text-white" strokeWidth={2.25} />
- </div>
- <div>
- <h3 className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2 flex-wrap">
- <span>{kpiModal.title}</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- {filteredKpiData.length} Siswa
+ <AppModal
+ isOpen={kpiModal.isOpen}
+ onClose={closeKpiModal}
+ badge={`${filteredKpiData.length} Siswa`}
+ title={kpiModal.title}
+ description="Daftar detail siswa berdasarkan status presensi gerbang hari ini."
+ icon={Users}
+ maxWidth="max-w-3xl"
+ zIndex="z-[70]"
+ footer={
+ <div className="flex w-full items-center justify-between gap-2.5">
+ <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+ Menampilkan {filteredKpiData.length} data siswa Dareliman Edu
  </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Daftar detail siswa berdasarkan status presensi gerbang hari ini.
- </p>
- </div>
- </div>
  <button
  type="button"
  onClick={closeKpiModal}
- aria-label="Tutup modal"
- className="size-9 flex items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer shrink-0"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
+ Tutup Rincian
  </button>
  </div>
-
+ }
+ >
+ <div className="space-y-4">
  {/* Toolbar Filter / Search dalam Modal */}
- <div className="border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50 p-4 dark:border-emerald-800/60 dark:from-emerald-950/20 dark:via-teal-950/10 dark:to-emerald-950/20 shrink-0 flex items-center justify-between gap-3">
+ <div className="flex items-center justify-between gap-3">
  <div className="relative flex-1 max-w-sm flex items-center">
  <div className="pointer-events-none absolute left-3.5 z-10 flex items-center text-emerald-600/70 dark:text-emerald-400">
  <Search className="size-4" />
@@ -2090,26 +1968,8 @@ export default function GateAttendancePage() {
  </div>
  )}
  </div>
-
- {/* Footer Modal */}
- <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900 shrink-0">
- <span className="text-xs font-semibold text-slate-400 dark:text-slate-500">
- Menampilkan {filteredKpiData.length} data siswa Dareliman Edu
- </span>
- <button
- type="button"
- onClick={closeKpiModal}
- className="inline-flex items-center gap-1.5 rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 px-4 py-2 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
- >
- <X className="size-4 text-rose-600" strokeWidth={2.2} />
- <span>Tutup Rincian</span>
- </button>
  </div>
- </div>
- </motion.div>
- </motion.div>
- )}
- </AnimatePresence>
+ </AppModal>
 
  </motion.div>
  </PageContainer>

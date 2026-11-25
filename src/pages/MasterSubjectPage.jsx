@@ -52,6 +52,7 @@ import { TableRoot, TableHeader, TableBody, TableRow, TableHead, TableCell } fro
 import PageContainer from '../components/app/PageContainer'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
 import AppDataTable from '../components/app/AppDataTable'
+import AppModal from '../components/app/AppModal'
 import { useAuthStore } from '../stores/authStore'
 import { getUserRoleLevel, ROLE_LEVELS, hasRoleLevel, isFoundationUser } from '../auth/portalResolver'
 import { SmartScrollFab } from '../components/common'
@@ -1095,62 +1096,45 @@ export default function MasterSubjectPage({
  />
  </div>
 
- {/* ── HARMONIZED FORM MODAL (TAMBAH / EDIT) ────────────────────────────── */}
- <AnimatePresence>
- {isFormModalOpen && (
- <div
- className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto"
- role="dialog"
- aria-modal="true"
- aria-labelledby="subject-form-title"
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !simpanMutation.isPending) {
- setIsFormModalOpen(false)
- }
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="w-full max-w-xl font-sans my-auto"
- >
- <div className="flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-2xl border border-emerald-200/80 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
-
- {/* Header */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232] shrink-0">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-800/60 dark:text-slate-300 p-2.5 shadow-md shadow-sm border-2 border-emerald-300/30 shrink-0">
- <BookOpen className="size-5 text-emerald-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3 id="subject-form-title" className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>{selectedForEdit ? 'Edit Mata Pelajaran' : 'Tambah Mata Pelajaran Baru'}</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-[#0E5C44] border border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- {selectedForEdit ? 'Perbarui' : 'Data Baru'}
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Lengkapi referensi kurikulum, klasifikasi, alokasi JP, dan parameter penilaian rapor.
- </p>
- </div>
- </div>
- <button
- type="button"
- disabled={simpanMutation.isPending}
- onClick={() => setIsFormModalOpen(false)}
- aria-label="Tutup formulir"
- className="rounded-xl p-2 bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:border-rose-800/60 dark:text-rose-400 border border-rose-300/40 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer disabled:opacity-50"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Form Body */}
- <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-4 text-xs font-semibold text-slate-700 dark:text-slate-200">
+      {/* ── HARMONIZED FORM MODAL (CREATE / EDIT) ─────────────────────────────── */}
+      <AppModal
+        isOpen={isFormModalOpen}
+        onClose={() => !simpanMutation.isPending && setIsFormModalOpen(false)}
+        title={selectedForEdit ? 'Edit Mata Pelajaran' : 'Tambah Mata Pelajaran Baru'}
+        badge={selectedForEdit ? 'Perbarui' : 'Data Baru'}
+        description="Lengkapi referensi kurikulum, klasifikasi, alokasi JP, dan parameter penilaian rapor."
+        icon={BookOpen}
+        maxWidth="max-w-2xl"
+        disableBackdropClose={simpanMutation.isPending}
+        hideCloseButton={simpanMutation.isPending}
+        footer={
+          <>
+            <button
+              type="button"
+              disabled={simpanMutation.isPending}
+              onClick={() => setIsFormModalOpen(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="submit"
+              form="subject-form"
+              disabled={simpanMutation.isPending}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+            >
+              {simpanMutation.isPending ? (
+                <Loader2 className="size-4 animate-spin text-white" />
+              ) : (
+                <Save className="size-4 text-white" strokeWidth={2.25} />
+              )}
+              <span>{simpanMutation.isPending ? 'Menyimpan...' : 'Simpan Data'}</span>
+            </button>
+          </>
+        }
+      >
+        <form id="subject-form" onSubmit={handleSubmit} className="space-y-4 text-xs font-semibold text-slate-700 dark:text-slate-200">
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
  {/* Unit Pendidikan */}
  <div>
@@ -1219,7 +1203,7 @@ export default function MasterSubjectPage({
  onChange={(e) => setFormData({ ...formData, kode_mapel: e.target.value })}
  required
  placeholder="Contoh: MP-SD-PAI"
- className="w-full rounded-xl border border-emerald-200/90 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#0E5C44] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#0E5C44]/12 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  />
  </div>
  </div>
@@ -1237,7 +1221,7 @@ export default function MasterSubjectPage({
  onChange={(e) => setFormData({ ...formData, nama_mapel: e.target.value })}
  required
  placeholder="Contoh: Pendidikan Agama Islam"
- className="w-full rounded-xl border border-emerald-200/90 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#0E5C44] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#0E5C44]/12 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  />
  </div>
  </div>
@@ -1254,7 +1238,7 @@ export default function MasterSubjectPage({
  value={formData.nama_singkat}
  onChange={(e) => setFormData({ ...formData, nama_singkat: e.target.value })}
  placeholder="Contoh: PAI"
- className="w-full rounded-xl border border-emerald-200/90 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#0E5C44] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#0E5C44]/12 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  />
  </div>
  </div>
@@ -1320,7 +1304,7 @@ export default function MasterSubjectPage({
  max="20"
  value={formData.jam_pelajaran}
  onChange={(e) => setFormData({ ...formData, jam_pelajaran: parseInt(e.target.value) || 0 })}
- className="w-full rounded-xl border border-emerald-200/90 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#0E5C44] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#0E5C44]/12 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  />
  </div>
  </div>
@@ -1339,7 +1323,7 @@ export default function MasterSubjectPage({
  max="100"
  value={formData.kkm}
  onChange={(e) => setFormData({ ...formData, kkm: parseFloat(e.target.value) || 0 })}
- className="w-full rounded-xl border border-emerald-200/90 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#0E5C44] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#0E5C44]/12 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  />
  </div>
  </div>
@@ -1355,7 +1339,7 @@ export default function MasterSubjectPage({
  max="100"
  value={formData.bobot_pengetahuan}
  onChange={(e) => setFormData({ ...formData, bobot_pengetahuan: parseInt(e.target.value) || 0 })}
- className="w-full rounded-xl border border-emerald-200/90 bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#0E5C44] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#0E5C44]/12 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 px-3.5 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  />
  </div>
 
@@ -1370,7 +1354,7 @@ export default function MasterSubjectPage({
  max="100"
  value={formData.bobot_keterampilan}
  onChange={(e) => setFormData({ ...formData, bobot_keterampilan: parseInt(e.target.value) || 0 })}
- className="w-full rounded-xl border border-emerald-200/90 bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#0E5C44] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#0E5C44]/12 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 px-3.5 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  />
  </div>
 
@@ -1385,7 +1369,7 @@ export default function MasterSubjectPage({
  max="100"
  value={formData.bobot_sikap}
  onChange={(e) => setFormData({ ...formData, bobot_sikap: parseInt(e.target.value) || 0 })}
- className="w-full rounded-xl border border-emerald-200/90 bg-slate-50/50 px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:border-[#0E5C44] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#0E5C44]/12 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
+ className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 px-3.5 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  />
  </div>
 
@@ -1421,8 +1405,8 @@ export default function MasterSubjectPage({
  className={cn(
  'flex items-center justify-between p-4 rounded-xl border-2 transition-all cursor-pointer select-none',
  formData.status
- ? 'border-emerald-500/40 bg-white dark:bg-[#1B2433] shadow-xs dark:border-emerald-700/60 dark:bg-[#1B2433]'
- : 'border-emerald-200/80 bg-slate-50/80 dark:border-emerald-800/60 dark:bg-slate-900/60'
+ ? 'border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/30 shadow-xs dark:border-emerald-700/80'
+ : 'border-[#b6f6d9] bg-slate-50/80 dark:border-emerald-700/80 dark:bg-slate-900/60'
  )}
  >
  <div className="flex items-center gap-3.5">
@@ -1430,8 +1414,8 @@ export default function MasterSubjectPage({
  className={cn(
  'flex size-11 shrink-0 items-center justify-center rounded-xl text-white shadow-md transition-all',
  formData.status
- ? 'bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-800/60 dark:text-slate-300 shadow-sm'
- : 'bg-slate-400 dark:bg-slate-700 shadow-slate-400/20'
+ ? 'bg-emerald-600 text-white shadow-emerald-600/20'
+ : 'bg-slate-400 dark:bg-slate-700 text-white shadow-slate-400/20'
  )}
  >
  {formData.status ? (
@@ -1469,7 +1453,7 @@ export default function MasterSubjectPage({
  <div
  className={cn(
  'relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out',
- formData.status ? 'bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white' : 'bg-slate-300 dark:bg-slate-700'
+ formData.status ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-slate-300 dark:bg-slate-700'
  )}
  >
  <span
@@ -1481,101 +1465,36 @@ export default function MasterSubjectPage({
  </div>
  </div>
  </div>
+        </form>
+      </AppModal>
 
- {/* Footer Aksi */}
- <div className="flex items-center justify-between border-t border-emerald-200/80 bg-white pt-4 dark:border-emerald-800/60 dark:bg-slate-950">
- <Button
- type="button"
- variant="danger"
- disabled={simpanMutation.isPending}
- onClick={() => setIsFormModalOpen(false)}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:border-rose-800/60 dark:text-rose-400 px-4 py-2.5 text-xs font-extrabold border border-rose-300/40 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer disabled:opacity-50"
- >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
- </div>
- <span>Batal</span>
- </Button>
- <Button
- type="submit"
- variant="success"
- disabled={simpanMutation.isPending}
- className="inline-flex items-center gap-2 rounded-xl bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-800/60 dark:text-slate-300 px-5 py-2.5 text-xs font-extrabold border-2 border-emerald-300/40 hover:scale-[1.03] transition-all duration-200 active:scale-95 cursor-pointer disabled:opacity-50"
- >
- {simpanMutation.isPending ? (
- <Loader2 className="size-4 animate-spin text-emerald-600" />
- ) : (
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <Save className="size-3.5 text-slate-600" strokeWidth={2.25} />
- </div>
- )}
- <span>{simpanMutation.isPending ? 'Menyimpan...' : 'Simpan Data'}</span>
- </Button>
- </div>
- </form>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
-
- {/* ── HARMONIZED DETAIL MODAL ──────────────────────────────────────────── */}
- <AnimatePresence>
- {isDetailModalOpen && selectedForDetail && (
- <div
- className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto"
- role="dialog"
- aria-modal="true"
- aria-labelledby="subject-detail-title"
- onMouseDown={(e) => {
- if (e.target === e.currentTarget) setIsDetailModalOpen(false)
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="w-full max-w-xl font-sans my-auto"
- >
- <div className="flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-2xl border border-emerald-200/80 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
-
- {/* Header */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div
- className="rounded-xl p-2.5 shadow-md text-white shrink-0 border"
- style={{
- backgroundColor: selectedForDetail.warna || '#0E5C44',
- borderColor: `${selectedForDetail.warna || '#0E5C44'}44`,
- }}
- >
- <BookOpen className="size-5 text-current" strokeWidth={2.25} />
- </div>
- <div>
- <h3 id="subject-detail-title" className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
- {selectedForDetail.nama_mapel || selectedForDetail.name}
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5">
- {selectedForDetail.kode_mapel || selectedForDetail.code}
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setIsDetailModalOpen(false)}
- aria-label="Tutup detail"
- className="rounded-xl p-2 bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:border-rose-800/60 dark:text-rose-400 border border-rose-300/40 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Body */}
- <div className="p-6 space-y-3.5 text-xs">
+      {/* ── HARMONIZED DETAIL MODAL ──────────────────────────────────────────── */}
+      <AppModal
+        isOpen={Boolean(isDetailModalOpen && selectedForDetail)}
+        onClose={() => setIsDetailModalOpen(false)}
+        title={selectedForDetail?.nama_mapel || selectedForDetail?.name}
+        badge="Detail Mapel"
+        description={selectedForDetail?.kode_mapel || selectedForDetail?.code}
+        icon={BookOpen}
+        maxWidth="max-w-2xl"
+        bodyClassName="space-y-3.5 text-xs"
+        footer={
+          <div className="flex w-full justify-end">
+            <button
+              type="button"
+              onClick={() => setIsDetailModalOpen(false)}
+              className="h-9.5 px-5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Tutup</span>
+            </button>
+          </div>
+        }
+      >
+        {selectedForDetail && (
+          <>
  {/* Identity Box */}
- <div className="space-y-2 rounded-xl border border-emerald-200/80 bg-slate-50/70 p-4 dark:border-emerald-800/60 dark:bg-slate-900/40">
+ <div className="space-y-2 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-slate-50/70 p-4 dark:bg-slate-900/40">
  <div className="flex items-center justify-between border-b border-emerald-200/60 pb-2 dark:border-emerald-800/60">
  <span className="font-bold text-slate-500">Kode & Singkatan</span>
  <span className="font-mono font-extrabold text-slate-800 dark:text-slate-100">
@@ -1604,8 +1523,8 @@ export default function MasterSubjectPage({
 
  {/* JP & KKM Metrics */}
  <div className="grid grid-cols-2 gap-3">
- <div className="flex items-center gap-3 rounded-xl border border-emerald-200/80 bg-emerald-50/70 p-3.5 dark:border-emerald-800 dark:bg-emerald-950/40">
- <div className="flex size-10 items-center justify-center rounded-xl bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-800/60 dark:text-slate-300 shadow-xs shrink-0">
+ <div className="flex items-center gap-3 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/70 p-3.5 dark:bg-emerald-950/40">
+ <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-xs shrink-0">
  <Clock3 className="size-5" />
  </div>
  <div>
@@ -1613,19 +1532,19 @@ export default function MasterSubjectPage({
  <p className="text-sm font-black text-emerald-900 dark:text-emerald-200">{selectedForDetail.jam_pelajaran || 2} JP / Minggu</p>
  </div>
  </div>
- <div className="flex items-center gap-3 rounded-xl border border-emerald-/80 bg-emerald-/70 p-3.5 dark:border-emerald- dark:bg-emerald-/40">
- <div className="flex size-10 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-xs shrink-0 border border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="flex items-center gap-3 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/70 p-3.5 dark:bg-emerald-950/40">
+ <div className="flex size-10 items-center justify-center rounded-xl bg-teal-600 text-white shadow-xs shrink-0">
  <Target className="size-5" />
  </div>
  <div>
  <p className="text-[10px] font-black uppercase text-slate-500 dark:text-slate-400">KKM Minimum</p>
- <p className="text-sm font-black text-emerald- dark:text-emerald-">{selectedForDetail.kkm || 75}</p>
+ <p className="text-sm font-black text-emerald-900 dark:text-emerald-200">{selectedForDetail.kkm || 75}</p>
  </div>
  </div>
  </div>
 
  {/* Bobot Penilaian */}
- <div className="rounded-xl border border-emerald-200/80 bg-slate-50/70 p-4 dark:border-emerald-800/60 dark:bg-slate-900/40">
+ <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-slate-50/70 p-4 dark:bg-slate-900/40">
  <p className="mb-2 flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">
  <ChartNoAxesColumn className="size-3.5 text-emerald-700 dark:text-emerald-400" />
  Bobot Penilaian Rapor
@@ -1645,77 +1564,41 @@ export default function MasterSubjectPage({
  </div>
  </div>
  </div>
- </div>
+          </>
+        )}
+      </AppModal>
 
- {/* Footer */}
- <div className="flex justify-end border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <button
- type="button"
- onClick={() => setIsDetailModalOpen(false)}
- className="inline-flex items-center gap-2 rounded-xl border border-emerald-300 bg-white px-4 py-2 text-xs font-extrabold text-slate-700 hover:bg-slate-100 transition dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 cursor-pointer"
- >
- Tutup
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
-
- {/* ── HARMONIZED EXPORT MODAL ──────────────────────────────────────────── */}
- <AnimatePresence>
- {isExportModalOpen && (
- <div
- className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="subject-export-title"
- onMouseDown={(e) => {
- if (e.target === e.currentTarget) setIsExportModalOpen(false)
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="w-full max-w-md font-sans my-auto"
- >
- <div className="flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-2xl border border-emerald-200/80 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
-
- {/* Header */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-white dark:bg-[#1B2433] p-2.5 shadow-md shadow-sm border border-amber-300/30 shrink-0">
- <Download className="size-5 text-emerald-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3 id="subject-export-title" className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Export Mata Pelajaran</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-[#0E5C44] border border-emerald-200/80 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- Unduh
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Pilih format berkas untuk mengekspor data mata pelajaran
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setIsExportModalOpen(false)}
- aria-label="Tutup modal export"
- className="rounded-xl p-2 bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:border-rose-800/60 dark:text-rose-400 border border-rose-300/40 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Body */}
- <div className="space-y-2.5 p-6 text-sm text-slate-700 dark:text-slate-200">
+      {/* ── HARMONIZED EXPORT MODAL ──────────────────────────────────────────── */}
+      <AppModal
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+        title="Export Mata Pelajaran"
+        badge="Unduh"
+        description="Pilih format berkas untuk mengekspor data mata pelajaran"
+        icon={Download}
+        maxWidth="max-w-lg"
+        bodyClassName="space-y-2.5 text-sm text-slate-700 dark:text-slate-200"
+        footer={
+          <>
+            <button
+              type="button"
+              onClick={() => setIsExportModalOpen(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleProcessExport}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+            >
+              <Download className="size-4 text-white" strokeWidth={2.25} />
+              <span>Unduh Berkas</span>
+            </button>
+          </>
+        }
+      >
  {[
  { value: 'xlsx', label: 'Excel (.xlsx)', desc: 'Format Microsoft Excel Modern (Disarankan)' },
  { value: 'xls', label: 'Excel Legacy (.xls)', desc: 'Format Microsoft Excel Standard 97-2003' },
@@ -1725,10 +1608,10 @@ export default function MasterSubjectPage({
  <label
  key={opt.value}
  className={cn(
- 'flex cursor-pointer items-center gap-3 rounded-xl border p-3.5 transition-all',
+ 'flex cursor-pointer items-center gap-3 rounded-xl border-2 p-3.5 transition-all',
  exportFormat === opt.value
- ? 'border-emerald-500 bg-emerald-50/60 shadow-2xs dark:border-emerald-600 dark:bg-emerald-950/40'
- : 'border-emerald-200/80 hover:border-emerald-300 hover:bg-slate-50/50 dark:border-emerald-800/60 dark:hover:border-emerald-200/80 dark:hover:bg-slate-800/40'
+ ? 'border-emerald-500 bg-emerald-50/70 shadow-xs ring-2 ring-emerald-500/20 dark:border-emerald-600 dark:bg-emerald-950/40'
+ : 'border-[#b6f6d9] dark:border-emerald-700/80 hover:border-emerald-400 hover:bg-slate-50/50 dark:hover:bg-slate-800/40'
  )}
  >
  <input
@@ -1745,92 +1628,48 @@ export default function MasterSubjectPage({
  </div>
  </label>
  ))}
- </div>
+      </AppModal>
 
- {/* Footer */}
- <div className="flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <button
- type="button"
- onClick={() => setIsExportModalOpen(false)}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:border-rose-800/60 dark:text-rose-400 px-4 py-2.5 text-xs font-extrabold border border-rose-300/40 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
- >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
- </div>
- <span>Batal</span>
- </button>
- <button
- type="button"
- onClick={handleProcessExport}
- className="inline-flex items-center gap-2 rounded-xl bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-800/60 dark:text-slate-300 px-5 py-2.5 text-xs font-extrabold border border-amber-300/40 hover:scale-[1.03] transition-all duration-200 active:scale-95 cursor-pointer"
- >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <Download className="size-3.5 text-emerald-600" strokeWidth={2.25} />
- </div>
- <span>Unduh Berkas</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
-
- {/* ── HARMONIZED IMPORT MODAL ──────────────────────────────────────────── */}
- <AnimatePresence>
- {isImportModalOpen && (
- <div
- className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="subject-import-title"
- onMouseDown={(e) => {
- if (e.target === e.currentTarget) setIsImportModalOpen(false)
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="w-full max-w-md font-sans my-auto"
- >
- <div className="flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-2xl border border-emerald-200/80 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
-
- {/* Header */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-white dark:bg-[#1B2433] p-2.5 shadow-md shadow-sky-500/30 border border-sky-300/30 shrink-0">
- <Upload className="size-5 text-slate-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3 id="subject-import-title" className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Import Mata Pelajaran</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-sky-50 px-2 py-0.5 text-[10px] font-bold text-sky-800 border border-sky-200/80 dark:bg-sky-950/60 dark:text-sky-300">
- <Sparkles className="size-3" />
- Batch
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Unggah file Excel atau CSV sesuai template standar
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setIsImportModalOpen(false)}
- aria-label="Tutup modal import"
- className="rounded-xl p-2 bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:border-rose-800/60 dark:text-rose-400 border border-rose-300/40 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Form Body */}
- <form onSubmit={handleImportSubmit} className="p-6 space-y-4">
+      {/* ── HARMONIZED IMPORT MODAL ──────────────────────────────────────────── */}
+      <AppModal
+        isOpen={isImportModalOpen}
+        onClose={() => {
+          setIsImportModalOpen(false)
+          setOverwriteExisting(false)
+        }}
+        title="Import Mata Pelajaran"
+        badge="Batch"
+        description="Unggah file Excel atau CSV sesuai template standar"
+        icon={Upload}
+        maxWidth="max-w-xl"
+        footer={
+          <>
+            <button
+              type="button"
+              onClick={() => {
+                setIsImportModalOpen(false)
+                setOverwriteExisting(false)
+              }}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="submit"
+              form="subject-import-form"
+              disabled={!importFile}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+            >
+              <Upload className="size-4 text-white" strokeWidth={2.25} />
+              <span>Upload & Impor</span>
+            </button>
+          </>
+        }
+      >
+        <form id="subject-import-form" onSubmit={handleImportSubmit} className="space-y-4">
  {/* Download Template Banner */}
- <div className="flex items-center justify-between p-3.5 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800">
+ <div className="flex items-center justify-between p-3.5 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/40 border-2 border-[#b6f6d9] dark:border-emerald-700/80">
  <div className="flex items-center gap-2.5">
  <FileSpreadsheet className="size-5 text-emerald-700 dark:text-emerald-400" />
  <div>
@@ -1841,7 +1680,7 @@ export default function MasterSubjectPage({
  <button
  type="button"
  onClick={handleDownloadTemplate}
- className="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-bold transition shadow-xs cursor-pointer border border-emerald-600 h-9 text-sm font-medium"
+ className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black transition shadow-xs cursor-pointer border-2 border-emerald-600 h-9 inline-flex items-center justify-center active:scale-95"
  >
  Template
  </button>
@@ -1849,7 +1688,7 @@ export default function MasterSubjectPage({
 
  {/* Dropzone */}
  <div className="rounded-xl border-2 border-dashed border-emerald-300 bg-emerald-50/40 p-6 text-center dark:border-emerald-700 dark:bg-emerald-950/20">
- <FileSpreadsheet className="mx-auto mb-2 size-10 text-white dark:text-emerald-400" />
+ <FileSpreadsheet className="mx-auto mb-2 size-10 text-emerald-600 dark:text-emerald-400" />
  <p className="text-xs font-bold text-slate-800 dark:text-slate-100">Pilih berkas Excel (.xlsx, .xls) atau CSV</p>
  <p className="text-xs text-slate-400 mt-0.5">Ukuran maksimal file 10 MB</p>
  <input
@@ -1862,10 +1701,10 @@ export default function MasterSubjectPage({
 
  {/* Opsi Timpa Data (Overwrite) */}
  <div className={cn(
- "rounded-xl border p-4 transition-all duration-200",
+ "rounded-xl border-2 p-4 transition-all duration-200",
  overwriteExisting
- ? "border-amber-300/90 bg-white dark:bg-[#1B2433] dark:border-amber-700/60 dark:bg-amber-950/30"
- : "border-emerald-200/80 bg-slate-50/60 dark:border-emerald-800/60 dark:bg-slate-900/40"
+ ? "border-amber-400 bg-amber-50/40 dark:bg-amber-950/30 dark:border-amber-700/60"
+ : "border-[#b6f6d9] bg-slate-50/60 dark:border-emerald-700/80 dark:bg-slate-900/40"
  )}>
  <label className="flex items-start gap-3 cursor-pointer select-none">
  <div className="pt-0.5">
@@ -1901,106 +1740,35 @@ export default function MasterSubjectPage({
  </div>
  </label>
  </div>
+        </form>
+      </AppModal>
 
- {/* Footer */}
- <div className="flex items-center justify-between border-t border-emerald-200/80 bg-white pt-4 dark:border-emerald-800/60 dark:bg-slate-950">
- <button
- type="button"
- onClick={() => {
- setIsImportModalOpen(false)
- setOverwriteExisting(false)
- }}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:border-rose-800/60 dark:text-rose-400 px-4 py-2.5 text-xs font-extrabold border border-rose-300/40 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
- >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
- </div>
- <span>Batal</span>
- </button>
- <button
- type="submit"
- disabled={!importFile}
- className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-[#1B2433] px-5 py-2.5 text-xs font-extrabold border border-sky-300/40 hover:scale-[1.03] transition-all duration-200 active:scale-95 cursor-pointer disabled:opacity-50"
- >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <Upload className="size-3.5 text-white" strokeWidth={2.25} />
- </div>
- <span>Upload & Impor</span>
- </button>
- </div>
- </form>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
-
- {/* ── MODAL HASIL IMPOR & PEMBERITAHUAN DATA DUPLIKAT ── */}
- <AnimatePresence>
- {duplicateModalData && (
- <div
- className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/75 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="mapel-duplicate-report-title"
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="my-auto w-full max-w-xl font-sans"
- >
- <div className="flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-2xl border border-emerald-200/80 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
- <div className={cn(
- "h-1.5 w-full shrink-0",
- duplicateModalData.diperbarui > 0
- ? "bg-white dark:bg-[#1B2433]"
- : duplicateModalData.duplikat > 0
- ? "bg-white dark:bg-[#1B2433]"
- : "bg-white dark:bg-[#1B2433]"
- )} />
-
- {/* Header */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className={cn(
- "rounded-xl p-2.5 text-white shadow-md shrink-0 border",
- duplicateModalData.diperbarui > 0
- ? "bg-white dark:bg-[#1B2433] border-amber-300/30 shadow-sm"
- : "bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-800/60 dark:text-slate-300 border-emerald-300/30 shadow-sm"
- )}>
- {duplicateModalData.diperbarui > 0 ? (
- <RefreshCcw className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- ) : (
- <CheckCircle2 className="h-5 w-5 text-current" strokeWidth={2.25} />
- )}
- </div>
- <div>
- <h3 id="mapel-duplicate-report-title" className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Hasil Impor & Pemberitahuan Data</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300">
- Total {duplicateModalData.total} Data
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Ringkasan sinkronisasi dan status pemrosesan data mata pelajaran
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setDuplicateModalData(null)}
- aria-label="Tutup ringkasan impor"
- className="size-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-sky-950/60 dark:text-sky-300 transition cursor-pointer"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Body */}
- <div className="min-h-0 flex-1 space-y-4 overflow-y-auto p-6 text-sm text-slate-700 dark:text-slate-200">
+      {/* ── MODAL HASIL IMPOR & PEMBERITAHUAN DATA DUPLIKAT ── */}
+      <AppModal
+        isOpen={Boolean(duplicateModalData)}
+        onClose={() => setDuplicateModalData(null)}
+        title="Hasil Impor & Pemberitahuan Data"
+        badge={duplicateModalData ? `Total ${duplicateModalData.total} Data` : undefined}
+        description="Ringkasan sinkronisasi dan status pemrosesan data mata pelajaran"
+        icon={duplicateModalData?.diperbarui > 0 ? RefreshCcw : CheckCircle2}
+        maxWidth="max-w-xl"
+        zIndex={70}
+        disableBackdropClose
+        bodyClassName="space-y-4 text-sm text-slate-700 dark:text-slate-200"
+        footer={
+          <div className="flex w-full justify-end">
+            <button
+              type="button"
+              onClick={() => setDuplicateModalData(null)}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+            >
+              <span>Mengerti</span>
+            </button>
+          </div>
+        }
+      >
+        {duplicateModalData && (
+          <>
  {/* KPI Cards */}
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
  <div className="rounded-xl border border-emerald-200/80 bg-emerald-50/50 p-3 text-center dark:border-emerald-800/60 dark:bg-emerald-950/30">
@@ -2065,217 +1833,124 @@ export default function MasterSubjectPage({
  </div>
  </div>
  )}
- </div>
+          </>
+        )}
+      </AppModal>
 
- {/* Footer */}
- <div className="flex items-center justify-end border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 px-6 py-3.5 dark:border-emerald-800/60 dark:bg-slate-900/30">
- <button
- type="button"
- onClick={() => setDuplicateModalData(null)}
- className="inline-flex items-center gap-1.5 rounded-xl bg-white dark:bg-[#1B2433] px-5 py-2 text-xs font-bold shadow-md hover:from-emerald-700 hover:to-teal-800 transition cursor-pointer border border-emerald-200/80 dark:border-emerald-800/60"
- >
- <span>Mengerti</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+      {/* ── HARMONIZED DELETE CONFIRMATION MODAL (z-[70]) ────────────────────── */}
+      <AppModal
+        isOpen={Boolean(deleteTarget)}
+        onClose={() => !hapusMutation.isPending && setDeleteTarget(null)}
+        title="Hapus Mata Pelajaran"
+        badge="Konfirmasi"
+        description="Tindakan ini akan mengarsipkan data mata pelajaran"
+        icon={Trash2}
+        variant="danger"
+        maxWidth="max-w-md"
+        zIndex={70}
+        disableBackdropClose={hapusMutation.isPending}
+        hideCloseButton={hapusMutation.isPending}
+        bodyClassName="space-y-3.5"
+        footer={
+          <>
+            <button
+              type="button"
+              disabled={hapusMutation.isPending}
+              onClick={() => setDeleteTarget(null)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="button"
+              disabled={hapusMutation.isPending}
+              onClick={() => hapusMutation.mutate(deleteTarget.id)}
+              className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20 disabled:opacity-50"
+            >
+              {hapusMutation.isPending ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <Trash2 className="size-4" strokeWidth={2.2} />
+              )}
+              <span>{hapusMutation.isPending ? 'Menghapus...' : 'Ya, Hapus Data'}</span>
+            </button>
+          </>
+        }
+      >
+        {deleteTarget && (
+          <>
+            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border-2 border-[#b6f6d9] dark:border-emerald-700/80">
+              <span className="text-[10px] uppercase font-bold text-slate-400">Target Mata Pelajaran</span>
+              <h4 className="text-sm font-black text-slate-900 dark:text-white mt-0.5">
+                {deleteTarget.nama_mapel || deleteTarget.name}
+              </h4>
+              <p className="text-xs font-mono text-slate-500 mt-0.5">
+                Kode: {deleteTarget.kode_mapel || deleteTarget.code} · {deleteTarget.unit_pendidikan?.name || 'Unit'}
+              </p>
+            </div>
+            <div className="rounded-xl border border-rose-200/80 bg-rose-50/70 p-3.5 text-xs font-semibold text-rose-900 dark:border-rose-900/50 dark:bg-rose-950/30 dark:text-rose-300 leading-relaxed flex items-start gap-2.5">
+              <div className="size-6 shrink-0 rounded-lg bg-rose-600 flex items-center justify-center text-white mt-0.5">
+                <AlertTriangle className="size-3.5" />
+              </div>
+              <p>
+                Apakah Anda yakin ingin menghapus mata pelajaran ini? Data yang terhapus dapat dipulihkan kembali dari filter arsip jika diperlukan.
+              </p>
+            </div>
+          </>
+        )}
+      </AppModal>
 
- {/* ── HARMONIZED DELETE CONFIRMATION MODAL (z-[70]) ────────────────────── */}
- <AnimatePresence>
- {deleteTarget && (
- <div
- className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="delete-confirm-title"
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !hapusMutation.isPending) {
- setDeleteTarget(null)
- }
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="w-full max-w-md font-sans my-auto"
- >
- <div className="flex flex-col overflow-hidden rounded-2xl border border-rose-200/80 bg-white shadow-2xl shadow-sm dark:border-rose-900/60 dark:bg-[#182232] dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
-
- {/* Header */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-white dark:bg-[#1B2433] p-2.5 shadow-md shadow-sm border border-rose-300/30 shrink-0">
- <Trash2 className="size-5 text-emerald-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3 id="delete-confirm-title" className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Hapus Mata Pelajaran</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-rose-50 px-2 py-0.5 text-[10px] font-bold text-rose-700 border border-rose-200/80 dark:bg-rose-950/60 dark:text-rose-300">
- Konfirmasi
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Tindakan ini akan mengarsipkan data mata pelajaran
- </p>
- </div>
- </div>
- <button
- type="button"
- disabled={hapusMutation.isPending}
- onClick={() => setDeleteTarget(null)}
- aria-label="Batal hapus"
- className="rounded-xl p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 transition"
- >
- <X className="size-4" strokeWidth={2.2} />
- </button>
- </div>
-
- {/* Target Entity Summary Box */}
- <div className="p-6 space-y-3.5">
- <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-emerald-200/80 dark:border-emerald-800/60">
- <span className="text-[10px] uppercase font-bold text-slate-400">Target Mata Pelajaran</span>
- <h4 className="text-sm font-black text-slate-900 dark:text-white mt-0.5">
- {deleteTarget.nama_mapel || deleteTarget.name}
- </h4>
- <p className="text-xs font-mono text-slate-500 mt-0.5">
- Kode: {deleteTarget.kode_mapel || deleteTarget.code} · {deleteTarget.unit_pendidikan?.name || 'Unit'}
- </p>
- </div>
-
- {/* Danger Notice Box */}
- <div className="rounded-xl border border-rose-200/80 bg-rose-50/70 p-3.5 text-xs font-semibold text-rose-900 dark:border-rose-900/50 dark:bg-rose-950/30 dark:text-rose-300 leading-relaxed flex items-start gap-2.5">
- <div className="size-6 shrink-0 rounded-lg bg-rose-600 flex items-center justify-center text-white mt-0.5">
- <AlertTriangle className="size-3.5" />
- </div>
- <p>
- Apakah Anda yakin ingin menghapus mata pelajaran ini? Data yang terhapus dapat dipulihkan kembali dari filter arsip jika diperlukan.
- </p>
- </div>
- </div>
-
- {/* Footer */}
- <div className="flex items-center justify-between border-t border-emerald-200/80 bg-white px-6 py-4 dark:border-emerald-800/60 dark:bg-slate-950">
- <button
- type="button"
- disabled={hapusMutation.isPending}
- onClick={() => setDeleteTarget(null)}
- className="inline-flex items-center gap-2 rounded-xl border border-emerald-300 bg-emerald-50 border border-emerald-200/80 px-4 py-2.5 text-xs font-extrabold text-emerald-700 transition-all duration-200 hover:scale-[1.02] hover:bg-slate-200 active:scale-95 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 cursor-pointer disabled:opacity-50"
- >
- <X className="size-3.5" strokeWidth={2.2} />
- <span>Batal</span>
- </button>
- <button
- type="button"
- disabled={hapusMutation.isPending}
- onClick={() => hapusMutation.mutate(deleteTarget.id)}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:border-rose-800/60 dark:text-rose-400 px-5 py-2.5 text-xs font-black text-white shadow-md shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-95 cursor-pointer disabled:opacity-50"
- >
- {hapusMutation.isPending ? (
- <Loader2 className="size-4 animate-spin" />
- ) : (
- <Trash2 className="size-4" strokeWidth={2.2} />
- )}
- <span>{hapusMutation.isPending ? 'Menghapus...' : 'Ya, Hapus Data'}</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
-
- {/* ── HARMONIZED BULK DELETE CONFIRMATION MODAL (z-[70]) ──────────────── */}
- <AnimatePresence>
- {bulkDeleteConfirmOpen && (
- <div
- className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="bulk-delete-confirm-title"
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !bulkDeleteMutation.isPending) {
- setBulkDeleteConfirmOpen(false)
- }
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="w-full max-w-md font-sans my-auto"
- >
- <div className="flex flex-col overflow-hidden rounded-2xl border border-rose-200/80 bg-white shadow-2xl shadow-sm dark:border-rose-900/60 dark:bg-[#182232] dark:shadow-black/60">
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-white dark:bg-[#1B2433] p-2.5 shadow-md shadow-sm border border-rose-300/30 shrink-0">
- <Trash2 className="size-5 text-slate-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3 id="bulk-delete-confirm-title" className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
- Hapus Massal Mata Pelajaran
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Konfirmasi penghapusan beberapa data sekaligus
- </p>
- </div>
- </div>
- <button
- type="button"
- disabled={bulkDeleteMutation.isPending}
- onClick={() => setBulkDeleteConfirmOpen(false)}
- aria-label="Batal hapus"
- className="rounded-xl p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 transition"
- >
- <X className="size-4" strokeWidth={2.2} />
- </button>
- </div>
- <div className="p-6 space-y-3.5">
- <div className="p-4 rounded-xl bg-rose-50/60 dark:bg-rose-950/30 border border-rose-200/80 dark:border-rose-900/50">
- <span className="text-[10px] uppercase font-bold text-rose-500">Jumlah Data Terpilih</span>
- <h4 className="text-lg font-black text-rose-950 dark:text-rose-200 mt-0.5">
- {selectedIds.length} Mata Pelajaran
- </h4>
- <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
- Apakah Anda yakin ingin menghapus seluruh data mata pelajaran yang telah Anda centang?
- </p>
- </div>
- </div>
- <div className="flex items-center justify-between border-t border-emerald-200/80 bg-white px-6 py-4 dark:border-emerald-800/60 dark:bg-slate-950">
- <button
- type="button"
- disabled={bulkDeleteMutation.isPending}
- onClick={() => setBulkDeleteConfirmOpen(false)}
- className="inline-flex items-center gap-2 rounded-xl border border-emerald-300 bg-emerald-50 border border-emerald-200/80 px-4 py-2.5 text-xs font-extrabold text-emerald-700 transition-all duration-200 hover:scale-[1.02] hover:bg-slate-200 active:scale-95 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 cursor-pointer disabled:opacity-50"
- >
- <X className="size-3.5" strokeWidth={2.2} />
- <span>Batal</span>
- </button>
- <button
- type="button"
- disabled={bulkDeleteMutation.isPending}
- onClick={() => bulkDeleteMutation.mutate(selectedIds)}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:border-rose-800/60 dark:text-rose-400 px-5 py-2.5 text-xs font-black text-white shadow-md shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-95 cursor-pointer disabled:opacity-50"
- >
- {bulkDeleteMutation.isPending ? (
- <Loader2 className="size-4 animate-spin" />
- ) : (
- <Trash2 className="size-4" strokeWidth={2.2} />
- )}
- <span>{bulkDeleteMutation.isPending ? 'Menghapus...' : 'Ya, Hapus Semua'}</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+      {/* ── HARMONIZED BULK DELETE CONFIRMATION MODAL (z-[70]) ──────────────── */}
+      <AppModal
+        isOpen={bulkDeleteConfirmOpen}
+        onClose={() => !bulkDeleteMutation.isPending && setBulkDeleteConfirmOpen(false)}
+        title="Hapus Massal Mata Pelajaran"
+        description="Konfirmasi penghapusan beberapa data sekaligus"
+        icon={Trash2}
+        variant="danger"
+        maxWidth="max-w-md"
+        zIndex={70}
+        disableBackdropClose={bulkDeleteMutation.isPending}
+        hideCloseButton={bulkDeleteMutation.isPending}
+        bodyClassName="space-y-3.5"
+        footer={
+          <>
+            <button
+              type="button"
+              disabled={bulkDeleteMutation.isPending}
+              onClick={() => setBulkDeleteConfirmOpen(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="button"
+              disabled={bulkDeleteMutation.isPending}
+              onClick={() => bulkDeleteMutation.mutate(selectedIds)}
+              className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20 disabled:opacity-50"
+            >
+              {bulkDeleteMutation.isPending ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <Trash2 className="size-4" strokeWidth={2.2} />
+              )}
+              <span>{bulkDeleteMutation.isPending ? 'Menghapus...' : 'Ya, Hapus Semua'}</span>
+            </button>
+          </>
+        }
+      >
+        <div className="p-4 rounded-xl bg-rose-50/60 dark:bg-rose-950/30 border border-rose-200/80 dark:border-rose-900/50">
+          <span className="text-[10px] uppercase font-bold text-rose-500">Jumlah Data Terpilih</span>
+          <h4 className="text-lg font-black text-rose-950 dark:text-rose-200 mt-0.5">
+            {selectedIds.length} Mata Pelajaran
+          </h4>
+          <p className="text-xs text-slate-600 dark:text-slate-300 mt-1">
+            Apakah Anda yakin ingin menghapus seluruh data mata pelajaran yang telah Anda centang?
+          </p>
+        </div>
+      </AppModal>
 
  {/* Smart Floating Scroll Navigator (Opsi A) */}
  <SmartScrollFab targetId="tabel-mata-pelajaran" downTooltip="Langsung ke Tabel Mata Pelajaran" />

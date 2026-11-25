@@ -1,3 +1,4 @@
+import AppModal from '../app/AppModal'
 import { useEffect, useState, useMemo } from 'react'
 import CustomSelect from '@/components/ui/CustomSelect'
 import ActionDropdown from '../app/ActionDropdown'
@@ -335,39 +336,38 @@ function PrintCredentialsModal({ open, onClose, users = [] }) {
  }, 250)
  }
 
- return (
- <div className="fixed inset-0 z-[80] flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-md overflow-y-auto">
- <div className="w-full max-w-2xl overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-[#1B2433] dark:border dark:border-emerald-800/60 my-6">
- {/* Modal Header */}
- <div className="flex items-center justify-between border-b border-emerald-100/80 dark:border-emerald-800/60 px-6 py-4 bg-slate-50/50 dark:bg-slate-900/50">
- <div className="flex items-center gap-3">
- <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/70 text-emerald-700 dark:bg-emerald-950/40 dark:border-emerald-700/80 dark:text-emerald-300 shadow-md shadow-sm">
- <Printer className="size-5" />
- </div>
- <div>
- <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Cetak Kredensial Akun &amp; Password</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 dark:bg-emerald-950/80 px-2 py-0.5 text-[10px] font-bold text-emerald-800 dark:text-emerald-300">
- <Sparkles className="size-3" />
- Cetak / Slip
- </span>
- </h3>
- <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">
- Filter dan pratinjau data cetak secara langsung tanpa membuka tab browser baru.
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={onClose}
- className="rounded-xl p-2 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors"
- >
- <X className="size-4" />
- </button>
- </div>
-
- {/* Modal Content / Filters & Live Preview */}
- <div className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
+  return (
+    <AppModal
+      isOpen={Boolean(open)}
+      onClose={onClose}
+      title="Cetak Kredensial Akun & Password"
+      badge="Cetak / Slip"
+      description="Filter dan pratinjau data cetak secara langsung tanpa membuka tab browser baru."
+      icon={Printer}
+      maxWidth="max-w-2xl"
+      zIndex={80}
+      bodyClassName="space-y-4"
+      footer={
+        <>
+          <button
+            type="button"
+            onClick={onClose}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="button"
+            onClick={handlePrint}
+            className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+          >
+            <Printer className="size-4" />
+            <span>Cetak / Print PDF Sekarang</span>
+          </button>
+        </>
+      }
+    >
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
  {/* Kriteria 1: Unit Pendidikan */}
  <div>
@@ -505,29 +505,8 @@ function PrintCredentialsModal({ open, onClose, users = [] }) {
  )}
  </div>
  </div>
- </div>
-
- {/* Modal Footer */}
- <div className="flex justify-end gap-2 border-t border-emerald-100/80 dark:border-emerald-800/60 bg-slate-50 dark:bg-slate-900 px-6 py-4">
- <button
- type="button"
- onClick={onClose}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 px-4 py-2 text-xs font-extrabold text-slate-600 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors"
- >
- Batal
- </button>
- <button
- type="button"
- onClick={handlePrint}
- className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 dark:bg-emerald-50 dark:text-slate-900 dark: hover:from-emerald-700 hover:to-teal-700 px-5 py-2 text-xs font-extrabold shadow-md shadow-sm cursor-pointer transition-all text-white border border-emerald-600 h-9 text-sm font-medium"
- >
- <Printer className="size-3.5" />
- <span>Cetak / Print PDF Sekarang</span>
- </button>
- </div>
- </div>
- </div>
- )
+    </AppModal>
+  )
 }
 
 function AccountModal({ open, user, roles = [], saving, onClose, onSave, roleOnly = false }) {
@@ -799,78 +778,41 @@ function AccountModal({ open, user, roles = [], saving, onClose, onSave, roleOnl
  onSave(payload)
  }
 
- return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-md overflow-y-auto">
- <form onSubmit={submit} className="w-full max-w-xl overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-[#1B2433] dark:border dark:border-emerald-800/60 my-8">
- {/* Header */}
- <div className="flex items-center justify-between border-b border-emerald-100/80 dark:border-emerald-800/60 px-6 py-4 bg-slate-50/50 dark:bg-slate-900/50">
- <div className="flex items-center gap-3">
- <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/70 text-emerald-700 dark:bg-emerald-950/40 dark:border-emerald-700/80 dark:text-emerald-300 shadow-md shadow-sm">
- <ShieldCheck className="size-5" />
- </div>
- <div>
- <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>{roleOnly ? 'Edit Akun Unit' : editing ? 'Edit Akun Login' : 'Tambah Akun Login Baru'}</span>
- </h3>
- <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">
- {editing
- ? 'Perbarui informasi dan role akses akun login terdaftar.'
- : 'Pilih metode pembuatan akun: tarik dari data terdaftar atau input manual admin standalone.'}
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={onClose}
- className="rounded-xl p-2 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors"
- >
- <X className="size-4" />
- </button>
- </div>
-
- {formError && (
- <div className="mx-6 mt-4 flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs font-semibold text-amber-800 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-300">
- <AlertTriangle className="size-4 shrink-0 text-amber-600" />
- <span>{formError}</span>
- </div>
- )}
-
- {/* Method Selector Tabs (Only when Creating New Account) */}
- {!editing && !roleOnly && (
- <div className="p-4 pb-0 bg-slate-50/70 dark:bg-slate-900/50 border-b border-emerald-100/80 dark:border-emerald-800/60">
- <label className="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-2">
- Metode Pembuatan Akun:
- </label>
- <div className="grid grid-cols-2 gap-2">
- <button
- type="button"
- onClick={() => handleSwitchMethod('linked')}
- className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-extrabold transition-all duration-200 cursor-pointer ${
- method === 'linked'
- ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-sm'
- : 'bg-white text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-700/80'
- }`}
- >
- <Briefcase className="size-3.5" />
- <span>1. Tarik Data Terdaftar</span>
- </button>
- <button
- type="button"
- onClick={() => handleSwitchMethod('manual')}
- className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-extrabold transition-all duration-200 cursor-pointer ${
- method === 'manual'
- ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-sm'
- : 'bg-white text-slate-600 hover:bg-slate-100 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-700/80'
- }`}
- >
- <ShieldCheck className="size-3.5" />
- <span>2. Manual (Admin Standalone)</span>
- </button>
- </div>
- </div>
- )}
-
- <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+  return (
+    <AppModal
+      isOpen={Boolean(open)}
+      onClose={() => !saving && onClose()}
+      title={roleOnly ? 'Edit Akun Unit' : editing ? 'Edit Akun Login' : 'Tambah Akun Login Baru'}
+      badge={editing ? 'Perbarui' : 'Akun Baru'}
+      description={editing ? 'Perbarui peran, unit, dan status akun pengguna' : 'Buat akun akses login baru untuk pegawai, siswa, atau wali'}
+      icon={ShieldCheck}
+      maxWidth="max-w-xl"
+      zIndex={70}
+      disableBackdropClose={saving}
+      hideCloseButton={saving}
+      footer={
+        <>
+          <button
+            type="button"
+            disabled={saving}
+            onClick={onClose}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="submit"
+            form="user-account-modal-form"
+            disabled={saving}
+            className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+          >
+            <span>{saving ? 'Menyimpan...' : 'Simpan Akun'}</span>
+          </button>
+        </>
+      }
+    >
+      <form id="user-account-modal-form" onSubmit={submit} className="space-y-4">
  {/* METHOD 1: LINKED ENTITY LOOKUP */}
  {!editing && !roleOnly && method === 'linked' && (
  <div className="space-y-3.5 rounded-xl p-4 bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/80 dark:border-emerald-900/40">
@@ -1158,28 +1100,9 @@ function AccountModal({ open, user, roles = [], saving, onClose, onSave, roleOnl
  </label>
  )}
  </div>
- </div>
-
- {/* Footer */}
- <div className="flex justify-end gap-2 border-t border-emerald-100/80 dark:border-emerald-800/60 bg-slate-50 dark:bg-slate-900 px-6 py-4">
- <button
- type="button"
- onClick={onClose}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-700/80 px-4 py-2 text-xs font-extrabold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
- >
- Batal
- </button>
- <button
- disabled={saving}
- className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 dark:bg-slate-100 dark:text-slate-900 dark: hover:from-emerald-700 hover:to-teal-700 px-5 py-2 text-xs font-extrabold shadow-md shadow-sm disabled:opacity-50 cursor-pointer transition-all text-white border border-emerald-600 h-9 text-sm font-medium"
- >
- <ShieldCheck className="size-4" />
- <span>{saving ? 'Menyimpan...' : 'Simpan Akun Login'}</span>
- </button>
- </div>
- </form>
- </div>
- )
+      </form>
+    </AppModal>
+  )
 }
 
 
@@ -1218,24 +1141,44 @@ function ResetPasswordModal({ isOpen, onClose, onConfirm, user, isSubmitting }) 
  onConfirm({ password, password_confirmation: passwordConfirmation })
  }
 
- return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
- <div className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]">
- <form onSubmit={handleSubmit} className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-md shadow-sm">
- <Key className="size-5" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-amber-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
- Keamanan Akun
- </span>
- <h3 className="text-base font-bold text-slate-900 dark:text-white mt-0.5">
- Reset Password {user.name}
- </h3>
- </div>
- </div>
-
+  return (
+    <AppModal
+      isOpen={Boolean(isOpen && user)}
+      onClose={() => !isSubmitting && onClose()}
+      title={user ? `Reset Password ${user.name}` : 'Reset Password'}
+      badge="Keamanan Akun"
+      description={user ? `Masukkan password baru untuk akun ${user.email}` : ''}
+      icon={Key}
+      variant="warning"
+      maxWidth="max-w-md"
+      zIndex={70}
+      disableBackdropClose={isSubmitting}
+      hideCloseButton={isSubmitting}
+      footer={
+        <>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isSubmitting}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="submit"
+            form="user-reset-pw-form"
+            disabled={isSubmitting}
+            className="h-9.5 px-5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-amber-600 shadow-md shadow-amber-600/20 disabled:opacity-50"
+          >
+            <Key className="size-3.5" />
+            <span>{isSubmitting ? 'Menyimpan...' : 'Reset Password'}</span>
+          </button>
+        </>
+      }
+    >
+      {user && (
+      <form id="user-reset-pw-form" onSubmit={handleSubmit} className="space-y-4">
  <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
  Masukkan password baru untuk akun <strong>{user.email}</strong>.
  </p>
@@ -1296,76 +1239,58 @@ function ResetPasswordModal({ isOpen, onClose, onConfirm, user, isSubmitting }) 
  </div>
  </div>
 
- <div className="flex items-center justify-end gap-3">
- <button
- type="button"
- onClick={onClose}
- disabled={isSubmitting}
- className="rounded-xl border border-emerald-200/80 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-slate-800 transition-all cursor-pointer"
- >
- Batal
- </button>
- <button
- type="submit"
- disabled={isSubmitting}
- className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-[#1B2433] px-5 py-2 text-xs font-bold shadow-md shadow-sm hover:brightness-105 disabled:opacity-50 transition-all cursor-pointer"
- >
- <Key className="size-3.5" />
- <span>{isSubmitting ? 'Menyimpan...' : 'Reset Password'}</span>
- </button>
- </div>
- </form>
- </div>
- </div>
- )
+      </form>
+      )}
+    </AppModal>
+  )
 }
 
 // ── HARMONIZED DELETE MODAL ───────────────────────────────────────────────
 function HarmonizedDeleteModal({ isOpen, onClose, onConfirm, user, isSubmitting }) {
  if (!isOpen || !user) return null
- return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
- <div className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]">
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:border-rose-800/60 dark:text-rose-400 shadow-md shadow-sm">
- <Trash2 className="size-6 text-emerald-600" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-rose-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
- Hapus Akun
- </span>
- <h3 className="text-base font-bold text-slate-900 dark:text-white mt-0.5">
- Hapus Akun {user.name}?
- </h3>
- </div>
- </div>
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
- Akun akan dikeluarkan dari semua sesi dan tidak dapat login lagi ke sistem.
- </p>
- <div className="flex items-center justify-end gap-3">
- <button
- type="button"
- onClick={onClose}
- disabled={isSubmitting}
- className="rounded-xl border border-emerald-200/80 px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-slate-800 transition-all cursor-pointer"
- >
- Batal
- </button>
- <button
- type="button"
- onClick={onConfirm}
- disabled={isSubmitting}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white px-5 py-2.5 text-xs font-bold text-white shadow-md shadow-sm hover:brightness-105 disabled:opacity-50 transition-all cursor-pointer"
- >
- <Trash2 className="size-3.5" />
- <span>{isSubmitting ? 'Menghapus...' : 'Ya, Hapus Akun'}</span>
- </button>
- </div>
- </div>
- </div>
- </div>
- )
+  return (
+    <AppModal
+      isOpen={Boolean(isOpen && user)}
+      onClose={() => !isSubmitting && onClose()}
+      title={user ? `Hapus Akun ${user.name}?` : 'Hapus Akun?'}
+      badge="Hapus Akun"
+      description="Konfirmasi penghapusan akun pengguna"
+      icon={Trash2}
+      variant="danger"
+      maxWidth="max-w-md"
+      zIndex={70}
+      disableBackdropClose={isSubmitting}
+      hideCloseButton={isSubmitting}
+      footer={
+        <>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isSubmitting}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={isSubmitting}
+            className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20 disabled:opacity-50"
+          >
+            <Trash2 className="size-3.5" />
+            <span>{isSubmitting ? 'Menghapus...' : 'Ya, Hapus Akun'}</span>
+          </button>
+        </>
+      }
+    >
+      {user && (
+      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+        Akun akan dikeluarkan dari semua sesi dan tidak dapat login lagi ke sistem.
+      </p>
+      )}
+    </AppModal>
+  )
 }
 
 // ── HARMONIZED IMPORT MODAL ──────────────────────────────────────────────
@@ -1381,36 +1306,42 @@ function HarmonizedImportModal({
 }) {
  if (!isOpen) return null
 
- return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-md">
- <div className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white dark:bg-[#182232]/80 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
-
- {/* Header */}
- <div className="flex items-center justify-between border-b border-emerald-100/80 p-5 dark:border-emerald-800/60">
- <div className="flex items-center gap-3">
- <div className="flex size-11 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-md shadow-sky-500/20">
- <Upload className="size-5" />
- </div>
- <div>
- <h3 className="text-base font-bold text-slate-900 dark:text-white">
- Import Akun Pengguna
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- Unggah berkas Excel (.xlsx, .xls) atau CSV data akun
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={onClose}
- className="flex size-8 items-center justify-center rounded-xl text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition cursor-pointer"
- >
- <X className="size-4" />
- </button>
- </div>
-
- {/* Content */}
- <form onSubmit={onSubmit} className="p-6 space-y-4">
+  return (
+    <AppModal
+      isOpen={Boolean(isOpen)}
+      onClose={() => !isImporting && onClose()}
+      title="Import Akun Pengguna"
+      badge="Batch Import"
+      description="Unggah berkas Excel atau CSV untuk impor akun pengguna massal"
+      icon={Upload}
+      maxWidth="max-w-md"
+      zIndex={70}
+      disableBackdropClose={isImporting}
+      hideCloseButton={isImporting}
+      footer={
+        <>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isImporting}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="submit"
+            form="user-import-form"
+            disabled={isImporting}
+            className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+          >
+            <Upload className="size-3.5" />
+            <span>{isImporting ? 'Memproses...' : 'Mulai Impor Akun'}</span>
+          </button>
+        </>
+      }
+    >
+      <form id="user-import-form" onSubmit={onSubmit} className="space-y-4">
  {/* Download Template Card */}
  <div className="flex items-center justify-between rounded-xl border border-emerald-200/80 bg-slate-50/60 p-3.5 dark:border-emerald-800/60 dark:bg-slate-900/40">
  <div className="flex items-center gap-2.5">
@@ -1505,67 +1436,42 @@ function HarmonizedImportModal({
  </label>
  </div>
 
- {/* Actions */}
- <div className="flex items-center justify-end gap-3 pt-2">
- <button
- type="button"
- onClick={onClose}
- disabled={isImporting}
- className="rounded-xl border border-emerald-200/80 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-slate-800 transition cursor-pointer"
- >
- Batal
- </button>
- <button
- type="submit"
- disabled={!importFile || isImporting}
- className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-[#1B2433] px-5 py-2 text-xs font-bold shadow-md shadow-sm hover:brightness-105 disabled:opacity-50 transition cursor-pointer"
- >
- <Upload className="size-3.5" />
- <span>{isImporting ? 'Memproses...' : 'Mulai Impor Akun'}</span>
- </button>
- </div>
- </form>
- </div>
- </div>
- )
+      </form>
+    </AppModal>
+  )
 }
 
 // ── HARMONIZED DUPLICATE REPORT MODAL ──────────────────────────────────────
 function HarmonizedDuplicateModal({ data, onClose }) {
  if (!data) return null
 
- const duplicates = data.duplicates || []
+ const duplicates = data?.duplicates || []
 
- return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-md">
- <div className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white dark:bg-[#182232]/80 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
-
- {/* Header */}
- <div className="flex items-center justify-between border-b border-emerald-100/80 p-5 dark:border-emerald-800/60">
- <div className="flex items-center gap-3">
- <div className="flex size-11 items-center justify-center rounded-xl bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-700/80 dark:text-slate-300 shadow-md shadow-sm">
- <AlertCircle className="size-5" />
- </div>
- <div>
- <h3 className="text-base font-bold text-slate-900 dark:text-white">
- Laporan Hasil Impor Akun Pengguna
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- Ringkasan sinkronisasi dan status pemrosesan data akun pengguna
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={onClose}
- className="flex size-8 items-center justify-center rounded-xl text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition cursor-pointer"
- >
- <X className="size-4" />
- </button>
- </div>
-
- {/* Body */}
- <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+  return (
+    <AppModal
+      isOpen={Boolean(data)}
+      onClose={onClose}
+      title="Laporan Hasil Impor Akun Pengguna"
+      badge="Ringkasan"
+      description="Ringkasan sinkronisasi dan status pemrosesan data akun pengguna"
+      icon={AlertCircle}
+      maxWidth="max-w-md"
+      zIndex={70}
+      bodyClassName="space-y-4 text-xs"
+      footer={
+        <div className="flex w-full justify-end">
+          <button
+            type="button"
+            onClick={onClose}
+            className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+          >
+            <span>Mengerti</span>
+          </button>
+        </div>
+      }
+    >
+      {data && (
+        <>
  {/* KPI Cards */}
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
  <div className="rounded-xl border border-emerald-200/80 bg-emerald-50/50 p-3 text-center dark:border-emerald-800/60 dark:bg-emerald-950/30">
@@ -1632,57 +1538,41 @@ function HarmonizedDuplicateModal({ data, onClose }) {
  </div>
  </div>
  )}
- </div>
-
- {/* Footer */}
- <div className="flex items-center justify-end border-t border-emerald-100/80 bg-slate-50/50 px-6 py-3.5 dark:border-emerald-800/60 dark:bg-slate-900/30">
- <button
- type="button"
- onClick={onClose}
- className="inline-flex items-center gap-1.5 rounded-xl bg-white dark:bg-[#1B2433] px-5 py-2 text-xs font-bold shadow-md hover:from-emerald-700 hover:to-teal-800 transition cursor-pointer"
- >
- <span>Mengerti</span>
- </button>
- </div>
- </div>
- </div>
- )
+        </>
+      )}
+    </AppModal>
+  )
 }
 
 function HarmonizedSyncResultModal({ data, onClose }) {
  if (!data) return null
- const totalBaru = data.total_baru || 0
+ const totalBaru = data?.total_baru || 0
 
- return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-md">
- <div className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white dark:bg-[#182232]/80 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
-
- {/* Header */}
- <div className="flex items-center justify-between border-b border-emerald-100/80 p-5 dark:border-emerald-800/60">
- <div className="flex items-center gap-3">
- <div className="flex size-11 items-center justify-center rounded-xl bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-700/80 dark:text-slate-300 shadow-md shadow-sm">
- <Sparkles className="size-5" />
- </div>
- <div>
- <h3 className="text-base font-bold text-slate-900 dark:text-white">
- Hasil Sinkronisasi Akun Otomatis
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- Pembaruan akun login terintegrasi untuk entitas terdaftar
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={onClose}
- className="flex size-8 items-center justify-center rounded-xl text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition cursor-pointer"
- >
- <X className="size-4" />
- </button>
- </div>
-
- {/* Body */}
- <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+  return (
+    <AppModal
+      isOpen={Boolean(data)}
+      onClose={onClose}
+      title="Hasil Sinkronisasi Akun Otomatis"
+      badge={`${totalBaru} Akun Baru`}
+      description="Ringkasan sinkronisasi akun otomatis dari data master"
+      icon={Sparkles}
+      maxWidth="max-w-md"
+      zIndex={70}
+      bodyClassName="space-y-4 text-xs"
+      footer={
+        <div className="flex w-full justify-end">
+          <button
+            type="button"
+            onClick={onClose}
+            className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+          >
+            <span>Tutup &amp; Tinjau Daftar Akun</span>
+          </button>
+        </div>
+      }
+    >
+      {data && (
+        <>
  {/* KPI Summary */}
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
  <div className="rounded-xl border border-emerald-200/80 bg-emerald-50/50 p-3 text-center dark:border-emerald-800/60 dark:bg-emerald-950/30">
@@ -1720,21 +1610,10 @@ function HarmonizedSyncResultModal({ data, onClose }) {
  </li>
  </ul>
  </div>
- </div>
-
- {/* Footer */}
- <div className="flex items-center justify-end border-t border-emerald-100/80 bg-slate-50/50 px-6 py-3.5 dark:border-emerald-800/60 dark:bg-slate-900/30">
- <button
- type="button"
- onClick={onClose}
- className="inline-flex items-center gap-1.5 rounded-xl bg-white dark:bg-[#1B2433] px-5 py-2 text-xs font-bold shadow-md hover:from-emerald-700 hover:to-teal-800 transition cursor-pointer"
- >
- <span>Tutup &amp; Tinjau Daftar Akun</span>
- </button>
- </div>
- </div>
- </div>
- )
+        </>
+      )}
+    </AppModal>
+  )
 }
 
 export default function UserAccountManagement({

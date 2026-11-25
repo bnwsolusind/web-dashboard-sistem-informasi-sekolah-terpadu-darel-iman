@@ -1,4 +1,5 @@
 import { HeroUiHeader } from "../components/ui/HeroUiHeader"
+import AppModal from "../components/app/AppModal"
 import CustomSelect from "../components/ui/CustomSelect"
 import React, { useState, useEffect, useRef, useMemo } from 'react'
 import {
@@ -72,7 +73,8 @@ import {
   MasterPageHeader,
   MasterActionButton,
   MasterStatCard,
-  MasterStatsGrid
+  MasterStatsGrid,
+  SquircleActionButton
 } from '../components/master-data'
 import {
   Button
@@ -783,17 +785,11 @@ export default function WorshipAttendancePage() {
  inputClassName="h-9 text-xs font-semibold"
  />
 
- <Button
- type="button"
+ <SquircleActionButton
  variant="primary"
- appearance="fill"
- size="sm"
+ label="Template Baru"
  onClick={() => { setShowTemplateModal(true); setTemplateStep(1) }}
- prefixIcon={<Plus className="h-4 w-4" />}
- className="!bg-white dark:bg-[#1B2433] !from-emerald-600 !to-teal-600 ! font-bold shadow-sm cursor-pointer"
- >
- Template Baru
- </Button>
+ />
           </div>
           </div>
 
@@ -995,13 +991,12 @@ export default function WorshipAttendancePage() {
  <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
  Opened
  </span>
- <button
+ <SquircleActionButton
+ variant="edit"
+ icon={Edit}
+ label="Ubah Jam Manual"
  onClick={() => handleOpenEditSessionModal(sessionDetail)}
- className="inline-flex items-center gap-1 rounded-lg bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 px-2.5 py-1 text-xs font-bold text-emerald-700 shadow-2xs transition-all hover:bg-emerald-100 hover:scale-105 active:scale-95 dark:bg-emerald-950/50 dark:border-emerald-800/60 dark:text-emerald-300"
- >
- <Edit className="h-3.5 w-3.5 text-emerald-600" />
- <span>Ubah Jam Manual</span>
- </button>
+ />
  </div>
  <div className="mt-1 flex flex-wrap items-center gap-2.5 text-xs text-slate-500 dark:text-slate-400">
  <span className="flex items-center gap-1 font-medium">
@@ -1017,18 +1012,18 @@ export default function WorshipAttendancePage() {
  </div>
 
  <div className="flex items-center gap-2">
- <button
+ <SquircleActionButton
+ variant="neutral"
+ icon={ChevronDown}
+ label="Aksi Cepat"
  onClick={() => toastInfo('Aksi Cepat', 'Pilihan aksi cepat sesi.')}
- className="flex items-center gap-1 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 py-2 text-xs font-bold text-slate-700 shadow-sm transition hover:bg-emerald-50/40 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200"
- >
- Aksi Cepat <ChevronDown className="h-3.5 w-3.5" />
- </button>
- <button
+ />
+ <SquircleActionButton
+ variant="primary"
+ icon={Lock}
+ label="Tutup Sesi"
  onClick={() => toastWarning('Tutup Sesi', 'Sesi telah ditutup.')}
- className="rounded-xl bg-emerald-600 px-4 py-2 text-xs font-bold text-white shadow transition hover:bg-emerald-700"
- >
- Tutup Sesi
- </button>
+ />
  </div>
  </div>
 
@@ -1263,8 +1258,10 @@ export default function WorshipAttendancePage() {
  </CustomSelect>
 
  {(filterStatus || filterKamar || filterKelompok || searchSantri) && (
- <button
- type="button"
+ <SquircleActionButton
+ variant="restore"
+ icon={RotateCcw}
+ label="Reset Filter"
  onClick={() => {
  setFilterStatus('')
  setFilterKamar('')
@@ -1272,10 +1269,7 @@ export default function WorshipAttendancePage() {
  setSearchSantri('')
  setCurrentPage(1)
  }}
- className="flex h-9 w-full sm:w-auto items-center justify-center gap-1 rounded-xl bg-emerald-50 hover:bg-slate-200 text-emerald-700 px-3 text-xs font-bold transition cursor-pointer dark:bg-emerald-950/40 dark:text-slate-200 dark:hover:bg-slate-700"
- >
- Reset Filter
- </button>
+ />
  )}
  </div>
 
@@ -1594,11 +1588,32 @@ export default function WorshipAttendancePage() {
  )}
 
  {/* ── VERIFY MODAL ──────────────────────────────────────────────────── */}
- {showVerifyModal && (
- <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm">
- <div className="w-full max-w-md rounded-xl border border-emerald-200/80 bg-white p-5 shadow-2xl dark:border-emerald-800/60 dark:bg-[#1B2433]">
- <h3 className="text-base font-bold text-slate-900 dark:text-white mb-3">Verifikasi Status Presensi Santri</h3>
- <form onSubmit={handleVerifySubmit} className="space-y-4">
+ <AppModal
+ isOpen={showVerifyModal}
+ onClose={() => setShowVerifyModal(false)}
+ title="Verifikasi Status Presensi Santri"
+ icon={UserCheck}
+ maxWidth="max-w-md"
+ footer={
+ <div className="flex w-full justify-end gap-2.5">
+ <button
+ type="button"
+ onClick={() => setShowVerifyModal(false)}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
+ >
+ Batal
+ </button>
+ <button
+ type="submit"
+ form="worship-verify-form"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 active:scale-95 cursor-pointer"
+ >
+ Simpan Status
+ </button>
+ </div>
+ }
+ >
+ <form id="worship-verify-form" onSubmit={handleVerifySubmit} className="space-y-4">
  <div>
  <label className="block text-xs font-bold uppercase text-slate-500 mb-1">Status Kehadiran</label>
  <CustomSelect
@@ -1623,47 +1638,37 @@ export default function WorshipAttendancePage() {
  placeholder="Catatan opsional..."
  />
  </div>
-
- <div className="flex justify-end gap-2 pt-1">
- <button
- type="button"
- onClick={() => setShowVerifyModal(false)}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 dark:border-emerald-800/60 dark:text-slate-200"
- >
- Batal
- </button>
- <button
- type="submit"
- className="rounded-lg bg-emerald-600 px-5 py-2 text-xs font-bold text-white shadow border border-emerald-200/80 dark:border-emerald-800/60 h-9 text-sm font-medium"
- >
- Simpan Status
- </button>
- </div>
  </form>
- </div>
- </div>
- )}
+ </AppModal>
 
  {/* ── CAMERA MODAL ──────────────────────────────────────────────────── */}
- {showCameraModal && (
- <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 backdrop-blur-md p-4">
- <div className="w-full max-w-lg rounded-xl bg-white p-6 shadow-2xl dark:bg-[#111827] space-y-4 border border-emerald-200/80 dark:border-emerald-800/60">
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-3 dark:border-emerald-800/60">
- <div className="flex items-center gap-2">
- <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
- <Camera className="h-4 w-4" />
- </div>
- <div>
- <h3 className="text-base font-bold text-slate-900 dark:text-white">
- Scanner QR Code Kartu Santri
- </h3>
- <p className="text-xs text-slate-400">Arahkan QR Code pada kartu santri ke area pemindai</p>
- </div>
- </div>
- <button onClick={closeCameraModal} className="text-slate-400 hover:text-slate-600">
- <X className="h-5 w-5" />
+ <AppModal
+ isOpen={showCameraModal}
+ onClose={closeCameraModal}
+ title="Scanner QR Code Kartu Santri"
+ description="Arahkan QR Code pada kartu santri ke area pemindai"
+ icon={Camera}
+ maxWidth="max-w-lg"
+ footer={
+ <div className="flex w-full items-center justify-between text-xs">
+ <button
+ type="button"
+ onClick={cameraActive ? stopCamera : startCamera}
+ className="inline-flex h-9.5 items-center gap-1.5 rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 hover:bg-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
+ >
+ {cameraActive ? <><CameraOff className="h-3.5 w-3.5 text-rose-500" /> Matikan Kamera</> : <><Camera className="h-3.5 w-3.5 text-emerald-500" /> Nyalakan Kamera</>}
+ </button>
+ <button
+ type="button"
+ onClick={closeCameraModal}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 hover:bg-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
+ >
+ Tutup Kamera
  </button>
  </div>
+ }
+ >
+ <div className="space-y-4">
 
  {/* Video Camera Viewfinder Screen */}
  <div className="relative overflow-hidden rounded-xl bg-black aspect-video flex items-center justify-center border border-emerald-200/80 dark:border-emerald-800/60 shadow-inner">
@@ -1719,40 +1724,37 @@ export default function WorshipAttendancePage() {
  {processingScan ? <RefreshCw className="h-4 w-4 animate-spin" /> : 'Proses QR'}
  </button>
  </form>
-
- <div className="flex justify-between items-center pt-2 text-xs text-slate-400 border-t border-emerald-200/80 dark:border-emerald-800/60">
- <button
- type="button"
- onClick={cameraActive ? stopCamera : startCamera}
- className="flex items-center gap-1.5 font-bold text-slate-600 hover:text-slate-800 dark:text-slate-300"
- >
- {cameraActive ? <><CameraOff className="h-3.5 w-3.5 text-rose-500" /> Matikan Kamera</> : <><Camera className="h-3.5 w-3.5 text-emerald-500" /> Nyalakan Kamera</>}
- </button>
- <button
- type="button"
- onClick={closeCameraModal}
- className="text-slate-500 hover:text-slate-700 font-semibold"
- >
- Tutup Kamera
- </button>
  </div>
  </div>
- </div>
- </div>
- )}
+ </AppModal>
 
  {/* ── MODAL UBAH MANUAL JADWAL SESI IBADAH SANTRI ──────────────────── */}
- {showEditSessionModal && (
- <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
- <form onSubmit={handleSaveEditSession} className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl dark:bg-[#111827] space-y-4">
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-3 dark:border-emerald-800/60">
- <h3 className="text-base font-bold text-slate-900 dark:text-white">
- Ubah Manual Jam & Lokasi Sesi Santri
- </h3>
- <button type="button" onClick={() => setShowEditSessionModal(false)} className="text-slate-400 hover:text-slate-600">
- <X className="h-5 w-5" />
+ <AppModal
+ isOpen={showEditSessionModal}
+ onClose={() => setShowEditSessionModal(false)}
+ title="Ubah Manual Jam & Lokasi Sesi Santri"
+ icon={Clock}
+ maxWidth="max-w-md"
+ footer={
+ <div className="flex w-full justify-end gap-2.5">
+ <button
+ type="button"
+ onClick={() => setShowEditSessionModal(false)}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
+ >
+ Batal
+ </button>
+ <button
+ type="submit"
+ form="worship-edit-session-form"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 active:scale-95 cursor-pointer"
+ >
+ Simpan Perubahan
  </button>
  </div>
+ }
+ >
+ <form id="worship-edit-session-form" onSubmit={handleSaveEditSession} className="space-y-4">
 
  <div className="space-y-3 text-xs">
  <div>
@@ -1808,31 +1810,36 @@ export default function WorshipAttendancePage() {
  </div>
  </div>
 
- <div className="flex justify-end gap-2 border-t border-emerald-200/80 pt-3 dark:border-emerald-800/60">
+ </form>
+ </AppModal>
+
+ {/* ── TEMPLATE MODAL ────────────────────────────────────────────────── */}
+ <AppModal
+ isOpen={showTemplateModal}
+ onClose={() => setShowTemplateModal(false)}
+ title="Tambah Template Ibadah Baru"
+ icon={Plus}
+ maxWidth="max-w-lg"
+ footer={
+ <div className="flex w-full justify-end gap-2.5">
  <button
  type="button"
- onClick={() => setShowEditSessionModal(false)}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50 dark:border-emerald-800/60 dark:text-slate-300"
+ onClick={() => setShowTemplateModal(false)}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
  Batal
  </button>
  <button
  type="submit"
- className="rounded-lg bg-emerald-600 px-4 py-2 text-xs font-bold text-white border border-emerald-200/80 dark:border-emerald-800/60 h-9 text-sm font-medium"
+ form="worship-template-form"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 active:scale-95 cursor-pointer"
  >
- Simpan Perubahan
+ Simpan Template
  </button>
  </div>
- </form>
- </div>
- )}
-
- {/* ── TEMPLATE MODAL ────────────────────────────────────────────────── */}
- {showTemplateModal && (
- <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm">
- <div className="w-full max-w-lg rounded-xl border border-emerald-200/80 bg-white p-5 shadow-2xl dark:border-emerald-800/60 dark:bg-[#1B2433]">
- <h3 className="text-base font-bold text-slate-900 dark:text-white mb-4">Tambah Template Ibadah Baru</h3>
- <form onSubmit={handleCreateTemplate} className="space-y-3 text-xs">
+ }
+ >
+ <form id="worship-template-form" onSubmit={handleCreateTemplate} className="space-y-3 text-xs">
  <div>
  <label className="block font-bold text-slate-500 uppercase mb-1">Nama Kegiatan Ibadah</label>
  <input
@@ -1891,57 +1898,38 @@ export default function WorshipAttendancePage() {
  />
  </div>
 
- <div className="flex justify-end gap-2 pt-2">
+ </form>
+ </AppModal>
+
+ {/* ── STUDENT DETAIL MODAL ─────────────────────────────────────────── */}
+ <AppModal
+ isOpen={Boolean(showStudentDrawer && selectedStudent)}
+ onClose={() => setShowStudentDrawer(false)}
+ title={selectedStudent?.student?.nama_lengkap || 'Detail Santri'}
+ description={selectedStudent?.student?.nisn ? `NISN: ${selectedStudent.student.nisn}` : ''}
+ icon={Users}
+ maxWidth="max-w-sm"
+ footer={
+ <div className="flex w-full justify-end">
  <button
  type="button"
- onClick={() => setShowTemplateModal(false)}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 dark:border-emerald-800/60 dark:text-slate-200"
+ onClick={() => setShowStudentDrawer(false)}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- Batal
+ Tutup
  </button>
- <button
- type="submit"
- className="rounded-lg bg-emerald-600 px-5 py-2 text-xs font-bold text-white shadow border border-emerald-200/80 dark:border-emerald-800/60 h-9 text-sm font-medium"
+ </div>
+ }
  >
- Simpan Template
- </button>
- </div>
- </form>
- </div>
- </div>
- )}
-
- {/* ── STUDENT DRAWER ────────────────────────────────────────────────── */}
- {showStudentDrawer && selectedStudent && (
- <>
- <div className="fixed inset-0 z-40 bg-slate-950/30 backdrop-blur-sm" onClick={() => setShowStudentDrawer(false)} />
- <div className="fixed inset-y-0 right-0 z-50 flex w-full max-w-sm flex-col bg-white shadow-2xl dark:bg-[#1B2433] border-l border-emerald-200/80 dark:border-emerald-800/60">
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 p-4 dark:border-emerald-800/60">
- <div className="flex items-center gap-3">
- <div className="flex h-9 w-10 items-center justify-center rounded-full bg-emerald-100 text-sm font-bold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
- {(selectedStudent.student?.nama_lengkap || 'S')[0]}
- </div>
- <div>
- <p className="font-bold text-slate-900 dark:text-white">{selectedStudent.student?.nama_lengkap}</p>
- <p className="text-xs text-slate-400">NISN: {selectedStudent.student?.nisn}</p>
- </div>
- </div>
- <button onClick={() => setShowStudentDrawer(false)} className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100">
- <X className="h-5 w-5" />
- </button>
- </div>
-
- <div className="p-4 space-y-3">
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 p-3 text-xs dark:border-emerald-800/60 dark:bg-slate-800/40 space-y-1">
+ {selectedStudent && (
+ <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 p-3 text-xs dark:bg-slate-800/40 space-y-1">
  <p><span className="text-slate-400">Kamar:</span> <strong className="text-slate-800 dark:text-slate-200">{selectedStudent.room || 'Kamar 01'}</strong></p>
  <p><span className="text-slate-400">Kelompok:</span> <strong className="text-slate-800 dark:text-slate-200">{selectedStudent.group || 'Kelompok A'}</strong></p>
  <p><span className="text-slate-400">Status Presensi:</span> {getAttendancePill(selectedStudent.attendance_status)}</p>
  <p><span className="text-slate-400">Waktu Absen:</span> <strong className="text-slate-800 dark:text-slate-200">{selectedStudent.check_in_time || '04:50 WIB'}</strong></p>
  </div>
- </div>
- </div>
- </>
  )}
+ </AppModal>
 
  </motion.div>
  </MasterDataPage>

@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from 'react'
+import AppModal from '@/components/app/AppModal'
 import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -729,79 +730,40 @@ export default function TeacherCommentsWorkspace({
  </div>
 
  {/* 5. HERO UI MODAL FOR TANGGAPI & DETAIL MODAL */}
- <HeroModal
- isOpen={Boolean(activeModalItem)}
- onOpenChange={(open) => {
- if (!open && !submitting) setActiveModalItem(null)
- }}
- >
- <HeroModal.Backdrop
- isDismissable={!submitting}
- className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- >
- <HeroModal.Container placement="center" className="w-full max-w-xl">
  {activeModalItem && (() => {
  const modalTheme = getCategoryTheme(activeModalItem.category || activeModalItem.kategori)
  const modalTeacher = activeModalItem.teacher?.full_name || activeModalItem.teacher?.nama_lengkap || activeModalItem.teacher?.name || '-'
  const isModalSigned = activeModalItem.signature_status === 'signed' || Boolean(activeModalItem.signed_by_user_id && activeModalItem.signed_at)
 
  return (
- <HeroModal.Dialog className="modal-dialog font-sans my-auto w-full max-w-xl flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60 outline-hidden">
- {/* Top Accent Gradient Bar */}
- <div className={cn('h-1.5 w-full shrink-0', modalTheme.topBar)} />
-
- {/* Modal Header */}
- <HeroModal.Header className="modal-header flex !flex-row items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232] dark:bg-slate-950">
- <div className="flex items-center gap-3">
- <div className={cn('flex h-11 w-11 shrink-0 items-center justify-center rounded-xl shadow-md text-white', modalTheme.iconBg)}>
- <BookOpenCheck className="h-5 w-5" />
- </div>
- <div>
- <div className="flex flex-wrap items-center gap-2">
- <HeroChip
- size="sm"
- variant="soft"
- className={cn('font-bold text-[10px] inline-flex items-center gap-1 border', modalTheme.badge)}
+ <AppModal
+ isOpen={Boolean(activeModalItem)}
+ onClose={() => { if (!submitting) setActiveModalItem(null) }}
+ disableBackdropClose={submitting}
+ hideCloseButton={submitting}
+ title={activeModalItem?.title || activeModalItem?.judul || '-'}
+ description={`Guru: ${modalTeacher} · Tanggal: ${formatDate(activeModalItem?.date || activeModalItem?.created_at)}`}
+ badge={`${activeModalItem?.category || activeModalItem?.kategori || '-'} · ${isModalSigned ? 'Disetujui Orang Tua' : 'Menunggu Tanggapan'}`}
+ icon={BookOpenCheck}
+ maxWidth="max-w-xl"
+ zIndex="z-[70]"
+ footer={
+ <div className="flex w-full items-center justify-between gap-2.5">
+ <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
+ Dareliman Edu {student?.unit_name ? `· ${student.unit_name}` : ''}
+ </span>
+ <button
+ type="button"
+ onClick={() => setActiveModalItem(null)}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <HeroChip.Label>{activeModalItem.category || activeModalItem.kategori || '-'}</HeroChip.Label>
- </HeroChip>
- <HeroChip
- size="sm"
- variant="soft"
- color={isModalSigned ? 'success' : 'warning'}
- className={cn(
- 'font-bold text-[10px] inline-flex items-center gap-1 border',
- isModalSigned
- ? 'bg-emerald-100 text-emerald-800 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800/60'
- : 'bg-amber-100 text-amber-800 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950 dark:text-amber-300 dark:border-emerald-800/60'
- )}
+ Tutup
+ </button>
+ </div>
+ }
  >
- {isModalSigned ? <CheckCircle2 className="h-3 w-3 text-emerald-600 inline mr-1" /> : <Clock className="h-3 w-3 text-amber-600 inline mr-1" />}
- <HeroChip.Label>{isModalSigned ? 'Disetujui Orang Tua' : 'Menunggu Tanggapan'}</HeroChip.Label>
- </HeroChip>
- </div>
- <h3 className="modal-title mt-1 text-sm sm:text-base font-black text-slate-900 dark:text-white leading-tight">
- {activeModalItem.title || activeModalItem.judul || '-'}
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Guru: <span className="font-bold text-slate-700 dark:text-slate-300">{modalTeacher}</span> · Tanggal: {formatDate(activeModalItem.date || activeModalItem.created_at)}
- </p>
- </div>
- </div>
-
- <HeroButton
- isIconOnly
- size="sm"
- isDisabled={submitting}
- onPress={() => setActiveModalItem(null)}
- className="size-8 flex items-center justify-center rounded-xl bg-emerald-50 hover:bg-slate-200 text-emerald-700 hover:text-emerald-700 dark:bg-emerald-950/40 dark:hover:bg-slate-700 dark:text-emerald-300 cursor-pointer transition-all active:scale-95 shrink-0"
- >
- <X className="size-4" strokeWidth={2.2} />
- </HeroButton>
- </HeroModal.Header>
-
- {/* Modal Body */}
- <HeroModal.Body className="modal-body p-6 space-y-4 text-slate-700 dark:text-slate-200 overflow-y-auto">
+ {activeModalItem && (
+ <div className="space-y-4 text-slate-700 dark:text-slate-200">
  {/* Error Banner if any */}
  {submitError && (
  <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50 p-3 text-xs font-bold text-rose-700 dark:border-emerald-800/60 dark:bg-rose-950/50 dark:text-rose-300">
@@ -895,27 +857,11 @@ export default function TeacherCommentsWorkspace({
  Catatan ini menunggu tanggapan dan persetujuan dari akun orang tua/wali murid ananda.
  </div>
  )}
- </HeroModal.Body>
-
- {/* Modal Footer */}
- <HeroModal.Footer className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-white px-6 py-4 dark:border-emerald-800/60 dark:bg-slate-950">
- <span className="text-xs font-medium text-slate-400">
- Dareliman Edu {student?.unit_name ? `· ${student.unit_name}` : ''}
- </span>
- <HeroButton
- size="sm"
- onPress={() => setActiveModalItem(null)}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-4 py-2 text-xs font-bold text-slate-700 hover:bg-emerald-50/40 dark:border-emerald-700/80 dark:bg-emerald-950/60 dark:text-emerald-300 cursor-pointer"
- >
- Tutup
- </HeroButton>
- </HeroModal.Footer>
- </HeroModal.Dialog>
+ </div>
+ )}
+ </AppModal>
  )
  })()}
- </HeroModal.Container>
- </HeroModal.Backdrop>
- </HeroModal>
  </div>
  )
 }

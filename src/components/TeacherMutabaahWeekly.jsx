@@ -1,3 +1,4 @@
+import AppModal from './app/AppModal'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import CustomSelect from '@/components/ui/CustomSelect'
 import {
@@ -1156,160 +1157,71 @@ export default function TeacherMutabaahWeekly({
  </div>
 
  {/* ── 3. MODAL PENGISIAN JURNAL MUTABAAH SISWA (HARI INI & HARI SEBELUMNYA) ── */}
- {inputStudent && (
- <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200">
- <div className="relative flex flex-col max-h-[92vh] w-full max-w-4xl rounded-3xl bg-white dark:bg-[#182232] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 overflow-hidden">
- {/* Modal Header: Student Identity & Nav */}
- <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50 px-5 py-3.5 dark:border-emerald-800/60 gap-3">
- <div className="flex items-center gap-3">
- <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-700 dark:bg-emerald-950/40 dark:border-emerald-700/80 dark:text-emerald-300 font-black text-xs shadow-xs">
- {(inputStudent.name || 'S').slice(0, 2).toUpperCase()}
- </div>
- <div>
- <div className="flex items-center gap-2">
- <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
- {inputStudent.name}
- </h3>
- <span className="rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60 px-2 py-0.2 text-[10px] font-extrabold">
- {currentAssignment?.kelas_name || 'Rombel'}
- </span>
- </div>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- NIS: {inputStudent.nis || '-'} · {isBoarding ? 'Boarding 24 Jam' : 'Fullday School'}
- </p>
- </div>
- </div>
-
- {/* Quick Student Switcher & Close */}
- <div className="flex items-center gap-2 self-end sm:self-auto">
- <div className="flex items-center gap-1 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 p-1 text-xs">
- <button
- type="button"
- onClick={() => handleNavigateModalStudent(-1)}
- className="rounded-lg p-1.5 text-slate-600 hover:bg-white dark:text-slate-300 dark:hover:bg-slate-700 transition cursor-pointer"
- title="Siswa Sebelumnya"
- >
- <ChevronLeft className="size-4" />
- </button>
- <span className="px-1 text-xs font-bold text-slate-600 dark:text-slate-300">
- {filteredStudents.findIndex((s) => String(s.id) === String(inputStudent.id)) + 1} / {filteredStudents.length}
- </span>
- <button
- type="button"
- onClick={() => handleNavigateModalStudent(1)}
- className="rounded-lg p-1.5 text-slate-600 hover:bg-white dark:text-slate-300 dark:hover:bg-slate-700 transition cursor-pointer"
- title="Siswa Berikutnya"
- >
- <ChevronRight className="size-4" />
- </button>
- </div>
-
- <button
- type="button"
- onClick={() => setInputStudent(null)}
- className="rounded-xl p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-white transition cursor-pointer"
- >
- <X className="size-5" />
- </button>
- </div>
- </div>
-
- {/* DAY SELECTOR: HARI INI & HARI SEBELUMNYA (FUTURE DAYS LOCKED) */}
- <div className="border-b border-emerald-100/80 dark:border-emerald-800/60 bg-slate-50/80 dark:bg-slate-900/60 px-5 py-2.5">
- <div className="flex items-center justify-between gap-2 flex-wrap">
- <span className="text-xs font-bold text-slate-600 dark:text-slate-400">
- Pilih Hari Pengisian:
- </span>
- {saveSuccessNotice && (
- <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 dark:text-emerald-400 animate-in fade-in">
- <Check className="size-3.5" /> Tersimpan ke server
- </span>
- )}
- </div>
-
- <div className="mt-2 flex items-center gap-1.5 overflow-x-auto pb-1">
- {weekDaysClassified.map((d) => {
- const isSelected = d.date === inputDate
- return (
- <button
- type="button"
- key={d.date}
- disabled={!d.canEdit}
- onClick={() => handleSelectInputDate(d.date)}
- className={`relative flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold transition shrink-0 cursor-pointer ${
- isSelected
- ? 'bg-emerald-600 text-white shadow-xs'
- : d.canEdit
- ? 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 hover:bg-emerald-50 dark:hover:bg-slate-700'
- : 'bg-slate-100 dark:bg-slate-800/40 text-slate-400 dark:text-slate-600 border border-dashed border-emerald-200/80 dark:border-emerald-800/60 cursor-not-allowed'
- }`}
- >
- {d.isToday && (
- <span className={`size-2 rounded-full ${isSelected ? 'bg-amber-300' : 'bg-emerald-500'} animate-pulse`} />
- )}
- <span>
- {d.isToday ? 'Hari Ini' : d.day} ({d.label})
- </span>
- {d.isFuture && (
- <span className="text-[9px] opacity-75 font-normal ml-0.5">
- (Belum Tiba)
- </span>
- )}
- </button>
- )
- })}
- </div>
- </div>
-
- {/* Fullday Scope Tabs (Sekolah vs Rumah) */}
- {!isBoarding && (
- <div className="flex items-center justify-between gap-3 border-b border-emerald-100/80 dark:border-emerald-800/60 px-5 py-2 text-xs">
- <div className="flex items-center gap-1.5">
- <button
- type="button"
- onClick={() => setScopeTabModal('school')}
- className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-bold transition cursor-pointer ${
- scopeTabModal === 'school'
- ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
- : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
- }`}
- >
- <School className="size-3.5" />
- <span>Agenda Sekolah (Guru)</span>
- </button>
- <button
- type="button"
- onClick={() => setScopeTabModal('home')}
- className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-bold transition cursor-pointer ${
- scopeTabModal === 'home'
- ? 'bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300'
- : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
- }`}
- >
- <Home className="size-3.5" />
- <span>Pantauan Rumah (Orang Tua)</span>
- </button>
- <button
- type="button"
- onClick={() => setScopeTabModal('all')}
- className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-bold transition cursor-pointer ${
- scopeTabModal === 'all'
- ? 'bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-white'
- : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
- }`}
- >
- <span>Semua Agenda</span>
- </button>
- </div>
-
- <div className="text-xs font-bold text-emerald-700 dark:text-emerald-400">
- {modalFilledCount}/{modalTotalItems} Terisi ({modalDayProgress}%)
- </div>
- </div>
- )}
-
- {/* Modal Body: List of Items for the Selected Day */}
- <div className="flex-1 overflow-y-auto p-5 space-y-2.5 max-h-[55vh]">
+      <AppModal
+        isOpen={Boolean(inputStudent)}
+        onClose={() => setInputStudent(null)}
+        title={inputStudent?.name || 'Jurnal Mutabaah'}
+        badge={currentAssignment?.kelas_name || 'Rombel'}
+        description={inputStudent ? `NIS: ${inputStudent.nis || '-'} · ${isBoarding ? 'Boarding 24 Jam' : 'Fullday School'}` : undefined}
+        icon={BookOpen}
+        maxWidth="max-w-4xl"
+        zIndex={100}
+        headerActions={
+          inputStudent ? (
+            <div className="flex items-center gap-1 rounded-xl bg-white/20 p-1 text-xs backdrop-blur-md border border-white/25">
+              <button
+                type="button"
+                onClick={() => handleNavigateModalStudent(-1)}
+                className="rounded-lg p-1 text-white hover:bg-white/20 transition cursor-pointer"
+                title="Siswa Sebelumnya"
+              >
+                <ChevronLeft className="size-4" />
+              </button>
+              <span className="px-1.5 text-xs font-black text-white tabular-nums">
+                {filteredStudents.findIndex((s) => String(s.id) === String(inputStudent.id)) + 1} / {filteredStudents.length}
+              </span>
+              <button
+                type="button"
+                onClick={() => handleNavigateModalStudent(1)}
+                className="rounded-lg p-1 text-white hover:bg-white/20 transition cursor-pointer"
+                title="Siswa Berikutnya"
+              >
+                <ChevronRight className="size-4" />
+              </button>
+            </div>
+          ) : null
+        }
+        footer={
+          <div className="flex w-full flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-3 text-xs text-slate-500">
+              <span className="font-bold text-slate-700 dark:text-slate-300">Keterangan:</span>
+              <span>B = Baik</span>
+              <span>K = Kurang</span>
+              <span>X = Belum</span>
+              <span>— = N/A</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => handleOpenPrintPreview(inputStudent)}
+                className="h-9.5 px-4 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:text-emerald-300 text-xs font-black inline-flex items-center gap-1.5 transition cursor-pointer"
+              >
+                <Printer className="size-3.5" />
+                <span>Pratinjau Cetak</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setInputStudent(null)}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+              >
+                <span>Selesai</span>
+              </button>
+            </div>
+          </div>
+        }
+      >
+        {inputStudent && (
+          <>
  {loadingInputModal ? (
  <div className="flex flex-col items-center justify-center p-12 text-slate-500">
  <Loader2 className="size-6 animate-spin text-emerald-600 mb-2" />
@@ -1385,108 +1297,67 @@ export default function TeacherMutabaahWeekly({
  )
  })
  )}
- </div>
+          </>
+        )}
+      </AppModal>
 
- {/* Modal Footer */}
- <div className="flex items-center justify-between border-t border-emerald-100/80 bg-slate-50 px-5 py-3 dark:border-emerald-800/60 dark:bg-slate-900/80">
- <div className="flex items-center gap-3 text-xs text-slate-500">
- <span className="font-bold text-slate-700 dark:text-slate-300">Keterangan:</span>
- <span>B = Baik</span>
- <span>K = Kurang</span>
- <span>X = Belum</span>
- <span>— = N/A</span>
- </div>
- <div className="flex items-center gap-2">
- <button
- type="button"
- onClick={() => handleOpenPrintPreview(inputStudent)}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-50 dark:border-emerald-700/80 dark:bg-emerald-950/60 dark:text-emerald-300 transition cursor-pointer"
- >
- <Printer className="mr-1 inline size-3.5" />
- Pratinjau Cetak
- </button>
- <button
- type="button"
- onClick={() => setInputStudent(null)}
- className="rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-1.5 text-xs font-extrabold shadow-xs transition cursor-pointer"
- >
- Selesai
- </button>
- </div>
- </div>
- </div>
- </div>
- )}
 
  {/* ── 4. MODAL PRATINJAU CETAK SISWA (PEKANAN, BULANAN, SEMESTER) ────────────── */}
- {previewStudent && (
- <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200">
- <div className="relative flex flex-col max-h-[92vh] w-full max-w-4xl rounded-3xl bg-white dark:bg-[#182232] border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 overflow-hidden">
- {/* Modal Header */}
- <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50 px-5 py-3.5 dark:border-emerald-800/60 gap-3">
- <div className="flex items-center gap-3">
- <div className="flex size-10 items-center justify-center rounded-xl bg-slate-100 border border-emerald-200/80 text-slate-700 dark:bg-slate-800 dark:border-emerald-700/80 dark:text-slate-300 shadow-xs">
- <Printer className="size-5" />
- </div>
- <div>
- <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
- Pratinjau Lembar Cetak Mutaba'ah
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- Siswa: <strong>{previewStudent.name}</strong> · Rombel {currentAssignment?.kelas_name || 'Aktif'}
- </p>
- </div>
- </div>
-
- {/* Segmented Range Selector */}
- <div className="flex items-center gap-1">
- <div className="flex items-center gap-1 rounded-xl bg-emerald-500/10 dark:bg-emerald-950/40 p-1 border border-emerald-200/80 dark:border-emerald-800/80">
- <button
- type="button"
- onClick={() => setPrintRangeMode('pekanan')}
- className={`px-3 py-1 rounded-xl text-xs font-black transition-all cursor-pointer ${
- printRangeMode === 'pekanan'
- ? 'bg-emerald-600 text-white shadow-xs'
- : 'text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white'
- }`}
- >
- Pekanan
- </button>
- <button
- type="button"
- onClick={() => setPrintRangeMode('bulanan')}
- className={`px-3 py-1 rounded-xl text-xs font-black transition-all cursor-pointer ${
- printRangeMode === 'bulanan'
- ? 'bg-emerald-600 text-white shadow-xs'
- : 'text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white'
- }`}
- >
- Bulanan
- </button>
- <button
- type="button"
- onClick={() => setPrintRangeMode('semester')}
- className={`px-3 py-1 rounded-xl text-xs font-black transition-all cursor-pointer ${
- printRangeMode === 'semester'
- ? 'bg-emerald-600 text-white shadow-xs'
- : 'text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white'
- }`}
- >
- Semester
- </button>
- </div>
- <button
- type="button"
- onClick={() => setPreviewStudent(null)}
- className="rounded-xl p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-white transition cursor-pointer ml-1"
- >
- <X className="size-5" />
- </button>
- </div>
- </div>
-
- {/* Modal Body: A4 Paper Preview */}
- <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-slate-100 dark:bg-slate-900/60">
+      <AppModal
+        isOpen={Boolean(previewStudent)}
+        onClose={() => setPreviewStudent(null)}
+        title="Pratinjau Lembar Cetak Mutaba'ah"
+        badge={printRangeMode}
+        description={previewStudent ? `Siswa: ${previewStudent.name} · Rombel ${currentAssignment?.kelas_name || 'Aktif'}` : undefined}
+        icon={Printer}
+        maxWidth="max-w-4xl"
+        zIndex={100}
+        headerActions={
+          <div className="flex items-center gap-1 rounded-xl bg-white/20 p-1 backdrop-blur-md border border-white/25">
+            {['pekanan', 'bulanan', 'semester'].map((mode) => (
+              <button
+                key={mode}
+                type="button"
+                onClick={() => setPrintRangeMode(mode)}
+                className={`px-2.5 py-1 rounded-lg text-xs font-black capitalize transition-all cursor-pointer ${
+                  printRangeMode === mode
+                    ? 'bg-white text-emerald-800 shadow-xs'
+                    : 'text-white/90 hover:bg-white/15'
+                }`}
+              >
+                {mode}
+              </button>
+            ))}
+          </div>
+        }
+        footer={
+          <div className="flex w-full flex-wrap items-center justify-between gap-2">
+            <span className="text-xs text-slate-500">
+              Mode Cetak Aktif: <strong className="text-emerald-700 capitalize">{printRangeMode}</strong> (Format Dokumen A4).
+            </span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setPreviewStudent(null)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Tutup</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleExecutePrint(previewStudent, previewValues, printRangeMode)}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+              >
+                <Printer className="size-4" />
+                <span>Cetak Lembar {printRangeMode === 'pekanan' ? 'Pekanan' : printRangeMode === 'bulanan' ? 'Bulanan' : 'Semester'} Sekarang</span>
+              </button>
+            </div>
+          </div>
+        }
+      >
+        {previewStudent && (
+          <>
  {loadingPreview ? (
  <div className="flex flex-col items-center justify-center p-16">
  <Loader2 className="size-8 animate-spin text-emerald-600 mb-3" />
@@ -1826,36 +1697,9 @@ export default function TeacherMutabaahWeekly({
  </div>
  </div>
  )}
- </div>
-
- {/* Modal Footer Actions */}
- <div className="flex items-center justify-between border-t border-emerald-100/80 bg-slate-50 px-5 py-3.5 dark:border-emerald-800/60 dark:bg-slate-900/80">
- <span className="text-xs text-slate-500">
- Mode Cetak Aktif: <strong className="text-emerald-700 capitalize">{printRangeMode}</strong> (Format Dokumen A4).
- </span>
- <div className="flex items-center gap-2">
- <button
- type="button"
- onClick={() => setPreviewStudent(null)}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 dark:border-emerald-700/80 dark:bg-emerald-950/60 dark:text-emerald-300 transition cursor-pointer"
- >
- Tutup
- </button>
- <button
- type="button"
- onClick={() => handleExecutePrint(previewStudent, previewValues, printRangeMode)}
- className="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white hover:from-emerald-700 hover:to-teal-700 px-4 py-2 text-xs font-extrabold shadow-sm transition cursor-pointer"
- >
- <Printer className="size-4" />
- <span>
- Cetak Lembar {printRangeMode === 'pekanan' ? 'Pekanan' : printRangeMode === 'bulanan' ? 'Bulanan' : 'Semester'} Sekarang
- </span>
- </button>
- </div>
- </div>
- </div>
- </div>
- )}
+          </>
+        )}
+      </AppModal>
  </section>
  </div>
 )

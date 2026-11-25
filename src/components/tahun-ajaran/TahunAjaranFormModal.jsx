@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
 import { AppInput, AppDatePicker, AppTextarea } from '../app'
+import AppModal from '../app/AppModal'
 
 export default function TahunAjaranFormModal({
  isOpen,
@@ -82,97 +83,42 @@ export default function TahunAjaranFormModal({
  onSubmit(formData)
  }
 
- return (
- <AnimatePresence>
- {isOpen && (
- <div
- className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto"
- role="dialog"
- aria-modal="true"
- aria-labelledby="modal-tahun-ajaran-title"
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !isSubmitting) onClose()
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="my-auto w-full max-w-xl font-sans"
- >
- <div className="flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-card-dark dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
- <div
- className={cn(
- 'h-1.5 w-full shrink-0',
- isEdit
- ? 'bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600'
- : 'bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600'
- )}
- />
-
- {/* Modal Header */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner shrink-0">
- <div className="flex items-center gap-3.5">
- <div
- className={cn(
- 'rounded-xl text-white p-3 shadow-md shrink-0 border',
- isEdit
- ? 'bg-amber-600 hover:bg-amber-700 shadow-amber-600/25 border-emerald-200/80 dark:border-emerald-800/60'
- : 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-600/25 border-emerald-300'
- )}
- >
- {isEdit ? (
- <Pencil className="size-5" strokeWidth={2.25} />
- ) : (
- <CalendarDays className="size-5" strokeWidth={2.25} />
- )}
- </div>
- <div>
- <div className="flex items-center gap-2 flex-wrap">
- <h3
- id="modal-tahun-ajaran-title"
- className="text-base sm:text-lg font-black tracking-tight text-slate-900 dark:text-white"
- >
- {isEdit ? 'Ubah Master Tahun Ajaran' : 'Tambah Tahun Ajaran Baru'}
- </h3>
- <span
- className={cn(
- 'inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-extrabold border',
- isEdit
- ? 'bg-amber-50 text-amber-700 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/60 dark:text-amber-300 dark:border-emerald-800/60'
- : 'bg-emerald-50 text-emerald-800 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/60'
- )}
- >
- <Sparkles className="size-3" />
- {isEdit ? 'Update Data' : 'Periode Baru'}
- </span>
- </div>
- <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">
- Lengkapi identitas periode, rentang kalender aktif, dan status operasional.
- </p>
- </div>
- </div>
-
- {/* Tombol Close Squircle */}
- <button
- type="button"
- disabled={isSubmitting}
- onClick={onClose}
- aria-label="Tutup form modal"
- className="size-9 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer disabled:opacity-50 shrink-0"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Modal Body / Form */}
- <form
- id="tahun-ajaran-form"
- onSubmit={handleSubmit}
- className="flex-1 overflow-y-auto p-6 space-y-5"
- >
+  return (
+    <AppModal
+      isOpen={isOpen}
+      onClose={() => !isSubmitting && onClose()}
+      title={isEdit ? 'Ubah Master Tahun Ajaran' : 'Tambah Tahun Ajaran Baru'}
+      badge={isEdit ? 'Update Data' : 'Periode Baru'}
+      description="Lengkapi identitas periode, rentang kalender aktif, dan status operasional."
+      icon={isEdit ? Pencil : CalendarDays}
+      variant={isEdit ? 'warning' : 'emerald'}
+      maxWidth="max-w-2xl"
+      disableBackdropClose={isSubmitting}
+      hideCloseButton={isSubmitting}
+      footer={
+        <div className="flex w-full items-center justify-between gap-3">
+          <button
+            type="button"
+            disabled={isSubmitting}
+            onClick={onClose}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="submit"
+            form="tahun-ajaran-form"
+            disabled={isSubmitting}
+            className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+          >
+            {isSubmitting ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" strokeWidth={2.2} />}
+            <span>{isSubmitting ? 'Menyimpan...' : isEdit ? 'Perbarui Tahun Ajaran' : 'Simpan Tahun Ajaran'}</span>
+          </button>
+        </div>
+      }
+    >
+      <form id="tahun-ajaran-form" onSubmit={handleSubmit} className="space-y-5">
  {/* GRUP 1: IDENTITAS PERIODE */}
  <div className="space-y-3.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 p-4 dark:border-emerald-800/60 dark:bg-slate-800/40">
  <h4 className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-[#059669] dark:text-[#10B981]">
@@ -351,49 +297,7 @@ export default function TahunAjaranFormModal({
  </button>
  </div>
  </div>
- </form>
-
- {/* Modal Footer */}
- <div className="flex items-center justify-between border-t border-emerald-200/80 bg-white px-6 py-4 dark:border-emerald-800/60 dark:bg-surface-dark-inner shrink-0">
- <button
- type="button"
- disabled={isSubmitting}
- onClick={onClose}
- className="inline-flex items-center gap-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50 border border-emerald-200/80 px-4 py-2.5 text-xs font-extrabold text-emerald-700 transition-all duration-200 hover:scale-[1.02] hover:bg-slate-200 active:scale-95 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200 cursor-pointer disabled:opacity-50"
- >
- <X className="size-3.5" strokeWidth={2.2} />
- <span>Batal</span>
- </button>
-
- <button
- type="submit"
- form="tahun-ajaran-form"
- disabled={isSubmitting}
- className={cn(
- 'inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-xs font-black text-white shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-95 cursor-pointer disabled:opacity-50',
- isEdit
- ? 'bg-amber-600 hover:bg-amber-700 shadow-amber-600/25'
- : 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-600/25'
- )}
- >
- {isSubmitting ? (
- <Loader2 className="size-4 animate-spin" />
- ) : (
- <Save className="size-4" strokeWidth={2.2} />
- )}
- <span>
- {isSubmitting
- ? 'Menyimpan...'
- : isEdit
- ? 'Perbarui Tahun Ajaran'
- : 'Simpan Tahun Ajaran'}
- </span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
- )
+      </form>
+    </AppModal>
+  )
 }

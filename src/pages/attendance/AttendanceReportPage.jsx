@@ -1,6 +1,7 @@
 import { HeroUiHeader } from "../../components/ui/HeroUiHeader"
 import { motion, AnimatePresence } from 'framer-motion'
 import CustomSelect from "../../components/ui/CustomSelect"
+import AppModal from "../../components/app/AppModal"
 import {
   useEffect,
   useMemo,
@@ -1275,337 +1276,259 @@ export default function AttendanceReportPage() {
       </div>
 
       {/* ── Summary Card Interactive Datatable Modal (HeroUI Harmonized Modal) ── */}
-      <AnimatePresence>
-        {cardModal.isOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={closeCardModal}
-              className="fixed inset-0 bg-slate-950/70 backdrop-blur-md"
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="relative w-full max-w-4xl max-h-[90vh] flex flex-col rounded-2xl border border-emerald-200/80 bg-white shadow-2xl dark:border-emerald-800/60 dark:bg-[#182232] overflow-hidden z-10"
-            >
-              {/* Top Accent Gradient Bar */}
-              <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
-
-              <div className="flex flex-row items-center justify-between p-5 sm:p-6 border-b border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/80">
-                <div className="flex items-center gap-3">
-                  <div className="flex size-11 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 shrink-0">
-                    <ClipboardCheck className="size-6" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300">
-                        <Sparkles className="size-3" />
-                        Log Presensi
-                      </span>
-                      <AppBadge variant={cardModal.tone === 'rose' ? 'danger' : cardModal.tone === 'amber' ? 'warning' : 'success'}>
-                        {modalRows.length} Data Log
-                      </AppBadge>
-                    </div>
-                    <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">
-                      {cardModal.title}
-                    </h3>
-                  </div>
-                </div>
-
+      <AppModal
+        isOpen={cardModal.isOpen}
+        onClose={closeCardModal}
+        icon={ClipboardCheck}
+        title={cardModal.title}
+        badge="Log Presensi"
+        maxWidth="max-w-4xl"
+        zIndex={50}
+        headerActions={
+          <AppBadge variant={cardModal.tone === 'rose' ? 'danger' : cardModal.tone === 'amber' ? 'warning' : 'success'}>
+            {modalRows.length} Data Log
+          </AppBadge>
+        }
+        footer={
+          <div className="flex items-center justify-between w-full gap-2">
+            <span className="text-xs text-slate-500 font-medium">
+              Menampilkan {modalRows.length ? (cardModal.page - 1) * MODAL_PAGE_SIZE + 1 : 0}–{Math.min(cardModal.page * MODAL_PAGE_SIZE, modalRows.length)} dari {modalRows.length} data
+            </span>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 mr-4">
                 <button
                   type="button"
-                  onClick={closeCardModal}
-                  className="rounded-xl p-2 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-600 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 dark:hover:text-slate-300 transition-colors cursor-pointer"
-                  aria-label="Tutup modal"
+                  disabled={cardModal.page === 1}
+                  onClick={() => setCardModal((prev) => ({ ...prev, page: prev.page - 1 }))}
+                  className="p-1 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 disabled:opacity-40 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                 >
-                  <X className="size-5" />
+                  <ChevronLeft className="h-4 w-4" />
+                </button>
+                <span className="text-xs font-semibold px-2 text-slate-700 dark:text-slate-300">
+                  {cardModal.page} / {modalTotalPages}
+                </span>
+                <button
+                  type="button"
+                  disabled={cardModal.page === modalTotalPages}
+                  onClick={() => setCardModal((prev) => ({ ...prev, page: prev.page + 1 }))}
+                  className="p-1 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 disabled:opacity-40 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                >
+                  <ChevronRight className="h-4 w-4" />
                 </button>
               </div>
-
-              <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4">
-                {/* Modal Search Toolbar */}
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-emerald-200/70 dark:border-emerald-800/60">
-                  <div className="relative w-full sm:w-80">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                    <input
-                      type="text"
-                      placeholder="Cari nama siswa, NIS, atau kelas..."
-                      value={cardModal.searchQuery}
-                      onChange={(e) => setCardModal((prev) => ({ ...prev, searchQuery: e.target.value, page: 1 }))}
-                      className="w-full pl-9 pr-8 py-2 text-xs bg-white dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500"
-                    />
-                    {cardModal.searchQuery && (
-                      <button
-                        type="button"
-                        onClick={() => setCardModal((prev) => ({ ...prev, searchQuery: '', page: 1 }))}
-                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                      >
-                        <X className="h-3.5 w-3.5" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                {/* Modal Datatable */}
-                <div className="overflow-x-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
-                  <table className="w-full text-left text-xs">
-                    <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-xs font-bold uppercase tracking-wider text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/80 dark:text-emerald-300">
-                      <tr>
-                        <th className="py-3 px-4">No</th>
-                        <th className="py-3 px-4">Siswa</th>
-                        <th className="py-3 px-4">Kelas</th>
-                        <th className="py-3 px-4">Tanggal</th>
-                        <th className="py-3 px-4">Mata Pelajaran</th>
-                        <th className="py-3 px-4">Status</th>
-                        <th className="py-3 px-4">Catatan</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40">
-                      {paginatedModalRows.length > 0 ? (
-                        paginatedModalRows.map((row, idx) => {
-                          const studentName = row.siswa?.full_name || row.siswa_name || 'Siswa'
-                          const studentNis = row.siswa?.nis || '-'
-                          const kelasName = row.jadwal_pelajaran?.kelas?.nama_kelas || row.siswa?.kelas?.nama_kelas || 'Rombel'
-                          const status = String(row.status_hadir || '').toLowerCase()
-
-                          return (
-                            <tr key={row.id || idx} className="hover:bg-emerald-50/40 dark:hover:bg-emerald-950/30 transition-colors">
-                              <td className="py-3 px-4 font-medium text-slate-500">
-                                {(cardModal.page - 1) * MODAL_PAGE_SIZE + idx + 1}
-                              </td>
-                              <td className="py-3 px-4">
-                                <div className="font-bold text-slate-900 dark:text-white">{studentName}</div>
-                                <div className="text-[10px] text-slate-400">NIS: {studentNis}</div>
-                              </td>
-                              <td className="py-3 px-4 font-medium text-slate-800 dark:text-slate-200">
-                                {kelasName}
-                              </td>
-                              <td className="py-3 px-4 text-slate-600 dark:text-slate-400 whitespace-nowrap">
-                                {row.tanggal || '-'}
-                              </td>
-                              <td className="py-3 px-4 text-slate-700 dark:text-slate-300">
-                                {row.jadwal_pelajaran?.subject?.name || '-'}
-                              </td>
-                              <td className="py-3 px-4">
-                                <AppBadge variant={status === 'hadir' ? 'success' : status === 'alpa' ? 'danger' : 'warning'}>
-                                  {status.toUpperCase()}
-                                </AppBadge>
-                              </td>
-                              <td className="py-3 px-4 text-slate-500 max-w-md truncate">
-                                {row.catatan || row.keterangan || '-'}
-                              </td>
-                            </tr>
-                          )
-                        })
-                      ) : (
-                        <tr>
-                          <td colSpan="7" className="py-8 text-center text-slate-400 font-medium">
-                            {cardModal.searchQuery ? 'Tidak ada data presensi yang cocok dengan pencarian.' : 'Belum ada data pada kategori ini.'}
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between p-4 border-t border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50">
-                <span className="text-xs text-slate-500 font-medium">
-                  Menampilkan {modalRows.length ? (cardModal.page - 1) * MODAL_PAGE_SIZE + 1 : 0}–{Math.min(cardModal.page * MODAL_PAGE_SIZE, modalRows.length)} dari {modalRows.length} data
-                </span>
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-1 mr-4">
-                    <button
-                      type="button"
-                      disabled={cardModal.page === 1}
-                      onClick={() => setCardModal((prev) => ({ ...prev, page: prev.page - 1 }))}
-                      className="p-1 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 disabled:opacity-40 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                    >
-                      <ChevronLeft className="h-4 w-4" />
-                    </button>
-                    <span className="text-xs font-semibold px-2 text-slate-700 dark:text-slate-300">
-                      {cardModal.page} / {modalTotalPages}
-                    </span>
-                    <button
-                      type="button"
-                      disabled={cardModal.page === modalTotalPages}
-                      onClick={() => setCardModal((prev) => ({ ...prev, page: prev.page + 1 }))}
-                      className="p-1 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 disabled:opacity-40 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                    >
-                      <ChevronRight className="h-4 w-4" />
-                    </button>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={closeCardModal}
-                    className="rounded-xl border border-emerald-200/80 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all cursor-pointer"
-                  >
-                    Tutup
-                  </button>
-                </div>
-              </div>
-            </motion.div>
+              <button
+                type="button"
+                onClick={closeCardModal}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black border border-slate-300 dark:border-slate-700 transition-all active:scale-95 cursor-pointer"
+              >
+                Tutup
+              </button>
+            </div>
           </div>
-        )}
-      </AnimatePresence>
+        }
+      >
+        {/* Modal Search Toolbar */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-emerald-200/70 dark:border-emerald-800/60">
+          <div className="relative w-full sm:w-80">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            <input
+              type="text"
+              placeholder="Cari nama siswa, NIS, atau kelas..."
+              value={cardModal.searchQuery}
+              onChange={(e) => setCardModal((prev) => ({ ...prev, searchQuery: e.target.value, page: 1 }))}
+              className="w-full pl-9 pr-8 py-2 text-xs bg-white dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500"
+            />
+            {cardModal.searchQuery && (
+              <button
+                type="button"
+                onClick={() => setCardModal((prev) => ({ ...prev, searchQuery: '', page: 1 }))}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Modal Datatable */}
+        <div className="overflow-x-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-xs font-bold uppercase tracking-wider text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/80 dark:text-emerald-300">
+              <tr>
+                <th className="py-3 px-4">No</th>
+                <th className="py-3 px-4">Siswa</th>
+                <th className="py-3 px-4">Kelas</th>
+                <th className="py-3 px-4">Tanggal</th>
+                <th className="py-3 px-4">Mata Pelajaran</th>
+                <th className="py-3 px-4">Status</th>
+                <th className="py-3 px-4">Catatan</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40">
+              {paginatedModalRows.length > 0 ? (
+                paginatedModalRows.map((row, idx) => {
+                  const studentName = row.siswa?.full_name || row.siswa_name || 'Siswa'
+                  const studentNis = row.siswa?.nis || '-'
+                  const kelasName = row.jadwal_pelajaran?.kelas?.nama_kelas || row.siswa?.kelas?.nama_kelas || 'Rombel'
+                  const status = String(row.status_hadir || '').toLowerCase()
+
+                  return (
+                    <tr key={row.id || idx} className="hover:bg-emerald-50/40 dark:hover:bg-emerald-950/30 transition-colors">
+                      <td className="py-3 px-4 font-medium text-slate-500">
+                        {(cardModal.page - 1) * MODAL_PAGE_SIZE + idx + 1}
+                      </td>
+                      <td className="py-3 px-4">
+                        <div className="font-bold text-slate-900 dark:text-white">{studentName}</div>
+                        <div className="text-[10px] text-slate-400">NIS: {studentNis}</div>
+                      </td>
+                      <td className="py-3 px-4 font-medium text-slate-800 dark:text-slate-200">
+                        {kelasName}
+                      </td>
+                      <td className="py-3 px-4 text-slate-600 dark:text-slate-400 whitespace-nowrap">
+                        {row.tanggal || '-'}
+                      </td>
+                      <td className="py-3 px-4 text-slate-700 dark:text-slate-300">
+                        {row.jadwal_pelajaran?.subject?.name || '-'}
+                      </td>
+                      <td className="py-3 px-4">
+                        <AppBadge variant={status === 'hadir' ? 'success' : status === 'alpa' ? 'danger' : 'warning'}>
+                          {status.toUpperCase()}
+                        </AppBadge>
+                      </td>
+                      <td className="py-3 px-4 text-slate-500 max-w-md truncate">
+                        {row.catatan || row.keterangan || '-'}
+                      </td>
+                    </tr>
+                  )
+                })
+              ) : (
+                <tr>
+                  <td colSpan="7" className="py-8 text-center text-slate-400 font-medium">
+                    {cardModal.searchQuery ? 'Tidak ada data presensi yang cocok dengan pencarian.' : 'Belum ada data pada kategori ini.'}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </AppModal>
 
       {/* ── Modal Detail Rincian Rombel (HeroUI Harmonized Modal) ── */}
-      <AnimatePresence>
-        {selectedDetailRombel && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+      <AppModal
+        isOpen={Boolean(selectedDetailRombel)}
+        onClose={() => setSelectedDetailRombel(null)}
+        icon={
+          <span className="font-extrabold text-base text-white">
+            {selectedDetailRombel?.kode_kelas || 'R'}
+          </span>
+        }
+        badge="Rincian Kelas"
+        title={selectedDetailRombel?.rombel_name || ''}
+        description={selectedDetailRombel ? `${selectedDetailRombel.unit_name} — Periode: ${selectedMonth}` : ''}
+        maxWidth="max-w-xl"
+        zIndex={50}
+        footer={
+          <div className="flex items-center justify-end gap-2.5 w-full">
+            <button
+              type="button"
               onClick={() => setSelectedDetailRombel(null)}
-              className="fixed inset-0 bg-slate-950/70 backdrop-blur-md"
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="relative w-full max-w-xl flex flex-col rounded-2xl border border-emerald-200/80 bg-white shadow-2xl dark:border-emerald-800/60 dark:bg-[#182232] overflow-hidden z-10"
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black border border-slate-300 dark:border-slate-700 transition-all active:scale-95 cursor-pointer"
             >
-              {/* Top Accent Gradient Bar */}
-              <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
-
-              <div className="flex items-center justify-between p-5 sm:p-6 border-b border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/80">
-                <div className="flex items-center gap-3">
-                  <div className="size-11 rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 flex items-center justify-center font-extrabold text-base shrink-0">
-                    {selectedDetailRombel.kode_kelas || 'R'}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300">
-                        <Sparkles className="size-3" />
-                        Rincian Kelas
-                      </span>
-                    </div>
-                    <h3 className="text-lg font-black leading-tight text-slate-900 dark:text-white">
-                      {selectedDetailRombel.rombel_name}
-                    </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                      {selectedDetailRombel.unit_name} — Periode: {selectedMonth}
-                    </p>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setSelectedDetailRombel(null)}
-                  className="rounded-xl p-2 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-600 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 dark:hover:text-slate-300 transition-colors cursor-pointer"
-                  aria-label="Tutup modal"
-                >
-                  <X className="size-5" />
-                </button>
-              </div>
-
-              <div className="p-5 sm:p-6 space-y-4">
-                {/* Progress Bar Persentase Kehadiran */}
-                <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-emerald-200/80 dark:border-emerald-800/60 space-y-2">
-                  <div className="flex items-center justify-between text-xs font-bold">
-                    <span className="text-slate-700 dark:text-slate-300">Tingkat Kehadiran Rombel</span>
-                    <span className="text-[#059669] dark:text-[#10B981] text-sm font-black">
-                      {selectedDetailRombel.attendance_rate}% ({selectedDetailRombel.evaluation_status})
-                    </span>
-                  </div>
-                  <div className="h-3.5 w-full rounded-full bg-emerald-50 dark:bg-emerald-950/40 overflow-hidden">
-                    <div
-                      className={`h-full transition-all duration-500 rounded-full ${
-                        selectedDetailRombel.attendance_rate >= 90
-                          ? 'bg-emerald-500'
-                          : selectedDetailRombel.attendance_rate >= 75
-                          ? 'bg-amber-500'
-                          : 'bg-rose-500'
-                      }`}
-                      style={{ width: `${selectedDetailRombel.attendance_rate}%` }}
-                    />
-                  </div>
-                </div>
-
-                {/* Grid Metric Cards Detail */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60">
-                    <span className="block text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">
-                      Total Hadir (H)
-                    </span>
-                    <span className="text-xl font-black text-emerald-900 dark:text-emerald-200">
-                      {selectedDetailRombel.hadir + selectedDetailRombel.terlambat}
-                    </span>
-                  </div>
-
-                  <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-emerald-200/80 dark:border-emerald-800/60">
-                    <span className="block text-[10px] font-bold text-blue-700 dark:text-blue-400 uppercase tracking-wider">
-                      Sakit (S)
-                    </span>
-                    <span className="text-xl font-black text-blue-900 dark:text-blue-200">
-                      {selectedDetailRombel.sakit}
-                    </span>
-                  </div>
-
-                  <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-emerald-200/80 dark:border-emerald-800/60">
-                    <span className="block text-[10px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">
-                      Izin (I)
-                    </span>
-                    <span className="text-xl font-black text-amber-900 dark:text-amber-200">
-                      {selectedDetailRombel.izin}
-                    </span>
-                  </div>
-
-                  <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-emerald-200/80 dark:border-emerald-800/60">
-                    <span className="block text-[10px] font-bold text-rose-700 dark:text-rose-400 uppercase tracking-wider">
-                      Alpa (A)
-                    </span>
-                    <span className="text-xl font-black text-rose-900 dark:text-rose-200">
-                      {selectedDetailRombel.alpa}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Summary / Rekomendasi Evaluasi */}
-                <div className="p-3.5 rounded-xl border border-emerald-200/80 bg-white dark:border-emerald-800/60 dark:bg-slate-900 space-y-1 text-xs">
-                  <h5 className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
-                    <CheckCircle2 size={14} className="text-emerald-600" /> Rekomendasi Evaluasi Kehadiran:
-                  </h5>
-                  <p className="text-slate-500 dark:text-slate-400 font-medium">
-                    {selectedDetailRombel.attendance_rate >= 90
-                      ? 'Tingkat kehadiran rombel ini sangat baik dan optimal. Pertahankan konsistensi presensi kelas.'
-                      : selectedDetailRombel.attendance_rate >= 75
-                      ? 'Tingkat kehadiran rombel cukup memadai, tetapi disarankan wali kelas memantau siswa yang berulang kali izin/sakit.'
-                      : 'Tingkat kehadiran rombel rendah (perlu perhatian khusus). Diperlukan koordinasi wali kelas dan bimbingan konseling untuk penanganan presensi.'}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-end gap-2.5 p-4 border-t border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50">
-                <button
-                  type="button"
-                  onClick={() => setSelectedDetailRombel(null)}
-                  className="rounded-xl border border-emerald-200/80 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all cursor-pointer"
-                >
-                  Tutup
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSelectedDetailRombel(null)
-                    setIsPrintModalOpen(true)
-                  }}
-                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-2 text-xs font-extrabold text-white shadow-md shadow-emerald-600/20 hover:from-emerald-700 hover:to-teal-700 transition-all cursor-pointer"
-                >
-                  <Printer className="size-3.5" />
-                  <span>Cetak Laporan Rombel</span>
-                </button>
-              </div>
-            </motion.div>
+              Tutup
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedDetailRombel(null)
+                setIsPrintModalOpen(true)
+              }}
+              className="inline-flex items-center gap-2 h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-xs font-black text-white shadow-md shadow-emerald-600/20 border-2 border-emerald-600 transition-all active:scale-95 cursor-pointer"
+            >
+              <Printer className="size-3.5" />
+              <span>Cetak Laporan Rombel</span>
+            </button>
           </div>
+        }
+      >
+        {selectedDetailRombel && (
+          <>
+            {/* Progress Bar Persentase Kehadiran */}
+            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-emerald-200/80 dark:border-emerald-800/60 space-y-2">
+              <div className="flex items-center justify-between text-xs font-bold">
+                <span className="text-slate-700 dark:text-slate-300">Tingkat Kehadiran Rombel</span>
+                <span className="text-[#059669] dark:text-[#10B981] text-sm font-black">
+                  {selectedDetailRombel.attendance_rate}% ({selectedDetailRombel.evaluation_status})
+                </span>
+              </div>
+              <div className="h-3.5 w-full rounded-full bg-emerald-50 dark:bg-emerald-950/40 overflow-hidden">
+                <div
+                  className={`h-full transition-all duration-500 rounded-full ${
+                    selectedDetailRombel.attendance_rate >= 90
+                      ? 'bg-emerald-500'
+                      : selectedDetailRombel.attendance_rate >= 75
+                      ? 'bg-amber-500'
+                      : 'bg-rose-500'
+                  }`}
+                  style={{ width: `${selectedDetailRombel.attendance_rate}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Grid Metric Cards Detail */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60">
+                <span className="block text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">
+                  Total Hadir (H)
+                </span>
+                <span className="text-xl font-black text-emerald-900 dark:text-emerald-200">
+                  {selectedDetailRombel.hadir + selectedDetailRombel.terlambat}
+                </span>
+              </div>
+
+              <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-emerald-200/80 dark:border-emerald-800/60">
+                <span className="block text-[10px] font-bold text-blue-700 dark:text-blue-400 uppercase tracking-wider">
+                  Sakit (S)
+                </span>
+                <span className="text-xl font-black text-blue-900 dark:text-blue-200">
+                  {selectedDetailRombel.sakit}
+                </span>
+              </div>
+
+              <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-emerald-200/80 dark:border-emerald-800/60">
+                <span className="block text-[10px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">
+                  Izin (I)
+                </span>
+                <span className="text-xl font-black text-amber-900 dark:text-amber-200">
+                  {selectedDetailRombel.izin}
+                </span>
+              </div>
+
+              <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-emerald-200/80 dark:border-emerald-800/60">
+                <span className="block text-[10px] font-bold text-rose-700 dark:text-rose-400 uppercase tracking-wider">
+                  Alpa (A)
+                </span>
+                <span className="text-xl font-black text-rose-900 dark:text-rose-200">
+                  {selectedDetailRombel.alpa}
+                </span>
+              </div>
+            </div>
+
+            {/* Summary / Rekomendasi Evaluasi */}
+            <div className="p-3.5 rounded-xl border border-emerald-200/80 bg-white dark:border-emerald-800/60 dark:bg-slate-900 space-y-1 text-xs">
+              <h5 className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                <CheckCircle2 size={14} className="text-emerald-600" /> Rekomendasi Evaluasi Kehadiran:
+              </h5>
+              <p className="text-slate-500 dark:text-slate-400 font-medium">
+                {selectedDetailRombel.attendance_rate >= 90
+                  ? 'Tingkat kehadiran rombel ini sangat baik dan optimal. Pertahankan konsistensi presensi kelas.'
+                  : selectedDetailRombel.attendance_rate >= 75
+                  ? 'Tingkat kehadiran rombel cukup memadai, tetapi disarankan wali kelas memantau siswa yang berulang kali izin/sakit.'
+                  : 'Tingkat kehadiran rombel rendah (perlu perhatian khusus). Diperlukan koordinasi wali kelas dan bimbingan konseling untuk penanganan presensi.'}
+              </p>
+            </div>
+          </>
         )}
-      </AnimatePresence>
+      </AppModal>
 
       {/* Modal Opsi Cetak & Unduh PDF */}
  <PrintOptionModal

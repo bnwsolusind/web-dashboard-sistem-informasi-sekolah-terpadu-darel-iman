@@ -30,6 +30,7 @@ import {
 } from 'lucide-react'
 import ActionDropdown from '../components/app/ActionDropdown'
 import AppDataTable from '../components/app/AppDataTable'
+import AppModal from '../components/app/AppModal'
 import MobileDataCard from '../components/app/MobileDataCard'
 import {
   equranService
@@ -443,128 +444,110 @@ const emptyDoa = {
 }
 
 function HarmonizedDeleteModal({ isOpen, onClose, onConfirm, item, isSubmitting }) {
- if (!isOpen || !item) return null
-
- return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fadeIn">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex h-9 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 shadow-sm">
- <Trash2 className="h-6 w-6" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-rose-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
- Hapus Permanen
- </span>
- <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
- Hapus Data Doa?
- </h3>
- </div>
- </div>
-
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Apakah Anda yakin ingin menghapus doa ini dari database? Tindakan ini tidak dapat dibatalkan.
- </p>
-
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/50 p-3.5 dark:border-emerald-800/60 dark:bg-rose-950/20 mb-5">
- <p className="text-xs font-black text-rose-950 dark:text-rose-100">
- #{item?.id} • {item?.nama}
- </p>
- <p className="text-xs text-rose-800/80 dark:text-rose-300/80 mt-0.5">
- Kategori: {item?.grup || 'Doa Harian'}
- </p>
- </div>
-
- <div className="flex items-center justify-end gap-3">
- <button
- type="button"
- onClick={onClose}
- disabled={isSubmitting}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all cursor-pointer"
- >
- Batal
- </button>
- <button
- type="button"
- onClick={onConfirm}
- disabled={isSubmitting}
- className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white px-5 py-2 text-xs font-bold text-white shadow-sm hover:brightness-105 disabled:opacity-50 transition-all cursor-pointer"
- >
- {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
- Hapus Doa
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )
+  return (
+    <AppModal
+      isOpen={Boolean(isOpen && item)}
+      onClose={() => !isSubmitting && onClose()}
+      title="Hapus Data Doa?"
+      badge="Hapus Permanen"
+      description="Tindakan ini tidak dapat dibatalkan."
+      icon={Trash2}
+      variant="danger"
+      maxWidth="max-w-md"
+      zIndex={70}
+      disableBackdropClose={isSubmitting}
+      hideCloseButton={isSubmitting}
+      bodyClassName="space-y-4"
+      footer={
+        <>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isSubmitting}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={isSubmitting}
+            className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20 disabled:opacity-50"
+          >
+            {isSubmitting ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+            <span>Hapus Doa</span>
+          </button>
+        </>
+      }
+    >
+      {item && (
+        <>
+          <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            Apakah Anda yakin ingin menghapus doa ini dari database? Tindakan ini tidak dapat dibatalkan.
+          </p>
+          <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-rose-50/50 p-3.5 dark:bg-rose-950/20">
+            <p className="text-xs font-black text-rose-950 dark:text-rose-100">
+              #{item?.id} • {item?.nama}
+            </p>
+            <p className="text-xs text-rose-800/80 dark:text-rose-300/80 mt-0.5">
+              Kategori: {item?.grup || 'Doa Harian'}
+            </p>
+          </div>
+        </>
+      )}
+    </AppModal>
+  )
 }
 
 function HarmonizedDeleteAllModal({ isOpen, onClose, onConfirm, isSubmitting }) {
- if (!isOpen) return null
-
- return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fadeIn">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex h-9 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 shadow-sm">
- <Trash2 className="h-6 w-6" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-rose-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
- Kosongkan Database
- </span>
- <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
- Hapus Seluruh Data Doa?
- </h3>
- </div>
- </div>
-
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Seluruh data doa dan dzikir lokal akan dihapus dari sistem. Anda dapat mengimpor kembali melalui katalog EQuran.id kapan saja.
- </p>
-
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/50 p-3.5 dark:border-emerald-800/60 dark:bg-rose-950/20 mb-5">
- <p className="text-xs font-bold text-rose-900 dark:text-rose-200">
- Peringatan: Seluruh data doa &amp; dzikir lokal akan dikosongkan.
- </p>
- </div>
-
- <div className="flex items-center justify-end gap-3">
- <button
- type="button"
- onClick={onClose}
- disabled={isSubmitting}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all cursor-pointer"
- >
- Batal
- </button>
- <button
- type="button"
- onClick={onConfirm}
- disabled={isSubmitting}
- className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white px-5 py-2 text-xs font-bold text-white shadow-sm hover:brightness-105 disabled:opacity-50 transition-all cursor-pointer"
- >
- {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
- Ya, Kosongkan Data
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )
+  return (
+    <AppModal
+      isOpen={isOpen}
+      onClose={() => !isSubmitting && onClose()}
+      title="Hapus Seluruh Data Doa?"
+      badge="Kosongkan Database"
+      description="Seluruh data doa dan dzikir lokal akan dihapus dari sistem."
+      icon={Trash2}
+      variant="danger"
+      maxWidth="max-w-md"
+      zIndex={70}
+      disableBackdropClose={isSubmitting}
+      hideCloseButton={isSubmitting}
+      bodyClassName="space-y-4"
+      footer={
+        <>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isSubmitting}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={isSubmitting}
+            className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20 disabled:opacity-50"
+          >
+            {isSubmitting ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+            <span>Ya, Kosongkan Semua</span>
+          </button>
+        </>
+      }
+    >
+      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+        Seluruh data doa dan dzikir lokal akan dihapus dari sistem. Anda dapat mengimpor kembali melalui katalog EQuran.id kapan saja.
+      </p>
+      <div className="rounded-xl border border-rose-200/80 dark:border-rose-900/50 bg-rose-50/70 p-3.5 dark:bg-rose-950/30">
+        <p className="text-xs font-bold text-rose-900 dark:text-rose-200">
+          Peringatan: Seluruh data doa &amp; dzikir lokal akan dikosongkan.
+        </p>
+      </div>
+    </AppModal>
+  )
 }
 
 export default function MasterDoaPage() {
@@ -1182,59 +1165,48 @@ export default function MasterDoaPage() {
         />
 
  {/* MODAL PILIH & IMPOR KATALOG EQURAN.ID (Harmonized Remote Modal - z-[70]) */}
- {showRemoteCatalog && (
- <div className="fixed inset-0 z-[70] bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-3xl max-h-[90vh] overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sky-950/20 dark:border-emerald-800/60 dark:bg-[#1B2433] flex flex-col"
- >
- {/* Top Sky Accent Line */}
-
- {/* Header dengan Squircle 3D Icon Badge */}
- <div className="p-5 sm:p-6 border-b border-emerald-200/80 dark:border-emerald-800/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] flex items-start justify-between gap-4 shrink-0">
- <div className="flex items-start gap-3.5">
- <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-md shadow-sky-500/30 border border-emerald-200/80 dark:border-emerald-800/60">
- <RefreshCw className="size-6 text-emerald-600" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-sky-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-sky-800 dark:bg-sky-950/60 dark:text-sky-300">
- Katalog Sumber EQuran.id
- </span>
- <h3 className="text-lg font-black text-slate-900 dark:text-white mt-0.5">
- Pilih & Impor Koleksi Doa
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Pilih satu atau sinkronkan seluruh doa resmi ke database sekolah.
- </p>
- </div>
- </div>
-
- <div className="flex items-center gap-2">
- <button
- type="button"
- disabled={syncingAll || loadingRemote}
- onClick={handleSyncAllFromCatalog}
- className="inline-flex items-center gap-1.5 rounded-xl bg-white dark:bg-[#1B2433] px-4 py-2 text-xs font-bold shadow-md shadow-sky-600/25 hover:brightness-105 disabled:opacity-60 transition cursor-pointer"
- >
- <RefreshCw className={`size-3.5 ${syncingAll ? 'animate-spin' : ''}`} />
- {syncingAll ? 'Sinkron Seluruh…' : 'Impor Semua Sekaligus'}
- </button>
- <button
- onClick={() => setShowRemoteCatalog(false)}
- className="rounded-xl p-1.5 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-600 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 dark:hover:text-slate-200 transition-colors cursor-pointer"
- >
- <X className="w-5 h-5" />
- </button>
- </div>
- </div>
-
- <div className="border-b border-emerald-200/80 dark:border-emerald-800/80 bg-sky-50/60 px-5 py-2.5 text-xs font-semibold text-sky-900 dark:border-emerald-800/60 dark:bg-sky-950/30 dark:text-sky-200 shrink-0">
- {loadingRemote ? 'Mengambil katalog EQuran.id…' : `${filteredRemoteDoas.length} item sumber tersedia. Item yang sudah ada dapat diimpor ulang untuk memperbarui isinya.`}
- </div>
-
- <div className="overflow-y-auto p-4 sm:p-5 flex-1 bg-slate-50/50 dark:bg-slate-900/30">
+      <AppModal
+        isOpen={showRemoteCatalog}
+        onClose={() => setShowRemoteCatalog(false)}
+        title="Pilih & Impor Koleksi Doa"
+        badge="Katalog Sumber EQuran.id"
+        description="Pilih satu atau sinkronkan seluruh doa resmi ke database sekolah."
+        icon={RefreshCw}
+        maxWidth="max-w-3xl"
+        zIndex={70}
+        headerActions={
+          <button
+            type="button"
+            disabled={syncingAll || loadingRemote}
+            onClick={handleSyncAllFromCatalog}
+            className="inline-flex items-center gap-1.5 rounded-xl bg-white/20 hover:bg-white/30 text-white border border-white/30 px-3.5 py-1.5 text-xs font-black backdrop-blur-md disabled:opacity-60 transition cursor-pointer"
+          >
+            <RefreshCw className={`size-3.5 ${syncingAll ? 'animate-spin' : ''}`} />
+            <span>{syncingAll ? 'Sinkron Seluruh…' : 'Impor Semua Sekaligus'}</span>
+          </button>
+        }
+        subHeader={
+          <div className="bg-emerald-50/90 dark:bg-emerald-950/40 border-b border-emerald-200/80 dark:border-emerald-800/60 px-6 py-2.5 text-xs font-bold text-emerald-900 dark:text-emerald-200">
+            {loadingRemote ? 'Mengambil katalog EQuran.id…' : `${filteredRemoteDoas.length} item sumber tersedia. Item yang sudah ada dapat diimpor ulang untuk memperbarui isinya.`}
+          </div>
+        }
+        bodyClassName="bg-slate-50/50 dark:bg-slate-900/30 p-4 sm:p-5"
+        footer={
+          <div className="flex w-full items-center justify-between gap-3">
+            <span className="text-xs text-slate-500 dark:text-slate-400">
+              Data resmi Kementerian Agama RI via EQuran.id
+            </span>
+            <button
+              type="button"
+              onClick={() => setShowRemoteCatalog(false)}
+              className="h-9.5 px-5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Tutup Katalog</span>
+            </button>
+          </div>
+        }
+      >
  {loadingRemote ? (
  <div className="flex items-center justify-center gap-2 p-12 text-slate-500">
  <Loader2 className="size-5 animate-spin text-sky-600" />
@@ -1265,69 +1237,44 @@ export default function MasterDoaPage() {
  })}
  </div>
  )}
- </div>
+      </AppModal>
 
- <div className="bg-white dark:bg-[#1B2433] border-t border-emerald-200/80 dark:border-emerald-800/60 px-6 py-4 flex items-center justify-between shrink-0">
- <span className="text-xs text-slate-500 dark:text-slate-400">
- Data resmi Kementerian Agama RI via EQuran.id
- </span>
- <button
- onClick={() => setShowRemoteCatalog(false)}
- className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-all cursor-pointer shadow-sm shadow-emerald-600/20"
- >
- Tutup Katalog
- </button>
- </div>
- </motion.div>
- </div>
- )}
 
  {/* MODAL READER DETAIL DOA (Harmonized Reader Detail Modal - z-[70]) */}
- {showDetailModal && selectedDoa && (
- <div className="fixed inset-0 z-[70] bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-fadeIn">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433] flex flex-col"
- >
- {/* Top Emerald Accent Line */}
-
- {/* Header dengan Squircle 3D Icon Badge */}
- <div className="p-5 sm:p-6 border-b border-emerald-200/80 dark:border-emerald-800/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50 flex items-start justify-between gap-4 shrink-0">
- <div className="flex items-start gap-3.5">
- <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-md shadow-xs">
- <Bookmark className="size-6 text-slate-600" />
- </div>
- <div>
- <div className="flex items-center gap-2">
- <span className="inline-block rounded-md bg-emerald-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
- ID Doa #{selectedDoa.id} • {selectedDoa.grup || 'Doa Harian'}
- </span>
- </div>
- <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1">
- {selectedDoa.nama}
- </h2>
- </div>
- </div>
-
- <button
- onClick={() => setShowDetailModal(false)}
- className="rounded-xl p-1.5 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-600 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 dark:hover:text-slate-200 transition-colors cursor-pointer"
- >
- <X className="w-5 h-5" />
- </button>
- </div>
-
- {/* Modal Body */}
- <div className="p-5 sm:p-6 overflow-y-auto space-y-4 flex-1 bg-slate-50/50 dark:bg-slate-900/30">
- {loadingDetail ? (
- <div className="p-12 text-center text-slate-400 flex flex-col items-center gap-2">
- <Loader2 className="w-8 h-8 animate-spin text-emerald-600" />
- <span className="text-sm font-medium">Memuat rincian doa...</span>
- </div>
- ) : (
- <>
+      <AppModal
+        isOpen={Boolean(showDetailModal && selectedDoa)}
+        onClose={() => setShowDetailModal(false)}
+        title={selectedDoa?.nama}
+        badge={selectedDoa ? `ID Doa #${selectedDoa.id}` : undefined}
+        description={selectedDoa?.grup || 'Doa Harian'}
+        icon={Bookmark}
+        maxWidth="max-w-2xl"
+        zIndex={70}
+        bodyClassName="space-y-4 bg-slate-50/50 dark:bg-slate-900/30"
+        footer={
+          <div className="flex w-full items-center justify-between gap-3">
+            <span className="text-xs text-slate-500 dark:text-slate-400">
+              Konten Referensi Doa Resmi EQuran.id
+            </span>
+            <button
+              type="button"
+              onClick={() => setShowDetailModal(false)}
+              className="h-9.5 px-5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Tutup Pembaca Doa</span>
+            </button>
+          </div>
+        }
+      >
+        {selectedDoa && (
+          loadingDetail ? (
+            <div className="p-12 text-center text-slate-400 flex flex-col items-center gap-2">
+              <Loader2 className="w-8 h-8 animate-spin text-emerald-600" />
+              <span className="text-sm font-medium">Memuat rincian doa...</span>
+            </div>
+          ) : (
+            <>
  {/* Teks Arab (Large Right Aligned) */}
  <div className="bg-white dark:bg-[#1C2637] p-6 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 shadow-xs text-right text-3xl font-serif leading-loose text-slate-900 dark:text-white tracking-wide font-medium">
  {selectedDoa.ar}
@@ -1373,54 +1320,48 @@ export default function MasterDoaPage() {
  ))}
  </div>
  )}
- </>
- )}
- </div>
+          </>
+          )
+        )}
+      </AppModal>
 
- {/* Modal Footer */}
- <div className="bg-white dark:bg-[#1B2433] border-t border-emerald-200/80 dark:border-emerald-800/60 px-6 py-4 flex items-center justify-between shrink-0">
- <span className="text-xs text-slate-500 dark:text-slate-400">
- Konten Referensi Doa Resmi EQuran.id
- </span>
- <button
- onClick={() => setShowDetailModal(false)}
- className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-all cursor-pointer shadow-sm shadow-emerald-600/20"
- >
- Tutup Pembaca Doa
- </button>
- </div>
- </motion.div>
- </div>
- )}
 
  {/* MODAL FORM ADD / EDIT DOA (Harmonized Form Modal - z-[70]) */}
- {showModal && (
- <div className="fixed inset-0 z-[70] bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-lg overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- {/* Top Accent Line (Amber for edit, Emerald for new) */}
-
- <div className="p-6">
- {/* Dialog Header dengan Squircle 3D Icon Badge */}
- <div className="flex items-center gap-3.5 mb-5">
- <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 shadow-sm">
- <BookOpen className="size-6 text-emerald-600" />
- </div>
- <div>
- <span className={`inline-block rounded-md px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider ${editingItem ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300' : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'}`}>
- {editingItem ? 'Perbarui Data' : 'Doa Baru'}
- </span>
- <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
- {editingItem ? `Edit Doa: ${editingItem.nama}` : 'Tambah Doa Baru Manual'}
- </h3>
- </div>
- </div>
-
- <form onSubmit={handleSave} className="space-y-4">
+      <AppModal
+        isOpen={showModal}
+        onClose={() => !saving && setShowModal(false)}
+        title={editingItem ? `Edit Doa: ${editingItem.nama}` : 'Tambah Doa Baru Manual'}
+        badge={editingItem ? 'Perbarui Data' : 'Doa Baru'}
+        description="Kelola teks Arab, transliterasi latin, terjemahan, serta kata kunci pencarian doa."
+        icon={BookOpen}
+        maxWidth="max-w-lg"
+        zIndex={70}
+        disableBackdropClose={saving}
+        hideCloseButton={saving}
+        footer={
+          <>
+            <button
+              type="button"
+              disabled={saving}
+              onClick={() => setShowModal(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="submit"
+              form="master-doa-form"
+              disabled={saving}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+            >
+              {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
+              <span>{editingItem ? 'Simpan Perubahan' : 'Tambah Doa'}</span>
+            </button>
+          </>
+        }
+      >
+        <form id="master-doa-form" onSubmit={handleSave} className="space-y-4">
  <div className="grid grid-cols-3 gap-4">
  <div>
  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">ID Doa</label>
@@ -1515,46 +1456,26 @@ export default function MasterDoaPage() {
  />
  </div>
 
- <div className="flex items-center justify-end gap-3 pt-4 border-t border-emerald-200/80 dark:border-emerald-800/60">
- <button
- type="button"
- onClick={() => setShowModal(false)}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all cursor-pointer"
- >
- Batal
- </button>
- <button
- type="submit"
- disabled={saving}
- className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 dark:bg-slate-100 dark:text-slate-900 dark: px-5 py-2 text-xs font-bold shadow-sm hover:brightness-105 disabled:opacity-50 transition-all cursor-pointer text-white border border-emerald-200/80 dark:border-emerald-800/60 h-9 text-sm font-medium"
- >
- {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
- <span>{editingItem ? 'Simpan Perubahan' : 'Tambah Doa'}</span>
- </button>
- </div>
- </form>
- </div>
- </motion.div>
- </div>
- )}
+        </form>
+      </AppModal>
 
- <HarmonizedDeleteModal
- isOpen={isDeleteOpen}
- onClose={() => {
- setIsDeleteOpen(false)
- setDeleteItem(null)
- }}
- onConfirm={handleConfirmDelete}
- item={deleteItem}
- isSubmitting={isDeleting}
- />
+      <HarmonizedDeleteModal
+        isOpen={isDeleteOpen}
+        onClose={() => {
+          setIsDeleteOpen(false)
+          setDeleteItem(null)
+        }}
+        onConfirm={handleConfirmDelete}
+        item={deleteItem}
+        isSubmitting={isDeleting}
+      />
 
- <HarmonizedDeleteAllModal
- isOpen={isDeleteAllOpen}
- onClose={() => setIsDeleteAllOpen(false)}
- onConfirm={handleConfirmDeleteAll}
- isSubmitting={isDeletingAll}
- />
+      <HarmonizedDeleteAllModal
+        isOpen={isDeleteAllOpen}
+        onClose={() => setIsDeleteAllOpen(false)}
+        onConfirm={handleConfirmDeleteAll}
+        isSubmitting={isDeletingAll}
+      />
 
  </MasterDataPage>
  </PageContainer>

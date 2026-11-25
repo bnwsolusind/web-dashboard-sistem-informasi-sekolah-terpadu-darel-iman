@@ -1,4 +1,5 @@
 import CustomSelect from "../components/ui/CustomSelect"
+import AppModal from '../components/app/AppModal'
 import React, { useState, useMemo } from 'react'
 import {
   motion,
@@ -1539,40 +1540,47 @@ export default function MasterHakAksesPage() {
  isSubmitting={assignPegawaiRoleMutation.isPending}
  />
 
- {/* ── MODAL: SAVE CONFIRMATION (z-[70]) ── */}
- <AnimatePresence>
- {showSaveRoleConfirmModal && (
- <div
- className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto"
- role="dialog"
- aria-modal="true"
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="my-auto w-full max-w-md font-sans"
- >
- <div className="flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 p-2.5 shadow-md shadow-xs shrink-0">
- <ShieldCheck className="size-5" />
- </div>
- <div>
- <h2 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
- {selectedRole?.id ? 'Konfirmasi Perubahan Role' : 'Konfirmasi Simpan Role Baru'}
- </h2>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Verifikasi izin sebelum disimpan ke sistem
- </p>
- </div>
- </div>
- <IconButton icon={X} variant="ghost" size="sm" onClick={() => setShowSaveRoleConfirmModal(false)} />
- </div>
-
- <div className="p-6 space-y-4">
+      {/* ── MODAL: SAVE CONFIRMATION (z-[70]) ── */}
+      <AppModal
+        isOpen={showSaveRoleConfirmModal}
+        onClose={() => !(tambahRoleMutation.isPending || ubahRoleMutation.isPending) && setShowSaveRoleConfirmModal(false)}
+        title={selectedRole?.id ? 'Konfirmasi Perubahan Role' : 'Konfirmasi Simpan Role Baru'}
+        badge="Verifikasi Izin"
+        description="Verifikasi izin sebelum disimpan ke sistem"
+        icon={ShieldCheck}
+        variant={selectedRole?.id ? 'warning' : 'emerald'}
+        maxWidth="max-w-md"
+        zIndex={70}
+        disableBackdropClose={tambahRoleMutation.isPending || ubahRoleMutation.isPending}
+        hideCloseButton={tambahRoleMutation.isPending || ubahRoleMutation.isPending}
+        bodyClassName="space-y-4"
+        footer={
+          <>
+            <button
+              type="button"
+              disabled={tambahRoleMutation.isPending || ubahRoleMutation.isPending}
+              onClick={() => setShowSaveRoleConfirmModal(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="button"
+              disabled={tambahRoleMutation.isPending || ubahRoleMutation.isPending}
+              onClick={handleConfirmSaveRole}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+            >
+              {(tambahRoleMutation.isPending || ubahRoleMutation.isPending) ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <Save className="size-4" strokeWidth={2} />
+              )}
+              <span>{(tambahRoleMutation.isPending || ubahRoleMutation.isPending) ? 'Menyimpan...' : 'Ya, Simpan Role'}</span>
+            </button>
+          </>
+        }
+      >
  <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/70 p-3.5 dark:border-emerald-800/60 dark:bg-slate-900/40 text-xs">
  <p className="text-slate-500 font-bold">Nama Role Target:</p>
  <p className="text-sm font-black text-slate-900 dark:text-white mt-0.5">{pendingRoleData?.name}</p>
@@ -1588,64 +1596,47 @@ export default function MasterHakAksesPage() {
  Perubahan izin pada role ini akan langsung berlaku pada seluruh akun pengguna yang memegang role tersebut saat sesi login berikutnya.
  </p>
  </div>
- </div>
+      </AppModal>
 
- <div className="flex items-center justify-end gap-3 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <AppButton variant="ghost" size="md" onClick={() => setShowSaveRoleConfirmModal(false)}>Batal</AppButton>
- <button
- type="button"
- disabled={tambahRoleMutation.isPending || ubahRoleMutation.isPending}
- onClick={handleConfirmSaveRole}
- className="inline-flex items-center gap-2 rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 px-5 py-2.5 text-xs font-black shadow-sm hover:scale-[1.02] active:scale-95 transition-all cursor-pointer disabled:opacity-50"
- >
- {tambahRoleMutation.isPending || ubahRoleMutation.isPending ? (
- <Loader2 className="size-4 animate-spin" />
- ) : (
- <CheckCircle2 className="size-4" strokeWidth={2.2} />
- )}
- <span>Ya, Simpan Matriks Role</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
-
- {/* ── MODAL: DELETE CONFIRMATION ROLE (z-[70]) ── */}
- <AnimatePresence>
- {deleteTargetRole && (
- <div
- className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto"
- role="dialog"
- aria-modal="true"
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="my-auto w-full max-w-md font-sans"
- >
- <div className="flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 p-2.5 shadow-md shadow-xs shrink-0">
- <Trash2 className="size-5" />
- </div>
- <div>
- <h2 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
- Hapus Role Permanen
- </h2>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Tindakan ini tidak dapat dibatalkan
- </p>
- </div>
- </div>
- <IconButton icon={X} variant="ghost" size="sm" onClick={() => setDeleteTargetRole(null)} />
- </div>
-
- <div className="p-6 space-y-4">
+      {/* ── MODAL: DELETE CONFIRMATION ROLE (z-[70]) ── */}
+      <AppModal
+        isOpen={Boolean(deleteTargetRole)}
+        onClose={() => !hapusRoleMutation.isPending && setDeleteTargetRole(null)}
+        title="Hapus Role Permanen"
+        badge="Konfirmasi"
+        description="Tindakan ini tidak dapat dibatalkan"
+        icon={Trash2}
+        variant="danger"
+        maxWidth="max-w-md"
+        zIndex={70}
+        disableBackdropClose={hapusRoleMutation.isPending}
+        hideCloseButton={hapusRoleMutation.isPending}
+        bodyClassName="space-y-4 text-xs"
+        footer={
+          <>
+            <button
+              type="button"
+              disabled={hapusRoleMutation.isPending}
+              onClick={() => setDeleteTargetRole(null)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="button"
+              disabled={hapusRoleMutation.isPending}
+              onClick={handleConfirmDeleteRole}
+              className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20 disabled:opacity-50"
+            >
+              {hapusRoleMutation.isPending ? <Loader2 className="size-4 animate-spin" /> : <Trash2 className="size-4" />}
+              <span>Hapus Role Sekarang</span>
+            </button>
+          </>
+        }
+      >
+        {deleteTargetRole && (
+          <>
  <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/60 p-3.5 dark:border-emerald-800/60 dark:bg-rose-950/30 text-xs">
  <p className="text-rose-600 font-bold">Role yang Akan Dihapus:</p>
  <p className="text-sm font-black text-rose-950 dark:text-rose-100 mt-0.5">{deleteTargetRole?.name}</p>
@@ -1657,52 +1648,49 @@ export default function MasterHakAksesPage() {
  Pastikan tidak ada pengguna aktif yang masih menggunakan role ini sebelum melakukan penghapusan.
  </p>
  </div>
- </div>
+          </>
+        )}
+      </AppModal>
 
- <div className="flex items-center justify-end gap-3 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <AppButton variant="ghost" size="md" onClick={() => setDeleteTargetRole(null)}>Batal</AppButton>
- <AppButton variant="danger" size="md" icon={Trash2} loading={hapusRoleMutation.isPending} onClick={handleConfirmDeleteRole}>Hapus Role Sekarang</AppButton>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
-
- {/* ── MODAL: DELETE CONFIRMATION PERMISSION (z-[70]) ── */}
- <AnimatePresence>
- {deleteTargetPerm && (
- <div
- className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto"
- role="dialog"
- aria-modal="true"
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="my-auto w-full max-w-md font-sans"
- >
- <div className="flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 p-2.5 shadow-md shadow-xs shrink-0">
- <Trash2 className="size-5" />
- </div>
- <div>
- <h2 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
- Hapus Izin Akses
- </h2>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Tindakan ini permanen
- </p>
- </div>
- </div>
- <IconButton icon={X} variant="ghost" size="sm" onClick={() => setDeleteTargetPerm(null)} />
- </div>
-
- <div className="p-6 space-y-4">
+      {/* ── MODAL: DELETE CONFIRMATION PERMISSION (z-[70]) ── */}
+      <AppModal
+        isOpen={Boolean(deleteTargetPerm)}
+        onClose={() => !hapusPermMutation.isPending && setDeleteTargetPerm(null)}
+        title="Hapus Izin Akses"
+        badge="Konfirmasi"
+        description="Tindakan ini permanen"
+        icon={Trash2}
+        variant="danger"
+        maxWidth="max-w-md"
+        zIndex={70}
+        disableBackdropClose={hapusPermMutation.isPending}
+        hideCloseButton={hapusPermMutation.isPending}
+        bodyClassName="space-y-4 text-xs"
+        footer={
+          <>
+            <button
+              type="button"
+              disabled={hapusPermMutation.isPending}
+              onClick={() => setDeleteTargetPerm(null)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="button"
+              disabled={hapusPermMutation.isPending}
+              onClick={handleConfirmDeletePerm}
+              className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20 disabled:opacity-50"
+            >
+              {hapusPermMutation.isPending ? <Loader2 className="size-4 animate-spin" /> : <Trash2 className="size-4" />}
+              <span>Hapus Izin</span>
+            </button>
+          </>
+        }
+      >
+        {deleteTargetPerm && (
+          <>
  <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/60 p-3.5 dark:border-emerald-800/60 dark:bg-rose-950/30 text-xs">
  <p className="text-rose-600 font-bold">Izin yang Akan Dihapus:</p>
  <p className="text-sm font-black text-rose-950 dark:text-rose-100 mt-0.5">
@@ -1710,17 +1698,10 @@ export default function MasterHakAksesPage() {
  </p>
  <p className="text-slate-500 mt-1">Izin akan dicabut dari seluruh role dan penugasan langsung.</p>
  </div>
- </div>
+          </>
+        )}
+      </AppModal>
 
- <div className="flex items-center justify-end gap-3 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <AppButton variant="ghost" size="md" onClick={() => setDeleteTargetPerm(null)}>Batal</AppButton>
- <AppButton variant="danger" size="md" icon={Trash2} loading={hapusPermMutation.isPending} onClick={handleConfirmDeletePerm}>Hapus Izin</AppButton>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
 
  {/* Smart Floating Scroll Navigator (Opsi A) */}
  <SmartScrollFab targetId="tabel-master-hak-akses" downTooltip="Langsung ke Navigasi Tab Akses" />
@@ -1912,97 +1893,64 @@ function RoleFormModal({
  })
  }
 
- return (
- <div
- className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto"
- role="dialog"
- aria-modal="true"
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !isSubmitting) onClose()
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="my-auto w-full max-w-4xl font-sans"
- >
- <div className="flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
- {/* Top Accent Gradient Bar */}
- <div
- className={cn(
- 'h-1.5 w-full shrink-0',
- isEdit
- ? 'bg-white dark:bg-[#1B2433]'
- : 'bg-white dark:bg-[#1B2433]'
- )}
- />
-
- {/* Header */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232] shrink-0">
- <div className="flex items-center gap-3.5">
- <div
- className={cn(
- 'rounded-xl text-white p-3 shadow-md shrink-0 border',
- isEdit
- ? 'bg-white dark:bg-[#1B2433] shadow-sm border-emerald-200/80 dark:border-emerald-800/60'
- : 'bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm border-emerald-300'
- )}
- >
- <Shield className="size-5" strokeWidth={2.25} />
- </div>
- <div>
- <div className="flex items-center gap-2 flex-wrap">
- <h2 className="text-base sm:text-lg font-black tracking-tight text-slate-900 dark:text-white">
- {isEdit ? 'Ubah Matriks & Kebijakan Role' : 'Tambah Role Akses Dinamis'}
- </h2>
- <span
- className={cn(
- 'inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-black border',
- isEdit
- ? 'bg-amber-50 text-amber-800 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/60 dark:text-amber-300 dark:border-emerald-800/60'
- : 'bg-emerald-50 text-emerald-800 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/60'
- )}
- >
- <Sparkles className="size-3" />
- {isEdit ? 'Edit Dinamis' : 'Role Dinamis'}
- </span>
- </div>
- <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
- Atur cakupan data, halaman awal, izin modul, serta daftar menu sidebar langsung dari database.
- </p>
- </div>
- </div>
- <IconButton icon={X} variant="ghost" size="sm" onClick={onClose} disabled={isSubmitting} />
- </div>
-
- {/* Sub-Tab Selector inside Modal */}
- <div className="flex items-center gap-2 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/70 px-6 py-2.5 dark:border-emerald-800/60 dark:bg-slate-900/50 shrink-0 overflow-x-auto">
- {[
- { id: 'policy', label: '1. Kebijakan & Scope' },
- { id: 'permissions', label: `2. Izin Modul (${selectedPerms.length})` },
- { id: 'menus', label: `3. Menu Sidebar (${useCustomMenuAccess ? allowedMenuIds.length : 'Otomatis'})` },
- ].map((t) => (
- <button
- key={t.id}
- type="button"
- onClick={() => setModalTab(t.id)}
- className={cn(
- 'rounded-xl px-3.5 py-1.5 text-xs font-extrabold transition-all whitespace-nowrap cursor-pointer',
- modalTab === t.id
- ? 'bg-emerald-600 text-white shadow-sm'
- : 'bg-white text-slate-600 border border-emerald-200/80 dark:border-emerald-800/60 hover:bg-slate-100 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-700/80'
- )}
- >
- {t.label}
- </button>
- ))}
- </div>
-
- {/* Form Content */}
- <form onSubmit={handleSubmit} className="flex flex-1 flex-col overflow-hidden">
- <div className="flex-1 space-y-4 overflow-y-auto p-6 text-slate-800 dark:text-slate-100">
+  return (
+    <AppModal
+      isOpen={isOpen}
+      onClose={() => !isSubmitting && onClose()}
+      title={isEdit ? 'Ubah Matriks & Kebijakan Role' : 'Tambah Role Akses Dinamis'}
+      badge={isEdit ? 'Edit Dinamis' : 'Role Dinamis'}
+      description="Atur cakupan data, halaman awal, izin modul, serta daftar menu sidebar langsung dari database."
+      icon={Shield}
+      maxWidth="max-w-4xl"
+      disableBackdropClose={isSubmitting}
+      hideCloseButton={isSubmitting}
+      subHeader={
+        <div className="flex items-center gap-1.5 border-b border-emerald-200/80 bg-emerald-50/80 px-6 py-2.5 dark:border-emerald-800/60 dark:bg-emerald-950/40 overflow-x-auto">
+          {[
+            { id: 'policy', label: '1. Kebijakan & Scope' },
+            { id: 'permissions', label: `2. Izin Modul (${selectedPerms.length})` },
+            { id: 'menus', label: `3. Menu Sidebar (${useCustomMenuAccess ? allowedMenuIds.length : 'Otomatis'})` },
+          ].map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => setModalTab(t.id)}
+              className={cn(
+                'rounded-lg px-3 py-1.5 text-xs font-black transition-all whitespace-nowrap cursor-pointer active:scale-95',
+                modalTab === t.id
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-emerald-700 hover:bg-emerald-100/60 dark:text-slate-300 dark:hover:bg-slate-800'
+              )}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+      }
+      footer={
+        <>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isSubmitting}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="submit"
+            form="role-matrix-form"
+            disabled={isSubmitting || !name.trim()}
+            className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+          >
+            {isSubmitting ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" strokeWidth={2.2} />}
+            <span>{isEdit ? 'Simpan Matriks Role' : 'Tambah Role Baru'}</span>
+          </button>
+        </>
+      }
+    >
+      <form id="role-matrix-form" onSubmit={handleSubmit} className="space-y-4 text-slate-800 dark:text-slate-100">
  {modalTab === 'policy' && (
  <div className="space-y-4">
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -2440,39 +2388,11 @@ function RoleFormModal({
  </div>
  </div>
  )}
- </div>
-
- {/* Footer */}
- <div className="flex items-center justify-end gap-3 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900 shrink-0">
- <Button
- type="button"
- variant="outline"
- onClick={onClose}
- disabled={isSubmitting}
- className="rounded-xl border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50 px-4 py-2.5 text-xs font-black text-rose-700 hover:bg-rose-100 dark:border-emerald-800/60 dark:bg-rose-950/50 dark:text-rose-300"
- >
- Batal
- </Button>
- <Button
- type="submit"
- variant="primary"
- disabled={isSubmitting || !name.trim()}
- className="inline-flex items-center gap-2 rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 px-5 py-2.5 text-xs font-black shadow-sm hover:scale-[1.02] active:scale-95"
- >
- {isSubmitting ? (
- <Loader2 className="size-4 animate-spin" />
- ) : (
- <Save className="size-4" strokeWidth={2.2} />
- )}
- <span>{isEdit ? 'Simpan Matriks Role' : 'Tambah Role Baru'}</span>
- </Button>
- </div>
- </form>
- </div>
- </motion.div>
- </div>
- )
+      </form>
+    </AppModal>
+  )
 }
+
 
 // ─────────────────────────────────────────────────────────────────────────────
 // KOMPONEN MODAL PERMISSION (HARMONIZED)
@@ -2503,41 +2423,41 @@ function PermissionFormModal({ isOpen, onClose, onSubmit, isSubmitting = false }
  onSubmit({ name: name.trim() })
  }
 
- return (
- <div
- className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto"
- role="dialog"
- aria-modal="true"
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !isSubmitting) onClose()
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="my-auto w-full max-w-md font-sans"
- >
- <div className="flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-white dark:bg-[#1B2433] p-2.5 shadow-md shadow-sky-600/30 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
- <Key className="size-5" />
- </div>
- <div>
- <h2 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
- Tambah Izin Akses Granular
- </h2>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Daftarkan permission baru ke sistem
- </p>
- </div>
- </div>
- <IconButton icon={X} variant="ghost" size="sm" onClick={onClose} />
- </div>
-
- <form onSubmit={handleSubmit} className="p-6 space-y-4">
+  return (
+    <AppModal
+      isOpen={isOpen}
+      onClose={() => !isSubmitting && onClose()}
+      title="Tambah Izin Akses Granular"
+      badge="Izin Baru"
+      description="Daftarkan permission baru ke sistem"
+      icon={Key}
+      maxWidth="max-w-md"
+      disableBackdropClose={isSubmitting}
+      hideCloseButton={isSubmitting}
+      footer={
+        <>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isSubmitting}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="submit"
+            form="perm-create-form"
+            disabled={isSubmitting || !name.trim()}
+            className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+          >
+            {isSubmitting ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" strokeWidth={2} />}
+            <span>Simpan Izin Akses</span>
+          </button>
+        </>
+      }
+    >
+      <form id="perm-create-form" onSubmit={handleSubmit} className="space-y-4">
  <div>
  <label className="mb-1.5 block text-xs font-bold text-slate-700 dark:text-slate-300">
  Nama Izin Akses <span className="text-rose-500">*</span>
@@ -2563,16 +2483,11 @@ function PermissionFormModal({ isOpen, onClose, onSubmit, isSubmitting = false }
  </p>
  </div>
 
- <div className="flex items-center justify-end gap-3 pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60">
- <AppButton variant="ghost" size="md" onClick={onClose}>Batal</AppButton>
- <AppButton type="submit" variant="primary" size="md" icon={Save} loading={isSubmitting} disabled={isSubmitting || !name.trim()}>Simpan Izin Akses</AppButton>
- </div>
- </form>
- </div>
- </motion.div>
- </div>
- )
+      </form>
+    </AppModal>
+  )
 }
+
 
 // ─────────────────────────────────────────────────────────────────────────────
 // KOMPONEN MODAL PEGAWAI ROLE (HARMONIZED)
@@ -2706,42 +2621,41 @@ function PegawaiRoleModal({
  const activeRoleGroup = getRoleCategoryGroup(roleName)
  const defaultRolePermCount = applyRoleDefaultPermissions(roleName, allPermissions).length
 
- return (
- <div
- className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto"
- role="dialog"
- aria-modal="true"
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !isSubmitting) onClose()
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="my-auto w-full max-w-xl font-sans"
- >
- <div className="flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 p-2.5 shadow-md shadow-xs shrink-0">
- <UserCog className="size-5" />
- </div>
- <div>
- <h2 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
- Penetapan Hak Akses Pegawai
- </h2>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Atur status role, izin spesifik satu per satu, dan akun login pengguna
- </p>
- </div>
- </div>
- <IconButton icon={X} variant="ghost" size="sm" onClick={onClose} />
- </div>
-
- <form onSubmit={handleSubmit} className="flex flex-1 flex-col overflow-hidden">
- <div className="flex-1 space-y-4 overflow-y-auto p-6 text-slate-800 dark:text-slate-100">
+  return (
+    <AppModal
+      isOpen={isOpen}
+      onClose={() => !isSubmitting && onClose()}
+      title="Penetapan Hak Akses Pegawai"
+      badge="Hak Akses"
+      description="Atur status role, izin spesifik satu per satu, dan akun login pengguna"
+      icon={UserCog}
+      maxWidth="max-w-xl"
+      disableBackdropClose={isSubmitting}
+      hideCloseButton={isSubmitting}
+      footer={
+        <>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isSubmitting}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="submit"
+            form="pegawai-role-form"
+            disabled={isSubmitting}
+            className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+          >
+            {isSubmitting ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" strokeWidth={2} />}
+            <span>Simpan Akses Pegawai</span>
+          </button>
+        </>
+      }
+    >
+      <form id="pegawai-role-form" onSubmit={handleSubmit} className="space-y-4 text-slate-800 dark:text-slate-100">
  {/* Employee Summary Card */}
  <div className="flex items-center gap-3.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 p-4 dark:border-emerald-800/60 dark:bg-emerald-950/30">
  <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 font-black text-sm shadow-xs">
@@ -3081,15 +2995,7 @@ function PegawaiRoleModal({
  </div>
  </div>
  )}
- </div>
-
- <div className="flex items-center justify-end gap-3 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900 shrink-0">
- <AppButton variant="ghost" size="md" onClick={onClose} disabled={isSubmitting}>Batal</AppButton>
- <AppButton type="submit" variant="primary" size="md" icon={Save} loading={isSubmitting}>Simpan Akses Pegawai</AppButton>
- </div>
- </form>
- </div>
- </motion.div>
- </div>
- )
+      </form>
+    </AppModal>
+  )
 }

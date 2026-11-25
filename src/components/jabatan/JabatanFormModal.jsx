@@ -24,6 +24,7 @@ import {
 } from 'lucide-react'
 import { AppButton, IconButton, AppInput, AppTextarea, AppCheckbox } from '../app'
 import HeroUiFilterSelect from '../ui/HeroUiFilterSelect'
+import AppModal from '../app/AppModal'
 
 // Validation Schema using Zod
 const jabatanSchema = z.object({
@@ -213,47 +214,42 @@ export default function JabatanFormModal({
  { step: 4, label: 'Konfirmasi' },
  ]
 
- return (
- <div
- id="jabatan-form-modal"
- className="overlay modal overlay-open:opacity-100 overlay-open:duration-300 fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md animate-fadeIn"
- role="dialog"
- aria-modal="true"
- aria-labelledby="form-jabatan-title"
- tabIndex={-1}
- onMouseDown={e => { if (e.target === e.currentTarget) onClose() }}
- >
- <div className="modal-dialog font-sans my-auto w-full max-w-4xl">
- <div className="modal-content flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-card-dark dark:shadow-black/60">
- {/* Top accent line */}
-
- {/* Modal Header Bar */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 p-2.5 text-[#059669] dark:from-emerald-950/60 dark:to-teal-950/40 dark:border-emerald-800/60 dark:text-[#10B981]">
- <Network className="h-5 w-5" strokeWidth={2.25} />
- </div>
- <div>
- <h3 id="form-jabatan-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- {isEdit ? 'Edit Jabatan' : 'Tambah Jabatan'}
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-[#059669] border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" /> {isEdit ? 'Update' : 'Baru'}
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Lengkapi informasi struktur jabatan kepegawaian.</p>
- </div>
- </div>
-        <IconButton
-          icon={X}
-          variant="ghost"
-          size="sm"
-          onClick={onClose}
-          aria-label="Tutup form jabatan"
-        />
- </div>
-
- {/* Modal Main Body Grid */}
- <form onSubmit={handleSubmit(submitHandler)} className="flex min-h-0 flex-1 flex-col">
+  return (
+    <AppModal
+      isOpen={isOpen}
+      onClose={() => !isSubmitting && onClose()}
+      title={isEdit ? 'Ubah Master Jabatan' : 'Tambah Jabatan Baru'}
+      badge={isEdit ? 'Perbarui' : 'Baru'}
+      description="Atur identitas jabatan, kategori, hak akses, dan tingkat struktur."
+      icon={Briefcase}
+      variant={isEdit ? 'warning' : 'emerald'}
+      maxWidth="max-w-4xl"
+      disableBackdropClose={isSubmitting}
+      hideCloseButton={isSubmitting}
+      bodyClassName="p-0"
+      footer={
+        <>
+          <button
+            type="button"
+            disabled={isSubmitting}
+            onClick={onClose}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="submit"
+            form="jabatan-form"
+            disabled={isSubmitting}
+            className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+          >
+            <span>{isSubmitting ? 'Menyimpan...' : isEdit ? 'Simpan Perubahan' : 'Simpan Jabatan'}</span>
+          </button>
+        </>
+      }
+    >
+      <form id="jabatan-form" onSubmit={handleSubmit(submitHandler)} className="flex flex-col">
  <div className="modal-body flex min-h-0 flex-1 flex-col overflow-y-auto p-0">
  {/* Horizontal Wizard Stepper */}
  <div className="flex shrink-0 items-center justify-between gap-1 overflow-x-auto border-b border-emerald-100/80 bg-slate-50/60 p-3.5 dark:border-emerald-800/80 dark:bg-slate-900/40">
@@ -690,40 +686,7 @@ export default function JabatanFormModal({
  </div>
  </div>
 
-      {/* Modal Bottom Action Footer */}
-      <div className="modal-footer flex items-center justify-between border-t border-emerald-100/80 bg-white px-6 py-4 dark:border-emerald-800/60 dark:bg-slate-950">
-        <AppButton variant="ghost" size="md" onClick={onClose}>
-          Batal
-        </AppButton>
-
-        <div className="flex items-center gap-2.5">
-          {currentStep < 4 ? (
-            <AppButton
-              variant="primary"
-              size="md"
-              icon={ArrowRight}
-              iconPosition="end"
-              onClick={handleNext}
-            >
-              Selanjutnya
-            </AppButton>
-          ) : (
-            <AppButton
-              type="submit"
-              variant="primary"
-              size="md"
-              icon={CircleCheck}
-              loading={isSubmitting}
-              disabled={isSubmitting}
-            >
-              {isEdit ? "Simpan Perubahan" : "Simpan Jabatan"}
-            </AppButton>
-          )}
-        </div>
-      </div>
-    </form>
-  </div>
-</div>
-</div>
-)
+      </form>
+    </AppModal>
+  )
 }

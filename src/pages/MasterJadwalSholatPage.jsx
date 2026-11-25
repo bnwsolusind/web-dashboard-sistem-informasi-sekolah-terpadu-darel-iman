@@ -43,6 +43,7 @@ import {
 } from '../services/equranService'
 import ActionDropdown from '../components/app/ActionDropdown'
 import AppDataTable from '../components/app/AppDataTable'
+import AppModal from '../components/app/AppModal'
 import MobileDataCard from '../components/app/MobileDataCard'
 import PageContainer from '../components/app/PageContainer'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
@@ -582,132 +583,112 @@ function ModernKpiCard({
 }
 
 function HarmonizedDeleteModal({ isOpen, onClose, onConfirm, item, isSubmitting }) {
- if (!isOpen || !item) return null
-
- return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fadeIn">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex h-9 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 shadow-sm">
- <Trash2 className="h-6 w-6" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-rose-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
- Hapus Permanen
- </span>
- <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
- Hapus Jadwal Sholat?
- </h3>
- </div>
- </div>
-
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Apakah Anda yakin ingin menghapus data jadwal sholat ini dari database? Tindakan ini tidak dapat dibatalkan.
- </p>
-
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/50 p-3.5 dark:border-emerald-800/60 dark:bg-rose-950/20 mb-5">
- <p className="text-xs font-black text-rose-950 dark:text-rose-100">
- {item?.kabkota_name || 'Kab/Kota'} ({item?.provinsi || 'Provinsi'})
- </p>
- <p className="text-xs text-rose-800/80 dark:text-rose-300/80 mt-1">
- Tanggal: {item?.tanggal_lengkap || item?.tanggal} ({item?.hari || '-'})
- </p>
- </div>
-
- <div className="flex items-center justify-end gap-3">
- <button
- type="button"
- onClick={onClose}
- disabled={isSubmitting}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all cursor-pointer"
- >
- Batal
- </button>
- <button
- type="button"
- onClick={onConfirm}
- disabled={isSubmitting}
- className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white px-5 py-2 text-xs font-bold text-white shadow-sm hover:brightness-105 disabled:opacity-50 transition-all cursor-pointer"
- >
- {isSubmitting ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
- Hapus Jadwal
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )
+  return (
+    <AppModal
+      isOpen={Boolean(isOpen && item)}
+      onClose={() => !isSubmitting && onClose()}
+      title="Hapus Jadwal Sholat?"
+      badge="Hapus Permanen"
+      description="Apakah Anda yakin ingin menghapus data jadwal sholat ini dari database? Tindakan ini tidak dapat dibatalkan."
+      icon={Trash2}
+      variant="danger"
+      maxWidth="max-w-md"
+      zIndex={70}
+      disableBackdropClose={isSubmitting}
+      hideCloseButton={isSubmitting}
+      bodyClassName="space-y-4"
+      footer={
+        <>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isSubmitting}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={isSubmitting}
+            className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20 disabled:opacity-50"
+          >
+            {isSubmitting ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+            <span>Hapus Jadwal</span>
+          </button>
+        </>
+      }
+    >
+      {item && (
+        <>
+          <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            Apakah Anda yakin ingin menghapus data jadwal sholat ini dari database? Tindakan ini tidak dapat dibatalkan.
+          </p>
+          <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-rose-50/50 p-3.5 dark:bg-rose-950/20">
+            <p className="text-xs font-black text-rose-950 dark:text-rose-100">
+              {item?.kabkota_name || 'Kab/Kota'} ({item?.provinsi || 'Provinsi'})
+            </p>
+            <p className="text-xs text-rose-800/80 dark:text-rose-300/80 mt-1">
+              Tanggal: {item?.tanggal_lengkap || item?.tanggal} ({item?.hari || '-'})
+            </p>
+          </div>
+        </>
+      )}
+    </AppModal>
+  )
 }
 
 function HarmonizedSaveConfirmModal({ isOpen, onClose, onConfirm, payload, isSubmitting }) {
- if (!isOpen) return null
-
- return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fadeIn">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
- 
-            <Database className="h-6 w-6 text-white" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-emerald-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
- Simpan Database
- </span>
- <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
- Simpan Jadwal Sholat Bulanan?
- </h3>
- </div>
- </div>
-
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Data jadwal sholat bulanan untuk wilayah ini akan disimpan ke database master aplikasi untuk sinkronisasi otomatis absensi dan ibadah harian santri/siswa.
- </p>
-
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/50 p-3.5 dark:border-emerald-800/60 dark:bg-emerald-950/20 mb-5">
- <p className="text-xs font-black text-emerald-950 dark:text-emerald-100">
- {payload?.kabkota || 'Kota'} ({payload?.provinsi || 'Provinsi'})
- </p>
- <p className="text-xs text-emerald-800/80 dark:text-emerald-300/80 mt-1">
- Bulan: {payload?.bulan} / {payload?.tahun} • {payload?.totalDays || '1 Bulan Penuh'}
- </p>
- </div>
-
- <div className="flex items-center justify-end gap-3">
- <button
- type="button"
- onClick={onClose}
- disabled={isSubmitting}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all cursor-pointer"
- >
- Batal
- </button>
- <button
- type="button"
- onClick={onConfirm}
- disabled={isSubmitting}
- className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 dark:bg-slate-100 dark:text-slate-900 dark: px-5 py-2 text-xs font-bold shadow-sm hover:brightness-105 disabled:opacity-50 transition-all cursor-pointer text-white border border-emerald-200/80 dark:border-emerald-800/60 h-9 text-sm font-medium"
- >
- {isSubmitting ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
- Konfirmasi Simpan
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )
+  return (
+    <AppModal
+      isOpen={isOpen}
+      onClose={() => !isSubmitting && onClose()}
+      title="Simpan Jadwal Sholat Bulanan?"
+      badge="Simpan Database"
+      description="Sinkronisasi jadwal sholat bulanan ke database master aplikasi."
+      icon={Database}
+      maxWidth="max-w-md"
+      zIndex={70}
+      disableBackdropClose={isSubmitting}
+      hideCloseButton={isSubmitting}
+      bodyClassName="space-y-4"
+      footer={
+        <>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isSubmitting}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={isSubmitting}
+            className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+          >
+            {isSubmitting ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+            <span>Konfirmasi Simpan</span>
+          </button>
+        </>
+      }
+    >
+      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+        Data jadwal sholat bulanan untuk wilayah ini akan disimpan ke database master aplikasi untuk sinkronisasi otomatis absensi dan ibadah harian santri/siswa.
+      </p>
+      <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/50 p-3.5 dark:bg-emerald-950/20">
+        <p className="text-xs font-black text-emerald-950 dark:text-emerald-100">
+          {payload?.kabkota || 'Kota'} ({payload?.provinsi || 'Provinsi'})
+        </p>
+        <p className="text-xs text-emerald-800/80 dark:text-emerald-300/80 mt-1">
+          Bulan: {payload?.bulan} / {payload?.tahun} • {payload?.totalDays || '1 Bulan Penuh'}
+        </p>
+      </div>
+    </AppModal>
+  )
 }
 
 export default function MasterJadwalSholatPage() {

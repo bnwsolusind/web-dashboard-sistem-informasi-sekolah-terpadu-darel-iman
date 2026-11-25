@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import AppModal from '../app/AppModal'
 import {
  Layers,
  Save,
@@ -198,91 +199,42 @@ export default function PemantauanDivisiFormModal({
  const progressBgClass =
  capVal >= 80 ? 'bg-emerald-500' : capVal >= 65 ? 'bg-blue-500' : capVal >= 50 ? 'bg-amber-500' : 'bg-rose-500'
 
- return (
- <AnimatePresence>
- {isOpen && (
- <div
- role="dialog"
- tabIndex={-1}
- aria-modal="true"
- aria-labelledby="monitoring-divisi-modal-title"
- className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !isSubmitting) onClose()
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="font-sans my-auto w-full max-w-xl"
- >
- <div className="flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-modal border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-surface-dark-inner dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
- <div
- className={`h-1.5 w-full shrink-0 ${
- isEditMode
- ? 'bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600'
- : 'bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600'
- }`}
- />
-
- {/* Modal Header */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3">
- <div
- className={`flex h-11 w-11 items-center justify-center rounded-xl text-white shadow-md shrink-0 border ${
- isEditMode
- ? 'bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 border-emerald-200/80 dark:border-emerald-800/60 shadow-sm'
- : 'bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 border-emerald-200/80 dark:border-emerald-800/60 shadow-sm'
- }`}
- >
- {isEditMode ? (
- <Pencil className="h-5 w-5 text-emerald-600" strokeWidth={2.25} />
- ) : (
- <Layers className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- )}
- </div>
- <div>
- <h3
- id="monitoring-divisi-modal-title"
- className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2"
- >
- <span>{isEditMode ? 'Ubah Laporan Supervisi Divisi' : 'Input Supervisi Divisi Baru'}</span>
- <span
- className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-extrabold border ${
- isEditMode
- ? 'bg-amber-50 text-amber-800 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/60 dark:text-amber-400 dark:border-emerald-800/60'
- : 'bg-emerald-50 text-emerald-800 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60'
- }`}
- >
- <Sparkles className="size-3" />
- {isEditMode ? 'Update Data' : 'Supervisi Baru'}
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- {isEditMode
- ? 'Perbarui evaluasi, status, capaian, dan catatan arahan tindak lanjut pimpinan.'
- : 'Rekam evaluasi pengawasan capaian divisi operasional di seluruh unit pendidikan.'}
- </p>
- </div>
- </div>
-
- <button
- type="button"
- onClick={onClose}
- disabled={isSubmitting}
- aria-label="Tutup form modal"
- className="size-9 flex items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer disabled:opacity-60"
- >
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Form Content */}
- <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
- <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4 text-sm">
+  return (
+    <AppModal
+      isOpen={isOpen}
+      onClose={() => !isSubmitting && onClose()}
+      title={isEditMode ? 'Ubah Laporan Pemantauan Divisi' : 'Input Laporan Pemantauan Divisi'}
+      badge={isEditMode ? 'Perbarui' : 'Laporan Baru'}
+      description="Lengkapi rincian supervisi, temuan lapangan, dan rekomendasi tindak lanjut."
+      icon={isEditMode ? Pencil : Layers}
+      variant={isEditMode ? 'warning' : 'emerald'}
+      maxWidth="max-w-xl"
+      disableBackdropClose={isSubmitting}
+      hideCloseButton={isSubmitting}
+      footer={
+        <>
+          <button
+            type="button"
+            disabled={isSubmitting}
+            onClick={onClose}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-60"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="submit"
+            form="pemantauan-divisi-form"
+            disabled={isSubmitting}
+            className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-60"
+          >
+            <Save className="size-4" />
+            <span>{isSubmitting ? 'Menyimpan...' : isEditMode ? 'Simpan Perubahan Laporan' : 'Simpan Laporan Supervisi'}</span>
+          </button>
+        </>
+      }
+    >
+      <form id="pemantauan-divisi-form" onSubmit={handleSubmit} className="space-y-4">
  {/* Hero Mini Banner Info Card */}
  <div className="relative overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-card-dark p-4 shadow-xs dark:border-emerald-800/60 dark:bg-slate-900/60">
  <div className="flex items-center justify-between gap-3 relative z-10">
@@ -516,40 +468,7 @@ export default function PemantauanDivisiFormModal({
  className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 p-3 text-xs font-bold text-slate-800 focus:border-emerald-500 focus:bg-white dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-200 shadow-2xs"
  />
  </div>
- </div>
-
- {/* Modal Footer */}
- <div className="flex items-center justify-between border-t border-emerald-100/80 bg-slate-50/80 px-6 py-4 dark:border-emerald-800/60 dark:bg-slate-950/80">
- <button
- type="button"
- onClick={onClose}
- disabled={isSubmitting}
- className="h-9 px-4 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white hover:bg-slate-50 text-slate-700 text-sm font-medium transition-colors cursor-pointer disabled:opacity-60 shadow-xs"
- >
- Batal
- </button>
- <button
- type="submit"
- disabled={isSubmitting}
- className={`inline-flex items-center gap-2 h-9 px-4 rounded-lg text-white font-semibold text-sm shadow-xs transition-all active:scale-95 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed ${
- isEditMode
- ? 'bg-white dark:bg-card-dark shadow-sm hover:from-amber-600 hover:to-orange-600'
- : 'bg-emerald-600 hover:bg-emerald-700 text-white dark:bg-emerald-600 dark:text-white shadow-sm hover:from-emerald-500 hover:to-teal-500'
- }`}
- >
- <Save className="size-4" />
- {isSubmitting
- ? 'Menyimpan...'
- : isEditMode
- ? 'Simpan Perubahan Laporan'
- : 'Simpan Laporan Supervisi'}
- </button>
- </div>
- </form>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
- )
+      </form>
+    </AppModal>
+  )
 }

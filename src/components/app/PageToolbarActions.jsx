@@ -26,6 +26,8 @@ export function PageToolbarActions({
   refreshLabel = 'Segarkan',
   refreshing = false,
   primaryAction,
+  onAdd,
+  addLabel,
   secondaryActions = [],
   children,
   className,
@@ -34,6 +36,7 @@ export function PageToolbarActions({
   ...props
 }) {
   const isIconOnly = iconOnly && !showLabel
+  const effectivePrimaryAction = primaryAction || (onAdd ? { label: addLabel || 'Tambah Data', onClick: onAdd } : null)
   return (
     <div
       className={cn('flex flex-wrap items-center gap-2', className)}
@@ -148,26 +151,26 @@ export function PageToolbarActions({
       })}
 
       {/* Standard Primary Action: Placed at far right */}
-      {primaryAction && (
-        <Tooltip content={primaryAction.label || 'Tambah Data'}>
+      {effectivePrimaryAction && (
+        <Tooltip content={effectivePrimaryAction.label || 'Tambah Data'}>
           <Button
             type="button"
             variant="create"
-            onClick={primaryAction.onClick}
-            disabled={primaryAction.disabled || primaryAction.loading}
+            onClick={effectivePrimaryAction.onClick}
+            disabled={effectivePrimaryAction.disabled || effectivePrimaryAction.loading}
             size={isIconOnly ? "icon" : "default"}
             className={cn(
               'h-9 rounded-xl text-xs font-extrabold transition-all cursor-pointer shadow-xs inline-flex items-center justify-center',
               isIconOnly ? 'w-9 p-0 shrink-0' : 'px-4 gap-2',
-              primaryAction.className
+              effectivePrimaryAction.className
             )}
           >
-            {primaryAction.icon ? (
-              <primaryAction.icon className="w-4 h-4 text-white shrink-0" />
+            {effectivePrimaryAction.icon ? (
+              <effectivePrimaryAction.icon className="w-4 h-4 text-white shrink-0" />
             ) : (
               <Plus className="w-4 h-4 text-white shrink-0" />
             )}
-            {!isIconOnly && <span>{primaryAction.label || 'Tambah Data'}</span>}
+            {!isIconOnly && <span>{effectivePrimaryAction.label || 'Tambah Data'}</span>}
           </Button>
         </Tooltip>
       )}

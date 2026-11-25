@@ -339,67 +339,60 @@ function ModernKpiCard({
 
 // ── HARMONIZED DELETE MODAL ──
 function HarmonizedDeleteModal({ isOpen, onClose, onConfirm, item, isSubmitting }) {
- if (!isOpen || !item) return null
-
- return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fadeIn">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative my-auto w-full max-w-md overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex h-9 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 shadow-sm">
- <Trash2 className="h-6 w-6" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-rose-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
- Hapus Permanen
- </span>
- <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
- Hapus Jadwal Pelajaran?
- </h3>
- </div>
- </div>
-
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Apakah Anda yakin ingin menghapus jadwal mengajar ini? Tindakan ini akan menghapus alokasi jadwal pelajaran dari sistem.
- </p>
-
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/50 p-3.5 dark:border-emerald-800/60 dark:bg-rose-950/20 mb-5">
- <p className="text-xs font-black text-rose-950 dark:text-rose-100">
- {item?.subject?.nama_mapel || item?.subject?.name || 'Mata Pelajaran'}
- </p>
- <p className="text-xs text-rose-800/80 dark:text-rose-300/80 mt-0.5">
- Kelas: {item?.kelas?.nama_kelas || item?.school_class?.name || '-'} • Guru: {item?.employee?.nama_lengkap || item?.teacher?.name || '-'}
- </p>
- </div>
-
- <div className="flex items-center justify-end gap-3">
- <button
- type="button"
- onClick={onClose}
- disabled={isSubmitting}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all cursor-pointer"
- >
- Batal
- </button>
- <button
- type="button"
- onClick={onConfirm}
- disabled={isSubmitting}
- className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white px-5 py-2 text-xs font-bold text-white shadow-sm hover:brightness-105 disabled:opacity-50 transition-all cursor-pointer"
- >
- {isSubmitting && <RefreshCcw className="h-4 w-4 animate-spin" />}
- Hapus Jadwal
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )
+  return (
+    <AppModal
+      isOpen={Boolean(isOpen && item)}
+      onClose={() => !isSubmitting && onClose()}
+      title="Hapus Jadwal Pelajaran?"
+      badge="Hapus Permanen"
+      description="Apakah Anda yakin ingin menghapus jadwal mengajar ini? Tindakan ini tidak dapat dibatalkan."
+      icon={Trash2}
+      variant="danger"
+      maxWidth="max-w-md"
+      zIndex={70}
+      disableBackdropClose={isSubmitting}
+      hideCloseButton={isSubmitting}
+      bodyClassName="space-y-4"
+      footer={
+        <>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isSubmitting}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={isSubmitting}
+            className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20 disabled:opacity-50"
+          >
+            {isSubmitting ? <RefreshCcw className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+            <span>Hapus Jadwal</span>
+          </button>
+        </>
+      }
+    >
+      {item && (
+        <>
+          <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            Apakah Anda yakin ingin menghapus jadwal mengajar ini? Tindakan ini tidak dapat dibatalkan.
+          </p>
+          <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-rose-50/50 p-3.5 dark:bg-rose-950/20">
+            <p className="text-xs font-black text-rose-950 dark:text-rose-100">
+              {item?.subject?.name || item?.mata_pelajaran?.nama_mapel || 'Mata Pelajaran'} • {item?.school_class?.nama_kelas || item?.kelas?.nama_kelas || 'Kelas'}
+            </p>
+            <p className="text-xs text-rose-800/80 dark:text-rose-300/80 mt-0.5">
+              Guru: {item?.teacher?.nama_lengkap || item?.guru?.nama_lengkap || '-'}
+            </p>
+          </div>
+        </>
+      )}
+    </AppModal>
+  )
 }
 
 
@@ -1631,600 +1624,440 @@ export default function MasterSchedulePage({ embedded = false, hideBreadcrumb = 
  className="schedule-master-page space-y-6"
  hideBreadcrumb={true}
  >
- {/* ══════════════════════════════════════════════════════════════════
- 1. HARMONIZED PRINT OPTION MODAL (CETAK & PDF)
- ══════════════════════════════════════════════════════════════════ */}
- <AnimatePresence>
- {isPrintModalOpen && (
- <div
- role="dialog"
- tabIndex={-1}
- aria-modal="true"
- aria-labelledby="schedule-print-title"
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- onMouseDown={(e) => {
- if (e.target === e.currentTarget) setIsPrintModalOpen(false)
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.95, y: 16 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.96, y: 12 }}
- transition={{ type: 'spring', stiffness: 400, damping: 30 }}
- className="modal-dialog font-sans my-auto w-full max-w-lg"
- >
- <div className="modal-content relative flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
+        {/* ══════════════════════════════════════════════════════════════════
+            1. HARMONIZED PRINT OPTION MODAL (AppModal)
+            ══════════════════════════════════════════════════════════════════ */}
+        <AppModal
+          isOpen={isPrintModalOpen}
+          onClose={() => setIsPrintModalOpen(false)}
+          icon={Printer}
+          title="Cetak Dokumen Resmi Jadwal"
+          badge="A4 Landscape & Portrait"
+          description="Pilih format dokumen cetak resmi (Matriks Mingguan atau Rekap Log)"
+          maxWidth="max-w-lg"
+          footer={
+            <button
+              type="button"
+              onClick={() => setIsPrintModalOpen(false)}
+              className="h-9.5 px-5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Tutup</span>
+            </button>
+          }
+        >
+          {/* Tab Pemilih Format Dokumen */}
+          <div className="grid grid-cols-2 gap-1.5 p-1.5 bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 rounded-xl">
+            <button
+              type="button"
+              onClick={() => setPrintFormatMode('matrix')}
+              className={cn(
+                'flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-black transition-all cursor-pointer active:scale-95',
+                printFormatMode === 'matrix'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-emerald-700 hover:bg-emerald-100/60 dark:text-slate-300 dark:hover:bg-slate-800'
+              )}
+            >
+              <LayoutGrid className="size-3.5" />
+              <span>Matriks Mingguan (Resmi)</span>
+            </button>
 
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-white dark:bg-[#1B2433] p-2.5 shadow-xs border border-emerald-200/80 dark:border-emerald-800/60">
- <Printer className="size-5 text-slate-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3
- id="schedule-print-title"
- className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2"
- >
- <span>Cetak Dokumen Resmi Jadwal</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-[#059669] border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- A4 Landscape & Portrait
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Pilih format dokumen cetak resmi (Matriks Mingguan atau Rekap Log)
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setIsPrintModalOpen(false)}
- aria-label="Tutup modal cetak"
- className="rounded-xl p-2 bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
+            <button
+              type="button"
+              onClick={() => setPrintFormatMode('table')}
+              className={cn(
+                'flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-black transition-all cursor-pointer active:scale-95',
+                printFormatMode === 'table'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-emerald-700 hover:bg-emerald-100/60 dark:text-slate-300 dark:hover:bg-slate-800'
+              )}
+            >
+              <TableIcon className="size-3.5" />
+              <span>Rekap Tabel Baris</span>
+            </button>
+          </div>
 
- {/* Tab Pemilih Format Dokumen */}
- <div className="px-6 pt-4 pb-0 bg-slate-50/50 dark:bg-slate-900/40 border-b border-emerald-200/80 dark:border-emerald-800/60">
- <div className="grid grid-cols-2 gap-2 p-1 bg-emerald-50 dark:bg-emerald-950/40 rounded-xl">
- <button
- type="button"
- onClick={() => setPrintFormatMode('matrix')}
- className={cn(
- "flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer",
- printFormatMode === 'matrix'
- ? "bg-white text-emerald-800 shadow-xs dark:bg-slate-700 dark:text-emerald-300 font-extrabold"
- : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
- )}
- >
- <LayoutGrid className="size-3.5" />
- <span>Matriks Mingguan (Resmi)</span>
- </button>
+          {printFormatMode === 'matrix' ? (
+            /* ── FORMAT 1: MATRIKS MINGGUAN RESMI (A4 LANDSCAPE) ── */
+            <div className="space-y-4">
+              {/* Pilihan Rombel / Kelas */}
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
+                    Pilih Rombel / Kelas Target
+                  </label>
+                  <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400">
+                    {activeUnitObj?.program_type === 'boarding' ? 'Boarding School' : 'Full Day School'}
+                  </span>
+                </div>
+                <HeroUiFilterSelect
+                  ariaLabel="Pilih Rombel / Kelas Target"
+                  value={printKelasFilter}
+                  onChange={(val) => setPrintKelasFilter(val)}
+                  options={printKelasOptions}
+                  placeholder="Kelas Aktif / Paling Atas di Unit"
+                  icon={GraduationCap}
+                  searchable
+                  allowClear
+                  className="w-full"
+                  popoverWidth="w-full"
+                  size="lg"
+                />
+                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                  Mencetak tabel jadwal matriks mingguan (Senin s/d Sabtu) dengan Kop Surat Resmi Lembaga, identitas wali kelas, kepala sekolah, serta pembedaan otomatis Full Day vs Boarding School.
+                </p>
+              </div>
 
- <button
- type="button"
- onClick={() => setPrintFormatMode('table')}
- className={cn(
- "flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer",
- printFormatMode === 'table'
- ? "bg-white text-indigo-800 shadow-xs dark:bg-slate-700 dark:text-indigo-300 font-extrabold"
- : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
- )}
- >
- <TableIcon className="size-3.5" />
- <span>Rekap Tabel Baris</span>
- </button>
- </div>
- </div>
+              {/* Callout Info Zero Hardcode */}
+              <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/70 p-3.5 dark:bg-emerald-950/40">
+                <div className="flex items-start gap-2.5">
+                  <ShieldCheck className="size-4.5 text-emerald-600 shrink-0 mt-0.5" />
+                  <div className="text-xs text-emerald-950 dark:text-emerald-200 leading-snug">
+                    <strong>Data Asli Database (Zero Hardcode):</strong> Slot waktu, mapel, guru, dan pengesahan diturunkan 100% dari database nyata unit. Slot kosong tampil bersih tanpa data karangan.
+                  </div>
+                </div>
+              </div>
 
- {/* Body */}
- <div className="modal-body min-h-0 flex-1 overflow-y-auto p-6 space-y-4">
- {printFormatMode === 'matrix' ? (
- /* ── FORMAT 1: MATRIKS MINGGUAN RESMI (A4 LANDSCAPE) ── */
- <div className="space-y-4">
- {/* Pilihan Rombel / Kelas */}
- <div className="space-y-1.5">
- <div className="flex items-center justify-between">
- <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
- Pilih Rombel / Kelas Target
- </label>
- <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400">
- {activeUnitObj?.program_type === 'boarding' ? 'Boarding School' : 'Full Day School'}
- </span>
- </div>
- <HeroUiFilterSelect
- ariaLabel="Pilih Rombel / Kelas Target"
- value={printKelasFilter}
- onChange={(val) => setPrintKelasFilter(val)}
- options={printKelasOptions}
- placeholder="Kelas Aktif / Paling Atas di Unit"
- icon={GraduationCap}
- searchable
- allowClear
- className="w-full"
- popoverWidth="w-full"
- size="md"
- />
- <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
- Mencetak tabel jadwal matriks mingguan (Senin s/d Sabtu) dengan Kop Surat Resmi Lembaga, identitas wali kelas, kepala sekolah, serta pembedaan otomatis Full Day vs Boarding School.
- </p>
- </div>
+              {/* Tombol Cetak Matriks */}
+              <div className="pt-2 border-t border-emerald-200/80 dark:border-emerald-800/60">
+                <button
+                  type="button"
+                  disabled={isGeneratingMatrix}
+                  onClick={handleExecuteMatrixPrint}
+                  className="w-full flex items-center justify-between p-3.5 rounded-xl border-2 border-emerald-600 bg-emerald-600 hover:bg-emerald-700 text-left transition-all duration-200 cursor-pointer shadow-md shadow-emerald-600/20 group text-white active:scale-[0.99] disabled:opacity-50"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="size-9 rounded-xl bg-white/20 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform border border-white/25">
+                      <Printer className="size-4.5 text-white" strokeWidth={2.25} />
+                    </div>
+                    <div>
+                      <h5 className="text-xs font-black text-white">
+                        {isGeneratingMatrix ? 'Memuat Data Matriks...' : 'Cetak Matriks Jadwal Resmi (A4 Landscape)'}
+                      </h5>
+                      <p className="text-xs text-emerald-100">
+                        Kop Surat Lembaga • Format Matriks Mingguan • Tanda Tangan Resmi
+                      </p>
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
+          ) : (
+            /* ── FORMAT 2: REKAP TABEL BARIS (A4 PORTRAIT) ── */
+            <div className="space-y-4">
+              {/* Teacher Scope Filter */}
+              <div className="space-y-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  Filter Guru Pengampu (Opsional)
+                </label>
+                <HeroUiFilterSelect
+                  ariaLabel="Filter Guru Pengampu"
+                  value={printTeacherFilter}
+                  onChange={(val) => setPrintTeacherFilter(val)}
+                  options={printTeacherOptions}
+                  placeholder="Semua Guru (Seluruh Jadwal Terfilter)"
+                  icon={Users}
+                  searchable
+                  allowClear
+                  className="w-full"
+                  popoverWidth="w-full"
+                  size="lg"
+                />
+                <p className="text-xs text-slate-400">
+                  {printTeacherFilter
+                    ? 'Mencetak jadwal khusus untuk guru terpilih.'
+                    : 'Mencetak seluruh baris jadwal yang aktif pada filter saat ini.'}
+                </p>
+              </div>
 
- {/* Callout Info Zero Hardcode */}
- <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/70 p-3.5 dark:border-emerald-800/60 dark:bg-emerald-950/40">
- <div className="flex items-start gap-2.5">
- <ShieldCheck className="size-4.5 text-emerald-600 shrink-0 mt-0.5" />
- <div className="text-xs text-emerald-950 dark:text-emerald-200 leading-snug">
- <strong>Data Asli Database (Zero Hardcode):</strong> Slot waktu, mapel, guru, dan pengesahan diturunkan 100% dari database nyata unit. Slot kosong tampil bersih tanpa data karangan.
- </div>
- </div>
- </div>
+              {/* Action Cards */}
+              <div className="pt-2 border-t border-emerald-200/80 dark:border-emerald-800/60 space-y-2.5">
+                <button
+                  type="button"
+                  onClick={() => handleExecutePrint('clean')}
+                  className="w-full flex items-center justify-between p-3.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/70 hover:bg-emerald-100/70 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/50 text-left transition-all duration-200 cursor-pointer shadow-2xs hover:shadow-xs group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="size-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                      <Printer className="size-4.5" strokeWidth={2.25} />
+                    </div>
+                    <div>
+                      <h5 className="text-xs font-black text-slate-900 dark:text-white">Cetak Rekap Tabel (Print Clean)</h5>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">Tampilan cetak browser resmi tanpa artefak sidebar/navigasi</p>
+                    </div>
+                  </div>
+                </button>
 
- {/* Tombol Cetak Matriks */}
- <div className="pt-2 border-t border-emerald-200/80 dark:border-emerald-800/60">
- <button
- type="button"
- disabled={isGeneratingMatrix}
- onClick={handleExecuteMatrixPrint}
- className="w-full flex items-center justify-between p-3.5 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-600 dark:bg-emerald-50 dark:text-slate-900 dark: hover:from-emerald-700 hover:to-teal-800 text-left transition-all duration-200 cursor-pointer shadow-sm group text-white border border-emerald-200/80 dark:border-emerald-800/60 h-9 text-sm font-medium"
- >
- <div className="flex items-center gap-3">
- <div className="size-9 rounded-xl bg-white/20 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform border border-emerald-200/80 dark:border-emerald-800/60">
- <Printer className="size-4.5" strokeWidth={2.25} />
- </div>
- <div>
- <h5 className="text-xs font-black text-white">
- {isGeneratingMatrix ? 'Memuat Data Matriks...' : 'Cetak Matriks Jadwal Resmi (A4 Landscape)'}
- </h5>
- <p className="text-xs text-emerald-100">
- Kop Surat Lembaga • Format Matriks Mingguan • Tanda Tangan Resmi
- </p>
- </div>
- </div>
- </button>
- </div>
- </div>
- ) : (
- /* ── FORMAT 2: REKAP TABEL BARIS (A4 PORTRAIT) ── */
- <div className="space-y-4">
- {/* Teacher Scope Filter */}
- <div className="space-y-1.5">
- <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
- Filter Guru Pengampu (Opsional)
- </label>
- <HeroUiFilterSelect
- ariaLabel="Filter Guru Pengampu"
- value={printTeacherFilter}
- onChange={(val) => setPrintTeacherFilter(val)}
- options={printTeacherOptions}
- placeholder="Semua Guru (Seluruh Jadwal Terfilter)"
- icon={Users}
- searchable
- allowClear
- className="w-full"
- popoverWidth="w-full"
- size="md"
- />
- <p className="text-xs text-slate-400">
- {printTeacherFilter
- ? 'Mencetak jadwal khusus untuk guru terpilih.'
- : 'Mencetak seluruh baris jadwal yang aktif pada filter saat ini.'}
- </p>
- </div>
+                <button
+                  type="button"
+                  onClick={() => handleExecutePrint('pdf')}
+                  className="w-full flex items-center justify-between p-3.5 rounded-xl border-2 border-rose-300 dark:border-rose-800/70 bg-rose-50/70 hover:bg-rose-100/70 dark:bg-rose-950/30 dark:hover:bg-rose-900/40 text-left transition-all duration-200 cursor-pointer shadow-2xs hover:shadow-xs group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="size-9 rounded-xl bg-rose-600 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                      <Download className="size-4.5" strokeWidth={2.25} />
+                    </div>
+                    <div>
+                      <h5 className="text-xs font-black text-slate-900 dark:text-white">Unduh Berkas PDF (.pdf)</h5>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">Unduh dokumen jadwal pelajaran siap arsip dalam format PDF</p>
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
+          )}
+        </AppModal>
 
- {/* Action Cards */}
- <div className="pt-2 border-t border-emerald-200/80 dark:border-emerald-800/60 space-y-2.5">
- <button
- type="button"
- onClick={() => handleExecutePrint('clean')}
- className="w-full flex items-center justify-between p-3.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/70 hover:bg-emerald-100/70 dark:border-emerald-800/60 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/50 text-left transition-all duration-200 cursor-pointer shadow-2xs hover:shadow-xs group"
- >
- <div className="flex items-center gap-3">
- <div className="size-9 rounded-xl bg-white dark:bg-[#1B2433] flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform border border-emerald-200/80 dark:border-emerald-800/60">
- <Printer className="size-4.5" strokeWidth={2.25} />
- </div>
- <div>
- <h5 className="text-xs font-black text-slate-900 dark:text-white">Cetak Rekap Tabel (Print Clean)</h5>
- <p className="text-xs text-slate-500 dark:text-slate-400">Tampilan cetak browser resmi tanpa artefak sidebar/navigasi</p>
- </div>
- </div>
- </button>
+        {/* ══════════════════════════════════════════════════════════════════
+            2. HARMONIZED BATCH EXPORT MODAL (AppModal)
+            ══════════════════════════════════════════════════════════════════ */}
+        <AppModal
+          isOpen={showExportModal}
+          onClose={() => setShowExportModal(false)}
+          icon={Download}
+          title="Export Data Jadwal"
+          badge="Unduh"
+          description="Pilih format berkas untuk mengekspor data jadwal pelajaran"
+          maxWidth="max-w-md"
+          footer={
+            <div className="flex items-center justify-between w-full">
+              <button
+                type="button"
+                onClick={() => setShowExportModal(false)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleProcessExport}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+              >
+                <Download className="size-4 text-white" strokeWidth={2.25} />
+                <span>Unduh Berkas</span>
+              </button>
+            </div>
+          }
+        >
+          <div className="space-y-2.5">
+            {[
+              { value: 'xlsx', label: 'Excel (.xlsx)', desc: 'Format Microsoft Excel Modern (Disarankan)' },
+              { value: 'xls', label: 'Excel Legacy (.xls)', desc: 'Format Microsoft Excel Standard 97-2003' },
+              { value: 'csv', label: 'CSV (.csv)', desc: 'Format Comma-Separated Values universal' },
+              { value: 'pdf', label: 'PDF (.pdf)', desc: 'Format Dokumen Cetak Resmi' },
+            ].map((opt) => (
+              <label
+                key={opt.value}
+                className={cn(
+                  'flex cursor-pointer items-center gap-3 rounded-xl border-2 p-3.5 transition-all',
+                  exportFormat === opt.value
+                    ? 'border-emerald-500 bg-emerald-50/70 shadow-xs ring-2 ring-emerald-500/20 dark:border-emerald-600 dark:bg-emerald-950/40'
+                    : 'border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/20 hover:border-emerald-400 dark:hover:bg-emerald-950/30'
+                )}
+              >
+                <input
+                  type="radio"
+                  name="export-fmt-schedule"
+                  value={opt.value}
+                  checked={exportFormat === opt.value}
+                  onChange={() => setExportFormat(opt.value)}
+                  className="accent-emerald-600 size-4"
+                />
+                <div>
+                  <p className="text-xs font-bold text-slate-800 dark:text-slate-100">{opt.label}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">{opt.desc}</p>
+                </div>
+              </label>
+            ))}
 
- <button
- type="button"
- onClick={() => handleExecutePrint('pdf')}
- className="w-full flex items-center justify-between p-3.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/70 hover:bg-rose-100/70 dark:border-emerald-800/60 dark:bg-rose-950/30 dark:hover:bg-rose-900/40 text-left transition-all duration-200 cursor-pointer shadow-2xs hover:shadow-xs group"
- >
- <div className="flex items-center gap-3">
- <div className="size-9 rounded-xl bg-white dark:bg-[#1B2433] flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform border border-emerald-200/80 dark:border-emerald-800/60">
- <Download className="size-4.5" strokeWidth={2.25} />
- </div>
- <div>
- <h5 className="text-xs font-black text-slate-900 dark:text-white">Unduh Berkas PDF (.pdf)</h5>
- <p className="text-xs text-slate-500 dark:text-slate-400">Unduh dokumen jadwal pelajaran siap arsip dalam format PDF</p>
- </div>
- </div>
- </button>
- </div>
- </div>
- )}
- </div>
+            {/* Active Scope Summary */}
+            <div className="mt-3 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/40 p-3 dark:bg-emerald-950/20 text-xs">
+              <div className="flex items-center justify-between text-slate-600 dark:text-slate-300">
+                <span>Total Data Terpilih:</span>
+                <span className="font-extrabold text-emerald-700 dark:text-emerald-400">
+                  {Number(items?.length || 0).toLocaleString('id-ID')} Baris Jadwal
+                </span>
+              </div>
+            </div>
+          </div>
+        </AppModal>
 
- {/* Footer */}
- <div className="modal-footer flex items-center justify-end border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 px-6 py-4 dark:border-emerald-800/60 dark:bg-[#131B27]">
- <button
- type="button"
- onClick={() => setIsPrintModalOpen(false)}
- className="inline-flex items-center gap-1.5 rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
- >
- Tutup
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+        {/* ══════════════════════════════════════════════════════════════════
+            3. HARMONIZED BATCH IMPORT MODAL (AppModal)
+            ══════════════════════════════════════════════════════════════════ */}
+        <AppModal
+          isOpen={showImportModal}
+          onClose={() => { if (!isImporting) setShowImportModal(false) }}
+          icon={Upload}
+          title="Import Jadwal Pelajaran"
+          badge="Batch Import"
+          description="Unggah berkas spreadsheet (.csv) untuk impor jadwal pelajaran massal"
+          maxWidth="max-w-xl"
+          footer={
+            <div className="flex items-center justify-between w-full">
+              <button
+                type="button"
+                disabled={isImporting}
+                onClick={() => setShowImportModal(false)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleProcessImport}
+                disabled={!importFile || isImporting}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50 disabled:pointer-events-none"
+              >
+                {isImporting ? (
+                  <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  <Upload className="size-4 text-white" strokeWidth={2.25} />
+                )}
+                <span>{isImporting ? 'Memproses Impor...' : 'Mulai Impor Data'}</span>
+              </button>
+            </div>
+          }
+        >
+          <div className="space-y-4">
+            {/* Error Banner Rincian Gagal Validasi Server */}
+            {importFailures.length > 0 && (
+              <div className="flex flex-col gap-2 rounded-xl border-2 border-rose-300 dark:border-rose-800/60 bg-rose-50/95 p-4 text-rose-900 dark:bg-rose-950/50 dark:text-rose-200 shadow-sm animate-fadeIn">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 font-black text-xs text-rose-800 dark:text-rose-300 uppercase tracking-wide">
+                    <AlertTriangle className="size-4.5 text-rose-600 dark:text-rose-400 shrink-0" />
+                    <span>Gagal Memvalidasi {importFailures.length} Baris Jadwal (Error 422)</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setImportFailures([])}
+                    className="text-xs font-bold text-rose-700 hover:text-rose-900 dark:text-rose-300 dark:hover:text-white underline cursor-pointer"
+                  >
+                    Tutup Banner
+                  </button>
+                </div>
+                <p className="text-xs text-rose-700 dark:text-rose-300 leading-relaxed">
+                  Server menolak data berikut karena tidak memenuhi syarat validasi (ID relasi tidak terdaftar, jadwal bentrok waktu/ruang/guru, atau format waktu tidak sesuai):
+                </p>
+                <div className="max-h-40 overflow-y-auto space-y-2 text-xs pr-1">
+                  {importFailures.map((f, idx) => (
+                    <div key={idx} className="rounded-xl border border-rose-200 dark:border-rose-800/60 bg-rose-50/50 p-2.5 dark:bg-slate-900/70 flex items-start gap-2">
+                      <span className="font-bold text-rose-800 dark:text-rose-300 shrink-0 rounded bg-rose-100 dark:bg-rose-900/60 px-1.5 py-0.5 text-[10px]">
+                        Baris {f.row}
+                      </span>
+                      <p className="text-slate-700 dark:text-slate-300 font-medium leading-relaxed">{f.message}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
- {/* ══════════════════════════════════════════════════════════════════
- 2. HARMONIZED BATCH EXPORT MODAL
- ══════════════════════════════════════════════════════════════════ */}
- <AnimatePresence>
- {showExportModal && (
- <div
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="schedule-export-title"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget) setShowExportModal(false)
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-md"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
+            {/* Unduh Template Card */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/40 p-4 dark:bg-slate-900/40">
+              <div className="flex items-center gap-3">
+                <div className="flex size-9 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-xs shrink-0">
+                  <Download className="size-4.5 text-white" strokeWidth={2.2} />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-800 dark:text-slate-100">Unduh Format Berkas</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Gunakan template resmi agar kolom jadwal terpetakan otomatis</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => handleDownloadTemplate('xlsx')}
+                  className="inline-flex items-center gap-1.5 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-100/70 hover:bg-emerald-200/70 text-emerald-800 px-3 py-1.5 text-xs font-bold transition-all dark:bg-emerald-950/40 dark:text-emerald-300 cursor-pointer hover:scale-[1.02] active:scale-95"
+                >
+                  <div className="flex size-5 items-center justify-center rounded-md bg-emerald-600 text-white">
+                    <Download className="size-3 text-white" strokeWidth={2.2} />
+                  </div>
+                  <span>Excel (.xlsx)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDownloadTemplate('csv')}
+                  className="inline-flex items-center gap-1.5 rounded-xl border-2 border-slate-300 dark:border-slate-700 bg-slate-200/80 hover:bg-slate-300/80 text-slate-700 px-3 py-1.5 text-xs font-bold transition-all dark:bg-slate-800 dark:text-slate-200 cursor-pointer hover:scale-[1.02] active:scale-95"
+                >
+                  <div className="flex size-5 items-center justify-center rounded-md bg-slate-600 text-white">
+                    <Download className="size-3 text-white" strokeWidth={2.2} />
+                  </div>
+                  <span>CSV</span>
+                </button>
+              </div>
+            </div>
 
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-white dark:bg-[#1B2433] p-2.5 shadow-md shadow-xs shrink-0 border border-emerald-200/80 dark:border-emerald-800/60">
- <Download className="h-5 w-5 text-emerald-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3
- id="schedule-export-title"
- className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2"
- >
- <span>Export Data Jadwal</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-[#059669] border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- Unduh
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Pilih format berkas untuk mengekspor data jadwal pelajaran
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setShowExportModal(false)}
- aria-label="Tutup modal export"
- className="rounded-xl p-2 bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
+            {/* Dropzone Upload */}
+            <label className="group relative flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-emerald-400 dark:border-emerald-700 bg-emerald-50/40 p-6 text-center transition-all duration-200 hover:border-emerald-500 hover:bg-emerald-50/70 hover:shadow-xs dark:bg-slate-900/30 dark:hover:bg-emerald-950/20">
+              <div className="mb-2.5 flex size-12 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm transition-transform duration-200 group-hover:scale-110">
+                <FileSpreadsheet className="size-6 text-white" strokeWidth={2.2} />
+              </div>
+              <p className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100">
+                {importFile ? importFile.name : 'Pilih atau Tarik Berkas Jadwal (.xlsx, .xls, .csv) ke Sini'}
+              </p>
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                Mendukung format Excel Spreadsheet (.xlsx, .xls) dan CSV (.csv)
+              </p>
+              {importFile && (
+                <div className="mt-2.5 inline-flex items-center gap-1.5 rounded-full bg-emerald-100/80 px-3 py-1 text-xs font-bold text-emerald-700 border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300">
+                  <CheckCircle2 className="size-3.5" />
+                  <span>{(importFile.size / 1024).toFixed(1)} KB · Berkas Siap Diunggah</span>
+                </div>
+              )}
+              <input type="file" accept=".xlsx,.xls,.csv" onChange={handleFileSelect} className="hidden" />
+            </label>
 
- {/* Body */}
- <div className="modal-body space-y-2.5 p-6 text-sm text-slate-700 dark:text-slate-200">
- {[
- { value: 'xlsx', label: 'Excel (.xlsx)', desc: 'Format Microsoft Excel Modern (Disarankan)' },
- { value: 'xls', label: 'Excel Legacy (.xls)', desc: 'Format Microsoft Excel Standard 97-2003' },
- { value: 'csv', label: 'CSV (.csv)', desc: 'Format Comma-Separated Values universal' },
- { value: 'pdf', label: 'PDF (.pdf)', desc: 'Format Dokumen Cetak Resmi' },
- ].map((opt) => (
- <label
- key={opt.value}
- className={cn(
- 'flex cursor-pointer items-center gap-3 rounded-xl border p-3.5 transition-all',
- exportFormat === opt.value
- ? 'border-emerald-300 dark:border-emerald-800 bg-emerald-50/60 shadow-2xs dark:border-emerald-800/60 dark:bg-emerald-950/40'
- : 'border-emerald-200/80 hover:border-emerald-300 hover:bg-emerald-50/40 dark:border-emerald-800/60 dark:hover:border-emerald-700/80 dark:hover:bg-emerald-950/30'
- )}
- >
- <input
- type="radio"
- name="export-fmt-schedule"
- value={opt.value}
- checked={exportFormat === opt.value}
- onChange={() => setExportFormat(opt.value)}
- className="accent-emerald-600 size-4"
- />
- <div>
- <p className="text-xs font-bold text-slate-800 dark:text-slate-100">{opt.label}</p>
- <p className="text-xs text-slate-500 dark:text-slate-400">{opt.desc}</p>
- </div>
- </label>
- ))}
+            {/* Guidance Banner */}
+            <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/70 p-3.5 dark:bg-emerald-950/30 flex items-start gap-2.5">
+              <ShieldCheck className="size-4.5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+              <div className="space-y-1 text-xs text-slate-700 dark:text-slate-200 leading-relaxed">
+                <p className="font-bold text-emerald-700 dark:text-emerald-300">Panduan Pengisian Berkas Impor:</p>
+                <p>• Kolom <strong>kelas_id</strong>, <strong>employee_id</strong>, dan <strong>subject_id</strong> wajib berupa UUID unik terdaftar di sistem.</p>
+                <p>• Jam <strong>time_start</strong> &amp; <strong>time_end</strong> wajib format <code>HH:mm</code> (contoh: <code>07:30</code> dan <code>09:00</code>).</p>
+                <p>• Hari <strong>day_of_week</strong> diisi angka 1 (Senin) hingga 7 (Minggu).</p>
+              </div>
+            </div>
 
- {/* Active Scope Summary */}
- <div className="mt-3 rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/40 p-3 dark:border-emerald-800/60 dark:bg-emerald-950/20 text-xs">
- <div className="flex items-center justify-between text-slate-600 dark:text-slate-300">
- <span>Total Data Terpilih:</span>
- <span className="font-extrabold text-[#059669] dark:text-emerald-400">
- {Number(items?.length || 0).toLocaleString('id-ID')} Baris Jadwal
- </span>
- </div>
- </div>
- </div>
-
- {/* Footer */}
- <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <button
- type="button"
- onClick={() => setShowExportModal(false)}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
- >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
- </div>
- <span>Batal</span>
- </button>
- <button
- type="button"
- onClick={handleProcessExport}
- className="inline-flex items-center gap-2 rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 px-5 py-2.5 text-xs font-extrabold border-2 border-emerald-300 dark:border-emerald-800 hover:scale-[1.03] transition-all duration-200 active:scale-95 cursor-pointer"
- >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <Download className="size-3.5 text-emerald-600" strokeWidth={2.25} />
- </div>
- <span>Unduh Berkas</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
-
- {/* ══════════════════════════════════════════════════════════════════
- 3. HARMONIZED BATCH IMPORT MODAL
- ══════════════════════════════════════════════════════════════════ */}
- <AnimatePresence>
- {showImportModal && (
- <div
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="schedule-import-title"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !isImporting) setShowImportModal(false)
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
-
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-white dark:bg-[#1B2433] p-2.5 shadow-md shadow-sky-500/30 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
- <Upload className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3
- id="schedule-import-title"
- className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2"
- >
- <span>Import Jadwal Pelajaran</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-sky-50 px-2 py-0.5 text-[10px] font-bold text-sky-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- Batch Import
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Unggah berkas spreadsheet (.csv) untuk impor jadwal pelajaran massal
- </p>
- </div>
- </div>
- <button
- type="button"
- disabled={isImporting}
- onClick={() => setShowImportModal(false)}
- aria-label="Tutup form import"
- className="rounded-xl p-2 bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer disabled:opacity-50"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Modal Body */}
- <div className="modal-body min-h-0 flex-1 space-y-4.5 overflow-y-auto p-6 text-sm text-slate-700 dark:text-slate-200">
- {/* Error Banner Rincian Gagal Validasi Server */}
- {importFailures.length > 0 && (
- <div className="flex flex-col gap-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/95 p-4 text-rose-900 dark:border-emerald-800/60 dark:bg-rose-950/50 dark:text-rose-200 shadow-sm animate-fadeIn">
- <div className="flex items-center justify-between">
- <div className="flex items-center gap-2 font-black text-xs text-rose-800 dark:text-rose-300 uppercase tracking-wide">
- <AlertTriangle className="size-4.5 text-rose-600 dark:text-rose-400 shrink-0" />
- <span>Gagal Memvalidasi {importFailures.length} Baris Jadwal (Error 422)</span>
- </div>
- <button
- type="button"
- onClick={() => setImportFailures([])}
- className="text-xs font-bold text-rose-700 hover:text-rose-900 dark:text-rose-300 dark:hover:text-white underline cursor-pointer"
- >
- Tutup Banner
- </button>
- </div>
- <p className="text-xs text-rose-700 dark:text-rose-300 leading-relaxed">
- Server menolak data berikut karena tidak memenuhi syarat validasi (ID relasi tidak terdaftar, jadwal bentrok waktu/ruang/guru, atau format waktu tidak sesuai):
- </p>
- <div className="max-h-40 overflow-y-auto space-y-2 text-xs pr-1">
- {importFailures.map((f, idx) => (
- <div key={idx} className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white/90 p-2.5 dark:border-emerald-800/60 dark:bg-slate-900/70 flex items-start gap-2">
- <span className="font-bold text-rose-800 dark:text-rose-300 shrink-0 rounded bg-rose-100 dark:bg-rose-900/60 px-1.5 py-0.5 text-[10px]">
- Baris {f.row}
- </span>
- <p className="text-slate-700 dark:text-slate-300 font-medium leading-relaxed">{f.message}</p>
- </div>
- ))}
- </div>
- </div>
- )}
-
- {/* Unduh Template Card */}
- <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] p-4 dark:border-emerald-800/60 dark:bg-slate-900/40">
- <div className="flex items-center gap-3">
- <div className="flex size-9 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
- <Download className="size-4.5 text-current" strokeWidth={2.2} />
- </div>
- <div>
- <p className="text-xs font-bold text-slate-800 dark:text-slate-100">Unduh Format Berkas</p>
- <p className="text-xs text-slate-500 dark:text-slate-400">Gunakan template resmi agar kolom jadwal terpetakan otomatis</p>
- </div>
- </div>
- <div className="flex items-center gap-2 shrink-0">
- <button
- type="button"
- onClick={() => handleDownloadTemplate('xlsx')}
- className="inline-flex items-center gap-1.5 rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 hover:bg-emerald-100/70 text-[#059669] px-3 py-1.5 text-xs font-bold transition-all dark:border-emerald-800/60 dark:bg-emerald-950/40 dark:text-emerald-300 cursor-pointer hover:scale-[1.02] active:scale-95"
- >
- <div className="flex size-5 items-center justify-center rounded-md bg-emerald-600 text-white">
- <Download className="size-3 text-emerald-600" strokeWidth={2.2} />
- </div>
- <span>Excel (.xlsx)</span>
- </button>
- <button
- type="button"
- onClick={() => handleDownloadTemplate('csv')}
- className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 px-3 py-1.5 text-xs font-bold transition-all dark:border-emerald-700/80 dark:bg-slate-800/60 dark:text-slate-300 cursor-pointer hover:scale-[1.02] active:scale-95"
- >
- <div className="flex size-5 items-center justify-center rounded-md bg-slate-600 text-white">
- <Download className="size-3 text-slate-600" strokeWidth={2.2} />
- </div>
- <span>CSV</span>
- </button>
- </div>
- </div>
-
- {/* Dropzone Upload */}
- <label className="group relative flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-emerald-300 dark:border-emerald-700 bg-white dark:bg-[#1B2433] p-6 text-center transition-all duration-200 hover:border-emerald-300 dark:hover:border-emerald-700/80 hover:bg-emerald-50/40 hover:shadow-xs dark:border-emerald-800/60 dark:bg-slate-900/30 dark:hover:border-emerald-700/80 dark:hover:bg-emerald-950/20">
- <div className="mb-2.5 flex size-12 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] border border-emerald-200/80 dark:border-emerald-800/60 text-[#059669] transition-transform duration-200 group-hover:scale-110 dark:from-emerald-950/60 dark:to-teal-950/40 dark:border-emerald-800/60 dark:text-[#10B981]">
- <FileSpreadsheet className="size-6" strokeWidth={2.2} />
- </div>
- <p className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100">
- {importFile ? importFile.name : 'Pilih atau Tarik Berkas Jadwal (.xlsx, .xls, .csv) ke Sini'}
- </p>
- <p className="mt-1 text-xs text-slate-400 dark:text-slate-400">
- Mendukung format Excel Spreadsheet (.xlsx, .xls) dan CSV (.csv)
- </p>
- {importFile && (
- <div className="mt-2.5 inline-flex items-center gap-1.5 rounded-full bg-emerald-100/80 px-3 py-1 text-xs font-bold text-[#059669] border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800/60">
- <CheckCircle2 className="size-3.5" />
- <span>{(importFile.size / 1024).toFixed(1)} KB · Berkas Siap Diunggah</span>
- </div>
- )}
- <input type="file" accept=".xlsx,.xls,.csv" onChange={handleFileSelect} className="hidden" />
- </label>
-
- {/* Guidance Banner */}
- <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/70 p-3.5 dark:border-emerald-800/60 dark:bg-emerald-950/30 flex items-start gap-2.5">
- <ShieldCheck className="size-4.5 text-[#059669] dark:text-emerald-400 shrink-0 mt-0.5" />
- <div className="space-y-1 text-xs text-slate-700 dark:text-slate-200 leading-relaxed">
- <p className="font-bold text-[#059669] dark:text-emerald-300">Panduan Pengisian Berkas Impor:</p>
- <p>• Kolom <strong>kelas_id</strong>, <strong>employee_id</strong>, dan <strong>subject_id</strong> wajib berupa UUID unik terdaftar di sistem.</p>
- <p>• Jam <strong>time_start</strong> &amp; <strong>time_end</strong> wajib format <code>HH:mm</code> (contoh: <code>07:30</code> dan <code>09:00</code>).</p>
- <p>• Hari <strong>day_of_week</strong> diisi angka 1 (Senin) hingga 7 (Minggu).</p>
- </div>
- </div>
-
- {/* Table Preview */}
- {importPreviewData.length > 0 && (
- <div className="space-y-2">
- <div className="flex items-center justify-between">
- <p className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
- <span>Preview Data Berkas</span>
- <span className="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
- {importPreviewData.length} baris pertama
- </span>
- </p>
- </div>
- <div className="max-h-44 overflow-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-2xs dark:border-emerald-800/60 dark:bg-[#182232]">
- <table className="w-full text-left text-xs">
- <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 text-emerald-950 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
- <tr>
- {['Kelas ID', 'Guru ID', 'Mapel ID', 'Hari', 'Mulai', 'Selesai'].map((h) => (
- <th key={h} className="px-3 py-2.5">{h}</th>
- ))}
- </tr>
- </thead>
- <tbody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40">
- {importPreviewData.map((r, i) => (
- <tr key={i} className="hover:bg-emerald-50/30 dark:hover:bg-emerald-950/30 transition-colors">
- <td className="px-3 py-2 font-mono text-slate-700 dark:text-slate-300 truncate max-w-[100px]">{r.kelas_id || '-'}</td>
- <td className="px-3 py-2 font-mono text-slate-700 dark:text-slate-300 truncate max-w-[100px]">{r.employee_id || '-'}</td>
- <td className="px-3 py-2 font-mono text-slate-700 dark:text-slate-300 truncate max-w-[100px]">{r.subject_id || '-'}</td>
- <td className="px-3 py-2 font-medium text-slate-900 dark:text-white">{r.day_of_week || '-'}</td>
- <td className="px-3 py-2 font-medium text-slate-900 dark:text-white">{r.time_start || '-'}</td>
- <td className="px-3 py-2 font-medium text-slate-900 dark:text-white">{r.time_end || '-'}</td>
- </tr>
- ))}
- </tbody>
- </table>
- </div>
- </div>
- )}
- </div>
-
- {/* Footer */}
- <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <button
- type="button"
- disabled={isImporting}
- onClick={() => setShowImportModal(false)}
- className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200/80 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs hover:bg-slate-100 hover:text-slate-900 transition-all dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer disabled:opacity-50"
- >
- <X className="size-4 text-emerald-600 dark:text-emerald-400" />
- <span>Batal</span>
- </button>
- <button
- type="button"
- onClick={handleProcessImport}
- disabled={!importFile || isImporting}
- className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-[#1B2433] hover:from-[#0B4A37] hover:to-[#0F6349] dark:from-[#147B5B] dark:to-[#1E8E5A] px-5 py-2.5 text-xs font-extrabold shadow-md shadow-[#059669]/25 hover:shadow-lg hover:shadow-[#059669]/35 transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer border border-emerald-200/80 dark:border-emerald-800/60"
- >
- {isImporting ? (
- <span className="size-4 animate-spin rounded-full border-2 border-emerald-200/80 border-t-transparent" />
- ) : (
- <Upload className="size-4" strokeWidth={2.25} />
- )}
- <span>{isImporting ? 'Memproses Impor...' : 'Mulai Impor Data'}</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+            {/* Table Preview */}
+            {importPreviewData.length > 0 && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                    <span>Preview Data Berkas</span>
+                    <span className="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
+                      {importPreviewData.length} baris pertama
+                    </span>
+                  </p>
+                </div>
+                <div className="max-h-44 overflow-auto rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/20 shadow-2xs dark:bg-[#182232]">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 text-emerald-950 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
+                      <tr>
+                        {['Kelas ID', 'Guru ID', 'Mapel ID', 'Hari', 'Mulai', 'Selesai'].map((h) => (
+                          <th key={h} className="px-3 py-2.5">{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/40">
+                      {importPreviewData.map((r, i) => (
+                        <tr key={i} className="hover:bg-emerald-50/30 dark:hover:bg-emerald-950/30 transition-colors">
+                          <td className="px-3 py-2 font-mono text-slate-700 dark:text-slate-300 truncate max-w-[100px]">{r.kelas_id || '-'}</td>
+                          <td className="px-3 py-2 font-mono text-slate-700 dark:text-slate-300 truncate max-w-[100px]">{r.employee_id || '-'}</td>
+                          <td className="px-3 py-2 font-mono text-slate-700 dark:text-slate-300 truncate max-w-[100px]">{r.subject_id || '-'}</td>
+                          <td className="px-3 py-2 font-medium text-slate-900 dark:text-white">{r.day_of_week || '-'}</td>
+                          <td className="px-3 py-2 font-medium text-slate-900 dark:text-white">{r.time_start || '-'}</td>
+                          <td className="px-3 py-2 font-medium text-slate-900 dark:text-white">{r.time_end || '-'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </div>
+        </AppModal>
 
  {/* ── Breadcrumb Navigation ── */}
  {!(embedded || hideBreadcrumb) && (
@@ -3090,6 +2923,7 @@ export default function MasterSchedulePage({ embedded = false, hideBreadcrumb = 
  onClose={() => setModal(false)}
  icon={CalendarDays}
  title={editing ? 'Edit Jadwal Pelajaran' : 'Tambah Jadwal Pelajaran'}
+ badge={editing ? 'Update Data' : 'Jadwal Baru'}
  description="Lengkapi informasi akademik, rincian hari kosong, dan alokasi jam bebas bentrok."
  maxWidth="max-w-4xl"
  footer={
@@ -3116,7 +2950,7 @@ export default function MasterSchedulePage({ embedded = false, hideBreadcrumb = 
  <button
  type="button"
  onClick={() => setModal(false)}
- className="h-9 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50 px-4 text-xs font-bold text-emerald-700 hover:bg-slate-200 dark:border-emerald-700/80 dark:bg-emerald-950/40 dark:text-emerald-300 dark:hover:bg-slate-700 transition-all cursor-pointer"
+ className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
  >
  Batal
  </button>
@@ -3125,10 +2959,10 @@ export default function MasterSchedulePage({ embedded = false, hideBreadcrumb = 
  form="schedule-form"
  disabled={saveMutation.isPending || liveConflicts.length > 0}
  className={cn(
- 'h-11 rounded-xl px-5 text-xs font-bold text-white active:scale-95 disabled:opacity-50 transition-all shadow-md',
+ 'h-9.5 rounded-xl px-5 text-xs font-black text-white active:scale-95 disabled:opacity-50 transition-all shadow-md',
  liveConflicts.length > 0
- ? 'bg-rose-600 cursor-not-allowed shadow-sm'
- : 'bg-[#059669] hover:bg-[#047857] text-white dark:bg-[#18A972] dark:hover:bg-[#059669] dark:text-white hover:from-emerald-700 hover:to-teal-700 cursor-pointer shadow-sm'
+ ? 'bg-rose-600 cursor-not-allowed shadow-rose-600/20 border-2 border-rose-600'
+ : 'bg-emerald-600 hover:bg-emerald-700 text-white border-2 border-emerald-600 shadow-emerald-600/20 cursor-pointer'
  )}
  >
  {saveMutation.isPending
@@ -3146,7 +2980,7 @@ export default function MasterSchedulePage({ embedded = false, hideBreadcrumb = 
  <form
  id="schedule-form"
  onSubmit={submit}
- className="space-y-5 p-4 sm:p-6 text-xs font-semibold text-slate-700 dark:text-slate-200"
+ className="space-y-4 text-xs font-semibold text-slate-700 dark:text-slate-200"
  >
  {/* HERO UI HEADER BANNER */}
  <div className="relative overflow-hidden rounded-2xl border-2 border-emerald-500/30 !bg-[#D5F2E3] p-5 sm:p-6 shadow-md shadow-emerald-500/10 dark:border-emerald-600/40 dark:!bg-[#112a22] print:hidden">
@@ -3211,7 +3045,7 @@ export default function MasterSchedulePage({ embedded = false, hideBreadcrumb = 
  ) : null}
 
  {/* GRUP 1: INFORMASI & PERIODE AKADEMIK */}
- <div className="space-y-4 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-4.5 sm:p-5 dark:border-emerald-800/60 dark:bg-[#1B2433] shadow-xs">
+ <div className="space-y-4 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/30 p-4.5 sm:p-5 dark:bg-slate-900/40 shadow-xs">
  <h4 className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#059669] dark:text-[#10B981]">
  <Building2 className="h-4 w-4" />
  <span>1. Informasi & Periode Akademik</span>
@@ -3296,7 +3130,7 @@ export default function MasterSchedulePage({ embedded = false, hideBreadcrumb = 
  </div>
 
  {/* GRUP 2: JENIS JADWAL & ALOKASI AKTIVITAS */}
- <div className="space-y-4 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-4.5 sm:p-5 dark:border-emerald-800/60 dark:bg-[#1B2433] shadow-xs">
+ <div className="space-y-4 rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/30 p-4.5 sm:p-5 dark:bg-slate-900/40 shadow-xs">
  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-3">
  <h4 className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#059669] dark:text-[#10B981]">
  <BookOpen className="h-4 w-4" />
@@ -3325,8 +3159,8 @@ export default function MasterSchedulePage({ embedded = false, hideBreadcrumb = 
  type="button"
  onClick={() => handleFormChange('activity_type', 'activity')}
  className={`flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-bold text-xs transition-all cursor-pointer ${form.activity_type !== 'kbm'
- ? 'bg-white dark:bg-[#1B2433] shadow-sm'
- : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:hover:bg-white/60 dark:hover:bg-slate-800/60'
+ ? 'bg-emerald-600 text-white shadow-xs'
+ : 'text-slate-600 hover:text-emerald-700 hover:bg-emerald-100/60 dark:text-slate-400 dark:hover:bg-slate-800/60'
  }`}
  >
  <Sparkles className="h-4 w-4 shrink-0" />
@@ -3507,7 +3341,7 @@ export default function MasterSchedulePage({ embedded = false, hideBreadcrumb = 
  {/* ── KOLOM 1 (KIRI): RINCIAN HARI & INPUT MANUAL ── */}
  <div className="space-y-4">
  {/* Pemilihan Hari & Ketersediaan Slot */}
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/80 bg-white/95 p-4 dark:bg-slate-900/90 shadow-xs">
+ <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/30 p-4 dark:bg-slate-900/40 shadow-xs">
  {/* Target Konteks KBM Realtime */}
  <div className="mb-3.5 flex flex-wrap items-center justify-between gap-2.5 rounded-xl bg-slate-50/50 dark:bg-slate-900/50 p-2.5 sm:p-3 border border-emerald-200/80 dark:border-emerald-800/80">
  <div className="flex items-center gap-2.5 min-w-0">
@@ -3559,14 +3393,14 @@ export default function MasterSchedulePage({ embedded = false, hideBreadcrumb = 
  type="button"
  onClick={() => handleFormChange('day_of_week', d.id)}
  className={cn(
- 'flex flex-col p-3 rounded-xl text-left border transition-all cursor-pointer relative overflow-hidden',
+ 'flex flex-col p-3 rounded-xl text-left border-2 transition-all cursor-pointer relative overflow-hidden',
  isSelected
- ? 'border-slate-600 bg-white dark:bg-[#1B2433] shadow-sm ring-2 ring-emerald-500/50'
+ ? 'border-emerald-600 bg-emerald-600 text-white shadow-md shadow-emerald-600/20 ring-2 ring-emerald-500/30'
  : isEmpty
- ? 'border-emerald-300 dark:border-emerald-800 bg-emerald-50/80 hover:bg-emerald-100/80 dark:border-emerald-800/60 dark:bg-emerald-950/40 text-slate-800 dark:text-slate-200'
+ ? 'border-[#b6f6d9] dark:border-emerald-800 bg-emerald-50/80 hover:bg-emerald-100/80 dark:bg-emerald-950/40 text-slate-800 dark:text-slate-200'
  : status === 'partial'
- ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-white hover:bg-teal-50/50 dark:border-emerald-700/80 dark:bg-slate-900 text-slate-800 dark:text-slate-200'
- : 'border-emerald-200/80 bg-white/70 hover:bg-slate-100 dark:border-emerald-700/80 dark:bg-slate-900/60 text-slate-700 dark:text-slate-300'
+ ? 'border-[#b6f6d9] dark:border-emerald-800/60 bg-teal-50/50 hover:bg-teal-100/60 dark:bg-slate-900 text-slate-800 dark:text-slate-200'
+ : 'border-slate-200 bg-slate-100/80 hover:bg-slate-200/70 dark:border-emerald-700/80 dark:bg-slate-900/60 text-slate-700 dark:text-slate-300'
  )}
  >
  <div className="flex items-center justify-between w-full">
@@ -3627,7 +3461,7 @@ export default function MasterSchedulePage({ embedded = false, hideBreadcrumb = 
  </div>
 
  {/* Input Manual Jam Mulai & Selesai & Pola Minggu */}
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/80 bg-white/95 p-4 dark:bg-slate-900/90 shadow-xs space-y-3.5">
+ <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/30 p-4 dark:bg-slate-900/40 shadow-xs space-y-3.5">
  <div className="grid grid-cols-2 gap-3.5">
  {/* Jam Mulai */}
  <div>
@@ -3640,7 +3474,7 @@ export default function MasterSchedulePage({ embedded = false, hideBreadcrumb = 
  type="time"
  value={form.time_start}
  onChange={(e) => handleFormChange('time_start', e.target.value)}
- className={`h-11 w-full rounded-xl border bg-white px-3.5 font-mono outline-none focus:border-emerald-700/80 dark:border-emerald-700/80 dark:bg-[#111827] ${formErrors.time_start ? 'border-rose-500' : 'border-emerald-200/80'
+ className={`h-10 w-full rounded-xl border-2 bg-white px-3.5 font-mono text-xs font-bold outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700/80 dark:bg-slate-900 ${formErrors.time_start ? 'border-rose-500' : 'border-[#b6f6d9]'
  }`}
  />
  {formErrors.time_start && (
@@ -3661,7 +3495,7 @@ export default function MasterSchedulePage({ embedded = false, hideBreadcrumb = 
  type="time"
  value={form.time_end}
  onChange={(e) => handleFormChange('time_end', e.target.value)}
- className={`h-11 w-full rounded-xl border bg-white px-3.5 font-mono outline-none focus:border-emerald-700/80 dark:border-emerald-700/80 dark:bg-[#111827] ${formErrors.time_end ? 'border-rose-500' : 'border-emerald-200/80'
+ className={`h-10 w-full rounded-xl border-2 bg-white px-3.5 font-mono text-xs font-bold outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700/80 dark:bg-slate-900 ${formErrors.time_end ? 'border-rose-500' : 'border-[#b6f6d9]'
  }`}
  />
  {formErrors.time_end && (
@@ -3705,7 +3539,7 @@ export default function MasterSchedulePage({ embedded = false, hideBreadcrumb = 
  </div>
 
  {/* ── KOLOM 2 (KANAN): REKOMENDASI JAM KOSONG (BEBAS BENTROK) ── */}
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white/95 p-4 dark:bg-slate-900/90 shadow-xs space-y-4 h-full flex flex-col justify-between">
+ <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/30 p-4 dark:bg-slate-900/40 shadow-xs space-y-4 h-full flex flex-col justify-between">
  <div>
  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-3 border-b border-emerald-200/80 dark:border-emerald-800/60">
  <div>
@@ -3841,48 +3675,37 @@ export default function MasterSchedulePage({ embedded = false, hideBreadcrumb = 
  </MasterFormModal>
 
  {/* Modal Interactive Picker Guru Pengampu */}
- {guruPickerOpen && (
- <div
- role="dialog"
- aria-modal="true"
- className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-md animate-in fade-in duration-200"
- onMouseDown={(e) => {
- if (e.target === e.currentTarget) setGuruPickerOpen(false)
- }}
- >
- <div className="relative my-auto w-full max-w-lg overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] dark:border-emerald-800/60 dark:bg-[#182232]">
- {/* Top Accent Gradient Bar */}
-
- {/* Header Modal */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 p-2.5 shadow-md shadow-xs shrink-0">
- <Users className="h-5 w-5" />
- </div>
- <div>
- <h3 className="text-base font-black text-slate-900 dark:text-white">Pilih Guru Pengampu</h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Cari & pilih guru pengajar jadwal ini</p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setGuruPickerOpen(false)}
- className="rounded-xl p-2 bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-105 transition-all duration-200 cursor-pointer"
- >
- <X className="size-4" />
- </button>
- </div>
-
- {/* Body Search */}
- <div className="p-6 space-y-4">
+      <AppModal
+        isOpen={guruPickerOpen}
+        onClose={() => setGuruPickerOpen(false)}
+        title="Pilih Guru Pengampu"
+        badge="Direktori Guru"
+        description="Cari & pilih guru pengajar jadwal ini"
+        icon={Users}
+        maxWidth="max-w-lg"
+        zIndex={100}
+        bodyClassName="space-y-4"
+        footer={
+          <div className="flex w-full justify-end">
+            <button
+              type="button"
+              onClick={() => setGuruPickerOpen(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Tutup</span>
+            </button>
+          </div>
+        }
+      >
  <div className="relative">
- <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+ <Search className="absolute left-3.5 top-3 h-4 w-4 text-emerald-600 dark:text-emerald-400" />
  <input
  type="text"
  value={guruSearchText}
  onChange={(e) => setGuruSearchText(e.target.value)}
  placeholder="Cari nama guru atau NIY..."
- className="h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 pl-10 pr-4 text-xs font-medium outline-none focus:border-emerald-700/80 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-white"
+ className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 text-xs font-bold outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:text-white"
  />
  </div>
 
@@ -3937,17 +3760,15 @@ export default function MasterSchedulePage({ embedded = false, hideBreadcrumb = 
  })
  )}
  </div>
- </div>
- </div>
- </div>
- )}
- <HarmonizedDeleteModal
- isOpen={Boolean(deleteItem)}
- onClose={() => setDeleteItem(null)}
- onConfirm={() => deleteMutation.mutate(deleteItem?.id)}
- item={deleteItem}
- isSubmitting={deleteMutation.isPending}
- />
+      </AppModal>
+
+      <HarmonizedDeleteModal
+        isOpen={Boolean(deleteItem)}
+        onClose={() => setDeleteItem(null)}
+        onConfirm={() => deleteMutation.mutate(deleteItem?.id)}
+        item={deleteItem}
+        isSubmitting={deleteMutation.isPending}
+      />
  </MasterDataPage>
  )
 }

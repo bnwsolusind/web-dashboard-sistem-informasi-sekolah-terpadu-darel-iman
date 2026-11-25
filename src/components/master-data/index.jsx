@@ -484,10 +484,12 @@ export function QuickAccessCard({
 	onClick,
 	tone = 'emerald',
 	loading = false,
+	layout = 'horizontal',
 	className = '',
 	...props
 }) {
 	const toneConfig = quickAccessTones[tone] || quickAccessTones.emerald
+	const isVertical = layout === 'vertical'
 
 	return (
 		<button
@@ -496,10 +498,10 @@ export function QuickAccessCard({
 			aria-label={title}
 			aria-busy={loading || undefined}
 			className={`
-				group flex min-w-0 items-center gap-3 rounded-2xl border-2 p-3 text-left
+				group min-w-0 rounded-2xl border-2 p-3 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer
 				shadow-xs hover:shadow-md
-				transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer
 				focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 dark:focus-visible:ring-emerald-400
+				${isVertical ? 'flex flex-col items-center text-center gap-2.5 p-3.5 justify-center' : 'flex items-center gap-3 text-left'}
 				${toneConfig.card}
 				${className}
 			`}
@@ -512,12 +514,12 @@ export function QuickAccessCard({
 					Icon && <Icon className="size-5 text-white" strokeWidth={2.2} />
 				)}
 			</span>
-			<span className="min-w-0 flex-1 pr-1">
+			<span className={`min-w-0 ${isVertical ? 'w-full text-center' : 'flex-1 pr-1'}`}>
 				<span className={`block text-xs font-extrabold text-slate-900 dark:text-slate-100 leading-tight transition-colors duration-150 ${toneConfig.titleHover}`}>
 					{title}
 				</span>
 				{subtitle && (
-					<span className="block text-[10px] font-medium text-slate-600 dark:text-slate-400 mt-0.5 leading-snug">
+					<span className="block text-[10px] font-medium text-slate-600 dark:text-slate-400 mt-1 leading-snug">
 						{subtitle}
 					</span>
 				)}

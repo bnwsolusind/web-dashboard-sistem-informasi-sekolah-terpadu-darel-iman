@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from 'react'
+import AppModal from '@/components/app/AppModal'
 import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -903,67 +904,26 @@ export default function AssignmentsWorkspace({
  const modalSubject = getSubjectColor(activeModal.subject?.name || activeModal.subject?.nama_mapel)
 
  return (
- <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-950/70 p-4 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.95, y: 15 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 15 }}
- transition={{ type: 'spring', damping: 25, stiffness: 300 }}
- className="relative w-full max-w-xl overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-slate-900"
- >
- {/* Top Accent Gradient Bar */}
-
- {/* Modal Header */}
- <div className="flex items-start justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 p-5 dark:border-emerald-800/60">
- <div className="flex items-start gap-3.5">
- <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm">
- <ModalIcon className="h-5 w-5" />
- </div>
- <div>
- <div className="flex flex-wrap items-center gap-2">
- <span className={`inline-flex items-center gap-1 rounded-lg border px-2 py-0.5 text-[10px] font-bold ${modalSubject.pill}`}>
- {activeModal.subject?.name || activeModal.subject?.nama_mapel || '-'}
- </span>
- <span className={`inline-flex items-center gap-1 rounded-lg border px-2 py-0.5 text-[10px] font-bold ${modalTheme.badge}`}>
- {modalTheme.label}
- </span>
- {modalSubmission && (
- <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-black text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
- Sudah Dikumpulkan
- </span>
- )}
- </div>
- <h3 className="mt-1 text-base font-black text-slate-900 dark:text-white leading-snug">
- {activeModal.judul}
- </h3>
- <p className="text-xs text-slate-500 mt-0.5">
- Guru: <b className="text-slate-700 dark:text-slate-300">{activeModal.teacher?.nama_lengkap || activeModal.teacher?.name || '-'}</b> · Tenggat: <b>{formatDate(activeModal.deadline)}</b>
- </p>
- </div>
- </div>
-
- <button
- type="button"
- onClick={() => setActiveModal(null)}
- aria-label="Tutup modal"
- className="rounded-xl p-2 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 dark:hover:text-slate-200 transition"
- >
- <X className="h-5 w-5" />
- </button>
- </div>
-
- {/* Modal Internal Navigation Tabs */}
- <div className="flex border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 px-5 dark:border-emerald-800/60 dark:bg-slate-800/40">
+ <AppModal
+ isOpen={Boolean(activeModal)}
+ onClose={() => setActiveModal(null)}
+ title={activeModal.judul}
+ description={`Guru: ${activeModal.teacher?.nama_lengkap || activeModal.teacher?.name || '-'} · Tenggat: ${formatDate(activeModal.deadline)}`}
+ badge={`${activeModal.subject?.name || activeModal.subject?.nama_mapel || '-'} · ${modalTheme.label}${modalSubmission ? ' · Sudah Dikumpulkan' : ''}`}
+ icon={ModalIcon}
+ maxWidth="max-w-xl"
+ subHeader={
+ <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-emerald-100/70 dark:bg-emerald-950/50 border border-emerald-200/80 dark:border-emerald-800/60 w-fit">
  <button
  type="button"
  onClick={() => setModalTab('instruksi')}
- className={`flex items-center gap-1.5 border-b-2 py-3 px-3 text-xs font-bold transition-all ${
+ className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-black transition-all active:scale-95 ${
  modalTab === 'instruksi'
- ? 'border-slate-600 text-emerald-700 dark:border-emerald-800/60 dark:text-emerald-300'
- : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400'
+ ? 'bg-emerald-600 text-white shadow-xs'
+ : 'text-slate-600 hover:text-emerald-700 hover:bg-emerald-100/60 dark:text-slate-300 dark:hover:bg-slate-800'
  }`}
  >
- <ClipboardList className="h-4 w-4" />
+ <ClipboardList className="h-3.5 w-3.5" />
  <span>Lembar Soal & Instruksi</span>
  </button>
 
@@ -971,13 +931,13 @@ export default function AssignmentsWorkspace({
  <button
  type="button"
  onClick={() => setModalTab('jawaban')}
- className={`flex items-center gap-1.5 border-b-2 py-3 px-3 text-xs font-bold transition-all ${
+ className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-black transition-all active:scale-95 ${
  modalTab === 'jawaban'
- ? 'border-slate-600 text-emerald-700 dark:border-emerald-800/60 dark:text-emerald-300'
- : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400'
+ ? 'bg-emerald-600 text-white shadow-xs'
+ : 'text-slate-600 hover:text-emerald-700 hover:bg-emerald-100/60 dark:text-slate-300 dark:hover:bg-slate-800'
  }`}
  >
- <CheckCircle2 className="h-4 w-4" />
+ <CheckCircle2 className="h-3.5 w-3.5" />
  <span>Jawaban & Nilai Siswa</span>
  </button>
  )}
@@ -986,20 +946,35 @@ export default function AssignmentsWorkspace({
  <button
  type="button"
  onClick={() => setModalTab('kumpul')}
- className={`flex items-center gap-1.5 border-b-2 py-3 px-3 text-xs font-bold transition-all ${
+ className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-black transition-all active:scale-95 ${
  modalTab === 'kumpul'
- ? 'border-slate-600 text-emerald-700 dark:border-emerald-800/60 dark:text-emerald-300'
- : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400'
+ ? 'bg-emerald-600 text-white shadow-xs'
+ : 'text-slate-600 hover:text-emerald-700 hover:bg-emerald-100/60 dark:text-slate-300 dark:hover:bg-slate-800'
  }`}
  >
- <Send className="h-4 w-4" />
+ <Send className="h-3.5 w-3.5" />
  <span>Form Kumpul Tugas</span>
  </button>
  )}
  </div>
-
+ }
+ footer={
+ <div className="flex w-full items-center justify-between gap-3">
+ <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
+ Sistem Pembelajaran Terpadu{student?.unit_name ? ` · ${student.unit_name}` : ''}
+ </span>
+ <button
+ type="button"
+ onClick={() => setActiveModal(null)}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
+ >
+ Tutup
+ </button>
+ </div>
+ }
+ >
  {/* Modal Content Body */}
- <div className="max-h-[68vh] overflow-y-auto p-5 space-y-4">
+ <div className="space-y-4">
  {message && (
  <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50 p-3 text-xs font-bold text-emerald-800 dark:border-emerald-800/60 dark:bg-emerald-950 dark:text-emerald-300">
  {message}
@@ -1346,25 +1321,7 @@ export default function AssignmentsWorkspace({
  </form>
  )}
  </div>
-
- {/* Modal Footer */}
- <div className="flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 px-5 py-3.5 dark:border-emerald-800/60 dark:bg-slate-800/60">
- <span className="text-xs text-slate-500">
- Sistem Pembelajaran Terpadu{student?.unit_name ? ` · ${student.unit_name}` : ''}
- </span>
- <Button
- type="button"
- variant="ghost"
- appearance="outline"
- size="sm"
- onClick={() => setActiveModal(null)}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-700/80 dark:text-slate-300"
- >
- Tutup
- </Button>
- </div>
- </motion.div>
- </div>
+ </AppModal>
  )
  })()}
  </AnimatePresence>

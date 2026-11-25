@@ -1,6 +1,7 @@
 import {
-  KpiStatCard
+ KpiStatCard
 } from '../components/app'
+import AppModal from '../components/app/AppModal'
 import CustomSelect from "../components/ui/CustomSelect"
 import React, { useState, useEffect, useMemo } from 'react'
 import {
@@ -21,7 +22,8 @@ import {
   CheckCircle2,
   AlertCircle,
   FileText,
-  Globe
+  Globe,
+  Trash2
 } from 'lucide-react'
 import {
   Download as Download1,
@@ -37,6 +39,8 @@ import {
 import PageContainer from '../components/app/PageContainer'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
 import ActionDropdown from '../components/app/ActionDropdown'
+import PageToolbarActions from '../components/app/PageToolbarActions'
+import { SquircleActionButton } from '../components/master-data'
 import CsvImportModal from '../components/master-data/CsvImportModal'
 import {
   educationUnitService
@@ -66,9 +70,6 @@ import {
   DialogFooter,
   DialogClose
 } from '@/components/ui/dialog'
-import {
-  AlertDialog
-} from '@/components/ui/alert-dialog'
 import {
   Pagination
 } from '@/components/ui/pagination'
@@ -829,58 +830,18 @@ export default function NewsManagementPage() {
  </p>
  </div>
 
- {/* Soft Pastel Squircle Action Buttons Baris 1 */}
- <div className="flex items-center gap-2 shrink-0">
- {/* Tombol Impor (Sky Blue Soft Pastel Squircle) */}
- <HoverCard>
- <HoverCardTrigger>
- <button
- type="button"
- onClick={() => setIsImportModalOpen(true)}
- className="inline-flex h-9 w-10 items-center justify-center rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-sky-50 text-sky-700 shadow-xs transition hover:scale-105 hover:bg-sky-100 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300"
- >
- <Upload1 className="h-4 w-4" />
- </button>
- </HoverCardTrigger>
- <HoverCardContent className="text-xs font-bold text-slate-700 dark:text-slate-200 p-2">
- Impor Data Berita (Excel/CSV)
- </HoverCardContent>
- </HoverCard>
-
- {/* Tombol Ekspor (Amber/Orange Soft Pastel Squircle) */}
- <HoverCard>
- <HoverCardTrigger>
- <button
- type="button"
- onClick={handleExportNews}
- className="inline-flex h-9 w-10 items-center justify-center rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-amber-50 text-amber-700 shadow-xs transition hover:scale-105 hover:bg-amber-100 dark:border-emerald-800/60 dark:bg-amber-950/60 dark:text-amber-300"
- >
- <Download1 className="h-4 w-4" />
- </button>
- </HoverCardTrigger>
- <HoverCardContent className="text-xs font-bold text-slate-700 dark:text-slate-200 p-2">
- Ekspor Laporan Berita
- </HoverCardContent>
- </HoverCard>
-
- {/* Tombol Buat Berita Baru (Emerald/Green Soft Pastel Squircle) */}
- <HoverCard>
- <HoverCardTrigger>
- <Button
- variant="ghost"
- size="md"
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50 text-emerald-800 font-bold shadow-xs transition hover:scale-105 hover:bg-emerald-100 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300"
- onClick={handleOpenAdd}
- >
- <Plus className="h-4 w-4" />
- <span>Buat Berita Baru</span>
- </Button>
- </HoverCardTrigger>
- <HoverCardContent className="text-xs font-bold text-slate-700 dark:text-slate-200 p-2">
- Publikasikan berita baru
- </HoverCardContent>
- </HoverCard>
- </div>
+ {/* Canonical PageToolbarActions Baris 1 */}
+ <PageToolbarActions
+ className="shrink-0"
+ onImport={() => setIsImportModalOpen(true)}
+ importLabel="Impor Data Berita (Excel/CSV)"
+ onExport={handleExportNews}
+ exportLabel="Ekspor Laporan Berita"
+ primaryAction={{
+ label: 'Buat Berita Baru',
+ onClick: handleOpenAdd,
+ }}
+ />
  </div>
 
  {/* BARIS 2: CARD FILTER (DILENGKAPI DENGAN SEARCH, DROPDOWN UNIT DARI DATABASE & PERPAGE SELECTOR) */}
@@ -951,21 +912,14 @@ export default function NewsManagementPage() {
  <option value={100}>100 / hal</option>
  </CustomSelect>
 
- {/* Tombol Muat Ulang (Sky Pastel) */}
- <HoverCard>
- <HoverCardTrigger>
- <button
- type="button"
+ {/* Tombol Muat Ulang (Canonical SquircleActionButton) */}
+ <SquircleActionButton
+ variant="sync"
+ icon={RefreshCw}
+ label="Muat Ulang Data dari Database"
+ loading={loading}
  onClick={loadNews}
- className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-sky-50 text-sky-700 shadow-xs transition hover:scale-105 hover:bg-sky-100 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300"
- >
- <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
- </button>
- </HoverCardTrigger>
- <HoverCardContent className="text-xs font-bold text-slate-700 dark:text-slate-200 p-2">
- Muat Ulang Data dari Database
- </HoverCardContent>
- </HoverCard>
+ />
  </div>
  </div>
 
@@ -1329,56 +1283,39 @@ export default function NewsManagementPage() {
  {/* ══════════════════════════════════════════════════════════════════
  KPI CARDS DRILL-DOWN MODAL — Interactive News Analytics Breakdown
  ══════════════════════════════════════════════════════════════════ */}
- <AnimatePresence>
- {activeKpiModal && (
- <div
- role="dialog"
- tabIndex={-1}
- aria-modal="true"
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs"
- onMouseDown={(e) => { if (e.target === e.currentTarget) setActiveKpiModal(null) }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.95, y: 10 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.96, y: 8 }}
- transition={{ type: 'spring', stiffness: 450, damping: 30 }}
- className="modal-dialog font-sans w-full max-w-4xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] dark:border-emerald-700/80 dark:bg-[#1B2433]">
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 bg-white px-6 py-4 dark:border-emerald-700/80 dark:bg-[#1B2433]">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-emerald-500/10 p-2.5 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400">
- {activeKpiModal === 'total' && <Megaphone className="h-5 w-5" />}
- {activeKpiModal === 'published' && <CheckCircle2 className="h-5 w-5" />}
- {activeKpiModal === 'draft' && <AlertCircle className="h-5 w-5" />}
- {activeKpiModal === 'global' && <Globe className="h-5 w-5" />}
- </div>
- <div>
- <h3 className="modal-title text-base font-extrabold text-slate-900 dark:text-white">
- {activeKpiModal === 'total' && 'Analisis Total Publikasi Berita & Pengumuman'}
- {activeKpiModal === 'published' && 'Rincian Berita Dipublikasikan (Aktif Portal)'}
- {activeKpiModal === 'draft' && 'Rincian Berita Draf Internal (Belum Rilis)'}
- {activeKpiModal === 'global' && 'Rincian Berita Lintas Unit (Target Yayasan)'}
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- Menampilkan {filteredKpiNewsItems.length} data berita terfilter
- </p>
- </div>
- </div>
+ <AppModal
+ isOpen={Boolean(activeKpiModal)}
+ onClose={() => setActiveKpiModal(null)}
+ title={
+ activeKpiModal === 'total'
+ ? 'Analisis Total Publikasi Berita & Pengumuman'
+ : activeKpiModal === 'published'
+ ? 'Rincian Berita Dipublikasikan (Aktif Portal)'
+ : activeKpiModal === 'draft'
+ ? 'Rincian Berita Draf Internal (Belum Rilis)'
+ : 'Rincian Berita Lintas Unit (Target Yayasan)'
+ }
+ description={`Menampilkan ${filteredKpiNewsItems.length} data berita terfilter`}
+ icon={activeKpiModal === 'published' ? CheckCircle2 : activeKpiModal === 'draft' ? AlertCircle : activeKpiModal === 'global' ? Globe : Megaphone}
+ maxWidth="max-w-4xl"
+ footer={
+ <div className="flex w-full items-center justify-between gap-2">
+ <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+ Menampilkan total {filteredKpiNewsItems.length} baris
+ </span>
  <button
  type="button"
  onClick={() => setActiveKpiModal(null)}
- aria-label="Tutup modal"
- className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors cursor-pointer"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <span className="text-lg font-bold">✕</span>
+ Tutup
  </button>
  </div>
-
+ }
+ >
+ <div className="space-y-4">
  {/* Toolbar Search inside Modal */}
- <div className="flex items-center gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/60 px-6 py-3 dark:border-emerald-800/60 dark:bg-slate-900/40">
+ <div className="flex items-center gap-3">
  <div className="relative flex-1">
  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-emerald-600 dark:text-emerald-400" />
  <input
@@ -1386,7 +1323,7 @@ export default function NewsManagementPage() {
  value={kpiModalSearch}
  onChange={(e) => setKpiModalSearch(e.target.value)}
  placeholder="Cari judul berita, ringkasan, atau kategori..."
- className="h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white pl-9 pr-4 text-xs font-semibold text-slate-700 placeholder:text-slate-400 focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-700/80 dark:bg-slate-900 dark:text-slate-200"
+ className="h-10 w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white pl-9 pr-4 text-xs font-bold text-slate-800 placeholder:text-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
  <Badge color="emerald" size="md">
@@ -1395,7 +1332,7 @@ export default function NewsManagementPage() {
  </div>
 
  {/* Table Body inside Modal */}
- <div className="modal-body flex-1 overflow-y-auto p-6">
+ <div>
  {filteredKpiNewsItems.length === 0 ? (
  <div className="py-12 text-center">
  <p className="text-sm font-bold text-slate-500">Tidak ada berita yang cocok dengan kriteria filter ini.</p>
@@ -1469,46 +1406,46 @@ export default function NewsManagementPage() {
  </div>
  )}
  </div>
+ </div>
+ </AppModal>
 
- {/* Footer */}
- <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 px-6 py-3 dark:border-emerald-800/60 dark:bg-slate-900/50">
- <span className="text-xs font-semibold text-slate-500">
- Menampilkan total {filteredKpiNewsItems.length} baris
- </span>
+ {/* MODAL KONFIRMASI HAPUS (APP MODAL DANGER) */}
+ <AppModal
+ isOpen={isDeleteOpen}
+ onClose={() => setIsDeleteOpen(false)}
+ variant="danger"
+ zIndex={70}
+ maxWidth="max-w-md"
+ icon={Trash2}
+ title="Hapus Berita Ini dari Database?"
+ badge="Hapus Permanen"
+ description={deletingItem?.judul ? `Target: ${deletingItem.judul}` : 'Konfirmasi penghapusan berita permanen'}
+ footer={
+ <>
  <button
  type="button"
- onClick={() => setActiveKpiModal(null)}
- className="h-8 px-4 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white text-xs font-bold text-slate-700 hover:bg-emerald-50/40 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200 cursor-pointer"
+ onClick={() => setIsDeleteOpen(false)}
+ className="inline-flex items-center gap-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 h-9.5 px-4 text-xs font-black border border-slate-300 dark:border-slate-700 transition-all active:scale-95 cursor-pointer"
  >
- Tutup
+ Batal
  </button>
- </div>
- </div>
- </motion.div>
+ <button
+ type="button"
+ onClick={handleDeleteConfirm}
+ className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white h-9.5 px-5 text-xs font-black border-2 border-rose-600 shadow-md shadow-rose-600/20 transition-all active:scale-95 cursor-pointer"
+ >
+ <Trash2 className="size-3.5" strokeWidth={2.2} />
+ <span>Hapus Permanen dari Database</span>
+ </button>
+ </>
+ }
+ >
+ {deletingItem && (
+ <div className="rounded-2xl border-2 border-rose-200 dark:border-rose-800/60 bg-rose-50/70 dark:bg-rose-950/30 p-4 text-xs text-rose-900 dark:text-rose-200 leading-relaxed">
+ Apakah Anda yakin ingin menghapus berita <strong>&quot;{deletingItem?.judul}&quot;</strong> dari database? Berita yang dihapus tidak akan tampil lagi di portal orang tua dan siswa.
  </div>
  )}
- </AnimatePresence>
-
- {/* MODAL KONFIRMASI HAPUS (ALERT DIALOG HEROUI) */}
- <AnimatePresence>
- <AlertDialog isOpen={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
- <DialogHeader>
- <DialogTitle>Hapus Berita Ini dari Database?</DialogTitle>
- <DialogDescription>
- Apakah Anda yakin ingin menghapus berita "{deletingItem?.judul}" dari database? Berita yang dihapus tidak akan tampil lagi di portal orang tua dan siswa.
- </DialogDescription>
- </DialogHeader>
-
- <DialogFooter className="gap-2.5 pt-4 border-t border-emerald-200/80 dark:border-emerald-800/80">
- <DialogClose appearance="outline" size="sm" type="button">
- Batal
- </DialogClose>
- <Button variant="danger" appearance="fill" size="sm" onClick={handleDeleteConfirm} className="font-bold px-5">
- Hapus Permanen dari Database
- </Button>
- </DialogFooter>
- </AlertDialog>
- </AnimatePresence>
+ </AppModal>
 
  <CsvImportModal
  isOpen={isImportModalOpen}

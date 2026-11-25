@@ -25,6 +25,7 @@ import KpiStatCard from '../components/app/KpiStatCard'
 import AppBadge from '../components/app/AppBadge'
 import AppEmptyState from '../components/app/AppEmptyState'
 import AppSkeleton from '../components/app/AppSkeleton'
+import { SquircleActionButton } from '../components/master-data'
 
 export default function AcademicPage() {
  const { data: daftarLaporan, isLoading, isError, refetch } = useDaftarLaporanBulanan({ per_page: 20 })
@@ -280,13 +281,13 @@ export default function AcademicPage() {
  ) : isError ? (
  <div className="p-6 text-center">
  <p className="text-xs font-semibold text-rose-600">Gagal memuat data laporan.</p>
- <button
- type="button"
+ <SquircleActionButton
+ variant="sync"
+ label="Coba Lagi"
  onClick={() => refetch()}
- className="mt-2 text-xs font-bold text-[#059669] underline"
- >
- Coba Lagi
- </button>
+ showLabel
+ className="mt-2"
+ />
  </div>
  ) : reportsList.length === 0 ? (
  <div className="p-8">

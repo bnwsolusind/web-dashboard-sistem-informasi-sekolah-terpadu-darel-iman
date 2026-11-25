@@ -12,6 +12,7 @@ import {
  Table as TableIcon,
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
+import AppModal from '../app/AppModal'
 import { parseSpreadsheetFile, downloadSpreadsheetTemplate } from '../../utils/spreadsheetParser'
 
 export default function TahunAjaranImportModal({
@@ -125,59 +126,41 @@ export default function TahunAjaranImportModal({
  onClose()
  }
 
- return (
- <AnimatePresence>
- <div
- className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto"
- role="dialog"
- aria-modal="true"
- aria-labelledby="import-tahun-ajaran-title"
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !isSubmitting) handleClose()
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="my-auto w-full max-w-xl font-sans"
- >
- <div className="flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-card-dark dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
-
- {/* Modal Header */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner shrink-0">
- <div className="flex items-center gap-3.5">
- <div className="rounded-xl bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 p-3 shadow-md shadow-xs shrink-0">
- <Upload className="size-5" strokeWidth={2.25} />
- </div>
- <div>
- <h3
- id="import-tahun-ajaran-title"
- className="text-base sm:text-lg font-black tracking-tight text-slate-900 dark:text-white"
- >
- Impor Data Tahun Ajaran
- </h3>
- <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">
- Unggah berkas CSV/Excel untuk memproses data tahun ajaran secara massal.
- </p>
- </div>
- </div>
-
- <button
- type="button"
- disabled={isSubmitting}
- onClick={handleClose}
- aria-label="Tutup modal impor"
- className="size-9 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer disabled:opacity-50 shrink-0"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Modal Body */}
- <div className="flex-1 overflow-y-auto p-6 space-y-5 text-xs">
+  return (
+    <AppModal
+      isOpen={isOpen}
+      onClose={() => !isSubmitting && handleClose()}
+      title="Impor Data Tahun Ajaran"
+      badge="Batch Import"
+      description="Unggah berkas CSV/Excel untuk memproses data tahun ajaran secara massal."
+      icon={Upload}
+      maxWidth="max-w-2xl"
+      disableBackdropClose={isSubmitting}
+      hideCloseButton={isSubmitting}
+      bodyClassName="space-y-5 text-xs"
+      footer={
+        <div className="flex w-full items-center justify-between gap-3">
+          <button
+            type="button"
+            disabled={isSubmitting}
+            onClick={handleClose}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="button"
+            disabled={previewRows.length === 0 || isSubmitting}
+            onClick={handleSubmitImport}
+            className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+          >
+            {isSubmitting ? <Loader2 className="size-4 animate-spin" /> : <CheckCircle2 className="size-4" strokeWidth={2.2} />}
+            <span>{isSubmitting ? 'Memproses Impor...' : `Impor ${previewRows.length} Data`}</span>
+          </button>
+        </div>
+      }
+    >
  {/* Template Download Card */}
  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/40 p-4 dark:border-emerald-800/60 dark:bg-emerald-950/20">
  <div className="flex items-center gap-3">
@@ -336,37 +319,6 @@ export default function TahunAjaranImportModal({
  </div>
  </div>
  )}
- </div>
-
- {/* Modal Footer */}
- <div className="flex items-center justify-between border-t border-emerald-200/80 bg-white px-6 py-4 dark:border-emerald-800/60 dark:bg-[#182232] shrink-0">
- <button
- type="button"
- disabled={isSubmitting}
- onClick={handleClose}
- className="inline-flex items-center gap-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50 border border-emerald-200/80 px-4 py-2.5 text-xs font-extrabold text-emerald-700 transition-all duration-200 hover:scale-[1.02] hover:bg-slate-200 active:scale-95 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200 cursor-pointer disabled:opacity-50"
- >
- <X className="size-3.5" strokeWidth={2.2} />
- <span>Batal</span>
- </button>
-
- <button
- type="button"
- disabled={previewRows.length === 0 || isSubmitting}
- onClick={handleSubmitImport}
- className="inline-flex items-center gap-2 rounded-xl bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 px-5 py-2.5 text-xs font-black shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-95 cursor-pointer disabled:opacity-50"
- >
- {isSubmitting ? (
- <Loader2 className="size-4 animate-spin" />
- ) : (
- <CheckCircle2 className="size-4" strokeWidth={2.2} />
- )}
- <span>{isSubmitting ? 'Memproses Impor...' : `Impor ${previewRows.length} Data`}</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- </AnimatePresence>
- )
+    </AppModal>
+  )
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { FiEye, FiEyeOff, FiClock, FiCheckCircle, FiAlertTriangle, FiXCircle, FiHelpCircle, FiX } from 'react-icons/fi'
 import { motion, AnimatePresence } from 'framer-motion'
+import AppModal from '../app/AppModal'
 import { authService } from '../../services/authService'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertContent, AlertDescription, AlertIndicator } from '@/components/ui/alert'
@@ -233,60 +234,35 @@ export default function ChangePasswordCard() {
  </div>
 
  {/* Help Modal */}
- <AnimatePresence>
- {helpModalOpen && (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6">
- <div className="flex items-center justify-between mb-4">
- <div className="flex items-center gap-3">
- <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm">
- <FiHelpCircle className="h-5 w-5" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-emerald-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
- Bantuan Keamanan
- </span>
- <h3 className="text-base font-bold text-slate-900 dark:text-white mt-0.5">
- Lupa Password Lama?
- </h3>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setHelpModalOpen(false)}
- className="p-1 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors cursor-pointer"
- >
- <FiX className="h-5 w-5" />
- </button>
- </div>
- <div className="text-left text-xs space-y-3 text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+      <AppModal
+        isOpen={helpModalOpen}
+        onClose={() => setHelpModalOpen(false)}
+        title="Lupa Password Lama?"
+        badge="Bantuan Keamanan"
+        description="Informasi reset kata sandi akun pengguna"
+        icon={FiHelpCircle}
+        maxWidth="max-w-md"
+        zIndex={70}
+        bodyClassName="space-y-3 text-xs text-slate-600 dark:text-slate-300 leading-relaxed"
+        footer={
+          <div className="flex w-full justify-end">
+            <button
+              type="button"
+              onClick={() => setHelpModalOpen(false)}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+            >
+              <span>Saya Mengerti</span>
+            </button>
+          </div>
+        }
+      >
  <p>
  Demi keamanan sistem, password asli Anda tersimpan dalam bentuk terenkripsi (hash <i>bcrypt</i>) di database server sehingga tidak dapat dibaca kembali dalam bentuk teks biasa.
  </p>
  <p>
  Jika Anda lupa password lama yang sedang aktif, silakan hubungi <strong>Administrator Sistem / Tata Usaha Sekolah</strong> untuk melakukan reset password akun Anda secara resmi.
  </p>
- </div>
- <div className="flex items-center justify-end">
- <button
- type="button"
- onClick={() => setHelpModalOpen(false)}
- className="rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white dark:bg-emerald-600 dark:text-white px-5 py-2.5 text-xs font-bold shadow-sm hover:brightness-105 transition-all cursor-pointer"
- >
- Saya Mengerti
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+      </AppModal>
  </Card>
  )
 }

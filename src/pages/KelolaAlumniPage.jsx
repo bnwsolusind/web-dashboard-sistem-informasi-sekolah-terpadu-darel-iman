@@ -109,17 +109,7 @@ import {
   Tooltip,
   Legend
 } from 'recharts'
-import {
-  Dialog,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogBody,
-  DialogFooter,
-  DialogClose,
-  OverlayWrapper,
-  Backdrop
-} from '../components/ui/dialog'
+import AppModal from '../components/app/AppModal'
 import {
   FieldLabel,
   FieldDescription
@@ -2195,27 +2185,43 @@ export default function KelolaAlumniPage() {
  </div>
  </MasterDataPage>
 
- {/* ── 1. MODAL TAMBAH DATA ALUMNI BARU (HeroUI Dialog) ───────────────────── */}
- {addModalOpen && (
- <OverlayWrapper>
- <Backdrop isOpen={addModalOpen} onOpenChange={setAddModalOpen} />
- <Dialog isOpen={addModalOpen} onOpenChange={setAddModalOpen} className="max-w-xl w-full rounded-xl p-6 border border-emerald-200/80 bg-white shadow-2xl dark:border-emerald-800/60 dark:bg-[#1B2433]">
- <DialogHeader className="pb-3 border-b border-emerald-200/80 dark:border-emerald-800/60">
- <DialogTitle className="flex items-center gap-3 text-base font-bold text-slate-900 dark:text-slate-100">
- <div className="p-2.5 rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400 shrink-0 shadow-xs">
- <UserPlus className="w-5 h-5" />
- </div>
- <div>
- <div>Tambah Data Alumni Baru</div>
- <DialogDescription className="text-xs font-normal text-slate-500 dark:text-slate-400 mt-0.5">
- Masukkan identitas siswa/alumni baru berserta informasi kelanjutan studi atau karir.
- </DialogDescription>
- </div>
- </DialogTitle>
- </DialogHeader>
-
- <form onSubmit={handleSaveAdd}>
- <DialogBody className="space-y-5 py-4 max-h-[70vh] overflow-y-auto pr-1.5 text-slate-700 dark:text-slate-200">
+ {/* ── 1. MODAL TAMBAH DATA ALUMNI BARU (AppModal) ───────────────────── */}
+ <AppModal
+   isOpen={addModalOpen}
+   onClose={() => !submitting && setAddModalOpen(false)}
+   title="Tambah Data Alumni Baru"
+   badge="Alumni Baru"
+   description="Masukkan identitas siswa/alumni baru berserta informasi kelanjutan studi atau karir."
+   icon={UserPlus}
+   variant="emerald"
+   maxWidth="max-w-xl"
+   zIndex={60}
+   disableBackdropClose={submitting}
+   footer={
+     <>
+       <Button
+         type="button"
+         variant="ghost"
+         disabled={submitting}
+         onClick={() => setAddModalOpen(false)}
+         className="bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 rounded-xl h-9.5 px-4 font-black border border-slate-300 dark:border-slate-700 active:scale-95"
+       >
+         Batal
+       </Button>
+       <Button
+         variant="primary"
+         size="sm"
+         type="submit"
+         form="add-alumni-form"
+         pending={submitting}
+         className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl h-9.5 px-5 font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 active:scale-95"
+       >
+         Simpan Alumni Baru
+       </Button>
+     </>
+   }
+ >
+ <form id="add-alumni-form" onSubmit={handleSaveAdd} className="space-y-5">
  {/* ── SEKSI 1: JENIS DATA / TIPE MUTASI ── */}
  <div className="space-y-3.5">
  <div className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5 pb-1 border-b border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60">
@@ -2555,41 +2561,32 @@ export default function KelolaAlumniPage() {
  />
  </div>
  </div>
- </DialogBody>
-
- <DialogFooter className="gap-2.5 pt-4 border-t border-emerald-200/80 dark:border-emerald-800/80">
- <DialogClose appearance="outline" size="sm" type="button" disabled={submitting}>
- Batal
- </DialogClose>
-                <Button variant="primary" size="sm" type="submit" pending={submitting} className="font-bold px-4 h-9 text-sm">
-                  Simpan Alumni Baru
-                </Button>
- </DialogFooter>
  </form>
- </Dialog>
- </OverlayWrapper>
- )}
+ </AppModal>
 
- {/* ── 1.1. MODAL DATATABLE SISWA / SANTRI SELECTOR (HeroUI Dialog) ────────── */}
- {studentTableModalOpen && (
- <OverlayWrapper>
- <Backdrop isOpen={studentTableModalOpen} onOpenChange={setStudentTableModalOpen} />
- <Dialog isOpen={studentTableModalOpen} onOpenChange={setStudentTableModalOpen} className="max-w-4xl w-full rounded-xl p-6 border border-emerald-200/80 bg-white shadow-2xl dark:border-emerald-800/60 dark:bg-[#1B2433]">
- <DialogHeader className="pb-3 border-b border-emerald-200/80 dark:border-emerald-800/60">
- <DialogTitle className="flex items-center gap-3 text-base font-bold text-slate-900 dark:text-slate-100">
- <div className="p-2.5 rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400 shrink-0 shadow-xs">
- <School className="w-5 h-5" />
- </div>
- <div>
- <div>DataTable Siswa & Santri Database</div>
- <DialogDescription className="text-xs font-normal text-slate-500 dark:text-slate-400 mt-0.5">
- Pilih siswa/santri dari daftar unit di bawah ini untuk mengisikan identitas alumni secara langsung.
- </DialogDescription>
- </div>
- </DialogTitle>
- </DialogHeader>
-
- <DialogBody className="space-y-4 py-4 max-h-[75vh] overflow-y-auto pr-1 text-slate-700 dark:text-slate-200">
+ {/* ── 1.1. MODAL DATATABLE SISWA / SANTRI SELECTOR (AppModal) ────────── */}
+ <AppModal
+   isOpen={studentTableModalOpen}
+   onClose={() => setStudentTableModalOpen(false)}
+   title="DataTable Siswa & Santri Database"
+   badge={`${studentTableTotalCount} Siswa`}
+   description="Pilih siswa/santri dari daftar unit di bawah ini untuk mengisikan identitas alumni secara langsung."
+   icon={School}
+   variant="emerald"
+   maxWidth="max-w-4xl"
+   zIndex={70}
+   footer={
+     <Button
+       type="button"
+       variant="ghost"
+       onClick={() => setStudentTableModalOpen(false)}
+       className="bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 rounded-xl h-9.5 px-4 font-black border border-slate-300 dark:border-slate-700 active:scale-95"
+     >
+       Tutup
+     </Button>
+   }
+ >
+ <div className="space-y-4">
  {/* Filter Toolbar */}
  <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-emerald-200/80 dark:border-emerald-800/60">
  <div className="relative flex-1 w-full">
@@ -2710,38 +2707,47 @@ export default function KelolaAlumniPage() {
  />
  </div>
  )}
- </DialogBody>
-
- <DialogFooter className="pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60">
- <DialogClose appearance="outline" size="sm" type="button">
- Tutup
- </DialogClose>
- </DialogFooter>
- </Dialog>
- </OverlayWrapper>
- )}
-
- {/* ── 2. MODAL EDIT DATA ALUMNI (HeroUI Dialog) ───────────────────────── */}
- {editModalOpen && selectedAlumni && (
- <OverlayWrapper>
- <Backdrop isOpen={editModalOpen} onOpenChange={setEditModalOpen} />
- <Dialog isOpen={editModalOpen} onOpenChange={setEditModalOpen} className="max-w-xl w-full rounded-xl p-6 border border-emerald-200/80 bg-white shadow-2xl dark:border-emerald-800/60 dark:bg-[#1B2433]">
- <DialogHeader className="pb-3 border-b border-emerald-200/80 dark:border-emerald-800/60">
- <DialogTitle className="flex items-center gap-3 text-base font-bold text-slate-900 dark:text-slate-100">
- <div className="p-2.5 rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 shrink-0 shadow-xs">
- <Edit3 className="w-5 h-5" />
  </div>
- <div>
- <div>Edit Data Alumni & Tujuan Lanjut</div>
- <DialogDescription className="text-xs font-normal text-slate-500 dark:text-slate-400 mt-0.5">
- Perbarui identitas dan status kelanjutan studi alumni <span className="font-semibold text-slate-800 dark:text-slate-200">{selectedAlumni.full_name || selectedAlumni.nama}</span>.
- </DialogDescription>
- </div>
- </DialogTitle>
- </DialogHeader>
+ </AppModal>
 
- <form onSubmit={handleSaveEdit}>
- <DialogBody className="space-y-5 py-4 max-h-[70vh] overflow-y-auto pr-1.5 text-slate-700 dark:text-slate-200">
+ {/* ── 2. MODAL EDIT DATA ALUMNI (AppModal) ───────────────────────── */}
+ <AppModal
+   isOpen={editModalOpen && !!selectedAlumni}
+   onClose={() => !submitting && setEditModalOpen(false)}
+   title="Edit Data Alumni & Tujuan Lanjut"
+   badge="Update Data"
+   description={`Perbarui identitas dan status kelanjutan studi alumni ${selectedAlumni?.full_name || selectedAlumni?.nama || ''}.`}
+   icon={Edit3}
+   variant="emerald"
+   maxWidth="max-w-xl"
+   zIndex={60}
+   disableBackdropClose={submitting}
+   footer={
+     <>
+       <Button
+         type="button"
+         variant="ghost"
+         disabled={submitting}
+         onClick={() => setEditModalOpen(false)}
+         className="bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 rounded-xl h-9.5 px-4 font-black border border-slate-300 dark:border-slate-700 active:scale-95"
+       >
+         Batal
+       </Button>
+       <Button
+         variant="primary"
+         size="sm"
+         type="submit"
+         form="edit-alumni-form"
+         pending={submitting}
+         className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl h-9.5 px-5 font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 active:scale-95"
+       >
+         Simpan Perubahan
+       </Button>
+     </>
+   }
+ >
+ {selectedAlumni && (
+ <form id="edit-alumni-form" onSubmit={handleSaveEdit} className="space-y-5">
  {/* ── SEKSI 1: JENIS DATA / TIPE MUTASI (Edit) ── */}
  <div className="space-y-3.5">
  <div className="text-xs font-bold uppercase tracking-wider text-blue-700 dark:text-blue-400 flex items-center gap-1.5 pb-1 border-b border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60">
@@ -2976,42 +2982,48 @@ export default function KelolaAlumniPage() {
  />
  </div>
  </div>
- </DialogBody>
-
- <DialogFooter className="gap-2.5 pt-4 border-t border-emerald-200/80 dark:border-emerald-800/80">
- <DialogClose appearance="outline" size="sm" type="button" disabled={submitting}>
- Batal
- </DialogClose>
- <Button variant="primary" size="sm" type="submit" pending={submitting} className="font-bold px-4">
- Simpan Perubahan
- </Button>
- </DialogFooter>
  </form>
- </Dialog>
- </OverlayWrapper>
  )}
+ </AppModal>
 
- {/* ── 3. MODAL KONFIRMASI PINDAH UNIT (INTERNAL) ─────────────────────────── */}
- {pindahUnitModalOpen && selectedAlumni && (
- <OverlayWrapper>
- <Backdrop isOpen={pindahUnitModalOpen} onOpenChange={setPindahUnitModalOpen} />
- <Dialog isOpen={pindahUnitModalOpen} onOpenChange={setPindahUnitModalOpen} className="max-w-md w-full rounded-xl p-6 border border-emerald-200/80 bg-white shadow-2xl dark:border-emerald-800/60 dark:bg-[#1B2433]">
- <DialogHeader className="pb-3 border-b border-emerald-200/80 dark:border-emerald-800/60">
- <DialogTitle className="flex items-center gap-3 text-base font-bold text-amber-600 dark:text-amber-400">
- <div className="p-2.5 rounded-xl bg-amber-50 text-amber-600 dark:bg-amber-950/60 dark:text-amber-400 shrink-0 shadow-xs">
- <ArrowRightLeft className="w-5 h-5" />
- </div>
- <div>
- <div>Pindahkan Siswa Dari Unit Asal</div>
- <DialogDescription className="text-xs font-normal text-slate-500 dark:text-slate-400 mt-0.5">
- Memindahkan <span className="font-bold text-slate-800 dark:text-slate-200">{selectedAlumni.full_name || selectedAlumni.nama}</span> ke unit baru.
- </DialogDescription>
- </div>
- </DialogTitle>
- </DialogHeader>
-
- <form onSubmit={handleSavePindahUnit}>
- <DialogBody className="space-y-4 py-4 text-slate-700 dark:text-slate-200">
+ {/* ── 3. MODAL KONFIRMASI PINDAH UNIT (INTERNAL) (AppModal) ─────────────────────────── */}
+ <AppModal
+   isOpen={pindahUnitModalOpen && !!selectedAlumni}
+   onClose={() => !submitting && setPindahUnitModalOpen(false)}
+   title="Pindahkan Siswa Dari Unit Asal"
+   badge="Mutasi Internal"
+   description={`Memindahkan ${selectedAlumni?.full_name || selectedAlumni?.nama || ''} ke unit baru.`}
+   icon={ArrowRightLeft}
+   variant="warning"
+   maxWidth="max-w-md"
+   zIndex={60}
+   disableBackdropClose={submitting}
+   footer={
+     <>
+       <Button
+         type="button"
+         variant="ghost"
+         disabled={submitting}
+         onClick={() => setPindahUnitModalOpen(false)}
+         className="bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 rounded-xl h-9.5 px-4 font-black border border-slate-300 dark:border-slate-700 active:scale-95"
+       >
+         Batal
+       </Button>
+       <Button
+         variant="warning"
+         size="sm"
+         type="submit"
+         form="pindah-unit-form"
+         pending={submitting}
+         className="bg-amber-600 hover:bg-amber-700 text-white rounded-xl h-9.5 px-5 font-black border-2 border-amber-600 shadow-md shadow-amber-600/20 active:scale-95"
+       >
+         Pindahkan & Lepas dari Unit Asal
+       </Button>
+     </>
+   }
+ >
+ {selectedAlumni && (
+ <form id="pindah-unit-form" onSubmit={handleSavePindahUnit} className="space-y-4">
  <Alert variant="warning" className="text-xs rounded-xl border-emerald-200/80 dark:border-emerald-800/60 bg-amber-50/80 dark:border-emerald-800/60 dark:bg-amber-950/30">
  <AlertTitle className="font-semibold text-amber-900 dark:text-amber-300">Pelepasan Dari Unit Asal</AlertTitle>
  <AlertDescription className="text-xs text-amber-800 dark:text-amber-400 mt-0.5">
@@ -3117,42 +3129,48 @@ export default function KelolaAlumniPage() {
  className="w-full h-9 text-xs rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 dark:border-emerald-700/80 px-3.5 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
- </DialogBody>
-
- <DialogFooter className="gap-2.5 pt-4 border-t border-emerald-200/80 dark:border-emerald-800/80">
- <DialogClose appearance="outline" size="sm" type="button" disabled={submitting}>
- Batal
- </DialogClose>
-              <Button variant="warning" size="sm" type="submit" pending={submitting} className="font-bold px-4">
-                Pindahkan & Lepas dari Unit Asal
-              </Button>
-            </DialogFooter>
  </form>
- </Dialog>
- </OverlayWrapper>
  )}
+ </AppModal>
 
- {/* ── 4. MODAL KONFIRMASI PINDAH KELUAR (SEKOLAH LAIN) ────────────────────── */}
- {pindahKeluarModalOpen && selectedAlumni && (
- <OverlayWrapper>
- <Backdrop isOpen={pindahKeluarModalOpen} onOpenChange={setPindahKeluarModalOpen} />
- <Dialog isOpen={pindahKeluarModalOpen} onOpenChange={setPindahKeluarModalOpen} className="max-w-md w-full rounded-xl p-6 border border-emerald-200/80 bg-white shadow-2xl dark:border-emerald-800/60 dark:bg-[#1B2433]">
- <DialogHeader className="pb-3 border-b border-emerald-200/80 dark:border-emerald-800/60">
- <DialogTitle className="flex items-center gap-3 text-base font-bold text-rose-600 dark:text-rose-400">
- <div className="p-2.5 rounded-xl bg-rose-50 text-rose-600 dark:bg-rose-950/60 dark:text-rose-400 shrink-0 shadow-xs">
- <UserX className="w-5 h-5" />
- </div>
- <div>
- <div>Proses Mutasi Keluar di Lain Sekolah</div>
- <DialogDescription className="text-xs font-normal text-slate-500 dark:text-slate-400 mt-0.5">
- Mutasi keluar siswa <span className="font-bold text-slate-800 dark:text-slate-200">{selectedAlumni.full_name || selectedAlumni.nama}</span> ke sekolah lain di luar yayasan.
- </DialogDescription>
- </div>
- </DialogTitle>
- </DialogHeader>
-
- <form onSubmit={handleSavePindahKeluar}>
- <DialogBody className="space-y-4 py-4 text-slate-700 dark:text-slate-200">
+ {/* ── 4. MODAL KONFIRMASI PINDAH KELUAR (SEKOLAH LAIN) (AppModal) ────────────────────── */}
+ <AppModal
+   isOpen={pindahKeluarModalOpen && !!selectedAlumni}
+   onClose={() => !submitting && setPindahKeluarModalOpen(false)}
+   title="Proses Mutasi Keluar di Lain Sekolah"
+   badge="Mutasi Keluar"
+   description={`Mutasi keluar siswa ${selectedAlumni?.full_name || selectedAlumni?.nama || ''} ke sekolah lain di luar yayasan.`}
+   icon={UserX}
+   variant="danger"
+   maxWidth="max-w-md"
+   zIndex={60}
+   disableBackdropClose={submitting}
+   footer={
+     <>
+       <Button
+         type="button"
+         variant="ghost"
+         disabled={submitting}
+         onClick={() => setPindahKeluarModalOpen(false)}
+         className="bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 rounded-xl h-9.5 px-4 font-black border border-slate-300 dark:border-slate-700 active:scale-95"
+       >
+         Batal
+       </Button>
+       <Button
+         variant="danger"
+         size="sm"
+         type="submit"
+         form="pindah-keluar-form"
+         pending={submitting}
+         className="bg-rose-600 hover:bg-rose-700 text-white rounded-xl h-9.5 px-5 font-black border-2 border-rose-600 shadow-md shadow-rose-600/20 active:scale-95"
+       >
+         Proses & Hapus Dari Unit
+       </Button>
+     </>
+   }
+ >
+ {selectedAlumni && (
+ <form id="pindah-keluar-form" onSubmit={handleSavePindahKeluar} className="space-y-4">
  <Alert variant="error" className="text-xs rounded-xl border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/80 dark:border-emerald-800/60 dark:bg-rose-950/30">
  <AlertTitle className="font-semibold text-rose-900 dark:text-rose-300">Pelepasan Data Unit</AlertTitle>
  <AlertDescription className="text-xs text-rose-800 dark:text-rose-400 mt-0.5">
@@ -3182,20 +3200,9 @@ export default function KelolaAlumniPage() {
  className="w-full h-9 text-xs rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-slate-900 dark:border-emerald-700/80 px-3.5 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
- </DialogBody>
-
- <DialogFooter className="gap-2.5 pt-4 border-t border-emerald-200/80 dark:border-emerald-800/80">
- <DialogClose appearance="outline" size="sm" type="button" disabled={submitting}>
- Batal
- </DialogClose>
- <Button variant="danger" size="sm" type="submit" pending={submitting} className="font-bold px-4">
- Proses & Hapus Dari Unit
- </Button>
- </DialogFooter>
  </form>
- </Dialog>
- </OverlayWrapper>
  )}
+ </AppModal>
 
  {/* ── 5. CONFIRM DIALOG HAPUS DATA ALUMNI (HeroUI AlertDialog) ───────────── */}
  <ConfirmDialog
@@ -3209,36 +3216,30 @@ export default function KelolaAlumniPage() {
  isDanger
  />
 
- {/* ── 6. MODAL POPUP DETAIL SISWA CARD (HeroUI Dialog) ───────────── */}
- {cardModalOpen && (
- <OverlayWrapper>
- <Backdrop isOpen={cardModalOpen} onOpenChange={setCardModalOpen} />
- <Dialog isOpen={cardModalOpen} onOpenChange={setCardModalOpen} className="max-w-4xl w-full rounded-xl p-6 border border-emerald-200/80 bg-white shadow-2xl dark:border-emerald-800/60 dark:bg-[#1B2433]">
- <DialogHeader className="pb-3 border-b border-emerald-200/80 dark:border-emerald-800/60">
- <DialogTitle className="flex items-center gap-3 text-base font-bold text-slate-900 dark:text-slate-100">
- <div className={`p-2.5 rounded-xl ${
- cardModalData.tone === 'blue' ? 'bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400' :
- cardModalData.tone === 'amber' ? 'bg-amber-50 text-amber-600 dark:bg-amber-950/60 dark:text-amber-400' :
- cardModalData.tone === 'rose' ? 'bg-rose-50 text-rose-600 dark:bg-rose-950/60 dark:text-rose-400' :
- 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400'
- } shrink-0 shadow-xs`}>
- <cardModalData.icon className="w-5 h-5" />
- </div>
- <div>
- <div className="flex items-center gap-2">
- <span>{cardModalData.title}</span>
- <AppBadge variant={cardModalData.tone === 'rose' ? 'error' : cardModalData.tone === 'amber' ? 'warning' : cardModalData.tone === 'blue' ? 'cyan' : 'success'}>
- {cardModalData.list.length} Siswa
- </AppBadge>
- </div>
- <DialogDescription className="text-xs font-normal text-slate-500 dark:text-slate-400 mt-0.5">
- {cardModalData.description}
- </DialogDescription>
- </div>
- </DialogTitle>
- </DialogHeader>
-
- <DialogBody className="space-y-4 py-4 max-h-[65vh] overflow-y-auto pr-1 text-slate-700 dark:text-slate-200">
+ {/* ── 6. MODAL POPUP DETAIL SISWA CARD (AppModal) ───────────── */}
+ <AppModal
+   isOpen={cardModalOpen && !!cardModalData}
+   onClose={() => setCardModalOpen(false)}
+   title={cardModalData?.title || ''}
+   badge={`${cardModalData?.list?.length ?? 0} Siswa`}
+   description={cardModalData?.description || ''}
+   icon={cardModalData?.icon}
+   variant={cardModalData?.tone === 'rose' ? 'danger' : cardModalData?.tone === 'amber' ? 'warning' : 'emerald'}
+   maxWidth="max-w-4xl"
+   zIndex={60}
+   footer={
+     <Button
+       type="button"
+       variant="ghost"
+       onClick={() => setCardModalOpen(false)}
+       className="bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 rounded-xl h-9.5 px-4 font-black border border-slate-300 dark:border-slate-700 active:scale-95"
+     >
+       Tutup
+     </Button>
+   }
+ >
+ {cardModalData && (
+ <div className="space-y-4">
  {/* Input Filter Cari Cepat di Dalam Modal */}
  <div className="flex items-center gap-2">
  <Input
@@ -3412,37 +3413,49 @@ export default function KelolaAlumniPage() {
  </tbody>
  </table>
  </div>
- </DialogBody>
-
- <DialogFooter className="gap-2.5 pt-4 border-t border-emerald-200/80 dark:border-emerald-800/80">
- <DialogClose appearance="outline" size="sm" type="button">
- Tutup
- </DialogClose>
- </DialogFooter>
- </Dialog>
- </OverlayWrapper>
+ </div>
  )}
+ </AppModal>
 
- {/* ── 7. MODAL DETAIL ALUMNI (HeroUI Dialog Interactive Popup) ───────────── */}
- {detailModalOpen && selectedAlumniDetail && (
- <OverlayWrapper>
- <Backdrop isOpen={detailModalOpen} onOpenChange={setDetailModalOpen} />
- <Dialog isOpen={detailModalOpen} onOpenChange={setDetailModalOpen} className="max-w-xl w-full rounded-xl p-6 border border-emerald-200/80 bg-white shadow-2xl dark:border-emerald-800/60 dark:bg-[#1B2433]">
- <DialogHeader className="pb-3 border-b border-emerald-200/80 dark:border-emerald-800/60">
- <DialogTitle className="flex items-center gap-3 text-base font-bold text-slate-900 dark:text-slate-100">
- <div className="p-2.5 rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400 shrink-0 shadow-xs">
- <GraduationCap className="w-5 h-5" />
- </div>
- <div>
- <div>Rincian Profil Alumni & Kelanjutan Studi</div>
- <DialogDescription className="text-xs font-normal text-slate-500 dark:text-slate-400 mt-0.5">
- Informasi lengkap biodata siswa/alumni, riwayat unit sekolah asal, dan status tujuan studi / karir.
- </DialogDescription>
- </div>
- </DialogTitle>
- </DialogHeader>
-
- <DialogBody className="space-y-5 py-4 max-h-[75vh] overflow-y-auto text-slate-700 dark:text-slate-200">
+ {/* ── 7. MODAL DETAIL ALUMNI (AppModal) ───────────── */}
+ <AppModal
+   isOpen={detailModalOpen && !!selectedAlumniDetail}
+   onClose={() => setDetailModalOpen(false)}
+   title="Rincian Profil Alumni & Kelanjutan Studi"
+   badge="Profil Alumni"
+   description="Informasi lengkap biodata siswa/alumni, riwayat unit sekolah asal, dan status tujuan studi / karir."
+   icon={GraduationCap}
+   variant="emerald"
+   maxWidth="max-w-xl"
+   zIndex={60}
+   footer={
+     <>
+       <Button
+         type="button"
+         variant="ghost"
+         onClick={() => setDetailModalOpen(false)}
+         className="bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 rounded-xl h-9.5 px-4 font-black border border-slate-300 dark:border-slate-700 active:scale-95"
+       >
+         Tutup
+       </Button>
+       <Button
+         variant="primary"
+         size="sm"
+         type="button"
+         onClick={() => {
+           setDetailModalOpen(false)
+           handleOpenUbahTujuan(selectedAlumniDetail)
+         }}
+         className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl h-9.5 px-5 font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 active:scale-95 gap-2"
+       >
+         <School className="w-4 h-4" />
+         Ubah Tujuan Lanjut
+       </Button>
+     </>
+   }
+ >
+ {selectedAlumniDetail && (
+ <div className="space-y-5">
  {/* Header Banner Identity */}
  <div className="flex items-start gap-4 p-4 rounded-xl bg-slate-50 border border-emerald-200/80 dark:bg-slate-900/50 dark:border-emerald-800/60">
  <PersonIdentityCell
@@ -3528,51 +3541,47 @@ export default function KelolaAlumniPage() {
  <p className="italic font-medium">"{selectedAlumniDetail.metadata.catatan_alumni}"</p>
  </div>
  )}
- </DialogBody>
-
- <DialogFooter className="gap-2.5 pt-4 border-t border-emerald-200/80 dark:border-emerald-800/80">
- <DialogClose appearance="outline" size="sm" type="button">
- Tutup
- </DialogClose>
- <Button
- variant="primary"
- size="sm"
- type="button"
- onClick={() => {
- setDetailModalOpen(false)
- handleOpenUbahTujuan(selectedAlumniDetail)
- }}
- className="gap-2 font-bold px-4"
- >
- <School className="w-4 h-4" />
- Ubah Tujuan Lanjut
- </Button>
- </DialogFooter>
- </Dialog>
- </OverlayWrapper>
+ </div>
  )}
+ </AppModal>
 
- {/* ── 8. MODAL DEDICATED UBAH TUJUAN LANJUT SEKOLAH / PTN ───────────── */}
- {tujuanModalOpen && (
- <OverlayWrapper>
- <Backdrop isOpen={tujuanModalOpen} onOpenChange={setTujuanModalOpen} />
- <Dialog isOpen={tujuanModalOpen} onOpenChange={setTujuanModalOpen} className="max-w-xl w-full rounded-xl p-6 border border-emerald-200/80 bg-white shadow-2xl dark:border-emerald-800/60 dark:bg-[#1B2433]">
- <DialogHeader className="pb-3 border-b border-emerald-200/80 dark:border-emerald-800/60">
- <DialogTitle className="flex items-center gap-3 text-base font-bold text-slate-900 dark:text-slate-100">
- <div className="p-2.5 rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 shrink-0 shadow-xs">
- <School className="w-5 h-5" />
- </div>
- <div>
- <div>Ubah Tujuan Lanjut Sekolah / PTN</div>
- <DialogDescription className="text-xs font-normal text-slate-500 dark:text-slate-400 mt-0.5">
- Perbarui informasi sekolah lanjutan, PTN/perguruan tinggi, atau status karir alumni {selectedAlumni?.full_name || selectedAlumni?.nama || ''}.
- </DialogDescription>
- </div>
- </DialogTitle>
- </DialogHeader>
-
- <form onSubmit={handleSaveUbahTujuan}>
- <DialogBody className="space-y-4 py-4 max-h-[70vh] overflow-y-auto text-slate-700 dark:text-slate-200">
+ {/* ── 8. MODAL DEDICATED UBAH TUJUAN LANJUT SEKOLAH / PTN (AppModal) ───────────── */}
+ <AppModal
+   isOpen={tujuanModalOpen}
+   onClose={() => !submitting && setTujuanModalOpen(false)}
+   title="Ubah Tujuan Lanjut Sekolah / PTN"
+   badge="Tujuan Lanjut"
+   description={`Perbarui informasi sekolah lanjutan, PTN/perguruan tinggi, atau status karir alumni ${selectedAlumni?.full_name || selectedAlumni?.nama || ''}.`}
+   icon={School}
+   variant="emerald"
+   maxWidth="max-w-xl"
+   zIndex={60}
+   disableBackdropClose={submitting}
+   footer={
+     <>
+       <Button
+         type="button"
+         variant="ghost"
+         disabled={submitting}
+         onClick={() => setTujuanModalOpen(false)}
+         className="bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 rounded-xl h-9.5 px-4 font-black border border-slate-300 dark:border-slate-700 active:scale-95"
+       >
+         Batal
+       </Button>
+       <Button
+         variant="primary"
+         size="sm"
+         type="submit"
+         form="ubah-tujuan-form"
+         pending={submitting}
+         className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl h-9.5 px-5 font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 active:scale-95"
+       >
+         Simpan Perubahan
+       </Button>
+     </>
+   }
+ >
+ <form id="ubah-tujuan-form" onSubmit={handleSaveUbahTujuan} className="space-y-4">
  <div className="space-y-1.5">
  <FieldLabel className="text-xs font-bold">Status Kelanjutan Studi / Karir</FieldLabel>
  <HeroUiFilterSelect
@@ -3648,20 +3657,8 @@ export default function KelolaAlumniPage() {
  className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-3 text-xs dark:border-emerald-700/80 dark:bg-slate-900 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20"
  />
  </div>
- </DialogBody>
-
- <DialogFooter className="gap-2.5 pt-4 border-t border-emerald-200/80 dark:border-emerald-800/80">
- <DialogClose appearance="outline" size="sm" type="button" disabled={submitting}>
- Batal
- </DialogClose>
- <Button variant="primary" size="sm" type="submit" pending={submitting} className="font-bold px-5">
- Simpan Perubahan
- </Button>
- </DialogFooter>
  </form>
- </Dialog>
- </OverlayWrapper>
- )}
+ </AppModal>
 
  {/* CsvImportModal for Alumni */}
  <CsvImportModal

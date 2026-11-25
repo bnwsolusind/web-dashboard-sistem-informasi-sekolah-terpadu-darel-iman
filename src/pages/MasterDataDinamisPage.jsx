@@ -29,6 +29,7 @@ import {
   ChevronDown
 } from 'lucide-react'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
+import AppModal from '../components/app/AppModal'
 import AppTabs from '../components/app/AppTabs'
 import { StandardSubTabs } from '../components/app/StandardSubTabs'
 import HeroUiHeader from '../components/ui/HeroUiHeader'
@@ -962,29 +963,40 @@ export default function MasterDataDinamisPage() {
       </div>
       )}
  {/* ── MODAL FORM OPSI BISNIS ── */}
- <AnimatePresence>
- {isOptionModalOpen && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.95 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.95 }}
- className="w-full max-w-lg rounded-xl bg-white dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xl overflow-hidden"
- >
- <div className="p-6">
- <div className="flex items-center justify-between mb-4">
- <h3 className="text-lg font-black text-slate-800 dark:text-slate-100">
- {editingOption ? 'Ubah Opsi Bisnis' : 'Tambah Opsi Bisnis Baru'}
- </h3>
- <button
- onClick={() => setIsOptionModalOpen(false)}
- className="p-1 rounded-xl text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300"
- >
- <X className="w-5 h-5" />
- </button>
- </div>
-
- <form onSubmit={handleSaveOption} className="space-y-4">
+      <AppModal
+        isOpen={isOptionModalOpen}
+        onClose={() => !isSubmittingOption && setIsOptionModalOpen(false)}
+        title={editingOption ? 'Ubah Opsi Bisnis' : 'Tambah Opsi Bisnis Baru'}
+        badge={editingOption ? 'Perbarui' : 'Opsi Baru'}
+        description="Kelola daftar pilihan dropdown dan parameter bisnis terpusat."
+        icon={Sliders}
+        maxWidth="max-w-lg"
+        disableBackdropClose={isSubmittingOption}
+        hideCloseButton={isSubmittingOption}
+        footer={
+          <>
+            <button
+              type="button"
+              disabled={isSubmittingOption}
+              onClick={() => setIsOptionModalOpen(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="submit"
+              form="dinamis-option-form"
+              disabled={isSubmittingOption}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+            >
+              {isSubmittingOption ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+              <span>{isSubmittingOption ? 'Menyimpan...' : 'Simpan Opsi'}</span>
+            </button>
+          </>
+        }
+      >
+        <form id="dinamis-option-form" onSubmit={handleSaveOption} className="space-y-4">
  <div>
  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
  Kelompok / Grup Opsi
@@ -1086,54 +1098,43 @@ export default function MasterDataDinamisPage() {
  </label>
  </div>
 
- <div className="flex items-center justify-end gap-2 pt-4 border-t border-emerald-200/80 dark:border-emerald-800/60">
- <button
- type="button"
- onClick={() => setIsOptionModalOpen(false)}
- className="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300"
- >
- Batal
- </button>
- <button
- type="submit"
- disabled={isSubmittingOption}
- className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-emerald-600 text-white text-xs sm:text-sm font-bold shadow-md shadow-xs h-9"
- >
- {isSubmittingOption ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
- <span>Simpan Opsi</span>
- </button>
- </div>
- </form>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+        </form>
+      </AppModal>
 
- {/* ── MODAL FORM GENERATOR CONFIG ── */}
- <AnimatePresence>
- {isConfigModalOpen && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.95 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.95 }}
- className="w-full max-w-lg rounded-xl bg-white dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/60 shadow-2xl overflow-hidden"
- >
- <div className="p-6">
- <div className="flex items-center justify-between mb-4">
- <h3 className="text-lg font-black text-slate-800 dark:text-slate-100">
- Ubah Pola Generator Kode
- </h3>
- <button
- onClick={() => setIsConfigModalOpen(false)}
- className="p-1 rounded-xl text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300"
- >
- <X className="w-5 h-5" />
- </button>
- </div>
-
- <form onSubmit={handleSaveConfig} className="space-y-4">
+      <AppModal
+        isOpen={isConfigModalOpen}
+        onClose={() => !isSubmittingConfig && setIsConfigModalOpen(false)}
+        title="Ubah Pola Generator Kode"
+        badge="Konfigurasi"
+        description="Sesuaikan format awalan dan pola penomoran otomatis entitas bisnis."
+        icon={Sliders}
+        maxWidth="max-w-lg"
+        disableBackdropClose={isSubmittingConfig}
+        hideCloseButton={isSubmittingConfig}
+        footer={
+          <>
+            <button
+              type="button"
+              disabled={isSubmittingConfig}
+              onClick={() => setIsConfigModalOpen(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="submit"
+              form="dinamis-config-form"
+              disabled={isSubmittingConfig}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+            >
+              {isSubmittingConfig ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+              <span>{isSubmittingConfig ? 'Menyimpan...' : 'Simpan Konfigurasi'}</span>
+            </button>
+          </>
+        }
+      >
+        <form id="dinamis-config-form" onSubmit={handleSaveConfig} className="space-y-4">
  <div>
  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
  Entitas Bisnis
@@ -1204,29 +1205,8 @@ export default function MasterDataDinamisPage() {
  />
  </div>
 
- <div className="flex items-center justify-end gap-2 pt-4 border-t border-emerald-200/80 dark:border-emerald-800/60">
- <button
- type="button"
- onClick={() => setIsConfigModalOpen(false)}
- className="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300"
- >
- Batal
- </button>
- <button
- type="submit"
- disabled={isSubmittingConfig}
- className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-emerald-600 text-white text-xs sm:text-sm font-bold shadow-md shadow-xs h-9"
- >
- {isSubmittingConfig ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
- <span>Simpan Pola</span>
- </button>
- </div>
- </form>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+        </form>
+      </AppModal>
 
  {/* Smart Floating Scroll Navigator */}
  <SmartScrollFab

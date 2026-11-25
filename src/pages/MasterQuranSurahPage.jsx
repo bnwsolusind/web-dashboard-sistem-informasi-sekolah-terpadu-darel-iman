@@ -31,6 +31,7 @@ import {
 } from 'lucide-react'
 import ActionDropdown from '../components/app/ActionDropdown'
 import AppDataTable from '../components/app/AppDataTable'
+import AppModal from '../components/app/AppModal'
 import MobileDataCard from '../components/app/MobileDataCard'
 import { equranService } from '../services/equranService'
 import PageContainer from '../components/app/PageContainer'
@@ -441,72 +442,65 @@ function ModernKpiCard({ icon: Icon, label, subtext, value, tag, ctaText = 'Liha
 }
 
 function HarmonizedDeleteModal({ isOpen, onClose, onConfirm, item, isSubmitting }) {
- if (!isOpen || !item) return null
-
- return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fadeIn">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex h-9 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:border-rose-800/60 dark:text-rose-400 shadow-md shadow-sm">
- <Trash2 className="h-6 w-6" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-rose-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
- Hapus Permanen
- </span>
- <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
- Hapus Data Surah?
- </h3>
- </div>
- </div>
-
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Apakah Anda yakin ingin menghapus data surah ini dari database? Tindakan ini tidak dapat dibatalkan.
- </p>
-
- <div className="rounded-xl border border-rose-200/80 bg-rose-50/50 p-3.5 dark:border-rose-800/60 dark:bg-rose-950/20 mb-5">
- <div className="flex items-center justify-between">
- <p className="text-xs font-black text-rose-950 dark:text-rose-100">
- #{item?.nomor} • Surah {item?.nama_latin}
- </p>
- <span className="font-serif text-sm font-bold text-rose-800 dark:text-rose-300">
- {item?.nama}
- </span>
- </div>
- <p className="text-xs text-rose-800/80 dark:text-rose-300/80 mt-1">
- Tempat Turun: {item?.tempat_turun} • Jumlah: {item?.jumlah_ayat} Ayat
- </p>
- </div>
-
- <div className="flex items-center justify-end gap-3">
- <button
- type="button"
- onClick={onClose}
- disabled={isSubmitting}
- className="rounded-xl border border-emerald-200/80 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all cursor-pointer"
- >
- Batal
- </button>
- <button
- type="button"
- onClick={onConfirm}
- disabled={isSubmitting}
- className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white px-5 py-2 text-xs font-bold text-white shadow-md shadow-sm hover:brightness-105 disabled:opacity-50 transition-all cursor-pointer"
- >
- {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
- Hapus Surah
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )
+  return (
+    <AppModal
+      isOpen={Boolean(isOpen && item)}
+      onClose={() => !isSubmitting && onClose()}
+      title="Hapus Data Surah?"
+      badge="Hapus Permanen"
+      description="Tindakan ini tidak dapat dibatalkan."
+      icon={Trash2}
+      variant="danger"
+      maxWidth="max-w-md"
+      zIndex={70}
+      disableBackdropClose={isSubmitting}
+      hideCloseButton={isSubmitting}
+      bodyClassName="space-y-4"
+      footer={
+        <>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isSubmitting}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={isSubmitting}
+            className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20 disabled:opacity-50"
+          >
+            {isSubmitting ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+            <span>Hapus Surah</span>
+          </button>
+        </>
+      }
+    >
+      {item && (
+        <>
+          <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            Apakah Anda yakin ingin menghapus data surah ini dari database? Tindakan ini tidak dapat dibatalkan.
+          </p>
+          <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-rose-50/50 p-3.5 dark:bg-rose-950/20">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-black text-rose-950 dark:text-rose-100">
+                #{item?.nomor} • Surah {item?.nama_latin}
+              </p>
+              <span className="font-serif text-sm font-bold text-rose-800 dark:text-rose-300">
+                {item?.nama}
+              </span>
+            </div>
+            <p className="text-xs text-rose-800/80 dark:text-rose-300/80 mt-1">
+              Tempat Turun: {item?.tempat_turun} • Jumlah: {item?.jumlah_ayat} Ayat
+            </p>
+          </div>
+        </>
+      )}
+    </AppModal>
+  )
 }
 
 const emptySurah = {
@@ -1088,95 +1082,34 @@ export default function MasterQuranSurahPage() {
         />
 
  {/* MODAL DETAIL SURAH & RINCIAN AYAT (Harmonized Ayah Reader Modal - z-[70]) */}
- {showAyatModal && selectedSurahDetail && (
- <div className="fixed inset-0 z-[70] bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-fadeIn">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433] flex flex-col"
- >
- {/* Top Emerald Accent Line */}
-
- {/* Modal Header dengan Squircle 3D Icon Badge */}
- <div className="p-5 sm:p-6 border-b border-emerald-100/80 dark:border-emerald-900/40 bg-slate-50/50 dark:bg-slate-900/50 flex items-start justify-between gap-4 shrink-0">
- <div className="flex items-start gap-4">
- <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/70 text-emerald-700 dark:bg-emerald-950/40 dark:border-emerald-700/80 dark:text-emerald-300 shadow-md shadow-sm border-2 border-emerald-300">
- <BookOpen className="size-6 text-emerald-600" />
- </div>
- <div>
- <div className="flex items-center gap-2 flex-wrap">
- <span className="inline-block rounded-md bg-emerald-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
- Surah Ke-{selectedSurahDetail.nomor} • {selectedSurahDetail.tempat_turun}
- </span>
- <span className="rounded-md bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
- {selectedSurahDetail.jumlah_ayat} Ayat
- </span>
- </div>
- <div className="flex items-baseline gap-3 mt-1 flex-wrap">
- <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
- {selectedSurahDetail.nama_latin}
- </h2>
- <span className="text-xl font-serif font-bold text-emerald-700 dark:text-emerald-400">
- {selectedSurahDetail.nama}
- </span>
- </div>
- <p className="text-xs text-slate-500 dark:text-slate-400 italic mt-0.5">
- "{selectedSurahDetail.arti}"
- </p>
- </div>
- </div>
-
- <div className="flex items-center gap-2">
- {selectedSurahDetail.audio_full && (
- <button
- onClick={() => handlePlayAudio(selectedSurahDetail.audio_full)}
- className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${playingAudioUrl === selectedSurahDetail.audio_full
- ? 'bg-emerald-600 text-white shadow-md animate-pulse'
- : 'bg-emerald-100 text-emerald-900 hover:bg-emerald-200 dark:bg-emerald-950/80 dark:text-emerald-300'
- }`}
- >
- {playingAudioUrl === selectedSurahDetail.audio_full ? (
- <>
- <Pause className="w-3.5 h-3.5" /> Pause
- </>
- ) : (
- <>
- <Play className="w-3.5 h-3.5" /> Murottal Full
- </>
- )}
- </button>
- )}
-
- <button
- onClick={handleCloseAyatModal}
- className="rounded-xl p-1.5 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-600 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 dark:hover:text-slate-200 transition-colors cursor-pointer"
- >
- <X className="w-5 h-5" />
- </button>
- </div>
- </div>
-
- {/* Ayah Search Bar */}
- <div className="bg-slate-50 dark:bg-slate-900/60 border-b border-emerald-200/80 dark:border-emerald-800/60 px-5 py-2.5 flex items-center justify-between gap-4 shrink-0">
- <div className="relative flex-1 max-w-sm">
- <Search className="w-4 h-4 text-emerald-600 dark:text-emerald-400 absolute left-3 top-1/2 -translate-y-1/2" />
- <input
- type="text"
- value={ayatSearch}
- onChange={(e) => setAyatSearch(e.target.value)}
- placeholder="Cari nomor ayat atau teks terjemahan..."
- className="w-full pl-9 pr-4 py-1.5 bg-white dark:bg-slate-800 border border-emerald-200/80 dark:border-emerald-700/80 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-800 dark:text-slate-200"
- />
- </div>
-
- <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold hidden sm:inline">
- Menampilkan {filteredAyats.length} dari {ayats.length} Ayat
- </span>
- </div>
-
- {/* Ayah List Content */}
- <div className="p-5 sm:p-6 overflow-y-auto space-y-4 flex-1 bg-slate-50/50 dark:bg-slate-900/30">
+      <AppModal
+        isOpen={Boolean(showAyatModal && selectedSurahDetail)}
+        onClose={() => setShowAyatModal(false)}
+        title={selectedSurahDetail ? `Surah ${selectedSurahDetail.nama_latin} (${selectedSurahDetail.nama})` : 'Detail Surah'}
+        badge={selectedSurahDetail ? `QS. ${selectedSurahDetail.nomor} • ${selectedSurahDetail.jumlah_ayat} Ayat` : undefined}
+        description={selectedSurahDetail ? `${selectedSurahDetail.arti} • ${selectedSurahDetail.tempat_turun}` : undefined}
+        icon={BookOpen}
+        maxWidth="max-w-4xl"
+        zIndex={70}
+        bodyClassName="space-y-4 bg-slate-50/50 dark:bg-slate-900/30"
+        footer={
+          <div className="flex w-full items-center justify-between gap-3">
+            <span className="text-xs text-slate-500 dark:text-slate-400">
+              Sumber Data Al-Qur'an Resmi
+            </span>
+            <button
+              type="button"
+              onClick={() => setShowAyatModal(false)}
+              className="h-9.5 px-5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Tutup</span>
+            </button>
+          </div>
+        }
+      >
+        {selectedSurahDetail && (
+          <>
  {loadingAyat ? (
  <div className="p-16 text-center text-slate-400 flex flex-col items-center gap-3">
  <Loader2 className="w-10 h-9 animate-spin text-emerald-600" />
@@ -1237,52 +1170,47 @@ export default function MasterQuranSurahPage() {
  </div>
  ))
  )}
- </div>
+          </>
+        )}
+      </AppModal>
 
- {/* Modal Footer */}
- <div className="bg-white dark:bg-[#1B2433] border-t border-emerald-200/80 dark:border-emerald-800/60 px-6 py-4 flex items-center justify-between shrink-0">
- <span className="text-xs text-slate-500 dark:text-slate-400">
- Data resmi Kementerian Agama RI via EQuran.id API
- </span>
- <button
- onClick={handleCloseAyatModal}
- className="px-5 py-2 bg-slate-800 text-white text-xs font-bold rounded-lg transition-all cursor-pointer border border-emerald-600 h-9 text-sm font-medium"
- >
- Tutup Pembaca Ayat
- </button>
- </div>
- </motion.div>
- </div>
- )}
 
  {/* MODAL FORM ADD / EDIT (Harmonized Add/Edit Modal - z-[70]) */}
- {showModal && (
- <div className="fixed inset-0 z-[70] bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-lg overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- {/* Top Accent Line (Amber for edit, Emerald for new) */}
-
- <div className="p-6">
- {/* Dialog Header dengan Squircle 3D Icon Badge */}
- <div className="flex items-center gap-3.5 mb-5">
- <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-emerald-50 border border-emerald-200/80 text-emerald-600 shadow-sm">
- <BookOpen className="size-6 text-emerald-600" />
- </div>
- <div>
- <span className={`inline-block rounded-md px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider ${editingItem ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300' : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'}`}>
- {editingItem ? 'Perbarui Data' : 'Surah Baru'}
- </span>
- <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
- {editingItem ? `Edit Surah: ${editingItem.nama_latin}` : 'Tambah Surah Baru Manual'}
- </h3>
- </div>
- </div>
-
- <form onSubmit={handleSubmit} className="space-y-4">
+      <AppModal
+        isOpen={showModal}
+        onClose={() => !saving && setShowModal(false)}
+        title={editingItem ? `Edit Surah: ${editingItem.nama_latin}` : "Tambah Surah Al-Qur'an Manual"}
+        badge={editingItem ? 'Perbarui Data' : 'Surah Baru'}
+        description="Kelola data nomor surah, nama Arab/Latin, arti, dan jumlah ayat."
+        icon={BookOpen}
+        maxWidth="max-w-lg"
+        zIndex={70}
+        disableBackdropClose={saving}
+        hideCloseButton={saving}
+        footer={
+          <>
+            <button
+              type="button"
+              disabled={saving}
+              onClick={() => setShowModal(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="submit"
+              form="quran-surah-form"
+              disabled={saving}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+            >
+              {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
+              <span>{editingItem ? 'Simpan Perubahan' : 'Tambah Surah'}</span>
+            </button>
+          </>
+        }
+      >
+        <form id="quran-surah-form" onSubmit={handleSubmit} className="space-y-4">
  <div className="grid grid-cols-2 gap-4">
  <div>
  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Nomor Surah</label>
@@ -1365,28 +1293,8 @@ export default function MasterQuranSurahPage() {
  />
  </div>
 
- <div className="flex items-center justify-end gap-3 pt-4 border-t border-emerald-200/80 dark:border-emerald-800/60">
- <button
- type="button"
- onClick={() => setShowModal(false)}
- className="rounded-xl border border-emerald-200/80 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-slate-800 transition-all cursor-pointer"
- >
- Batal
- </button>
- <button
- type="submit"
- disabled={saving}
- className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 dark:bg-slate-100 dark:text-slate-900 dark: px-5 py-2 text-xs font-bold shadow-md shadow-sm hover:brightness-105 disabled:opacity-50 transition-all cursor-pointer text-white border border-emerald-600 h-9 text-sm font-medium"
- >
- {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
- <span>{editingItem ? 'Simpan Perubahan' : 'Tambah Surah'}</span>
- </button>
- </div>
- </form>
- </div>
- </motion.div>
- </div>
- )}
+        </form>
+      </AppModal>
 
  {/* Harmonized Delete Modal */}
  <HarmonizedDeleteModal

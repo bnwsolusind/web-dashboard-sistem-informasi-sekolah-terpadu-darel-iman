@@ -53,6 +53,7 @@ import {
   usePengaturanStore
 } from '../stores/pengaturanStore'
 import ActionDropdown from '../components/app/ActionDropdown'
+import AppModal from '../components/app/AppModal'
 import PageContainer from '../components/app/PageContainer'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
 import {
@@ -336,44 +337,20 @@ const getJenisBadgeColor = (j) => {
  }
 }
 function HarmonizedDeleteModal({ isOpen, onClose, onConfirm, item, isSubmitting }) {
- if (!isOpen || !item) return null
  const cnt = item?.ujian_count || 0
  return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex h-9 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 shadow-sm">
- <Trash2 className="h-6 w-6" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-rose-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
- Hapus Permanen
- </span>
- <h3 className="text-base font-bold text-slate-900 dark:text-white mt-0.5">
- Hapus Kisi-kisi?
- </h3>
- </div>
- </div>
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Apakah Anda yakin ingin menghapus kisi-kisi <strong className="text-slate-900 dark:text-white">"{item.judul_kisi || 'ini'}"</strong>?
- </p>
- {cnt > 0 && (
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/50 p-3 dark:border-emerald-800/60 dark:bg-rose-950/20 mb-6">
- <div className="flex items-start gap-2">
- <AlertTriangle className="h-4 w-4 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
- <p className="text-xs text-rose-800 dark:text-rose-300">
- Perhatian: Kisi-kisi ini masih dipakai di {cnt} ujian aktif. Menghapus data ini dapat berdampak pada konfigurasi ujian terkait.
- </p>
- </div>
- </div>
- )}
- <div className="flex items-center justify-end gap-3">
+ <AppModal
+ isOpen={Boolean(isOpen && item)}
+ onClose={onClose}
+ title="Hapus Kisi-kisi?"
+ badge="Hapus Permanen"
+ icon={Trash2}
+ variant="danger"
+ maxWidth="max-w-md"
+ zIndex={70}
+ disableBackdropClose={isSubmitting}
+ footer={
+ <>
  <button
  type="button"
  onClick={onClose}
@@ -386,14 +363,31 @@ function HarmonizedDeleteModal({ isOpen, onClose, onConfirm, item, isSubmitting 
  type="button"
  onClick={onConfirm}
  disabled={isSubmitting}
- className="h-9 px-5 rounded-xl bg-white dark:bg-[#1B2433] hover:from-rose-700 hover:to-red-700 text-xs font-extrabold shadow-sm transition cursor-pointer disabled:opacity-50"
+ className="h-9 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-extrabold shadow-sm transition cursor-pointer disabled:opacity-50"
  >
  {isSubmitting ? 'Menghapus...' : 'Ya, Hapus'}
  </button>
+ </>
+ }
+ >
+ {item && (
+ <>
+ <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+ Apakah Anda yakin ingin menghapus kisi-kisi <strong className="text-slate-900 dark:text-white">"{item.judul_kisi || 'ini'}"</strong>?
+ </p>
+ {cnt > 0 && (
+ <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/50 p-3 dark:border-emerald-800/60 dark:bg-rose-950/20">
+ <div className="flex items-start gap-2">
+ <AlertTriangle className="h-4 w-4 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
+ <p className="text-xs text-rose-800 dark:text-rose-300">
+ Perhatian: Kisi-kisi ini masih dipakai di {cnt} ujian aktif. Menghapus data ini dapat berdampak pada konfigurasi ujian terkait.
+ </p>
  </div>
  </div>
- </motion.div>
- </div>
+ )}
+ </>
+ )}
+ </AppModal>
  )
 }
 
@@ -1428,20 +1422,40 @@ export default function LmsKisiKisiPage({ embedded, hidePageHeader, tabNav, onNa
         />
 
  {/* Row Detail Modal */}
- {showRowDetailModal && rowDetailItem && (
- <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4" onClick={() => setShowRowDetailModal(false)}>
- <div className="bg-white dark:bg-[#1B2433] rounded-xl w-full max-w-lg shadow-2xl shadow-xs overflow-hidden" onClick={(e) => e.stopPropagation()}>
- <div className="flex items-start justify-between px-6 py-4 border-b border-emerald-200/80 dark:border-emerald-800/80 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] dark:from-emerald-950/30">
- <div className="flex items-start gap-3">
- <div className="w-10 h-9 rounded-xl bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 flex items-center justify-center shadow-sm shrink-0 mt-0.5"><FileText className="w-5 h-5 text-slate-600" /></div>
- <div>
- <h2 className="text-sm font-bold text-slate-900 dark:text-white leading-tight">{rowDetailItem.judul_kisi}</h2>
- <p className="text-xs text-slate-500 mt-0.5">{rowDetailItem.mata_pelajaran?.name || '-'} · {rowDetailItem.jenis_ujian || '-'}</p>
+ <AppModal
+ isOpen={Boolean(showRowDetailModal && rowDetailItem)}
+ onClose={() => setShowRowDetailModal(false)}
+ title={rowDetailItem?.judul_kisi || 'Detail Kisi-kisi'}
+ description={`${rowDetailItem?.mata_pelajaran?.name || '-'} · ${rowDetailItem?.jenis_ujian || '-'}`}
+ icon={FileText}
+ maxWidth="max-w-lg"
+ zIndex={50}
+ footer={
+ rowDetailItem ? (
+ <div className="flex items-center justify-between gap-3 w-full">
+ <button type="button" onClick={() => setShowRowDetailModal(false)} className="px-4 py-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-slate-600 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">Tutup</button>
+ <div className="flex items-center gap-2">
+ <button
+ type="button"
+ onClick={() => { setShowRowDetailModal(false); handleGoToBankSoal(rowDetailItem) }}
+ className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400 border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-semibold hover:bg-blue-100 transition-colors cursor-pointer">
+ <Plus className="w-3.5 h-3.5" />Buat Soal
+ </button>
+ <button type="button" onClick={() => { setShowRowDetailModal(false); handleDelete(rowDetailItem.id, rowDetailItem) }}
+ className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-semibold hover:bg-rose-100 transition-colors">
+ <Trash2 className="w-3.5 h-3.5" />Hapus
+ </button>
+ <button type="button" onClick={() => { setShowRowDetailModal(false); handleOpenModal(rowDetailItem) }}
+ className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#059669] text-white text-xs font-semibold hover:bg-emerald-700 transition-colors shadow-sm">
+ <Edit3 className="w-3.5 h-3.5" />Edit Data
+ </button>
  </div>
  </div>
- <button onClick={() => setShowRowDetailModal(false)} className="p-1.5 rounded-xl hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 text-slate-400 transition cursor-pointer"><X className="w-5 h-5" /></button>
- </div>
- <div className="px-6 py-4 space-y-4 max-h-[60vh] overflow-y-auto">
+ ) : null
+ }
+ >
+ {rowDetailItem && (
+ <>
  <div className="flex flex-wrap gap-2">
  <span className={`inline-block px-3 py-1 text-xs font-semibold rounded-full border ${getJenisBadgeColor(rowDetailItem.jenis_ujian)}`}>
  {getJenisFullName(rowDetailItem.jenis_ujian)}
@@ -1491,53 +1505,29 @@ export default function LmsKisiKisiPage({ embedded, hidePageHeader, tabNav, onNa
  <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-800 p-3 rounded-xl">{rowDetailItem.kompetensi_dasar}</p>
  </div>
  )}
- </div>
- <div className="px-6 py-4 border-t border-emerald-200/80 dark:border-emerald-700/80 flex items-center justify-between gap-3 bg-slate-50/50 dark:bg-slate-800/30">
- <button onClick={() => setShowRowDetailModal(false)} className="px-4 py-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-slate-600 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">Tutup</button>
- <div className="flex items-center gap-2">
- <button
- type="button"
- onClick={() => { setShowRowDetailModal(false); handleGoToBankSoal(rowDetailItem) }}
- className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400 border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-semibold hover:bg-blue-100 transition-colors cursor-pointer">
- <Plus className="w-3.5 h-3.5" />Buat Soal
- </button>
- <button onClick={() => { setShowRowDetailModal(false); handleDelete(rowDetailItem.id, rowDetailItem) }}
- className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-semibold hover:bg-rose-100 transition-colors">
- <Trash2 className="w-3.5 h-3.5" />Hapus
- </button>
- <button onClick={() => { setShowRowDetailModal(false); handleOpenModal(rowDetailItem) }}
- className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#059669] text-white text-xs font-semibold hover:bg-emerald-700 transition-colors shadow-sm">
- <Edit3 className="w-3.5 h-3.5" />Edit Data
- </button>
- </div>
- </div>
- </div>
- </div>
+ </>
  )}
+ </AppModal>
 
  {/* Create/Edit Modal */}
- {showModal && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md overflow-y-auto">
- <div className="relative w-full max-w-2xl bg-white dark:bg-[#1B2433] rounded-xl shadow-2xl shadow-xs overflow-hidden my-8">
- <div className="flex items-center justify-between px-6 py-5 border-b border-emerald-200/80 dark:border-emerald-800/80 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] dark:from-emerald-950/30">
- <div className="flex items-center gap-3">
- <div className="size-10 rounded-xl bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 flex items-center justify-center shadow-sm">
- <FileText className="size-5 text-emerald-600" />
- </div>
- <div>
- <h3 className="text-base font-bold text-slate-900 dark:text-white leading-tight">
- {editingItem ? 'Edit Kisi-kisi Ujian' : 'Buat Kisi-kisi Ujian Baru'}
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- {editingItem ? 'Perbarui rincian capaian pembelajaran & sebaran soal' : 'Definisikan kisi-kisi dan distribusi bobot soal ujian'}
- </p>
- </div>
- </div>
- <button onClick={() => setShowModal(false)} className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-xl transition cursor-pointer">
- <X className="size-5" />
+ <AppModal
+ isOpen={showModal}
+ onClose={() => setShowModal(false)}
+ title={editingItem ? 'Edit Kisi-kisi Ujian' : 'Buat Kisi-kisi Ujian Baru'}
+ description={editingItem ? 'Perbarui rincian capaian pembelajaran & sebaran soal' : 'Definisikan kisi-kisi dan distribusi bobot soal ujian'}
+ icon={FileText}
+ maxWidth="max-w-2xl"
+ zIndex={50}
+ footer={
+ <>
+ <button type="button" onClick={() => setShowModal(false)} className="px-5 py-2.5 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-semibold rounded-xl hover:bg-slate-200 transition">Batal</button>
+ <button type="submit" form="lms-kisi-kisi-form" disabled={!!distribusiError} className="px-5 py-2.5 bg-[#059669] text-white text-sm font-semibold rounded-lg transition shadow-lg shadow-sm disabled:opacity-50 disabled:cursor-not-allowed border border-emerald-200/80 dark:border-emerald-800/60 h-9">
+ {editingItem ? 'Simpan Perubahan' : 'Buat Kisi-kisi'}
  </button>
- </div>
- <form onSubmit={handleSubmit} className="p-6 space-y-5 max-h-[80vh] overflow-y-auto">
+ </>
+ }
+ >
+ <form id="lms-kisi-kisi-form" onSubmit={handleSubmit} className="space-y-5">
  <div><label className={labelCls}>Judul Kisi-kisi Ujian *</label>
  <input type="text" required placeholder="Contoh: Kisi-kisi PTS Gasal Matematika Kelas 8" value={formData.judul_kisi} onChange={(e) => setFormData({ ...formData, judul_kisi: e.target.value })} className={inputCls} /></div>
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1708,16 +1698,8 @@ export default function LmsKisiKisiPage({ embedded, hidePageHeader, tabNav, onNa
  </button>
  <span className={`text-xs font-semibold ${formData.status ? 'text-emerald-600' : 'text-slate-400'}`}>{formData.status ? 'Aktif' : 'Nonaktif'}</span>
  </div>
- <div className="pt-4 border-t border-emerald-200/80 dark:border-emerald-700/80 flex justify-end gap-3">
- <button type="button" onClick={() => setShowModal(false)} className="px-5 py-2.5 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-semibold rounded-xl hover:bg-slate-200 transition">Batal</button>
- <button type="submit" disabled={!!distribusiError} className="px-5 py-2.5 bg-[#059669] text-white text-sm font-semibold rounded-lg transition shadow-lg shadow-sm disabled:opacity-50 disabled:cursor-not-allowed border border-emerald-200/80 dark:border-emerald-800/60 h-9">
- {editingItem ? 'Simpan Perubahan' : 'Buat Kisi-kisi'}
- </button>
- </div>
  </form>
- </div>
- </div>
- )}
+ </AppModal>
 
  <PrintOptionModal isOpen={isPrintModalOpen} onClose={() => setIsPrintModalOpen(false)}
  title="Opsi Cetak Data Kisi-kisi Ujian" subtitle="Pilih metode pencetakan atau unduh cetak biru kisi-kisi"

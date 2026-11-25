@@ -35,6 +35,7 @@ import {
 } from 'lucide-react'
 import AppBreadcrumb from '../../components/app/AppBreadcrumb'
 import PageContainer from '../../components/app/PageContainer'
+import AppModal from '../../components/app/AppModal'
 import {
   useToast
 } from '../../components/app'
@@ -785,192 +786,169 @@ export function FoundationProfilePage() {
         </motion.div>
 
         {/* MODAL EDIT PROFIL - HEROUI HARMONIZED STANDARD */}
-        {editModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fade-in">
-            <div className="relative bg-white dark:bg-[#1B2433] w-full max-w-lg rounded-3xl border-2 border-emerald-300 dark:border-emerald-700 shadow-2xl shadow-emerald-950/20 overflow-hidden">
-              <div className="h-1.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 w-full" />
-              <div className="px-6 py-4 border-b border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 flex items-center justify-center shadow-xs">
-                    <UserRound className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-black text-emerald-950 dark:text-white">Edit Informasi Pribadi</h3>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400">Perbarui informasi kontak dan data diri akun</p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setEditModalOpen(false)}
-                  className="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition cursor-pointer"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-
-              <form onSubmit={handleSaveProfile} className="p-6 space-y-4 text-xs">
-                <div className="space-y-1">
-                  <label className="font-bold text-slate-700 dark:text-slate-300">Nama Panggilan</label>
-                  <input
-                    type="text"
-                    placeholder="Contoh: Pak H. Ahmad"
-                    value={editForm.nama_panggilan}
-                    onChange={(e) => setEditForm({ ...editForm, nama_panggilan: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-emerald-50/20 dark:bg-emerald-950/20 border-2 border-emerald-300 dark:border-emerald-700/80 rounded-xl font-medium focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-900 dark:text-white"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="font-bold text-slate-700 dark:text-slate-300">Nomor HP / Whatsapp</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="08xxxxxxxxxx"
-                    value={editForm.phone}
-                    onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-emerald-50/20 dark:bg-emerald-950/20 border-2 border-emerald-300 dark:border-emerald-700/80 rounded-xl font-medium focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-900 dark:text-white"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="font-bold text-slate-700 dark:text-slate-300">Alamat Email</label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="email@domain.com"
-                    value={editForm.email}
-                    onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-emerald-50/20 dark:bg-emerald-950/20 border-2 border-emerald-300 dark:border-emerald-700/80 rounded-xl font-medium focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-900 dark:text-white"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="font-bold text-slate-700 dark:text-slate-300">Alamat Lengkap</label>
-                  <textarea
-                    rows={3}
-                    placeholder="Alamat domisili..."
-                    value={editForm.alamat}
-                    onChange={(e) => setEditForm({ ...editForm, alamat: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-emerald-50/20 dark:bg-emerald-950/20 border-2 border-emerald-300 dark:border-emerald-700/80 rounded-xl font-medium focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-900 dark:text-white"
-                  />
-                </div>
-
-                <div className="pt-3 flex items-center justify-end gap-2 border-t border-emerald-200/80 dark:border-emerald-800/60">
-                  <button
-                    type="button"
-                    onClick={() => setEditModalOpen(false)}
-                    className="inline-flex items-center justify-center rounded-xl border-2 border-rose-200 dark:border-rose-900/60 bg-rose-50 dark:bg-rose-950/30 px-4 py-2 text-xs font-bold text-rose-700 dark:text-rose-300 hover:bg-rose-100 transition cursor-pointer"
-                  >
-                    Batal
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={savingEdit}
-                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 text-xs font-extrabold shadow-md shadow-emerald-900/10 hover:scale-105 active:scale-95 transition-all cursor-pointer disabled:opacity-50"
-                  >
-                    {savingEdit ? (
-                      <>
-                        <RefreshCw className="h-3.5 w-3.5 animate-spin" />
-                        <span>Menyimpan...</span>
-                      </>
-                    ) : (
-                      <span>Simpan Perubahan</span>
-                    )}
-                  </button>
-                </div>
-              </form>
+        <AppModal
+          isOpen={editModalOpen}
+          onClose={() => setEditModalOpen(false)}
+          disableBackdropClose={savingEdit}
+          hideCloseButton={savingEdit}
+          icon={UserRound}
+          title="Edit Informasi Pribadi"
+          description="Perbarui informasi kontak dan data diri akun"
+          maxWidth="max-w-lg"
+          zIndex={50}
+          footer={
+            <div className="flex items-center justify-end gap-2.5 w-full">
+              <button
+                type="button"
+                onClick={() => setEditModalOpen(false)}
+                disabled={savingEdit}
+                className="inline-flex items-center justify-center rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 h-9.5 px-4 text-xs font-black text-slate-700 dark:text-slate-200 transition active:scale-95 cursor-pointer disabled:opacity-50"
+              >
+                Batal
+              </button>
+              <button
+                type="submit"
+                form="edit-profile-form"
+                disabled={savingEdit}
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white h-9.5 px-5 text-xs font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 active:scale-95 transition-all cursor-pointer disabled:opacity-50"
+              >
+                {savingEdit ? (
+                  <>
+                    <RefreshCw className="h-3.5 w-3.5 animate-spin" />
+                    <span>Menyimpan...</span>
+                  </>
+                ) : (
+                  <span>Simpan Perubahan</span>
+                )}
+              </button>
             </div>
-          </div>
-        )}
+          }
+        >
+          <form id="edit-profile-form" onSubmit={handleSaveProfile} className="space-y-4 text-xs">
+            <div className="space-y-1">
+              <label className="font-bold text-slate-700 dark:text-slate-300">Nama Panggilan</label>
+              <input
+                type="text"
+                placeholder="Contoh: Pak H. Ahmad"
+                value={editForm.nama_panggilan}
+                onChange={(e) => setEditForm({ ...editForm, nama_panggilan: e.target.value })}
+                className="w-full px-3.5 py-2.5 bg-emerald-50/20 dark:bg-emerald-950/20 border-2 border-[#b6f6d9] dark:border-emerald-700/80 rounded-xl font-medium focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-900 dark:text-white"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="font-bold text-slate-700 dark:text-slate-300">Nomor HP / Whatsapp</label>
+              <input
+                type="text"
+                required
+                placeholder="08xxxxxxxxxx"
+                value={editForm.phone}
+                onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
+                className="w-full px-3.5 py-2.5 bg-emerald-50/20 dark:bg-emerald-950/20 border-2 border-[#b6f6d9] dark:border-emerald-700/80 rounded-xl font-medium focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-900 dark:text-white"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="font-bold text-slate-700 dark:text-slate-300">Alamat Email</label>
+              <input
+                type="email"
+                required
+                placeholder="email@domain.com"
+                value={editForm.email}
+                onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                className="w-full px-3.5 py-2.5 bg-emerald-50/20 dark:bg-emerald-950/20 border-2 border-[#b6f6d9] dark:border-emerald-700/80 rounded-xl font-medium focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-900 dark:text-white"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="font-bold text-slate-700 dark:text-slate-300">Alamat Lengkap</label>
+              <textarea
+                rows={3}
+                placeholder="Alamat domisili..."
+                value={editForm.alamat}
+                onChange={(e) => setEditForm({ ...editForm, alamat: e.target.value })}
+                className="w-full px-3.5 py-2.5 bg-emerald-50/20 dark:bg-emerald-950/20 border-2 border-[#b6f6d9] dark:border-emerald-700/80 rounded-xl font-medium focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-900 dark:text-white"
+              />
+            </div>
+          </form>
+        </AppModal>
 
         {/* MODAL UBAH FOTO PROFIL - HEROUI HARMONIZED STANDARD */}
-        {avatarModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fade-in">
-            <div className="relative bg-white dark:bg-[#1B2433] w-full max-w-md rounded-3xl border-2 border-emerald-300 dark:border-emerald-700 shadow-2xl shadow-emerald-950/20 overflow-hidden">
-              <div className="h-1.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 w-full" />
-              <div className="px-6 py-4 border-b border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 flex items-center justify-center shadow-xs">
-                    <Camera className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-black text-emerald-950 dark:text-white">Ubah Foto Profil</h3>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400">Unggah foto profil formal terbaru</p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAvatarModalOpen(false)
-                    setSelectedFile(null)
-                    setPreviewUrl(null)
-                  }}
-                  className="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 transition cursor-pointer"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-
-              <div className="p-6 space-y-4 text-xs text-center">
-                <div className="w-32 h-32 mx-auto rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/30 border-2 border-dashed border-emerald-300 dark:border-emerald-700/80 overflow-hidden flex items-center justify-center relative shadow-inner">
-                  {previewUrl ? (
-                    <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
-                  ) : profile.foto ? (
-                    <img src={profile.foto} alt="Current" className="w-full h-full object-cover" />
-                  ) : (
-                    <Camera className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
-                  )}
-                </div>
-
-                <input
-                  type="file"
-                  accept="image/jpeg,image/png,image/jpg,image/webp"
-                  onChange={handleFileSelect}
-                  className="hidden"
-                  id="avatar-input"
-                />
-
-                <label
-                  htmlFor="avatar-input"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-50 dark:bg-emerald-950/40 border-2 border-emerald-300 dark:border-emerald-700/80 text-emerald-800 dark:text-emerald-200 font-extrabold text-xs rounded-xl cursor-pointer hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition shadow-xs"
-                >
-                  <Camera className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                  <span>Pilih File Foto</span>
-                </label>
-                <p className="text-[10px] text-slate-400">Format: JPG, JPEG, PNG, WebP. Ukuran maks 2MB.</p>
-
-                <div className="pt-3 flex items-center justify-end gap-2 border-t border-emerald-200/80 dark:border-emerald-800/60">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setAvatarModalOpen(false)
-                      setSelectedFile(null)
-                      setPreviewUrl(null)
-                    }}
-                    className="inline-flex items-center justify-center rounded-xl border-2 border-rose-200 dark:border-rose-900/60 bg-rose-50 dark:bg-rose-950/30 px-4 py-2 text-xs font-bold text-rose-700 dark:text-rose-300 hover:bg-rose-100 transition cursor-pointer"
-                  >
-                    Batal
-                  </button>
-                  <button
-                    type="button"
-                    disabled={!selectedFile || uploadingAvatar}
-                    onClick={handleUploadAvatar}
-                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 text-xs font-extrabold shadow-md shadow-emerald-900/10 hover:scale-105 active:scale-95 transition-all cursor-pointer disabled:opacity-50"
-                  >
-                    {uploadingAvatar ? (
-                      <>
-                        <RefreshCw className="h-3.5 w-3.5 animate-spin" />
-                        <span>Mengunggah...</span>
-                      </>
-                    ) : (
-                      <span>Unggah & Simpan</span>
-                    )}
-                  </button>
-                </div>
-              </div>
+        <AppModal
+          isOpen={avatarModalOpen}
+          onClose={() => {
+            setAvatarModalOpen(false)
+            setSelectedFile(null)
+            setPreviewUrl(null)
+          }}
+          disableBackdropClose={uploadingAvatar}
+          hideCloseButton={uploadingAvatar}
+          icon={Camera}
+          title="Ubah Foto Profil"
+          description="Unggah foto profil formal terbaru"
+          maxWidth="max-w-md"
+          zIndex={50}
+          footer={
+            <div className="flex items-center justify-end gap-2.5 w-full">
+              <button
+                type="button"
+                disabled={uploadingAvatar}
+                onClick={() => {
+                  setAvatarModalOpen(false)
+                  setSelectedFile(null)
+                  setPreviewUrl(null)
+                }}
+                className="inline-flex items-center justify-center rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 h-9.5 px-4 text-xs font-black text-slate-700 dark:text-slate-200 transition active:scale-95 cursor-pointer disabled:opacity-50"
+              >
+                Batal
+              </button>
+              <button
+                type="button"
+                disabled={!selectedFile || uploadingAvatar}
+                onClick={handleUploadAvatar}
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white h-9.5 px-5 text-xs font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 active:scale-95 transition-all cursor-pointer disabled:opacity-50"
+              >
+                {uploadingAvatar ? (
+                  <>
+                    <RefreshCw className="h-3.5 w-3.5 animate-spin" />
+                    <span>Mengunggah...</span>
+                  </>
+                ) : (
+                  <span>Unggah & Simpan</span>
+                )}
+              </button>
             </div>
+          }
+        >
+          <div className="space-y-4 text-xs text-center">
+            <div className="w-32 h-32 mx-auto rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/30 border-2 border-dashed border-emerald-300 dark:border-emerald-700/80 overflow-hidden flex items-center justify-center relative shadow-inner">
+              {previewUrl ? (
+                <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
+              ) : profile?.foto ? (
+                <img src={profile?.foto} alt="Current" className="w-full h-full object-cover" />
+              ) : (
+                <Camera className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
+              )}
+            </div>
+
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/jpg,image/webp"
+              onChange={handleFileSelect}
+              className="hidden"
+              id="avatar-input"
+            />
+
+            <label
+              htmlFor="avatar-input"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-50 dark:bg-emerald-950/40 border-2 border-emerald-300 dark:border-emerald-700/80 text-emerald-800 dark:text-emerald-200 font-extrabold text-xs rounded-xl cursor-pointer hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition shadow-xs"
+            >
+              <Camera className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <span>Pilih File Foto</span>
+            </label>
+            <p className="text-[10px] text-slate-400">Format: JPG, JPEG, PNG, WebP. Ukuran maks 2MB.</p>
           </div>
-        )}
+        </AppModal>
 
         {/* Smart Floating Scroll Navigator */}
         <SmartScrollFab targetId="tab-konten-profil" downTooltip="Langsung ke Konten Profil" />

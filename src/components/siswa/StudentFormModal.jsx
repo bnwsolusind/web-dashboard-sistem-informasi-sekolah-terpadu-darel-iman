@@ -1,5 +1,6 @@
 import { AppButton, IconButton } from '../app'
 import React, { useState, useEffect, useRef, useMemo } from 'react'
+import AppModal from '../app/AppModal'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
  GraduationCap,
@@ -1112,45 +1113,16 @@ export default function StudentFormModal({
  onChange: handleChange,
  })
 
- if (!isOpen) return null
-
- return (
- <div className="overlay modal fixed inset-0 z-50 flex items-start sm:items-center justify-center p-2 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto">
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-6xl py-2 sm:py-0"
- >
- <div className="modal-content flex max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#182232] dark:shadow-black/60">
-
- {/* Top Accent Gradient Bar */}
-
- {/* Modal Header — Clean Top with Icon Badge & Title */}
- <div className="modal-header flex shrink-0 items-center justify-between border-b border-emerald-100/80 bg-white px-4 py-3 sm:px-6 sm:py-4 dark:border-emerald-800/60 dark:bg-slate-950">
- <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
- <div className="flex size-9 sm:size-10 items-center justify-center rounded-lg bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 p-2 text-emerald-700 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shrink-0">
- <GraduationCap className="size-4 sm:size-5" />
- </div>
- <div className="min-w-0">
- <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
- <h2 className="modal-title text-lg font-semibold tracking-tight text-slate-900 dark:text-white ">
- {initialData ? 'Edit Data Siswa' : 'Tambah Siswa Baru'}
- </h2>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60 shrink-0">
- <Sparkles className="size-3" /> {initialData ? 'Update Data' : 'Siswa Baru'}
- </span>
- </div>
- <p className="mt-0.5 text-xs sm:text-xs text-slate-500 dark:text-slate-400 truncate">
- Langkah {activeStep + 1} dari 5 · {steps[activeStep]?.desc || steps[activeStep]?.title}
- </p>
- </div>
- </div>
- <IconButton icon={X} variant="ghost" size="sm" onClick={onClose} aria-label="Tutup modal" />
- </div>
-
- {/* Step Wizard Indicator (Standardized Horizontal Bar) */}
+  return (
+    <AppModal
+      isOpen={Boolean(isOpen)}
+      onClose={onClose}
+      title={initialData ? 'Edit Data Siswa' : 'Tambah Siswa Baru'}
+      badge={initialData ? 'Update Data' : 'Siswa Baru'}
+      description={`Langkah ${activeStep + 1} dari 5 · ${steps[activeStep]?.desc || steps[activeStep]?.title}`}
+      icon={GraduationCap}
+      maxWidth="max-w-6xl"
+      subHeader={
  <div className="shrink-0 border-b border-emerald-100/80 bg-slate-50/70 p-2 sm:px-6 dark:border-emerald-800/60 dark:bg-slate-900/50">
  <div className="grid grid-cols-5 gap-1 sm:gap-2">
  {steps.map((step, idx) => {
@@ -1179,8 +1151,52 @@ export default function StudentFormModal({
  </div>
  </div>
 
- {/* Form Content Area */}
- <div ref={modalBodyRef} className="min-h-0 flex-1 overflow-y-auto bg-white p-5 sm:p-6 dark:bg-[#182232]">
+      }
+      footer={
+        <div className="flex w-full items-center justify-between gap-2">
+          <button
+            type="button"
+            onClick={onClose}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <div className="flex items-center gap-2 sm:gap-2.5">
+            {activeStep > 0 && (
+              <button
+                type="button"
+                onClick={() => setActiveStep(prev => prev - 1)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+              >
+                <ArrowLeft className="size-4" />
+                <span>Kembali</span>
+              </button>
+            )}
+            {activeStep < steps.length - 1 ? (
+              <button
+                type="button"
+                onClick={handleNextStep}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+              >
+                <span>Selanjutnya</span>
+                <ArrowRight className="size-4" strokeWidth={2} />
+              </button>
+            ) : (
+              <button
+                type="submit"
+                form="student-main-form"
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+              >
+                <Save className="size-4" strokeWidth={2} />
+                <span>Simpan Data</span>
+              </button>
+            )}
+          </div>
+        </div>
+      }
+    >
+      <div ref={modalBodyRef} className="space-y-4">
  {/* In-Modal Alert Banner */}
  {modalError && (
  <div className="mb-5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/90 p-4 text-xs text-rose-800 dark:border-emerald-800/60 dark:bg-rose-950/50 dark:text-rose-300 flex items-start justify-between gap-3 shadow-xs animate-in fade-in duration-200">
@@ -1722,27 +1738,7 @@ export default function StudentFormModal({
  )}
 
  </form>
- </div>
-
- {/* Modal Footer — Canonical Unified Actions */}
- <div className="modal-footer flex shrink-0 items-center justify-between border-t border-emerald-100/80 bg-white px-4 py-3 sm:px-6 sm:py-4 dark:border-emerald-800/60 dark:bg-slate-950 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))] sm:pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
- <AppButton variant="ghost" size="md" icon={X} onClick={onClose}>Batal</AppButton>
-
- <div className="flex items-center gap-2 sm:gap-2.5">
- {activeStep > 0 && (
- <AppButton variant="outline" size="md" icon={ArrowLeft} onClick={() => setActiveStep(prev => prev - 1)}>Kembali</AppButton>
- )}
-
- {activeStep < steps.length - 1 ? (
- <AppButton variant="primary" size="md" onClick={handleNextStep}><span>Selanjutnya</span><ArrowRight className="size-4 ml-1.5" strokeWidth={2} /></AppButton>
- ) : (
- <AppButton variant="primary" size="md" icon={Save} type="submit" form="student-main-form">Simpan Data</AppButton>
- )}
- </div>
- </div>
-
- </div>
- </motion.div>
- </div>
- )
+      </div>
+    </AppModal>
+  )
 }

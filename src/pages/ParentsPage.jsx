@@ -29,6 +29,7 @@ import PageContainer from '../components/app/PageContainer'
 import HeroUiHeader from '../components/ui/HeroUiHeader'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
 import AppDataTable from '../components/app/AppDataTable'
+import PageToolbarActions from '../components/app/PageToolbarActions'
 import CsvImportModal from '../components/master-data/CsvImportModal'
 import {
  MasterFilterSelect,
@@ -300,75 +301,16 @@ export default function ParentsPage() {
  iconClassName="bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-700/80 dark:text-slate-300 border-2 border-emerald-300 shadow-sm"
  countLabel={`${Number(meta.total || parentList.length).toLocaleString('id-ID')} orang`}
  actions={
- <div className="flex items-center gap-2.5 flex-nowrap shrink-0 overflow-x-auto py-1">
- {/* Cetak Datatable Button - Vivid Indigo / Violet Squircle */}
- <div className="group relative inline-flex">
- <button
- type="button"
- title="Cetak Data Laporan (Print)"
- aria-label="Cetak Data Laporan"
- onClick={() => setIsPrintModalOpen(true)}
- className="flex size-10 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] border border-indigo-300/40 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer"
- >
- <Printer className="size-5 text-slate-600" strokeWidth={2.2} />
- </button>
- <div className="pointer-events-none absolute top-full left-1/2 mt-2 -translate-x-1/2 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-out z-50 whitespace-nowrap rounded-lg bg-emerald-950/95 border border-emerald-700/60 px-2.5 py-1 text-xs font-bold shadow-xl text-emerald-100 dark:bg-emerald-900/90 dark:text-emerald-100">
- <div className="absolute bottom-full left-1/2 -mb-1 -translate-x-1/2 border-4 border-transparent border-b-slate-900 dark:border-b-slate-100" />
- Cetak Data
- </div>
- </div>
-
- {/* Import Button (Vivid Sky Blue / Blue Squircle) */}
- <div className="group relative inline-flex">
- <button
- type="button"
- title="Import Data Orang Tua"
- aria-label="Import Data Orang Tua"
- className="flex size-10 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] border border-sky-300/40 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer"
- onClick={() => setIsImportOpen(true)}
- >
- <Upload className="size-5 text-slate-600" strokeWidth={2.2} />
- </button>
- <div className="pointer-events-none absolute top-full left-1/2 mt-2 -translate-x-1/2 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-out z-50 whitespace-nowrap rounded-lg bg-emerald-950/95 border border-emerald-700/60 px-2.5 py-1 text-xs font-bold shadow-xl text-emerald-100 dark:bg-emerald-900/90 dark:text-emerald-100">
- <div className="absolute bottom-full left-1/2 -mb-1 -translate-x-1/2 border-4 border-transparent border-b-slate-900 dark:border-b-slate-100" />
- Import Data
- </div>
- </div>
-
- {/* Export Button (Vivid Amber / Orange Squircle) */}
- <div className="group relative inline-flex">
- <button
- type="button"
- title="Export Data Orang Tua"
- aria-label="Export Data Orang Tua"
- className="flex size-10 items-center justify-center rounded-xl bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-700/80 dark:text-slate-300 border border-amber-300/40 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer"
- onClick={handleExport}
- >
- <Download className="size-5 text-slate-600" strokeWidth={2.2} />
- </button>
- <div className="pointer-events-none absolute top-full left-1/2 mt-2 -translate-x-1/2 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-out z-50 whitespace-nowrap rounded-lg bg-emerald-950/95 border border-emerald-700/60 px-2.5 py-1 text-xs font-bold shadow-xl text-emerald-100 dark:bg-emerald-900/90 dark:text-emerald-100">
- <div className="absolute bottom-full left-1/2 -mb-1 -translate-x-1/2 border-4 border-transparent border-b-slate-900 dark:border-b-slate-100" />
- Export Data
- </div>
- </div>
-
- {/* Tambah Button (Vivid Emerald / Teal Squircle) */}
- <div className="group relative inline-flex">
- <button
- type="button"
- title="Tambah Orang Tua / Wali Baru"
- aria-label="Tambah Orang Tua / Wali Baru"
- className="flex size-10 items-center justify-center rounded-xl bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-700/80 dark:text-slate-300 border-2 border-emerald-300 hover:scale-105 transition-all duration-200 active:scale-95 cursor-pointer"
- onClick={handleOpenCreate}
- >
- <Plus className="size-5 text-slate-600" strokeWidth={2.5} />
- </button>
- <div className="pointer-events-none absolute top-full left-1/2 mt-2 -translate-x-1/2 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-out z-50 whitespace-nowrap rounded-lg bg-emerald-950/95 border border-emerald-700/60 px-2.5 py-1 text-xs font-bold shadow-xl text-emerald-100 dark:bg-emerald-900/90 dark:text-emerald-100">
- <div className="absolute bottom-full left-1/2 -mb-1 -translate-x-1/2 border-4 border-transparent border-b-slate-900 dark:border-b-slate-100" />
- Tambah Orang Tua
- </div>
- </div>
- </div>
+ <PageToolbarActions
+ onPrint={() => setIsPrintModalOpen(true)}
+ printLabel="Cetak Data Laporan (Print)"
+ onImport={() => setIsImportOpen(true)}
+ importLabel="Import Data Orang Tua"
+ onExport={handleExport}
+ exportLabel="Export Data Orang Tua"
+ onAdd={handleOpenCreate}
+ addLabel="Tambah Orang Tua / Wali Baru"
+ />
  }
  search={search}
  onSearchChange={(value) => {

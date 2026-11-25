@@ -46,6 +46,7 @@ import { subjectService } from '../services/subjectService'
 import { useAuthStore } from '../stores/authStore'
 import { useUnitStore } from '../stores/unitStore'
 import ActionDropdown from '../components/app/ActionDropdown'
+import AppModal from '../components/app/AppModal'
 import PageContainer from '../components/app/PageContainer'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
 import { printCleanTable, downloadPdfTable } from '../utils/printHelper'
@@ -538,113 +539,18 @@ function HarmonizedBatchImportModal({ isOpen, onClose, onImportSuccess, notify }
   }
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.96 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.96 }}
-        className="relative w-full max-w-xl overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
-      >
-        <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 p-6 dark:border-emerald-800/60">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-10 items-center justify-center rounded-xl bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-800/60 dark:text-slate-300 shadow-md shadow-sm">
-              <Upload className="h-5 w-5" />
-            </div>
-            <div>
-              <h3 className="text-base font-black text-slate-900 dark:text-white">Impor Data Butir Bank Soal</h3>
-              <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Unggah berkas CSV atau XLSX berisi butir pertanyaan ujian.</p>
-            </div>
-          </div>
-          <button
-            onClick={onClose}
-            className="rounded-xl p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition-colors"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-
-        <div className="p-6 space-y-5">
-          {/* Download Template Card */}
-          <div className="flex items-center justify-between rounded-xl border border-emerald-200/80 bg-emerald-50/50 p-4 dark:border-emerald-900/60 dark:bg-emerald-950/20">
-            <div className="flex items-center gap-3">
-              <FileSpreadsheet className="h-8 w-8 text-emerald-600 dark:text-emerald-400 shrink-0" />
-              <div>
-                <p className="text-xs font-bold text-emerald-950 dark:text-emerald-200">Template Berkas Data Soal</p>
-                <p className="text-xs text-emerald-800/80 dark:text-emerald-400/80">Format standar untuk pilihan ganda, esai, dan tingkat kesulitan.</p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={handleDownloadTemplate}
-              className="inline-flex items-center gap-1.5 rounded-lg border-2 border-emerald-300/80 bg-white px-3.5 py-2 text-xs font-bold text-emerald-700 shadow-xs dark:border-emerald-700 dark:bg-emerald-600 dark:text-emerald-300 dark: transition-all text-sm font-medium"
-            >
-              <Download className="h-3.5 w-3.5" /> Unduh Format
-            </button>
-          </div>
-
-          {/* Dropzone */}
-          <div
-            onDragEnter={handleDrag}
-            onDragLeave={handleDrag}
-            onDragOver={handleDrag}
-            onDrop={handleDrop}
-            onClick={() => fileInputRef.current?.click()}
-            className={`cursor-pointer rounded-xl border-2 border-dashed p-7 text-center transition-all ${dragActive
-              ? 'border-emerald-500 bg-emerald-50/60 dark:border-emerald-400 dark:bg-emerald-950/30'
-              : 'border-emerald-300/80 bg-slate-50/50 hover:bg-emerald-50/30 dark:border-emerald-800/70 dark:bg-slate-900/40'
-              }`}
-          >
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".csv,.xlsx,.xls"
-              onChange={(e) => e.target.files?.[0] && handleProcessFile(e.target.files[0])}
-              className="hidden"
-            />
-            <div className="mx-auto flex h-9 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300 mb-3">
-              <Upload className="h-6 w-6" />
-            </div>
-            <p className="text-xs font-bold text-slate-800 dark:text-slate-200">
-              {selectedFile ? selectedFile.name : 'Tarik & lepas berkas ke sini, atau klik untuk memilih'}
-            </p>
-            <p className="text-xs text-slate-400 mt-1">Mendukung file .CSV, .XLSX (Maks. 5MB)</p>
-          </div>
-
-          {/* Mini Preview Datatable */}
-          {previewRows.length > 0 && (
-            <div className="space-y-2">
-              <p className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
-                Pratinjau Butir Soal (5 Baris Pertama)
-              </p>
-              <div className="overflow-x-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
-                <TableRoot className="w-full text-left text-xs">
-                  <TableHeader className="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 font-bold border-b border-emerald-200/80">
-                    <TableRow>
-                      <TableHead className="py-2 px-3">No</TableHead>
-                      <TableHead className="py-2 px-3">Kode</TableHead>
-                      <TableHead className="py-2 px-3">Pertanyaan</TableHead>
-                      <TableHead className="py-2 px-3">Tipe</TableHead>
-                      <TableHead className="py-2 px-3">Kunci</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody className="divide-y divide-emerald-100/70 dark:divide-emerald-900/40">
-                    {previewRows.map((r, i) => (
-                      <TableRow key={i} className="hover:bg-emerald-50/30">
-                        <TableCell className="py-2 px-3 font-semibold text-emerald-600">{i + 1}</TableCell>
-                        <TableCell className="py-2 px-3 font-mono font-bold text-emerald-700 dark:text-emerald-400">{r.kode_soal || '-'}</TableCell>
-                        <TableCell className="py-2 px-3 font-medium text-slate-800 dark:text-slate-100 truncate max-w-[200px]">{r.pertanyaan || '-'}</TableCell>
-                        <TableCell className="py-2 px-3 text-slate-600 dark:text-slate-300 uppercase">{r.tipe_soal}</TableCell>
-                        <TableCell className="py-2 px-3 font-bold text-emerald-700">{r.kunci_jawaban}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </TableRoot>
-              </div>
-            </div>
-          )}
-        </div>
-
-        <div className="flex items-center justify-end gap-3 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 p-5 dark:border-emerald-800/60 dark:bg-slate-900/50">
+    <AppModal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Impor Data Butir Bank Soal"
+      description="Unggah berkas CSV atau XLSX berisi butir pertanyaan ujian."
+      icon={Upload}
+      maxWidth="max-w-xl"
+      zIndex={60}
+      disableBackdropClose={isSubmitting}
+      bodyClassName="space-y-5"
+      footer={
+        <>
           <button
             type="button"
             onClick={onClose}
@@ -657,91 +563,142 @@ function HarmonizedBatchImportModal({ isOpen, onClose, onImportSuccess, notify }
             type="button"
             onClick={handleSubmit}
             disabled={isSubmitting || !selectedFile}
-            className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-[#1B2433] px-5 py-2.5 text-xs font-bold shadow-md shadow-sky-600/30 hover:brightness-105 disabled:opacity-50 transition-all border border-emerald-200/80 dark:border-emerald-800/60"
+            className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 text-xs font-bold shadow-md shadow-emerald-600/20 disabled:opacity-50 transition-all"
           >
             {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
             <span>{isSubmitting ? 'Memproses Berkas...' : 'Proses Impor Soal'}</span>
           </button>
+        </>
+      }
+    >
+      {/* Download Template Card */}
+      <div className="flex items-center justify-between rounded-xl border border-emerald-200/80 bg-emerald-50/50 p-4 dark:border-emerald-900/60 dark:bg-emerald-950/20">
+        <div className="flex items-center gap-3">
+          <FileSpreadsheet className="h-8 w-8 text-emerald-600 dark:text-emerald-400 shrink-0" />
+          <div>
+            <p className="text-xs font-bold text-emerald-950 dark:text-emerald-200">Template Berkas Data Soal</p>
+            <p className="text-xs text-emerald-800/80 dark:text-emerald-400/80">Format standar untuk pilihan ganda, esai, dan tingkat kesulitan.</p>
+          </div>
         </div>
-      </motion.div>
-    </div>
+        <button
+          type="button"
+          onClick={handleDownloadTemplate}
+          className="inline-flex items-center gap-1.5 rounded-lg border-2 border-emerald-300/80 bg-white px-3.5 py-2 text-xs font-bold text-emerald-700 shadow-xs dark:border-emerald-700 dark:bg-emerald-600 dark:text-emerald-300 transition-all text-sm font-medium"
+        >
+          <Download className="h-3.5 w-3.5" /> Unduh Format
+        </button>
+      </div>
+
+      {/* Dropzone */}
+      <div
+        onDragEnter={handleDrag}
+        onDragLeave={handleDrag}
+        onDragOver={handleDrag}
+        onDrop={handleDrop}
+        onClick={() => fileInputRef.current?.click()}
+        className={`cursor-pointer rounded-xl border-2 border-dashed p-7 text-center transition-all ${dragActive
+          ? 'border-emerald-500 bg-emerald-50/60 dark:border-emerald-400 dark:bg-emerald-950/30'
+          : 'border-emerald-300/80 bg-slate-50/50 hover:bg-emerald-50/30 dark:border-emerald-800/70 dark:bg-slate-900/40'
+          }`}
+      >
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".csv,.xlsx,.xls"
+          onChange={(e) => e.target.files?.[0] && handleProcessFile(e.target.files[0])}
+          className="hidden"
+        />
+        <div className="mx-auto flex h-9 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300 mb-3">
+          <Upload className="h-6 w-6" />
+        </div>
+        <p className="text-xs font-bold text-slate-800 dark:text-slate-200">
+          {selectedFile ? selectedFile.name : 'Tarik & lepas berkas ke sini, atau klik untuk memilih'}
+        </p>
+        <p className="text-xs text-slate-400 mt-1">Mendukung file .CSV, .XLSX (Maks. 5MB)</p>
+      </div>
+
+      {/* Mini Preview Datatable */}
+      {previewRows.length > 0 && (
+        <div className="space-y-2">
+          <p className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+            Pratinjau Butir Soal (5 Baris Pertama)
+          </p>
+          <div className="overflow-x-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
+            <TableRoot className="w-full text-left text-xs">
+              <TableHeader className="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-200 font-bold border-b border-emerald-200/80">
+                <TableRow>
+                  <TableHead className="py-2 px-3">No</TableHead>
+                  <TableHead className="py-2 px-3">Kode</TableHead>
+                  <TableHead className="py-2 px-3">Pertanyaan</TableHead>
+                  <TableHead className="py-2 px-3">Tipe</TableHead>
+                  <TableHead className="py-2 px-3">Kunci</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="divide-y divide-emerald-100/70 dark:divide-emerald-900/40">
+                {previewRows.map((r, i) => (
+                  <TableRow key={i} className="hover:bg-emerald-50/30">
+                    <TableCell className="py-2 px-3 font-semibold text-emerald-600">{i + 1}</TableCell>
+                    <TableCell className="py-2 px-3 font-mono font-bold text-emerald-700 dark:text-emerald-400">{r.kode_soal || '-'}</TableCell>
+                    <TableCell className="py-2 px-3 font-medium text-slate-800 dark:text-slate-100 truncate max-w-[200px]">{r.pertanyaan || '-'}</TableCell>
+                    <TableCell className="py-2 px-3 text-slate-600 dark:text-slate-300 uppercase">{r.tipe_soal}</TableCell>
+                    <TableCell className="py-2 px-3 font-bold text-emerald-700">{r.kunci_jawaban}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </TableRoot>
+          </div>
+        </div>
+      )}
+    </AppModal>
   )
 }
 
 // ── 3. HARMONIZED SAVE CONFIRMATION MODAL ──
 function HarmonizedSaveModal({ isOpen, onClose, onConfirm, isEdit, title, isSubmitting }) {
-  if (!isOpen) return null
-
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fadeIn">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.94 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.94 }}
-        className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
-      >
-        <div
-          className={`h-1.5 w-full bg-white dark:bg-[#1B2433] ${isEdit ? 'from-amber-400 via-amber-500 to-orange-600' : 'from-emerald-500 via-teal-400 to-emerald-600'
-            }`}
-        />
-        <div className="p-6">
-          <div className="flex items-center gap-3.5 mb-4">
-            <div
-              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-white shadow-md ${isEdit
-                ? 'bg-white dark:bg-[#1B2433] shadow-sm'
-                : 'bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-800/60 dark:text-slate-300 shadow-sm'
-                }`}
-            >
-              {isEdit ? <Edit3 className="h-6 w-6" /> : <BookOpen className="h-6 w-6" />}
-            </div>
-            <div>
-              <span
-                className={`inline-block rounded-md px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider ${isEdit
-                  ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300'
-                  : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
-                  }`}
-              >
-                {isEdit ? 'Perbarui Soal' : 'Butir Soal Baru'}
-              </span>
-              <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
-                Konfirmasi Simpan Soal
-              </h3>
-            </div>
-          </div>
+    <AppModal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Konfirmasi Simpan Soal"
+      badge={isEdit ? 'Perbarui Soal' : 'Butir Soal Baru'}
+      icon={isEdit ? Edit3 : BookOpen}
+      variant={isEdit ? 'warning' : 'emerald'}
+      maxWidth="max-w-md"
+      zIndex={70}
+      disableBackdropClose={isSubmitting}
+      footer={
+        <>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isSubmitting}
+            className="rounded-xl border border-emerald-200/80 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:border-emerald-800/60 dark:text-slate-300 dark:hover:bg-slate-800 transition-all"
+          >
+            Batal
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={isSubmitting}
+            className={`inline-flex items-center gap-1.5 rounded-xl px-5 py-2 text-xs font-bold text-white shadow-md transition-all ${isEdit
+              ? 'bg-amber-600 hover:bg-amber-700'
+              : 'bg-emerald-600 hover:bg-emerald-700'
+              } disabled:opacity-50`}
+          >
+            {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
+            <span>{isSubmitting ? 'Menyimpan...' : isEdit ? 'Ya, Simpan Perubahan' : 'Ya, Tambahkan Soal'}</span>
+          </button>
+        </>
+      }
+    >
+      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+        Apakah Anda yakin ingin {isEdit ? 'memperbarui butir pertanyaan' : 'menyimpan butir soal baru'} berikut ke bank soal:
+      </p>
 
-          <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
-            Apakah Anda yakin ingin {isEdit ? 'memperbarui butir pertanyaan' : 'menyimpan butir soal baru'} berikut ke bank soal:
-          </p>
-
-          <div className="rounded-xl border border-emerald-200/80 bg-emerald-50/50 p-3.5 dark:border-emerald-800/60 dark:bg-emerald-950/20 mb-5">
-            <p className="text-xs font-black text-emerald-950 dark:text-emerald-100 line-clamp-2">{title || 'Butir Pertanyaan Soal'}</p>
-          </div>
-
-          <div className="flex items-center justify-end gap-3">
-            <button
-              type="button"
-              onClick={onClose}
-              disabled={isSubmitting}
-              className="rounded-xl border border-emerald-200/80 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:border-emerald-800/60 dark:text-slate-300 dark:hover:bg-slate-800 transition-all"
-            >
-              Batal
-            </button>
-            <button
-              type="button"
-              onClick={onConfirm}
-              disabled={isSubmitting}
-              className={`inline-flex items-center gap-1.5 rounded-xl px-5 py-2 text-xs font-bold text-white shadow-md transition-all ${isEdit
-                ? 'bg-white dark:bg-[#1B2433] shadow-sm hover:brightness-105'
-                : 'bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white shadow-sm hover:brightness-105'
-                } disabled:opacity-50`}
-            >
-              {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
-              <span>{isSubmitting ? 'Menyimpan...' : isEdit ? 'Ya, Simpan Perubahan' : 'Ya, Tambahkan Soal'}</span>
-            </button>
-          </div>
-        </div>
-      </motion.div>
-    </div>
+      <div className="rounded-xl border border-emerald-200/80 bg-emerald-50/50 p-3.5 dark:border-emerald-800/60 dark:bg-emerald-950/20">
+        <p className="text-xs font-black text-emerald-950 dark:text-emerald-100 line-clamp-2">{title || 'Butir Pertanyaan Soal'}</p>
+      </div>
+    </AppModal>
   )
 }
 
@@ -759,171 +716,120 @@ function HarmonizedBatchExportModal({
   if (!isOpen) return null
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md animate-fadeIn"
-      role="dialog"
-      aria-modal="true"
-      tabIndex={-1}
-      onMouseDown={(e) => {
-        if (e.target === e.currentTarget && !isExporting) onClose()
-      }}
+    <AppModal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={`Export Data ${moduleTitle}`}
+      badge="Unduh Data"
+      description="Pilih format berkas untuk mengekspor data sesuai filter aktif."
+      icon={Download}
+      maxWidth="max-w-xl"
+      zIndex={50}
+      disableBackdropClose={isExporting}
+      footer={
+        <>
+          <button
+            type="button"
+            onClick={onClose}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200/90 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs dark:border-emerald-800/60 dark:bg-emerald-600 dark:text-slate-200 transition cursor-pointer text-sm font-medium"
+          >
+            Batal
+          </button>
+          <button
+            type="button"
+            disabled={isExporting}
+            onClick={() => onExport(exportFormat)}
+            className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 text-xs font-extrabold shadow-md transition-all duration-200 disabled:opacity-50 cursor-pointer"
+          >
+            <Download className="size-4" />
+            {isExporting ? 'Menyiapkan...' : 'Unduh Berkas'}
+          </button>
+        </>
+      }
     >
-      <motion.div
-        initial={{ opacity: 0, scale: 0.94, y: 14 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 10 }}
-        transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-        className="w-full max-w-xl"
-      >
-        <div className="flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-2xl border border-amber-200/80 bg-white shadow-2xl shadow-sm dark:border-amber-900/50 dark:bg-[#182232]">
-
-          <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232] shrink-0">
-            <div className="flex items-center gap-3">
-              <div className="rounded-xl bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-800/60 dark:text-slate-300 p-2.5 shadow-md shadow-sm border border-amber-300/40 shrink-0">
-                <Download className="h-5 w-5 text-emerald-600" strokeWidth={2.2} />
-              </div>
-              <div>
-                <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
-                  <span>Export Data {moduleTitle}</span>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700 border border-amber-200/80 dark:bg-amber-950/60 dark:text-amber-400 dark:border-amber-800/60">
-                    <Sparkles className="size-3" /> Unduh Data
-                  </span>
-                </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  Pilih format berkas untuk mengekspor data sesuai filter aktif.
-                </p>
-              </div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        {[
+          ['xlsx', 'Excel (.xlsx)', FileSpreadsheet, 'Format spreadsheet modern Microsoft Excel.'],
+          ['xls', 'Excel (.xls)', FileSpreadsheet, 'Format kompatibilitas Excel 97-2003.'],
+          ['csv', 'CSV (.csv)', FileText, 'Format teks koma terpisah universal.'],
+        ].map(([value, label, Icon, desc]) => (
+          <button
+            key={value}
+            type="button"
+            onClick={() => setExportFormat(value)}
+            className={`rounded-xl border p-4 text-left transition-all duration-200 cursor-pointer ${exportFormat === value
+              ? 'border-emerald-500 bg-emerald-50/70 shadow-sm dark:border-emerald-700 dark:bg-emerald-950/40'
+              : 'border-emerald-200/80 bg-white hover:border-emerald-300 dark:border-emerald-800/60 dark:bg-slate-900/40'
+              }`}
+          >
+            <div className="flex items-center gap-2 mb-1.5">
+              <Icon
+                className={`size-4 ${exportFormat === value ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-400'
+                  }`}
+              />
+              <span className="text-xs font-black text-slate-900 dark:text-white">{label}</span>
             </div>
-            <button
-              type="button"
-              disabled={isExporting}
-              onClick={onClose}
-              className="size-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-sky-950/60 dark:text-sky-300 transition-colors cursor-pointer disabled:opacity-50"
-            >
-              <X className="size-4" />
-            </button>
-          </div>
+            <p className="text-[10px] text-slate-500 leading-snug">{desc}</p>
+          </button>
+        ))}
+      </div>
 
-          <div className="p-6 space-y-4 overflow-y-auto flex-1">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {[
-                ['xlsx', 'Excel (.xlsx)', FileSpreadsheet, 'Format spreadsheet modern Microsoft Excel.'],
-                ['xls', 'Excel (.xls)', FileSpreadsheet, 'Format kompatibilitas Excel 97-2003.'],
-                ['csv', 'CSV (.csv)', FileText, 'Format teks koma terpisah universal.'],
-              ].map(([value, label, Icon, desc]) => (
-                <button
-                  key={value}
-                  type="button"
-                  onClick={() => setExportFormat(value)}
-                  className={`rounded-xl border p-4 text-left transition-all duration-200 cursor-pointer ${exportFormat === value
-                    ? 'border-emerald-500 bg-emerald-50/70 shadow-sm dark:border-emerald-700 dark:bg-emerald-950/40'
-                    : 'border-emerald-200/80 bg-white hover:border-emerald-300 dark:border-emerald-800/60 dark:bg-slate-900/40'
-                    }`}
-                >
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <Icon
-                      className={`size-4 ${exportFormat === value ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-400'
-                        }`}
-                    />
-                    <span className="text-xs font-black text-slate-900 dark:text-white">{label}</span>
-                  </div>
-                  <p className="text-[10px] text-slate-500 leading-snug">{desc}</p>
-                </button>
-              ))}
-            </div>
-
-            <div className="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200/80 dark:bg-amber-950/30 dark:border-amber-800/60 text-xs text-amber-900 dark:text-amber-300 leading-relaxed">
-              <p className="font-bold flex items-center gap-1.5 mb-0.5">
-                <Sparkles className="size-3.5 text-amber-600 dark:text-amber-400" />
-                Filter Ekspor Aktif
-              </p>
-              <p className="text-xs text-amber-800/90 dark:text-amber-300/80">
-                Data yang diekspor akan mencakup seluruh entitas terfilter ({totalCount} butir {moduleTitle.toLowerCase()}).
-              </p>
-            </div>
-          </div>
-
-          <div className="px-6 py-4 border-t border-emerald-200/80 dark:border-emerald-800/80 flex items-center justify-end gap-2.5 bg-slate-50/50 dark:bg-slate-900/40 shrink-0">
-            <button
-              type="button"
-              onClick={onClose}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200/90 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs dark:border-emerald-800/60 dark:bg-emerald-600 dark:text-slate-200 transition cursor-pointer text-sm font-medium"
-            >
-              Batal
-            </button>
-            <button
-              type="button"
-              disabled={isExporting}
-              onClick={() => onExport(exportFormat)}
-              className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-[#1B2433] px-5 py-2.5 text-xs font-extrabold shadow-md shadow-sm hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200 disabled:opacity-50 cursor-pointer border border-amber-300/40"
-            >
-              <Download className="size-4" />
-              {isExporting ? 'Menyiapkan...' : 'Unduh Berkas'}
-            </button>
-          </div>
-        </div>
-      </motion.div>
-    </div>
+      <div className="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200/80 dark:bg-amber-950/30 dark:border-amber-800/60 text-xs text-amber-900 dark:text-amber-300 leading-relaxed">
+        <p className="font-bold flex items-center gap-1.5 mb-0.5">
+          <Sparkles className="size-3.5 text-amber-600 dark:text-amber-400" />
+          Filter Ekspor Aktif
+        </p>
+        <p className="text-xs text-amber-800/90 dark:text-amber-300/80">
+          Data yang diekspor akan mencakup seluruh entitas terfilter ({totalCount} butir {moduleTitle.toLowerCase()}).
+        </p>
+      </div>
+    </AppModal>
   )
 }
 
 // ── 5. HARMONIZED DELETE CONFIRMATION MODAL ──
 function HarmonizedDeleteModal({ isOpen, onClose, onConfirm, title, isSubmitting }) {
-  if (!isOpen) return null
-
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fadeIn">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.94 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.94 }}
-        className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
-      >
-        <div className="p-6">
-          <div className="flex items-center gap-3.5 mb-4">
-            <div className="flex h-9 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:border-rose-800/60 dark:text-rose-400 shadow-md shadow-sm">
-              <Trash2 className="h-6 w-6" />
-            </div>
-            <div>
-              <span className="inline-block rounded-md bg-rose-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
-                Hapus Permanen
-              </span>
-              <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
-                Konfirmasi Hapus Butir Soal
-              </h3>
-            </div>
-          </div>
+    <AppModal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Konfirmasi Hapus Butir Soal"
+      badge="Hapus Permanen"
+      icon={Trash2}
+      variant="danger"
+      maxWidth="max-w-md"
+      zIndex={70}
+      disableBackdropClose={isSubmitting}
+      footer={
+        <>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isSubmitting}
+            className="rounded-xl border border-emerald-200/80 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:border-emerald-800/60 dark:text-slate-300 dark:hover:bg-slate-800 transition-all"
+          >
+            Batal
+          </button>
+          <button
+            type="button"
+            onClick={onConfirm}
+            disabled={isSubmitting}
+            className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white px-5 py-2 text-xs font-bold shadow-md hover:brightness-105 disabled:opacity-50 transition-all"
+          >
+            {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
+            <span>{isSubmitting ? 'Menghapus...' : 'Ya, Hapus Butir Soal'}</span>
+          </button>
+        </>
+      }
+    >
+      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+        Apakah Anda yakin ingin menghapus butir soal berikut dari bank soal? Soal yang dihapus tidak akan muncul pada paket ujian berikutnya.
+      </p>
 
-          <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
-            Apakah Anda yakin ingin menghapus butir soal berikut dari bank soal? Soal yang dihapus tidak akan muncul pada paket ujian berikutnya.
-          </p>
-
-          <div className="rounded-xl border border-rose-200/80 bg-rose-50/50 p-3.5 dark:border-rose-800/60 dark:bg-rose-950/20 mb-5">
-            <p className="text-xs font-black text-rose-950 dark:text-rose-100 line-clamp-2">{title || 'Butir Pertanyaan Soal'}</p>
-          </div>
-
-          <div className="flex items-center justify-end gap-3">
-            <button
-              type="button"
-              onClick={onClose}
-              disabled={isSubmitting}
-              className="rounded-xl border border-emerald-200/80 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 dark:border-emerald-800/60 dark:text-slate-300 dark:hover:bg-slate-800 transition-all"
-            >
-              Batal
-            </button>
-            <button
-              type="button"
-              onClick={onConfirm}
-              disabled={isSubmitting}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white px-5 py-2 text-xs font-bold text-white shadow-md shadow-sm hover:brightness-105 disabled:opacity-50 transition-all"
-            >
-              {isSubmitting && <RefreshCw className="h-4 w-4 animate-spin" />}
-              <span>{isSubmitting ? 'Menghapus...' : 'Ya, Hapus Butir Soal'}</span>
-            </button>
-          </div>
-        </div>
-      </motion.div>
-    </div>
+      <div className="rounded-xl border border-rose-200/80 bg-rose-50/50 p-3.5 dark:border-rose-800/60 dark:bg-rose-950/20">
+        <p className="text-xs font-black text-rose-950 dark:text-rose-100 line-clamp-2">{title || 'Butir Pertanyaan Soal'}</p>
+      </div>
+    </AppModal>
   )
 }
 
@@ -2635,148 +2541,121 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
         />
 
         {/* ROW DETAIL MODAL POPUP — Quick Preview */}
-        {showRowDetailModal && rowDetailItem && (
-          <div
-            className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn"
-            onClick={() => setShowRowDetailModal(false)}
-          >
-            <div
-              className="bg-white dark:bg-[#182232] rounded-3xl w-full max-w-lg shadow-2xl shadow-emerald-950/20 border-2 border-emerald-300 dark:border-emerald-700/80 dark:border-emerald-800/60 overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Header */}
-              <div className="flex items-start justify-between px-6 py-4 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/50">
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5 shadow-xs">
-                    <HelpCircle className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h2 className="text-sm font-black text-slate-900 dark:text-white leading-tight line-clamp-2">{rowDetailItem.pertanyaan}</h2>
-                    <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 mt-0.5">
-                      {rowDetailItem.kode_soal || 'SOAL-SYS'} • {getMapelName(rowDetailItem)}
-                    </p>
-                  </div>
-                </div>
+        <AppModal
+          isOpen={showRowDetailModal && Boolean(rowDetailItem)}
+          onClose={() => setShowRowDetailModal(false)}
+          title={rowDetailItem?.pertanyaan}
+          description={`${rowDetailItem?.kode_soal || 'SOAL-SYS'} • ${getMapelName(rowDetailItem)}`}
+          icon={HelpCircle}
+          maxWidth="max-w-lg"
+          zIndex={50}
+          bodyClassName="space-y-3.5"
+          footer={
+            <div className="flex items-center justify-between gap-3 w-full">
+              <button
+                onClick={() => setShowRowDetailModal(false)}
+                className="px-4 py-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              >
+                Tutup
+              </button>
+              <div className="flex items-center gap-2">
                 <button
-                  onClick={() => setShowRowDetailModal(false)}
-                  className="p-1.5 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400 shrink-0 transition-colors"
+                  onClick={() => {
+                    setShowRowDetailModal(false)
+                    handleDeletePrompt(rowDetailItem)
+                  }}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-800 text-xs font-bold hover:bg-rose-100 dark:hover:bg-rose-900/50 transition-colors"
                 >
-                  <X className="w-5 h-5" />
+                  <Trash2 className="w-3.5 h-3.5" />
+                  Hapus
                 </button>
-              </div>
-
-              {/* Body */}
-              <div className="px-6 py-4 space-y-3.5 max-h-[60vh] overflow-y-auto">
-                <div className="flex flex-wrap gap-2">
-                  {getTipeBadge(rowDetailItem.tipe_soal)}
-                  {getKesulitanBadge(rowDetailItem.tingkat_kesulitan)}
-                  <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold ${rowDetailItem.status ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800' : 'bg-slate-100 text-slate-600 dark:bg-sky-950/60 dark:text-sky-300 border border-emerald-200/80 dark:border-emerald-800/60'
-                    }`}>
-                    <span className={`w-1.5 h-1.5 rounded-full ${rowDetailItem.status ? 'bg-emerald-500' : 'bg-slate-400'}`} />
-                    {rowDetailItem.status ? 'Aktif' : 'Non-Aktif'}
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2.5">
-                  <div className="bg-emerald-50/80 dark:bg-emerald-950/30 rounded-xl p-3 border border-emerald-100 dark:border-emerald-900/40">
-                    <p className="text-[10px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">Poin Bobot</p>
-                    <p className="text-base font-black text-emerald-800 dark:text-emerald-300 mt-0.5 tabular-nums">{rowDetailItem.poin} Poin</p>
-                  </div>
-                  <div className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-3 border border-emerald-200/80 dark:border-emerald-800/60">
-                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-wider">Kisi-kisi Ujian</p>
-                    <p className="text-xs font-bold text-slate-800 dark:text-white mt-0.5 line-clamp-1">{rowDetailItem.kisi_kisi?.judul_kisi || 'Umum'}</p>
-                  </div>
-                  {rowDetailItem.kunci_jawaban && (
-                    <div className="bg-blue-50/80 dark:bg-blue-950/30 rounded-xl p-3 col-span-2 border border-blue-100 dark:border-blue-900/40">
-                      <p className="text-[10px] font-black text-blue-700 dark:text-blue-400 uppercase tracking-wider">Kunci Jawaban</p>
-                      <p className="text-xs font-bold text-blue-900 dark:text-blue-200 mt-0.5">{rowDetailItem.kunci_jawaban}</p>
-                    </div>
-                  )}
-                </div>
-
-                {rowDetailItem.indikator && (
-                  <div className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-3 border border-emerald-200/80 dark:border-emerald-800/60">
-                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-wider mb-1">Indikator Soal</p>
-                    <p className="text-xs font-medium text-slate-700 dark:text-slate-300 leading-relaxed">{rowDetailItem.indikator}</p>
-                  </div>
-                )}
-
-                {rowDetailItem.pembahasan && (
-                  <div className="bg-purple-50/80 dark:bg-purple-950/30 rounded-xl p-3 border border-purple-100 dark:border-purple-900/40">
-                    <p className="text-[10px] font-black text-purple-700 dark:text-purple-400 uppercase tracking-wider mb-1">Pembahasan &amp; Keterangan</p>
-                    <p className="text-xs font-medium text-slate-700 dark:text-slate-300 leading-relaxed line-clamp-4">{rowDetailItem.pembahasan}</p>
-                  </div>
-                )}
-              </div>
-
-              {/* Footer Actions */}
-              <div className="px-6 py-4 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between gap-3 bg-slate-50/50 dark:bg-slate-900/40">
                 <button
-                  onClick={() => setShowRowDetailModal(false)}
-                  className="px-4 py-2 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  onClick={() => {
+                    setShowRowDetailModal(false)
+                    handleOpenModal(rowDetailItem)
+                  }}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md transition-all"
                 >
-                  Tutup
+                  <Edit3 className="w-3.5 h-3.5" />
+                  Edit Soal
                 </button>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => {
-                      setShowRowDetailModal(false)
-                      handleDeletePrompt(rowDetailItem)
-                    }}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-800 text-xs font-bold hover:bg-rose-100 dark:hover:bg-rose-900/50 transition-colors"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                    Hapus
-                  </button>
-                  <button
-                    onClick={() => {
-                      setShowRowDetailModal(false)
-                      handleOpenModal(rowDetailItem)
-                    }}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white dark:bg-[#1B2433] text-xs font-bold shadow-md hover:brightness-105 transition-all border border-emerald-200/80 dark:border-emerald-800/60"
-                  >
-                    <Edit3 className="w-3.5 h-3.5" />
-                    Edit Soal
-                  </button>
-                </div>
               </div>
             </div>
-          </div>
-        )}
-
-        {/* CRUD Form Modal — Tambah & Kelola Pertanyaan */}
-        {showModal && (
-          <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto animate-fadeIn">
-            <motion.div
-              id="modalFormScrollContainer"
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.96 }}
-              className="bg-white dark:bg-[#1B2433] rounded-xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 flex flex-col"
-            >
-              <div className="px-6 py-4 border-b border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between bg-white dark:bg-[#1B2433] shrink-0">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-10 items-center justify-center rounded-xl bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-800/60 dark:text-slate-300 shadow-md shadow-sm shrink-0">
-                    {editingItem ? <Edit3 className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
-                  </div>
-                  <div>
-                    <h2 className="text-base font-black text-slate-900 dark:text-white">
-                      {editingItem ? 'Edit Butir Soal' : 'Form Tambah & Kelola Pertanyaan Bank Soal'}
-                    </h2>
-                    <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                      Pertanyaan yang disimpan otomatis terdaftar pada kisi-kisi dan dapat diedit langsung di bawah.
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={handleCloseModal}
-                  className="p-2 rounded-xl text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
+          }
+        >
+          {rowDetailItem && (
+            <>
+              <div className="flex flex-wrap gap-2">
+                {getTipeBadge(rowDetailItem.tipe_soal)}
+                {getKesulitanBadge(rowDetailItem.tingkat_kesulitan)}
+                <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold ${rowDetailItem.status ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800' : 'bg-slate-100 text-slate-600 dark:bg-sky-950/60 dark:text-sky-300 border border-emerald-200/80 dark:border-emerald-800/60'
+                  }`}>
+                  <span className={`w-1.5 h-1.5 rounded-full ${rowDetailItem.status ? 'bg-emerald-500' : 'bg-slate-400'}`} />
+                  {rowDetailItem.status ? 'Aktif' : 'Non-Aktif'}
+                </span>
               </div>
 
-              <form onSubmit={handleTriggerSave} className="p-6 space-y-5 flex-1 overflow-y-auto overflow-x-hidden">
+              <div className="grid grid-cols-2 gap-2.5">
+                <div className="bg-emerald-50/80 dark:bg-emerald-950/30 rounded-xl p-3 border border-emerald-100 dark:border-emerald-900/40">
+                  <p className="text-[10px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">Poin Bobot</p>
+                  <p className="text-base font-black text-emerald-800 dark:text-emerald-300 mt-0.5 tabular-nums">{rowDetailItem.poin} Poin</p>
+                </div>
+                <div className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-3 border border-emerald-200/80 dark:border-emerald-800/60">
+                  <p className="text-[10px] font-black text-slate-500 uppercase tracking-wider">Kisi-kisi Ujian</p>
+                  <p className="text-xs font-bold text-slate-800 dark:text-white mt-0.5 line-clamp-1">{rowDetailItem.kisi_kisi?.judul_kisi || 'Umum'}</p>
+                </div>
+                {rowDetailItem.kunci_jawaban && (
+                  <div className="bg-blue-50/80 dark:bg-blue-950/30 rounded-xl p-3 col-span-2 border border-blue-100 dark:border-blue-900/40">
+                    <p className="text-[10px] font-black text-blue-700 dark:text-blue-400 uppercase tracking-wider">Kunci Jawaban</p>
+                    <p className="text-xs font-bold text-blue-900 dark:text-blue-200 mt-0.5">{rowDetailItem.kunci_jawaban}</p>
+                  </div>
+                )}
+              </div>
+
+              {rowDetailItem.indikator && (
+                <div className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-3 border border-emerald-200/80 dark:border-emerald-800/60">
+                  <p className="text-[10px] font-black text-slate-500 uppercase tracking-wider mb-1">Indikator Soal</p>
+                  <p className="text-xs font-medium text-slate-700 dark:text-slate-300 leading-relaxed">{rowDetailItem.indikator}</p>
+                </div>
+              )}
+
+              {rowDetailItem.pembahasan && (
+                <div className="bg-purple-50/80 dark:bg-purple-950/30 rounded-xl p-3 border border-purple-100 dark:border-purple-900/40">
+                  <p className="text-[10px] font-black text-purple-700 dark:text-purple-400 uppercase tracking-wider mb-1">Pembahasan &amp; Keterangan</p>
+                  <p className="text-xs font-medium text-slate-700 dark:text-slate-300 leading-relaxed line-clamp-4">{rowDetailItem.pembahasan}</p>
+                </div>
+              )}
+            </>
+          )}
+        </AppModal>
+
+        {/* CRUD Form Modal — Tambah & Kelola Pertanyaan */}
+        <AppModal
+          isOpen={showModal}
+          onClose={handleCloseModal}
+          title={editingItem ? 'Edit Butir Soal' : 'Form Tambah & Kelola Pertanyaan Bank Soal'}
+          description="Pertanyaan yang disimpan otomatis terdaftar pada kisi-kisi dan dapat diedit langsung di bawah."
+          icon={editingItem ? Edit3 : Plus}
+          maxWidth="max-w-4xl"
+          zIndex={50}
+          footer={
+            <div className="flex items-center justify-between w-full">
+              <span className="text-xs text-slate-500 font-medium">
+                {modalSessionQuestions.length > 0
+                  ? `${modalSessionQuestions.length} pertanyaan telah tersimpan`
+                  : 'Siap menginput butir soal baru'}
+              </span>
+              <button
+                type="button"
+                onClick={handleCloseModal}
+                className="px-5 py-2.5 rounded-lg bg-[#0E5C44] text-white text-xs font-bold shadow-md transition-all cursor-pointer border border-emerald-600 h-9 text-sm font-medium"
+              >
+                Selesai &amp; Tutup Modal
+              </button>
+            </div>
+          }
+        >
+          <form id="modalFormScrollContainer" onSubmit={handleTriggerSave} className="space-y-5">
                 {/* Active Question Step Indicator (Multi-question builder header) */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-white dark:bg-[#1B2433] border-2 border-emerald-300/80 dark:border-emerald-700/60 rounded-xl shadow-xs">
                   <div className="flex items-center gap-3">
@@ -3307,46 +3186,29 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                     </div>
                   )}
                 </div>
-
-                {/* Modal Footer Action */}
-                <div className="pt-4 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between shrink-0">
-                  <span className="text-xs text-slate-500 font-medium">
-                    {modalSessionQuestions.length > 0
-                      ? `${modalSessionQuestions.length} pertanyaan telah tersimpan`
-                      : 'Siap menginput butir soal baru'}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={handleCloseModal}
-                    className="px-5 py-2.5 rounded-lg bg-[#0E5C44] text-white text-xs font-bold shadow-md transition-all cursor-pointer border border-emerald-600 h-9 text-sm font-medium"
-                  >
-                    Selesai &amp; Tutup Modal
-                  </button>
-                </div>
               </form>
-            </motion.div>
-          </div>
-        )}
+        </AppModal>
 
         {/* Detail / Preview Modal */}
-        {showDetailModal && viewingItem && (
-          <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
-            <div className="bg-white dark:bg-[#1B2433] rounded-xl max-w-xl w-full max-h-[85vh] overflow-y-auto shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 p-6 space-y-5">
-              <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-3">
-                <div>
-                  <span className="text-xs font-mono text-emerald-700 dark:text-emerald-400 font-bold">{viewingItem.kode_soal || 'SOAL-SYS'}</span>
-                  <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2 mt-0.5">
-                    Pratinjau Butir Soal Ujian
-                  </h3>
-                </div>
-                <button
-                  onClick={() => setShowDetailModal(false)}
-                  className="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
+        <AppModal
+          isOpen={showDetailModal && Boolean(viewingItem)}
+          onClose={() => setShowDetailModal(false)}
+          title="Pratinjau Butir Soal Ujian"
+          badge={viewingItem?.kode_soal || 'SOAL-SYS'}
+          icon={Eye}
+          maxWidth="max-w-xl"
+          zIndex={50}
+          footer={
+            <button
+              onClick={() => setShowDetailModal(false)}
+              className="px-5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-200 transition-colors"
+            >
+              Tutup Pratinjau
+            </button>
+          }
+        >
+          {viewingItem && (
+            <>
               <div className="space-y-4 text-sm">
                 <div className="flex items-center gap-2">
                   {getTipeBadge(viewingItem.tipe_soal)}
@@ -3430,18 +3292,9 @@ export default function LmsBankSoalPage({ embedded = false, hideBreadcrumb = fal
                   </div>
                 )}
               </div>
-
-              <div className="pt-4 border-t border-emerald-200/80 dark:border-emerald-800/60 flex justify-end">
-                <button
-                  onClick={() => setShowDetailModal(false)}
-                  className="px-5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-200 transition-colors"
-                >
-                  Tutup Pratinjau
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+            </>
+          )}
+        </AppModal>
 
         {/* Harmonized Batch Export Modal */}
         <HarmonizedBatchExportModal

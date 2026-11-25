@@ -55,6 +55,7 @@ import {
 import PageContainer from '../components/app/PageContainer'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
 import ActionDropdown from '../components/app/ActionDropdown'
+import AppModal from '../components/app/AppModal'
 import { KpiStatCard } from '../components/app'
 import HeroUiFilterSelect from '../components/ui/HeroUiFilterSelect'
 import {
@@ -694,41 +695,19 @@ function printRaporDocument(digitalData) {
 }
 
 function HarmonizedDeleteRaporModal({ isOpen, onClose, onConfirm, item, isSubmitting }) {
- if (!isOpen || !item) return null
  return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex h-9 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 shadow-sm">
- <Trash2 className="h-6 w-6" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-rose-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
- Hapus Permanen
- </span>
- <h3 className="text-base font-bold text-slate-900 dark:text-white mt-0.5">
- Hapus Data Rapor?
- </h3>
- </div>
- </div>
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Apakah Anda yakin ingin menghapus data rapor siswa <strong className="text-slate-900 dark:text-white">{item.siswa?.nama_lengkap || item.siswa_nama || 'ini'}</strong>?
- </p>
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/50 p-3 dark:border-emerald-800/60 dark:bg-rose-950/20 mb-6">
- <div className="flex items-start gap-2">
- <AlertTriangle className="h-4 w-4 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
- <p className="text-xs text-rose-800 dark:text-rose-300">
- Data rapor yang terhapus tidak dapat dipulihkan. Nilai dapat dihitung ulang jika diperlukan.
- </p>
- </div>
- </div>
- <div className="flex items-center justify-end gap-3">
+ <AppModal
+ isOpen={Boolean(isOpen && item)}
+ onClose={onClose}
+ title="Hapus Data Rapor?"
+ badge="Hapus Permanen"
+ icon={Trash2}
+ variant="danger"
+ maxWidth="max-w-md"
+ zIndex={70}
+ disableBackdropClose={isSubmitting}
+ footer={
+ <>
  <button
  type="button"
  onClick={onClose}
@@ -741,14 +720,29 @@ function HarmonizedDeleteRaporModal({ isOpen, onClose, onConfirm, item, isSubmit
  type="button"
  onClick={onConfirm}
  disabled={isSubmitting}
- className="h-9 px-5 rounded-xl bg-white dark:bg-[#1B2433] hover:from-rose-700 hover:to-red-700 text-xs font-extrabold shadow-sm transition cursor-pointer disabled:opacity-50"
+ className="h-9 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-extrabold shadow-sm transition cursor-pointer disabled:opacity-50"
  >
  {isSubmitting ? 'Menghapus...' : 'Ya, Hapus Rapor'}
  </button>
+ </>
+ }
+ >
+ {item && (
+ <>
+ <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+ Apakah Anda yakin ingin menghapus data rapor siswa <strong className="text-slate-900 dark:text-white">{item.siswa?.nama_lengkap || item.siswa_nama || 'ini'}</strong>?
+ </p>
+ <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/50 p-3 dark:border-emerald-800/60 dark:bg-rose-950/20">
+ <div className="flex items-start gap-2">
+ <AlertTriangle className="h-4 w-4 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
+ <p className="text-xs text-rose-800 dark:text-rose-300">
+ Data rapor yang terhapus tidak dapat dipulihkan. Nilai dapat dihitung ulang jika diperlukan.
+ </p>
  </div>
  </div>
- </motion.div>
- </div>
+ </>
+ )}
+ </AppModal>
  )
 }
 

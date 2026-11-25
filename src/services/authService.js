@@ -1,9 +1,9 @@
 import { api } from './api'
 
 export const authService = {
-  login: async ({ identifier, email, password, device_name = 'web-dashboard' }) => {
+  login: async ({ identifier, email, password, portal_type, device_name = 'web-dashboard' }) => {
     const resolvedIdentifier = identifier ?? email
-    const { data } = await api.post('/auth/login', { identifier: resolvedIdentifier, email: resolvedIdentifier, password, device_name })
+    const { data } = await api.post('/auth/login', { identifier: resolvedIdentifier, email: resolvedIdentifier, password, portal_type, device_name })
     return data
   },
 

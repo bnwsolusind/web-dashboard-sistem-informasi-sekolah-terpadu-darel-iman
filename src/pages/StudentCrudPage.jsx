@@ -16,6 +16,7 @@ import {
 import {
   DataTable
 } from '../components/common/DataTable'
+import PageToolbarActions from '../components/app/PageToolbarActions'
 import {
   StudentFormModal
 } from '../components/crud/StudentFormModal'
@@ -327,22 +328,14 @@ export default function StudentCrudPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2.5 shrink-0">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => refetch()}
-              disabled={isFetching}
-              className="border-emerald-300 dark:border-emerald-700/80 bg-white/80 dark:bg-slate-800/80 hover:bg-white text-slate-800 dark:text-slate-200 shadow-xs"
-            >
-              <LuRefreshCw className={isFetching ? 'h-4 w-4 mr-1.5 animate-spin' : 'h-4 w-4 mr-1.5'} />
-              Refresh Data
-            </Button>
-            <Button onClick={handleOpenCreateModal} size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm">
-              <LuPlus className="h-4 w-4 mr-1.5" />
-              Tambah Siswa
-            </Button>
-          </div>
+          <PageToolbarActions
+            className="shrink-0"
+            onRefresh={() => refetch()}
+            refreshLabel="Refresh Data"
+            refreshing={isFetching}
+            onAdd={handleOpenCreateModal}
+            addLabel="Tambah Siswa"
+          />
         </div>
       </div>
 

@@ -58,6 +58,7 @@ import {
  Plus as PlusIcon,
 } from 'lucide-react'
 import HeroUiFilterSelect from '../ui/HeroUiFilterSelect'
+import AppModal from '../app/AppModal'
 import ActionDropdown from '../app/ActionDropdown'
 
 // Zero-state baseline for pergerakan siswa trend data when backend movement API is empty
@@ -795,37 +796,31 @@ export default function StudentLeaderAnalyticsSection({
  </Card>
 
  {/* POP-UP MODAL: DATATABLE DATA SISWA DENGAN FILTER KELAS */}
- {showStudentTableModal && (
- <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm overflow-y-auto">
- <div className="relative w-full max-w-5xl rounded-xl bg-white shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-900 overflow-hidden my-6">
-
- {/* Modal Header */}
- <div className="flex items-center justify-between border-b border-emerald-100/80 dark:border-emerald-800/60 bg-slate-50/80 dark:bg-slate-800/80 px-6 py-4">
- <div className="flex items-center gap-3">
- <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300">
- <Users className="size-5" />
- </div>
- <div>
- <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
- Data Master Siswa (Datatable Pop-up)
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- Daftar siswa sesuai kewenangan unit dengan filter menurut kelas dan pencarian interaktif.
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setShowStudentTableModal(false)}
- className="flex size-9 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-white transition cursor-pointer"
- aria-label="Tutup Modal"
- >
- <X className="size-5" />
- </button>
- </div>
-
- {/* Modal Body */}
- <div className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
+      <AppModal
+        isOpen={showStudentTableModal}
+        onClose={() => setShowStudentTableModal(false)}
+        title="Data Master Siswa (Datatable Pop-up)"
+        badge={`${filteredModalStudents.length} Siswa`}
+        description="Daftar siswa sesuai kewenangan unit dengan filter menurut kelas dan pencarian interaktif."
+        icon={Users}
+        maxWidth="max-w-5xl"
+        bodyClassName="space-y-4"
+        footer={
+          <div className="flex w-full items-center justify-between gap-3">
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+              Menampilkan {filteredModalStudents.length} siswa (terfilter berdasarkan kelas: {modalKelasFilter || 'Semua Kelas'}).
+            </span>
+            <button
+              type="button"
+              onClick={() => setShowStudentTableModal(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Tutup Pop-up</span>
+            </button>
+          </div>
+        }
+      >
  {/* Toolbar Filter Kelas & Search */}
  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between bg-slate-50/60 dark:bg-slate-800/40 p-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
  {/* Filter Kelas */}
@@ -955,26 +950,7 @@ export default function StudentLeaderAnalyticsSection({
  )}
  </TableBody>
  </TableRoot>
- </div>
-
- {/* Modal Footer */}
- <div className="flex items-center justify-between border-t border-emerald-100/80 dark:border-emerald-800/60 bg-slate-50/80 dark:bg-slate-800/80 px-6 py-3.5">
- <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
- Menampilkan {filteredModalStudents.length} siswa (terfilter berdasarkan kelas: {modalKelasFilter || 'Semua Kelas'}).
- </span>
- <Button
- variant="ghost"
- appearance="outline"
- size="sm"
- onClick={() => setShowStudentTableModal(false)}
- className="rounded-xl font-bold cursor-pointer"
- >
- Tutup Pop-up
- </Button>
- </div>
- </div>
- </div>
- )}
+      </AppModal>
  </div>
  )
 }

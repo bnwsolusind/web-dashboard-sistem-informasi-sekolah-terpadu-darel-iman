@@ -32,6 +32,7 @@ import {
 } from 'lucide-react'
 import AppBreadcrumb from '../../components/app/AppBreadcrumb'
 import ActionDropdown from '../../components/app/ActionDropdown'
+import AppModal from '../../components/app/AppModal'
 import api from '../../services/api'
 import {
   Card
@@ -94,38 +95,50 @@ function useDebounce(value, delay = 350) {
 }
 
 function HarmonizedDeleteBillModal({ isOpen, onClose, onConfirm, bill, isSubmitting, error }) {
-    if (!isOpen || !bill) return null
     return (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
-            <motion.div
-                initial={{ opacity: 0, scale: 0.94 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.94 }}
-                className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] dark:border-emerald-800/60 dark:bg-[#1B2433]"
-            >
-                <div className="p-6">
-                    <div className="flex items-center gap-3.5 mb-4">
-                        <div className="flex h-9 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 shadow-sm">
-                            <Trash2 className="h-6 w-6" />
-                        </div>
-                        <div>
-                            <span className="inline-block rounded-md bg-rose-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
-                                Hapus Tagihan
-                            </span>
-                            <h3 className="text-base font-bold text-slate-900 dark:text-white mt-0.5">
-                                Hapus Tagihan Siswa?
-                            </h3>
-                        </div>
-                    </div>
-                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+        <AppModal
+            isOpen={isOpen && Boolean(bill)}
+            onClose={onClose}
+            disableBackdropClose={isSubmitting}
+            hideCloseButton={isSubmitting}
+            icon={Trash2}
+            title="Hapus Tagihan Siswa?"
+            badge="Hapus Tagihan"
+            variant="danger"
+            maxWidth="max-w-md"
+            zIndex={70}
+            footer={
+                <div className="flex items-center justify-end gap-2.5 w-full">
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        disabled={isSubmitting}
+                        className="h-9.5 px-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-xs font-black text-slate-700 dark:text-slate-200 transition active:scale-95 cursor-pointer disabled:opacity-50"
+                    >
+                        Batal
+                    </button>
+                    <button
+                        type="button"
+                        onClick={onConfirm}
+                        disabled={isSubmitting}
+                        className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black border-2 border-rose-600 shadow-md shadow-rose-600/20 active:scale-95 transition cursor-pointer disabled:opacity-50"
+                    >
+                        {isSubmitting ? 'Menghapus...' : 'Ya, Hapus Tagihan'}
+                    </button>
+                </div>
+            }
+        >
+            {bill && (
+                <>
+                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                         Apakah Anda yakin ingin menghapus tagihan <strong className="text-slate-900 dark:text-white">"{bill.title}"</strong> untuk siswa <strong className="text-slate-900 dark:text-white">{bill.student?.nama_lengkap || 'ini'}</strong>?
                     </p>
                     {error && (
-                        <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/80 p-3 mb-4 text-xs font-semibold text-rose-700 dark:border-emerald-800/60 dark:bg-rose-950/40 dark:text-rose-300">
+                        <div className="rounded-xl border border-rose-200/80 dark:border-rose-800/60 bg-rose-50/80 p-3 text-xs font-semibold text-rose-700 dark:bg-rose-950/40 dark:text-rose-300">
                             {error}
                         </div>
                     )}
-                    <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/50 p-3 dark:border-emerald-800/60 dark:bg-rose-950/20 mb-6">
+                    <div className="rounded-xl border border-rose-200/80 dark:border-rose-800/60 bg-rose-50/50 p-3 dark:bg-rose-950/20">
                         <div className="flex items-start gap-2">
                             <AlertCircle className="h-4 w-4 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
                             <p className="text-xs text-rose-800 dark:text-rose-300">
@@ -133,27 +146,9 @@ function HarmonizedDeleteBillModal({ isOpen, onClose, onConfirm, bill, isSubmitt
                             </p>
                         </div>
                     </div>
-                    <div className="flex items-center justify-end gap-3">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            disabled={isSubmitting}
-                            className="h-9 px-4 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white text-xs font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-700/80 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition cursor-pointer"
-                        >
-                            Batal
-                        </button>
-                        <button
-                            type="button"
-                            onClick={onConfirm}
-                            disabled={isSubmitting}
-                            className="h-9 px-5 rounded-xl bg-white dark:bg-[#1B2433] hover:from-rose-700 hover:to-red-700 text-xs font-extrabold shadow-sm transition cursor-pointer disabled:opacity-50"
-                        >
-                            {isSubmitting ? 'Menghapus...' : 'Ya, Hapus Tagihan'}
-                        </button>
-                    </div>
-                </div>
-            </motion.div>
-        </div>
+                </>
+            )}
+        </AppModal>
     )
 }
 
@@ -781,295 +776,284 @@ export default function StudentBillsManagementPage() {
             </div>
 
             {/* 5. MODAL TERBITKAN TAGIHAN (SINGLE & BULK) */}
-            <AnimatePresence>
-                {isCreateModalOpen && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-xs">
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            className="w-full max-w-xl rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-6 shadow-xl dark:border-emerald-800/60 dark:bg-slate-900"
+            <AppModal
+                isOpen={isCreateModalOpen}
+                onClose={() => setIsCreateModalOpen(false)}
+                disableBackdropClose={creating}
+                hideCloseButton={creating}
+                icon={Receipt}
+                title="Terbitkan Tagihan Siswa"
+                maxWidth="max-w-xl"
+                zIndex={50}
+                footer={
+                    <div className="flex justify-end gap-2.5 w-full">
+                        <button
+                            type="button"
+                            onClick={() => setIsCreateModalOpen(false)}
+                            disabled={creating}
+                            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black border border-slate-300 dark:border-slate-700 transition-all active:scale-95 cursor-pointer disabled:opacity-50"
                         >
-                            <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-3 dark:border-emerald-800/60">
-                                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Terbitkan Tagihan Siswa</h3>
-                                <CloseButton onClick={() => setIsCreateModalOpen(false)} />
-                            </div>
-
-                            {createError && (
-                                <div className="mt-3 rounded-xl bg-rose-50 p-3 text-xs font-bold text-rose-600">
-                                    {createError}
-                                </div>
-                            )}
-
-                            <form onSubmit={handleSaveCreateBill} className="mt-4 space-y-4">
-                                {/* Mode Switcher */}
-                                <div className="flex rounded-xl bg-emerald-50 p-1 dark:bg-emerald-950/40">
-                                    <button
-                                        type="button"
-                                        onClick={() => setCreateForm((prev) => ({ ...prev, mode: 'single' }))}
-                                        className={`flex-1 rounded-lg py-1.5 text-xs font-bold transition-all ${createForm.mode === 'single' ? 'bg-white shadow-xs text-emerald-800 dark:bg-slate-700 dark:text-white' : 'text-slate-500'
-                                            }`}
-                                    >
-                                        Perorangan Siswa
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => setCreateForm((prev) => ({ ...prev, mode: 'bulk_class' }))}
-                                        className={`flex-1 rounded-lg py-1.5 text-xs font-bold transition-all ${createForm.mode === 'bulk_class' ? 'bg-white shadow-xs text-emerald-800 dark:bg-slate-700 dark:text-white' : 'text-slate-500'
-                                            }`}
-                                    >
-                                        Massal Per Rombel
-                                    </button>
-                                </div>
-
-                                {/* Pilih Kelas Rombel */}
-                                <div>
-                                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                                        Kelas / Rombel <span className="text-rose-500">*</span>
-                                    </label>
-                                    <CustomSelect
-                                        value={createForm.class_id}
-                                        onChange={(e) => setCreateForm((prev) => ({ ...prev, class_id: e.target.value, student_id: '' }))}
-                                        required
-                                        className="mt-1 h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
-                                    >
-                                        <option value="">Pilih Kelas...</option>
-                                        {classes.map((c) => (
-                                            <option key={c.id} value={c.id}>
-                                                {c.nama_kelas || c.name}
-                                            </option>
-                                        ))}
-                                    </CustomSelect>
-                                </div>
-
-                                {/* Jika mode single, pilih siswa */}
-                                {createForm.mode === 'single' && (
-                                    <div>
-                                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                                            Nama Siswa <span className="text-rose-500">*</span>
-                                        </label>
-                                        <CustomSelect
-                                            value={createForm.student_id}
-                                            onChange={(e) => setCreateForm((prev) => ({ ...prev, student_id: e.target.value }))}
-                                            required={createForm.mode === 'single'}
-                                            className="mt-1 h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
-                                        >
-                                            <option value="">Pilih Siswa...</option>
-                                            {students.map((s) => (
-                                                <option key={s.id} value={s.id}>
-                                                    {s.nama_lengkap} (NIS: {s.nis || '-'})
-                                                </option>
-                                            ))}
-                                        </CustomSelect>
-                                    </div>
-                                )}
-
-                                {/* Kategori Biaya */}
-                                <div>
-                                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                                        Kategori Biaya <span className="text-rose-500">*</span>
-                                    </label>
-                                    <CustomSelect
-                                        value={createForm.fee_category_id}
-                                        onChange={(e) => {
-                                            const cat = feeCategories.find((c) => c.id === e.target.value)
-                                            setCreateForm((prev) => ({
-                                                ...prev,
-                                                fee_category_id: e.target.value,
-                                                amount: cat?.default_amount ? String(cat.default_amount) : prev.amount,
-                                            }))
-                                        }}
-                                        required
-                                        className="mt-1 h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
-                                    >
-                                        <option value="">Pilih Kategori...</option>
-                                        {feeCategories.map((fc) => (
-                                            <option key={fc.id} value={fc.id}>
-                                                {fc.name} ({fc.code})
-                                            </option>
-                                        ))}
-                                    </CustomSelect>
-                                </div>
-
-                                {/* Judul Tagihan */}
-                                <div>
-                                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                                        Judul / Uraian Tagihan <span className="text-rose-500">*</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value={createForm.title}
-                                        onChange={(e) => setCreateForm((prev) => ({ ...prev, title: e.target.value }))}
-                                        required
-                                        placeholder="Contoh: SPP Bulan September 2026"
-                                        className="mt-1 h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
-                                    />
-                                </div>
-
-                                {/* Nominal & Jatuh Tempo */}
-                                <div className="grid grid-cols-2 gap-3">
-                                    <div>
-                                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                                            Nominal (Rp) <span className="text-rose-500">*</span>
-                                        </label>
-                                        <input
-                                            type="number"
-                                            value={createForm.amount}
-                                            onChange={(e) => setCreateForm((prev) => ({ ...prev, amount: e.target.value }))}
-                                            required
-                                            min="1"
-                                            className="mt-1 h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                                            Jatuh Tempo <span className="text-rose-500">*</span>
-                                        </label>
-                                        <DatePicker
-                                            value={createForm.due_date}
-                                            onChange={(e) => setCreateForm((prev) => ({ ...prev, due_date: e.target.value }))}
-                                            required
-                                            inputClassName="mt-1 h-9 text-xs"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="mt-6 flex justify-end gap-2 border-t border-emerald-200/80 pt-4 dark:border-emerald-800/60">
-                                    <Button
-                                        type="button"
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={() => setIsCreateModalOpen(false)}
-                                        disabled={creating}
-                                    >
-                                        Batal
-                                    </Button>
-                                    <Button
-                                        type="submit"
-                                        variant="primary"
-                                        disabled={creating}
-                                        className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg h-9 px-4 text-sm shadow-xs border border-emerald-200/80 dark:border-emerald-800/60 inline-flex items-center justify-center gap-2"
-                                    >
-                                        {creating ? 'Menerbitkan...' : 'Terbitkan Sekarang'}
-                                    </Button>
-                                </div>
-                            </form>
-                        </motion.div>
+                            Batal
+                        </button>
+                        <button
+                            type="submit"
+                            form="create-bill-form"
+                            disabled={creating}
+                            className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 active:scale-95 transition-all cursor-pointer disabled:opacity-50 inline-flex items-center justify-center gap-2"
+                        >
+                            {creating ? 'Menerbitkan...' : 'Terbitkan Sekarang'}
+                        </button>
+                    </div>
+                }
+            >
+                {createError && (
+                    <div className="rounded-xl bg-rose-50 p-3 text-xs font-bold text-rose-600 dark:bg-rose-950/40 dark:text-rose-300">
+                        {createError}
                     </div>
                 )}
-            </AnimatePresence>
+
+                <form id="create-bill-form" onSubmit={handleSaveCreateBill} className="space-y-4">
+                    {/* Mode Switcher */}
+                    <div className="flex rounded-xl bg-emerald-50 p-1 dark:bg-emerald-950/40">
+                        <button
+                            type="button"
+                            onClick={() => setCreateForm((prev) => ({ ...prev, mode: 'single' }))}
+                            className={`flex-1 rounded-lg py-1.5 text-xs font-bold transition-all ${createForm.mode === 'single' ? 'bg-white shadow-xs text-emerald-800 dark:bg-slate-700 dark:text-white' : 'text-slate-500'
+                                }`}
+                        >
+                            Perorangan Siswa
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setCreateForm((prev) => ({ ...prev, mode: 'bulk_class' }))}
+                            className={`flex-1 rounded-lg py-1.5 text-xs font-bold transition-all ${createForm.mode === 'bulk_class' ? 'bg-white shadow-xs text-emerald-800 dark:bg-slate-700 dark:text-white' : 'text-slate-500'
+                                }`}
+                        >
+                            Massal Per Rombel
+                        </button>
+                    </div>
+
+                    {/* Pilih Kelas Rombel */}
+                    <div>
+                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                            Kelas / Rombel <span className="text-rose-500">*</span>
+                        </label>
+                        <CustomSelect
+                            value={createForm.class_id}
+                            onChange={(e) => setCreateForm((prev) => ({ ...prev, class_id: e.target.value, student_id: '' }))}
+                            required
+                            className="mt-1 h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
+                        >
+                            <option value="">Pilih Kelas...</option>
+                            {classes.map((c) => (
+                                <option key={c.id} value={c.id}>
+                                    {c.nama_kelas || c.name}
+                                </option>
+                            ))}
+                        </CustomSelect>
+                    </div>
+
+                    {/* Jika mode single, pilih siswa */}
+                    {createForm.mode === 'single' && (
+                        <div>
+                            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                                Nama Siswa <span className="text-rose-500">*</span>
+                            </label>
+                            <CustomSelect
+                                value={createForm.student_id}
+                                onChange={(e) => setCreateForm((prev) => ({ ...prev, student_id: e.target.value }))}
+                                required={createForm.mode === 'single'}
+                                className="mt-1 h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
+                            >
+                                <option value="">Pilih Siswa...</option>
+                                {students.map((s) => (
+                                    <option key={s.id} value={s.id}>
+                                        {s.nama_lengkap} (NIS: {s.nis || '-'})
+                                    </option>
+                                ))}
+                            </CustomSelect>
+                        </div>
+                    )}
+
+                    {/* Kategori Biaya */}
+                    <div>
+                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                            Kategori Biaya <span className="text-rose-500">*</span>
+                        </label>
+                        <CustomSelect
+                            value={createForm.fee_category_id}
+                            onChange={(e) => {
+                                const cat = feeCategories.find((c) => c.id === e.target.value)
+                                setCreateForm((prev) => ({
+                                    ...prev,
+                                    fee_category_id: e.target.value,
+                                    amount: cat?.default_amount ? String(cat.default_amount) : prev.amount,
+                                }))
+                            }}
+                            required
+                            className="mt-1 h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
+                        >
+                            <option value="">Pilih Kategori...</option>
+                            {feeCategories.map((fc) => (
+                                <option key={fc.id} value={fc.id}>
+                                    {fc.name} ({fc.code})
+                                </option>
+                            ))}
+                        </CustomSelect>
+                    </div>
+
+                    {/* Judul Tagihan */}
+                    <div>
+                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                            Judul / Uraian Tagihan <span className="text-rose-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            value={createForm.title}
+                            onChange={(e) => setCreateForm((prev) => ({ ...prev, title: e.target.value }))}
+                            required
+                            placeholder="Contoh: SPP Bulan September 2026"
+                            className="mt-1 h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
+                        />
+                    </div>
+
+                    {/* Nominal & Jatuh Tempo */}
+                    <div className="grid grid-cols-2 gap-3">
+                        <div>
+                            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                                Nominal (Rp) <span className="text-rose-500">*</span>
+                            </label>
+                            <input
+                                type="number"
+                                value={createForm.amount}
+                                onChange={(e) => setCreateForm((prev) => ({ ...prev, amount: e.target.value }))}
+                                required
+                                min="1"
+                                className="mt-1 h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                                Jatuh Tempo <span className="text-rose-500">*</span>
+                            </label>
+                            <DatePicker
+                                value={createForm.due_date}
+                                onChange={(e) => setCreateForm((prev) => ({ ...prev, due_date: e.target.value }))}
+                                required
+                                inputClassName="mt-1 h-9 text-xs"
+                            />
+                        </div>
+                    </div>
+                </form>
+            </AppModal>
 
             {/* 6. MODAL CATAT PEMBAYARAN KASIR */}
-            <AnimatePresence>
-                {isPayModalOpen && selectedBill && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-xs">
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            className="w-full max-w-md rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-6 shadow-xl dark:border-emerald-800/60 dark:bg-slate-900"
+            <AppModal
+                isOpen={isPayModalOpen && Boolean(selectedBill)}
+                onClose={() => setIsPayModalOpen(false)}
+                disableBackdropClose={paying}
+                hideCloseButton={paying}
+                icon={Wallet}
+                title="Catat Pelunasan Pembayaran"
+                maxWidth="max-w-md"
+                zIndex={50}
+                footer={
+                    <div className="flex justify-end gap-2.5 w-full">
+                        <button
+                            type="button"
+                            onClick={() => setIsPayModalOpen(false)}
+                            disabled={paying}
+                            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black border border-slate-300 dark:border-slate-700 transition-all active:scale-95 cursor-pointer disabled:opacity-50"
                         >
-                            <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-3 dark:border-emerald-800/60">
-                                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Catat Pelunasan Pembayaran</h3>
-                                <CloseButton onClick={() => setIsPayModalOpen(false)} />
-                            </div>
-
-                            {payError && (
-                                <div className="mt-3 rounded-xl bg-rose-50 p-3 text-xs font-bold text-rose-600">
-                                    {payError}
-                                </div>
-                            )}
-
-                            <div className="mt-3 rounded-xl bg-slate-50 p-3 text-xs dark:bg-slate-800">
-                                <p className="font-bold text-slate-900 dark:text-white">{selectedBill.title}</p>
-                                <p className="text-slate-500">Siswa: {selectedBill.student?.nama_lengkap} ({selectedBill.student?.kelas?.nama_kelas})</p>
-                                <p className="mt-1 font-black text-emerald-700 dark:text-emerald-400">
-                                    Nominal Tagihan: {formatRupiah(selectedBill.amount)}
-                                </p>
-                            </div>
-
-                            <form onSubmit={handleSavePayment} className="mt-4 space-y-4">
-                                <div>
-                                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                                        Jumlah Diterima (Rp) <span className="text-rose-500">*</span>
-                                    </label>
-                                    <input
-                                        type="number"
-                                        value={payForm.paid_amount}
-                                        onChange={(e) => setPayForm((prev) => ({ ...prev, paid_amount: e.target.value }))}
-                                        required
-                                        min="1"
-                                        className="mt-1 h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                                        Metode Pembayaran <span className="text-rose-500">*</span>
-                                    </label>
-                                    <CustomSelect
-                                        value={payForm.payment_method}
-                                        onChange={(e) => setPayForm((prev) => ({ ...prev, payment_method: e.target.value }))}
-                                        required
-                                        className="mt-1 h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
-                                    >
-                                        <option value="TUNAI_KASIR">Tunai Kasir Sekolah</option>
-                                        <option value="TRANSFER_BSI">Transfer BSI Syariah</option>
-                                        <option value="QRIS">QRIS Yayasan</option>
-                                        <option value="TRANSFER_BANK">Transfer Bank Lainnya</option>
-                                    </CustomSelect>
-                                </div>
-
-                                <div>
-                                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                                        Tanggal Transaksi
-                                    </label>
-                                    <DatePicker
-                                        value={payForm.paid_at}
-                                        onChange={(e) => setPayForm((prev) => ({ ...prev, paid_at: e.target.value }))}
-                                        required
-                                        inputClassName="mt-1 h-9 text-xs"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                                        Catatan Kasir / Keterangan (Opsional)
-                                    </label>
-                                    <textarea
-                                        value={payForm.notes}
-                                        onChange={(e) => setPayForm((prev) => ({ ...prev, notes: e.target.value }))}
-                                        rows={2}
-                                        placeholder="Contoh: Diterima langsung oleh kasir TU"
-                                        className="mt-1 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-2.5 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
-                                    />
-                                </div>
-
-                                <div className="mt-6 flex justify-end gap-2 border-t border-emerald-200/80 pt-4 dark:border-emerald-800/60">
-                                    <Button
-                                        type="button"
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={() => setIsPayModalOpen(false)}
-                                        disabled={paying}
-                                    >
-                                        Batal
-                                    </Button>
-                                    <Button
-                                        type="submit"
-                                        variant="primary"
-                                        size="sm"
-                                        disabled={paying}
-                                        className="!bg-[#059669] !text-white"
-                                    >
-                                        {paying ? 'Menyimpan...' : 'Simpan & Terbitkan Kuitansi'}
-                                    </Button>
-                                </div>
-                            </form>
-                        </motion.div>
+                            Batal
+                        </button>
+                        <button
+                            type="submit"
+                            form="pay-bill-form"
+                            disabled={paying}
+                            className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 active:scale-95 transition-all cursor-pointer disabled:opacity-50"
+                        >
+                            {paying ? 'Menyimpan...' : 'Simpan & Terbitkan Kuitansi'}
+                        </button>
                     </div>
+                }
+            >
+                {selectedBill && (
+                    <>
+                        {payError && (
+                            <div className="rounded-xl bg-rose-50 p-3 text-xs font-bold text-rose-600 dark:bg-rose-950/40 dark:text-rose-300">
+                                {payError}
+                            </div>
+                        )}
+
+                        <div className="rounded-xl bg-slate-50 p-3 text-xs dark:bg-slate-800">
+                            <p className="font-bold text-slate-900 dark:text-white">{selectedBill.title}</p>
+                            <p className="text-slate-500">Siswa: {selectedBill.student?.nama_lengkap} ({selectedBill.student?.kelas?.nama_kelas})</p>
+                            <p className="mt-1 font-black text-emerald-700 dark:text-emerald-400">
+                                Nominal Tagihan: {formatRupiah(selectedBill.amount)}
+                            </p>
+                        </div>
+
+                        <form id="pay-bill-form" onSubmit={handleSavePayment} className="space-y-4">
+                            <div>
+                                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                                    Jumlah Diterima (Rp) <span className="text-rose-500">*</span>
+                                </label>
+                                <input
+                                    type="number"
+                                    value={payForm.paid_amount}
+                                    onChange={(e) => setPayForm((prev) => ({ ...prev, paid_amount: e.target.value }))}
+                                    required
+                                    min="1"
+                                    className="mt-1 h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                                    Metode Pembayaran <span className="text-rose-500">*</span>
+                                </label>
+                                <CustomSelect
+                                    value={payForm.payment_method}
+                                    onChange={(e) => setPayForm((prev) => ({ ...prev, payment_method: e.target.value }))}
+                                    required
+                                    className="mt-1 h-9 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
+                                >
+                                    <option value="TUNAI_KASIR">Tunai Kasir Sekolah</option>
+                                    <option value="TRANSFER_BSI">Transfer BSI Syariah</option>
+                                    <option value="QRIS">QRIS Yayasan</option>
+                                    <option value="TRANSFER_BANK">Transfer Bank Lainnya</option>
+                                </CustomSelect>
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                                    Tanggal Transaksi
+                                </label>
+                                <DatePicker
+                                    value={payForm.paid_at}
+                                    onChange={(e) => setPayForm((prev) => ({ ...prev, paid_at: e.target.value }))}
+                                    required
+                                    inputClassName="mt-1 h-9 text-xs"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                                    Catatan Kasir / Keterangan (Opsional)
+                                </label>
+                                <textarea
+                                    value={payForm.notes}
+                                    onChange={(e) => setPayForm((prev) => ({ ...prev, notes: e.target.value }))}
+                                    rows={2}
+                                    placeholder="Contoh: Diterima langsung oleh kasir TU"
+                                    className="mt-1 w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-2.5 text-xs outline-none focus:border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-700/80 dark:bg-slate-800"
+                                />
+                            </div>
+                        </form>
+                    </>
                 )}
-            </AnimatePresence>
+            </AppModal>
 
             {/* 7. PRINT TEMPLATE FOR OFFICIAL RECEIPT */}
             {activeReceipt && (

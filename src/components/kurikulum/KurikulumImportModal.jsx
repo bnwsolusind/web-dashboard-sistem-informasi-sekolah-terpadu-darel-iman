@@ -11,6 +11,7 @@ import {
  FileSpreadsheet,
 } from 'lucide-react'
 import { parseSpreadsheetFile, downloadSpreadsheetTemplate } from '../../utils/spreadsheetParser'
+import AppModal from '../app/AppModal'
 
 const SAMPLE_ROWS = [
  {
@@ -228,61 +229,40 @@ export default function KurikulumImportModal({
  onClose()
  }
 
- return (
- <AnimatePresence>
- {isOpen && (
- <div
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto"
- role="dialog"
- aria-modal="true"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !isSubmitting) resetModal()
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 16 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 12 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sky-950/20 dark:border-emerald-800/60 dark:bg-[#182232]">
- {/* Garis Aksen Gradasi Atas Sky Blue */}
-
- {/* Header Modal */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232] dark:bg-slate-950">
- <div className="flex items-center gap-3">
- <div className="rounded-lg bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/50 dark:border-emerald-800/60 dark:text-emerald-400 p-2.5 shadow-xs shrink-0">
-                  <FileInput className="size-5 text-emerald-600 dark:text-emerald-400" strokeWidth={2.25} />
- </div>
- <div>
- <h3 className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Import Data Kurikulum</span>
- <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold border bg-sky-50 text-sky-700 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-400 dark:border-emerald-800/60">
- <Sparkles className="size-3 text-sky-600" />
- Batch CSV / JSON
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Unggah berkas kurikulum massal sesuai struktur format SIT.
- </p>
- </div>
- </div>
-
- <button
- type="button"
- disabled={isSubmitting}
- onClick={resetModal}
- className="size-9 flex items-center justify-center rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-sky-950/60 dark:text-sky-300 transition-colors cursor-pointer disabled:opacity-50"
- aria-label="Tutup modal"
- >
- <X className="size-4" strokeWidth={2.25} />
- </button>
- </div>
-
- {/* Body Modal */}
- <div className="modal-body p-6 space-y-5 overflow-y-auto max-h-[70vh]">
+  return (
+    <AppModal
+      isOpen={isOpen}
+      onClose={() => !isSubmitting && resetModal()}
+      title="Import Data Kurikulum"
+      badge="Batch Import"
+      description="Unggah berkas spreadsheet (Excel/CSV) untuk memperbarui data kurikulum massal."
+      icon={FileInput}
+      maxWidth="max-w-xl"
+      disableBackdropClose={isSubmitting}
+      hideCloseButton={isSubmitting}
+      bodyClassName="space-y-5"
+      footer={
+        <>
+          <button
+            type="button"
+            disabled={isSubmitting}
+            onClick={resetModal}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            Batal
+          </button>
+          <button
+            type="button"
+            disabled={isSubmitting || (parsedData.length === 0 && !manualJsonText.trim())}
+            onClick={handleSubmit}
+            className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+          >
+            {isSubmitting ? <span className="size-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" /> : <FileInput className="size-4" />}
+            <span>{isSubmitting ? 'Mengimpor...' : 'Mulai Import'}</span>
+          </button>
+        </>
+      }
+    >
  {/* Result Callout */}
  {result && (
  <div
@@ -511,37 +491,6 @@ export default function KurikulumImportModal({
  </div>
  </div>
  )}
- </div>
-
- {/* Footer Modal */}
- <div className="modal-footer px-6 py-4 border-t border-emerald-100/80 dark:border-emerald-800/80 flex items-center justify-end gap-2.5 bg-slate-50/50 dark:bg-slate-900/40">
- <button
- type="button"
- disabled={isSubmitting}
- onClick={resetModal}
- className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200/80 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-2xs dark:border-emerald-700/80 dark:bg-emerald-600 dark:text-slate-200 transition cursor-pointer disabled:opacity-50 text-sm font-medium"
- >
- Batal
- </button>
-
- <button
- type="button"
- disabled={isSubmitting || (parsedData.length === 0 && !manualJsonText.trim())}
- onClick={handleSubmit}
- className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-[#1B2433] px-5 py-2.5 text-xs font-extrabold shadow-md shadow-sky-500/25 hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200 disabled:opacity-50 cursor-pointer border border-emerald-200/80 dark:border-emerald-800/60"
- >
- {isSubmitting ? (
- <span className="size-3.5 animate-spin rounded-full border-2 border-emerald-200/80 border-t-transparent" />
- ) : (
- <FileInput className="size-4" />
- )}
- <span>{isSubmitting ? 'Mengimpor...' : 'Proses Impor Data'}</span>
- </button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
- )
+    </AppModal>
+  )
 }

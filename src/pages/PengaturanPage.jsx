@@ -147,54 +147,48 @@ const presetThemes = [
 
 
 function HarmonizedActionModal({ isOpen, onClose, onConfirm, title, desc, confirmLabel, variant = 'danger' }) {
- if (!isOpen) return null
  const isDanger = variant === 'danger'
  return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto">
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 16 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.94, y: 16 }}
- transition={{ type: 'spring', damping: 25, stiffness: 350 }}
- className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] dark:border-emerald-800/60 dark:bg-[#1B2433] my-auto"
- >
- 
+ <AppModal
+ isOpen={isOpen}
+ onClose={onClose}
+ variant={isDanger ? 'danger' : 'emerald'}
+ badge={isDanger ? 'Konfirmasi Hapus' : 'Konfirmasi Reset'}
+ title={title}
+ icon={isDanger ? Trash2 : RotateCcw}
+ maxWidth="max-w-md"
+ zIndex="z-[70]"
+ footer={
+ <div className="flex w-full items-center justify-end gap-2.5">
  <button
  type="button"
  onClick={onClose}
- aria-label="Tutup modal"
- className="absolute top-4 right-4 size-8 flex items-center justify-center rounded-xl bg-emerald-50 hover:bg-slate-200 text-emerald-700 hover:text-slate-800 dark:bg-emerald-950/40 dark:hover:bg-slate-700 dark:text-emerald-300 cursor-pointer transition-all active:scale-95 z-20 shadow-xs"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <X className="size-4" strokeWidth={2.2} />
+ Batal
  </button>
-
- <div className="p-5 sm:p-6">
- <div className="flex items-start gap-3.5 mb-4 pr-8">
- <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl  shadow-md ${
+ <button
+ type="button"
+ onClick={onConfirm}
+ className={`inline-flex h-9.5 items-center justify-center rounded-xl border-2 px-5 text-xs font-black text-white shadow-md transition-all active:scale-95 cursor-pointer ${
  isDanger
- ? 'bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 shadow-sm'
- : 'bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm'
- }`}>
- {isDanger ? <Trash2 className="h-6 w-6" /> : <RotateCcw className="h-6 w-6" />}
+ ? 'border-rose-600 bg-rose-600 hover:bg-rose-700 shadow-rose-600/20'
+ : 'border-emerald-600 bg-emerald-600 hover:bg-emerald-700 shadow-emerald-600/20'
+ }`}
+ >
+ {confirmLabel}
+ </button>
  </div>
- <div>
- <span className={`inline-block rounded-md px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider ${
- isDanger
- ? 'bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300'
- : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
- }`}>
- {isDanger ? 'Konfirmasi Hapus' : 'Konfirmasi Reset'}
- </span>
- <h3 className="text-base font-bold text-slate-900 dark:text-white mt-0.5 leading-snug">{title}</h3>
- </div>
- </div>
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+ }
+ >
+ <div className="space-y-4">
+ <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
  {desc}
  </p>
- <div className={`rounded-xl border p-3 mb-6 ${
+ <div className={`rounded-xl border p-3 ${
  isDanger
- ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/50 dark:border-emerald-800/60 dark:bg-rose-950/20'
- : 'border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20'
+ ? 'border-rose-200/80 bg-rose-50/70 dark:border-rose-800/60 dark:bg-rose-950/20'
+ : 'border-emerald-200/80 bg-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20'
  }`}>
  <div className="flex items-start gap-2">
  {isDanger ? (
@@ -207,29 +201,8 @@ function HarmonizedActionModal({ isOpen, onClose, onConfirm, title, desc, confir
  </p>
  </div>
  </div>
- <div className="flex items-center justify-end gap-3">
- <button
- type="button"
- onClick={onClose}
- className="h-9 px-4 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white text-xs font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-800/60 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition cursor-pointer"
- >
- Batal
- </button>
- <button
- type="button"
- onClick={onConfirm}
- className={`h-10 px-5 rounded-xl text-xs font-extrabold text-white shadow-md transition cursor-pointer ${
- isDanger
- ? 'bg-white dark:bg-[#1B2433] hover:from-rose-700 hover:to-red-700 shadow-sm'
- : 'bg-[#059669] hover:bg-[#047857] text-white dark:bg-[#18A972] dark:hover:bg-[#059669] dark:text-white hover:from-emerald-700 hover:to-teal-700 shadow-sm'
- }`}
- >
- {confirmLabel}
- </button>
  </div>
- </div>
- </motion.div>
- </div>
+ </AppModal>
  )
 }
 
@@ -243,57 +216,55 @@ function SaveConfirmModal({
  previews,
  onPreviewPhoto,
 }) {
- if (!isOpen) return null
-
  const logoPreview = previews.logo || form.logo_url
  const faviconPreview = previews.favicon || form.favicon_url
  const hasNewLogo = Boolean(files.logo)
  const hasNewFavicon = Boolean(files.favicon)
 
  return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto">
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 16 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.94, y: 16 }}
- transition={{ type: 'spring', damping: 25, stiffness: 350 }}
- className="relative w-full max-w-lg overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] dark:border-emerald-800/60 dark:bg-[#1B2433] my-auto"
- >
-
+ <AppModal
+ isOpen={isOpen}
+ onClose={() => { if (!isSaving) onClose() }}
+ disableBackdropClose={isSaving}
+ hideCloseButton={isSaving}
+ badge="Konfirmasi Penyimpanan · Super Admin"
+ title="Simpan Pengaturan Sistem & Berkas Foto"
+ description="Pastikan data identitas sekolah, logo/foto, dan preferensi tema sudah sesuai sebelum diterapkan."
+ icon={School}
+ maxWidth="max-w-lg"
+ zIndex="z-[70]"
+ footer={
+ <div className="flex w-full items-center justify-end gap-2.5">
  <button
  type="button"
  onClick={onClose}
  disabled={isSaving}
- aria-label="Tutup dialog"
- className="absolute top-4 right-4 size-8 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-400 cursor-pointer transition-all active:scale-95 disabled:opacity-50 z-20 shadow-xs"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <X className="size-4" strokeWidth={2.2} />
+ Batal
  </button>
-
- <div className="p-5 sm:p-6 space-y-4">
- <div className="flex items-start gap-3.5 pr-8">
- <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
- 
-            <School className="h-6 w-6 text-white" />
+ <button
+ type="button"
+ onClick={onConfirm}
+ disabled={isSaving}
+ className="inline-flex h-9.5 items-center justify-center gap-2 rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 active:scale-95 disabled:opacity-50 cursor-pointer"
+ >
+ {isSaving ? (
+ <>
+ <div className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+ <span>Menyimpan ke Server...</span>
+ </>
+ ) : (
+ <>
+ <Save className="size-4" />
+ <span>Ya, Simpan Pengaturan</span>
+ </>
+ )}
+ </button>
  </div>
- <div className="min-w-0">
- <div className="flex flex-wrap items-center gap-1.5 mb-0.5">
- <span className="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- Konfirmasi Penyimpanan
- </span>
- <span className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-bold bg-teal-50 text-teal-700 dark:bg-teal-950/50 dark:text-teal-300 border border-emerald-200/80 dark:border-emerald-800/60">
- Super Admin
- </span>
- </div>
- <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white leading-tight">
- Simpan Pengaturan Sistem & Berkas Foto
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
- Pastikan data identitas sekolah, logo/foto, dan preferensi tema sudah sesuai sebelum diterapkan.
- </p>
- </div>
- </div>
+ }
+ >
+ <div className="space-y-4">
 
  <div className="rounded-xl border border-emerald-200/80 bg-slate-50/80 p-4 dark:border-emerald-800/80 dark:bg-slate-900/60 space-y-3">
  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-2.5 border-b border-emerald-200/80 dark:border-emerald-800/70">
@@ -412,120 +383,46 @@ function SaveConfirmModal({
  </div>
  </div>
 
- <div className="flex items-center justify-end gap-2.5 pt-2">
- <Button
- type="button"
- variant="outline"
- onClick={onClose}
- disabled={isSaving}
- className="h-9 px-4 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white hover:bg-emerald-50/50 text-sm font-medium text-slate-700 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-200 transition-colors cursor-pointer"
- >
- Batal
- </Button>
- <Button
- type="button"
- variant="primary"
- onClick={onConfirm}
- disabled={isSaving}
- className="h-9 px-4 rounded-lg bg-emerald-600 text-sm font-medium text-white shadow-xs text-white border border-emerald-200/80 dark:border-emerald-800/60"
- >
- {isSaving ? (
- <>
- <div className="size-4 animate-spin rounded-full border-2 border-emerald-200/80 border-t-transparent" />
- <span>Menyimpan ke Server...</span>
- </>
- ) : (
- <>
- <Save className="size-4" />
- <span>Ya, Simpan Pengaturan</span>
- </>
- )}
- </Button>
  </div>
- </div>
- </motion.div>
- </div>
+ </AppModal>
  )
 }
 
 function HarmonizedStatusModal({ isOpen, onClose, type = 'success', title, message }) {
- if (!isOpen) return null
-
  const isSuccess = type === 'success'
  const isError = type === 'error'
 
  return (
- <div className="fixed inset-0 z-[75] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto">
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 16 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.94, y: 16 }}
- transition={{ type: 'spring', damping: 25, stiffness: 350 }}
- className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] dark:border-emerald-800/60 dark:bg-[#1B2433] my-auto"
- >
- <div
- className={`h-1.5 w-full ${
- isSuccess
- ? 'bg-white dark:bg-[#1B2433]'
- : isError
- ? 'bg-rose-600 hover:bg-rose-700 text-white'
- : 'bg-white dark:bg-[#1B2433]'
- }`}
- />
-
+ <AppModal
+ isOpen={isOpen}
+ onClose={onClose}
+ variant={isError ? 'danger' : 'emerald'}
+ badge={isSuccess ? 'Penyimpanan Berhasil' : isError ? 'Penyimpanan Gagal' : 'Informasi Pengaturan'}
+ title={title}
+ icon={isSuccess ? CheckCircle2 : isError ? AlertTriangle : Sparkles}
+ maxWidth="max-w-md"
+ zIndex="z-[75]"
+ footer={
+ <div className="flex w-full items-center justify-end">
  <button
  type="button"
  onClick={onClose}
- aria-label="Tutup dialog"
- className="absolute top-4 right-4 size-8 flex items-center justify-center rounded-xl bg-emerald-50 hover:bg-slate-200 text-emerald-700 hover:text-slate-800 dark:bg-emerald-950/40 dark:hover:bg-slate-700 dark:text-emerald-300 cursor-pointer transition-all active:scale-95 z-20 shadow-xs"
+ className="inline-flex h-9.5 items-center justify-center gap-2 rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 active:scale-95 cursor-pointer"
  >
- <X className="size-4" strokeWidth={2.2} />
+ <Check className="size-4" strokeWidth={2.5} />
+ <span>OK, Mengerti</span>
  </button>
-
- <div className="p-5 sm:p-6 space-y-4">
- <div className="flex items-start gap-3.5 pr-8">
- <div
- className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl  shadow-md ${
- isSuccess
- ? 'bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-xs'
- : isError
- ? 'bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 shadow-xs'
- : 'bg-white dark:bg-[#1B2433] shadow-cyan-500/30 border border-emerald-200/80 dark:border-emerald-800/60'
- }`}
+ </div>
+ }
  >
- {isSuccess ? (
- <CheckCircle2 className="h-6 w-6" />
- ) : isError ? (
- <AlertTriangle className="h-6 w-6" />
- ) : (
- <Sparkles className="h-6 w-6" />
- )}
- </div>
- <div>
- <span
- className={`inline-block rounded-md px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider ${
- isSuccess
- ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-800/60'
- : isError
- ? 'bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border border-emerald-200/80 dark:border-emerald-800/60'
- : 'bg-teal-100 text-teal-800 dark:bg-teal-950/60 dark:text-teal-300 border border-emerald-200/80 dark:border-emerald-800/60'
- }`}
- >
- {isSuccess ? 'Penyimpanan Berhasil' : isError ? 'Penyimpanan Gagal' : 'Informasi Pengaturan'}
- </span>
- <h3 className="text-base font-bold text-slate-900 dark:text-white mt-1 leading-snug">
- {title}
- </h3>
- </div>
- </div>
-
+ <div className="space-y-4">
  <div
  className={`rounded-xl border p-3.5 text-xs font-medium leading-relaxed ${
  isSuccess
- ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/60 text-emerald-950 dark:border-emerald-800/60 dark:bg-emerald-950/20 dark:text-emerald-200'
+ ? 'border-emerald-200/80 bg-emerald-50/60 text-emerald-950 dark:border-emerald-800/60 dark:bg-emerald-950/20 dark:text-emerald-200'
  : isError
- ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-rose-50/60 text-rose-950 dark:border-emerald-800/60 dark:bg-rose-950/20 dark:text-rose-200'
- : 'border-emerald-200/80 dark:border-emerald-800/60 bg-teal-50/60 text-teal-950 dark:border-emerald-800/60 dark:bg-teal-950/20 dark:text-teal-200'
+ ? 'border-rose-200/80 bg-rose-50/60 text-rose-950 dark:border-rose-800/60 dark:bg-rose-950/20 dark:text-rose-200'
+ : 'border-emerald-200/80 bg-teal-50/60 text-teal-950 dark:border-emerald-800/60 dark:bg-teal-950/20 dark:text-teal-200'
  }`}
  >
  <p className="leading-relaxed">{message}</p>
@@ -543,71 +440,25 @@ function HarmonizedStatusModal({ isOpen, onClose, type = 'success', title, messa
  </div>
  </div>
  )}
-
- <div className="flex items-center justify-end pt-2">
- <button
- type="button"
- onClick={onClose}
- className="h-9 px-5 rounded-lg bg-emerald-600 dark:bg-emerald-50 dark:text-slate-900 dark: hover:from-emerald-500 hover:to-teal-500 text-xs font-black shadow-sm transition active:scale-95 inline-flex items-center gap-2 cursor-pointer text-white border border-emerald-200/80 dark:border-emerald-800/60 text-sm font-medium"
- >
- <Check className="size-4" strokeWidth={2.5} />
- <span>OK, Mengerti</span>
- </button>
  </div>
- </div>
- </motion.div>
- </div>
+ </AppModal>
  )
 }
 
 function PhotoPreviewModal({ isOpen, onClose, photoUrl, title }) {
- if (!isOpen || !photoUrl) return null
-
  return (
- <div className="fixed inset-0 z-[80] flex items-center justify-center p-3 sm:p-5 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
- <motion.div
- initial={{ opacity: 0, scale: 0.92 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.92 }}
- transition={{ type: 'spring', damping: 25, stiffness: 350 }}
- className="relative w-full max-w-lg overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] dark:border-emerald-800/60 dark:bg-[#1B2433] my-auto"
- >
-
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 px-5 py-3.5">
- <div className="flex items-center gap-2.5 min-w-0">
- <div className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
- <Image className="size-4" />
- </div>
- <div className="min-w-0">
- <h4 className="text-xs font-extrabold text-slate-900 dark:text-white ">
- {title || 'Pratinjau Foto / Logo'}
- </h4>
- <p className="text-[10px] text-slate-400 truncate">Resolusi Penuh • Media Asset</p>
- </div>
- </div>
- <button
- type="button"
- onClick={onClose}
- aria-label="Tutup pratinjau"
- className="size-8 flex items-center justify-center rounded-xl bg-emerald-50 hover:bg-slate-200 text-emerald-700 hover:text-slate-800 dark:bg-emerald-950/40 dark:hover:bg-slate-700 dark:text-emerald-300 cursor-pointer transition-all active:scale-95"
- >
- <X className="size-4" strokeWidth={2.2} />
- </button>
- </div>
-
- <div className="p-6 flex flex-col items-center justify-center bg-slate-50/70 dark:bg-slate-900/50 min-h-[260px]">
- <div className="relative max-h-[320px] max-w-full flex items-center justify-center p-3 rounded-xl bg-white dark:bg-slate-800/80 border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 shadow-sm">
- <img
- src={photoUrl}
- alt={title || 'Pratinjau Foto'}
- className="max-h-[280px] w-auto max-w-full object-contain rounded-xl"
- />
- </div>
- </div>
-
- <div className="flex items-center justify-between border-t border-emerald-200/80 dark:border-emerald-800/60 px-5 py-3 bg-white dark:bg-[#1B2433]">
+ <AppModal
+ isOpen={Boolean(isOpen && photoUrl)}
+ onClose={onClose}
+ title={title || 'Pratinjau Foto / Logo'}
+ description="Resolusi Penuh • Media Asset"
+ icon={Image}
+ maxWidth="max-w-lg"
+ zIndex="z-[80]"
+ footer={
+ <div className="flex w-full items-center justify-between gap-2">
  <a
- href={photoUrl}
+ href={photoUrl || '#'}
  target="_blank"
  rel="noopener noreferrer"
  download
@@ -619,13 +470,23 @@ function PhotoPreviewModal({ isOpen, onClose, photoUrl, title }) {
  <button
  type="button"
  onClick={onClose}
- className="h-8.5 px-4 rounded-xl bg-emerald-50 hover:bg-slate-200 text-emerald-700 text-xs font-bold dark:bg-emerald-950/40 dark:hover:bg-slate-700 dark:text-slate-200 cursor-pointer transition"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
  Tutup
  </button>
  </div>
- </motion.div>
+ }
+ >
+ <div className="p-4 flex flex-col items-center justify-center rounded-2xl bg-slate-50/70 dark:bg-slate-900/50 min-h-[260px]">
+ <div className="relative max-h-[320px] max-w-full flex items-center justify-center p-3 rounded-xl bg-white dark:bg-slate-800/80 border border-emerald-200/80 dark:border-emerald-800/60 shadow-sm">
+ <img
+ src={photoUrl}
+ alt={title || 'Pratinjau Foto'}
+ className="max-h-[280px] w-auto max-w-full object-contain rounded-xl"
+ />
  </div>
+ </div>
+ </AppModal>
  )
 }
 

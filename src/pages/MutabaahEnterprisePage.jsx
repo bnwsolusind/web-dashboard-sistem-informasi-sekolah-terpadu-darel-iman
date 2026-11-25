@@ -1,4 +1,5 @@
 import { HeroUiHeader } from "../components/ui/HeroUiHeader"
+import AppModal from "../components/app/AppModal"
 import {
   KpiStatCard
 } from '../components/app'
@@ -932,48 +933,49 @@ class MutabaahErrorBoundary extends Component {
 }
 
 function CrudDrawer({ config, state, options, close, save, saving }) {
- const defaults = state.row ? Object.fromEntries(config.fields.map((f) => [f.name, f.type === 'date' ? normalizeDateInput(state.row[f.name]) : state.row[f.name] ?? (f.type === 'boolean' ? true : '')])) : blank(config)
+ const defaults = state?.row ? Object.fromEntries(config.fields.map((f) => [f.name, f.type === 'date' ? normalizeDateInput(state.row[f.name]) : state.row[f.name] ?? (f.type === 'boolean' ? true : '')])) : blank(config)
  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm({ resolver: zodResolver(formSchema), defaultValues: defaults })
  const selectedUnit = options.units?.find((u) => u.id === watch('education_unit_id'))
  const boarding = /pesantren|ma.?had/i.test(selectedUnit?.name || '')
  return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 sm:p-6 bg-slate-950/70 backdrop-blur-md overflow-y-auto" onMouseDown={(e) => e.target === e.currentTarget && close()}>
-      <motion.form
-        initial={{ opacity: 0, scale: 0.95, y: 16 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 16 }}
-        transition={{ duration: 0.2, ease: 'easeOut' }}
-        className="modal-content w-full max-w-xl bg-white dark:bg-[#1B2433] rounded-3xl shadow-2xl overflow-hidden my-auto max-h-[85vh] flex flex-col min-h-0 relative border-2 border-emerald-300 dark:border-emerald-700/80"
-        onSubmit={handleSubmit(save)}
-      >
-        <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
-        <header className="modal-header flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 px-6 py-4.5 shrink-0 bg-white dark:bg-surface-dark-inner">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/80 dark:border-emerald-800/60 text-emerald-700 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-xs">
-              {state.mode === 'create' ? <Plus className="size-5" /> : state.mode === 'detail' ? <Eye className="size-5" /> : <Pencil className="size-5" />}
-            </div>
-            <div>
-              <small className="text-[11px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Mutaba’ah Yaumiyyah</small>
-              <h2 className="modal-title text-base sm:text-lg font-black text-slate-900 dark:text-white">{state.mode === 'create' ? 'Tambah' : state.mode === 'detail' ? 'Detail' : 'Edit'} {config.title}</h2>
-            </div>
-          </div>
-          <button type="button" onClick={close} className="rounded-xl p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-300 cursor-pointer transition-colors"><X className="size-5" /></button>
-        </header>
-        <main className="p-6 space-y-4 flex-1 min-h-0 overflow-y-auto max-h-[60vh]">
-          {config.fields.filter((field) => !field.conditional || (field.conditional === 'boarding' ? boarding : !boarding)).map((field) => (
-            <FormField key={field.name} field={field} register={register} setValue={setValue} watch={watch} error={errors[field.name]?.message} options={options} disabled={state.mode === 'detail'} />
-          ))}
-        </main>
-        <footer className="modal-footer flex items-center justify-end gap-2.5 border-t border-emerald-200/80 px-6 py-4 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900 shrink-0">
-          <Button appearance="outline" size="sm" type="button" onClick={close} className="bg-slate-100 hover:bg-slate-200 border border-slate-300/80 text-slate-700 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200 font-bold rounded-xl cursor-pointer">Batal</Button>
-          {state.mode !== 'detail' && (
-            <Button variant="primary" size="sm" type="submit" disabled={saving} className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md shadow-emerald-600/20 cursor-pointer">
-              {saving && <Loader2 className="size-4 animate-spin mr-1" />} Simpan
-            </Button>
-          )}
-        </footer>
-      </motion.form>
+ <AppModal
+ isOpen={Boolean(state)}
+ onClose={close}
+ badge="Mutaba’ah Yaumiyyah"
+ title={`${state?.mode === 'create' ? 'Tambah' : state?.mode === 'detail' ? 'Detail' : 'Edit'} ${config.title}`}
+ icon={state?.mode === 'create' ? Plus : state?.mode === 'detail' ? Eye : Pencil}
+ maxWidth="max-w-xl"
+ zIndex="z-[70]"
+ footer={
+ <div className="flex w-full items-center justify-end gap-2.5">
+ <button
+ type="button"
+ onClick={close}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
+ >
+ Batal
+ </button>
+ {state?.mode !== 'detail' && (
+ <button
+ type="submit"
+ form="mutabaah-enterprise-form"
+ disabled={saving}
+ className="inline-flex h-9.5 items-center gap-1.5 rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 active:scale-95 disabled:opacity-50 cursor-pointer"
+ >
+ {saving && <Loader2 className="size-4 animate-spin" />} Simpan
+ </button>
+ )}
  </div>
+ }
+ >
+ {state && (
+ <form id="mutabaah-enterprise-form" className="space-y-4" onSubmit={handleSubmit(save)}>
+ {config.fields.filter((field) => !field.conditional || (field.conditional === 'boarding' ? boarding : !boarding)).map((field) => (
+ <FormField key={field.name} field={field} register={register} setValue={setValue} watch={watch} error={errors[field.name]?.message} options={options} disabled={state.mode === 'detail'} />
+ ))}
+ </form>
+ )}
+ </AppModal>
  )
 }
 
@@ -1095,27 +1097,28 @@ function TemplateItemsDrawer({ template, options, close, refresh }) {
  ], [options.agendas, items])
 
  return (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 sm:p-6 bg-slate-950/70 backdrop-blur-md overflow-y-auto" onMouseDown={(e) => e.target === e.currentTarget && close()}>
- <motion.aside
- initial={{ opacity: 0, scale: 0.95, y: 16 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 16 }}
- transition={{ duration: 0.2, ease: 'easeOut' }}
- className="w-full max-w-2xl bg-white dark:bg-[#1B2433] rounded-xl shadow-2xl overflow-hidden my-auto max-h-[90vh] flex flex-col relative border border-emerald-200/80 dark:border-emerald-800/60"
+ <AppModal
+ isOpen={Boolean(template)}
+ onClose={close}
+ badge="Detail Template"
+ title={template?.name}
+ icon={GripVertical}
+ maxWidth="max-w-2xl"
+ zIndex="z-[70]"
+ footer={
+ <div className="flex w-full justify-end">
+ <button
+ type="button"
+ onClick={() => { refresh(); close() }}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 active:scale-95 cursor-pointer"
  >
- <header className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 p-5 dark:border-emerald-800/60 shrink-0">
- <div className="flex items-center gap-3">
- <div className="flex h-9 w-11 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-sm">
- <GripVertical className="size-5" />
+ Selesai
+ </button>
  </div>
- <div>
- <small className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">Detail Template</small>
- <h2 className="text-base font-black text-slate-900 dark:text-white">{template.name}</h2>
- </div>
- </div>
- <button type="button" onClick={close} className="rounded-xl p-2 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 cursor-pointer transition-colors"><X className="size-5" /></button>
- </header>
- <main className="p-5 space-y-3 flex-1 overflow-y-auto">
+ }
+ >
+ {template && (
+ <div className="space-y-3">
  <div className="flex items-center gap-2 mb-4">
  <div className="flex-1">
  <HeroUiFilterSelect
@@ -1128,7 +1131,7 @@ function TemplateItemsDrawer({ template, options, close, refresh }) {
  popoverWidth="w-full min-w-[280px]"
  />
  </div>
- <Button variant="primary" size="sm" onClick={add} className="cursor-pointer h-9 px-4 rounded-xl shrink-0"><Plus className="size-4 mr-1" /> Tambah</Button>
+ <Button variant="primary" size="sm" onClick={add} className="cursor-pointer h-10 px-4 rounded-xl shrink-0"><Plus className="size-4 mr-1" /> Tambah</Button>
  </div>
 
  {items.map((item, index) => (
@@ -1153,12 +1156,9 @@ function TemplateItemsDrawer({ template, options, close, refresh }) {
  ))}
 
  {!items.length && <EmptyState onCreate={() => null} compact />}
- </main>
- <footer className="flex justify-end p-4 border-t border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
- <Button appearance="outline" size="sm" onClick={() => { refresh(); close() }} className="cursor-pointer">Selesai</Button>
- </footer>
- </motion.aside>
  </div>
+ )}
+ </AppModal>
  )
 }
 

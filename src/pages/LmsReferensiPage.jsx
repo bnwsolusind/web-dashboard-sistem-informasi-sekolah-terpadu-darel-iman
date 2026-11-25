@@ -53,6 +53,7 @@ import {
 } from '../components/ui/table'
 import CsvImportModal from '../components/master-data/CsvImportModal'
 import ActionDropdown from '../components/app/ActionDropdown'
+import AppModal from '../components/app/AppModal'
 import { RotateCcw, Printer } from 'lucide-react'
 
 const containerVariants = {
@@ -783,30 +784,24 @@ export default function LmsReferensiPage({ embedded = false, hideBreadcrumb = fa
  </motion.div>
 
  {/* KPI DETAIL MODAL */}
- {kpiModalOpen && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
- <div className="bg-white dark:bg-[#1B2433] w-full max-w-4xl rounded-xl shadow-2xl border border-emerald-100/80 dark:border-emerald-800/60 overflow-hidden flex flex-col max-h-[85vh]">
- <div className="bg-white dark:bg-[#1B2433] p-5 flex items-center justify-between">
- <div className="flex items-center gap-3">
- <div className="p-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
- <BookMarked className="w-5 h-5 text-emerald-200" />
- </div>
- <div>
- <h3 className="text-lg font-bold">{kpiModalCategory.title}</h3>
- <p className="text-xs text-emerald-100 mt-0.5">
- Menampilkan {kpiModalCategory.items.length} referensi terdaftar
- </p>
- </div>
- </div>
+ <AppModal
+ isOpen={kpiModalOpen}
+ onClose={() => setKpiModalOpen(false)}
+ title={kpiModalCategory.title}
+ description={`Menampilkan ${kpiModalCategory.items.length} referensi terdaftar`}
+ icon={BookMarked}
+ maxWidth="max-w-4xl"
+ zIndex={50}
+ footer={
  <button
+ type="button"
  onClick={() => setKpiModalOpen(false)}
- className="text-emerald-100 hover:p-1 rounded-lg hover:bg-white/10 transition-colors"
+ className="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors"
  >
- <X className="w-5 h-5" />
+ Tutup
  </button>
- </div>
-
- <div className="p-6 overflow-y-auto flex-1 space-y-4">
+ }
+ >
  {kpiModalCategory.items.length === 0 ? (
  <div className="py-12 text-center text-slate-400">
  <BookMarked className="w-12 h-9 mx-auto mb-3 opacity-30" />
@@ -854,49 +849,39 @@ export default function LmsReferensiPage({ embedded = false, hideBreadcrumb = fa
  </TableRoot>
  </div>
  )}
- </div>
-
- <div className="p-4 border-t border-emerald-200/80 dark:border-emerald-800/60 flex justify-end bg-slate-50/50 dark:bg-slate-900/40">
- <button
- onClick={() => setKpiModalOpen(false)}
- className="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors"
- >
- Tutup
- </button>
- </div>
- </div>
- </div>
- )}
+ </AppModal>
 
  {/* Add/Edit Modal */}
- {modalOpen && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
- <div className="relative w-full max-w-2xl bg-white dark:bg-[#1B2433] rounded-2xl shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 overflow-hidden flex flex-col max-h-[90vh]">
- {/* Modal Header */}
- <div className="flex items-center justify-between px-6 py-5 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/30">
- <div className="flex items-center gap-3">
- <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-[#0E5C44] dark:text-emerald-400">
- <BookMarked className="w-6 h-6" />
- </div>
- <div>
- <h3 className="text-lg font-bold text-slate-900 dark:text-white">
- {editingItem ? 'Edit Referensi Pembelajaran' : 'Tambah Referensi Pembelajaran Baru'}
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Lengkapi informasi buku, jurnal, atau referensi digital.
- </p>
- </div>
- </div>
+ <AppModal
+ isOpen={modalOpen}
+ onClose={() => setModalOpen(false)}
+ title={editingItem ? 'Edit Referensi Pembelajaran' : 'Tambah Referensi Pembelajaran Baru'}
+ description="Lengkapi informasi buku, jurnal, atau referensi digital."
+ icon={BookMarked}
+ maxWidth="max-w-2xl"
+ zIndex={50}
+ footer={
+ <>
  <button
+ type="button"
  onClick={() => setModalOpen(false)}
- className="p-2 rounded-xl text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 transition-all"
+ className="px-5 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all"
  >
- <X className="w-5 h-5" />
+ Batal
  </button>
- </div>
-
- {/* Modal Body / Form */}
- <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4">
+ <button
+ type="submit"
+ form="lms-referensi-form"
+ disabled={formSubmitting}
+ className="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-[#0E5C44] hover:bg-[#1E8E5A] active:scale-95 rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50"
+ >
+ {formSubmitting && <RefreshCw className="w-4 h-4 animate-spin" />}
+ {editingItem ? 'Simpan Perubahan' : 'Tambah Referensi'}
+ </button>
+ </>
+ }
+ >
+ <form id="lms-referensi-form" onSubmit={handleSubmit} className="space-y-4">
  {/* Pilih dari Data Referensi Umum (Pre-fill Opsional) */}
  {!editingItem && optionsReferensiUmum.length > 0 && (
  <div className="p-3.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-800/60 space-y-1.5">
@@ -1076,53 +1061,30 @@ export default function LmsReferensiPage({ embedded = false, hideBreadcrumb = fa
  </div>
  </div>
  </div>
-
- {/* Submit Buttons */}
- <div className="pt-4 flex items-center justify-end gap-3 border-t border-emerald-200/80 dark:border-emerald-800/60">
- <button
- type="button"
- onClick={() => setModalOpen(false)}
- className="px-5 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all"
- >
- Batal
- </button>
- <button
- type="submit"
- disabled={formSubmitting}
- className="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-[#0E5C44] hover:bg-[#1E8E5A] active:scale-95 rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50"
- >
- {formSubmitting && <RefreshCw className="w-4 h-4 animate-spin" />}
- {editingItem ? 'Simpan Perubahan' : 'Tambah Referensi'}
- </button>
- </div>
  </form>
- </div>
- </div>
- )}
+ </AppModal>
 
  {/* Preview / Detail Modal */}
- {previewModalOpen && previewItem && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
- <div className="relative w-full max-w-xl bg-white dark:bg-[#1B2433] rounded-2xl shadow-2xl border border-emerald-200/80 dark:border-emerald-800/60 overflow-hidden flex flex-col">
- <div className="flex items-center justify-between px-6 py-5 border-b border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/30">
- <div className="flex items-center gap-3">
- <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-[#0E5C44] dark:text-emerald-400">
- <Eye className="w-6 h-6" />
- </div>
- <div>
- <h3 className="text-lg font-bold text-slate-900 dark:text-white">Detail Referensi Pembelajaran</h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">Informasi lengkap kepustakaan & modul</p>
- </div>
- </div>
+ <AppModal
+ isOpen={Boolean(previewModalOpen && previewItem)}
+ onClose={() => setPreviewModalOpen(false)}
+ title="Detail Referensi Pembelajaran"
+ description="Informasi lengkap kepustakaan & modul"
+ icon={Eye}
+ maxWidth="max-w-xl"
+ zIndex={50}
+ footer={
  <button
+ type="button"
  onClick={() => setPreviewModalOpen(false)}
- className="p-2 rounded-xl text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+ className="px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:text-slate-200 text-xs font-bold transition-colors cursor-pointer"
  >
- <X className="w-5 h-5" />
+ Tutup
  </button>
- </div>
-
- <div className="p-6 space-y-4 overflow-y-auto max-h-[75vh]">
+ }
+ >
+ {previewItem && (
+ <>
  <div>
  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Judul Referensi</span>
  <h4 className="text-base font-bold text-slate-900 dark:text-white mt-1">{previewItem.judul}</h4>
@@ -1193,10 +1155,9 @@ export default function LmsReferensiPage({ embedded = false, hideBreadcrumb = fa
  </a>
  )}
  </div>
- </div>
- </div>
- </div>
+ </>
  )}
+ </AppModal>
  </motion.div>
  </div>
  </PageContainer>

@@ -22,21 +22,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Pagination } from '@/components/ui/pagination'
-
-import {
- OverlayWrapper,
- Backdrop,
-} from '@/components/ui/overlay'
-
-import {
- Dialog,
- DialogHeader,
- DialogTitle,
- DialogDescription,
- DialogBody,
- DialogFooter,
- DialogClose,
-} from '@/components/ui/dialog'
+import AppModal from '../app/AppModal'
 
 import {
  TableRoot,
@@ -220,10 +206,10 @@ export default function StudentAchievementRecapSection({
  setCategoryFilter('all')
  setCurrentPage(1)
  }}
- className={`cursor-pointer rounded-xl border-2 p-4 shadow-sm transition hover:shadow-md ${
+ className={`cursor-pointer rounded-[20px] border-2 p-4 shadow-sm transition-all hover:shadow-md ${
  categoryFilter === 'all'
           ? 'border-amber-300 dark:border-amber-700/80 bg-amber-500/10 shadow-md ring-2 ring-amber-500/20 dark:bg-amber-500/15'
-          : 'border-amber-200/60 dark:border-amber-800/50 bg-white dark:bg-[#1B2433] hover:border-amber-300 dark:hover:border-amber-700/80'
+          : 'border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] hover:border-amber-300 dark:hover:border-amber-700/80'
  }`}
  >
  <div className="flex items-center justify-between pb-2 border-b border-emerald-100/80 dark:border-emerald-800/80">
@@ -273,10 +259,10 @@ export default function StudentAchievementRecapSection({
  setCategoryFilter('tahfizh')
  setCurrentPage(1)
  }}
- className={`cursor-pointer rounded-xl border-2 p-4 shadow-sm transition hover:shadow-md ${
+ className={`cursor-pointer rounded-[20px] border-2 p-4 shadow-sm transition-all hover:shadow-md ${
  categoryFilter === 'tahfizh'
           ? 'border-emerald-300 dark:border-emerald-700/80 bg-emerald-500/10 shadow-md ring-2 ring-emerald-500/20 dark:bg-emerald-500/15'
-          : 'border-emerald-200/60 dark:border-emerald-800/50 bg-white dark:bg-[#1B2433] hover:border-emerald-300 dark:hover:border-emerald-700/80'
+          : 'border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] hover:border-emerald-300 dark:hover:border-emerald-700/80'
  }`}
  >
  <div className="flex items-center justify-between pb-2 border-b border-emerald-100/80 dark:border-emerald-800/80">
@@ -330,10 +316,10 @@ export default function StudentAchievementRecapSection({
  setCategoryFilter('karakter')
  setCurrentPage(1)
  }}
- className={`cursor-pointer rounded-xl border-2 p-4 shadow-sm transition hover:shadow-md ${
+ className={`cursor-pointer rounded-[20px] border-2 p-4 shadow-sm transition-all hover:shadow-md ${
  categoryFilter === 'karakter'
           ? 'border-purple-300 dark:border-purple-700/80 bg-purple-500/10 shadow-md ring-2 ring-purple-500/20 dark:bg-purple-500/15'
-          : 'border-purple-200/60 dark:border-purple-800/50 bg-white dark:bg-[#1B2433] hover:border-purple-300 dark:hover:border-purple-700/80'
+          : 'border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] hover:border-purple-300 dark:hover:border-purple-700/80'
  }`}
  >
  <div className="flex items-center justify-between pb-2 border-b border-emerald-100/80 dark:border-emerald-800/80">
@@ -387,10 +373,10 @@ export default function StudentAchievementRecapSection({
  setCategoryFilter('akademik')
  setCurrentPage(1)
  }}
- className={`cursor-pointer rounded-xl border-2 p-4 shadow-sm transition hover:shadow-md ${
+ className={`cursor-pointer rounded-[20px] border-2 p-4 shadow-sm transition-all hover:shadow-md ${
  categoryFilter === 'akademik'
           ? 'border-cyan-300 dark:border-cyan-700/80 bg-cyan-500/10 shadow-md ring-2 ring-cyan-500/20 dark:bg-cyan-500/15'
-          : 'border-cyan-200/60 dark:border-cyan-800/50 bg-white dark:bg-[#1B2433] hover:border-cyan-300 dark:hover:border-cyan-700/80'
+          : 'border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] hover:border-cyan-300 dark:hover:border-cyan-700/80'
  }`}
  >
  <div className="flex items-center justify-between pb-2 border-b border-emerald-100/80 dark:border-emerald-800/80">
@@ -444,10 +430,10 @@ export default function StudentAchievementRecapSection({
  setCategoryFilter('ekstrakurikuler')
  setCurrentPage(1)
  }}
- className={`cursor-pointer rounded-xl border-2 p-4 shadow-sm transition hover:shadow-md ${
+ className={`cursor-pointer rounded-[20px] border-2 p-4 shadow-sm transition-all hover:shadow-md ${
  categoryFilter === 'ekstrakurikuler'
           ? 'border-sky-300 dark:border-sky-700/80 bg-sky-500/10 shadow-md ring-2 ring-sky-500/20 dark:bg-sky-500/15'
-          : 'border-sky-200/60 dark:border-sky-800/50 bg-white dark:bg-[#1B2433] hover:border-sky-300 dark:hover:border-sky-700/80'
+          : 'border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] hover:border-sky-300 dark:hover:border-sky-700/80'
  }`}
  >
  <div className="flex items-center justify-between pb-2 border-b border-emerald-100/80 dark:border-emerald-800/80">
@@ -529,7 +515,7 @@ export default function StudentAchievementRecapSection({
   onClick={onRefresh}
   title="Segarkan Data"
   aria-label="Segarkan Data Backend"
-  className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white border-2 border-emerald-300 hover:bg-emerald-50 text-emerald-700 shadow-xs active:scale-95 transition-all cursor-pointer shrink-0"
+  className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white border-2 border-emerald-600 shadow-xs active:scale-95 transition-all cursor-pointer shrink-0"
   >
   <RefreshCw className="h-4 w-4 stroke-[2.2]" />
   </button>
@@ -537,82 +523,83 @@ export default function StudentAchievementRecapSection({
  </div>
  </div>
 
- {/* Toolbar Baris 2: Search + Filter Dropdowns + perPage */}
- <div className="flex flex-wrap items-center justify-between gap-3 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:from-emerald-950/20 dark:to-teal-950/10 p-4 border-b border-emerald-200/80 dark:border-emerald-800/60">
- <div className="flex flex-wrap items-center gap-2 flex-1">
- {/* Search Input */}
- <div className="relative min-w-[220px] max-w-md flex-1">
- <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-emerald-600 dark:text-emerald-400" />
- <input
- type="text"
- placeholder="Cari nama siswa, NIS, atau prestasi..."
- value={searchTerm}
- onChange={(e) => {
- setSearchTerm(e.target.value)
- setCurrentPage(1)
- }}
- className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white py-2 pl-9 pr-3 text-xs text-slate-800 placeholder-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:bg-slate-900 dark:text-white dark:placeholder-slate-500"
- />
- </div>
+ 	{/* Toolbar Baris 2: Search + Filter Dropdowns + perPage (Pasti 1 Baris Sejajar) */}
+	<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:from-emerald-950/20 dark:to-teal-950/10 p-3.5 sm:p-4 border-b border-emerald-200/80 dark:border-emerald-800/60">
+		{/* Search Input */}
+		<div className="relative min-w-[200px] max-w-md flex-1">
+			<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-emerald-600 dark:text-emerald-400" />
+			<input
+				type="text"
+				placeholder="Cari nama siswa, NIS, atau prestasi..."
+				value={searchTerm}
+				onChange={(e) => {
+					setSearchTerm(e.target.value)
+					setCurrentPage(1)
+				}}
+				className="w-full rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white py-2 pl-9 pr-3 text-xs text-slate-800 placeholder-slate-400 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:bg-slate-900 dark:text-white dark:placeholder-slate-500"
+			/>
+		</div>
 
- {/* Filter Kategori */}
- <CustomSelect
- value={categoryFilter}
- onChange={(e) => {
- setCategoryFilter(e.target.value)
- setCurrentPage(1)
- }}
- className="rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white py-2 px-3 text-xs font-semibold text-slate-700 focus:border-emerald-500 focus:outline-none dark:bg-slate-900 dark:text-slate-200 cursor-pointer"
- >
- <option value="all">Semua Kategori</option>
- <option value="tahfizh">Tahfizh Al-Qur'an</option>
- <option value="santri">Santri Pesantren</option>
- <option value="olahraga">Sepakbola / Ekstrakurikuler</option>
- <option value="lomba">Lomba Pembelajaran</option>
- <option value="akademik">Akademik Umum</option>
- </CustomSelect>
+		{/* Filter Kategori & Tampilkan: 10 dalam 1 Baris Sejajar (flex-nowrap) */}
+		<div className="flex items-center gap-2.5 shrink-0 flex-nowrap overflow-x-auto">
+			{/* Filter Kategori */}
+			<CustomSelect
+				value={categoryFilter}
+				onChange={(e) => {
+					setCategoryFilter(e.target.value)
+					setCurrentPage(1)
+				}}
+				className="rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white py-2 px-3 text-xs font-semibold text-slate-700 focus:border-emerald-500 focus:outline-none dark:bg-slate-900 dark:text-slate-200 cursor-pointer shrink-0 min-w-[155px]"
+			>
+				<option value="all">Semua Kategori</option>
+				<option value="tahfizh">Tahfizh Al-Qur'an</option>
+				<option value="santri">Santri Pesantren</option>
+				<option value="olahraga">Sepakbola / Ekstrakurikuler</option>
+				<option value="lomba">Lomba Pembelajaran</option>
+				<option value="akademik">Akademik Umum</option>
+			</CustomSelect>
 
- {/* Filter Unit Pendidikan */}
- {availableUnits.length > 1 && (
- <CustomSelect
- value={unitFilter}
- onChange={(e) => {
- setUnitFilter(e.target.value)
- setCurrentPage(1)
- }}
- className="rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white py-2 px-3 text-xs font-semibold text-slate-700 focus:border-emerald-500 focus:outline-none dark:bg-slate-900 dark:text-slate-200 cursor-pointer"
- >
- <option value="all">Semua Unit</option>
- {availableUnits.map((u) => (
- <option key={u} value={u}>
- {u}
- </option>
- ))}
- </CustomSelect>
- )}
- </div>
+			{/* Filter Unit Pendidikan */}
+			{availableUnits.length > 1 && (
+				<CustomSelect
+					value={unitFilter}
+					onChange={(e) => {
+						setUnitFilter(e.target.value)
+						setCurrentPage(1)
+					}}
+					className="rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white py-2 px-3 text-xs font-semibold text-slate-700 focus:border-emerald-500 focus:outline-none dark:bg-slate-900 dark:text-slate-200 cursor-pointer shrink-0"
+				>
+					<option value="all">Semua Unit</option>
+					{availableUnits.map((u) => (
+						<option key={u} value={u}>
+							{u}
+						</option>
+					))}
+				</CustomSelect>
+			)}
 
- {/* perPage Select */}
- <div className="flex items-center gap-2">
- <span className="text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">Tampilkan:</span>
- <CustomSelect
- value={perPage}
- onChange={(e) => {
- setPerPage(Number(e.target.value))
- setCurrentPage(1)
- }}
- className="rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white py-2 px-2 text-xs font-semibold text-slate-700 focus:border-emerald-500 focus:outline-none dark:bg-slate-900 dark:text-slate-200 cursor-pointer"
- >
- <option value={5}>5</option>
- <option value={10}>10</option>
- <option value={15}>15</option>
- <option value={25}>25</option>
- <option value={50}>50</option>
- </CustomSelect>
- </div>
- </div>
+			{/* perPage Select berdampingan dalam 1 baris */}
+			<div className="flex items-center gap-1.5 pl-2 border-l border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
+				<span className="text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap font-semibold">Tampilkan:</span>
+				<CustomSelect
+					value={perPage}
+					onChange={(e) => {
+						setPerPage(Number(e.target.value))
+						setCurrentPage(1)
+					}}
+					className="rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white py-2 px-2 text-xs font-semibold text-slate-700 focus:border-emerald-500 focus:outline-none dark:bg-slate-900 dark:text-slate-200 cursor-pointer shrink-0 w-16"
+				>
+					<option value={5}>5</option>
+					<option value={10}>10</option>
+					<option value={15}>15</option>
+					<option value={25}>25</option>
+					<option value={50}>50</option>
+				</CustomSelect>
+			</div>
+		</div>
+	</div>
 
- {/* HeroUI Table */}
+	{/* HeroUI Table */}
  <div className="overflow-x-auto">
  <TableRoot className="w-full text-left border-collapse text-xs min-w-[940px]">
  <TableHeader className="bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 border-b-2 border-emerald-200/90 dark:border-emerald-800/60 text-[10px] font-black uppercase tracking-[0.12em] text-slate-800 dark:text-slate-100">
@@ -765,31 +752,28 @@ export default function StudentAchievementRecapSection({
  </div>
  </div>
 
- {/* 3. Detail View Modal (HeroUI Dialog & Overlay) */}
+ {/* 3. Detail View Modal (AppModal) */}
+ <AppModal
+ isOpen={Boolean(selectedDetail)}
+ onClose={() => setSelectedDetail(null)}
+ title="Detail Rekapitulasi Prestasi Siswa"
+ description="Data Terintegrasi Database Backend"
+ icon={Award}
+ maxWidth="max-w-xl"
+ variant="emerald"
+ zIndex={60}
+ footer={
+ <button
+ type="button"
+ onClick={() => setSelectedDetail(null)}
+ className="h-9.5 px-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black transition-all cursor-pointer active:scale-95"
+ >
+ Tutup
+ </button>
+ }
+ >
  {selectedDetail && (
- <OverlayWrapper isOpen={!!selectedDetail} onOpenChange={(open) => !open && setSelectedDetail(null)}>
- <Backdrop isOpen={!!selectedDetail} onOpenChange={(open) => !open && setSelectedDetail(null)} />
- <Dialog className="max-w-xl">
- <DialogHeader>
- <div className="flex items-center justify-between">
- <div className="flex items-center gap-2">
- <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400">
- <Award className="h-5 w-5" />
- </div>
- <div>
- <DialogTitle className="text-base font-extrabold text-slate-900 dark:text-emerald-600">
- Detail Rekapitulasi Prestasi Siswa
- </DialogTitle>
- <DialogDescription className="text-xs text-slate-500 dark:text-slate-400">
- Data Terintegrasi Database Backend
- </DialogDescription>
- </div>
- </div>
- <DialogClose onClick={() => setSelectedDetail(null)} />
- </div>
- </DialogHeader>
-
- <DialogBody className="space-y-4 py-3">
+ <>
  {/* Profil Siswa */}
  <div className="flex items-center gap-3 rounded-xl bg-emerald-50/40 dark:bg-emerald-950/20 p-3 border border-emerald-200/80 dark:border-emerald-800/60">
  <Avatar size="md">
@@ -858,16 +842,9 @@ export default function StudentAchievementRecapSection({
  </div>
  )}
  </div>
- </DialogBody>
-
- <DialogFooter>
- <Button variant="ghost" size="sm" onClick={() => setSelectedDetail(null)}>
- Tutup
- </Button>
- </DialogFooter>
- </Dialog>
- </OverlayWrapper>
+ </>
  )}
+ </AppModal>
  </section>
  )
 }

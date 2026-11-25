@@ -51,6 +51,8 @@ import {
   HeroUiHeader,
   KpiStatCard
 } from '../components/app'
+import PageToolbarActions from '../components/app/PageToolbarActions'
+import { SquircleActionButton } from '../components/master-data'
 import { Button } from '../components/ui/button'
 import { Badge } from '../components/ui/badge'
 import {
@@ -613,20 +615,12 @@ export default function SuperAdminDashboardPage() {
             className="rounded-container !border-2 !border-emerald-300 dark:!border-emerald-700/80 shadow-md shadow-emerald-500/10"
             actions={
               <div className="flex items-center gap-2 print:hidden flex-wrap">
-                <HeroTooltip content="Segarkan Data Realtime">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => refetch()}
-                    disabled={isFetching}
-                    aria-label="Segarkan Data Realtime"
-                    className="h-8.5 rounded-xl px-2.5 text-xs font-bold cursor-pointer inline-flex items-center gap-1.5 border-emerald-300 dark:border-emerald-700 text-emerald-800 dark:text-emerald-300 bg-white hover:bg-emerald-50 dark:bg-slate-900 shadow-2xs"
-                  >
-                    <RefreshCw className={cn('size-3.5', isFetching && 'animate-spin')} />
-                    <span className="hidden sm:inline">Refresh</span>
-                  </Button>
-                </HeroTooltip>
+                <PageToolbarActions
+                  onRefresh={() => refetch()}
+                  refreshLabel="Segarkan Data Realtime"
+                  refreshing={isFetching}
+                  showLabel
+                />
               </div>
             }
           />
@@ -810,16 +804,13 @@ export default function SuperAdminDashboardPage() {
                   </p>
                 </div>
               </div>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
+              <SquircleActionButton
+                variant="sync"
+                icon={RefreshCw}
+                label="Reset Filter"
                 onClick={resetFilter}
-                className="h-8 rounded-xl font-bold text-xs px-3.5 cursor-pointer inline-flex items-center gap-1.5 border border-emerald-300 dark:border-emerald-700/80 text-emerald-800 dark:text-emerald-300 bg-emerald-50/70 hover:bg-emerald-100/80 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/60 shadow-xs transition-all active:scale-95"
-              >
-                <RefreshCw className="size-3.5" />
-                <span>Reset Filter</span>
-              </Button>
+                showLabel
+              />
             </div>
 
             <div className="p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5">
@@ -1228,66 +1219,46 @@ export default function SuperAdminDashboardPage() {
                 </div>
               </div>
               <div className="flex items-center gap-2.5 flex-wrap shrink-0 py-1">
-                <HeroTooltip content="Kelola Master Unit Sekolah">
-                  <Button
-                    type="button"
-                    variant="primary"
-                    size="sm"
-                    onClick={() => navigate('/dashboard/master/unit-pendidikan')}
-                    className="rounded-xl font-bold text-xs cursor-pointer inline-flex items-center gap-1.5"
-                  >
-                    <Building2 className="size-3.5" />
-                    <span>Tambah Unit</span>
-                  </Button>
-                </HeroTooltip>
-                <HeroTooltip content="Kelola & Tambah Pegawai">
-                  <Button
-                    type="button"
-                    variant="export"
-                    size="sm"
-                    onClick={() => navigate('/dashboard/employees')}
-                    className="rounded-xl font-bold text-xs cursor-pointer inline-flex items-center gap-1.5"
-                  >
-                    <UserPlus className="size-3.5" />
-                    <span>Tambah Pegawai</span>
-                  </Button>
-                </HeroTooltip>
-                <HeroTooltip content="Kelola & Tambah Peserta Didik">
-                  <Button
-                    type="button"
-                    variant="primary"
-                    size="sm"
-                    onClick={() => navigate('/dashboard/master/siswa')}
-                    className="rounded-xl font-bold text-xs cursor-pointer inline-flex items-center gap-1.5"
-                  >
-                    <Users className="size-3.5" />
-                    <span>Tambah Siswa</span>
-                  </Button>
-                </HeroTooltip>
-                <HeroTooltip content="Konfigurasi Hak Akses & Peran Spatie">
-                  <Button
-                    type="button"
-                    variant="edit"
-                    size="sm"
-                    onClick={() => navigate('/dashboard/hak-akses')}
-                    className="rounded-xl font-bold text-xs cursor-pointer inline-flex items-center gap-1.5"
-                  >
-                    <Key className="size-3.5" />
-                    <span>Kelola Hak Akses</span>
-                  </Button>
-                </HeroTooltip>
-                <HeroTooltip content="Pengaturan Preferensi Sistem">
-                  <Button
-                    type="button"
-                    variant="print"
-                    size="sm"
-                    onClick={() => navigate('/dashboard/pengaturan')}
-                    className="rounded-xl font-bold text-xs cursor-pointer inline-flex items-center gap-1.5"
-                  >
-                    <Settings className="size-3.5" />
-                    <span>Pengaturan</span>
-                  </Button>
-                </HeroTooltip>
+                <SquircleActionButton
+                  variant="primary"
+                  icon={Building2}
+                  label="Tambah Unit"
+                  title="Kelola Master Unit Sekolah"
+                  onClick={() => navigate('/dashboard/master/unit-pendidikan')}
+                  showLabel
+                />
+                <SquircleActionButton
+                  variant="export"
+                  icon={UserPlus}
+                  label="Tambah Pegawai"
+                  title="Kelola & Tambah Pegawai"
+                  onClick={() => navigate('/dashboard/employees')}
+                  showLabel
+                />
+                <SquircleActionButton
+                  variant="primary"
+                  icon={Users}
+                  label="Tambah Siswa"
+                  title="Kelola & Tambah Peserta Didik"
+                  onClick={() => navigate('/dashboard/master/siswa')}
+                  showLabel
+                />
+                <SquircleActionButton
+                  variant="edit"
+                  icon={Key}
+                  label="Kelola Hak Akses"
+                  title="Konfigurasi Hak Akses & Peran Spatie"
+                  onClick={() => navigate('/dashboard/hak-akses')}
+                  showLabel
+                />
+                <SquircleActionButton
+                  variant="print"
+                  icon={Settings}
+                  label="Pengaturan"
+                  title="Pengaturan Preferensi Sistem"
+                  onClick={() => navigate('/dashboard/pengaturan')}
+                  showLabel
+                />
               </div>
             </div>
           </section>
@@ -1315,28 +1286,15 @@ export default function SuperAdminDashboardPage() {
             isLoading={isLoading}
             density="compact"
             actions={
-              <div className="flex items-center gap-2">
-                <Button
-                  type="button"
-                  variant="export"
-                  size="sm"
-                  onClick={handleExportUnitsCsv}
-                  className="rounded-xl font-bold text-xs shadow-xs cursor-pointer inline-flex items-center gap-1.5"
-                >
-                  <Download className="size-3.5" />
-                  <span className="hidden sm:inline">CSV</span>
-                </Button>
-                <Button
-                  type="button"
-                  variant="primary"
-                  size="sm"
-                  onClick={() => navigate('/dashboard/master/unit-pendidikan')}
-                  className="rounded-xl font-bold text-xs shadow-xs cursor-pointer inline-flex items-center gap-1.5"
-                >
-                  <span>Kelola Semua</span>
-                  <ArrowRight className="size-3.5" />
-                </Button>
-              </div>
+              <PageToolbarActions
+                onExport={handleExportUnitsCsv}
+                exportLabel="CSV"
+                primaryAction={{
+                  label: 'Kelola Semua',
+                  icon: ArrowRight,
+                  onClick: () => navigate('/dashboard/master/unit-pendidikan'),
+                }}
+              />
             }
             filters={
               <div className="flex flex-wrap items-center gap-2.5">

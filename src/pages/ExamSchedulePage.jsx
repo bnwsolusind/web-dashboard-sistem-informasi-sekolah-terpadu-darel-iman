@@ -1,4 +1,5 @@
 import { HeroUiHeader } from "../components/ui/HeroUiHeader"
+import AppModal from "../components/app/AppModal"
 import {
   KpiStatCard
 } from '../components/app'
@@ -2011,51 +2012,49 @@ export default function ExamSchedulePage() {
  />
 
  {/* ── DIRECT CHAT / KOORDINASI PENGAWAS MODAL ── */}
- <AnimatePresence>
- {activeChatUser && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
- <motion.div
- initial={{ opacity: 0 }}
- animate={{ opacity: 1 }}
- exit={{ opacity: 0 }}
- onClick={() => setActiveChatUser(null)}
- className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs"
- />
- <motion.div
- initial={{ scale: 0.95, opacity: 0, y: 10 }}
- animate={{ scale: 1, opacity: 1, y: 0 }}
- exit={{ scale: 0.95, opacity: 0, y: 10 }}
- className="relative w-full max-w-lg overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] dark:border-emerald-800/60 dark:bg-slate-900 z-10"
+ <AppModal
+ isOpen={Boolean(activeChatUser)}
+ onClose={() => setActiveChatUser(null)}
+ title={activeChatUser?.nama_lengkap || 'Koordinasi Pengawas'}
+ description={activeChatUser ? `Pengawas Ujian • ${activeChatUser.niy ? `NIY ${activeChatUser.niy}` : 'Personel Sekolah'}` : ''}
+ icon={UserCheck}
+ maxWidth="max-w-lg"
+ footer={
+ activeChatUser ? (
+ <div className="flex w-full items-center justify-end gap-2">
+ <a
+ href={`https://wa.me/?text=${encodeURIComponent(`Assalamu'alaikum ${activeChatUser.nama_lengkap}, ${chatMessage || 'koordinasi terkait pengawasan ujian periodik.'}`)}`}
+ target="_blank"
+ rel="noopener noreferrer"
+ className="inline-flex h-9.5 items-center gap-1.5 rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 hover:bg-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 transition-all"
  >
- {/* Top Accent */}
-
- <div className="p-5 sm:p-6">
- <div className="flex items-center justify-between pb-4 border-b border-emerald-200/80 dark:border-emerald-800/60">
- <div className="flex items-center gap-3">
- <div className="flex h-9 w-11 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] font-black text-sm shadow-sm">
- {activeChatUser.nama_lengkap?.substring(0, 2).toUpperCase() || 'P'}
- </div>
- <div>
- <h3 className="text-base font-black text-slate-900 dark:text-white">
- {activeChatUser.nama_lengkap}
- </h3>
- <p className="text-xs text-slate-500 flex items-center gap-1.5">
- <UserCheck className="h-3.5 w-3.5 text-emerald-600" />
- <span>Pengawas Ujian • {activeChatUser.niy ? `NIY ${activeChatUser.niy}` : 'Personel Sekolah'}</span>
- </p>
- </div>
- </div>
+ <Phone className="h-4 w-4 text-emerald-600" />
+ <span>Kirim via WhatsApp</span>
+ </a>
  <button
  type="button"
- onClick={() => setActiveChatUser(null)}
- className="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors"
+ onClick={() => {
+ if (!chatMessage.trim()) {
+ notify('Peringatan', 'Tulis pesan sebelum mengirim.', 'warning')
+ return
+ }
+ notify('Terkirim', `Pesan berhasil dikirimkan ke ${activeChatUser.nama_lengkap}.`, 'success')
+ setActiveChatUser(null)
+ setChatMessage('')
+ }}
+ className="inline-flex h-9.5 items-center gap-1.5 rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 hover:bg-emerald-700 active:scale-95 transition-all cursor-pointer"
  >
- <X className="h-5 w-5" />
+ <Send className="h-4 w-4" />
+ <span>Kirim Pesan Internal</span>
  </button>
  </div>
-
+ ) : null
+ }
+ >
+ {activeChatUser && (
+ <div className="space-y-4">
  {/* Quick Templates */}
- <div className="mt-4">
+ <div>
  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
  Template Cepat Koordinasi:
  </label>
@@ -2089,40 +2088,9 @@ export default function ExamSchedulePage() {
  placeholder="Tulis pesan pengingat, instruksi khusus ruang ujian, dsb..."
  />
  </div>
-
- {/* Action Buttons */}
- <div className="mt-5 flex items-center justify-end gap-2">
- <a
- href={`https://wa.me/?text=${encodeURIComponent(`Assalamu'alaikum ${activeChatUser.nama_lengkap}, ${chatMessage || 'koordinasi terkait pengawasan ujian periodik.'}`)}`}
- target="_blank"
- rel="noopener noreferrer"
- className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300 text-xs font-bold transition-all"
- >
- <Phone className="h-4 w-4 text-emerald-600" />
- <span>Kirim via WhatsApp</span>
- </a>
- <button
- type="button"
- onClick={() => {
- if (!chatMessage.trim()) {
- notify('Peringatan', 'Tulis pesan sebelum mengirim.', 'warning')
- return
- }
- notify('Terkirim', `Pesan berhasil dikirimkan ke ${activeChatUser.nama_lengkap}.`, 'success')
- setActiveChatUser(null)
- setChatMessage('')
- }}
- className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-[#059669] hover:bg-[#047857] text-white dark:bg-[#18A972] dark:hover:bg-[#059669] dark:text-white text-xs font-black shadow-sm hover:from-emerald-700 transition-all cursor-pointer"
- >
- <Send className="h-4 w-4" />
- <span>Kirim Pesan Internal</span>
- </button>
- </div>
- </div>
- </motion.div>
  </div>
  )}
- </AnimatePresence>
+ </AppModal>
  </PageContainer>
  )
 }

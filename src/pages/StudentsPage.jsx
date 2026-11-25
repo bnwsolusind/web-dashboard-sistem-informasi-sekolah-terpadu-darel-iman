@@ -73,6 +73,7 @@ import {
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
 import AppBadge from '../components/app/AppBadge'
 import AppDataTable from '../components/app/AppDataTable'
+import AppModal from '../components/app/AppModal'
 import {
   api
 } from '../services/api'
@@ -161,16 +162,6 @@ import {
   SelectContent as HeroSelectContent,
   SelectItem as HeroSelectItem
 } from '../components/ui/select'
-import {
-  OverlayWrapper,
-  Backdrop,
-  Dialog,
-  DialogClose,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle
-} from '../components/ui/dialog'
 import {
   handleApiExport,
   downloadFileFromApi
@@ -1100,8 +1091,8 @@ export default function StudentsPage() {
  })
 
  return {
- nis: pickField(normalized, ['nis', 'nis_siswa', 'no_induk']),
- nisn: pickField(normalized, ['nisn']),
+ nis: pickField(normalized, ['nis', 'nis_sekolah', 'nis_siswa', 'no_induk']),
+ nisn: pickField(normalized, ['nisn', 'nisn_nasional']),
  nama: pickField(normalized, ['nama_lengkap', 'full_name', 'nama_siswa', 'nama']),
  gender: pickField(normalized, ['jenis_kelamin', 'gender', 'jk', 'l_p']),
  unit: pickField(normalized, ['unit_pendidikan', 'unit', 'nama_unit', 'unit_sekolah']),
@@ -2044,50 +2035,28 @@ export default function StudentsPage() {
  </div>
 
  {/* POP UP MODAL 1: DETAIL SISWA */}
- <AnimatePresence>
- {showDetailModal && selectedStudent && (
- <div
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto"
- role="dialog"
- aria-modal="true"
- aria-labelledby="student-detail-modal-title"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget) setShowDetailModal(false)
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-4xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-surface-dark-inner">
- {/* Top Accent Gradient Bar */}
-
- {/* Modal Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 p-2.5 shadow-md shadow-xs shrink-0">
- <FaUserGraduate className="size-5 text-emerald-600" />
- </div>
- <div>
- <h3 id="student-detail-modal-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Detail Siswa</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- Data Terpadu
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Informasi lengkap profil siswa, orang tua, akademik, dan dokumen.</p>
- </div>
- </div>
- <IconButton icon={X} variant="ghost" size="sm" onClick={() => setShowDetailModal(false)} aria-label="Tutup detail siswa" />
- </div>
-
- {/* Modal Content */}
- <div className="max-h-[75vh] overflow-y-auto bg-white p-5">
+        <AppModal
+          isOpen={Boolean(showDetailModal && selectedStudent)}
+          onClose={() => setShowDetailModal(false)}
+          icon={FaUserGraduate}
+          title="Detail Santri / Siswa"
+          badge="Data Terpadu"
+          description="Informasi lengkap profil santri, orang tua, akademik, dan dokumen."
+          maxWidth="max-w-4xl"
+          bodyClassName="p-5"
+          footer={
+            <button
+              type="button"
+              onClick={() => setShowDetailModal(false)}
+              className="h-9.5 px-5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Tutup Rincian</span>
+            </button>
+          }
+        >
+          {selectedStudent && (
+            <>
  <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
 
  {/* Left: Profile Overview Card */}
@@ -2404,37 +2373,33 @@ export default function StudentsPage() {
  </div>
  </div>
  </div>
- </div>
-
- {/* Footer */}
- <div className="modal-footer flex items-center justify-end border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <AppButton variant="danger" size="md" icon={X} onClick={() => setShowDetailModal(false)}>Tutup</AppButton>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+            </>
+          )}
+        </AppModal>
 
  {/* POP UP MODAL 2: TAMBAH / EDIT SISWA FORM (Code-split via React.lazy & Suspense) */}
  {showFormModal && (
  <Suspense
  fallback={
- <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm animate-in fade-in duration-200">
- <div className="flex w-full max-w-md flex-col items-center justify-center gap-4 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-8 shadow-2xl dark:bg-card-dark">
- <div className="flex size-14 items-center justify-center rounded-xl bg-white dark:bg-card-dark dark:from-emerald-950/60 dark:to-teal-950/40 border border-emerald-200/80 dark:border-emerald-800/60 shadow-xs">
- <Sparkles className="size-7 text-emerald-600 dark:text-emerald-400 animate-spin" />
- </div>
- <div className="space-y-1.5 text-center">
- <h4 className="text-sm font-extrabold text-slate-800 dark:text-white">
- Memuat Formulir Siswa Terpadu...
- </h4>
- <p className="text-xs text-slate-400 font-medium leading-relaxed">
- Menyiapkan wizard 5-langkah, pemetaan wilayah, dan validasi data.
- </p>
- </div>
- </div>
- </div>
+ <AppModal
+   isOpen={true}
+   maxWidth="max-w-md"
+   zIndex={50}
+   hideCloseButton
+   bodyClassName="flex flex-col items-center justify-center gap-4 p-8 text-center"
+ >
+   <div className="flex size-14 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200/80 dark:border-emerald-800/60 shadow-xs">
+     <Sparkles className="size-7 text-emerald-600 dark:text-emerald-400 animate-spin" />
+   </div>
+   <div className="space-y-1.5 text-center">
+     <h4 className="text-sm font-extrabold text-slate-800 dark:text-white">
+       Memuat Formulir Siswa Terpadu...
+     </h4>
+     <p className="text-xs text-slate-400 font-medium leading-relaxed">
+       Menyiapkan wizard 5-langkah, pemetaan wilayah, dan validasi data.
+     </p>
+   </div>
+ </AppModal>
  }
  >
  <StudentFormModal
@@ -2465,57 +2430,43 @@ export default function StudentsPage() {
  />
 
  {/* POP UP MODAL 4: DASHBOARD IMPORT DATA SISWA (HEROUI HARMONIZED BATCH MODAL) */}
- <AnimatePresence>
- {showImportModal && (
- <div
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="student-import-title"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !isImporting) {
- setShowImportModal(false)
- setImportFile(null)
- setImportPreviewData([])
- }
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-4xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-surface-dark-inner">
- {/* Top Accent Gradient Bar */}
-
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-white dark:bg-card-dark p-2.5 shadow-md shadow-sky-500/30 border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
- <Upload className="h-5 w-5 text-emerald-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3 id="student-import-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Import Data Siswa</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-sky-50 px-2 py-0.5 text-[10px] font-bold text-sky-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-sky-950/60 dark:text-sky-300 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- Batch Import
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Unggah file Excel atau CSV untuk mengimpor banyak siswa secara massal
- </p>
- </div>
- </div>
- <IconButton icon={X} variant="ghost" size="sm" onClick={() => { setShowImportModal(false); setImportFile(null); setImportPreviewData([]); }} aria-label="Tutup form import" />
- </div>
-
- {/* Modal Body */}
- <div className="modal-body min-h-0 flex-1 space-y-4.5 overflow-y-auto p-6 text-sm text-slate-700 dark:text-slate-200">
- {/* Step 1: Download Template Card */}
+        <AppModal
+          isOpen={showImportModal}
+          onClose={() => { setShowImportModal(false); setImportFile(null); setImportPreviewData([]) }}
+          disableBackdropClose={isImporting}
+          icon={Upload}
+          title="Import Data Siswa"
+          badge="Batch Import"
+          description="Unggah berkas Excel/CSV untuk menambahkan atau memperbarui data siswa secara massal."
+          maxWidth="max-w-4xl"
+          footer={
+            <div className="flex items-center justify-between w-full">
+              <button
+                type="button"
+                disabled={isImporting}
+                onClick={() => { setShowImportModal(false); setImportFile(null); setImportPreviewData([]) }}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                disabled={isImporting || !importFile}
+                onClick={handleProcessImport}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+              >
+                {isImporting ? (
+                  <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  <Upload className="size-4" strokeWidth={2} />
+                )}
+                <span>Mulai Impor</span>
+              </button>
+            </div>
+          }
+        >
+          <div className="space-y-4">
  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white dark:bg-card-dark p-4 dark:border-emerald-800/60 dark:bg-slate-900/40">
  <div className="flex items-center gap-3">
  <div className="flex size-9 items-center justify-center rounded-xl bg-white dark:bg-card-dark border border-emerald-200/80 dark:border-emerald-800/60 shrink-0">
@@ -2655,78 +2606,32 @@ export default function StudentsPage() {
  Sistem akan memvalidasi keunikan nomor induk siswa (NIS/NISN) dan secara otomatis menautkan data wali dan kelas tanpa merusak integritas database yang sudah ada.
  </p>
  </div>
- </div>
+          </div>
+        </AppModal>
 
- {/* Modal Action Footer */}
- <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <AppButton variant="outline" size="md" icon={X} disabled={isImporting} onClick={() => { setShowImportModal(false); setImportFile(null); setImportPreviewData([]); }}>Batal</AppButton>
- <AppButton variant="primary" size="md" icon={Upload} loading={isImporting} disabled={!importFile || isImporting} onClick={handleProcessImport}>Import {importPreviewData.length} Siswa</AppButton>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
-
- {/* ── MODAL HASIL IMPOR & PEMBERITAHUAN DATA DUPLIKAT SISWA ── */}
- <AnimatePresence>
- {duplicateModalData && (
- <div
- className="overlay modal fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-5 bg-slate-950/75 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="siswa-duplicate-report-title"
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-surface-dark-inner">
- {/* Top Accent Gradient Bar */}
- <div className={cn(
- "h-1.5 w-full shrink-0",
- duplicateModalData.diperbarui > 0
- ? "bg-white dark:bg-card-dark"
- : duplicateModalData.duplikat > 0
- ? "bg-white dark:bg-card-dark"
- : "bg-white dark:bg-card-dark"
- )} />
-
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3">
- <div className={cn(
- "rounded-xl p-2.5 text-white shadow-md shrink-0 border",
- duplicateModalData.diperbarui > 0
- ? "bg-white dark:bg-card-dark border-emerald-200/80 dark:border-emerald-800/60 shadow-sm"
- : "bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 shadow-sm"
- )}>
- {duplicateModalData.diperbarui > 0 ? (
- <RefreshCcw className="h-5 w-5 text-emerald-600" strokeWidth={2.25} />
- ) : (
- <CheckCircle2 className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- )}
- </div>
- <div>
- <h3 id="siswa-duplicate-report-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Hasil Impor & Pemberitahuan Data Siswa</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
- Total {duplicateModalData.total || 0} Data
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Ringkasan sinkronisasi dan status pemrosesan data siswa/santri
- </p>
- </div>
- </div>
- <IconButton icon={X} variant="ghost" size="sm" onClick={() => setDuplicateModalData(null)} aria-label="Tutup ringkasan impor" />
- </div>
-
- {/* Body */}
- <div className="modal-body min-h-0 flex-1 space-y-4 overflow-y-auto p-6 text-sm text-slate-700 dark:text-slate-200">
+        {/* POP UP MODAL 4B: HASIL IMPOR & DATA DUPLIKAT SISWA */}
+        <AppModal
+          isOpen={Boolean(duplicateModalData)}
+          onClose={() => setDuplicateModalData(null)}
+          zIndex={70}
+          icon={duplicateModalData?.diperbarui > 0 ? RefreshCcw : CheckCircle2}
+          title="Hasil Impor & Pemberitahuan Data Siswa"
+          badge={`Total ${duplicateModalData?.total || 0} Data`}
+          description="Ringkasan sinkronisasi dan status pemrosesan data siswa"
+          maxWidth="max-w-xl"
+          footer={
+            <button
+              type="button"
+              onClick={() => setDuplicateModalData(null)}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+            >
+              <Check className="size-4" strokeWidth={2.2} />
+              <span>Tutup &amp; Mengerti</span>
+            </button>
+          }
+        >
+          {duplicateModalData && (
+            <div className="space-y-4">
  {/* KPI Summary Cards */}
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
  <div className="p-3 rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/50 dark:bg-emerald-950/30 text-center">
@@ -2812,67 +2717,47 @@ export default function StudentsPage() {
  </ul>
  </div>
  )}
- </div>
-
- {/* Footer */}
- <div className="modal-footer flex items-center justify-end border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 dark:border-emerald-800/60 dark:bg-emerald-950/20 px-6 py-3.5 dark:border-emerald-800/60 dark:bg-slate-900/30">
- <AppButton variant="primary" size="md" icon={Check} onClick={() => setDuplicateModalData(null)}>Tutup & Mengerti</AppButton>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+            </div>
+          )}
+        </AppModal>
 
  {/* POP UP MODAL: DASHBOARD EXPORT DATA SISWA (HEROUI HARMONIZED BATCH MODAL) */}
- <AnimatePresence>
- {showExportModal && (
- <div
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="student-export-title"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !isExporting) {
- setShowExportModal(false)
- }
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2.5rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
-
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 p-2.5 shadow-md shadow-xs shrink-0">
- <Download className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3 id="student-export-title" className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Export Data {terms.siswa || 'Siswa'}</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/60 dark:text-amber-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- Unduh Data
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Pilih format berkas untuk mengekspor data master {terms.siswa?.toLowerCase() || 'siswa'} sesuai filter aktif
- </p>
- </div>
- </div>
- <IconButton icon={X} variant="ghost" size="sm" disabled={isExporting} onClick={() => setShowExportModal(false)} aria-label="Tutup modal export" />
- </div>
-
- {/* Body */}
- <div className="modal-body space-y-4 p-6 text-sm text-slate-700 dark:text-slate-200 overflow-y-auto">
+        <AppModal
+          isOpen={showExportModal}
+          onClose={() => setShowExportModal(false)}
+          disableBackdropClose={isExporting}
+          icon={Download}
+          title="Export Data Siswa"
+          badge="Batch Export"
+          description="Pilih format berkas untuk mengekspor data siswa sesuai filter aktif."
+          maxWidth="max-w-xl"
+          footer={
+            <div className="flex items-center justify-between w-full">
+              <button
+                type="button"
+                disabled={isExporting}
+                onClick={() => setShowExportModal(false)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                disabled={isExporting}
+                onClick={handleConfirmExport}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+              >
+                {isExporting ? (
+                  <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  <Download className="size-4" strokeWidth={2} />
+                )}
+                <span>Unduh Berkas</span>
+              </button>
+            </div>
+          }
+        >
  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
  {[
  { value: 'xlsx', label: 'Excel (.xlsx)', desc: 'Format Microsoft Excel Modern (Disarankan)' },
@@ -2926,41 +2811,40 @@ export default function StudentsPage() {
  )}
  </div>
  </div>
- </div>
-
- {/* Footer */}
- <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900 shrink-0">
- <AppButton variant="outline" size="md" icon={X} disabled={isExporting} onClick={() => setShowExportModal(false)}>Batal</AppButton>
- <AppButton variant="primary" size="md" icon={Download} loading={isExporting} disabled={isExporting} onClick={() => handleProcessExport(exportFormat)}>Unduh Berkas ({exportFormat.toUpperCase()})</AppButton>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+        </AppModal>
 
  {/* Modal Detail Data Statistik Siswa (ERP Stat Cards Popup) */}
- {statCardModal.isOpen && (
- <OverlayWrapper
- isOpen={statCardModal.isOpen}
- onOpenChange={(open) => {
- if (!open) setStatCardModal((prev) => ({ ...prev, isOpen: false }))
- }}
- isDismissable
+ <AppModal
+ isOpen={Boolean(statCardModal?.isOpen)}
+ onClose={() => setStatCardModal((prev) => ({ ...prev, isOpen: false }))}
+ icon={GraduationCap}
+ title={statCardModal?.title || 'Detail Data Statistik Siswa'}
+ badge="Data Statistik"
+ description="Daftar rinci siswa terfilter berdasarkan statistik"
+ maxWidth="max-w-4xl"
+ zIndex={70}
+ footer={
+ <div className="w-full flex items-center justify-between gap-2.5">
+ <button
+ type="button"
+ onClick={handlePrintStatCardModal}
+ className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white h-9.5 px-5 text-xs font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 transition-all active:scale-95 cursor-pointer"
  >
- <Backdrop isOpen={statCardModal.isOpen} />
- <Dialog className="max-w-4xl w-full p-6 space-y-5">
- <DialogHeader className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4">
- <div>
- <DialogTitle className="text-lg font-black text-slate-900 dark:text-slate-600 uppercase tracking-wide">
- {statCardModal.title}
- </DialogTitle>
- <DialogDescription className="text-xs font-semibold text-slate-500 dark:text-slate-400">
- Daftar rinci siswa terfilter berdasarkan statistik
- </DialogDescription>
+ <Printer className="size-3.5" strokeWidth={2.2} />
+ <span>Cetak Tabel Popup</span>
+ </button>
+ <button
+ type="button"
+ onClick={() => setStatCardModal((prev) => ({ ...prev, isOpen: false }))}
+ className="inline-flex items-center gap-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 h-9.5 px-4 text-xs font-black border border-slate-300 dark:border-slate-700 transition-all active:scale-95 cursor-pointer"
+ >
+ <X className="size-3.5" strokeWidth={2.2} />
+ <span>Tutup</span>
+ </button>
  </div>
- </DialogHeader>
-
+ }
+ >
+ {statCardModal?.isOpen && (
  <div className="space-y-4">
  <div className="flex items-center justify-between gap-4">
  <div className="relative flex-1 max-w-md">
@@ -2970,7 +2854,7 @@ export default function StudentsPage() {
  value={statModalSearch}
  onChange={(e) => setStatModalSearch(e.target.value)}
  placeholder="Cari nama, NIS, NISN, atau kelas..."
- className="w-full pl-9 pr-4 py-2 text-xs font-semibold rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+ className="w-full h-10 pl-9 pr-4 text-xs font-bold rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all"
  />
  </div>
  <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
@@ -2978,11 +2862,11 @@ export default function StudentsPage() {
  </span>
  </div>
 
- <div className="max-h-96 overflow-y-auto rounded-xl border border-emerald-200/80 dark:border-emerald-800/60">
+ <div className="max-h-96 overflow-y-auto rounded-2xl border-2 border-[#b6f6d9] dark:border-emerald-700/80">
  <TableRoot className="w-full text-left text-xs">
  <TableHeader className="sticky top-0 bg-gradient-to-r from-emerald-100/90 via-teal-50/70 to-emerald-100/90 border-b-2 border-emerald-200/90 text-emerald-950 dark:from-emerald-950/90 dark:via-teal-950/70 dark:to-emerald-950/90 dark:border-emerald-800/60 dark:text-emerald-100 font-bold text-xs uppercase tracking-wider">
  <TableRow>
- <TableHead className="p-3">Nama Siswa & NIS/NISN</TableHead>
+ <TableHead className="p-3">Nama Siswa &amp; NIS/NISN</TableHead>
  <TableHead className="p-3">Unit Kerja</TableHead>
  <TableHead className="p-3">Kelas</TableHead>
  <TableHead className="p-3 text-center">Jenis Kelamin</TableHead>
@@ -3023,72 +2907,30 @@ export default function StudentsPage() {
  </TableRoot>
  </div>
  </div>
-
- <DialogFooter className="flex items-center justify-between border-t border-emerald-200/80 dark:border-emerald-800/60 pt-4">
- <Button
- variant="primary"
- appearance="fill"
- size="sm"
- onClick={handlePrintStatCardModal}
- className="flex items-center gap-1.5 font-bold cursor-pointer"
- >
- <Printer className="size-4" />
- Cetak Tabel Popup
- </Button>
-
- <Button
- variant="ghost"
- appearance="outline"
- size="sm"
- onClick={() => setStatCardModal((prev) => ({ ...prev, isOpen: false }))}
- className="font-semibold"
- >
- Tutup
- </Button>
- </DialogFooter>
- </Dialog>
- </OverlayWrapper>
  )}
+ </AppModal>
 
  {/* MODAL PILIH OPSI CHAT KE ORANG TUA */}
- <AnimatePresence>
- {chatTargetModal && (
- <div
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget) setChatTargetModal(null)
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-surface-dark-inner">
- {/* Top Accent Gradient Bar */}
-
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 p-2.5 shadow-md shadow-xs shrink-0">
- <MessageCircle className="size-5 text-emerald-700 dark:text-emerald-300" />
- </div>
- <div>
- <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">Hubungi Orang Tua / Wali</h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Siswa: <strong className="text-emerald-700 dark:text-emerald-400">{chatTargetModal.nama || chatTargetModal.full_name}</strong>
- </p>
- </div>
- </div>
- <IconButton icon={X} variant="ghost" size="sm" onClick={() => setChatTargetModal(null)} aria-label="Tutup komunikasi orang tua" />
- </div>
-
- <div className="p-6 space-y-4 text-slate-700 dark:text-slate-200">
+        <AppModal
+          isOpen={Boolean(chatTargetModal)}
+          onClose={() => setChatTargetModal(null)}
+          icon={MessageCircle}
+          title="Hubungi Orang Tua / Wali"
+          description={chatTargetModal ? `Siswa: ${chatTargetModal.nama || chatTargetModal.full_name}` : ''}
+          maxWidth="max-w-xl"
+          footer={
+            <button
+              type="button"
+              onClick={() => setChatTargetModal(null)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+          }
+        >
+          {chatTargetModal && (
+            <>
  <div className="rounded-xl bg-emerald-50/40 p-3.5 text-xs border-2 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-card-dark space-y-1.5">
  <div className="flex justify-between py-0.5">
  <span className="text-slate-500">Nama Wali:</span>
@@ -3151,96 +2993,49 @@ export default function StudentsPage() {
  </div>
  </button>
  </div>
- </div>
-
- <div className="modal-footer flex items-center justify-end border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <AppButton variant="ghost" size="sm" onClick={() => setChatTargetModal(null)}>Batal</AppButton>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+            </>
+          )}
+        </AppModal>
 
  {/* MODAL: KONFIRMASI SIMPAN / PERBARUI DATA SISWA HARMONISASI HEROUI */}
- <AnimatePresence>
- {showSaveConfirmDialog && (
- <div
- className="overlay modal fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- aria-labelledby="student-save-confirm-title"
- tabIndex={-1}
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !isSaving) setShowSaveConfirmDialog(false)
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-surface-dark-inner">
- {/* Top Accent Gradient Bar */}
- <div
- className={cn(
- "h-1.5 w-full shrink-0",
- isEdit
- ? "bg-white dark:bg-card-dark"
- : "bg-white dark:bg-card-dark"
- )}
- />
-
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3">
- <div
- className={cn(
- "rounded-xl text-white p-2.5 shadow-md shrink-0 border",
- isEdit
- ? "bg-white dark:bg-card-dark shadow-sm border-emerald-200/80 dark:border-emerald-800/60"
- : "bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 shadow-sm border-emerald-300/30"
- )}
- >
- {isEdit ? (
- <Pencil className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- ) : (
- <GraduationCap className="h-5 w-5 text-amber-600" strokeWidth={2.25} />
- )}
- </div>
- <div>
- <h3
- id="student-save-confirm-title"
- className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2"
- >
- <span>{isEdit ? 'Konfirmasi Perubahan Data' : 'Konfirmasi Penyimpanan Data'}</span>
- <span
- className={cn(
- "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold border",
- isEdit
- ? "bg-amber-50 text-amber-700 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/60 dark:text-amber-400 dark:border-emerald-800/60"
- : "bg-emerald-50 text-emerald-800 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60"
- )}
- >
- <Sparkles className="size-3" />
- {isEdit ? 'Update Data' : 'Siswa Baru'}
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- {isEdit
- ? 'Verifikasi data siswa sebelum pembaruan diterapkan ke server.'
- : 'Verifikasi data siswa baru sebelum disimpan ke dalam sistem.'}
- </p>
- </div>
- </div>
-
- <IconButton icon={X} variant="ghost" size="sm" disabled={isSaving} onClick={() => setShowSaveConfirmDialog(false)} aria-label="Tutup dialog konfirmasi" />
- </div>
-
- {/* Body */}
- <div className="modal-body p-6 space-y-4 text-slate-700 dark:text-slate-200">
+        <AppModal
+          isOpen={showSaveConfirmDialog}
+          onClose={() => setShowSaveConfirmDialog(false)}
+          disableBackdropClose={isSaving}
+          variant={isEdit ? 'warning' : 'emerald'}
+          zIndex={70}
+          icon={isEdit ? Pencil : GraduationCap}
+          title={isEdit ? 'Konfirmasi Perubahan Data' : 'Konfirmasi Penyimpanan Data'}
+          badge={isEdit ? 'Update Data' : 'Siswa Baru'}
+          description={isEdit ? 'Verifikasi data siswa sebelum pembaruan diterapkan ke server.' : 'Verifikasi data siswa baru sebelum disimpan ke dalam sistem.'}
+          maxWidth="max-w-xl"
+          footer={
+            <div className="flex items-center justify-between w-full">
+              <button
+                type="button"
+                disabled={isSaving}
+                onClick={() => setShowSaveConfirmDialog(false)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                disabled={isSaving}
+                onClick={handleConfirmSave}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+              >
+                {isSaving ? (
+                  <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  <Save className="size-4" strokeWidth={2} />
+                )}
+                <span>{isEdit ? 'Ya, Perbarui' : 'Ya, Simpan'}</span>
+              </button>
+            </div>
+          }
+        >
  {/* Target Info Summary Card */}
  <div className="rounded-xl border border-emerald-200/80 bg-slate-50/70 p-3.5 dark:border-emerald-800/80 dark:bg-slate-900/50 space-y-2.5">
  <div className="flex items-center justify-between">
@@ -3292,61 +3087,47 @@ export default function StudentsPage() {
  : 'Data siswa baru akan tersimpan dan langsung aktif sesuai konfigurasi rombel dan unit sistem.'}
  </div>
  </div>
- </div>
-
- {/* Footer */}
- <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <AppButton variant="outline" size="md" icon={X} disabled={isSaving} onClick={() => setShowSaveConfirmDialog(false)}>Batal</AppButton>
-
- <AppButton variant="primary" size="md" icon={Save} loading={isSaving} disabled={isSaving} onClick={handleConfirmSave}>{isEdit ? 'Ya, Perbarui' : 'Ya, Simpan'}</AppButton>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+        </AppModal>
 
  {/* MODAL AJUKAN PINDAH UNIT (TWO-WAY HANDSHAKE) */}
- <AnimatePresence>
- {showAjukanMutasiModal && studentToMutate && (
- <div
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- tabIndex={-1}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-surface-dark-inner">
- 
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-white dark:bg-card-dark p-2.5 shadow-md shadow-xs shrink-0 border border-emerald-200/80 dark:border-emerald-800/60">
- <ArrowRightLeft className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3 className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Ajukan Pindah Unit</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 border-2 border-emerald-300 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/60">
- Internal Yayasan
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Kirim permohonan mutasi ke TU Unit Pendidikan yang dituju
- </p>
- </div>
- </div>
- <IconButton icon={X} variant="ghost" size="sm" onClick={() => setShowAjukanMutasiModal(false)} aria-label="Tutup form pengajuan mutasi" />
- </div>
-
- {/* Body */}
- <div className="p-6 space-y-4 overflow-y-auto">
+        <AppModal
+          isOpen={Boolean(showAjukanMutasiModal && studentToMutate)}
+          onClose={() => setShowAjukanMutasiModal(false)}
+          disableBackdropClose={isSubmittingMutasi}
+          icon={ArrowRightLeft}
+          title="Ajukan Pindah Unit"
+          badge="Internal Yayasan"
+          description="Kirim permohonan mutasi ke TU Unit Pendidikan yang dituju"
+          maxWidth="max-w-xl"
+          footer={
+            <div className="flex items-center justify-between w-full">
+              <button
+                type="button"
+                disabled={isSubmittingMutasi}
+                onClick={() => setShowAjukanMutasiModal(false)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                disabled={isSubmittingMutasi || !mutasiForm.unit_tujuan_id}
+                onClick={handleSubmitAjukanMutasi}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+              >
+                {isSubmittingMutasi ? (
+                  <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  <Send className="size-4" strokeWidth={2} />
+                )}
+                <span>Kirim Pengajuan</span>
+              </button>
+            </div>
+          }
+        >
+          {studentToMutate && (
+            <>
  {/* Ringkasan Siswa */}
  <div className="flex items-center gap-3.5 rounded-xl bg-slate-50 p-3.5 border border-emerald-200/80 dark:bg-slate-900/60 dark:border-emerald-800/60">
  <PersonAvatar
@@ -3427,61 +3208,30 @@ export default function StudentsPage() {
  </p>
  </div>
  </div>
- </div>
-
- {/* Footer */}
- <div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <AppButton variant="ghost" size="md" disabled={isSubmittingMutasi} onClick={() => setShowAjukanMutasiModal(false)}>Batal</AppButton>
-
- <AppButton variant="primary" size="md" icon={Send} loading={isSubmittingMutasi} disabled={isSubmittingMutasi || !mutasiForm.unit_tujuan_id} onClick={handleSubmitAjukanMutasi}>Kirim Pengajuan</AppButton>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+            </>
+          )}
+        </AppModal>
 
  {/* MODAL DAFTAR SISWA PINDAHAN MASUK (TU APPROVAL WORKFLOW) */}
- <AnimatePresence>
- {showIncomingModal && (
- <div
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- tabIndex={-1}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-4xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-surface-dark-inner">
-
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-white dark:bg-card-dark p-2.5 shadow-md shadow-xs shrink-0 border border-emerald-200/80 dark:border-emerald-800/60">
- <ArrowRightLeft className="h-5 w-5 text-emerald-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3 className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Daftar Siswa Pindahan Masuk</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-amber-950/60 dark:text-amber-300 dark:border-emerald-800/60">
- Menunggu Persetujuan TU
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Verifikasi data siswa mutasi masuk dan tetapkan kelas tujuan di unit Anda
- </p>
- </div>
- </div>
- <IconButton icon={X} variant="ghost" size="sm" onClick={() => setShowIncomingModal(false)} aria-label="Tutup modal mutasi masuk" />
- </div>
-
- {/* Body Content */}
- <div className="p-6 overflow-y-auto max-h-[60vh]">
+        <AppModal
+          isOpen={showIncomingModal}
+          onClose={() => setShowIncomingModal(false)}
+          icon={ArrowRightLeft}
+          title="Daftar Siswa Pindahan Masuk"
+          badge="Menunggu Persetujuan TU"
+          description="Verifikasi data siswa mutasi masuk dan tetapkan kelas tujuan di unit Anda"
+          maxWidth="max-w-4xl"
+          footer={
+            <button
+              type="button"
+              onClick={() => setShowIncomingModal(false)}
+              className="h-9.5 px-5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Tutup</span>
+            </button>
+          }
+        >
  {isLoadingIncoming ? (
  <div className="py-12 text-center text-xs text-slate-500">Memuat data permohonan mutasi...</div>
  ) : incomingMutations.length === 0 ? (
@@ -3537,54 +3287,49 @@ export default function StudentsPage() {
  })}
  </div>
  )}
- </div>
-
- {/* Footer */}
- <div className="modal-footer flex items-center justify-end border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <AppButton variant="ghost" size="md" onClick={() => setShowIncomingModal(false)}>Tutup</AppButton>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+        </AppModal>
 
  {/* SUB-MODAL TU MENETAPKAN KELAS TUJUAN (APPROVE MUTASI) */}
- <AnimatePresence>
- {selectedIncomingForApproval && !showRejectDialog && (
- <div
- className="overlay modal fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- tabIndex={-1}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-surface-dark-inner">
- <div className="p-6 space-y-4">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 p-2.5 shadow-sm">
- <CheckCircle2 className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3 className="text-sm font-black text-slate-900 dark:text-white">
- Tetapkan Kelas Tujuan Siswa
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- {selectedIncomingForApproval.student?.nama_lengkap || selectedIncomingForApproval.student?.full_name}
- </p>
- </div>
- </div>
-
- <div>
- <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
- Pilih Kelas Penempatan di Unit Ini <span className="text-rose-500">*</span>
- </label>
+        <AppModal
+          isOpen={Boolean(selectedIncomingForApproval && !showRejectDialog)}
+          onClose={() => setSelectedIncomingForApproval(null)}
+          disableBackdropClose={isProcessingApproval}
+          zIndex={70}
+          icon={CheckCircle2}
+          title="Tetapkan Kelas Tujuan Siswa"
+          description={selectedIncomingForApproval ? (selectedIncomingForApproval.student?.nama_lengkap || selectedIncomingForApproval.student?.full_name) : ''}
+          maxWidth="max-w-xl"
+          footer={
+            <div className="flex items-center justify-between w-full">
+              <button
+                type="button"
+                disabled={isProcessingApproval}
+                onClick={() => setSelectedIncomingForApproval(null)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                disabled={isProcessingApproval || !approvalKelasId}
+                onClick={handleApproveIncoming}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+              >
+                {isProcessingApproval ? (
+                  <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  <CheckCircle2 className="size-4" strokeWidth={2} />
+                )}
+                <span>Setujui &amp; Simpan</span>
+              </button>
+            </div>
+          }
+        >
+          <div>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+              Pilih Kelas Penempatan di Unit Ini <span className="text-rose-500">*</span>
+            </label>
  <HeroUiFilterSelect
  value={approvalKelasId}
  onChange={(val) => setApprovalKelasId(val)}
@@ -3617,54 +3362,50 @@ export default function StudentsPage() {
  className="w-full rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-3.5 py-2 text-xs text-slate-800 focus:border-emerald-200/80 focus:ring-1 focus:ring-emerald-500 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-slate-100"
  />
  </div>
- </div>
-
- <div className="flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <AppButton variant="ghost" size="sm" disabled={isProcessingApproval} onClick={() => setSelectedIncomingForApproval(null)}>Batal</AppButton>
- <AppButton variant="primary" size="sm" icon={CheckCircle2} loading={isProcessingApproval} disabled={isProcessingApproval || !approvalKelasId} onClick={handleApproveIncoming}>Setujui & Simpan</AppButton>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+        </AppModal>
 
  {/* SUB-MODAL TOLAK MUTASI */}
- <AnimatePresence>
- {showRejectDialog && selectedIncomingForApproval && (
- <div
- className="overlay modal fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- tabIndex={-1}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-surface-dark-inner">
- <div className="p-6 space-y-4">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 p-2.5 shadow-sm">
- <XCircle className="h-5 w-5 text-rose-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3 className="text-sm font-black text-slate-900 dark:text-white">
- Tolak Permohonan Mutasi
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- {selectedIncomingForApproval.student?.nama_lengkap || selectedIncomingForApproval.student?.full_name}
- </p>
- </div>
- </div>
-
- <div>
- <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
- Alasan Penolakan <span className="text-rose-500">*</span>
- </label>
+        <AppModal
+          isOpen={Boolean(showRejectDialog && selectedIncomingForApproval)}
+          onClose={() => setShowRejectDialog(false)}
+          disableBackdropClose={isProcessingApproval}
+          variant="danger"
+          zIndex={70}
+          icon={XCircle}
+          title="Tolak Permohonan Mutasi"
+          description={selectedIncomingForApproval ? (selectedIncomingForApproval.student?.nama_lengkap || selectedIncomingForApproval.student?.full_name) : ''}
+          maxWidth="max-w-xl"
+          footer={
+            <div className="flex items-center justify-between w-full">
+              <button
+                type="button"
+                disabled={isProcessingApproval}
+                onClick={() => setShowRejectDialog(false)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                disabled={isProcessingApproval || !rejectReason.trim()}
+                onClick={handleRejectIncoming}
+                className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20"
+              >
+                {isProcessingApproval ? (
+                  <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  <XCircle className="size-4" strokeWidth={2} />
+                )}
+                <span>Konfirmasi Tolak</span>
+              </button>
+            </div>
+          }
+        >
+          <div>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+              Alasan Penolakan <span className="text-rose-500">*</span>
+            </label>
  <textarea
  rows={3}
  value={rejectReason}
@@ -3674,74 +3415,49 @@ export default function StudentsPage() {
  required
  />
  </div>
- </div>
-
- <div className="flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <AppButton variant="ghost" size="sm" disabled={isProcessingApproval} onClick={() => setShowRejectDialog(false)}>Batal</AppButton>
- <AppButton variant="danger" size="sm" icon={XCircle} loading={isProcessingApproval} disabled={isProcessingApproval || !rejectReason.trim()} onClick={handleRejectIncoming}>Konfirmasi Tolak</AppButton>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+        </AppModal>
 
 			{/* MODAL: KONFIRMASI HAPUS DATA SISWA HARMONISASI HEROUI */}
-			<AnimatePresence>
-				{deleteTarget && (
-					<div
-						className="overlay modal fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
-						role="dialog"
-						aria-modal="true"
-						aria-labelledby="student-delete-confirm-title"
-						tabIndex={-1}
-						onMouseDown={(e) => {
-							if (e.target === e.currentTarget && !isDeleting) setDeleteTarget(null)
-						}}
-					>
-						<motion.div
-							initial={{ opacity: 0, scale: 0.94, y: 14 }}
-							animate={{ opacity: 1, scale: 1, y: 0 }}
-							exit={{ opacity: 0, scale: 0.95, y: 10 }}
-							transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-							className="modal-dialog font-sans my-auto w-full max-w-xl"
-						>
-							<div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 shadow-2xl shadow-emerald-950/20 dark:border-emerald-800/60 bg-white shadow-2xl shadow-sm dark:border-emerald-800/60 dark:bg-surface-dark-inner dark:shadow-black/60">
-								{/* Header */}
-								<div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
-									<div className="flex items-center gap-3">
-										<div className="rounded-xl  p-2.5 shadow-md shrink-0 border bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 shadow-sm border-emerald-200/80 dark:border-emerald-800/60">
-											<Trash2 className="h-5 w-5 text-rose-600" strokeWidth={2.25} />
-										</div>
-										<div>
-											<h3
-												id="student-delete-confirm-title"
-												className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2"
-											>
-												<span>Hapus Data Siswa</span>
-												<span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold border bg-rose-50 text-rose-700 border-emerald-200/80 dark:border-emerald-800/60 dark:bg-rose-950/60 dark:text-rose-400 dark:border-emerald-800/60">
-													<AlertTriangle className="size-3" />
-													Hapus Permanen
-												</span>
-											</h3>
-											<p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-												Tindakan ini permanen dan tidak dapat dibatalkan.
-											</p>
-										</div>
-									</div>
-
-									<IconButton
-										icon={X}
-										variant="ghost"
-										size="sm"
-										disabled={isDeleting}
-										onClick={() => setDeleteTarget(null)}
-										aria-label="Tutup dialog konfirmasi"
-									/>
-								</div>
-
-								{/* Body */}
-								<div className="modal-body p-6 space-y-4 text-slate-700 dark:text-slate-200">
+        <AppModal
+          isOpen={Boolean(deleteTarget)}
+          onClose={() => setDeleteTarget(null)}
+          disableBackdropClose={isDeleting}
+          variant="danger"
+          zIndex={70}
+          icon={Trash2}
+          title="Hapus Data Siswa"
+          badge="Hapus Permanen"
+          description="Tindakan ini permanen dan tidak dapat dibatalkan."
+          maxWidth="max-w-xl"
+          footer={
+            <div className="flex items-center justify-between w-full">
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={() => setDeleteTarget(null)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                disabled={isDeleting || !hasConfirmedDeleteCheck}
+                onClick={handleConfirmDelete}
+                className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20"
+              >
+                {isDeleting ? (
+                  <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  <Trash2 className="size-4" strokeWidth={2} />
+                )}
+                <span>Hapus Permanen</span>
+              </button>
+            </div>
+          }
+        >
+          {deleteTarget && (
+            <>
 									{/* Student Identity Card */}
 									<div className="rounded-xl border-2 border-rose-300 dark:border-rose-800 bg-rose-50/40 p-4 dark:border-emerald-800/60 dark:bg-rose-950/20 space-y-3">
 										<div className="flex items-center gap-3">
@@ -3795,78 +3511,47 @@ export default function StudentsPage() {
 											Saya memahami konsekuensi penghapusan permanen ini
 										</span>
 									</label>
-								</div>
-
-								{/* Footer */}
-								<div className="modal-footer flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
-									<AppButton
-										variant="ghost"
-										size="md"
-										disabled={isDeleting}
-										onClick={() => setDeleteTarget(null)}
-									>
-										Batal
-									</AppButton>
-
-									<AppButton
-										variant="danger"
-										size="md"
-										icon={Trash2}
-										loading={isDeleting}
-										disabled={isDeleting || !hasConfirmedDeleteCheck}
-										onClick={handleConfirmDelete}
-									>
-										Hapus Permanen
-									</AppButton>
-								</div>
-							</div>
-						</motion.div>
-					</div>
-				)}
-			</AnimatePresence>
+            </>
+          )}
+        </AppModal>
 
  {/* MODAL GENERATE NOMOR VIRTUAL ACCOUNT (VA BSI) SISWA */}
- <AnimatePresence>
- {showGenerateVaModal && (
- <div
- className="overlay modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md"
- role="dialog"
- aria-modal="true"
- tabIndex={-1}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="modal-dialog font-sans my-auto w-full max-w-xl"
- >
- <div className="modal-content flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-surface-dark-inner">
-
- {/* Header */}
- <div className="modal-header flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner">
- <div className="flex items-center gap-3">
- <div className="rounded-xl bg-white dark:bg-card-dark p-2.5 shadow-md shadow-xs shrink-0 border border-emerald-200/80 dark:border-emerald-800/60">
- <CreditCard className="h-5 w-5 text-slate-600" strokeWidth={2.25} />
- </div>
- <div>
- <h3 className="modal-title text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
- <span>Generate VA BSI Siswa</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-indigo-50 px-2 py-0.5 text-[10px] font-bold text-indigo-700 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-indigo-950/60 dark:text-indigo-300 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- Otomatis
- </span>
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
- Pembuatan nomor Virtual Account BSI massal untuk siswa
- </p>
- </div>
- </div>
- <IconButton icon={X} variant="ghost" size="sm" onClick={() => setShowGenerateVaModal(false)} aria-label="Tutup modal VA" />
- </div>
-
- {/* Body */}
- <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+        <AppModal
+          isOpen={showGenerateVaModal}
+          onClose={() => setShowGenerateVaModal(false)}
+          disableBackdropClose={isGeneratingVa}
+          icon={CreditCard}
+          title="Generate VA BSI Siswa"
+          badge="Otomatis"
+          description="Pembuatan nomor Virtual Account BSI massal untuk siswa"
+          maxWidth="max-w-xl"
+          footer={
+            <div className="flex items-center justify-between w-full">
+              <button
+                type="button"
+                disabled={isGeneratingVa}
+                onClick={() => setShowGenerateVaModal(false)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                disabled={isGeneratingVa}
+                onClick={handleGenerateVaBsi}
+                className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+              >
+                {isGeneratingVa ? (
+                  <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : (
+                  <CreditCard className="size-4" strokeWidth={2} />
+                )}
+                <span>Mulai Generate VA BSI</span>
+              </button>
+            </div>
+          }
+        >
  {/* Ringkasan Konfigurasi BSI */}
  <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-indigo-50/60 p-4 text-xs dark:bg-indigo-950/30 dark:border-emerald-800/60 space-y-2">
  <div className="flex items-center justify-between">
@@ -3916,18 +3601,7 @@ export default function StudentsPage() {
  <p className="text-xs text-slate-500 dark:text-slate-400">
  *Setelah digenerate, orang tua siswa akan langsung melihat Nomor Virtual Account ini di Portal Tagihan dan Aplikasi Mobile untuk pembayaran biaya pendidikan.
  </p>
- </div>
-
- {/* Footer */}
- <div className="flex items-center justify-between border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
- <AppButton variant="ghost" size="sm" disabled={isGeneratingVa} onClick={() => setShowGenerateVaModal(false)}>Batal</AppButton>
- <AppButton variant="primary" size="sm" icon={CreditCard} loading={isGeneratingVa} disabled={isGeneratingVa} onClick={handleGenerateVaBsi}>Mulai Generate VA BSI</AppButton>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+        </AppModal>
  </MasterDataPage>
  </motion.div>
 

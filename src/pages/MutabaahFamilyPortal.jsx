@@ -1,4 +1,5 @@
 import { HeroUiHeader } from "../components/ui/HeroUiHeader"
+import AppModal from "../components/app/AppModal"
 import {
   KpiStatCard
 } from '../components/app'
@@ -1112,42 +1113,42 @@ function SignatureSheet({ close, submit, saving }) {
  const [comment, setComment] = useState('')
 
  return (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
- {/* Backdrop with Fade Animation */}
- <motion.div
- initial={{ opacity: 0 }}
- animate={{ opacity: 1 }}
- exit={{ opacity: 0 }}
- className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs"
- onMouseDown={close}
- />
-
- {/* Modal with Spring Physics Pop-up (§R) */}
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="relative z-10 w-full max-w-md rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] overflow-hidden"
+ <AppModal
+ isOpen={true}
+ onClose={() => { if (!saving) close() }}
+ disableBackdropClose={saving}
+ hideCloseButton={saving}
+ badge="Konfirmasi Orang Tua"
+ title="Paraf Mutaba’ah Yaumiyyah"
+ icon={Signature}
+ maxWidth="max-w-md"
+ footer={
+ <div className="flex w-full items-center justify-between gap-2.5">
+ <button
+ type="button"
+ onClick={close}
+ disabled={saving}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <div className="p-5 sm:p-6">
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4 dark:border-emerald-800/60 mb-4">
- <div className="flex items-center gap-3">
- <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
- 
-            <Signature className="size-6 sm:size-7 h-5 w-5 text-white" strokeWidth={2.25} />
- </div>
- <div>
- <span className="text-[10px] font-bold text-[#059669] dark:text-emerald-400 uppercase tracking-wider">Konfirmasi Orang Tua</span>
- <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">Paraf Mutaba’ah Yaumiyyah</h3>
- </div>
- </div>
- <button type="button" onClick={close} aria-label="Tutup modal" className="size-9 flex items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer shrink-0">
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
+ Batal
+ </button>
+ <button
+ type="submit"
+ form="mutabaah-signature-form"
+ disabled={saving}
+ className="inline-flex h-9.5 items-center gap-2 rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 active:scale-95 disabled:opacity-50 cursor-pointer"
+ >
+ {saving ? (
+ <span className="size-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+ ) : (
+ <Signature className="size-3.5" strokeWidth={2.2} />
+ )}
+ <span>{saving ? 'Menyimpan...' : 'Konfirmasi Paraf'}</span>
  </button>
  </div>
-
- <form onSubmit={(e) => { e.preventDefault(); submit({ signature_status: status, comment: comment || null, device_info: { platform: navigator.platform, app: 'Dareliman Edu Web' } }) }} className="space-y-4">
+ }
+ >
+ <form id="mutabaah-signature-form" onSubmit={(e) => { e.preventDefault(); submit({ signature_status: status, comment: comment || null, device_info: { platform: navigator.platform, app: 'Dareliman Edu Web' } }) }} className="space-y-4">
  <div className="space-y-2">
  <label className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition ${status === 'approved' ? 'border-[#059669] bg-emerald-50/50 dark:bg-emerald-950/30' : 'border-emerald-200/80 dark:border-emerald-700/80'}`}>
  <input type="radio" value="approved" checked={status === 'approved'} onChange={(e) => setStatus(e.target.value)} className="mt-0.5 text-emerald-600 focus:ring-emerald-500" />
@@ -1187,41 +1188,12 @@ function SignatureSheet({ close, submit, saving }) {
  maxLength={1000}
  rows={3}
  placeholder="Tuliskan pesan untuk pembimbing..."
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-700/80/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-600/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20 resize-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 py-2.5 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder:text-slate-400/80 transition-all focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 resize-none"
  />
  </div>
  </div>
-
- <div className="flex flex-wrap items-center justify-between gap-2.5 border-t border-emerald-200/80 pt-4 dark:border-emerald-800/60">
- <button
- type="button"
- onClick={close}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
- >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
- </div>
- <span>Batal</span>
- </button>
- <button
- type="submit"
- disabled={saving}
- className="inline-flex items-center gap-2 rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 px-5 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-[1.03] transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer shadow-sm"
- >
- {saving ? (
- <span className="size-3.5 animate-spin rounded-full border-2 border-emerald-200/80 border-t-transparent" />
- ) : (
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <Signature className="size-3.5 text-emerald-600" strokeWidth={2.2} />
- </div>
- )}
- <span>{saving ? 'Menyimpan...' : 'Konfirmasi Paraf'}</span>
- </button>
- </div>
  </form>
- </div>
- </motion.div>
- </div>
+ </AppModal>
  )
 }
 
@@ -1229,42 +1201,42 @@ function NoteSheet({ close, initialNote, submit, saving }) {
  const [note, setNote] = useState(initialNote)
 
  return (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
- {/* Backdrop with Fade Animation */}
- <motion.div
- initial={{ opacity: 0 }}
- animate={{ opacity: 1 }}
- exit={{ opacity: 0 }}
- className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs"
- onMouseDown={close}
- />
-
- {/* Modal with Spring Physics Pop-up (§R) */}
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 14 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ type: 'spring', stiffness: 400, damping: 28 }}
- className="relative z-10 w-full max-w-md rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] overflow-hidden"
+ <AppModal
+ isOpen={true}
+ onClose={() => { if (!saving) close() }}
+ disableBackdropClose={saving}
+ hideCloseButton={saving}
+ badge="Supervisi Sekolah"
+ title="Edit Catatan Pembimbing / Musyrif"
+ icon={MessageSquareText}
+ maxWidth="max-w-md"
+ footer={
+ <div className="flex w-full items-center justify-between gap-2.5">
+ <button
+ type="button"
+ onClick={close}
+ disabled={saving}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <div className="p-5 sm:p-6">
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4 dark:border-emerald-800/60 mb-4">
- <div className="flex items-center gap-3">
- <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
- 
-            <MessageSquareText className="size-6 sm:size-7 h-5 w-5 text-white" strokeWidth={2.25} />
- </div>
- <div>
- <span className="text-[10px] font-bold text-[#059669] dark:text-emerald-400 uppercase tracking-wider">Supervisi Sekolah</span>
- <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">Edit Catatan Pembimbing / Musyrif</h3>
- </div>
- </div>
- <button type="button" onClick={close} aria-label="Tutup modal" className="size-9 flex items-center justify-center rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 hover:scale-105 active:scale-95 transition-all duration-200 shadow-sm cursor-pointer shrink-0">
- <X className="size-4 text-rose-600" strokeWidth={2.25} />
+ Batal
+ </button>
+ <button
+ type="submit"
+ form="mutabaah-note-form"
+ disabled={saving}
+ className="inline-flex h-9.5 items-center gap-2 rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 active:scale-95 disabled:opacity-50 cursor-pointer"
+ >
+ {saving ? (
+ <span className="size-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+ ) : (
+ <CheckCircle2 className="size-3.5" strokeWidth={2.2} />
+ )}
+ <span>{saving ? 'Menyimpan...' : 'Simpan Catatan'}</span>
  </button>
  </div>
-
- <form onSubmit={(e) => { e.preventDefault(); submit(note) }} className="space-y-4">
+ }
+ >
+ <form id="mutabaah-note-form" onSubmit={(e) => { e.preventDefault(); submit(note) }} className="space-y-4">
  <div>
  <label htmlFor="note-text" className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">Pesan / Evaluasi Musyrif untuk Santri & Orang Tua</label>
  <div className="relative">
@@ -1278,41 +1250,12 @@ function NoteSheet({ close, initialNote, submit, saving }) {
  maxLength={1000}
  rows={4}
  placeholder="Tuliskan evaluasi amalan ibadah santri hari ini..."
- className="w-full rounded-xl border border-emerald-200/80 bg-slate-50/50 pl-10 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400/80 transition-all duration-200 hover:border-emerald-300 focus:border-[#059669] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#059669]/12 dark:border-emerald-700/80/80 dark:bg-slate-900/50 dark:text-slate-100 dark:hover:border-emerald-600/80 dark:focus:border-[#10B981] dark:focus:bg-slate-900 dark:focus:ring-[#10B981]/20 resize-none"
+ className="w-full rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-white dark:bg-slate-900 pl-10 pr-4 py-2.5 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder:text-slate-400/80 transition-all focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 resize-none"
  />
  </div>
  </div>
-
- <div className="flex flex-wrap items-center justify-between gap-2.5 border-t border-emerald-200/80 pt-4 dark:border-emerald-800/60">
- <button
- type="button"
- onClick={close}
- className="inline-flex items-center gap-2 rounded-xl bg-rose-50 border border-emerald-200/80 dark:border-emerald-800/60 text-rose-600 dark:bg-rose-950/60 dark:border-emerald-800/60 dark:text-rose-400 px-4 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 transition-all duration-200 hover:scale-[1.03] active:scale-95 cursor-pointer"
- >
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <X className="size-3.5 text-rose-600" strokeWidth={2.2} />
- </div>
- <span>Batal</span>
- </button>
- <button
- type="submit"
- disabled={saving}
- className="inline-flex items-center gap-2 rounded-xl bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 px-5 py-2.5 text-xs font-extrabold border border-emerald-200/80 dark:border-emerald-800/60 hover:scale-[1.03] transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer shadow-sm"
- >
- {saving ? (
- <span className="size-3.5 animate-spin rounded-full border-2 border-emerald-200/80 border-t-transparent" />
- ) : (
- <div className="flex size-5 items-center justify-center rounded-lg bg-white/20">
- <CheckCircle2 className="size-3.5 text-slate-600" strokeWidth={2.2} />
- </div>
- )}
- <span>{saving ? 'Menyimpan...' : 'Simpan Catatan'}</span>
- </button>
- </div>
  </form>
- </div>
- </motion.div>
- </div>
+ </AppModal>
  )
 }
 

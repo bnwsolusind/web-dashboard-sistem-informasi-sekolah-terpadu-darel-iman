@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from 'react'
+import AppModal from '@/components/app/AppModal'
 import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -809,55 +810,37 @@ export default function CbtExamsWorkspace({
  </HeroCard>
 
  {/* 5. HERO UI MODAL DETAIL & PETUNJUK CBT */}
- <AnimatePresence>
- {instructionModal && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
- {/* Backdrop Blur */}
- <motion.div
- initial={{ opacity: 0 }}
- animate={{ opacity: 1 }}
- exit={{ opacity: 0 }}
- onClick={() => setInstructionModal(null)}
- className="absolute inset-0 bg-slate-950/70 backdrop-blur-md"
- />
-
- {/* Modal Dialog Card */}
- <motion.div
- initial={{ opacity: 0, scale: 0.95, y: 10 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- transition={{ duration: 0.2 }}
- className="relative w-full max-w-lg overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-6 sm:p-7 shadow-2xl dark:border-emerald-800/60 dark:bg-slate-900"
- >
- {/* Top Accent Gradient Bar */}
-
- {/* Modal Header */}
- <div className="flex items-start justify-between gap-3 border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4 dark:border-emerald-800/60">
- <div className="flex items-center gap-3">
- <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-sm">
- <Laptop className="h-5 w-5" />
- </div>
- <div>
- <h3 className="text-lg font-black text-slate-900 dark:text-white">
- Detail & Petunjuk Ujian CBT
- </h3>
- <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
- Informasi spesifikasi teknis dan tata tertib ujian komputer
- </p>
- </div>
- </div>
-
+ <AppModal
+ isOpen={Boolean(instructionModal)}
+ onClose={() => setInstructionModal(null)}
+ title="Detail & Petunjuk Ujian CBT"
+ description="Informasi spesifikasi teknis dan tata tertib ujian komputer"
+ icon={Laptop}
+ maxWidth="max-w-lg"
+ footer={
+ <div className="flex w-full items-center justify-end gap-2.5">
  <button
  type="button"
  onClick={() => setInstructionModal(null)}
- className="rounded-xl p-1.5 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-600 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 dark:hover:text-slate-300 cursor-pointer"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <X className="h-5 w-5" />
+ {isParent ? 'Tutup' : 'Batal'}
  </button>
+ {!isParent && instructionModal && (
+ <button
+ type="button"
+ onClick={() => handleConfirmStart(instructionModal)}
+ className="inline-flex h-9.5 items-center justify-center gap-2 rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 active:scale-95 cursor-pointer"
+ >
+ <Play className="h-4 w-4" />
+ Mulai Ujian Sekarang
+ </button>
+ )}
  </div>
-
- {/* Modal Content Info */}
- <div className="mt-5 space-y-4 text-xs">
+ }
+ >
+ {instructionModal && (
+ <div className="space-y-4 text-xs">
  {/* Rangkuman Judul & Mapel */}
  <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/40 p-4 dark:border-emerald-800/60 dark:bg-emerald-950/20 space-y-2">
  <div className="flex items-center justify-between">
@@ -944,32 +927,8 @@ export default function CbtExamsWorkspace({
  )}
  </div>
  </div>
-
- {/* Modal Footer */}
- <div className="mt-6 flex items-center justify-end gap-2.5 border-t border-emerald-200/80 pt-4 dark:border-emerald-800/60">
- <button
- type="button"
- onClick={() => setInstructionModal(null)}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white px-5 py-2.5 text-xs font-bold text-slate-600 transition-all hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-700/80 dark:bg-emerald-950/60 dark:text-emerald-300 cursor-pointer"
- >
- {isParent ? 'Tutup' : 'Batal'}
- </button>
-
- {!isParent && (
- <HeroButton
- size="md"
- onPress={() => handleConfirmStart(instructionModal)}
- className="inline-flex items-center gap-2 rounded-xl bg-white dark:bg-[#1B2433] px-6 py-2.5 text-xs font-black shadow-lg shadow-sm transition-all hover:scale-[1.02] cursor-pointer"
- >
- <Play className="h-4 w-4" />
- Mulai Ujian Sekarang
- </HeroButton>
  )}
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+ </AppModal>
  </div>
  )
 }

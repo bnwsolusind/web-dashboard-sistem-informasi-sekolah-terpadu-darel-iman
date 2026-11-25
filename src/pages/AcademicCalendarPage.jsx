@@ -24,6 +24,7 @@ import {
 } from 'lucide-react'
 
 import PageContainer from '../components/app/PageContainer'
+import AppModal from '../components/app/AppModal'
 import { PageToolbarActions } from '../components/app'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
 import {
@@ -759,84 +760,41 @@ export default function AcademicCalendarPage() {
  </div>
 
  {/* Modal Tambah / Edit Agenda Kalender Terpadu (HeroUI Harmonized Modal) */}
-      <AnimatePresence>
-        {isFormOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+      <AppModal
+        isOpen={isFormOpen}
+        onClose={() => { if (!isSubmitting) setIsFormOpen(false) }}
+        disableBackdropClose={isSubmitting}
+        hideCloseButton={isSubmitting}
+        variant={editingEvent ? 'warning' : 'emerald'}
+        badge={editingEvent ? 'Update Agenda' : 'Agenda Baru'}
+        title={editingEvent ? 'Ubah Agenda Akademik' : 'Tambah Agenda Akademik'}
+        icon={CalendarDays}
+        maxWidth="max-w-xl"
+        footer={
+          <div className="flex w-full items-center justify-end gap-3">
+            <button
+              type="button"
               onClick={() => setIsFormOpen(false)}
-              className="fixed inset-0 bg-slate-950/70 backdrop-blur-md"
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-              className="relative z-10 w-full max-w-xl overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] dark:border-emerald-800/60 dark:bg-[#182232]"
-              role="dialog"
-              aria-modal="true"
+              disabled={isSubmitting}
+              className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
             >
-              {/* Top Accent Gradient Bar */}
-              <div
-                className={cn(
-                  'h-1.5 w-full shrink-0',
-                  editingEvent
-                    ? 'bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-600'
-                    : 'bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600'
-                )}
-              />
-
-              <div className="p-6">
-                {/* Header */}
-                <div className="mb-5 flex items-start justify-between gap-4">
-                  <div className="flex items-center gap-3.5">
-                    <div
-                      className={cn(
-                        'flex size-11 shrink-0 items-center justify-center rounded-xl shadow-md border',
-                        editingEvent
-                          ? 'bg-gradient-to-br from-amber-500 to-amber-700 text-white border-amber-400/40'
-                          : 'bg-gradient-to-br from-emerald-500 to-teal-700 text-white border-emerald-400/40'
-                      )}
-                    >
-                      <CalendarDays className="size-6 text-white" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h3 className="text-lg font-black tracking-tight text-slate-900 dark:text-white">
-                          {editingEvent ? 'Ubah Agenda Akademik' : 'Tambah Agenda Akademik'}
-                        </h3>
-                        <span
-                          className={cn(
-                            'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider',
-                            editingEvent
-                              ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300'
-                              : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
-                          )}
-                        >
-                          <Sparkles className="size-3" />
-                          {editingEvent ? 'Update Agenda' : 'Agenda Baru'}
-                        </span>
-                      </div>
-                      <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
-                        Rincian jadwal kegiatan dan kalender akademik terpadu {foundationName}.
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setIsFormOpen(false)}
-                    className="rounded-xl p-1.5 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-600 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 dark:hover:text-slate-300 transition-colors"
-                    aria-label="Tutup form modal"
-                  >
-                    <X className="size-5" />
-                  </button>
-                </div>
-
-                {/* Form body */}
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="space-y-3.5 max-h-[60vh] overflow-y-auto pr-1">
+              Batal
+            </button>
+            <button
+              type="submit"
+              form="academic-calendar-form"
+              disabled={isSubmitting}
+              className="inline-flex h-9.5 items-center gap-2 rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 hover:bg-emerald-700 active:scale-95 transition-all cursor-pointer disabled:opacity-50"
+            >
+              {isSubmitting && <RefreshCw className="size-3.5 animate-spin" />}
+              Simpan Agenda
+            </button>
+          </div>
+        }
+      >
+        {/* Form body */}
+        <form id="academic-calendar-form" onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-3.5">
  {/* Judul Kegiatan */}
  <div>
  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
@@ -1008,112 +966,61 @@ export default function AcademicCalendarPage() {
  </div>
  </div>
 
-                  {/* Footer */}
-                  <div className="mt-6 flex items-center justify-end gap-3 border-t border-emerald-200/80 pt-4 dark:border-emerald-800/60">
-                    <button
-                      type="button"
-                      onClick={() => setIsFormOpen(false)}
-                      disabled={isSubmitting}
-                      className="rounded-xl border border-emerald-200/80 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all cursor-pointer"
-                    >
-                      Batal
-                    </button>
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-2 text-xs font-bold text-white shadow-md shadow-emerald-600/20 hover:from-emerald-700 hover:to-teal-700 hover:shadow-lg transition-all cursor-pointer disabled:opacity-50"
-                    >
-                      {isSubmitting && <RefreshCw className="size-3.5 animate-spin" />}
-                      Simpan Agenda
-                    </button>
-                  </div>
                 </form>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+       </AppModal>
 
-      {/* HeroUI Harmonized Delete Confirmation Modal */}
-      <AnimatePresence>
-        {deleteEventItem && (
-          <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => !isDeleting && setDeleteEventItem(null)}
-              className="fixed inset-0 bg-slate-950/70 backdrop-blur-md"
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-              className="relative z-10 w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] dark:border-emerald-800/60 dark:bg-[#182232]"
-              role="dialog"
-              aria-modal="true"
-            >
-              {/* Top Accent Gradient Bar */}
-              <div className="h-1.5 w-full shrink-0 bg-gradient-to-r from-rose-500 via-rose-600 to-red-700" />
-
-              <div className="p-6">
-                <div className="flex items-center gap-3.5 mb-4">
-                  <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-rose-500 to-rose-700 text-white shadow-md border border-rose-400/30">
-                    <Trash2 className="size-5 text-white" />
-                  </div>
-                  <div>
-                    <span className="inline-block rounded-md bg-rose-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
-                      Hapus Permanen
-                    </span>
-                    <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
-                      Hapus Agenda Kalender?
-                    </h3>
-                  </div>
-                </div>
-
-                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
-                  Apakah Anda yakin ingin menghapus agenda ini? Tindakan ini akan menghapus jadwal kegiatan dari kalender akademik.
-                </p>
-
-                <div className="rounded-xl border border-rose-200/80 bg-rose-50/50 p-3.5 dark:border-rose-900/60 dark:bg-rose-950/20 mb-5">
-                  <p className="text-xs font-black text-rose-950 dark:text-rose-100">
-                    {deleteEventItem?.title || 'Agenda'}
-                  </p>
-                  <p className="text-xs text-rose-800/80 dark:text-rose-300/80 mt-0.5">
-                    Kategori:{' '}
-                    {deleteEventItem?.category
-                      ? PRESET_CATEGORIES[deleteEventItem.category]?.label || deleteEventItem.category
-                      : '-'}{' '}
-                    • Tanggal: {deleteEventItem?.startDate || '-'} • Unit:{' '}
-                    {deleteEventItem?.unit || 'Semua Unit'}
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-end gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setDeleteEventItem(null)}
-                    disabled={isDeleting}
-                    className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all cursor-pointer"
-                  >
-                    Batal
-                  </button>
-                  <button
-                    type="button"
-                    onClick={confirmDeleteEvent}
-                    disabled={isDeleting}
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 px-5 py-2 text-xs font-bold text-white shadow-md shadow-rose-600/20 hover:from-rose-700 hover:to-red-700 hover:shadow-lg transition-all cursor-pointer disabled:opacity-50"
-                  >
-                    {isDeleting && <RefreshCw className="size-3.5 animate-spin" />}
-                    Hapus Agenda
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+       {/* HeroUI Harmonized Delete Confirmation Modal */}
+       <AppModal
+         isOpen={Boolean(deleteEventItem)}
+         onClose={() => !isDeleting && setDeleteEventItem(null)}
+         disableBackdropClose={isDeleting}
+         hideCloseButton={isDeleting}
+         variant="danger"
+         badge="Hapus Permanen"
+         title="Hapus Agenda Kalender?"
+         description="Apakah Anda yakin ingin menghapus agenda ini?"
+         icon={Trash2}
+         maxWidth="max-w-md"
+         zIndex={70}
+         footer={
+           <div className="flex w-full items-center justify-end gap-3">
+             <button
+               type="button"
+               onClick={() => setDeleteEventItem(null)}
+               disabled={isDeleting}
+               className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
+             >
+               Batal
+             </button>
+             <button
+               type="button"
+               onClick={confirmDeleteEvent}
+               disabled={isDeleting}
+               className="inline-flex h-9.5 items-center gap-1.5 rounded-xl border-2 border-rose-600 bg-rose-600 px-5 text-xs font-black text-white shadow-md shadow-rose-600/20 transition-all hover:bg-rose-700 active:scale-95 disabled:opacity-50 cursor-pointer"
+             >
+               {isDeleting && <RefreshCw className="size-3.5 animate-spin" />}
+               Hapus Agenda
+             </button>
+           </div>
+         }
+       >
+         <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+           Tindakan ini akan menghapus jadwal kegiatan dari kalender akademik secara permanen.
+         </p>
+         <div className="rounded-xl border border-rose-200/80 bg-rose-50/50 p-3.5 dark:border-rose-900/60 dark:bg-rose-950/20">
+           <p className="text-xs font-black text-rose-950 dark:text-rose-100">
+             {deleteEventItem?.title || 'Agenda'}
+           </p>
+           <p className="text-xs text-rose-800/80 dark:text-rose-300/80 mt-0.5">
+             Kategori:{' '}
+             {deleteEventItem?.category
+               ? PRESET_CATEGORIES[deleteEventItem.category]?.label || deleteEventItem.category
+               : '-'}{' '}
+             • Tanggal: {deleteEventItem?.startDate || '-'} • Unit:{' '}
+             {deleteEventItem?.unit || 'Semua Unit'}
+           </p>
+         </div>
+       </AppModal>
       </div>
     </PageContainer>
   )

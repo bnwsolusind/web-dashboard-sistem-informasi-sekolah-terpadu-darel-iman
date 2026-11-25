@@ -33,7 +33,10 @@ import {
 import * as LucideIcons from 'lucide-react'
 import { Icon as IconifyIcon, iconLoaded } from '@iconify/react'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
+import AppModal from '../components/app/AppModal'
 import AppTabs from '../components/app/AppTabs'
+import PageToolbarActions from '../components/app/PageToolbarActions'
+import { SquircleActionButton } from '../components/master-data'
 import { Button } from '../components/ui/button'
 import { useToast } from '../components/app'
 import { adminNavigationService } from '../services/adminNavigationService'
@@ -938,33 +941,27 @@ export default function KelolaNavigasiMenuPage() {
         badge="Web & Mobile"
         icon={Menu}
         actions={
-          <div className="flex items-center gap-2 flex-wrap">
-            <Button
-              variant="ghost"
+          <PageToolbarActions
+            primaryAction={{
+              label: activePlatformTab === "modules" ? "Tambah Modul Baru" : "Tambah Menu Baru",
+              onClick: activePlatformTab === "modules" ? handleOpenCreateModule : handleOpenCreate,
+            }}
+          >
+            <SquircleActionButton
+              variant="restore"
+              icon={RotateCcw}
+              label="Pulihkan Default"
               onClick={() => setResetConfirmOpen(true)}
-              className="rounded-xl border border-emerald-300 bg-white/80 dark:border-emerald-700/80 dark:bg-slate-800"
-            >
-              <RotateCcw className="h-4 w-4 text-slate-600 dark:text-slate-300 mr-1.5" /> Pulihkan Default
-            </Button>
+            />
             {activePlatformTab === "mobile" && (
-              <Button
-                variant="primary"
+              <SquircleActionButton
+                variant="sync"
+                icon={RefreshCw}
+                label="Publikasikan ke Mobile"
                 onClick={() => setSyncConfirmOpen(true)}
-                className="rounded-xl"
-              >
-                <RefreshCw className="h-4 w-4 mr-1.5" /> Publikasikan ke Mobile
-              </Button>
+              />
             )}
-            {activePlatformTab === "modules" ? (
-              <Button variant="create" onClick={handleOpenCreateModule} className="rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-xs text-white font-bold">
-                <Plus className="h-4 w-4 mr-1.5 text-white" /> Tambah Modul Baru
-              </Button>
-            ) : (
-              <Button variant="create" onClick={handleOpenCreate} className="rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-xs text-white font-bold">
-                <Plus className="h-4 w-4 mr-1.5 text-white" /> Tambah Menu Baru
-              </Button>
-            )}
-          </div>
+          </PageToolbarActions>
         }
       />
 
@@ -1341,44 +1338,42 @@ export default function KelolaNavigasiMenuPage() {
  </div>
  </section>
 
- {/* ========================================================
- MODAL FORM TAMBAH / UBAH MENU (Terpadu Web & Mobile)
- ======================================================== */}
- <AnimatePresence>
- {isFormModalOpen && (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.95 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.95 }}
- className="relative w-full max-w-2xl overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433] max-h-[90vh] flex flex-col"
- >
- {/* Header Accent Bar */}
-
- <div className="p-6 overflow-y-auto space-y-4">
- <div className="flex items-center justify-between pb-3 border-b border-emerald-200/80 dark:border-emerald-800/60">
- <div className="flex items-center gap-3">
- <div className="grid h-9 w-10 place-items-center rounded-xl bg-emerald-50 border border-emerald-200/70 text-emerald-700 dark:bg-emerald-950/40 dark:border-emerald-700/80 dark:text-emerald-300 shadow-md shadow-sm">
- <Menu className="h-5 w-5" />
- </div>
- <div>
- <h3 className="text-base font-bold text-slate-900 dark:text-white">
- {editingItem ? 'Ubah Menu Navigasi' : 'Tambah Menu Navigasi Baru'}
- </h3>
- <p className="text-xs text-slate-500">
- Sesuaikan label, ikon web/mobile, dan batasan hak akses role.
- </p>
- </div>
- </div>
- <button
- onClick={() => setIsFormModalOpen(false)}
- className="rounded-xl p-1.5 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300"
- >
- <X className="h-5 w-5" />
- </button>
- </div>
-
- <form onSubmit={handleSubmitForm} className="space-y-4 pt-1">
+      {/* 1. MODAL FORM TAMBAH / UBAH MENU */}
+      <AppModal
+        isOpen={isFormModalOpen}
+        onClose={() => !saveMutation.isPending && setIsFormModalOpen(false)}
+        title={editingItem ? 'Ubah Menu Navigasi' : 'Tambah Menu Navigasi Baru'}
+        badge={editingItem ? 'Perbarui' : 'Menu Baru'}
+        description="Sesuaikan label, ikon web/mobile, dan batasan hak akses role."
+        icon={Menu}
+        maxWidth="max-w-2xl"
+        zIndex={70}
+        disableBackdropClose={saveMutation.isPending}
+        hideCloseButton={saveMutation.isPending}
+        footer={
+          <>
+            <button
+              type="button"
+              disabled={saveMutation.isPending}
+              onClick={() => setIsFormModalOpen(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="submit"
+              form="nav-menu-form"
+              disabled={saveMutation.isPending}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+            >
+              <Save className="h-4 w-4" />
+              <span>{saveMutation.isPending ? 'Menyimpan...' : 'Simpan Menu'}</span>
+            </button>
+          </>
+        }
+      >
+        <form id="nav-menu-form" onSubmit={handleSubmitForm} className="space-y-4">
  {/* Platform Picker */}
  <div>
  <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1.5">
@@ -1816,239 +1811,174 @@ export default function KelolaNavigasiMenuPage() {
  </div>
  </div>
 
- {/* Footer Submit Buttons */}
- <div className="flex items-center justify-end gap-2 pt-4 border-t border-emerald-200/80 dark:border-emerald-800/60">
- <Button
- type="button"
- variant="ghost"
- onClick={() => setIsFormModalOpen(false)}
- className="rounded-xl"
- >
- Batal
- </Button>
- <Button
- type="submit"
- variant="primary"
- pending={saveMutation.isPending}
- className="rounded-xl"
- >
- <Save className="h-4 w-4 mr-1.5" /> Simpan Menu
- </Button>
- </div>
- </form>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+        </form>
+      </AppModal>
 
- {/* ========================================================
- HARMONIZED DELETE CONFIRMATION MODAL
- ======================================================== */}
- <AnimatePresence>
- {deleteConfirmTarget && (
- <div className="fixed inset-0 z-[80] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex h-9 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:border-rose-800/60 dark:text-rose-400 shadow-md shadow-sm">
- <Trash2 className="h-6 w-6" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-rose-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
- Hapus Menu
- </span>
- <h3 className="text-base font-bold text-slate-900 dark:text-white mt-0.5">
- Hapus "{deleteConfirmTarget.name}"?
- </h3>
- </div>
- </div>
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Menu ini akan dihapus dari navigasi sistem ({deleteConfirmTarget.platform}). Tindakan ini dapat dipulihkan dengan mereset ke menu default.
- </p>
- <div className="flex items-center justify-end gap-2">
- <Button
- variant="ghost"
- onClick={() => setDeleteConfirmTarget(null)}
- className="rounded-xl"
- >
- Batal
- </Button>
- <Button
- variant="danger"
- pending={deleteMutation.isPending}
- onClick={() => deleteMutation.mutate(deleteConfirmTarget.id)}
- className="rounded-xl"
- >
- Ya, Hapus Menu
- </Button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+      {/* 2. HARMONIZED DELETE CONFIRMATION MODAL */}
+      <AppModal
+        isOpen={Boolean(deleteConfirmTarget)}
+        onClose={() => !deleteMutation.isPending && setDeleteConfirmTarget(null)}
+        title={deleteConfirmTarget ? `Hapus "${deleteConfirmTarget.name}"?` : 'Hapus Menu'}
+        badge="Hapus Menu"
+        description={deleteConfirmTarget ? `Platform: ${deleteConfirmTarget.platform}` : undefined}
+        icon={Trash2}
+        variant="danger"
+        maxWidth="max-w-md"
+        zIndex={80}
+        disableBackdropClose={deleteMutation.isPending}
+        hideCloseButton={deleteMutation.isPending}
+        footer={
+          <>
+            <button
+              type="button"
+              disabled={deleteMutation.isPending}
+              onClick={() => setDeleteConfirmTarget(null)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="button"
+              disabled={deleteMutation.isPending}
+              onClick={() => deleteMutation.mutate(deleteConfirmTarget.id)}
+              className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20 disabled:opacity-50"
+            >
+              <Trash2 className="size-4" />
+              <span>{deleteMutation.isPending ? 'Menghapus...' : 'Ya, Hapus Menu'}</span>
+            </button>
+          </>
+        }
+      >
+        {deleteConfirmTarget && (
+          <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            Menu ini akan dihapus dari navigasi sistem ({deleteConfirmTarget.platform}). Tindakan ini dapat dipulihkan dengan mereset ke menu default.
+          </p>
+        )}
+      </AppModal>
 
- {/* ========================================================
- HARMONIZED SYNC TO MOBILE CONFIRMATION MODAL
- ======================================================== */}
- <AnimatePresence>
- {syncConfirmOpen && (
- <div className="fixed inset-0 z-[80] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex h-9 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-200/70 text-emerald-700 dark:bg-emerald-950/40 dark:border-emerald-700/80 dark:text-emerald-300 shadow-md shadow-sm">
- <RefreshCw className="h-6 w-6" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-emerald-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
- Sinkronisasi Mobile
- </span>
- <h3 className="text-base font-bold text-slate-900 dark:text-white mt-0.5">
- Publikasikan ke Aplikasi Mobile?
- </h3>
- </div>
- </div>
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Seluruh perubahan susunan menu mobile akan langsung disinkronkan ke server konfigurasi Android tanpa perlu rilis APK baru di Play Store.
- </p>
- <div className="flex items-center justify-end gap-2">
- <Button variant="ghost" onClick={() => setSyncConfirmOpen(false)} className="rounded-xl">
- Batal
- </Button>
- <Button
- variant="primary"
- pending={syncMutation.isPending}
- onClick={() => syncMutation.mutate()}
- className="rounded-xl"
- >
- Ya, Publikasikan Sekarang
- </Button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+      {/* 3. HARMONIZED SYNC TO MOBILE CONFIRMATION MODAL */}
+      <AppModal
+        isOpen={syncConfirmOpen}
+        onClose={() => !syncMutation.isPending && setSyncConfirmOpen(false)}
+        title="Publikasikan ke Aplikasi Mobile?"
+        badge="Sinkronisasi Mobile"
+        description="Sinkronisasi konfigurasi menu ke aplikasi mobile Android"
+        icon={RefreshCw}
+        maxWidth="max-w-md"
+        zIndex={80}
+        disableBackdropClose={syncMutation.isPending}
+        hideCloseButton={syncMutation.isPending}
+        footer={
+          <>
+            <button
+              type="button"
+              disabled={syncMutation.isPending}
+              onClick={() => setSyncConfirmOpen(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="button"
+              disabled={syncMutation.isPending}
+              onClick={() => syncMutation.mutate()}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+            >
+              <RefreshCw className={`size-4 ${syncMutation.isPending ? 'animate-spin' : ''}`} />
+              <span>{syncMutation.isPending ? 'Mempublikasikan...' : 'Ya, Publikasikan Sekarang'}</span>
+            </button>
+          </>
+        }
+      >
+        <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+          Seluruh perubahan susunan menu mobile akan langsung disinkronkan ke server konfigurasi Android tanpa perlu rilis APK baru di Play Store.
+        </p>
+      </AppModal>
 
- {/* ========================================================
- HARMONIZED RESET DEFAULTS CONFIRMATION MODAL
- ======================================================== */}
- <AnimatePresence>
- {resetConfirmOpen && (
- <div className="fixed inset-0 z-[80] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex h-9 w-12 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-[#1B2433] shadow-md shadow-sm border border-emerald-200/80 dark:border-emerald-800/60">
- <RotateCcw className="h-6 w-6" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-amber-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
- Reset Default
- </span>
- <h3 className="text-base font-bold text-slate-900 dark:text-white mt-0.5">
- Pulihkan Susunan Menu Bawaan?
- </h3>
- </div>
- </div>
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Tindakan ini akan mengembalikan seluruh susunan menu Web Dashboard dan Mobile App (Siswa, Orang Tua, Guru, TU, dll) ke konfigurasi standar awal sistem.
- </p>
- <div className="flex items-center justify-end gap-2">
- <Button variant="ghost" onClick={() => setResetConfirmOpen(false)} className="rounded-xl">
- Batal
- </Button>
- <Button
- variant="primary"
- pending={resetMutation.isPending}
- onClick={() => resetMutation.mutate()}
- className="rounded-xl bg-amber-600 hover:bg-amber-700"
- >
- Ya, Pulihkan Default
- </Button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+      {/* 4. HARMONIZED RESET DEFAULTS CONFIRMATION MODAL */}
+      <AppModal
+        isOpen={resetConfirmOpen}
+        onClose={() => !resetMutation.isPending && setResetConfirmOpen(false)}
+        title="Pulihkan Susunan Menu Bawaan?"
+        badge="Reset Default"
+        description="Kembalikan susunan menu ke pengaturan awal sistem"
+        icon={RotateCcw}
+        variant="warning"
+        maxWidth="max-w-md"
+        zIndex={80}
+        disableBackdropClose={resetMutation.isPending}
+        hideCloseButton={resetMutation.isPending}
+        footer={
+          <>
+            <button
+              type="button"
+              disabled={resetMutation.isPending}
+              onClick={() => setResetConfirmOpen(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="button"
+              disabled={resetMutation.isPending}
+              onClick={() => resetMutation.mutate()}
+              className="h-9.5 px-5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-amber-600 shadow-md shadow-amber-600/20 disabled:opacity-50"
+            >
+              <RotateCcw className="size-4" />
+              <span>{resetMutation.isPending ? 'Memulihkan...' : 'Ya, Pulihkan Default'}</span>
+            </button>
+          </>
+        }
+      >
+        <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+          Tindakan ini akan mengembalikan seluruh susunan menu Web Dashboard dan Mobile App (Siswa, Orang Tua, Guru, TU, dll) ke konfigurasi standar awal sistem.
+        </p>
+      </AppModal>
 
- {/* 5. Modal Visual Icon Gallery Picker */}
- <AnimatePresence>
- {iconPickerModal && (
- <div className="fixed inset-0 z-[80] flex items-center justify-center p-3 sm:p-4">
- <motion.div
- initial={{ opacity: 0 }}
- animate={{ opacity: 1 }}
- exit={{ opacity: 0 }}
- onClick={() => setIconPickerModal(null)}
- className="absolute inset-0 bg-slate-950/70 backdrop-blur-md"
- />
- <motion.div
- initial={{ scale: 0.95, opacity: 0, y: 15 }}
- animate={{ scale: 1, opacity: 1, y: 0 }}
- exit={{ scale: 0.95, opacity: 0, y: 15 }}
- className="relative w-full max-w-2xl max-h-[85vh] overflow-hidden rounded-xl bg-white shadow-2xl shadow-sm dark:bg-[#1B2433] dark:border dark:border-emerald-800/60 flex flex-col"
- >
- {/* Top Accent Gradient */}
- <div
- className={`h-1.5 w-full bg-white dark:bg-[#1B2433] ${
- iconPickerModal === 'mobile'
- ? 'from-violet-500 via-purple-400 to-violet-600'
- : 'from-emerald-500 via-teal-400 to-emerald-600'
- }`}
- />
-
- {/* Modal Header */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 p-4 sm:p-5 dark:border-emerald-800/60">
- <div className="flex items-center gap-3">
- <div
- className={`flex h-11 w-11 items-center justify-center rounded-xl shadow-md ${
- iconPickerModal === 'mobile'
- ? 'bg-white dark:bg-[#1B2433] shadow-violet-500/20'
- : 'bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-700/80 dark:text-slate-300 shadow-sm'
- }`}
- >
- <Palette className="h-5 w-5" />
- </div>
- <div>
- <h3 className="text-base font-black text-slate-900 dark:text-white">
- {iconPickerModal === 'mobile'
- ? 'Pilih Gambar Ikon Mobile (Material)'
- : 'Pilih Gambar Ikon Web / Modul (Lucide)'}
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- Klik langsung pada gambar ikon di bawah ini untuk memilihnya.
- </p>
- </div>
- </div>
-
- <button
- type="button"
- onClick={() => setIconPickerModal(null)}
- className="rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 cursor-pointer"
- >
- <X className="h-5 w-5" />
- </button>
- </div>
-
+      {/* 5. Modal Visual Icon Gallery Picker */}
+      <AppModal
+        isOpen={Boolean(iconPickerModal)}
+        onClose={() => setIconPickerModal(null)}
+        title={
+          iconPickerModal === 'mobile'
+            ? 'Galeri Ikon Aplikasi Mobile (MaterialIcons)'
+            : iconPickerModal === 'module'
+              ? 'Galeri Ikon Modul Induk (Lucide)'
+              : 'Galeri Ikon Dashboard Web (Lucide)'
+        }
+        badge={iconPickerModal === 'mobile' ? 'Mobile' : 'Web'}
+        description={
+          iconPickerModal === 'mobile'
+            ? '10.000+ ikon MaterialCommunityIcons lengkap untuk aplikasi Android/iOS'
+            : '1.500+ ikon vektor Lucide lengkap (Klik ikon untuk langsung memilih)'
+        }
+        icon={iconPickerModal === 'mobile' ? Smartphone : Palette}
+        maxWidth="max-w-3xl"
+        zIndex={80}
+        bodyClassName="p-0 flex flex-col"
+        footer={
+          <div className="flex w-full items-center justify-between gap-3">
+            <span className="text-[11px] text-slate-500">
+              {iconPickerModal === 'mobile'
+                ? 'Didukung oleh MaterialCommunityIcons (@iconify-json/mdi)'
+                : iconPickerModal === 'module'
+                  ? 'Ikon akan diterapkan pada header modul dan grup menu.'
+                  : 'Ikon akan otomatis disinkronkan ke Sidebar & Header.'}
+            </span>
+            <button
+              type="button"
+              onClick={() => setIconPickerModal(null)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Tutup</span>
+            </button>
+          </div>
+        }
+      >
  {/* Search Bar & Stats */}
  <div className="border-b border-emerald-200/80 dark:border-emerald-800/60 p-3 sm:p-4 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/40 flex items-center gap-3">
  <div className="relative flex-1">
@@ -2217,68 +2147,45 @@ export default function KelolaNavigasiMenuPage() {
  )}
  </>
  )}
- </div>
+        </div>
+      </AppModal>
 
- {/* Modal Footer */}
- <div className="flex items-center justify-between border-t border-emerald-200/80 p-4 dark:border-emerald-800/60 bg-slate-50/50 dark:bg-slate-900/40">
- <span className="text-xs text-slate-500">
- Ikon aktif:{' '}
- <strong className="text-slate-800 dark:text-white font-mono">
- {iconPickerModal === 'mobile'
- ? formData.icon_mobile
- : iconPickerModal === 'module'
- ? moduleFormData.icon
- : formData.icon}
- </strong>
- </span>
- <Button
- variant="ghost"
- onClick={() => setIconPickerModal(null)}
- className="rounded-xl"
- >
- Tutup
- </Button>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
-
- {/* 6. Modal Tambah / Ubah Modul Induk */}
- <AnimatePresence>
- {isModuleModalOpen && (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.94, y: 12 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.94, y: 12 }}
- className="relative w-full max-w-lg overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-5 sm:p-6">
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-4 dark:border-emerald-800/60">
- <div className="flex items-center gap-3">
- <div className="flex h-9 w-10 items-center justify-center rounded-xl bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-700/80 dark:text-slate-300 shadow-md">
- <Layers className="h-5 w-5" />
- </div>
- <div>
- <h3 className="text-base font-bold text-slate-900 dark:text-white">
- {editingModule ? 'Ubah Modul Induk' : 'Tambah Modul Induk Baru'}
- </h3>
- <p className="text-xs text-slate-500 dark:text-slate-400">
- Modul digunakan untuk mengelompokkan item menu sidebar dan mobile.
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => setIsModuleModalOpen(false)}
- className="rounded-xl p-1.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
- >
- <X className="h-5 w-5" />
- </button>
- </div>
-
- <form onSubmit={handleSubmitModuleForm} className="mt-4 space-y-4">
+      {/* 6. Modal Tambah / Ubah Modul Induk */}
+      <AppModal
+        isOpen={isModuleModalOpen}
+        onClose={() => !saveModuleMutation.isPending && setIsModuleModalOpen(false)}
+        title={editingModule ? 'Ubah Modul Induk' : 'Tambah Modul Induk Baru'}
+        badge={editingModule ? 'Perbarui' : 'Modul Baru'}
+        description="Modul berfungsi sebagai pengelompokan header pada sidebar dan portal mobile."
+        icon={Layers}
+        maxWidth="max-w-lg"
+        zIndex={70}
+        disableBackdropClose={saveModuleMutation.isPending}
+        hideCloseButton={saveModuleMutation.isPending}
+        footer={
+          <>
+            <button
+              type="button"
+              disabled={saveModuleMutation.isPending}
+              onClick={() => setIsModuleModalOpen(false)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="submit"
+              form="nav-module-form"
+              disabled={saveModuleMutation.isPending}
+              className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+            >
+              <Save className="h-4 w-4" />
+              <span>{saveModuleMutation.isPending ? 'Menyimpan...' : 'Simpan Modul'}</span>
+            </button>
+          </>
+        }
+      >
+        <form id="nav-module-form" onSubmit={handleSubmitModuleForm} className="space-y-4">
  <div>
  <label className="text-xs font-bold text-slate-700 dark:text-slate-200 block mb-1">
  Nama Modul:
@@ -2375,80 +2282,51 @@ export default function KelolaNavigasiMenuPage() {
  Modul Aktif (Tampilkan menu di dalamnya)
  </label>
 
- <div className="flex items-center justify-end gap-2 pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60">
- <Button
- type="button"
- variant="ghost"
- onClick={() => setIsModuleModalOpen(false)}
- className="rounded-xl"
- >
- Batal
- </Button>
- <Button
- type="submit"
- variant="primary"
- pending={saveModuleMutation.isPending}
- className="rounded-xl"
- >
- <Save className="h-4 w-4 mr-1.5" /> Simpan Modul
- </Button>
- </div>
- </form>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+        </form>
+      </AppModal>
 
- {/* 7. Modal Konfirmasi Hapus Modul */}
- <AnimatePresence>
- {deleteModuleTarget && (
- <div className="fixed inset-0 z-[80] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex h-9 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 border border-rose-200 text-rose-600 dark:bg-rose-950/60 dark:border-rose-800/60 dark:text-rose-400 shadow-md shadow-sm">
- <Trash2 className="h-6 w-6" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-rose-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
- Hapus Modul Induk
- </span>
- <h3 className="text-base font-bold text-slate-900 dark:text-white mt-0.5">
- Hapus "{deleteModuleTarget.name}"?
- </h3>
- </div>
- </div>
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Modul ini memiliki {(deleteModuleTarget.menus || []).length} menu di dalamnya. Menghapus modul juga akan menghapus seluruh menu di dalam modul tersebut.
- </p>
- <div className="flex items-center justify-end gap-2">
- <Button
- variant="ghost"
- onClick={() => setDeleteModuleTarget(null)}
- className="rounded-xl"
- >
- Batal
- </Button>
- <Button
- variant="danger"
- pending={deleteModuleMutation.isPending}
- onClick={() => deleteModuleMutation.mutate(deleteModuleTarget.id)}
- className="rounded-xl"
- >
- Ya, Hapus Modul
- </Button>
- </div>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+      {/* 7. Modal Konfirmasi Hapus Modul */}
+      <AppModal
+        isOpen={Boolean(deleteModuleTarget)}
+        onClose={() => !deleteModuleMutation.isPending && setDeleteModuleTarget(null)}
+        title={deleteModuleTarget ? `Hapus "${deleteModuleTarget.name}"?` : 'Hapus Modul Induk'}
+        badge="Hapus Modul Induk"
+        description="Konfirmasi penghapusan modul beserta seluruh menu di dalamnya"
+        icon={Trash2}
+        variant="danger"
+        maxWidth="max-w-md"
+        zIndex={80}
+        disableBackdropClose={deleteModuleMutation.isPending}
+        hideCloseButton={deleteModuleMutation.isPending}
+        footer={
+          <>
+            <button
+              type="button"
+              disabled={deleteModuleMutation.isPending}
+              onClick={() => setDeleteModuleTarget(null)}
+              className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+            >
+              <X className="size-4" strokeWidth={2} />
+              <span>Batal</span>
+            </button>
+            <button
+              type="button"
+              disabled={deleteModuleMutation.isPending}
+              onClick={() => deleteModuleMutation.mutate(deleteModuleTarget.id)}
+              className="h-9.5 px-5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black inline-flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer border-2 border-rose-600 shadow-md shadow-rose-600/20 disabled:opacity-50"
+            >
+              <Trash2 className="size-4" />
+              <span>{deleteModuleMutation.isPending ? 'Menghapus...' : 'Ya, Hapus Modul'}</span>
+            </button>
+          </>
+        }
+      >
+        {deleteModuleTarget && (
+          <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+            Modul ini memiliki {(deleteModuleTarget.menus || []).length} menu di dalamnya. Menghapus modul juga akan menghapus seluruh menu di dalam modul tersebut.
+          </p>
+        )}
+      </AppModal>
  </div>
  )
 }

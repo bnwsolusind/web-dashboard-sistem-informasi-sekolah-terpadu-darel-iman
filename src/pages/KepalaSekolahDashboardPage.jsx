@@ -9,6 +9,7 @@ import { educationUnitService } from '../services/educationUnitService'
 import HeroUiFilterSelect from '../components/ui/HeroUiFilterSelect'
 import {
  Users,
+ User,
  UserCheck,
  GraduationCap,
  School,
@@ -47,6 +48,7 @@ import {
  Briefcase,
  TrendingUp,
  Scale,
+ X,
 } from 'lucide-react'
 import PrincipalDisciplineOverviewSection from '../components/discipline/PrincipalDisciplineOverviewSection'
 import InputLaporanBulananModal from '../components/pemantauan/InputLaporanBulananModal'
@@ -356,7 +358,9 @@ export default function KepalaSekolahDashboardPage() {
  const [attendanceStatusFilter, setAttendanceStatusFilter] = useState('all')
  const [selectedAttendanceDate, setSelectedAttendanceDate] = useState('')
  const [isReportModalOpen, setIsReportModalOpen] = useState(false)
+ const [activityPeriodFilter, setActivityPeriodFilter] = useState('all')
  const [kbmSessionFilter, setKbmSessionFilter] = useState('all')
+ const [kbmDayFilter, setKbmDayFilter] = useState('today')
  const [selectedKbmSession, setSelectedKbmSession] = useState(null)
  const [monitoringPillar, setMonitoringPillar] = useState('guru') // 'guru' | 'tendik' | 'siswa'
  const [monitoringSearch, setMonitoringSearch] = useState('')
@@ -635,13 +639,78 @@ export default function KepalaSekolahDashboardPage() {
  const todaySessions = Array.isArray(data?.today_sessions)
  ? data.today_sessions
  : (Array.isArray(data?.teaching_sessions) ? data.teaching_sessions : (Array.isArray(data?.kbm?.sessions) ? data.kbm.sessions : []))
- const filteredSessions = todaySessions.filter((sess) => {
+
+ const todayDayOfWeek = React.useMemo(() => {
+ const d = new Date().getDay()
+ return d === 0 ? 7 : d
+ }, [])
+
+ const dayNamesMap = React.useMemo(() => ({
+ 1: 'Senin',
+ 2: 'Selasa',
+ 3: 'Rabu',
+ 4: 'Kamis',
+ 5: 'Jumat',
+ 6: 'Sabtu',
+ 7: 'Minggu',
+ }), [])
+
+ const todayDayName = dayNamesMap[todayDayOfWeek] || 'Hari Ini'
+
+ const filteredActivityLogs = React.useMemo(() => {
+  if (!onlineLogs || !Array.isArray(onlineLogs)) return []
+  if (activityPeriodFilter === 'all') return onlineLogs
+  const now = new Date()
+  return onlineLogs.filter((log) => {
+   let d = null
+   if (log.timestamp) {
+     d = new Date(Number(log.timestamp))
+   } else if (log.created_at) {
+     d = new Date(log.created_at)
+   } else if (log.time || log.date) {
+     const str = String(log.time || log.date).toLowerCase()
+     if (str.includes('menit') || str.includes('detik') || str.includes('jam') || str.includes('baru saja')) {
+       return true
+     }
+     const daysMatch = str.match(/(\d+)\s*hari/)
+     if (daysMatch) {
+       const days = parseInt(daysMatch[1], 10)
+       if (activityPeriodFilter === 'today') return days < 1
+       if (activityPeriodFilter === 'week') return days <= 7
+       if (activityPeriodFilter === 'month') return days <= 30
+       if (activityPeriodFilter === 'semester') return days <= 180
+       return true
+     }
+     d = new Date(str)
+   }
+   if (!d || isNaN(d.getTime())) return true
+   const diffDays = (now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24)
+   if (activityPeriodFilter === 'today') return diffDays <= 1
+   if (activityPeriodFilter === 'week') return diffDays <= 7
+   if (activityPeriodFilter === 'month') return diffDays <= 30
+   if (activityPeriodFilter === 'semester') return diffDays <= 180
+   return true
+  })
+ }, [onlineLogs, activityPeriodFilter])
+
+ const filteredByDaySessions = React.useMemo(() => {
+ if (kbmDayFilter === 'all') return todaySessions
+ const targetDay = kbmDayFilter === 'today' ? todayDayOfWeek : Number(kbmDayFilter)
+ return todaySessions.filter((sess) => {
+ if (sess.day_of_week === undefined || sess.day_of_week === null) return true
+ return Number(sess.day_of_week) === targetDay
+ })
+ }, [todaySessions, kbmDayFilter, todayDayOfWeek])
+
+ const filteredSessions = React.useMemo(() => {
+ return filteredByDaySessions.filter((sess) => {
  if (kbmSessionFilter === 'all') return true
  if (kbmSessionFilter === 'ongoing') return sess.is_ongoing
  if (kbmSessionFilter === 'completed') return sess.status === 'completed'
  if (kbmSessionFilter === 'scheduled') return sess.status === 'scheduled' && !sess.is_ongoing
  return true
  })
+ }, [filteredByDaySessions, kbmSessionFilter])
 
  const isUserGuru = React.useCallback((u) => {
  const role = String(u.role || u.jabatan || u.position || '').toLowerCase()
@@ -969,7 +1038,7 @@ export default function KepalaSekolahDashboardPage() {
  {/* Ambient Glows */}
 
  {/* Header Toolbar & Segmented Tabs */}
- <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-4 border-b border-emerald-500/20 dark:border-emerald-800/40">
+ <div className="relative z-10 flex flex-col gap-3 pb-4 border-b border-emerald-500/20 dark:border-emerald-800/40">
  <div className="flex items-center gap-3">
  <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 border-2 border-emerald-300 dark:bg-emerald-950/60 dark:border-emerald-700/80 dark:text-emerald-300 shadow-sm">
  <Activity className="h-5 w-5 animate-pulse" />
@@ -990,8 +1059,8 @@ export default function KepalaSekolahDashboardPage() {
  </div>
  </div>
 
- {/* Segmented 3-Pillar Switcher (Hero UI Style) */}
- <div className="flex items-center p-1.5 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 self-start lg:self-auto shrink-0 shadow-2xs">
+ {/* Segmented 4-Pillar Switcher - Pindah ke Bawah Tulisan */}
+ <div className="flex items-center p-1.5 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 self-start shrink-0 shadow-2xs overflow-x-auto max-w-full">
  <button
  type="button"
  onClick={() => {
@@ -1225,6 +1294,13 @@ export default function KepalaSekolahDashboardPage() {
  >
  Alpha ({alphaCount})
  </button>
+ <button
+ type="button"
+ onClick={() => setAttendanceStatusFilter('inactive')}
+ className={`px-2 py-0.5 rounded-lg transition-all ${attendanceStatusFilter === 'inactive' ? 'bg-slate-700 text-white shadow-xs font-black' : 'text-slate-600 dark:text-slate-400'}`}
+ >
+ Belum Presensi ({noActivityCount})
+ </button>
  </div>
 
  <button
@@ -1389,12 +1465,12 @@ export default function KepalaSekolahDashboardPage() {
  <div className="space-y-3">
  <div className="flex items-start justify-between gap-2">
  <div className="relative">
- <Avatar size="lg" className="ring-2 ring-blue-500/30">
+ <Avatar size="lg" className="ring-2 ring-blue-500/40 border-2 border-blue-400/50 dark:border-blue-500/40 shadow-xs">
  {photo && <AvatarImage src={photo} alt={userName} />}
- <AvatarFallback className="bg-white dark:bg-card-dark font-black text-xs">
- {getInitials(userName)}
+ <AvatarFallback className="h-full w-full rounded-full flex items-center justify-center bg-gradient-to-br from-blue-50 via-sky-50 to-indigo-100 dark:from-blue-950 dark:to-slate-900 text-blue-700 dark:text-blue-300 font-black text-xs border border-blue-200/60 dark:border-blue-800/60">
+ <User className="size-5" />
  </AvatarFallback>
- <AvatarBadge status={guru.is_online ? 'online' : 'offline'} size="lg" ping={guru.is_online} live={guru.is_online} />
+ <AvatarBadge status={guru.is_online ? 'online' : 'offline'} size="lg" />
  </Avatar>
  </div>
 
@@ -1405,12 +1481,13 @@ export default function KepalaSekolahDashboardPage() {
  Sedang KBM
  </span>
  ) : guru.is_online ? (
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 px-2 py-0.5 text-[10px] font-black border border-emerald-300/70">
- <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+ <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300 px-2 py-0.5 text-[10px] font-black border border-emerald-300/80 dark:border-emerald-700/80">
+ <span className="size-2 rounded-full bg-emerald-500 animate-pulse ring-2 ring-emerald-200 dark:ring-emerald-800" />
  Online
  </span>
  ) : (
- <span className="inline-flex items-center rounded-full bg-slate-100 text-slate-600 dark:bg-sky-950/60 dark:text-sky-300 px-2 py-0.5 text-[10px] font-bold">
+ <span className="inline-flex items-center gap-1 rounded-full bg-rose-50 text-rose-700 dark:bg-rose-950/70 dark:text-rose-300 px-2 py-0.5 text-[10px] font-black border border-rose-300/80 dark:border-rose-800/80">
+ <span className="size-2 rounded-full bg-rose-500 ring-2 ring-rose-200 dark:ring-rose-800" />
  Offline
  </span>
  )}
@@ -1447,7 +1524,7 @@ export default function KepalaSekolahDashboardPage() {
  )}
  </div>
 
- {/* Action Buttons: Chat & WhatsApp */}
+ {/* Action Buttons: Chat */}
  <div className="mt-3 pt-2.5 border-t border-emerald-100/80 dark:border-emerald-900/40/80 flex items-center gap-2">
  <button
  type="button"
@@ -1457,19 +1534,6 @@ export default function KepalaSekolahDashboardPage() {
  <MessageSquare className="h-3 w-3" />
  <span>Chat</span>
  </button>
-
- {guru.phone && guru.phone !== '—' && (
- <a
- href={`https://wa.me/${String(guru.phone).replace(/\D/g, '').replace(/^0/, '62')}`}
- target="_blank"
- rel="noopener noreferrer"
- title="Chat WhatsApp"
- className="inline-flex items-center justify-center gap-1 rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 px-2 py-1.5 text-xs font-black transition-all cursor-pointer shadow-xs"
- >
- <Phone className="h-3 w-3" />
- <span>WA</span>
- </a>
- )}
 
  {activeKbm && (
  <button
@@ -1521,23 +1585,24 @@ export default function KepalaSekolahDashboardPage() {
  <div className="space-y-3">
  <div className="flex items-start justify-between gap-2">
  <div className="relative">
- <Avatar size="lg" className="ring-2 ring-purple-500/30">
+ <Avatar size="lg" className="ring-2 ring-purple-500/40 border-2 border-purple-400/50 dark:border-purple-500/40 shadow-xs">
  {photo && <AvatarImage src={photo} alt={userName} />}
- <AvatarFallback className="bg-white dark:bg-card-dark font-black text-xs">
- {getInitials(userName)}
+ <AvatarFallback className="h-full w-full rounded-full flex items-center justify-center bg-gradient-to-br from-purple-50 via-fuchsia-50 to-pink-100 dark:from-purple-950 dark:to-slate-900 text-purple-700 dark:text-purple-300 font-black text-xs border border-purple-200/60 dark:border-purple-800/60">
+ <User className="size-5" />
  </AvatarFallback>
- <AvatarBadge status={tendik.is_online ? 'online' : 'offline'} size="lg" ping={tendik.is_online} live={tendik.is_online} />
+ <AvatarBadge status={tendik.is_online ? 'online' : 'offline'} size="lg" />
  </Avatar>
  </div>
 
  <div className="flex flex-col items-end gap-1">
  {tendik.is_online ? (
- <span className="inline-flex items-center gap-1 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300 px-2 py-0.5 text-[10px] font-black border border-purple-300/70">
- <span className="h-1.5 w-1.5 rounded-full bg-purple-500 animate-pulse" />
+ <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300 px-2 py-0.5 text-[10px] font-black border border-emerald-300/80 dark:border-emerald-700/80">
+ <span className="size-2 rounded-full bg-emerald-500 animate-pulse ring-2 ring-emerald-200 dark:ring-emerald-800" />
  Online / Bertugas
  </span>
  ) : (
- <span className="inline-flex items-center rounded-full bg-slate-100 text-slate-600 dark:bg-sky-950/60 dark:text-sky-300 px-2 py-0.5 text-[10px] font-bold">
+ <span className="inline-flex items-center gap-1 rounded-full bg-rose-50 text-rose-700 dark:bg-rose-950/70 dark:text-rose-300 px-2 py-0.5 text-[10px] font-black border border-rose-300/80 dark:border-rose-800/80">
+ <span className="size-2 rounded-full bg-rose-500 ring-2 ring-rose-200 dark:ring-rose-800" />
  Offline
  </span>
  )}
@@ -1570,29 +1635,16 @@ export default function KepalaSekolahDashboardPage() {
  </div>
  </div>
 
- {/* Action Buttons: Chat & WhatsApp */}
+ {/* Action Buttons: Chat */}
  <div className="mt-3 pt-2.5 border-t border-emerald-100/80 dark:border-emerald-900/40/80 flex items-center gap-2">
  <button
  type="button"
  onClick={() => setActiveChatUser(tendik)}
- className="flex-1 inline-flex items-center justify-center gap-1 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1.5 text-xs font-black transition-all cursor-pointer shadow-xs active:scale-95"
+ className="w-full inline-flex items-center justify-center gap-1 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1.5 text-xs font-black transition-all cursor-pointer shadow-xs active:scale-95"
  >
  <MessageSquare className="h-3 w-3" />
  <span>Chat Staf</span>
  </button>
-
- {tendik.phone && tendik.phone !== '—' && (
- <a
- href={`https://wa.me/${String(tendik.phone).replace(/\D/g, '').replace(/^0/, '62')}`}
- target="_blank"
- rel="noopener noreferrer"
- title="Chat WhatsApp"
- className="inline-flex items-center justify-center gap-1 rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 px-2 py-1.5 text-xs font-black transition-all cursor-pointer shadow-xs"
- >
- <Phone className="h-3 w-3" />
- <span>WA</span>
- </a>
- )}
  </div>
  </div>
  )
@@ -1639,12 +1691,12 @@ export default function KepalaSekolahDashboardPage() {
  <div className="group relative h-full overflow-hidden rounded-2xl border border-emerald-200/80 bg-white dark:bg-card-dark dark:border-emerald-800/60 dark:from-[#151D2A] dark:to-emerald-950/20 p-3.5 transition-all duration-200 hover:border-emerald-400 hover:shadow-md hover:shadow-sm flex flex-col justify-between cursor-pointer">
  <div className="space-y-2.5">
  <div className="flex items-start justify-between gap-2">
- <Avatar size="md" className="ring-2 ring-emerald-500/30 shrink-0">
+ <Avatar size="md" className="ring-2 ring-emerald-500/40 border-2 border-emerald-400/50 dark:border-emerald-500/40 shrink-0 shadow-xs">
  {photo && <AvatarImage src={photo} alt={sName} />}
- <AvatarFallback className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-black text-xs">
- {getInitials(sName)}
+ <AvatarFallback className="h-full w-full rounded-full flex items-center justify-center bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100 dark:from-emerald-950 dark:to-slate-900 text-emerald-700 dark:text-emerald-300 font-black text-xs border border-emerald-200/60 dark:border-emerald-800/60">
+ <User className="size-4" />
  </AvatarFallback>
- <AvatarBadge status={bInfo.status} size="md" ping={sStatus === 'Hadir'} live={sStatus === 'Hadir'} />
+ <AvatarBadge status={bInfo.status} size="md" />
  </Avatar>
 
  <AppBadge variant={bInfo.variant} size="xs">{sStatus}</AppBadge>
@@ -1674,22 +1726,8 @@ export default function KepalaSekolahDashboardPage() {
  </div>
  </div>
 
- {/* Action Buttons: WA Ortu & Cetak Evaluasi */}
+ {/* Action Button: Cetak Evaluasi */}
  <div className="mt-3 pt-2.5 border-t border-emerald-100/80 dark:border-emerald-900/40/80 flex items-center gap-1.5">
- {sPhone && sPhone !== '—' && (
- <a
- href={`https://wa.me/${String(sPhone).replace(/\D/g, '').replace(/^0/, '62')}`}
- target="_blank"
- rel="noopener noreferrer"
- onClick={(e) => e.stopPropagation()}
- title="WhatsApp Wali Murid"
- className="flex-1 inline-flex items-center justify-center gap-1 rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 py-1 px-2 text-[10.5px] font-black transition-all cursor-pointer"
- >
- <Phone className="h-3 w-3" />
- <span>WA Wali</span>
- </a>
- )}
-
  <button
  type="button"
  title="Cetak Evaluasi Pekanan"
@@ -1697,10 +1735,10 @@ export default function KepalaSekolahDashboardPage() {
  e.stopPropagation()
  handlePrintWeekly(student)
  }}
- className="inline-flex items-center justify-center gap-1 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white py-1 px-2.5 text-[10.5px] font-black transition-all cursor-pointer shadow-2xs border border-emerald-500"
+ className="w-full inline-flex items-center justify-center gap-1 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white py-1.5 px-2.5 text-[10.5px] font-black transition-all cursor-pointer shadow-2xs border border-emerald-500"
  >
  <Printer className="h-3 w-3" />
- <span>Rapor</span>
+ <span>Cetak Rapor Pekanan</span>
  </button>
  </div>
  </div>
@@ -1713,12 +1751,12 @@ export default function KepalaSekolahDashboardPage() {
  className="w-80 p-4 border-2 border-emerald-200/90 bg-white dark:border-emerald-800/80 dark:bg-card-dark rounded-xl shadow-xl space-y-3 z-50"
  >
  <div className="flex items-start gap-3">
- <Avatar size="xxl" className="ring-2 ring-emerald-500/40 shrink-0">
+ <Avatar size="xxl" className="ring-4 ring-emerald-500/30 border-2 border-emerald-400/70 dark:border-emerald-500/70 shrink-0 shadow-md">
  {photo && <AvatarImage src={photo} alt={sName} />}
- <AvatarFallback className="bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 font-extrabold text-lg">
- {getInitials(sName)}
+ <AvatarFallback className="h-full w-full rounded-full flex items-center justify-center bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100 dark:from-emerald-950 dark:to-slate-900 text-emerald-800 dark:text-emerald-200 font-extrabold text-lg border border-emerald-300/60 dark:border-emerald-800/60">
+ <User className="size-10" />
  </AvatarFallback>
- <AvatarBadge status={bInfo.status} size="xxl" ping={sStatus === 'Hadir'} live={true} />
+ <AvatarBadge status={bInfo.status} size="xxl" />
  </Avatar>
 
  <div className="min-w-0 flex-1 space-y-1">
@@ -1764,7 +1802,7 @@ export default function KepalaSekolahDashboardPage() {
  {/* TAB 4: RADAR KEDISIPLINAN & OTORISASI SP */}
  {monitoringPillar === 'kedisiplinan' && (
  <PrincipalDisciplineOverviewSection
- unitId={selectedUnitFilter || data?.unit_id || data?.unit?.id}
+ unitId={selectedUnitId || data?.context?.unit?.id || data?.unit_id || data?.unit?.id}
  onOpenStudentSummary={() => navigate('/dashboard/master/tata-tertib')}
  />
  )}
@@ -1778,16 +1816,16 @@ export default function KepalaSekolahDashboardPage() {
  
  <div className="space-y-4">
  {/* Header Section */}
- <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between border-b border-emerald-500/20 dark:border-emerald-800/40 bg-emerald-500/10 dark:bg-emerald-950/40 -mx-5 sm:-mx-6 -mt-5 sm:-mt-6 px-5 sm:px-6 py-4 mb-4 min-h-[72px] h-[72px]">
+ <div className="border-b border-emerald-500/20 dark:border-emerald-800/40 bg-emerald-500/10 dark:bg-emerald-950/40 -mx-5 sm:-mx-6 -mt-5 sm:-mt-6 px-5 sm:px-6 py-4 mb-4 space-y-3">
  <div className="flex items-center gap-3">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 border-2 border-emerald-300 dark:bg-emerald-950/60 dark:border-emerald-700/80 dark:text-emerald-300 shadow-sm">
+ <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 border-2 border-emerald-300 dark:bg-emerald-950/60 dark:border-emerald-700/80 dark:text-emerald-300 shadow-sm">
  <BookOpenCheck className="size-5" />
  </div>
  <div>
  <div className="flex items-center gap-2">
  <h3 className="text-base font-bold text-emerald-900 dark:text-emerald-200 leading-tight">
-                  Supervisi KBM Hari Ini
-                </h3>
+ Supervisi KBM {kbmDayFilter === 'all' ? 'Seluruh Hari' : kbmDayFilter === 'today' ? 'Hari Ini' : `Hari ${dayNamesMap[kbmDayFilter] || ''}`}
+ </h3>
  <span className="rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200/80 dark:border-emerald-800 px-2 py-0.5 text-[10px] font-bold text-emerald-700 dark:text-emerald-300 inline-flex items-center gap-1.5 shrink-0">
  <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
  Live
@@ -1799,40 +1837,61 @@ export default function KepalaSekolahDashboardPage() {
  </div>
  </div>
 
- {/* Filter Pills */}
-                {/* Filter Pills */}
-                <div className="flex items-center gap-1 bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 p-1 rounded-xl text-[10.5px] font-extrabold shrink-0 self-start lg:self-auto overflow-x-auto max-w-full shadow-2xs">
-                  <button
-                    type="button"
-                    onClick={() => setKbmSessionFilter('all')}
-                    className={`px-2.5 py-1 rounded-lg transition-all ${kbmSessionFilter === 'all' ? 'bg-emerald-600 text-white shadow-xs font-black' : 'text-slate-600 hover:text-emerald-700 dark:text-slate-300 dark:hover:text-white'}`}
-                  >
-                    Semua ({todaySessions.length})
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setKbmSessionFilter('ongoing')}
-                    className={`px-2.5 py-1 rounded-lg transition-all flex items-center gap-1.5 ${kbmSessionFilter === 'ongoing' ? 'bg-emerald-600 text-white shadow-xs font-black' : 'text-slate-600 hover:text-sky-700 dark:text-slate-300 dark:hover:text-white'}`}
-                  >
-                    <span className={`h-1.5 w-1.5 rounded-full ${kbmSessionFilter === 'ongoing' ? 'bg-white animate-pulse' : 'bg-sky-500'}`} />
-                    KBM ({todaySessions.filter((s) => s.is_ongoing).length})
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setKbmSessionFilter('completed')}
-                    className={`px-2.5 py-1 rounded-lg transition-all flex items-center gap-1.5 ${kbmSessionFilter === 'completed' ? 'bg-emerald-600 text-white shadow-xs font-black' : 'text-slate-600 hover:text-emerald-700 dark:text-slate-300 dark:hover:text-white'}`}
-                  >
-                    <CheckCircle2 className={`h-3 w-3 ${kbmSessionFilter === 'completed' ? 'text-white' : 'text-emerald-600'}`} />
-                    Selesai ({todaySessions.filter((s) => s.status === 'completed').length})
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setKbmSessionFilter('scheduled')}
-                    className={`px-2.5 py-1 rounded-lg transition-all ${kbmSessionFilter === 'scheduled' ? 'bg-emerald-600 text-white shadow-xs font-black' : 'text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white'}`}
-                  >
-                    Jadwal ({todaySessions.filter((s) => s.status === 'scheduled' && !s.is_ongoing).length})
-                  </button>
-                </div>
+ {/* Filter Status Tabs (Semua, KBM, Selesai, Jadwal) */}
+ <div className="flex items-center gap-1.5 bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 p-1 rounded-xl text-[10.5px] font-extrabold overflow-x-auto max-w-full shadow-2xs">
+ <button
+ type="button"
+ onClick={() => setKbmSessionFilter('all')}
+ className={`px-3 py-1.5 rounded-lg transition-all ${kbmSessionFilter === 'all' ? 'bg-emerald-600 text-white shadow-xs font-black' : 'text-slate-600 hover:text-emerald-700 dark:text-slate-300 dark:hover:text-white'}`}
+ >
+ Semua ({filteredByDaySessions.length})
+ </button>
+ <button
+ type="button"
+ onClick={() => setKbmSessionFilter('ongoing')}
+ className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${kbmSessionFilter === 'ongoing' ? 'bg-emerald-600 text-white shadow-xs font-black' : 'text-slate-600 hover:text-sky-700 dark:text-slate-300 dark:hover:text-white'}`}
+ >
+ <span className={`h-1.5 w-1.5 rounded-full ${kbmSessionFilter === 'ongoing' ? 'bg-white animate-pulse' : 'bg-sky-500'}`} />
+ KBM ({filteredByDaySessions.filter((s) => s.is_ongoing).length})
+ </button>
+ <button
+ type="button"
+ onClick={() => setKbmSessionFilter('completed')}
+ className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${kbmSessionFilter === 'completed' ? 'bg-emerald-600 text-white shadow-xs font-black' : 'text-slate-600 hover:text-emerald-700 dark:text-slate-300 dark:hover:text-white'}`}
+ >
+ <CheckCircle2 className={`h-3 w-3 ${kbmSessionFilter === 'completed' ? 'text-white' : 'text-emerald-600'}`} />
+ Selesai ({filteredByDaySessions.filter((s) => s.status === 'completed').length})
+ </button>
+ <button
+ type="button"
+ onClick={() => setKbmSessionFilter('scheduled')}
+ className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${kbmSessionFilter === 'scheduled' ? 'bg-emerald-600 text-white shadow-xs font-black' : 'text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white'}`}
+ >
+ Jadwal ({filteredByDaySessions.filter((s) => s.status === 'scheduled' && !s.is_ongoing).length})
+ </button>
+ </div>
+
+ {/* Filter Hari Dropdown - Pindah ke Bawah Tab */}
+ <div className="flex items-center gap-2 pt-1">
+ <span className="text-xs font-extrabold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+ <Calendar className="size-3.5 text-emerald-600 dark:text-emerald-400" />
+ Filter Hari:
+ </span>
+ <select
+ value={kbmDayFilter}
+ onChange={(e) => setKbmDayFilter(e.target.value)}
+ className="rounded-xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-slate-900 px-2.5 py-1 text-xs font-bold text-slate-800 dark:text-slate-100 shadow-xs focus:ring-2 focus:ring-emerald-500 cursor-pointer"
+ >
+ <option value="today">Hari Ini ({todayDayName})</option>
+ <option value="all">Semua Hari</option>
+ <option value="1">Senin</option>
+ <option value="2">Selasa</option>
+ <option value="3">Rabu</option>
+ <option value="4">Kamis</option>
+ <option value="5">Jumat</option>
+ <option value="6">Sabtu</option>
+ </select>
+ </div>
  </div>
 
  {/* Content List */}
@@ -1866,7 +1925,12 @@ export default function KepalaSekolahDashboardPage() {
  >
  <div className="flex items-start justify-between gap-2">
  <div className="space-y-1 min-w-0 flex-1">
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-2 flex-wrap">
+ {sess.hari && (
+ <span className="px-1.5 py-0.2 rounded text-[10px] font-black bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300/40">
+ {sess.hari}
+ </span>
+ )}
  <span className="inline-flex items-center gap-1 text-[10.5px] font-extrabold text-slate-600 dark:text-slate-300">
  <Clock className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
  {sess.start_time || sess.jam_mulai} - {sess.end_time || sess.jam_selesai}
@@ -1927,7 +1991,7 @@ export default function KepalaSekolahDashboardPage() {
  </div>
 
  <div className="pt-3 border-t border-emerald-100/80 dark:border-emerald-900/40/80 flex items-center justify-between text-xs text-slate-400">
- <span>Total: <strong className="text-slate-700 dark:text-slate-200 font-bold">{todaySessions.length}</strong> sesi mengajar hari ini</span>
+ <span>Total: <strong className="text-slate-700 dark:text-slate-200 font-bold">{filteredByDaySessions.length}</strong> sesi mengajar {kbmDayFilter === 'all' ? 'seluruh hari' : kbmDayFilter === 'today' ? 'hari ini' : `hari ${dayNamesMap[kbmDayFilter] || ''}`}</span>
  <span className="text-emerald-600 dark:text-emerald-400 font-extrabold text-[10.5px]">Sinkron Otomatis</span>
  </div>
  </div>
@@ -1936,7 +2000,7 @@ export default function KepalaSekolahDashboardPage() {
  <div className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-md shadow-emerald-500/10 flex flex-col justify-between dark:bg-card-dark">
  
  <div className="space-y-4">
- <div className="flex items-center justify-between border-b border-emerald-500/20 dark:border-emerald-800/40 bg-emerald-500/10 dark:bg-emerald-950/40 -mx-5 sm:-mx-6 -mt-5 sm:-mt-6 px-5 sm:px-6 py-4 mb-4 min-h-[72px] h-[72px]">
+ <div className="flex flex-col gap-3 border-b border-emerald-500/20 dark:border-emerald-800/40 bg-emerald-500/10 dark:bg-emerald-950/40 -mx-5 sm:-mx-6 -mt-5 sm:-mt-6 px-5 sm:px-6 py-4 mb-4">
  <div className="flex items-center gap-3">
                 <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 border-2 border-emerald-300 dark:bg-emerald-950/60 dark:border-emerald-700/80 dark:text-emerald-300 shadow-sm">
  <Radio className="size-5 animate-pulse" />
@@ -1956,10 +2020,49 @@ export default function KepalaSekolahDashboardPage() {
  </p>
  </div>
  </div>
+
+ {/* Filter Periode Tab: Semua, Hari Ini, Pekan Ini, Bulan Ini, Semester Ini */}
+ <div className="flex items-center gap-1 bg-white/70 dark:bg-slate-900/60 border border-emerald-200/80 dark:border-emerald-800/60 p-1 rounded-xl text-[10.5px] font-extrabold overflow-x-auto max-w-full shadow-2xs">
+ <button
+ type="button"
+ onClick={() => setActivityPeriodFilter('all')}
+ className={`px-2.5 py-1 rounded-lg transition-all ${activityPeriodFilter === 'all' ? 'bg-emerald-600 text-white shadow-xs font-black' : 'text-slate-600 hover:text-emerald-700 dark:text-slate-300 dark:hover:text-white'}`}
+ >
+ Semua
+ </button>
+ <button
+ type="button"
+ onClick={() => setActivityPeriodFilter('today')}
+ className={`px-2.5 py-1 rounded-lg transition-all ${activityPeriodFilter === 'today' ? 'bg-emerald-600 text-white shadow-xs font-black' : 'text-slate-600 hover:text-emerald-700 dark:text-slate-300 dark:hover:text-white'}`}
+ >
+ Hari Ini
+ </button>
+ <button
+ type="button"
+ onClick={() => setActivityPeriodFilter('week')}
+ className={`px-2.5 py-1 rounded-lg transition-all ${activityPeriodFilter === 'week' ? 'bg-emerald-600 text-white shadow-xs font-black' : 'text-slate-600 hover:text-emerald-700 dark:text-slate-300 dark:hover:text-white'}`}
+ >
+ Pekan Ini
+ </button>
+ <button
+ type="button"
+ onClick={() => setActivityPeriodFilter('month')}
+ className={`px-2.5 py-1 rounded-lg transition-all ${activityPeriodFilter === 'month' ? 'bg-emerald-600 text-white shadow-xs font-black' : 'text-slate-600 hover:text-emerald-700 dark:text-slate-300 dark:hover:text-white'}`}
+ >
+ Bulan Ini
+ </button>
+ <button
+ type="button"
+ onClick={() => setActivityPeriodFilter('semester')}
+ className={`px-2.5 py-1 rounded-lg transition-all ${activityPeriodFilter === 'semester' ? 'bg-emerald-600 text-white shadow-xs font-black' : 'text-slate-600 hover:text-emerald-700 dark:text-slate-300 dark:hover:text-white'}`}
+ >
+ Semester Ini
+ </button>
+ </div>
  </div>
 
  <div className="space-y-2 max-h-[380px] overflow-y-auto pr-1.5 scrollbar-thin">
- {onlineLogs.length === 0 ? (
+ {filteredActivityLogs.length === 0 ? (
  <div className="flex flex-col items-center justify-center py-12 text-center text-slate-400">
  <Activity className="h-9 w-10 stroke-1 mb-2 text-slate-300 dark:text-slate-600" />
  <p className="text-xs font-bold text-slate-500 dark:text-slate-400">
@@ -1967,7 +2070,7 @@ export default function KepalaSekolahDashboardPage() {
  </p>
  </div>
  ) : (
- onlineLogs.map((log, idx) => {
+ filteredActivityLogs.map((log, idx) => {
  const isLogin = log.type === 'login'
  return (
  <div
@@ -1978,11 +2081,12 @@ export default function KepalaSekolahDashboardPage() {
  : 'border-sky-200/80 bg-white dark:bg-card-dark dark:border-sky-800/60 dark:from-sky-950/30 dark:to-slate-900'
  }`}
  >
- <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-white text-xs font-bold mt-0.5 shadow-2xs ${
- isLogin ? 'bg-slate-100 border border-emerald-200/70 text-slate-700 dark:bg-slate-800 dark:border-emerald-800/60 dark:text-slate-300' : 'bg-white dark:bg-card-dark'
- }`}>
- {isLogin ? <UserCheck className="h-3.5 w-3.5" /> : <Activity className="h-3.5 w-3.5" />}
- </span>
+ <Avatar size="sm" className="relative ring-2 ring-emerald-200/90 dark:ring-emerald-700/80 border border-emerald-300/80 shadow-xs shrink-0 mt-0.5">
+ <AvatarFallback className="h-full w-full rounded-full flex items-center justify-center bg-gradient-to-br from-emerald-50 via-teal-50 to-sky-100 dark:from-emerald-950 dark:to-slate-900 text-emerald-700 dark:text-emerald-300 font-black text-xs">
+ <User className="size-3.5" />
+ </AvatarFallback>
+ <AvatarBadge status={isLogin || log.is_online ? 'online' : 'offline'} size="sm" />
+ </Avatar>
  <div className="min-w-0 flex-1 space-y-0.5">
  <div className="flex items-center justify-between gap-2">
  <p className="text-xs font-black text-slate-900 dark:text-white truncate">
@@ -2010,7 +2114,7 @@ export default function KepalaSekolahDashboardPage() {
 
  <div className="pt-3 border-t border-emerald-100/80 dark:border-emerald-900/40/80 flex items-center justify-between text-xs">
  <span className="text-slate-400 font-medium">
- Total Log: <strong className="text-slate-700 dark:text-slate-200 font-bold">{onlineLogs.length}</strong> aktivitas
+ Total Log: <strong className="text-slate-700 dark:text-slate-200 font-bold">{filteredActivityLogs.length}</strong> aktivitas
  </span>
  <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-extrabold text-[10.5px]">
  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -2022,7 +2126,7 @@ export default function KepalaSekolahDashboardPage() {
 
  {/* Quick Action Navigation (Soft Pastel Squircle Buttons) */}
  <section className="relative overflow-hidden rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-5 sm:p-6 shadow-md shadow-emerald-500/10 dark:bg-card-dark">
- <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+ <div className="space-y-4">
  <div>
  <div className="flex items-center gap-2">
  <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-[#0E5C44]/10 text-[#0E5C44] dark:bg-[#3FBF75]/20 dark:text-[#3FBF75]">
@@ -2033,66 +2137,73 @@ export default function KepalaSekolahDashboardPage() {
  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Navigasi langsung ke pemantauan presensi, tahfizh, dan kesiswaan</p>
  </div>
 
- <div className="flex flex-wrap gap-2.5">
+ {/* Baris Tombol Akses Cepat: 1 Baris Penuh di Layar Desktop */}
+ <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
  {/* 1. Input Laporan Bulanan - Teal Theme */}
  <QuickAccessCard
+ layout="vertical"
  tone="teal"
  icon={FileSpreadsheet}
  title="Input Laporan Bulanan"
  subtitle="Kinerja & Evaluasi"
  onClick={() => setIsReportModalOpen(true)}
- className="w-full sm:basis-[calc(50%_-_5px)] lg:basis-[calc(25%_-_7.5px)] grow"
+ className="w-full"
  />
 
  {/* 2. Monitoring Divisi - Sky Blue Theme */}
  <QuickAccessCard
+ layout="vertical"
  tone="sky"
  icon={FileText}
  title="Monitoring Divisi"
  subtitle="Divisi & Unit"
  onClick={() => navigate('/dashboard/monitoring-divisi')}
- className="w-full sm:basis-[calc(50%_-_5px)] lg:basis-[calc(25%_-_7.5px)] grow"
+ className="w-full"
  />
 
  {/* 3. Rekap Kehadiran - Emerald Green Theme */}
  <QuickAccessCard
+ layout="vertical"
  tone="emerald"
  icon={CheckCircle2}
  title="Rekap Kehadiran"
  subtitle="Presensi Guru & Siswa"
  onClick={() => navigate('/absensi/rekap-kehadiran')}
- className="w-full sm:basis-[calc(50%_-_5px)] lg:basis-[calc(25%_-_7.5px)] grow"
+ className="w-full"
  />
 
  {/* 4. Monitoring Tahfizh - Purple Theme */}
  <QuickAccessCard
+ layout="vertical"
  tone="purple"
  icon={BookOpen}
  title="Tahfizh & Mutabaah Non-Pesantren"
  subtitle="Hafalan & Ibadah Harian"
  onClick={() => navigate('/dashboard/monitoring-tahfizh-ibadah-non-pesantren')}
- className="w-full sm:basis-[calc(50%_-_5px)] lg:basis-[calc(25%_-_7.5px)] grow"
+ className="w-full"
  />
 
  {/* 5. Verifikasi Prestasi - Amber Theme */}
  <QuickAccessCard
+ layout="vertical"
  tone="amber"
  icon={Award}
  title="Verifikasi Prestasi"
  subtitle="Capaian & Penghargaan"
  onClick={() => navigate('/dashboard/laporan-prestasi')}
- className="w-full sm:basis-[calc(50%_-_5px)] lg:basis-[calc(25%_-_7.5px)] grow"
+ className="w-full"
  />
 
  {/* 6. Segarkan Data - Slate Theme */}
  <QuickAccessCard
+ layout="vertical"
  tone="slate"
  icon={RefreshCw}
  title="Segarkan Data"
  subtitle="Update Real-Time"
  onClick={fetchDashboard}
  loading={loading}
- className="w-full sm:basis-[calc(50%_-_5px)] lg:basis-[calc(25%_-_7.5px)] grow"
+ className="w-full"
  />
  </div>
  </div>
@@ -2291,9 +2402,10 @@ export default function KepalaSekolahDashboardPage() {
  <p className="text-xs font-semibold text-emerald-700/80 dark:text-emerald-400/80 mt-0.5">Klik pengumuman untuk melihat edaran resmi</p>
  </div>
  </div>
- <HeroChip size="sm" color="success" variant="solid" className="font-bold text-white shadow-xs">
+ <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black shadow-sm border border-emerald-400 bg-emerald-600 text-white dark:bg-emerald-500">
+                  <span className="size-2 rounded-full bg-white animate-pulse" />
                   {announcementList.length} Pengumuman
-                </HeroChip>
+                </span>
  </div>
 
  <List direction="vertical" hideDividers={false} className="w-full max-w-full divide-y divide-emerald-100/80 dark:divide-emerald-900/40 border-none bg-transparent">
@@ -2419,10 +2531,10 @@ export default function KepalaSekolahDashboardPage() {
  className="h-full rounded-2xl border border-emerald-200/80 bg-white dark:bg-card-dark dark:border-emerald-800/60 dark:from-[#151D2A] dark:to-emerald-950/20 p-3.5 space-y-2.5 shadow-xs hover:border-emerald-400 hover:shadow-md hover:shadow-sm transition-all flex flex-col justify-between"
  >
  <div className="flex items-center gap-3">
- <Avatar size="md" className="ring-2 ring-emerald-500/30 shrink-0">
+ <Avatar size="md" className="ring-2 ring-emerald-500/40 border-2 border-emerald-400/50 dark:border-emerald-500/40 shrink-0 shadow-xs">
  {pPhoto && <AvatarImage src={pPhoto} alt={pName} />}
- <AvatarFallback className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-black text-xs">
- {getInitials(pName)}
+ <AvatarFallback className="h-full w-full rounded-full flex items-center justify-center bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100 dark:from-emerald-950 dark:to-slate-900 text-emerald-700 dark:text-emerald-300 font-black text-xs border border-emerald-200/60 dark:border-emerald-800/60">
+ <User className="size-4" />
  </AvatarFallback>
  </Avatar>
  <div className="min-w-0 flex-1">
@@ -2438,17 +2550,7 @@ export default function KepalaSekolahDashboardPage() {
  {(pPhone || pEmail) && (
  <div className="pt-2 border-t border-emerald-100/80 dark:border-emerald-900/40/80 flex items-center justify-between text-[10.5px]">
  {pEmail && <span className="text-slate-400 truncate max-w-[130px]">{pEmail}</span>}
- {pPhone && (
- <a
- href={`https://wa.me/${String(pPhone).replace(/\D/g, '').replace(/^0/, '62')}`}
- target="_blank"
- rel="noopener noreferrer"
- className="inline-flex items-center gap-1 font-bold text-emerald-600 hover:text-emerald-700"
- >
- <Phone className="h-3 w-3" />
- <span>WA</span>
- </a>
- )}
+ {pPhone && <span className="text-slate-500 dark:text-slate-400 font-semibold truncate">{pPhone}</span>}
  </div>
  )}
  </div>
@@ -2623,10 +2725,10 @@ export default function KepalaSekolahDashboardPage() {
  return (
  <tr key={i} className="hover:bg-emerald-50/50 dark:hover:bg-emerald-950/40 transition-colors">
  <td className="px-4 py-3 text-center">
- <Avatar size="sm" className="mx-auto ring-2 ring-emerald-500/20">
+ <Avatar size="sm" className="mx-auto ring-2 ring-emerald-500/30 border border-emerald-400/50 shadow-2xs">
  {photo && <AvatarImage src={photo} alt={sName} />}
- <AvatarFallback className={st.gender === 'female' ? "bg-teal-100 text-teal-800 text-[10px] font-extrabold" : "bg-emerald-100 text-emerald-800 text-[10px] font-extrabold"}>
- {getInitials(sName)}
+ <AvatarFallback className={st.gender === 'female' ? "h-full w-full rounded-full flex items-center justify-center bg-teal-100 text-teal-800 text-[10px] font-extrabold border border-teal-300/50" : "h-full w-full rounded-full flex items-center justify-center bg-emerald-100 text-emerald-800 text-[10px] font-extrabold border border-emerald-300/50"}>
+ <User className="size-3" />
  </AvatarFallback>
  </Avatar>
  </td>
@@ -2847,20 +2949,21 @@ export default function KepalaSekolahDashboardPage() {
  onOpenChange={(open) => {
  if (!open) setActiveChatUser(null)
  }}
+ showCloseButton={false}
  className="max-w-xl w-full p-0 overflow-hidden border-2 border-emerald-500/30 bg-white dark:border-emerald-600/40 dark:bg-card-dark rounded-2xl shadow-2xl"
  >
  {/* Header Chat */}
  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-800 text-white shadow-md">
  <div className="flex items-center gap-3 min-w-0">
  <div className="relative shrink-0">
- <Avatar size="lg" className="ring-2 ring-white/50">
+ <Avatar size="lg" className="ring-2 ring-white/80 shadow-md bg-white border-0 shrink-0">
  {(activeChatUser?.avatar_url || activeChatUser?.photo_url || activeChatUser?.foto || activeChatUser?.avatar) && (
  <AvatarImage src={activeChatUser?.avatar_url || activeChatUser?.photo_url || activeChatUser?.foto || activeChatUser?.avatar} alt={activeChatUser?.nama} />
  )}
- <AvatarFallback className="bg-emerald-800 text-emerald-600 font-black text-xs">
+ <AvatarFallback className="h-full w-full rounded-full flex items-center justify-center bg-gradient-to-br from-white via-emerald-50 to-teal-100 text-emerald-800 font-black text-sm tracking-wide">
  {getInitials(activeChatUser?.nama || activeChatUser?.name || 'User')}
  </AvatarFallback>
- <AvatarBadge status={activeChatUser?.is_online ? 'online' : 'offline'} size="lg" ping={Boolean(activeChatUser?.is_online)} live={Boolean(activeChatUser?.is_online)} />
+ <AvatarBadge status={activeChatUser?.is_online ? 'online' : 'offline'} size="lg" />
  </Avatar>
  </div>
  <div className="min-w-0">
@@ -2879,23 +2982,14 @@ export default function KepalaSekolahDashboardPage() {
  </div>
 
  <div className="flex items-center gap-1.5">
- {activeChatUser?.phone && activeChatUser.phone !== '—' && (
- <a
- href={`https://wa.me/${String(activeChatUser.phone).replace(/\D/g, '').replace(/^0/, '62')}`}
- target="_blank"
- rel="noopener noreferrer"
- title="Buka via WhatsApp"
- className="flex h-8 w-8 items-center justify-center rounded-xl bg-white/15 hover:bg-white/25 transition-all cursor-pointer border border-emerald-200/80 dark:border-emerald-800/60"
- >
- <Phone className="h-4 w-4" />
- </a>
- )}
  <button
  type="button"
  onClick={() => setActiveChatUser(null)}
- className="flex h-8 w-8 items-center justify-center rounded-xl bg-white/15 hover:bg-white/25 transition-all cursor-pointer font-black text-xs border border-emerald-200/80 dark:border-emerald-800/60"
+ aria-label="Tutup dialog"
+ title="Tutup Obrolan"
+ className="flex size-8 items-center justify-center rounded-xl bg-white/20 hover:bg-rose-500 hover:text-white text-white transition-all cursor-pointer border border-white/25 shadow-xs active:scale-95"
  >
- ✕
+ <X className="size-4" strokeWidth={2.5} />
  </button>
  </div>
  </div>

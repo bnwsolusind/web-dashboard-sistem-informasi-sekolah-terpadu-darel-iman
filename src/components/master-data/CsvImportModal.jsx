@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import AppModal from '../app/AppModal'
 import {
  Download,
  FileSpreadsheet,
@@ -118,64 +119,42 @@ export default function CsvImportModal({
  }
  }
 
- return (
- <AnimatePresence>
- <div
- role="dialog"
- tabIndex={-1}
- aria-modal="true"
- aria-labelledby="csv-import-modal-title"
- className="fixed inset-0 z-[80] flex items-start sm:items-center justify-center p-3 sm:p-5 bg-slate-950/70 backdrop-blur-md overflow-y-auto"
- onMouseDown={(e) => {
- if (e.target === e.currentTarget && !busy) onClose()
- }}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.95, y: 16 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.96, y: 12 }}
- transition={{ type: 'spring', stiffness: 400, damping: 30 }}
- className="font-sans w-full max-w-xl my-auto"
- >
- <div className="relative flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-card-dark dark:shadow-black/60">
- {/* Top Accent Gradient Bar */}
-
- {/* Header */}
- <div className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-surface-dark-inner shrink-0">
- <div className="flex items-center gap-3">
- <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-600 text-white shadow-sm shrink-0">
- <Upload className="h-4.5 w-4.5 text-current" strokeWidth={2.25} />
- </div>
- <div>
- <h3
- id="csv-import-modal-title"
- className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2"
- >
- <span>Import {title}</span>
- <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
- <Sparkles className="size-3" />
- Batch Import
- </span>
- </h3>
- <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
- Unggah data berformat CSV atau Excel sesuai susunan kolom standar sistem.
- </p>
- </div>
- </div>
- <button
- type="button"
- disabled={busy}
- onClick={onClose}
- aria-label="Tutup modal"
- className="size-8 flex items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-400 cursor-pointer transition-all active:scale-95 shrink-0 disabled:opacity-50"
- >
- <X className="size-4" strokeWidth={2.2} />
- </button>
- </div>
-
- {/* Form */}
- <form onSubmit={submit} className="flex min-h-0 flex-1 flex-col">
- <div className="min-h-0 flex-1 overflow-y-auto p-6 space-y-4 text-sm text-slate-700 dark:text-slate-200">
+  return (
+    <AppModal
+      isOpen={isOpen}
+      onClose={() => !busy && onClose()}
+      title={`Import ${title}`}
+      badge="Batch Import"
+      description="Unggah data berformat CSV atau Excel sesuai susunan kolom standar sistem."
+      icon={Upload}
+      maxWidth="max-w-lg"
+      zIndex={70}
+      disableBackdropClose={busy}
+      hideCloseButton={busy}
+      footer={
+        <>
+          <button
+            type="button"
+            disabled={busy}
+            onClick={onClose}
+            className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+          >
+            <X className="size-4" strokeWidth={2} />
+            <span>Batal</span>
+          </button>
+          <button
+            type="submit"
+            form="csv-import-modal-form"
+            disabled={busy || !file}
+            className="h-9.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer border-2 border-emerald-600 shadow-md shadow-emerald-600/20"
+          >
+            {busy ? <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" /> : <Upload className="size-4" strokeWidth={2} />}
+            <span>{busy ? 'Memproses Impor...' : 'Mulai Impor Data'}</span>
+          </button>
+        </>
+      }
+    >
+      <form id="csv-import-modal-form" onSubmit={submit} className="space-y-4 text-sm text-slate-700 dark:text-slate-200">
  {/* 1. Download Template Card */}
  <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/50 p-4 dark:border-emerald-800/60 dark:bg-emerald-950/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
  <div className="space-y-0.5">
@@ -299,37 +278,7 @@ export default function CsvImportModal({
  Sistem akan memvalidasi integritas data master secara otomatis. Baris yang valid akan segera disimpan ke sistem.
  </p>
  </div>
- </div>
-
- {/* Footer */}
- <div className="flex items-center justify-end gap-2 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900 dark:bg-slate-900/50 shrink-0 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
- <button
- type="button"
- disabled={busy}
- onClick={onClose}
- className="h-9 px-4 rounded-lg border border-emerald-200/80 dark:border-emerald-800/60 bg-white text-slate-700 hover:bg-slate-50 text-sm font-medium inline-flex items-center gap-1.5 transition-all duration-200 active:scale-95 cursor-pointer shadow-xs disabled:opacity-50"
- >
- <X className="size-4" strokeWidth={2} />
- <span>Batal</span>
- </button>
-
- <button
- type="submit"
- disabled={busy || !file}
- className="h-9 px-4 rounded-lg bg-emerald-600 text-white text-sm font-medium inline-flex items-center gap-2 transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:pointer-events-none cursor-pointer shadow-xs border border-emerald-200/80 dark:border-emerald-800/60"
- >
- {busy ? (
- <span className="size-4 animate-spin rounded-full border-2 border-emerald-200/80 border-t-transparent" />
- ) : (
- <Upload className="size-4" strokeWidth={2} />
- )}
- <span>{busy ? 'Memproses Impor...' : 'Mulai Impor Data'}</span>
- </button>
- </div>
- </form>
- </div>
- </motion.div>
- </div>
- </AnimatePresence>
- )
+      </form>
+    </AppModal>
+  )
 }

@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from 'react'
+import AppModal from '@/components/app/AppModal'
 import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -495,67 +496,16 @@ export default function MaterialsWorkspace({ materials = [], loading = false, st
  </div>
 
  {/* DETAIL MODAL MATERI DENGAN STANDAR HEROUI HARMONIZED MODAL & DATA KURIKULUM LENGKAP */}
- <AnimatePresence>
- {activeDetail && (
- <div
- className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-xs"
- role="dialog"
- aria-modal="true"
- aria-labelledby="material-detail-title"
- onMouseDown={(e) => e.target === e.currentTarget && setActiveDetail(null)}
- >
- <motion.div
- initial={{ opacity: 0, scale: 0.95, y: 10 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- className="relative w-full max-w-4xl overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white shadow-2xl dark:border-emerald-800/60 dark:bg-slate-900 max-h-[92vh] flex flex-col"
- >
- {/* Top Accent Gradient Bar */}
-
- {/* Modal Header */}
- <header className="flex items-start justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 p-5 sm:p-6 dark:border-emerald-800/60 bg-white dark:bg-[#1B2433] dark:from-slate-900 dark:via-slate-900 dark:to-slate-900">
- <div className="flex gap-3.5 items-start">
- <div className={`hidden sm:flex h-12 w-12 shrink-0 items-center justify-center rounded-xl shadow-md ${getTypeTheme(activeDetail.tipe_materi || activeDetail.tipe).iconBg}`}>
- <BookOpen className="h-6 w-6 text-emerald-600" />
- </div>
- <div>
- <div className="flex flex-wrap items-center gap-2">
- <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider ${getTypeTheme(activeDetail.tipe_materi || activeDetail.tipe).badge}`}>
- {activeDetail.tipe_materi || activeDetail.tipe || '-'}
- </span>
- <span className={`inline-flex items-center rounded-lg border px-2.5 py-0.5 text-[10px] font-bold ${getSubjectColor(activeDetail.subject?.name || activeDetail.mata_pelajaran).pill}`}>
- {activeDetail.subject?.name || activeDetail.subject?.nama_mapel || activeDetail.mata_pelajaran || '-'}
- </span>
- {activeDetail.urutan && (
- <span className="inline-flex items-center gap-1 rounded-lg bg-emerald-50 px-2 py-0.5 text-[10px] font-black text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
- Pekan {String(activeDetail.urutan).padStart(2, '0')}
- </span>
- )}
- {(activeDetail.modul_ajar?.semester || activeDetail.modul_ajar?.fase) && (
- <span className="inline-flex items-center gap-1 rounded-lg bg-teal-50 border border-emerald-200/80 dark:border-emerald-800/60 px-2 py-0.5 text-[10px] font-black text-teal-800 dark:bg-teal-950 dark:text-teal-300 dark:border-emerald-800/60">
- {activeDetail.modul_ajar.semester ? `Semester ${activeDetail.modul_ajar.semester}` : ''}
- {activeDetail.modul_ajar.fase ? ` · Fase ${activeDetail.modul_ajar.fase}` : ''}
- </span>
- )}
- </div>
- <h3 id="material-detail-title" className="mt-2 text-lg sm:text-xl font-black text-slate-900 dark:text-white">
- {activeDetail.judul || activeDetail.title}
- </h3>
- </div>
- </div>
-
- <button
- type="button"
- onClick={() => setActiveDetail(null)}
- className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-slate-400 hover:bg-emerald-50 hover:text-emerald-700 hover:text-slate-600 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors"
- aria-label="Tutup modal"
- >
- <X className="h-5 w-5" />
- </button>
- </header>
-
- {/* Modal Sub-Nav Tabs */}
- <div className="flex border-b border-emerald-200/80 dark:border-emerald-800/60 px-6 pt-2 bg-slate-50/50 dark:border-emerald-800/60 dark:bg-slate-800/50 gap-2">
+ <AppModal
+ isOpen={Boolean(activeDetail)}
+ onClose={() => setActiveDetail(null)}
+ title={activeDetail?.judul || activeDetail?.title}
+ badge={activeDetail ? `${activeDetail.tipe_materi || activeDetail.tipe || '-'} · ${activeDetail.subject?.name || activeDetail.subject?.nama_mapel || activeDetail.mata_pelajaran || '-'}` : ''}
+ description={activeDetail?.modul_ajar?.semester ? `Semester ${activeDetail.modul_ajar.semester}${activeDetail.modul_ajar.fase ? ` · Fase ${activeDetail.modul_ajar.fase}` : ''}` : undefined}
+ icon={BookOpen}
+ maxWidth="max-w-4xl"
+ subHeader={
+ <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-emerald-100/70 dark:bg-emerald-950/50 border border-emerald-200/80 dark:border-emerald-800/60 w-fit">
  {[
  { id: 'ringkasan', label: 'Ringkasan & Catatan', Icon: BookCheck },
  { id: 'kurikulum', label: 'Capaian & Kurikulum', Icon: Target },
@@ -567,21 +517,51 @@ export default function MaterialsWorkspace({ materials = [], loading = false, st
  key={id}
  type="button"
  onClick={() => setActiveModalTab(id)}
- className={`inline-flex items-center gap-2 border-b-2 px-3.5 py-2.5 text-xs font-black transition-all ${
+ className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-black transition-all active:scale-95 ${
  isActive
- ? 'border-slate-600 text-emerald-700 dark:border-emerald-800/60 dark:text-emerald-300'
- : 'border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
+ ? 'bg-emerald-600 text-white shadow-xs'
+ : 'text-slate-600 hover:text-emerald-700 hover:bg-emerald-100/60 dark:text-slate-300 dark:hover:bg-slate-800'
  }`}
  >
- <Icon className="h-4 w-4" />
+ <Icon className="h-3.5 w-3.5" />
  <span>{label}</span>
  </button>
  )
  })}
  </div>
-
- {/* Modal Body */}
- <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-5">
+ }
+ footer={
+ activeDetail ? (
+ <div className="flex w-full flex-wrap items-center justify-between gap-2">
+ <div className="text-xs font-bold text-slate-500 dark:text-slate-400">
+ {activeDetail.modul_ajar?.kode_modul ? `Modul: ${activeDetail.modul_ajar.kode_modul}` : ''}
+ </div>
+ <div className="flex items-center gap-2">
+ <button
+ type="button"
+ onClick={() => setActiveDetail(null)}
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
+ >
+ Tutup
+ </button>
+ {activeDetail.link && (
+ <a
+ href={activeDetail.link}
+ target="_blank"
+ rel="noreferrer"
+ className="inline-flex h-9.5 items-center gap-2 rounded-xl border-2 border-emerald-600 bg-emerald-600 px-4 text-xs font-black text-white shadow-md shadow-emerald-600/20 hover:bg-emerald-700 transition-all"
+ >
+ Buka Sumber Asli
+ <ExternalLink className="h-3.5 w-3.5" />
+ </a>
+ )}
+ </div>
+ </div>
+ ) : null
+ }
+ >
+ {activeDetail && (
+ <div className="space-y-5">
  {/* Video Embed if available */}
  {activeDetail.video && (
  <div className="overflow-hidden rounded-xl border-2 border-emerald-200/80 dark:border-emerald-800/60 shadow-md">
@@ -881,38 +861,8 @@ export default function MaterialsWorkspace({ materials = [], loading = false, st
  </div>
  )}
  </div>
-
- {/* Modal Footer */}
- <footer className="flex flex-wrap items-center justify-between gap-2 border-t border-emerald-200/80 p-4 bg-slate-50/80 dark:border-emerald-800/60 dark:bg-slate-900">
- <div className="text-xs font-bold text-slate-400">
- {activeDetail.modul_ajar?.kode_modul ? `Modul: ${activeDetail.modul_ajar.kode_modul}` : ''}
- </div>
- <div className="flex items-center gap-2">
- <Button
- variant="ghost"
- appearance="outline"
- onClick={() => setActiveDetail(null)}
- className="rounded-xl font-bold border-emerald-200/80 dark:border-emerald-700/80"
- >
- Tutup
- </Button>
- {activeDetail.link && (
- <a
- href={activeDetail.link}
- target="_blank"
- rel="noreferrer"
- className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white dark:bg-emerald-600 dark:text-white px-4 py-2.5 text-xs font-black hover:from-emerald-700 hover:to-teal-800 shadow-sm"
- >
- Buka Sumber Asli
- <ExternalLink className="h-3.5 w-3.5" />
- </a>
  )}
- </div>
- </footer>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+ </AppModal>
  </div>
  )
 }

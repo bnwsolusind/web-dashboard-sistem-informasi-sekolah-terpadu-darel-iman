@@ -1,4 +1,5 @@
 import { HeroUiHeader } from "../components/ui/HeroUiHeader"
+import AppModal from "../components/app/AppModal"
 import React, { useState, useEffect, useMemo } from 'react'
 import {
   motion,
@@ -783,50 +784,38 @@ export default function SystemMaintenanceDataHubPage() {
  {/* ========================================================================= */}
  {/* MODAL IMPOR UNIVERSAL (HEROUI HARMONIZED BATCH MODAL) */}
  {/* ========================================================================= */}
- <AnimatePresence>
- {importModal.isOpen && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
- <motion.div
- initial={{ opacity: 0 }}
- animate={{ opacity: 1 }}
- exit={{ opacity: 0 }}
- onClick={() => !importModal.uploading && setImportModal((p) => ({ ...p, isOpen: false }))}
- className="fixed inset-0 bg-slate-950/70 backdrop-blur-md"
- />
-
- <motion.div
- initial={{ opacity: 0, scale: 0.95, y: 15 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 15 }}
- className="relative z-10 w-full max-w-xl overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/80 bg-white p-6 shadow-2xl shadow-sm dark:bg-slate-900"
- >
- {/* Accent Top Border */}
-
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/80 dark:border-emerald-800/60 pb-4">
- <div className="flex items-center gap-3">
- <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950/70 dark:text-emerald-300">
- <Upload className="size-5" />
- </div>
- <div>
- <h3 className="text-base font-black text-slate-900 dark:text-white">
- Impor Berkas: {importModal.tableName}
- </h3>
- <p className="text-xs text-slate-500">
- Unggah berkas Excel (.xlsx / .xls) atau CSV
- </p>
- </div>
- </div>
+ <AppModal
+ isOpen={importModal.isOpen}
+ onClose={() => { if (!importModal.uploading) setImportModal((p) => ({ ...p, isOpen: false })) }}
+ disableBackdropClose={importModal.uploading}
+ hideCloseButton={importModal.uploading}
+ title={`Impor Berkas: ${importModal.tableName}`}
+ description="Unggah berkas Excel (.xlsx / .xls) atau CSV"
+ icon={Upload}
+ maxWidth="max-w-xl"
+ footer={
+ <div className="flex w-full items-center justify-end gap-2">
  <button
  type="button"
  onClick={() => setImportModal((p) => ({ ...p, isOpen: false }))}
  disabled={importModal.uploading}
- className="p-1 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition cursor-pointer"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <X className="size-5" />
+ Tutup
+ </button>
+ <button
+ type="button"
+ onClick={handleSubmitImport}
+ disabled={!importModal.file || importModal.uploading}
+ className="inline-flex h-9.5 items-center gap-1.5 rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 active:scale-95 disabled:opacity-50 cursor-pointer"
+ >
+ <Upload className={`size-3.5 ${importModal.uploading ? 'animate-spin' : ''}`} />
+ <span>{importModal.uploading ? 'Memproses Berkas...' : 'Mulai Impor Sekarang'}</span>
  </button>
  </div>
-
- <div className="mt-5 space-y-4">
+ }
+ >
+ <div className="space-y-4">
  {/* Dropzone */}
  <div className="rounded-xl border-2 border-dashed border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/30 dark:bg-emerald-950/20 p-6 text-center">
  <FileSpreadsheet className="mx-auto size-10 text-emerald-500" />
@@ -913,79 +902,44 @@ export default function SystemMaintenanceDataHubPage() {
  </div>
  )}
  </div>
-
- <div className="mt-6 flex items-center justify-end gap-2 border-t border-emerald-200/80 dark:border-emerald-800/60 pt-4">
- <button
- type="button"
- onClick={() => setImportModal((p) => ({ ...p, isOpen: false }))}
- disabled={importModal.uploading}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2 text-xs font-bold text-slate-700 hover:bg-emerald-50/40 dark:border-emerald-700/80 dark:text-slate-300 transition cursor-pointer"
- >
- Tutup
- </button>
-
- <button
- type="button"
- onClick={handleSubmitImport}
- disabled={!importModal.file || importModal.uploading}
- className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 dark:bg-slate-100 dark:text-slate-900 dark: px-5 py-2 text-xs font-bold shadow-sm hover:from-emerald-700 hover:to-teal-800 transition cursor-pointer disabled:opacity-50 text-white border border-emerald-200/80 dark:border-emerald-800/60 h-9 text-sm font-medium"
- >
- <Upload className={`size-3.5 ${importModal.uploading ? 'animate-spin' : ''}`} />
- <span>{importModal.uploading ? 'Memproses Berkas...' : 'Mulai Impor Sekarang'}</span>
- </button>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+ </AppModal>
 
  {/* ========================================================================= */}
  {/* MODAL RESET DATABASE (HEROUI HARMONIZED DELETE MODAL) */}
  {/* ========================================================================= */}
- <AnimatePresence>
- {resetModal.isOpen && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
- <motion.div
- initial={{ opacity: 0 }}
- animate={{ opacity: 1 }}
- exit={{ opacity: 0 }}
- onClick={() => !resetModal.processing && setResetModal((p) => ({ ...p, isOpen: false }))}
- className="fixed inset-0 bg-slate-950/70 backdrop-blur-md"
- />
-
- <motion.div
- initial={{ opacity: 0, scale: 0.95, y: 15 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 15 }}
- className="relative z-10 w-full max-w-lg overflow-hidden rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-6 shadow-2xl shadow-sm dark:bg-slate-900"
- >
- {/* Accent Top Border */}
-
- <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/80 dark:border-emerald-800/60 pb-4">
- <div className="flex items-center gap-3">
- <div className="flex size-10 items-center justify-center rounded-xl bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300">
- <AlertTriangle className="size-5" />
- </div>
- <div>
- <h3 className="text-base font-black text-rose-950 dark:text-rose-200">
- Konfirmasi Reset Database
- </h3>
- <p className="text-xs text-rose-600 dark:text-rose-400">
- Tindakan permanen dan tidak dapat dibatalkan
- </p>
- </div>
- </div>
+ <AppModal
+ isOpen={resetModal.isOpen}
+ onClose={() => { if (!resetModal.processing) setResetModal((p) => ({ ...p, isOpen: false })) }}
+ disableBackdropClose={resetModal.processing}
+ hideCloseButton={resetModal.processing}
+ variant="danger"
+ title="Konfirmasi Reset Database"
+ description="Tindakan permanen dan tidak dapat dibatalkan"
+ icon={AlertTriangle}
+ maxWidth="max-w-lg"
+ footer={
+ <div className="flex w-full items-center justify-end gap-2">
  <button
  type="button"
  onClick={() => setResetModal((p) => ({ ...p, isOpen: false }))}
  disabled={resetModal.processing}
- className="p-1 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition cursor-pointer"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
- <X className="size-5" />
+ Batal
+ </button>
+ <button
+ type="button"
+ onClick={handleExecuteResetDatabase}
+ disabled={resetModal.confirmText.trim() !== 'RESET DATABASE' || resetModal.processing}
+ className="inline-flex h-9.5 items-center gap-1.5 rounded-xl border-2 border-rose-600 bg-rose-600 px-5 text-xs font-black text-white shadow-md shadow-rose-600/20 transition-all hover:bg-rose-700 active:scale-95 disabled:opacity-40 cursor-pointer"
+ >
+ <Trash2 className={`size-3.5 ${resetModal.processing ? 'animate-spin' : ''}`} />
+ <span>{resetModal.processing ? 'Mengeksekusi Reset...' : 'Konfirmasi Reset Sekarang'}</span>
  </button>
  </div>
-
- <div className="mt-4 space-y-4">
+ }
+ >
+ <div className="space-y-4">
  <div className="rounded-xl bg-rose-50 p-4 border border-emerald-200/80 dark:border-emerald-800/60 text-xs text-rose-900 dark:bg-rose-950/30 dark:border-emerald-800/60 dark:text-rose-200 leading-relaxed">
  <p className="font-bold">Peringatan Kritis:</p>
  <p className="mt-1">
@@ -1038,31 +992,7 @@ export default function SystemMaintenanceDataHubPage() {
  />
  </div>
  </div>
-
- <div className="mt-6 flex items-center justify-end gap-2 border-t border-emerald-200/80 dark:border-emerald-800/60 pt-4">
- <button
- type="button"
- onClick={() => setResetModal((p) => ({ ...p, isOpen: false }))}
- disabled={resetModal.processing}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2 text-xs font-bold text-slate-700 hover:bg-emerald-50/40 dark:border-emerald-700/80 dark:text-slate-300 transition cursor-pointer"
- >
- Batal
- </button>
-
- <button
- type="button"
- onClick={handleExecuteResetDatabase}
- disabled={resetModal.confirmText.trim() !== 'RESET DATABASE' || resetModal.processing}
- className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white px-5 py-2 text-xs font-black text-white shadow-sm hover:from-rose-700 hover:to-red-800 transition cursor-pointer disabled:opacity-40"
- >
- <Trash2 className={`size-3.5 ${resetModal.processing ? 'animate-spin' : ''}`} />
- <span>{resetModal.processing ? 'Mengeksekusi Reset...' : 'Konfirmasi Reset Sekarang'}</span>
- </button>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
+ </AppModal>
 
  </motion.div>
  </PageContainer>

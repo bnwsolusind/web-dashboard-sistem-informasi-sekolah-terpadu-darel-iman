@@ -1,6 +1,7 @@
 import {
-  KpiStatCard
+ KpiStatCard
 } from '../components/app'
+import AppModal from '../components/app/AppModal'
 import {
   useToast
 } from '../components/app/ToastProvider'
@@ -391,50 +392,23 @@ function HeroUiFilterSelect({
 
 function HarmonizedSaveScoresModal({ isOpen, onClose, onConfirm, studentName, classNameStr, totalEdited, isSubmitting }) {
  return (
- <AnimatePresence>
- {isOpen && (
- <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
- <motion.div
- initial={{ opacity: 0, scale: 0.94 }}
- animate={{ opacity: 1, scale: 1 }}
- exit={{ opacity: 0, scale: 0.94 }}
- className="relative w-full max-w-md overflow-hidden rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white shadow-2xl shadow-emerald-950/20 dark:bg-[#182232] shadow-sm dark:border-emerald-800/60 dark:bg-[#1B2433]"
- >
- <div className="p-6">
- <div className="flex items-center gap-3.5 mb-4">
- <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
- 
-            <CheckCircle2 className="h-6 w-6 text-white" />
- </div>
- <div>
- <span className="inline-block rounded-md bg-emerald-100 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
- Simpan Penilaian
- </span>
- <h3 className="text-base font-black text-slate-900 dark:text-white mt-0.5">
- Simpan Nilai & Paraf Doa?
- </h3>
- </div>
- </div>
-
- <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
- Nilai poin capaian doa dan status paraf guru penguji untuk santri/siswa berikut akan disimpan secara permanen ke database akademik.
- </p>
-
- <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/50 p-3.5 dark:border-emerald-800/60 dark:bg-emerald-950/20 mb-5">
- <p className="text-xs font-black text-emerald-950 dark:text-emerald-100">
- {studentName || 'Nama Siswa'} ({classNameStr || 'Kelas'})
- </p>
- <p className="text-xs text-emerald-800/80 dark:text-emerald-300/80 mt-1">
- {totalEdited} Butir Penilaian Siap Diperbarui
- </p>
- </div>
-
- <div className="flex items-center justify-end gap-3">
+ <AppModal
+ isOpen={isOpen}
+ onClose={() => { if (!isSubmitting) onClose() }}
+ disableBackdropClose={isSubmitting}
+ hideCloseButton={isSubmitting}
+ badge="Simpan Penilaian"
+ title="Simpan Nilai & Paraf Doa?"
+ icon={CheckCircle2}
+ maxWidth="max-w-md"
+ zIndex="z-[70]"
+ footer={
+ <div className="flex w-full items-center justify-end gap-2.5">
  <button
  type="button"
  onClick={onClose}
  disabled={isSubmitting}
- className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-700/80 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-all cursor-pointer"
+ className="inline-flex h-9.5 items-center justify-center rounded-xl border border-slate-300 bg-slate-200 px-4 text-xs font-black text-slate-700 transition-all hover:bg-slate-300 active:scale-95 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 cursor-pointer"
  >
  Batal
  </button>
@@ -442,17 +416,28 @@ function HarmonizedSaveScoresModal({ isOpen, onClose, onConfirm, studentName, cl
  type="button"
  onClick={onConfirm}
  disabled={isSubmitting}
- className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 dark:bg-slate-100 dark:text-slate-900 dark: px-5 py-2 text-xs font-bold shadow-sm hover:brightness-105 disabled:opacity-50 transition-all cursor-pointer text-white border border-emerald-200/80 dark:border-emerald-800/60 h-9 text-sm font-medium"
+ className="inline-flex h-9.5 items-center gap-1.5 rounded-xl border-2 border-emerald-600 bg-emerald-600 px-5 text-xs font-black text-white shadow-md shadow-emerald-600/20 transition-all hover:bg-emerald-700 active:scale-95 disabled:opacity-50 cursor-pointer"
  >
  {isSubmitting ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
  Konfirmasi Simpan
  </button>
  </div>
+ }
+ >
+ <div className="space-y-4">
+ <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+ Nilai poin capaian doa dan status paraf guru penguji untuk santri/siswa berikut akan disimpan secara permanen ke database akademik.
+ </p>
+ <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/50 p-3.5 dark:bg-emerald-950/20">
+ <p className="text-xs font-black text-emerald-950 dark:text-emerald-100">
+ {studentName || 'Nama Siswa'} ({classNameStr || 'Kelas'})
+ </p>
+ <p className="text-xs text-emerald-800/80 dark:text-emerald-300/80 mt-1">
+ {totalEdited} Butir Penilaian Siap Diperbarui
+ </p>
  </div>
- </motion.div>
  </div>
- )}
- </AnimatePresence>
+ </AppModal>
  )
 }
 
