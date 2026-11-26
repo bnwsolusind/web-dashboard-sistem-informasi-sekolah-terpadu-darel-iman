@@ -47,7 +47,16 @@ const formatDate = (val) => {
   }
 }
 
-export default function ParentBillsWorkspace({ bills = [], loading = false, student, onRefresh }) {
+export default function ParentBillsWorkspace({
+  bills = [],
+  loading = false,
+  student,
+  onRefresh,
+  sipdeiStatus = 'OK',
+  sipdeiMessage = '',
+  studentContext = null,
+  sipdeiMeta = null,
+}) {
   const [filter, setFilter] = useState('all')
   const [search, setSearch] = useState('')
   const [activeReceipt, setActiveReceipt] = useState(null)
@@ -59,6 +68,7 @@ export default function ParentBillsWorkspace({ bills = [], loading = false, stud
   const [isPayModalOpen, setIsPayModalOpen] = useState(false)
   const [selectedBank, setSelectedBank] = useState('BSI') // 'BSI' or 'NAGARI'
   const [processingVa, setProcessingVa] = useState(false)
+  const [confirmingSimPay, setConfirmingSimPay] = useState(false)
   const [vaResult, setVaResult] = useState(null)
   const [payError, setPayError] = useState(null)
 
@@ -270,6 +280,109 @@ export default function ParentBillsWorkspace({ bills = [], loading = false, stud
  </div>
  `,
     })
+  }
+
+  const normalizedSipdeiStatus = String(sipdeiStatus || (safeBills.length > 0 ? 'OK' : 'NO_BILLS')).toUpperCase()
+  const isStatusOk = normalizedSipdeiStatus === 'OK'
+  const resolvedName = studentContext?.full_name || studentName
+  const resolvedNis = studentContext?.nis || studentNis || '-'
+  const resolvedUnit = studentContext?.unit_name || student?.educationUnit?.name || student?.unit?.name || 'Unit Sekolah'
+
+  if (!loading && !isStatusOk) {
+    const isNotFound = normalizedSipdeiStatus === 'NIS_NOT_FOUND'
+    const isAmbiguous = normalizedSipdeiStatus === 'AMBIGUOUS_NIS'
+    const isUnavailable = normalizedSipdeiStatus === 'SERVICE_UNAVAILABLE'
+    const isAuthOrConfig = ['AUTHENTICATION_ERROR', 'NOT_CONFIGURED', 'INVALID_RESPONSE'].includes(normalizedSipdeiStatus)
+    const isNoBills = normalizedSipdeiStatus === 'NO_BILLS'
+
+    const badgeText = isNotFound
+      ? 'BELUM TERDAFTAR DI SIPDEI'
+      : isAmbiguous
+        ? 'PERLU VERIFIKASI NIS'
+        : isUnavailable
+          ? 'LAYANAN SIPDEI TERGANGGU'
+          : isAuthOrConfig
+            ? 'LAYANAN BELUM TERHUBUNG'
+            : 'BELUM ADA TAGIHAN'
+
+    const titleText = isNotFound
+      ? 'Data Anak Belum Terdaftar di SIPDEI'
+      : isAmbiguous
+        ? 'Data NIS Anak Perlu Diverifikasi Admin Sekolah'
+        : isUnavailable
+          ? 'Layanan SIPDEI Sedang Terganggu'
+          : isAuthOrConfig
+            ? 'Layanan Pembayaran Belum Dapat Dihubungkan'
+            : 'Belum Ada Tagihan Diterbitkan'
+
+    const bodyText = isNotFound
+      ? 'Data anak dengan NIS ini belum ditemukan pada sistem SIPDEI. Jika anak sudah terdaftar sebagai siswa, silakan hubungi Admin Sekolah untuk pemeriksaan dan pendaftaran ulang data anak di SIPDEI. Jika terdapat tagihan yang belum dibayar, silakan lakukan pembayaran melalui kanal resmi sekolah setelah tagihan tersedia.'
+      : isAmbiguous
+        ? 'Ditemukan lebih dari satu data siswa dengan NIS pembayaran yang sama di SIPDEI. Silakan hubungi Admin Sekolah untuk verifikasi data sebelum melakukan pembayaran.'
+        : isUnavailable
+          ? 'Koneksi ke sistem keuangan SIPDEI sedang terganggu atau batas waktu tercapai. Status tagihan anak belum dapat diverifikasi saat ini. Silakan muat ulang beberapa saat lagi.'
+          : isAuthOrConfig
+            ? 'Layanan pembayaran belum dapat dihubungkan dengan server SIPDEI. Silakan hubungi Admin Sekolah untuk pemeriksaan konfigurasi.'
+            : 'NIS anak sudah terhubung di SIPDEI, namun belum ada tagihan SPP yang diterbitkan untuk periode ini. Kondisi ini bukan berarti tagihan bulan berikutnya sudah lunas.'
+
+    const toneBorder = isNotFound || isAmbiguous
+      ? 'border-rose-300 dark:border-rose-800/80 bg-rose-50/40 dark:bg-rose-950/20'
+      : isUnavailable || isAuthOrConfig
+        ? 'border-amber-300 dark:border-amber-800/80 bg-amber-50/40 dark:bg-amber-950/20'
+        : 'border-sky-300 dark:border-sky-800/80 bg-sky-50/40 dark:bg-sky-950/20'
+
+    return (
+      <div className="space-y-6 pb-20">
+        <div className={`rounded-[22px] border-2 p-6 shadow-sm ${toneBorder}`}>
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-xs">
+                <AlertCircle className={`h-6 w-6 ${isNotFound || isAmbiguous ? 'text-rose-600' : isUnavailable || isAuthOrConfig ? 'text-amber-600' : 'text-sky-600'}`} />
+              </div>
+              <div className="space-y-2 max-w-2xl">
+                <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-black tracking-wider uppercase bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200">
+                  {badgeText}
+                </span>
+                <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white">
+                  {titleText}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                  {bodyText}
+                </p>
+                {sipdeiMessage && !isNotFound && (
+                  <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                    Detail status: {sipdeiMessage}
+                  </p>
+                )}
+
+                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2.5 rounded-xl border border-slate-200/90 dark:border-slate-700/80 bg-white/90 dark:bg-slate-900/70 p-3.5 text-xs">
+                  <div><span className="text-slate-500">Nama Anak:</span> <strong className="text-slate-900 dark:text-white">{resolvedName}</strong></div>
+                  <div><span className="text-slate-500">NIS:</span> <strong className="font-mono text-slate-900 dark:text-white">{resolvedNis}</strong></div>
+                  <div><span className="text-slate-500">Unit Pendidikan:</span> <strong className="text-slate-900 dark:text-white">{resolvedUnit}</strong></div>
+                  <div><span className="text-slate-500">Status Pemeriksaan SIPDEI:</span> <strong className="text-slate-900 dark:text-white">{normalizedSipdeiStatus}{sipdeiMeta?.status_code ? ` (HTTP ${sipdeiMeta.status_code})` : ''}</strong></div>
+                </div>
+
+                <div className="pt-2 flex flex-wrap items-center gap-2.5">
+                  {typeof onRefresh === 'function' && (
+                    <button
+                      type="button"
+                      onClick={() => onRefresh()}
+                      className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 text-xs font-extrabold shadow-xs transition cursor-pointer"
+                    >
+                      <RefreshCw className="h-3.5 w-3.5" />
+                      <span>Muat Ulang</span>
+                    </button>
+                  )}
+                  <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300">
+                    Petunjuk: Hubungi Admin Sekolah / Tata Usaha {resolvedUnit} jika memerlukan pemeriksaan data NIS.
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -754,7 +867,7 @@ export default function ParentBillsWorkspace({ bills = [], loading = false, stud
                   {vaResult.nomor_va}
                 </div>
 
-                <div className="flex items-center justify-center gap-2 mt-3">
+                <div className="flex items-center justify-center gap-2 mt-3 flex-wrap">
                   <button
                     type="button"
                     onClick={() => handleCopyModalVa(vaResult.nomor_va)}
@@ -772,6 +885,34 @@ export default function ParentBillsWorkspace({ bills = [], loading = false, stud
                       </>
                     )}
                   </button>
+                  {vaResult.simulation_mode && vaResult.can_simulate_payment && (
+                    <button
+                      type="button"
+                      disabled={confirmingSimPay}
+                      onClick={async () => {
+                        setConfirmingSimPay(true)
+                        setPayError(null)
+                        try {
+                          const headers = student?.id ? { 'X-Child-Id': student.id } : {}
+                          await api.post('/portal/bills/simulate-pay-confirm', { reference: vaResult.reference }, { headers })
+                          setIsPayModalOpen(false)
+                          setVaResult(null)
+                          setSelectedBillIds([])
+                          if (typeof onRefresh === 'function') {
+                            onRefresh()
+                          }
+                        } catch (err) {
+                          setPayError(err.response?.data?.message || 'Gagal mengonfirmasi pembayaran simulasi.')
+                        } finally {
+                          setConfirmingSimPay(false)
+                        }
+                      }}
+                      className="inline-flex items-center gap-1.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white px-3.5 py-1.5 text-xs font-bold transition shadow-sm cursor-pointer disabled:opacity-60"
+                    >
+                      <CheckCircle2 className="h-3.5 w-3.5" />
+                      <span>{confirmingSimPay ? 'Memproses...' : 'Simulasikan Pembayaran Lunas'}</span>
+                    </button>
+                  )}
                 </div>
               </div>
 

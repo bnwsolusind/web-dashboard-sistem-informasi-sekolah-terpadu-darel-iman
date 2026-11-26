@@ -135,6 +135,7 @@ export function KpiStatCard({
   valueClassName = '',
   footerAction,
   footerLabel,
+  leftFooterText: leftFooterTextProp,
   ctaText,
   className,
   onClick,
@@ -168,7 +169,7 @@ export function KpiStatCard({
   }
   const isCardActive = active || isActive
 
-  const leftFooterText = footerLabel || footerAction?.label || ctaText || card?.ctaText || card?.footerLabel || (isClickable ? 'Lihat Rincian' : (effectiveSubtitle || 'Statistik'))
+  const leftFooterText = leftFooterTextProp || footerLabel || footerAction?.label || ctaText || card?.ctaText || card?.footerLabel || (isClickable ? 'Lihat Rincian' : (effectiveSubtitle || 'Statistik'))
   const rightFooterText = footerAction?.ctaText || 'Detail'
 
   return (

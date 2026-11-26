@@ -12,6 +12,7 @@ import {
 } from 'react-router-dom'
 import AppBreadcrumb from '../components/app/AppBreadcrumb'
 import AppTabs from '../components/app/AppTabs'
+import PortalGateLockBanner from '../components/portal/PortalGateLockBanner'
 import {
   AlertCircle,
   Award,
@@ -136,9 +137,13 @@ export default function ParentPortalPage() {
  const [childId, setChildId] = useState('')
  const [viewAllChildren, setViewAllChildren] = useState(false)
  const [dashboard, setDashboard] = useState(null)
+ const [todayTimeline, setTodayTimeline] = useState({ activities: [], loading: false, error: null })
+ const [todaySchedulesData, setTodaySchedulesData] = useState({ items: [], dateFormatted: '', loading: false, error: null })
  const [active, setActive] = useState(() => (menu.some(([id]) => id === requestedTab) ? requestedTab : 'ringkasan'))
 
  const [records, setRecords] = useState([])
+ const [billsMeta, setBillsMeta] = useState(null)
+ const [childGate, setChildGate] = useState(null)
  const [tahfizhAchievement, setTahfizhAchievement] = useState(null)
  const [permissionsRecords, setPermissionsRecords] = useState([])
  const [examGridsRecords, setExamGridsRecords] = useState([])
@@ -180,6 +185,8 @@ export default function ParentPortalPage() {
  setChildId(id)
  setRecords([])
  setDashboard(null)
+ setTodayTimeline({ activities: [], loading: true, error: null })
+ setTodaySchedulesData({ items: [], dateFormatted: '', loading: true, error: null })
  setResultsData(null)
  setCbtOverview(null)
  setExamGridsRecords([])
@@ -205,8 +212,54 @@ export default function ParentPortalPage() {
  setError('')
  try {
  if (active === 'ringkasan') {
- const res = await familyPortalService.dashboard(childId).catch(() => ({ data: null }))
- setDashboard(res?.data || res || null)
+ const todayStr = new Intl.DateTimeFormat('en-CA').format(new Date())
+ setTodayTimeline((prev) => ({ ...prev, loading: true, error: null }))
+ setTodaySchedulesData((prev) => ({ ...prev, loading: true, error: null }))
+ const [res, tlRes, schRes] = await Promise.allSettled([
+ familyPortalService.dashboard(childId),
+ api.get('/portal/today-live-timeline', { headers: { 'X-Child-Id': childId }, params: { date: todayStr } }),
+ api.get('/portal/schedules', { headers: { 'X-Child-Id': childId }, params: { date: todayStr } }),
+ ])
+ const dashPayload = res.status === 'fulfilled' ? (res.value?.data || res.value || null) : null
+ setDashboard(dashPayload)
+
+ if (tlRes.status === 'fulfilled') {
+ const tlData = tlRes.value?.data?.data || {}
+ setTodayTimeline({
+ activities: Array.isArray(tlData.activities) ? tlData.activities : [],
+ loading: false,
+ error: null,
+ })
+ } else {
+ const errStatus = tlRes.reason?.response?.status
+ setTodayTimeline({
+ activities: [],
+ loading: false,
+ error: errStatus === 403 ? 'Terkunci oleh status pembayaran SPP.' : 'Gagal memuat aktivitas hari ini.',
+ })
+ }
+
+ if (schRes.status === 'fulfilled') {
+ const schData = schRes.value?.data?.data || {}
+ const schList = Array.isArray(schData.today_schedules)
+ ? schData.today_schedules
+ : (Array.isArray(dashPayload?.schedules_today) ? dashPayload.schedules_today : [])
+ setTodaySchedulesData({
+ items: schList,
+ dateFormatted: schData.selected_date_formatted || new Intl.DateTimeFormat('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date()),
+ loading: false,
+ error: null,
+ })
+ } else {
+ const errStatus = schRes.reason?.response?.status
+ const fallbackDashSched = Array.isArray(dashPayload?.schedules_today) ? dashPayload.schedules_today : []
+ setTodaySchedulesData({
+ items: errStatus === 403 ? [] : fallbackDashSched,
+ dateFormatted: new Intl.DateTimeFormat('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date()),
+ loading: false,
+ error: errStatus === 403 ? 'Terkunci oleh status pembayaran SPP.' : (fallbackDashSched.length === 0 ? 'Gagal memuat jadwal hari ini.' : null),
+ })
+ }
  setRecords([])
  } else if (active === 'profile') {
  const [profileResponse, dashboardResponse] = await Promise.all([
@@ -264,14 +317,39 @@ export default function ParentPortalPage() {
  setRecords(res.data?.data || null)
  } else if (active === 'bills') {
  setRecords([])
- const res = await api.get('/portal/bills', { headers: { 'X-Child-Id': childId } }).catch(() => ({ data: { data: [] } }))
- const list = res.data?.data?.data ?? res.data?.data ?? []
+ try {
+ const res = await api.get('/portal/bills', { headers: { 'X-Child-Id': childId } })
+ const data = res.data || {}
+ const list = data?.data?.data ?? data?.data ?? []
  setRecords(Array.isArray(list) ? list : [])
+ setBillsMeta({
+ sipdeiStatus: data?.sipdei_status || (Array.isArray(list) && list.length > 0 ? 'OK' : 'NO_BILLS'),
+ message: data?.message || '',
+ studentContext: data?.student_context || null,
+ sipdeiMeta: data?.sipdei_meta || null,
+ })
+ if (data?.portal_gate) setChildGate(data.portal_gate)
+ } catch (err) {
+ const errData = err?.response?.data || {}
+ setRecords([])
+ setBillsMeta({
+ sipdeiStatus: errData?.sipdei_status || 'SERVICE_UNAVAILABLE',
+ message: errData?.message || 'Layanan SIPDEI sedang terganggu atau tidak dapat dijangkau.',
+ studentContext: errData?.student_context || null,
+ sipdeiMeta: errData?.sipdei_meta || null,
+ })
+ if (errData?.portal_gate) setChildGate(errData.portal_gate)
+ }
  } else if (active === 'schedules') {
  setRecords([])
- const res = await familyPortalService.list('schedules', childId).catch(() => ({ data: [] }))
- const payload = res?.data || res || []
- setRecords(payload)
+ try {
+ const res = await api.get('/portal/schedules', { headers: { 'X-Child-Id': childId } })
+ setRecords(res.data?.data ?? res.data ?? [])
+ setChildGate(null)
+ } catch (err) {
+ if (err?.response?.data?.gate_blocked) setChildGate({ allowed: false, ...err.response.data })
+ setRecords([])
+ }
  } else if (active === 'calendar') {
  setRecords([])
  const res = await api.get('/portal/academic-calendar', { params: childId ? { child_id: childId } : {} }).catch(() => ({ data: { data: [] } }))
@@ -294,9 +372,24 @@ export default function ParentPortalPage() {
  }
  }, [active, childId, viewAllChildren])
 
- useEffect(() => {
- load()
- }, [load])
+  useEffect(() => {
+    if (!childId) {
+      setChildGate(null)
+      return
+    }
+    let mounted = true
+    setChildGate(null)
+    api.get('/portal/access-status', { headers: { 'X-Child-Id': childId } })
+      .then((res) => {
+        if (mounted && res.data?.data) setChildGate(res.data.data)
+      })
+      .catch(() => {})
+    return () => { mounted = false }
+  }, [childId])
+
+  useEffect(() => {
+    load()
+  }, [load])
 
  useEffect(() => {
  if (requestedTab && menu.some(([id]) => id === requestedTab)) setActive(requestedTab)
@@ -1748,6 +1841,185 @@ export default function ParentPortalPage() {
  </div>
  )}
 
+ {/* JADWAL & AKTIVITAS HARI INI (TERINTEGRASI FULLDAY & BOARDING) */}
+ <section className="grid gap-6 lg:grid-cols-2 items-stretch">
+ {/* A. JADWAL HARI INI */}
+ <div className="flex flex-col rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] shadow-md shadow-emerald-500/10 overflow-hidden">
+ <div className="border-b border-emerald-500/20 dark:border-emerald-800/40 bg-emerald-500/10 dark:bg-emerald-950/40 px-5 py-4 flex items-center justify-between gap-3">
+ <div className="flex items-center gap-2.5 min-w-0">
+ <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-xs">
+ <CalendarDays className="h-4 w-4 text-white" />
+ </div>
+ <div className="min-w-0">
+ <h3 className="text-xs font-black text-emerald-950 dark:text-emerald-200 leading-tight">
+ Jadwal Hari Ini — {activeChild?.full_name || 'Ananda'}
+ </h3>
+ <p className="text-[10px] font-semibold text-emerald-700/80 dark:text-emerald-400/80 truncate">
+ {todaySchedulesData.dateFormatted || 'Hari Ini'} • {activeChild?.unit_name || ''}
+ </p>
+ </div>
+ </div>
+ <button
+ type="button"
+ onClick={() => selectTab('schedules')}
+ className="inline-flex items-center gap-1 shrink-0 rounded-xl bg-white/80 px-2.5 py-1 text-xs font-bold text-emerald-700 border border-emerald-200/80 dark:border-emerald-800/60 hover:bg-emerald-100/80 transition-all dark:bg-emerald-950/60 dark:text-emerald-300 cursor-pointer"
+ >
+ <span>Lihat Semua</span>
+ <ChevronRight className="h-3 w-3" />
+ </button>
+ </div>
+
+ <div className="flex-1 p-5 space-y-3">
+ {/* Ringkasan Jadwal */}
+ {!todaySchedulesData.loading && !todaySchedulesData.error && (
+ <div className="grid grid-cols-3 gap-2 text-center">
+ <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/60 dark:bg-emerald-950/30 p-2">
+ <span className="text-[10px] font-bold text-slate-500 uppercase block">Terjadwal</span>
+ <span className="text-sm font-black text-emerald-800 dark:text-emerald-300">{todaySchedulesData.items.length}</span>
+ </div>
+ <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-sky-50/60 dark:bg-sky-950/30 p-2">
+ <span className="text-[10px] font-bold text-slate-500 uppercase block">Selesai</span>
+ <span className="text-sm font-black text-sky-800 dark:text-sky-300">{todaySchedulesData.items.filter((s) => s.status === 'selesai' || s.is_past).length}</span>
+ </div>
+ <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-amber-50/60 dark:bg-amber-950/30 p-2">
+ <span className="text-[10px] font-bold text-slate-500 uppercase block">Akan Datang</span>
+ <span className="text-sm font-black text-amber-800 dark:text-amber-300">{todaySchedulesData.items.filter((s) => s.status !== 'selesai' && !s.is_past).length}</span>
+ </div>
+ </div>
+ )}
+
+ {todaySchedulesData.loading ? (
+ <div className="py-8 text-center text-xs text-slate-500">Memuat jadwal hari ini...</div>
+ ) : todaySchedulesData.error ? (
+ <div className="py-6 text-center text-xs text-rose-600 dark:text-rose-400 border border-dashed border-rose-200 dark:border-rose-800/60 rounded-xl px-4">
+ {todaySchedulesData.error}
+ </div>
+ ) : todaySchedulesData.items.length > 0 ? (
+ <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
+ {todaySchedulesData.items.map((sch, idx) => {
+ const title = sch.activity_name || sch.subject?.name || 'Kegiatan Sekolah'
+ const timeLabel = sch.time_display || (sch.time_start && sch.time_end ? `${String(sch.time_start).slice(0, 5)} - ${String(sch.time_end).slice(0, 5)}` : '-')
+ const teacherName = sch.teacher?.name || sch.teacher_name || sch.employee?.nama_lengkap || null
+ const roomName = sch.room?.name || sch.room_name || null
+ const isOngoing = sch.status === 'berlangsung' || sch.is_ongoing
+ const isDone = sch.status === 'selesai' || sch.is_past
+ return (
+ <div key={sch.id || idx} className="flex items-center justify-between gap-3 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/70 dark:bg-slate-800/40 p-3 text-xs">
+ <div className="min-w-0 flex-1">
+ <div className="flex items-center gap-2">
+ <span className="font-mono text-[10px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-100/80 dark:bg-emerald-950/60 px-1.5 py-0.5 rounded">{timeLabel}</span>
+ <span className="font-bold text-slate-900 dark:text-white truncate">{title}</span>
+ </div>
+ <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 truncate">
+ {[teacherName ? `PJ: ${teacherName}` : null, roomName ? `Ruang: ${roomName}` : null].filter(Boolean).join(' • ') || 'Sesuai jadwal unit'}
+ </p>
+ </div>
+ <span className={`shrink-0 rounded-lg px-2 py-0.5 text-[10px] font-extrabold ${
+ isOngoing
+ ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
+ : isDone
+ ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+ : 'bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200'
+ }`}>
+ {sch.status_label || (isOngoing ? 'Berlangsung' : (isDone ? 'Selesai' : 'Akan Datang'))}
+ </span>
+ </div>
+ )
+ })}
+ </div>
+ ) : (
+ <div className="py-8 text-center text-xs text-slate-400 border border-dashed border-emerald-200/80 dark:border-emerald-800/60 rounded-xl">
+ {!activeChild?.class_name && !activeChild?.kelas_id
+ ? 'Anak belum memiliki penempatan kelas/jadwal.'
+ : 'Belum ada jadwal operasional untuk hari ini.'}
+ </div>
+ )}
+ </div>
+ </div>
+
+ {/* B. AKTIVITAS HARI INI (LIVE TIMELINE) */}
+ <div className="flex flex-col rounded-[22px] border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] shadow-md shadow-emerald-500/10 overflow-hidden">
+ <div className="border-b border-emerald-500/20 dark:border-emerald-800/40 bg-teal-500/10 dark:bg-teal-950/40 px-5 py-4 flex items-center justify-between gap-3">
+ <div className="flex items-center gap-2.5 min-w-0">
+ <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-teal-600 text-white shadow-xs">
+ <Clock className="h-4 w-4 text-white" />
+ </div>
+ <div className="min-w-0">
+ <h3 className="text-xs font-black text-teal-950 dark:text-teal-200 leading-tight">
+ Aktivitas Hari Ini (Live)
+ </h3>
+ <p className="text-[10px] font-semibold text-teal-700/80 dark:text-teal-400/80 truncate">
+ Interaksi Guru, Wali Kelas, Musyrif & Siswa
+ </p>
+ </div>
+ </div>
+ <Badge color="success" size="xs">Real-Time</Badge>
+ </div>
+
+ <div className="flex-1 p-5 space-y-3">
+ {!todayTimeline.loading && !todayTimeline.error && (
+ <div className="grid grid-cols-3 gap-2 text-center">
+ <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-teal-50/60 dark:bg-teal-950/30 p-2">
+ <span className="text-[10px] font-bold text-slate-500 uppercase block">Tercatat</span>
+ <span className="text-sm font-black text-teal-800 dark:text-teal-300">{todayTimeline.activities.length}</span>
+ </div>
+ <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/60 dark:bg-emerald-950/30 p-2">
+ <span className="text-[10px] font-bold text-slate-500 uppercase block">Presensi</span>
+ <span className="text-xs font-black text-emerald-800 dark:text-emerald-300 truncate block mt-0.5">
+ {dashboard?.attendance_today?.status_label || 'Belum Check-in'}
+ </span>
+ </div>
+ <div className="rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-amber-50/60 dark:bg-amber-950/30 p-2">
+ <span className="text-[10px] font-bold text-slate-500 uppercase block">Mutabaah</span>
+ <span className="text-xs font-black text-amber-800 dark:text-amber-300 truncate block mt-0.5">
+ {dashboard?.kpi?.mutabaah_status || 'Belum diisi'}
+ </span>
+ </div>
+ </div>
+ )}
+
+ {todayTimeline.loading ? (
+ <div className="py-8 text-center text-xs text-slate-500">Memuat aktivitas hari ini...</div>
+ ) : todayTimeline.error ? (
+ <div className="py-6 text-center text-xs text-rose-600 dark:text-rose-400 border border-dashed border-rose-200 dark:border-rose-800/60 rounded-xl px-4">
+ {todayTimeline.error}
+ </div>
+ ) : todayTimeline.activities.length > 0 ? (
+ <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
+ {todayTimeline.activities.map((act, idx) => (
+ <div key={act.id || idx} className="flex items-start gap-2.5 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-slate-50/70 dark:bg-slate-800/40 p-3 text-xs">
+ <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+ <CheckCircle2 className="h-3.5 w-3.5" />
+ </div>
+ <div className="flex-1 min-w-0">
+ <div className="flex items-center justify-between gap-2">
+ <span className="font-bold text-slate-900 dark:text-white truncate">{act.title}</span>
+ <span className="font-mono text-[10px] text-slate-400 shrink-0">{act.time_label || act.time || '-'}</span>
+ </div>
+ <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">{act.subtitle || act.description || '-'}</p>
+ {(act.notes || act.keterangan) && (
+ <p className="mt-1 rounded bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 text-[10px] text-amber-800 dark:text-amber-300">
+ Catatan: {act.notes || act.keterangan}
+ </p>
+ )}
+ </div>
+ {act.badge_label && (
+ <span className="shrink-0 rounded-lg bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 px-2 py-0.5 text-[10px] font-extrabold">
+ {act.badge_label}
+ </span>
+ )}
+ </div>
+ ))}
+ </div>
+ ) : (
+ <div className="py-8 text-center text-xs text-slate-400 border border-dashed border-emerald-200/80 dark:border-emerald-800/60 rounded-xl">
+ Belum ada aktivitas tercatat hari ini. Interaksi Guru, Wali Kelas, Musyrif, dan Siswa akan tampil di sini.
+ </div>
+ )}
+ </div>
+ </div>
+ </section>
+
  {/* Grid Nilai, Kalender Akademik & Pengumuman Terbaru */}
  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-stretch">
  {/* 1. KARTU NILAI RAPOR TERBARU */}
@@ -2092,6 +2364,8 @@ export default function ParentPortalPage() {
  <SchoolInformationWorkspace studentId={childId} student={activeChild} embedded />
  )}
 
+ {!(activeChild?.portal_gate?.allowed === false || childGate?.allowed === false || childGate?.gate_blocked) && (
+ <>
  {active === 'schedules' && (
  <ClassScheduleWorkspace schedules={records} loading={loading} activeChild={activeChild} />
  )}
@@ -2183,9 +2457,34 @@ export default function ParentPortalPage() {
  {active === 'hasil' && (
  <ExamResultsWorkspace resultsData={resultsData} reports={reportsRecords} loading={loading} student={activeChild} />
  )}
+ </>
+ )}
 
  {active === 'bills' && (
- <ParentBillsWorkspace bills={records} loading={loading} student={activeChild} />
+ <ParentBillsWorkspace
+ bills={records}
+ loading={loading}
+ student={activeChild}
+ onRefresh={load}
+ sipdeiStatus={billsMeta?.sipdeiStatus}
+ sipdeiMessage={billsMeta?.message}
+ studentContext={billsMeta?.studentContext}
+ sipdeiMeta={billsMeta?.sipdeiMeta}
+ />
+ )}
+
+ {(activeChild?.portal_gate?.allowed === false || childGate?.allowed === false || childGate?.gate_blocked) && ['schedules', 'materials', 'assignments', 'tahfizh', 'bahasa', 'grades', 'student-notes', 'discipline', 'mutabaah', 'attendance', 'kisi', 'ujian', 'hasil'].includes(active) && (
+ <PortalGateLockBanner
+ gate={childGate || activeChild?.portal_gate}
+ onOpenBills={() => selectTab('bills')}
+ onOpenChat={() => selectTab('chat')}
+ onRefresh={() => {
+ api.get('/portal/access-status', { headers: { 'X-Child-Id': childId } })
+ .then((res) => { if (res.data?.data) setChildGate(res.data.data) })
+ .catch(() => {})
+ load()
+ }}
+ />
  )}
 
  {/* CHAT GURU & MUSYRIF WORKSPACE (INTEGRATED FOR ACTIVE CHILD'UNIT) */}

@@ -143,6 +143,7 @@ import {
   GraduationCap,
   Plus,
   Pencil,
+  Unlock,
   School,
   Save,
   ArrowRightLeft,
@@ -614,6 +615,11 @@ export default function StudentsPage() {
  const canExportStudent = !isFoundationRole && (isSuperAdmin || isKepalaSekolah || isDivisiPendidikan || permissions.includes('student.export'))
  const canImportStudent = !isFoundationRole && (isSuperAdmin || permissions.includes('student.import') || hasAnyRole(user, ['Admin', 'Operator', 'Tata Usaha', 'TU']))
  const canManageVaBsi = !isFoundationRole && (isSuperAdmin || isLeaderRole || hasAnyRole(user, ['Super Admin', 'Admin', 'Operator', 'Tata Usaha', 'TU', 'Admin Madrasah', 'Admin Sekolah']))
+ const canManagePortalGate = !isFoundationRole && (isSuperAdmin || hasAnyRole(user, ['Super Admin', 'Admin', 'Operator', 'Operator Sekolah', 'Tata Usaha', 'TU', 'Admin Sekolah', 'Admin Madrasah']))
+ const [portalGateTarget, setPortalGateTarget] = useState(null)
+ const [portalGateReason, setPortalGateReason] = useState('')
+ const [portalGateUntil, setPortalGateUntil] = useState('')
+ const [isSavingPortalGate, setIsSavingPortalGate] = useState(false)
  const [showGenerateVaModal, setShowGenerateVaModal] = useState(false)
  const [isGeneratingVa, setIsGeneratingVa] = useState(false)
  const [forceOverwriteVa, setForceOverwriteVa] = useState(false)
@@ -2002,7 +2008,18 @@ export default function StudentsPage() {
                     </span>
                   </TableCell>
                   <TableCell className="whitespace-nowrap px-3 py-3 text-center">
-                    {renderStatusBadge(item.status)}
+                    <div className="inline-flex flex-col items-center gap-1">
+                      {renderStatusBadge(item.status)}
+                      {item.raw?.portal_gate_unlocked && (
+                        <span
+                          title={item.raw?.portal_gate_unlock_reason || 'Akses portal dibuka manual oleh admin'}
+                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/60"
+                        >
+                          <Unlock className="w-2.5 h-2.5" />
+                          <span>Portal Terbuka</span>
+                        </span>
+                      )}
+                    </div>
                   </TableCell>
                   <TableCell className="px-3 py-3 text-right" onClick={(e) => e.stopPropagation()}>
                     <div className="flex items-center justify-end">
@@ -2025,6 +2042,21 @@ export default function StudentsPage() {
                             label: 'Ajukan Pindah Unit',
                             icon: <ArrowRightLeft className="w-4 h-4 text-sky-600" />,
                             onClick: () => handleOpenAjukanMutasi(item),
+                          }] : []),
+                          ...(canManagePortalGate ? [{
+                            label: item.raw?.portal_gate_unlocked ? 'Kunci Kembali Portal' : 'Buka Kunci Portal',
+                            icon: item.raw?.portal_gate_unlocked
+                              ? <Lock className="w-4 h-4 text-rose-600" />
+                              : <Unlock className="w-4 h-4 text-emerald-600" />,
+                            onClick: () => {
+                              setPortalGateTarget(item)
+                              setPortalGateReason(item.raw?.portal_gate_unlock_reason || '')
+                              setPortalGateUntil(
+                                item.raw?.portal_gate_unlocked_until
+                                  ? String(item.raw.portal_gate_unlocked_until).slice(0, 10)
+                                  : ''
+                              )
+                            },
                           }] : []),
                         ]}
                       />
@@ -3605,6 +3637,132 @@ export default function StudentsPage() {
  <p className="text-xs text-slate-500 dark:text-slate-400">
  *Setelah digenerate, orang tua siswa akan langsung melihat Nomor Virtual Account ini di Portal Tagihan dan Aplikasi Mobile untuk pembayaran biaya pendidikan.
  </p>
+        </AppModal>
+
+        {/* MODAL BUKA KUNCI / KUNCI KEMBALI PORTAL SISWA (TANPA PELUNASAN) */}
+        <AppModal
+          isOpen={Boolean(portalGateTarget)}
+          onClose={() => !isSavingPortalGate && setPortalGateTarget(null)}
+          disableBackdropClose={isSavingPortalGate}
+          icon={portalGateTarget?.raw?.portal_gate_unlocked ? Lock : Unlock}
+          title={portalGateTarget?.raw?.portal_gate_unlocked ? 'Kunci Kembali Portal Siswa' : 'Buka Kunci Portal Siswa'}
+          badge={portalGateTarget?.raw?.portal_gate_unlocked ? 'Kembalikan ke SIPDEI' : 'Akses Sementara'}
+          description={
+            portalGateTarget
+              ? `${portalGateTarget.nama} (${portalGateTarget.nis || '-'}) · ${portalGateTarget.unit || '-'}`
+              : 'Pengaturan akses menu portal siswa & orang tua'
+          }
+          maxWidth="max-w-lg"
+          footer={
+            <div className="flex items-center justify-between w-full">
+              <button
+                type="button"
+                disabled={isSavingPortalGate}
+                onClick={() => setPortalGateTarget(null)}
+                className="h-9.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 text-xs font-black inline-flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer border border-slate-300 dark:border-slate-700 disabled:opacity-50"
+              >
+                <X className="size-4" strokeWidth={2} />
+                <span>Batal</span>
+              </button>
+              <button
+                type="button"
+                disabled={isSavingPortalGate}
+                onClick={async () => {
+                  if (!portalGateTarget?.id) return
+                  const willUnlock = !portalGateTarget?.raw?.portal_gate_unlocked
+                  setIsSavingPortalGate(true)
+                  try {
+                    const res = await api.post(`/students/${portalGateTarget.id}/portal-gate-override`, {
+                      unlocked: willUnlock,
+                      reason: willUnlock ? portalGateReason : null,
+                      unlocked_until: willUnlock && portalGateUntil ? portalGateUntil : null,
+                    })
+                    pushToast(
+                      'Berhasil',
+                      res?.data?.message ||
+                        (willUnlock
+                          ? 'Akses portal siswa dibuka tanpa melunasi tagihan.'
+                          : 'Kunci portal siswa dikembalikan ke status SIPDEI.'),
+                      'success'
+                    )
+                    setPortalGateTarget(null)
+                    if (typeof refetch === 'function') refetch()
+                  } catch (err) {
+                    pushToast(
+                      'Gagal',
+                      err?.response?.data?.message || 'Gagal memperbarui status kunci portal siswa.',
+                      'error'
+                    )
+                  } finally {
+                    setIsSavingPortalGate(false)
+                  }
+                }}
+                className={cn(
+                  'h-9.5 px-5 rounded-xl text-white text-xs font-black inline-flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer border-2 shadow-md',
+                  portalGateTarget?.raw?.portal_gate_unlocked
+                    ? 'bg-rose-600 hover:bg-rose-700 border-rose-600 shadow-rose-600/20'
+                    : 'bg-emerald-600 hover:bg-emerald-700 border-emerald-600 shadow-emerald-600/20'
+                )}
+              >
+                {isSavingPortalGate ? (
+                  <span className="size-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                ) : portalGateTarget?.raw?.portal_gate_unlocked ? (
+                  <Lock className="size-4" strokeWidth={2} />
+                ) : (
+                  <Unlock className="size-4" strokeWidth={2} />
+                )}
+                <span>
+                  {portalGateTarget?.raw?.portal_gate_unlocked ? 'Kunci Kembali Portal' : 'Buka Kunci Portal'}
+                </span>
+              </button>
+            </div>
+          }
+        >
+          <div className="space-y-4">
+            <div className="rounded-xl border border-amber-200 bg-amber-50/80 dark:bg-amber-950/30 dark:border-amber-800/60 p-3.5 text-xs text-amber-900 dark:text-amber-200 flex items-start gap-2.5">
+              <AlertTriangle className="size-4 text-amber-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="font-bold">Buka Kunci Saja (Bukan Pelunasan)</p>
+                <p className="mt-0.5 text-[11.5px] leading-relaxed">
+                  {portalGateTarget?.raw?.portal_gate_unlocked
+                    ? 'Menutup kembali override akan mengembalikan akses portal siswa mengikuti status tagihan & NIS di SIPDEI secara otomatis.'
+                    : 'Tindakan ini hanya membuka akses menu akademik siswa di aplikasi & portal orang tua. Status tagihan SPP di SIPDEI tetap tercatat belum lunas.'}
+                </p>
+              </div>
+            </div>
+
+            {!portalGateTarget?.raw?.portal_gate_unlocked && (
+              <>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
+                    Berlaku Sampai Tanggal (Opsional)
+                  </label>
+                  <input
+                    type="date"
+                    value={portalGateUntil}
+                    onChange={(e) => setPortalGateUntil(e.target.value)}
+                    className="w-full h-10 px-3 border-2 border-[#b6f6d9] dark:border-emerald-700/80 rounded-xl bg-white dark:bg-slate-900 text-xs font-bold text-slate-800 dark:text-slate-100 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
+                  />
+                  <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
+                    Kosongkan jika ingin terbuka hingga dikunci kembali secara manual.
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
+                    Alasan / Keterangan
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={portalGateReason}
+                    onChange={(e) => setPortalGateReason(e.target.value)}
+                    placeholder="Contoh: Dispensasi penundaan pembayaran SPP s/d akhir bulan..."
+                    className="w-full p-3.5 border-2 border-[#b6f6d9] dark:border-emerald-700/80 rounded-xl bg-white dark:bg-slate-900 text-xs font-bold text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none leading-relaxed transition-all"
+                  />
+                </div>
+              </>
+            )}
+          </div>
         </AppModal>
  </MasterDataPage>
  </motion.div>

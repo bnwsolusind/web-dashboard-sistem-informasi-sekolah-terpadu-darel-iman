@@ -2725,23 +2725,23 @@ export default function TahfizhPage() {
       {/* MODAL POPUP SELECTION SISWA */}
       {showStudentModal && (
         <Backdrop isOpen={showStudentModal} onOpenChange={setShowStudentModal} className="z-[70] bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-3 sm:p-5">
-          <Dialog showCloseButton={false} className="max-w-xl w-full h-[80vh] max-h-[80vh] flex flex-col rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-0 shadow-2xl shadow-emerald-950/20 overflow-hidden dark:bg-[#182232] dark:shadow-black/60">
-            <DialogHeader className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232] shrink-0">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
-
-                  <Users className="size-6 sm:size-7 h-5 w-5 text-white" strokeWidth={2.25} />
+          <Dialog showCloseButton={false} className="max-w-xl w-full h-[80vh] max-h-[80vh] flex flex-col rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-0 shadow-2xl shadow-emerald-950/20 overflow-hidden dark:bg-[#1B2433]">
+            <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
+            <DialogHeader className="flex items-center justify-between gap-3 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white px-6 py-4 shrink-0">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 text-white shadow-sm">
+                  <Users className="size-5 text-white" strokeWidth={2.25} />
                 </div>
-                <div>
-                  <DialogTitle className="text-sm sm:text-base font-black text-slate-900 dark:text-amber-600 flex items-center gap-2">
+                <div className="min-w-0">
+                  <DialogTitle className="text-sm sm:text-base font-black text-white flex items-center gap-2 flex-wrap">
                     <span>Pilih Siswa / Santri - {currentClassObj?.nama_kelas || 'Kelas Rombel'}</span>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2.5 py-0.5 text-[10px] font-extrabold text-white border border-white/30">
                       <Sparkles className="size-3" />
                       {filteredStudentsInModal.length} Siswa
                     </span>
                   </DialogTitle>
-                  <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    Pilih siswa untuk mengelola log setoran hafalan & murajaah harian atau lihat kelanjutan tahfizh.
+                  <DialogDescription className="text-xs text-emerald-100 mt-0.5">
+                    Pilih siswa untuk mengelola log setoran hafalan &amp; murajaah harian atau lihat kelanjutan tahfizh.
                   </DialogDescription>
                 </div>
               </div>
@@ -2749,9 +2749,9 @@ export default function TahfizhPage() {
                 type="button"
                 onClick={() => setShowStudentModal(false)}
                 aria-label="Tutup modal"
-                className="size-9 flex items-center justify-center rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition-colors shrink-0"
+                className="size-9 rounded-xl bg-white/20 hover:bg-rose-500 text-white border border-white/25 shadow-xs flex items-center justify-center transition-all active:scale-95 shrink-0 cursor-pointer"
               >
-                <X className="size-5" />
+                <X className="size-4" strokeWidth={2.2} />
               </button>
             </DialogHeader>
 
@@ -2846,21 +2846,18 @@ export default function TahfizhPage() {
               </div>
             </DialogBody>
 
-            <DialogFooter className="flex flex-wrap items-center justify-between gap-2.5 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
-              <span className="text-xs font-semibold text-slate-400 dark:text-slate-500">
+            <DialogFooter className="flex flex-wrap items-center justify-between gap-2.5 border-t border-emerald-200/80 bg-slate-100/90 dark:bg-slate-900/80 dark:border-emerald-800/60 p-4 sm:p-5 shrink-0">
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
                 Total {filteredStudentsInModal.length} Siswa Terdaftar
               </span>
-              <HeroButton
-                size="sm"
-                variant="flat"
-                color="default"
-                radius="full"
-                startContent={<X className="size-4" />}
-                onPress={() => setShowStudentModal(false)}
-                className="font-bold text-slate-700 dark:text-slate-200"
+              <button
+                type="button"
+                onClick={() => setShowStudentModal(false)}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 h-9.5 px-4 text-xs font-black border border-slate-300 dark:border-slate-700 transition-all active:scale-95 cursor-pointer"
               >
-                Tutup
-              </HeroButton>
+                <X className="size-4" />
+                <span>Tutup</span>
+              </button>
             </DialogFooter>
           </Dialog>
         </Backdrop>
@@ -2869,23 +2866,23 @@ export default function TahfizhPage() {
       {/* MODAL POPUP DETAIL KELANJUTAN TAHFIZH SISWA */}
       {showStudentDetailModal && detailStudentObj && (
         <Backdrop isOpen={showStudentDetailModal} onOpenChange={setShowStudentDetailModal} className="z-[70] bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-3 sm:p-5">
-          <Dialog showCloseButton={false} className="max-w-xl w-full rounded-3xl overflow-hidden shadow-2xl shadow-emerald-950/20 dark:shadow-black/60 border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#182232]">
-            <DialogHeader className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232]">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
-
-                  <BookOpenCheck className="size-6 sm:size-7 h-5 w-5 text-white" strokeWidth={2.25} />
+          <Dialog showCloseButton={false} className="max-w-xl w-full rounded-3xl overflow-hidden shadow-2xl shadow-emerald-950/20 border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] p-0">
+            <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
+            <DialogHeader className="flex items-center justify-between gap-3 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white px-6 py-4">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 text-white shadow-sm">
+                  <BookOpenCheck className="size-5 text-white" strokeWidth={2.25} />
                 </div>
-                <div>
-                  <DialogTitle className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
+                <div className="min-w-0">
+                  <DialogTitle className="text-sm sm:text-base font-black text-white flex items-center gap-2">
                     <span className="truncate">Detail Pencapaian: {getStudentName(detailStudentObj)}</span>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60 shrink-0">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2.5 py-0.5 text-[10px] font-extrabold text-white border border-white/30 shrink-0">
                       <Sparkles className="size-3" />
                       Progres
                     </span>
                   </DialogTitle>
-                  <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    Siswa: <strong className="font-bold">{getStudentName(detailStudentObj)}</strong> · NIS: {getStudentNis(detailStudentObj)} · Rombel: {currentClassObj?.nama_kelas || 'Kelas'}
+                  <DialogDescription className="text-xs text-emerald-100 mt-0.5">
+                    Siswa: <strong className="font-bold text-white">{getStudentName(detailStudentObj)}</strong> · NIS: {getStudentNis(detailStudentObj)} · Rombel: {currentClassObj?.nama_kelas || 'Kelas'}
                   </DialogDescription>
                 </div>
               </div>
@@ -2893,9 +2890,9 @@ export default function TahfizhPage() {
                 type="button"
                 onClick={() => setShowStudentDetailModal(false)}
                 aria-label="Tutup modal"
-                className="size-9 flex items-center justify-center rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition-colors shrink-0"
+                className="size-9 rounded-xl bg-white/20 hover:bg-rose-500 text-white border border-white/25 shadow-xs flex items-center justify-center transition-all active:scale-95 shrink-0 cursor-pointer"
               >
-                <X className="size-5" />
+                <X className="size-4" strokeWidth={2.2} />
               </button>
             </DialogHeader>
 
@@ -2966,37 +2963,31 @@ export default function TahfizhPage() {
               )}
             </DialogBody>
 
-            <DialogFooter className="flex flex-wrap items-center justify-between gap-2.5 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
-              <HeroButton
-                size="sm"
-                variant="solid"
-                color="success"
-                radius="full"
-                startContent={<BookOpen className="size-4 text-slate-600" />}
-                endContent={<ArrowRight className="size-3.5 text-white" />}
-                onPress={() => {
+            <DialogFooter className="flex flex-wrap items-center justify-between gap-2.5 border-t border-emerald-200/80 bg-slate-100/90 dark:bg-slate-900/80 dark:border-emerald-800/60 p-4 sm:p-5">
+              <button
+                type="button"
+                onClick={() => setShowStudentDetailModal(false)}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 h-9.5 px-4 text-xs font-black border border-slate-300 dark:border-slate-700 transition-all active:scale-95 cursor-pointer"
+              >
+                <X className="size-4" />
+                <span>Tutup</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
                   const sId = detailStudentObj.id || detailStudentObj.student_id
                   setSelectedStudentId(sId)
                   setShowStudentDetailModal(false)
                   setShowStudentModal(false)
                   setShowSheetModal(true)
                 }}
-                className="font-bold text-white shadow-sm"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white h-9.5 px-5 text-xs font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 transition-all active:scale-95 cursor-pointer"
               >
-                Kelola Setoran Siswa Ini
-              </HeroButton>
-
-              <HeroButton
-                size="sm"
-                variant="flat"
-                color="default"
-                radius="full"
-                startContent={<X className="size-4" />}
-                onPress={() => setShowStudentDetailModal(false)}
-                className="font-bold text-slate-700 dark:text-slate-200"
-              >
-                Tutup
-              </HeroButton>
+                <BookOpen className="size-4" />
+                <span>Kelola Setoran Siswa Ini</span>
+                <ArrowRight className="size-3.5" />
+              </button>
             </DialogFooter>
           </Dialog>
         </Backdrop>
@@ -3005,60 +2996,62 @@ export default function TahfizhPage() {
       {/* DIALOG KONFIRMASI SIMPAN DATA */}
       {showSaveConfirm && (
         <Backdrop isOpen={showSaveConfirm} onOpenChange={setShowSaveConfirm} className="z-[70] bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-3 sm:p-5">
-          <Dialog showCloseButton={false} className="max-w-md w-full rounded-3xl overflow-hidden shadow-2xl shadow-emerald-950/20 border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#182232]">
-            <DialogHeader className="px-6 py-4.5 border-b border-emerald-200/80 bg-white flex items-center justify-between dark:bg-[#182232] dark:border-emerald-800/60">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
-
-                  <Sparkles className="size-6 sm:size-7 size-5 text-white" strokeWidth={2.25} />
+          <Dialog showCloseButton={false} className="max-w-md w-full rounded-3xl overflow-hidden shadow-2xl shadow-emerald-950/20 border-2 border-emerald-300 dark:border-emerald-700/80 bg-white dark:bg-[#1B2433] p-0">
+            <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
+            <DialogHeader className="px-6 py-4 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 text-white shadow-sm">
+                  <Sparkles className="size-5 text-white" strokeWidth={2.25} />
                 </div>
-                <div>
-                  <DialogTitle className="font-black text-sm sm:text-base text-slate-900 dark:text-white flex items-center gap-2">
+                <div className="min-w-0">
+                  <DialogTitle className="font-black text-sm sm:text-base text-white flex items-center gap-2 flex-wrap">
                     <span>Konfirmasi Penyimpanan Log Tahfizh</span>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border border-emerald-200/80 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/60">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2.5 py-0.5 text-[10px] font-extrabold text-white border border-white/30">
                       <Sparkles className="size-3" />
                       Simpan Data
                     </span>
                   </DialogTitle>
-                  <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  <DialogDescription className="text-xs text-emerald-100 mt-0.5">
                     {singleSaveIndex !== null
                       ? `Simpan log Tahfizh hari ${weeklySheet[singleSaveIndex]?.day_name} (${weeklySheet[singleSaveIndex]?.record_date})`
                       : 'Simpan seluruh log Tahfizh pekan ini ke server'}
                   </DialogDescription>
                 </div>
               </div>
+              <button
+                type="button"
+                onClick={() => setShowSaveConfirm(false)}
+                aria-label="Tutup modal"
+                className="size-9 rounded-xl bg-white/20 hover:bg-rose-500 text-white border border-white/25 shadow-xs flex items-center justify-center transition-all active:scale-95 shrink-0 cursor-pointer"
+              >
+                <X className="size-4" strokeWidth={2.2} />
+              </button>
             </DialogHeader>
 
             <DialogBody className="p-5">
-              <div className="rounded-xl border-2 border-emerald-300 dark:border-emerald-800 bg-emerald-50/60 p-3.5 text-xs font-semibold text-emerald-800 dark:border-emerald-800/60 dark:bg-emerald-950/30 dark:text-emerald-300">
+              <div className="rounded-xl border-2 border-[#b6f6d9] dark:border-emerald-700/80 bg-emerald-50/60 p-3.5 text-xs font-semibold text-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-300">
                 Data setoran hafalan dan murajaah yang disimpan akan langsung diperbarui di database sistem.
               </div>
             </DialogBody>
 
-            <DialogFooter className="px-6 py-4 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 border-t border-emerald-200/80 flex items-center justify-between gap-2.5 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900 dark:border-emerald-800/60">
-              <HeroButton
-                size="sm"
-                variant="flat"
-                color="default"
-                radius="full"
-                startContent={<X className="size-4" />}
-                onPress={() => setShowSaveConfirm(false)}
-                className="font-bold text-slate-700 dark:text-slate-200"
+            <DialogFooter className="p-4 sm:p-5 bg-slate-100/90 dark:bg-slate-900/80 border-t border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-between gap-2.5">
+              <button
+                type="button"
+                onClick={() => setShowSaveConfirm(false)}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 h-9.5 px-4 text-xs font-black border border-slate-300 dark:border-slate-700 transition-all active:scale-95 cursor-pointer"
               >
-                Batal
-              </HeroButton>
+                <X className="size-4" />
+                <span>Batal</span>
+              </button>
 
-              <HeroButton
-                size="sm"
-                variant="solid"
-                color="success"
-                radius="full"
-                startContent={<Save className="size-4 text-emerald-600" />}
-                onPress={handleConfirmSave}
-                className="font-bold text-white shadow-sm"
+              <button
+                type="button"
+                onClick={handleConfirmSave}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white h-9.5 px-5 text-xs font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 transition-all active:scale-95 cursor-pointer"
               >
-                Ya, Simpan Log
-              </HeroButton>
+                <Save className="size-4" />
+                <span>Ya, Simpan Log</span>
+              </button>
             </DialogFooter>
           </Dialog>
         </Backdrop>
@@ -3067,23 +3060,23 @@ export default function TahfizhPage() {
       {/* MODAL TARIK MASTER AL-QUR'AN & SELEKSI JUZ / SURAH / AYAT (HEROUI 2-COLUMN LAYOUT WITH MUSHAF VIEWER) */}
       {showQuranModal && (
         <Backdrop isOpen={showQuranModal} onOpenChange={setShowQuranModal} className="z-[80] bg-slate-950/75 backdrop-blur-md flex items-center justify-center p-3 sm:p-5">
-          <Dialog showCloseButton={false} className="max-w-4xl w-full h-[88vh] max-h-[88vh] flex flex-col rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-0 shadow-xl overflow-hidden dark:border-emerald-800/60 dark:bg-[#1B2433]">
-            <DialogHeader className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232] shrink-0">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
-
-                  <BookOpen className="size-6 sm:size-7 h-5 w-5 text-white" strokeWidth={2.25} />
+          <Dialog showCloseButton={false} className="max-w-4xl w-full h-[88vh] max-h-[88vh] flex flex-col rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-0 shadow-2xl shadow-emerald-950/20 overflow-hidden dark:bg-[#1B2433]">
+            <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
+            <DialogHeader className="flex items-center justify-between gap-3 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white px-6 py-4 shrink-0">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 text-white shadow-sm">
+                  <BookOpen className="size-5 text-white" strokeWidth={2.25} />
                 </div>
-                <div>
-                  <DialogTitle className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
+                <div className="min-w-0">
+                  <DialogTitle className="text-sm sm:text-base font-black text-white flex items-center gap-2 flex-wrap">
                     <span>Pilih Hafalan Al-Qur'an (Juz, Surah, Ayat, Baris)</span>
-                    <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 bg-emerald-100/90 text-emerald-800 border border-emerald-300/80 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700/80 font-extrabold text-[10px]">
+                    <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 bg-white/20 text-white border border-white/30 font-extrabold text-[10px]">
                       Mushaf
                     </span>
                   </DialogTitle>
-                  <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  <DialogDescription className="text-xs text-emerald-100 mt-0.5">
                     {currentStudentObj ? (
-                      <span>Siswa Terpilih: <strong className="text-slate-800 dark:text-slate-200">{getStudentName(currentStudentObj)}</strong> (NIS: {getStudentNis(currentStudentObj)}) · {currentClassObj?.nama_kelas || 'Rombel'}</span>
+                      <span>Siswa Terpilih: <strong className="text-white">{getStudentName(currentStudentObj)}</strong> (NIS: {getStudentNis(currentStudentObj)}) · {currentClassObj?.nama_kelas || 'Rombel'}</span>
                     ) : (
                       'Pilih Juz, Surah, rentang Ayat, dan jumlah baris halaman Al-Qur\'an secara interaktif atau manual.'
                     )}
@@ -3092,16 +3085,16 @@ export default function TahfizhPage() {
               </div>
 
               <div className="flex items-center gap-2.5 shrink-0">
-                {/* Switcher Mode Interactive vs Manual (HeroUI Segmented Tabs) */}
-                <div className="bg-slate-100 p-1 rounded-xl border border-emerald-200/80 flex items-center gap-1 dark:bg-slate-900 dark:border-emerald-800/60" role="tablist" aria-label="Mode input mushaf">
+                {/* Switcher Mode Interactive vs Manual */}
+                <div className="bg-white/15 p-1 rounded-xl border border-white/25 flex items-center gap-1" role="tablist" aria-label="Mode input mushaf">
                   <button
                     type="button"
                     role="tab"
                     aria-selected={quranInputMode === 'interactive'}
                     onClick={() => setQuranInputMode('interactive')}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${quranInputMode === 'interactive'
-                        ? 'bg-emerald-600 text-white shadow-sm'
-                        : 'text-slate-600 hover:text-slate-900 dark:text-slate-400'
+                    className={`px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all cursor-pointer ${quranInputMode === 'interactive'
+                        ? 'bg-white text-emerald-800 shadow-xs'
+                        : 'text-white/90 hover:bg-white/15'
                       }`}
                   >
                     Interaktif
@@ -3111,26 +3104,23 @@ export default function TahfizhPage() {
                     role="tab"
                     aria-selected={quranInputMode === 'manual'}
                     onClick={() => setQuranInputMode('manual')}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${quranInputMode === 'manual'
-                        ? 'bg-emerald-600 text-white shadow-sm'
-                        : 'text-slate-600 hover:text-slate-900 dark:text-slate-400'
+                    className={`px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all cursor-pointer ${quranInputMode === 'manual'
+                        ? 'bg-white text-emerald-800 shadow-xs'
+                        : 'text-white/90 hover:bg-white/15'
                       }`}
                   >
                     Manual
                   </button>
                 </div>
 
-                <HeroButton
-                  isIconOnly
-                  size="sm"
-                  variant="flat"
-                  color="default"
-                  onPress={() => setShowQuranModal(false)}
+                <button
+                  type="button"
+                  onClick={() => setShowQuranModal(false)}
                   aria-label="Tutup modal"
-                  className="rounded-xl size-9 flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-600 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 transition-transform active:scale-95"
+                  className="size-9 rounded-xl bg-white/20 hover:bg-rose-500 text-white border border-white/25 shadow-xs flex items-center justify-center transition-all active:scale-95 shrink-0 cursor-pointer"
                 >
                   <X className="size-4" strokeWidth={2.2} />
-                </HeroButton>
+                </button>
               </div>
             </DialogHeader>
 
@@ -3557,28 +3547,27 @@ export default function TahfizhPage() {
               </div>
             </DialogBody>
 
-            <DialogFooter className="flex flex-wrap items-center justify-between gap-2.5 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900 shrink-0">
-              <span className="text-xs font-semibold text-slate-400 dark:text-slate-500">Pratinjau mushaf & konfigurasi ayat</span>
+            <DialogFooter className="flex flex-wrap items-center justify-between gap-2.5 border-t border-emerald-200/80 bg-slate-100/90 dark:bg-slate-900/80 dark:border-emerald-800/60 p-4 sm:p-5 shrink-0">
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Pratinjau mushaf &amp; konfigurasi ayat</span>
               <div className="flex items-center gap-2.5">
-                <HeroButton
-                  variant="flat"
-                  color="default"
-                  onPress={() => setShowQuranModal(false)}
-                  startContent={<X className="size-4" />}
-                  className="font-bold text-xs"
+                <button
+                  type="button"
+                  onClick={() => setShowQuranModal(false)}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 h-9.5 px-4 text-xs font-black border border-slate-300 dark:border-slate-700 transition-all active:scale-95 cursor-pointer"
                 >
-                  Batal
-                </HeroButton>
+                  <X className="size-4" />
+                  <span>Batal</span>
+                </button>
 
-                <HeroButton
-                  color="primary"
-                  onPress={handleApplyQuranSelection}
-                  isDisabled={!modalSurah}
-                  startContent={<BookOpen className="size-4" />}
-                  className="font-black text-xs bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm"
+                <button
+                  type="button"
+                  onClick={handleApplyQuranSelection}
+                  disabled={!modalSurah}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white h-9.5 px-5 text-xs font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
                 >
-                  Terapkan ke Form Tahfizh
-                </HeroButton>
+                  <BookOpen className="size-4" />
+                  <span>Terapkan ke Form Tahfizh</span>
+                </button>
               </div>
             </DialogFooter>
           </Dialog>
@@ -3596,39 +3585,36 @@ export default function TahfizhPage() {
 
         return (
           <Backdrop isOpen={showSheetModal} onOpenChange={setShowSheetModal} className="z-[70] bg-slate-950/75 backdrop-blur-md flex items-center justify-center p-3 sm:p-5">
-            <Dialog showCloseButton={false} className="w-full max-w-4xl h-[92vh] max-h-[92vh] flex flex-col rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-white p-0 shadow-xl overflow-hidden dark:border-emerald-800/60 dark:bg-[#1B2433]">
+            <Dialog showCloseButton={false} className="w-full max-w-4xl h-[92vh] max-h-[92vh] flex flex-col rounded-3xl border-2 border-emerald-300 dark:border-emerald-700/80 bg-white p-0 shadow-2xl shadow-emerald-950/20 overflow-hidden dark:bg-[#1B2433]">
+              <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 shrink-0" />
               {/* HEADER MODAL */}
-              <DialogHeader className="flex items-center justify-between border-b border-emerald-200/80 bg-white px-6 py-4.5 dark:border-emerald-800/60 dark:bg-[#182232] shrink-0">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 sm:size-14 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md border border-emerald-500/40 dark:border-emerald-600/50 dark:bg-emerald-600">
-
-                    <BookOpen className="size-6 sm:size-7 h-5 w-5 text-white" strokeWidth={2.25} />
+              <DialogHeader className="flex items-center justify-between gap-3 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white px-6 py-4 shrink-0">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 text-white shadow-sm">
+                    <BookOpen className="size-5 text-white" strokeWidth={2.25} />
                   </div>
-                  <div>
-                    <DialogTitle className="text-sm sm:text-base font-black text-slate-900 dark:text-slate-600 flex items-center gap-2">
-                      <span className="truncate">Formulir Tahfizh & Murajaah Harian</span>
-                      <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 bg-emerald-100/90 text-emerald-800 border border-emerald-300/80 dark:bg-emerald-950/70 dark:text-emerald-300 dark:border-emerald-700/80 font-extrabold text-[10px]">
+                  <div className="min-w-0">
+                    <DialogTitle className="text-sm sm:text-base font-black text-white flex items-center gap-2 flex-wrap">
+                      <span className="truncate">Formulir Tahfizh &amp; Murajaah Harian</span>
+                      <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 bg-white/20 text-white border border-white/30 font-extrabold text-[10px]">
                         <Sparkles className="size-3 mr-1 inline" />
                         Setoran Pekanan
                       </span>
                     </DialogTitle>
-                    <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                      Siswa: <strong className="text-slate-800 dark:text-slate-200">{studentName}</strong> · NIS: {studentNis} · Periode: Senin, {currentMonday} · Rombel: {currentClassObj?.nama_kelas || 'Kelas Aktif'}
+                    <DialogDescription className="text-xs text-emerald-100 mt-0.5">
+                      Siswa: <strong className="text-white">{studentName}</strong> · NIS: {studentNis} · Periode: Senin, {currentMonday} · Rombel: {currentClassObj?.nama_kelas || 'Kelas Aktif'}
                     </DialogDescription>
                   </div>
                 </div>
 
-                <HeroButton
-                  isIconOnly
-                  size="sm"
-                  variant="flat"
-                  color="default"
-                  onPress={() => setShowSheetModal(false)}
+                <button
+                  type="button"
+                  onClick={() => setShowSheetModal(false)}
                   aria-label="Tutup modal"
-                  className="rounded-xl size-9 flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-600 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 transition-transform active:scale-95 cursor-pointer shrink-0"
+                  className="size-9 rounded-xl bg-white/20 hover:bg-rose-500 text-white border border-white/25 shadow-xs flex items-center justify-center transition-all active:scale-95 cursor-pointer shrink-0"
                 >
-                  <X className="size-4 text-slate-600 dark:text-slate-300" strokeWidth={2.2} />
-                </HeroButton>
+                  <X className="size-4" strokeWidth={2.2} />
+                </button>
               </DialogHeader>
 
               <DialogBody className="p-4 sm:p-6 flex-1 overflow-y-auto min-h-0 space-y-4">
@@ -4054,27 +4040,25 @@ export default function TahfizhPage() {
                 </div>
               </DialogBody>
 
-              <DialogFooter className="flex flex-wrap items-center justify-between gap-2.5 border-t border-emerald-200/80 bg-gradient-to-r from-emerald-50/50 via-teal-50/30 to-emerald-50/50 px-6 py-4 shrink-0 dark:border-emerald-800/60 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-900">
-                <HeroButton
-                  variant="flat"
-                  color="default"
-                  onPress={() => setShowSheetModal(false)}
-                  startContent={<X className="size-4" />}
-                  className="font-bold text-xs"
+              <DialogFooter className="flex flex-wrap items-center justify-between gap-2.5 border-t border-emerald-200/80 bg-slate-100/90 dark:bg-slate-900/80 dark:border-emerald-800/60 p-4 sm:p-5 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setShowSheetModal(false)}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 h-9.5 px-4 text-xs font-black border border-slate-300 dark:border-slate-700 transition-all active:scale-95 cursor-pointer"
                 >
-                  Tutup Modal
-                </HeroButton>
+                  <X className="size-4" />
+                  <span>Tutup Modal</span>
+                </button>
 
-                <HeroButton
-                  color="primary"
-                  onPress={() => promptSaveConfirmation(null)}
-                  isDisabled={savingAll || !selectedStudentId}
-                  isLoading={savingAll}
-                  startContent={!savingAll && <Save className="size-4" />}
-                  className="font-black text-xs bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm px-5 py-2.5 h-9"
+                <button
+                  type="button"
+                  onClick={() => promptSaveConfirmation(null)}
+                  disabled={savingAll || !selectedStudentId}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white h-9.5 px-5 text-xs font-black border-2 border-emerald-600 shadow-md shadow-emerald-600/20 transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
                 >
-                  Simpan Seluruh Pekan Ini
-                </HeroButton>
+                  {savingAll ? <Loader2 className="size-4 animate-spin" /> : <Save className="size-4" />}
+                  <span>Simpan Seluruh Pekan Ini</span>
+                </button>
               </DialogFooter>
             </Dialog>
           </Backdrop>

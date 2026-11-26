@@ -1,5 +1,6 @@
 import CustomSelect from "../components/ui/CustomSelect"
 import AppModal from "../components/app/AppModal"
+import PortalGateLockBanner from "../components/portal/PortalGateLockBanner"
 import {
   useCallback,
   useEffect,
@@ -433,12 +434,18 @@ export default function StudentPortalPage({ section = 'ringkasan' }) {
  const [reportsRecords, setReportsRecords] = useState([])
  const [panelLoading, setPanelLoading] = useState(false)
  const [dashboardModules, setDashboardModules] = useState({})
+ const [studentGate, setStudentGate] = useState(null)
 
  const load = useCallback(async () => {
  setLoading(true); setError('')
  try {
- const [dashboardResponse, lmsResponse] = await Promise.all([api.get('/portal/dashboard'), studentLmsService.overview()])
+ const [dashboardResponse, lmsResponse, gateResponse] = await Promise.all([
+ api.get('/portal/dashboard'),
+ studentLmsService.overview(),
+ api.get('/portal/access-status').catch(() => ({ data: { data: null } })),
+ ])
  setDashboard(dashboardResponse.data.data); setLms(lmsResponse.data)
+ if (gateResponse?.data?.data) setStudentGate(gateResponse.data.data)
  } catch (err) {
  setError(err.response?.data?.message || 'Portal LMS belum berhasil dimuat.')
  } finally { setLoading(false) }
@@ -861,6 +868,14 @@ const KpiCardPastelStyles = {
  </section>
  )}
 
+ {!panelLoading && studentGate?.allowed === false && !['profile', 'announcements', 'bills'].includes(activeTab) && (
+ <PortalGateLockBanner
+ gate={studentGate}
+ onOpenBills={() => selectTab('bills')}
+ onRefresh={load}
+ />
+ )}
+
  {!panelLoading && activeTab === 'profile' && (
  <StudentProfileWorkspace student={portalRecords} dashboard={dashboard || {}} onNavigate={selectTab} readOnly />
  )}
@@ -875,6 +890,8 @@ const KpiCardPastelStyles = {
  </div>
  )}
 
+ {studentGate?.allowed !== false && (
+ <>
  {!panelLoading && activeTab === 'schedules' && (
  <ClassScheduleWorkspace schedules={portalRecords} loading={panelLoading} />
  )}
@@ -945,6 +962,8 @@ const KpiCardPastelStyles = {
  {!panelLoading && activeTab === 'hasil' && (
  <ExamResultsWorkspace resultsData={resultsData} reports={reportsRecords} loading={panelLoading} />
  )}
+ </>
+ )}
 
  {!panelLoading && activeTab === 'bills' && (
  <ParentBillsWorkspace
@@ -960,5 +979,7 @@ const KpiCardPastelStyles = {
  />
  )}
  </div>
+ )
+}
  )
 }

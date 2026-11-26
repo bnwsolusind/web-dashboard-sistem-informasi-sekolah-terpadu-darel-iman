@@ -183,8 +183,13 @@ export default function ParentDashboardPage() {
  const acts = timelineRes.data?.data?.activities || []
  setTodayTimeline(Array.isArray(acts) ? acts : [])
 
- const schs = schedulesRes.data?.data || dashRes.data?.data?.schedules_today || []
- setSchedules(Array.isArray(schs) ? schs : [])
+ const rawSchs = schedulesRes.data?.data
+ const schs = Array.isArray(rawSchs)
+ ? rawSchs
+ : (Array.isArray(rawSchs?.today_schedules)
+ ? rawSchs.today_schedules
+ : (Array.isArray(dashRes.data?.data?.schedules_today) ? dashRes.data.data.schedules_today : []))
+ setSchedules(schs)
 
  const nts = notesRes.data?.data?.data || notesRes.data?.data || []
  setStudentNotes(Array.isArray(nts) ? nts : [])
