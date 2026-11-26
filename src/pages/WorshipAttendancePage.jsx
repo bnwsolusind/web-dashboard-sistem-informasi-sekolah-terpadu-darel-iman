@@ -1,6 +1,7 @@
 import { HeroUiHeader } from "../components/ui/HeroUiHeader"
 import AppModal from "../components/app/AppModal"
 import CustomSelect from "../components/ui/CustomSelect"
+import { getSimNow, useSimulationClockStore } from "../stores/simulationClockStore"
 import React, { useState, useEffect, useRef, useMemo } from 'react'
 import {
   motion,
@@ -383,12 +384,20 @@ export default function WorshipAttendancePage() {
  // ── State (preserved API logic) ──────────────────────────────────────────
  const [activeTab, setActiveTab] = useState('sessions') // 'sessions' | 'templates'
  const [worshipMethod, setWorshipMethod] = useState('MANUAL') // 'MANUAL' | 'QRCODE' | 'RFID'
- const [date, setDate] = useState(new Date().toISOString().slice(0, 10))
- const [now, setNow] = useState(new Date())
+ const simLastIso = useSimulationClockStore((s) => (s.enabled && s.lastIso ? s.lastIso.slice(0, 10) : ''))
+ const [date, setDate] = useState(() => getSimNow().toLocaleDateString('en-CA'))
+ const [now, setNow] = useState(() => getSimNow())
 
- // LIVE REAL-TIME CLOCK TIMER (1s Ticker)
  useEffect(() => {
- const timer = setInterval(() => setNow(new Date()), 1000)
+   if (!simLastIso) return
+   const sim = getSimNow()
+   setDate(sim.toLocaleDateString('en-CA'))
+   setNow(sim)
+ }, [simLastIso])
+
+ // LIVE CLOCK TIMER (1s Ticker synced to Simulation Clock when active)
+ useEffect(() => {
+ const timer = setInterval(() => setNow(getSimNow()), 1000)
  return () => clearInterval(timer)
  }, [])
 

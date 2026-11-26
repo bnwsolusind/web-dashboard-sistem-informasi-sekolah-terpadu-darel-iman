@@ -1,5 +1,6 @@
 import { HeroUiHeader } from "../components/ui/HeroUiHeader"
 import CustomSelect from "../components/ui/CustomSelect"
+import { getSimNow, useSimulationClockStore } from '../stores/simulationClockStore'
 import {
   useCallback,
   useEffect,
@@ -109,7 +110,7 @@ import {
 } from '@/components/ui/dialog'
 
 const MODAL_PAGE_SIZE = 6
-const today = () => new Date().toISOString().slice(0, 10)
+const today = () => getSimNow().toLocaleDateString('en-CA')
 const formatAngka = (value) => new Intl.NumberFormat('id-ID').format(Number(value || 0))
 
 const containerVariants = {
@@ -246,8 +247,8 @@ const getStatusBadgeVariant = (status) => {
 }
 
 const getPeriodDateRange = (periodKey) => {
- const now = new Date()
- const iso = (d) => d.toISOString().slice(0, 10)
+ const now = getSimNow()
+ const iso = (d) => d.toLocaleDateString('en-CA')
  const todayStr = iso(now)
 
  if (periodKey === 'hari') return { from: todayStr, to: todayStr }
@@ -282,8 +283,15 @@ export default function RekapAbsensiIbadahPage() {
  const [selectedIbadah, setSelectedIbadah] = useState('semua')
  const [status, setStatus] = useState('semua')
  const [period, setPeriod] = useState('hari')
- const [dateFrom, setDateFrom] = useState(today())
- const [dateTo, setDateTo] = useState(today())
+ const simLastIso = useSimulationClockStore((s) => (s.enabled && s.lastIso ? s.lastIso.slice(0, 10) : ''))
+ const [dateFrom, setDateFrom] = useState(() => today())
+ const [dateTo, setDateTo] = useState(() => today())
+ useEffect(() => {
+   if (!simLastIso) return
+   const r = getPeriodDateRange(period)
+   setDateFrom(r.from)
+   setDateTo(r.to)
+ }, [simLastIso])
 
  // Pagination & Sorting
  const [halaman, setHalaman] = useState(1)

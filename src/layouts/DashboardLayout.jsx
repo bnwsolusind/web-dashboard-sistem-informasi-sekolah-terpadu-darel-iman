@@ -50,6 +50,7 @@ import { authService } from '../services/authService'
 import { api } from '../services/api'
 import { educationUnitService } from '../services/educationUnitService'
 import { useAuthStore } from '../stores/authStore'
+import SimulationClockBadge from '../components/app/SimulationClockBadge'
 import { usePengaturanStore } from '../stores/pengaturanStore'
 import { useUnitStore } from '../stores/unitStore'
 import { FAB } from '../components/ui/fab'
@@ -1804,6 +1805,7 @@ export default function DashboardLayout() {
               </div>
             )}
             {!location.pathname.includes('/portal-guru') && <ActiveScheduleNotice />}
+            <SimulationClockBadge />
             <Outlet />
           </main>
         </div>

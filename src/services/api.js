@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { clearAuthArtifacts, checkSessionValidity } from '../stores/authStore'
+import { useSimulationClockStore } from '../stores/simulationClockStore'
 import { showToast } from '../components/app/ToastProvider'
 
 // Throttle notifikasi error jaringan / server agar tidak spam saat multiple fetch gagal bersamaan
@@ -90,6 +91,7 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
   (response) => {
+    useSimulationClockStore.getState().syncFromHeaders(response?.headers)
     if (hasReportedServerIssue) {
       dispatchServerStatus('healthy', 'Koneksi kembali normal.')
     }

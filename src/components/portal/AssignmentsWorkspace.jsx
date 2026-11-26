@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect } from 'react'
 import AppModal from '@/components/app/AppModal'
+import { getSimNow, useSimulationClockStore } from '@/stores/simulationClockStore'
 import KpiStatCard from '@/components/app/KpiStatCard'
 import CustomSelect from '@/components/ui/CustomSelect'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -233,7 +234,8 @@ export default function AssignmentsWorkspace({
  // In-App Embed Viewer State
  const [embedModal, setEmbedModal] = useState({ isOpen: false, url: '', title: '' })
 
- const now = useMemo(() => new Date(), [])
+ const simLastIso = useSimulationClockStore((s) => (s.enabled && s.lastIso ? s.lastIso.slice(0, 10) : ''))
+ const now = useMemo(() => getSimNow(), [simLastIso])
 
  // Debounced search input (350ms) to prevent UI jitter
  useEffect(() => {

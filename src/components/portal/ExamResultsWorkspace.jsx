@@ -349,19 +349,19 @@ export default function ExamResultsWorkspace({
             </div>
           </div>
 
- {/* Action CTA: Cetak Lembar Evaluasi Perkembangan */}
- <div className="flex items-center gap-3 shrink-0">
- <button
- type="button"
- onClick={handlePrintEvaluation}
- className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white border-2 border-emerald-500 px-5 py-2.5 text-xs sm:text-sm font-black shadow-md shadow-emerald-600/20 transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
- >
- <Printer className="h-4 w-4" />
- <span>Cetak Lembar Evaluasi / PDF</span>
- </button>
- </div>
- </div>
- </div>
+          {/* Action CTA: Cetak Lembar Evaluasi Perkembangan */}
+          <div className="flex items-center gap-3 shrink-0">
+            <button
+              type="button"
+              onClick={handlePrintEvaluation}
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white border-2 border-emerald-500 px-5 py-2.5 text-xs sm:text-sm font-black shadow-md shadow-emerald-600/20 transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+            >
+              <Printer className="h-4 w-4" />
+              <span>Cetak Lembar Evaluasi / PDF</span>
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* 2. DYNAMIC 5 KPI STATS CARDS (HERO UI CARDS) */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
@@ -574,15 +574,15 @@ export default function ExamResultsWorkspace({
                 </p>
               </div>
 
- <button
- type="button"
- onClick={handlePrintEvaluation}
- className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white border-2 border-emerald-500 px-4 py-2 text-xs font-black rounded-xl shadow-md shadow-emerald-600/20 hover:scale-[1.01] active:scale-95 cursor-pointer self-start sm:self-auto"
- >
- <Printer className="w-4 h-4" />
- <span>Cetak Lembar Evaluasi / PDF</span>
- </button>
- </div>
+              <button
+                type="button"
+                onClick={handlePrintEvaluation}
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white border-2 border-emerald-500 px-4 py-2 text-xs font-black rounded-xl shadow-md shadow-emerald-600/20 hover:scale-[1.01] active:scale-95 cursor-pointer self-start sm:self-auto"
+              >
+                <Printer className="w-4 h-4" />
+                <span>Cetak Lembar Evaluasi / PDF</span>
+              </button>
+            </div>
 
             {/* Bagian Capaian Tahsin & Tahfizh */}
             <div className="rounded-xl overflow-hidden border border-emerald-200/80 dark:border-emerald-800/60 shadow-xs">

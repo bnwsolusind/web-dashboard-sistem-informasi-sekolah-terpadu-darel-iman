@@ -330,7 +330,11 @@ const CATEGORY_COLORS = {
 
 export default function ExamSchedulePage() {
  const { user } = useAuthStore()
- const { notify } = useToast()
+ const toast = useToast()
+ const notify = (title, message, type = 'info') => {
+   const fn = toast?.[type] || toast?.info
+   if (typeof fn === 'function') fn(message, { title })
+ }
  const queryClient = useQueryClient()
 
  const userRoles = useMemo(() => {

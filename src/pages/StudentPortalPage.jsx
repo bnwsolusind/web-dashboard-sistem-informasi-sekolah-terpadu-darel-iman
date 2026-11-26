@@ -981,5 +981,3 @@ const KpiCardPastelStyles = {
  </div>
  )
 }
- )
-}

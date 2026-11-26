@@ -416,12 +416,12 @@ function HeroUiFilterSelect({
           }
         }}
         className={`h-10 w-full flex items-center justify-between gap-2 rounded-lg border px-3 text-xs font-bold transition-all duration-200 cursor-pointer ${disabled
-            ? 'border-emerald-200/80 bg-slate-100 text-slate-400 dark:border-emerald-800/60 dark:bg-slate-800/60 cursor-not-allowed'
-            : isOpen
-              ? 'border-[#059669] bg-white ring-2 ring-[#059669]/15 dark:border-[#10B981] dark:bg-[#111827] dark:ring-[#10B981]/20 text-slate-900 dark:text-white shadow-xs'
-              : value !== '' && value !== undefined && value !== null
-                ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-white text-emerald-950 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-emerald-200'
-                : 'border-emerald-200/80 bg-white text-slate-800 hover:border-emerald-300 dark:border-emerald-800/60 dark:bg-[#111827] dark:text-slate-100 dark:hover:border-emerald-200/80'
+          ? 'border-emerald-200/80 bg-slate-100 text-slate-400 dark:border-emerald-800/60 dark:bg-slate-800/60 cursor-not-allowed'
+          : isOpen
+            ? 'border-[#059669] bg-white ring-2 ring-[#059669]/15 dark:border-[#10B981] dark:bg-[#111827] dark:ring-[#10B981]/20 text-slate-900 dark:text-white shadow-xs'
+            : value !== '' && value !== undefined && value !== null
+              ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-white text-emerald-950 dark:border-emerald-800/60 dark:bg-slate-900 dark:text-emerald-200'
+              : 'border-emerald-200/80 bg-white text-slate-800 hover:border-emerald-300 dark:border-emerald-800/60 dark:bg-[#111827] dark:text-slate-100 dark:hover:border-emerald-200/80'
           }`}
       >
         <div className="flex items-center gap-2 truncate">
@@ -482,8 +482,8 @@ function HeroUiFilterSelect({
                         setIsOpen(false)
                       }}
                       className={`w-full flex items-center justify-between rounded-xl px-2.5 py-2 text-xs font-semibold transition-colors text-left cursor-pointer ${isSelected
-                          ? 'bg-emerald-500/15 text-emerald-900 font-bold dark:bg-emerald-500/20 dark:text-emerald-300'
-                          : 'text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300'
+                        ? 'bg-emerald-500/15 text-emerald-900 font-bold dark:bg-emerald-500/20 dark:text-emerald-300'
+                        : 'text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300'
                         }`}
                     >
                       <span className="truncate">{opt.label}</span>
@@ -566,10 +566,10 @@ function HeroUiModalSelect({
           }
         }}
         className={`w-full flex items-center justify-between rounded-xl border px-3.5 h-10 text-xs font-bold transition-all duration-200 text-left cursor-pointer ${disabled
-            ? 'bg-slate-100 dark:bg-slate-800/60 border-emerald-200/80 dark:border-emerald-800/60 text-slate-400 cursor-not-allowed'
-            : isOpen
-              ? 'border-[#059669] bg-white ring-4 ring-[#059669]/12 dark:border-[#10B981] dark:bg-slate-900 dark:ring-[#10B981]/20 text-slate-800 dark:text-slate-100 shadow-sm'
-              : 'border-emerald-200/80 dark:border-emerald-800/60 bg-white hover:border-emerald-300 dark:hover:border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-900 dark:hover:border-emerald-200/80 text-slate-800 dark:text-slate-100'
+          ? 'bg-slate-100 dark:bg-slate-800/60 border-emerald-200/80 dark:border-emerald-800/60 text-slate-400 cursor-not-allowed'
+          : isOpen
+            ? 'border-[#059669] bg-white ring-4 ring-[#059669]/12 dark:border-[#10B981] dark:bg-slate-900 dark:ring-[#10B981]/20 text-slate-800 dark:text-slate-100 shadow-sm'
+            : 'border-emerald-200/80 dark:border-emerald-800/60 bg-white hover:border-emerald-300 dark:hover:border-emerald-200/80 dark:border-emerald-800/60 dark:bg-slate-900 dark:hover:border-emerald-200/80 text-slate-800 dark:text-slate-100'
           }`}
       >
         <div className="flex items-center gap-2 truncate">
@@ -635,8 +635,8 @@ function HeroUiModalSelect({
                         setIsOpen(false)
                       }}
                       className={`w-full flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition-colors text-left cursor-pointer ${isSelected
-                          ? 'bg-[#059669]/10 text-[#059669] font-bold dark:bg-[#10B981]/15 dark:text-[#10B981]'
-                          : 'text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300'
+                        ? 'bg-[#059669]/10 text-[#059669] font-bold dark:bg-[#10B981]/15 dark:text-[#10B981]'
+                        : 'text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 dark:text-slate-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300'
                         }`}
                     >
                       <div className="truncate pr-2">
@@ -2262,11 +2262,10 @@ export default function TahfizhPage() {
                         role="tab"
                         aria-selected={viewMode === 'guru'}
                         onClick={() => setViewMode('guru')}
-                        className={`rounded-lg px-3 py-1.5 text-xs font-black transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ${
-                          viewMode === 'guru'
+                        className={`rounded-lg px-3 py-1.5 text-xs font-black transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ${viewMode === 'guru'
                             ? 'bg-emerald-600 text-white shadow-xs'
                             : 'text-slate-600 hover:text-emerald-700 hover:bg-emerald-100/60 dark:text-slate-300 dark:hover:bg-slate-800'
-                        }`}
+                          }`}
                       >
                         <UserCheck className="w-3.5 h-3.5" />
                         <span>Mode Guru</span>
@@ -2278,11 +2277,10 @@ export default function TahfizhPage() {
                         role="tab"
                         aria-selected={viewMode === 'musyrif'}
                         onClick={() => setViewMode('musyrif')}
-                        className={`rounded-lg px-3 py-1.5 text-xs font-black transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ${
-                          viewMode === 'musyrif'
+                        className={`rounded-lg px-3 py-1.5 text-xs font-black transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ${viewMode === 'musyrif'
                             ? 'bg-emerald-600 text-white shadow-xs'
                             : 'text-slate-600 hover:text-emerald-700 hover:bg-emerald-100/60 dark:text-slate-300 dark:hover:bg-slate-800'
-                        }`}
+                          }`}
                       >
                         <UserCheck className="w-3.5 h-3.5" />
                         <span>Mode Musyrif</span>
@@ -2294,11 +2292,10 @@ export default function TahfizhPage() {
                         role="tab"
                         aria-selected={viewMode === 'ortu'}
                         onClick={() => setViewMode('ortu')}
-                        className={`rounded-lg px-3 py-1.5 text-xs font-black transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ${
-                          viewMode === 'ortu'
+                        className={`rounded-lg px-3 py-1.5 text-xs font-black transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 ${viewMode === 'ortu'
                             ? 'bg-emerald-600 text-white shadow-xs'
                             : 'text-slate-600 hover:text-emerald-700 hover:bg-emerald-100/60 dark:text-slate-300 dark:hover:bg-slate-800'
-                        }`}
+                          }`}
                       >
                         <Heart className="w-3.5 h-3.5" />
                         <span>Mode Ortu</span>
@@ -2788,8 +2785,8 @@ export default function TahfizhPage() {
                       <div
                         key={sId}
                         className={`p-3.5 rounded-xl border transition-all flex items-center justify-between gap-3 ${isSelected
-                            ? 'bg-emerald-50 border-emerald-300 ring-2 ring-emerald-500/20 dark:bg-emerald-950/40 dark:border-emerald-800/60'
-                            : 'bg-white hover:bg-slate-50 border-emerald-200/80 dark:bg-slate-900 dark:border-emerald-800/60 dark:hover:bg-slate-800/60'
+                          ? 'bg-emerald-50 border-emerald-300 ring-2 ring-emerald-500/20 dark:bg-emerald-950/40 dark:border-emerald-800/60'
+                          : 'bg-white hover:bg-slate-50 border-emerald-200/80 dark:bg-slate-900 dark:border-emerald-800/60 dark:hover:bg-slate-800/60'
                           }`}
                       >
                         <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -3093,8 +3090,8 @@ export default function TahfizhPage() {
                     aria-selected={quranInputMode === 'interactive'}
                     onClick={() => setQuranInputMode('interactive')}
                     className={`px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all cursor-pointer ${quranInputMode === 'interactive'
-                        ? 'bg-white text-emerald-800 shadow-xs'
-                        : 'text-white/90 hover:bg-white/15'
+                      ? 'bg-white text-emerald-800 shadow-xs'
+                      : 'text-white/90 hover:bg-white/15'
                       }`}
                   >
                     Interaktif
@@ -3105,8 +3102,8 @@ export default function TahfizhPage() {
                     aria-selected={quranInputMode === 'manual'}
                     onClick={() => setQuranInputMode('manual')}
                     className={`px-3 py-1.5 rounded-lg text-xs font-extrabold transition-all cursor-pointer ${quranInputMode === 'manual'
-                        ? 'bg-white text-emerald-800 shadow-xs'
-                        : 'text-white/90 hover:bg-white/15'
+                      ? 'bg-white text-emerald-800 shadow-xs'
+                      : 'text-white/90 hover:bg-white/15'
                       }`}
                   >
                     Manual
@@ -3181,8 +3178,8 @@ export default function TahfizhPage() {
                                 setModalBarisCount(5)
                               }}
                               className={`w-full px-3.5 py-2.5 text-left text-xs flex items-center justify-between transition-colors ${isSelected
-                                  ? 'bg-emerald-100/90 font-extrabold text-emerald-950 border-l-4 border-emerald-200/80 dark:bg-emerald-950 dark:text-emerald-200'
-                                  : 'hover:bg-emerald-50/60 text-slate-800 dark:text-slate-200 dark:hover:bg-slate-800/60'
+                                ? 'bg-emerald-100/90 font-extrabold text-emerald-950 border-l-4 border-emerald-200/80 dark:bg-emerald-950 dark:text-emerald-200'
+                                : 'hover:bg-emerald-50/60 text-slate-800 dark:text-slate-200 dark:hover:bg-slate-800/60'
                                 }`}
                             >
                               <div className="flex items-center gap-2.5">
@@ -3411,8 +3408,8 @@ export default function TahfizhPage() {
                               }))
                             }}
                             className={`p-3.5 rounded-xl border transition-all cursor-pointer space-y-2.5 shadow-sm ${isPenilaianOpen
-                                ? 'bg-emerald-50/70 border-emerald-200/80 ring-2 ring-emerald-500/20 dark:bg-slate-900 dark:border-emerald-800/60'
-                                : 'bg-white border-emerald-200/80 hover:border-emerald-300 dark:hover:border-emerald-200/80 dark:bg-slate-900 dark:border-emerald-800/60'
+                              ? 'bg-emerald-50/70 border-emerald-200/80 ring-2 ring-emerald-500/20 dark:bg-slate-900 dark:border-emerald-800/60'
+                              : 'bg-white border-emerald-200/80 hover:border-emerald-300 dark:hover:border-emerald-200/80 dark:bg-slate-900 dark:border-emerald-800/60'
                               }`}
                           >
                             <div className="flex items-center justify-between border-b border-emerald-200/80 dark:border-emerald-800/60 pb-1.5 dark:border-emerald-800/60">
@@ -3704,10 +3701,10 @@ export default function TahfizhPage() {
                           type="button"
                           onClick={() => setSelectedDayDate(row.record_date)}
                           className={`px-3 py-2.5 rounded-xl text-xs font-extrabold transition-all duration-200 flex flex-col items-center justify-center gap-1 border relative cursor-pointer ${isActiveDay
-                              ? 'bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 border-emerald-200/80 dark:border-emerald-800/60 shadow-sm scale-105 ring-2 ring-white/50'
-                              : isToday
-                                ? 'bg-emerald-800/90 text-emerald-100 border-amber-400/90 hover:bg-emerald-700'
-                                : 'bg-emerald-950/60 text-emerald-200/80 border-emerald-200/80 hover:bg-emerald-800/60 hover:text-white'
+                            ? 'bg-emerald-50 border-2 border-emerald-300 dark:border-emerald-800 text-emerald-600 dark:bg-emerald-950/60 dark:border-emerald-800/60 dark:text-emerald-300 border-emerald-200/80 dark:border-emerald-800/60 shadow-sm scale-105 ring-2 ring-white/50'
+                            : isToday
+                              ? 'bg-emerald-800/90 text-emerald-100 border-amber-400/90 hover:bg-emerald-700'
+                              : 'bg-emerald-950/60 text-emerald-200/80 border-emerald-200/80 hover:bg-emerald-800/60 hover:text-white'
                             }`}
                         >
                           {isToday && (
@@ -3823,10 +3820,10 @@ export default function TahfizhPage() {
                             <TableRow
                               key={row.record_date}
                               className={`transition-all duration-200 ${isActiveDay
-                                  ? 'bg-emerald-100/70 font-semibold dark:bg-emerald-950/60 border-l-4 border-l-emerald-600'
-                                  : row.isSaved
-                                    ? 'bg-emerald-50/20 dark:bg-emerald-950/20'
-                                    : ''
+                                ? 'bg-emerald-100/70 font-semibold dark:bg-emerald-950/60 border-l-4 border-l-emerald-600'
+                                : row.isSaved
+                                  ? 'bg-emerald-50/20 dark:bg-emerald-950/20'
+                                  : ''
                                 }`}
                             >
 
